@@ -1,0 +1,95 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.axiastudio.suite.anagrafiche.entities;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+/**
+ *
+ * @author Tiziano Lattisi <tiziano at axiastudio.it>
+ */
+@Entity
+public class Soggetto implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(name="tipologiasoggetto")
+    @Enumerated(EnumType.STRING)
+    private TipologiaSoggetto tipologiaSoggetto;
+    @Column(name="nome")
+    private String nome;
+    @Column(name="cognome")
+    private String cognome;
+    @Column(name="ragionesociale")
+    private String ragionesociale;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getRagionesociale() {
+        return ragionesociale;
+    }
+
+    public void setRagionesociale(String ragionesociale) {
+        this.ragionesociale = ragionesociale;
+    }
+
+    public TipologiaSoggetto getTipologiaSoggetto() {
+        return tipologiaSoggetto;
+    }
+
+    public void setTipologiaSoggetto(TipologiaSoggetto tipologiaSoggetto) {
+        this.tipologiaSoggetto = tipologiaSoggetto;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Soggetto)) {
+            return false;
+        }
+        Soggetto other = (Soggetto) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.axiastudio.suite.anagrafiche.entities.Soggetto[ id=" + id + " ]";
+    }
+    
+}

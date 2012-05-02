@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1022</width>
+    <height>660</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Protocolli</string>
+  </property>
+  <property name="searchcolumns" stdset="0">
+   <string>Tipo,Oggetto</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="margin">
+     <number>4</number>
+    </property>
+    <item>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>242</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>242</height>
+       </size>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="margin">
+        <number>2</number>
+       </property>
+       <item>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0" colspan="2">
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="title">
+            <string>Numero di protocollo e data</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <item>
+             <widget class="QComboBox" name="comboBox">
+              <property name="column" stdset="0">
+               <string>Tipo</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>ENTRATA</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>USCITA</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>INTERNO</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>N°</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEdit"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>del</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
+              <property name="minimumSize">
+               <size>
+                <width>120</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>120</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="displayFormat">
+               <string>dd/MM/yyyy</string>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
+              <property name="column" stdset="0">
+               <string>Dataprotocollo</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="title">
+            <string>Sportello</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <item>
+             <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiEntityPicker" name="lineEdit_2">
+              <property name="column" stdset="0">
+               <string>Sportello</string>
+              </property>
+              <property name="lookup" stdset="0">
+               <string>descrizione</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QGroupBox" name="groupBox_4">
+           <property name="title">
+            <string>Riferimento mittente</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout">
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QComboBox" name="comboBox_2">
+              <property name="column" stdset="0">
+               <string>Tiporiferimentomittente</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>NESSUNO</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>EMAIL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>FAX</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>LETTERA</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>RACCOMANDATA</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QDateEdit" name="dateEdit_2">
+              <property name="displayFormat">
+               <string>dd/MM/yyyy</string>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QLineEdit" name="lineEdit_3"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QGroupBox" name="groupBox_5">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>309</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>309</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="title">
+            <string/>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <property name="margin">
+             <number>4</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="annullato">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Annullato</string>
+              </property>
+              <property name="column" stdset="0">
+               <string>annullato</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QCheckBox" name="spedito">
+              <property name="text">
+               <string>Spedito</string>
+              </property>
+              <property name="column" stdset="0">
+               <string>Spedito</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="annullamentorichiesto">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Annull. richiesto</string>
+              </property>
+              <property name="column" stdset="0">
+               <string>annullamentorichiesto</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QCheckBox" name="riservato">
+              <property name="text">
+               <string>Riservato</string>
+              </property>
+              <property name="shortcut">
+               <string>Ctrl+J</string>
+              </property>
+              <property name="column" stdset="0">
+               <string>riservato</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="richiederisposta">
+              <property name="text">
+               <string>Richiede risposta</string>
+              </property>
+              <property name="column" stdset="0">
+               <string>richiederisposta</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QCheckBox" name="corrispostoostornato">
+              <property name="text">
+               <string>Corrisposto/stornato</string>
+              </property>
+              <property name="column" stdset="0">
+               <string>corrispostoostornato</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QGroupBox" name="groupBox_10">
+           <property name="minimumSize">
+            <size>
+             <width>309</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>309</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Spedizione e convalida</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>32</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="pixmap">
+               <pixmap resource="../../../../../../../../pypapi/pypapi/lib/pypapi/ui/resources/resources.qrc">:/icons/email_go.png</pixmap>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="label_spedizione">
+              <property name="text">
+               <string>-</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>32</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="pixmap">
+               <pixmap resource="../../../../../../../../pypapi/pypapi/lib/pypapi/ui/resources/resources.qrc">:/icons/lock_group.png</pixmap>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="label_convalidau">
+              <property name="text">
+               <string>-</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>32</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="pixmap">
+               <pixmap resource="../../../../../../../../pypapi/pypapi/lib/pypapi/ui/resources/resources.qrc">:/icons/lock_mail.png</pixmap>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="label_convalida">
+              <property name="text">
+               <string>-</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Note</string>
+           </property>
+           <property name="buddy">
+            <cstring>textEdit</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextEdit" name="textEdit">
+           <property name="acceptRichText">
+            <bool>false</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>Note</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Oggetto</string>
+           </property>
+           <property name="buddy">
+            <cstring>textEdit_2</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextEdit" name="textEdit_2">
+           <property name="acceptRichText">
+            <bool>false</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>Oggetto</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Corrispondenti e referenti</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <property name="margin">
+         <number>4</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="groupBox_6">
+          <property name="title">
+           <string>Mittenti</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <property name="margin">
+            <number>4</number>
+           </property>
+           <item>
+            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
+             <property name="entity" stdset="0">
+              <string>.soggettoProtocolloCollection</string>
+             </property>
+             <property name="columns" stdset="0">
+              <string>soggetto</string>
+             </property>
+             <property name="reference" stdset="0">
+              <string>soggetto</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QGroupBox" name="groupBox_7">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>300</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Destinatari</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <property name="margin">
+            <number>4</number>
+           </property>
+           <item>
+            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_3">
+             <property name="entity" stdset="0">
+              <string>.ufficioProtocolloCollection</string>
+             </property>
+             <property name="columns" stdset="0">
+              <string>ufficio</string>
+             </property>
+             <property name="reference" stdset="0">
+              <string>ufficio</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="groupBox_9">
+          <property name="title">
+           <string>Pratiche correlate</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <property name="margin">
+            <number>4</number>
+           </property>
+           <item>
+            <widget class="QTableView" name="tableView_4"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QGroupBox" name="groupBox_8">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>300</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Attribuzioni</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="margin">
+            <number>4</number>
+           </property>
+           <item>
+            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView">
+             <property name="entity" stdset="0">
+              <string>.attribuzioneCollection</string>
+             </property>
+             <property name="columns" stdset="0">
+              <string>Principale,Ufficio</string>
+             </property>
+             <property name="reference" stdset="0">
+              <string>Ufficio</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Riferimenti precedenti e successivi</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>pypapidateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiEntityPicker</class>
+   <extends>QLineEdit</extends>
+   <header>pypapientitypicker.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
+   <extends>QTableView</extends>
+   <header>pypapitableview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../../../../../../pypapi/pypapi/lib/pypapi/ui/resources/resources.qrc"/>
+  <include location="../../../../../../../../../../../../../pypapi/lib/pypapi/ui/resources/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
