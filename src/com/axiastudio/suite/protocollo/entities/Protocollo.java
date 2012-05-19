@@ -33,11 +33,11 @@ public class Protocollo implements Serializable {
     @JoinColumn(name = "sportello", referencedColumnName = "id")
     @ManyToOne
     private Ufficio sportello;
-    @OneToMany(mappedBy = "protocollo", orphanRemoval = true)
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<SoggettoProtocollo> soggettoProtocolloCollection;
-    @OneToMany(mappedBy = "protocollo", orphanRemoval = true)
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioProtocollo> ufficioProtocolloCollection;
-    @OneToMany(mappedBy = "protocollo", orphanRemoval = true)
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Attribuzione> attribuzioneCollection;
     @Column(name="annullato")
     private Boolean annullato;
