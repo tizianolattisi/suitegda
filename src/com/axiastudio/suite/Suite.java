@@ -33,7 +33,7 @@ public class Suite {
         db.open("SuitePU");
         EntityManagerFactory emf = db.getEntityManagerFactory();
         
-        //*
+        /*
         EntityManager em = emf.createEntityManager();
         
         Ufficio u1 = new Ufficio();
@@ -92,8 +92,11 @@ public class Suite {
 
         Register.registerAdapters(Resolver.adaptersFromEntityClass(Adapters.class));
         
-        formProtocollo.show();
-        formSoggetto.show();
+        //formProtocollo.show();
+        //formSoggetto.show();
+        
+        Mdi mdi = new Mdi();
+        mdi.show();
         
         Application.exec();
     
