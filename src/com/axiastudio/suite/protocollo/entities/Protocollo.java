@@ -21,9 +21,13 @@ public class Protocollo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name="iddocumento", unique=true)
+    private String iddocumento;
     @Column(name="dataprotocollo")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataprotocollo;
+    @Column(name="anno")
+    private Integer anno;
     @Column(name="oggetto")
     private String oggetto;
     @Column(name="note")
@@ -63,12 +67,28 @@ public class Protocollo implements Serializable {
         this.id = id;
     }
 
+    public String getIddocumento() {
+        return iddocumento;
+    }
+
+    public void setIddocumento(String iddocumento) {
+        this.iddocumento = iddocumento;
+    }
+
     public Date getDataprotocollo() {
         return dataprotocollo;
     }
 
     public void setDataprotocollo(Date dataprotocollo) {
         this.dataprotocollo = dataprotocollo;
+    }
+
+    public Integer getAnno() {
+        return anno;
+    }
+
+    public void setAnno(Integer anno) {
+        this.anno = anno;
     }
 
     public String getNote() {

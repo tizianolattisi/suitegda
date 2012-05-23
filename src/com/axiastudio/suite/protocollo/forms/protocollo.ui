@@ -14,7 +14,7 @@
    <string>Protocolli</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>Tipo,Oggetto</string>
+   <string>iddocumento,tipo,oggetto</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -83,7 +83,17 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit"/>
+             <widget class="QLineEdit" name="lineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="column" stdset="0">
+               <string>iddocumento</string>
+              </property>
+              <property name="search" stdset="0">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_4">
@@ -131,6 +141,9 @@
             </property>
             <item>
              <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiEntityPicker" name="lineEdit_2">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="column" stdset="0">
                <string>Sportello</string>
               </property>
@@ -451,6 +464,9 @@
            <property name="column" stdset="0">
             <string>Oggetto</string>
            </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
         </layout>
@@ -604,14 +620,14 @@
    <header>pypapidateedit.h</header>
   </customwidget>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiEntityPicker</class>
-   <extends>QLineEdit</extends>
-   <header>pypapientitypicker.h</header>
-  </customwidget>
-  <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
    <header>pypapitableview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiEntityPicker</class>
+   <extends>QLineEdit</extends>
+   <header>pypapientitypicker.h</header>
   </customwidget>
  </customwidgets>
  <resources>

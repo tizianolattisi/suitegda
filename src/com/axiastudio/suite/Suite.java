@@ -7,12 +7,15 @@ package com.axiastudio.suite;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
+import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.Form;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.protocollo.Adapters;
+import com.axiastudio.suite.protocollo.Validators;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import javax.persistence.EntityManager;
@@ -31,17 +34,19 @@ public class Suite {
 
         Database db = new Database();
         db.open("SuitePU");
-        EntityManagerFactory emf = db.getEntityManagerFactory();
-        
-        /*
-        EntityManager em = emf.createEntityManager();
-        
+        Register.registerUtility(db, IDatabase.class);
+        EntityManagerFactory emf = db.getEntityManagerFactory();        
+        //EntityManager em = emf.createEntityManager();
+
+        // registro adapter e validatori
+        Register.registerAdapters(Resolver.adaptersFromClass(Adapters.class));
+        Register.registerValidators(Resolver.validatorsFromClass(Validators.class));
+
+        // qualche dato di base
         Ufficio u1 = new Ufficio();
         u1.setDescrizione("Ufficio informativo");
-
         Ufficio u2 = new Ufficio();
         u2.setDescrizione("Ufficio protocollo");
-
         Soggetto s = new Soggetto();
         s.setNome("Tiziano");
         s.setCognome("Lattisi");
@@ -65,16 +70,11 @@ public class Suite {
         p3.setTipo(TipoProtocollo.INTERNO);
 
         
-        em.getTransaction().begin();
-        em.persist(p);
-        em.persist(p2);
-        em.persist(p3);
-        em.persist(u1);
-        em.persist(u2);
-        em.persist(s);
-        em.getTransaction().commit();
-        em.close();
-        //*/
+        // commit
+        Controller controller = new Controller(emf, Protocollo.class);
+        controller.commit(p);
+        controller.commit(p2);
+        controller.commit(p3);
         
         Application.initialize(args);
         
@@ -89,11 +89,6 @@ public class Suite {
         Form formSoggetto = Register.registerForm(db.getEntityManagerFactory(),
                             "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
                             Soggetto.class);
-
-        Register.registerAdapters(Resolver.adaptersFromEntityClass(Adapters.class));
-        
-        //formProtocollo.show();
-        //formSoggetto.show();
         
         Mdi mdi = new Mdi();
         mdi.show();
