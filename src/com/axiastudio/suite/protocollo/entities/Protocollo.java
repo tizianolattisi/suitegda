@@ -57,6 +57,12 @@ public class Protocollo implements Serializable {
     private Boolean corrispostoostornato;
     @Enumerated(EnumType.STRING)
     private TipoRiferimentoMittente tiporiferimentomittente;
+    @Column(name="riferimentomittente")
+    private String riferimentomittente;
+    @Column(name="datariferimentomittente")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datariferimentomittente;
+
 
 
     public Long getId() {
@@ -201,6 +207,22 @@ public class Protocollo implements Serializable {
 
     public void setUfficioProtocolloCollection(Collection<UfficioProtocollo> ufficioProtocolloCollection) {
         this.ufficioProtocolloCollection = ufficioProtocolloCollection;
+    }
+
+    public Date getDatariferimentomittente() {
+        return datariferimentomittente;
+    }
+
+    public void setDatariferimentomittente(Date datariferimentomittente) {
+        this.datariferimentomittente = datariferimentomittente;
+    }
+
+    public String getRiferimentomittente() {
+        return riferimentomittente;
+    }
+
+    public void setRiferimentomittente(String riferimentomittente) {
+        this.riferimentomittente = riferimentomittente;
     }
 
     @Override

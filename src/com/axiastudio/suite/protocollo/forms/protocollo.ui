@@ -204,10 +204,17 @@
               <property name="calendarPopup">
                <bool>true</bool>
               </property>
+              <property name="column" stdset="0">
+               <string>datariferimentomittente</string>
+              </property>
              </widget>
             </item>
             <item row="1" column="0" colspan="2">
-             <widget class="QLineEdit" name="lineEdit_3"/>
+             <widget class="QLineEdit" name="lineEdit_3">
+              <property name="column" stdset="0">
+               <string>riferimentomittente</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -539,7 +546,7 @@
               <string>.ufficioProtocolloCollection</string>
              </property>
              <property name="columns" stdset="0">
-              <string>ufficio</string>
+              <string>UFFICIO</string>
              </property>
              <property name="reference" stdset="0">
               <string>ufficio</string>
@@ -591,7 +598,7 @@
               <string>.attribuzioneCollection</string>
              </property>
              <property name="columns" stdset="0">
-              <string>Principale,Ufficio</string>
+              <string>principale,UFFICIO</string>
              </property>
              <property name="reference" stdset="0">
               <string>Ufficio</string>
