@@ -7,10 +7,9 @@ package com.axiastudio.suite;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.Form;
+import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
@@ -18,6 +17,7 @@ import com.axiastudio.suite.protocollo.Adapters;
 import com.axiastudio.suite.protocollo.Validators;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
+import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -78,9 +78,6 @@ public class Suite {
         
         Application.initialize(args);
         
-        Form formProtocollo = Register.registerForm(db.getEntityManagerFactory(),
-                            "classpath:com/axiastudio/suite/protocollo/forms/protocollo.ui",
-                            Protocollo.class);
 
         Form formUfficio = Register.registerForm(db.getEntityManagerFactory(),
                             "classpath:com/axiastudio/suite/base/forms/ufficio.ui",
@@ -89,6 +86,22 @@ public class Suite {
         Form formSoggetto = Register.registerForm(db.getEntityManagerFactory(),
                             "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
                             Soggetto.class);
+
+
+        /* 
+         * Registrazione a mano (form personalizzato), in alternativa a:
+         * 
+         * Form formProtocollo = Register.registerForm(db.getEntityManagerFactory(),
+         *                     "classpath:com/axiastudio/suite/protocollo/forms/protocollo.ui",
+         *                     Protocollo.class);
+         * 
+         */
+        Register.registerUtility(new Controller(db.getEntityManagerFactory(), Protocollo.class), IController.class, Protocollo.class.getName());
+        Form formProtocollo = new FormProtocollo("classpath:com/axiastudio/suite/protocollo/forms/protocollo.ui", Protocollo.class, "Protocolli");
+        Register.registerUtility(formProtocollo, IForm.class, Protocollo.class.getName());
+        Register.registerUtility(Protocollo.class, IFactory.class, Protocollo.class.getName());
+        formProtocollo.init();
+
         
         Mdi mdi = new Mdi();
         mdi.show();

@@ -70,6 +70,7 @@ public class Mdi extends QMainWindow {
         itemUffici.setText(1, "com.axiastudio.suite.base.entities.Ufficio");
         
         this.tree.activated.connect(this, "runTask()");
+        this.tree.setMinimumWidth(200);
 
     }
     

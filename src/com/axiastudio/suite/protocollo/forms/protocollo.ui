@@ -14,7 +14,7 @@
    <string>Protocolli</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>iddocumento,tipo,oggetto</string>
+   <string>&gt;iddocumento&lt;,&gt;tipo&lt;,&gt;dataprotocollo&lt;,&lt;oggetto&gt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -197,7 +197,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QDateEdit" name="dateEdit_2">
+             <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_2">
               <property name="displayFormat">
                <string>dd/MM/yyyy</string>
               </property>
@@ -340,7 +340,7 @@
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="label_5">
+             <widget class="QLabel" name="labelSpedito">
               <property name="minimumSize">
                <size>
                 <width>32</width>
@@ -369,7 +369,7 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="labelConvalidaAttribuzioni">
               <property name="minimumSize">
                <size>
                 <width>32</width>
@@ -398,7 +398,7 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_7">
+             <widget class="QLabel" name="labelConvalidaProtocollo">
               <property name="minimumSize">
                <size>
                 <width>32</width>
@@ -546,7 +546,7 @@
               <string>.ufficioProtocolloCollection</string>
              </property>
              <property name="columns" stdset="0">
-              <string>UFFICIO</string>
+              <string>&lt;ufficio&gt;</string>
              </property>
              <property name="reference" stdset="0">
               <string>ufficio</string>
@@ -598,7 +598,7 @@
               <string>.attribuzioneCollection</string>
              </property>
              <property name="columns" stdset="0">
-              <string>principale,UFFICIO</string>
+              <string>&gt;principale&lt;,&lt;ufficio&gt;</string>
              </property>
              <property name="reference" stdset="0">
               <string>Ufficio</string>
