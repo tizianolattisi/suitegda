@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>MainWindowProtocollo</class>
+ <widget class="QMainWindow" name="MainWindowProtocollo">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -639,7 +639,6 @@
  </customwidgets>
  <resources>
   <include location="../../../../../../../../pypapi/pypapi/lib/pypapi/ui/resources/resources.qrc"/>
-  <include location="../../../../../../../../../../../../../pypapi/lib/pypapi/ui/resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

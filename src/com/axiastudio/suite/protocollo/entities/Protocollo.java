@@ -62,6 +62,10 @@ public class Protocollo implements Serializable {
     @Column(name="datariferimentomittente")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datariferimentomittente;
+    @Column(name="convalidaattribuzioni")
+    private Boolean ConvalidaAttribuzioni;
+    @Column(name="convalidaprotocollo")
+    private Boolean ConvalidaProtocollo;
 
 
 
@@ -223,6 +227,22 @@ public class Protocollo implements Serializable {
 
     public void setRiferimentomittente(String riferimentomittente) {
         this.riferimentomittente = riferimentomittente;
+    }
+
+    public Boolean getConvalidaAttribuzioni() {
+        return ConvalidaAttribuzioni;
+    }
+
+    public void setConvalidaAttribuzioni(Boolean ConvalidaAttribuzioni) {
+        this.ConvalidaAttribuzioni = ConvalidaAttribuzioni;
+    }
+
+    public Boolean getConvalidaProtocollo() {
+        return ConvalidaProtocollo;
+    }
+
+    public void setConvalidaProtocollo(Boolean ConvalidaProtocollo) {
+        this.ConvalidaProtocollo = ConvalidaProtocollo;
     }
 
     @Override

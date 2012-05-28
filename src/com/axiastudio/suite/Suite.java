@@ -62,6 +62,7 @@ public class Suite {
         Protocollo p2 = new Protocollo();
         p2.setOggetto("Oggetto del protocollo2");
         p2.setNote("Note del protocollo2");
+        p2.setSportello(u1);
         p2.setTipo(TipoProtocollo.ENTRATA);
 
         Protocollo p3 = new Protocollo();

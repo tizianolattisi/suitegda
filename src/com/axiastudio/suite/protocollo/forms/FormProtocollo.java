@@ -6,6 +6,8 @@ package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.pypapi.ui.Form;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
+import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.QLabel;
 import com.trolltech.qt.gui.QPixmap;
 
@@ -40,6 +42,9 @@ public class FormProtocollo extends Form {
     
     private void convalidaAttribuzioni() {
         System.out.println("ciao");
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        protocollo.setConvalidaAttribuzioni(Boolean.TRUE);
+        this.getContext().getDirty();
     }
 
     private void convalidaProtocollo() {
