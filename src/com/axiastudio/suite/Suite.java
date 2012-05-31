@@ -77,7 +77,7 @@ public class Suite {
         controller.commit(p2);
         controller.commit(p3);
         
-        Application.initialize(args);
+        Application app = new Application(args);
         
 
         Form formUfficio = Register.registerForm(db.getEntityManagerFactory(),
@@ -107,7 +107,7 @@ public class Suite {
         Mdi mdi = new Mdi();
         mdi.show();
         
-        Application.exec();
+        app.exec();
     
     }
 }
