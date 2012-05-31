@@ -9,11 +9,11 @@
     <class>com.axiastudio.suite.protocollo.entities.UfficioProtocollo</class>
     <class>com.axiastudio.suite.protocollo.entities.SoggettoProtocollo</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:5432/suite"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>
-      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="javax.persistence.jdbc.user" value="tiziano"/>
-      <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+      <property name="javax.persistence.jdbc.user" value=""/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
     </properties>
   </persistence-unit>
 </persistence>
