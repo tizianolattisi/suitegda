@@ -593,7 +593,7 @@
             <number>4</number>
            </property>
            <item>
-            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView">
+            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewAttribuzioni">
              <property name="entity" stdset="0">
               <string>.attribuzioneCollection</string>
              </property>

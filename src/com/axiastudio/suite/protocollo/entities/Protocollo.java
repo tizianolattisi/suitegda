@@ -44,17 +44,17 @@ public class Protocollo implements Serializable {
     @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Attribuzione> attribuzioneCollection;
     @Column(name="annullato")
-    private Boolean annullato;
+    private Boolean annullato=false;
     @Column(name="annullamentorichiesto")
-    private Boolean annullamentorichiesto;
+    private Boolean annullamentorichiesto=false;
     @Column(name="richiederisposta")
-    private Boolean richiederisposta;
+    private Boolean richiederisposta=false;
     @Column(name="spedito")
-    private Boolean spedito;
+    private Boolean spedito=false;
     @Column(name="riservato")
-    private Boolean riservato;
+    private Boolean riservato=false;
     @Column(name="corrispostoostornato")
-    private Boolean corrispostoostornato;
+    private Boolean corrispostoostornato=false;
     @Enumerated(EnumType.STRING)
     private TipoRiferimentoMittente tiporiferimentomittente;
     @Column(name="riferimentomittente")
@@ -63,9 +63,9 @@ public class Protocollo implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datariferimentomittente;
     @Column(name="convalidaattribuzioni")
-    private Boolean ConvalidaAttribuzioni;
+    private Boolean ConvalidaAttribuzioni=false;
     @Column(name="convalidaprotocollo")
-    private Boolean ConvalidaProtocollo;
+    private Boolean ConvalidaProtocollo=false;
 
 
 
