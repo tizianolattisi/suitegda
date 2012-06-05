@@ -54,7 +54,7 @@ public class Validators {
             if( max != null ){
                 Integer i = Integer.parseInt(max.getIddocumento().substring(4));
                 i++;
-                newIddocumento = year+"0000000"+i.toString();
+                newIddocumento = year+String.format("%08d", i);
             } else {
                 newIddocumento = year+"00000001";
             }
