@@ -140,7 +140,10 @@
              <number>2</number>
             </property>
             <item>
-             <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_3">
+             <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiEntityPicker" name="lineEdit_2">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="column" stdset="0">
                <string>Sportello</string>
               </property>
@@ -611,17 +614,6 @@
        <attribute name="title">
         <string>Riferimenti precedenti e successivi</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_8"/>
-      </widget>
-      <widget class="QWidget" name="tab_3">
-       <attribute name="title">
-        <string>Documenti</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_9">
-        <item>
-         <widget class="QListWidget" name="listWidgetAlfresco"/>
-        </item>
-       </layout>
       </widget>
      </widget>
     </item>
@@ -640,9 +632,9 @@
    <header>pypapitableview.h</header>
   </customwidget>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
-   <extends>QComboBox</extends>
-   <header>pypapicombobox.h</header>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiEntityPicker</class>
+   <extends>QLineEdit</extends>
+   <header>pypapientitypicker.h</header>
   </customwidget>
  </customwidgets>
  <resources>
