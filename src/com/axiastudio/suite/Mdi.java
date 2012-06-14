@@ -16,10 +16,22 @@ import com.trolltech.qt.gui.*;
 public class Mdi extends QMainWindow {
     private QMdiArea workspace;
     private QTreeWidget tree;
+    private QSystemTrayIcon trayIcon;
     
     public Mdi(){
         this.createWorkspace();
         this.createTree();
+        this.createSystemTray();
+    }
+    
+    private void createSystemTray(){
+        QIcon pypapi = new QIcon("classpath:com/axiastudio/pypapi/ui/resources/pypapi32.png");
+        QMenu menu = new QMenu(this);
+        menu.addAction("prova");
+        this.trayIcon = new QSystemTrayIcon(pypapi, this);
+        this.trayIcon.setContextMenu(menu);
+        this.trayIcon.show();
+        this.trayIcon.showMessage("PyPaPi Suite", "Applicazione avviata.");
         
     }
     
@@ -54,6 +66,16 @@ public class Mdi extends QMainWindow {
         itemSoggetti.setText(0, "Soggetti");
         itemSoggetti.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemSoggetti.setText(1, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
+        
+        /* Pratiche */
+        QTreeWidgetItem itemPraticheRoot = new QTreeWidgetItem(this.tree);
+        itemPraticheRoot.setText(0, "Pratiche...");
+        this.tree.addTopLevelItem(itemPraticheRoot);
+
+        QTreeWidgetItem itemPratiche = new QTreeWidgetItem(itemPraticheRoot);
+        itemPratiche.setText(0, "Pratiche");
+        itemPratiche.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemPratiche.setText(1, "com.axiastudio.suite.pratiche.entities.Pratica");
 
         /* Amministrazione */
         QTreeWidgetItem itemAmministrazione = new QTreeWidgetItem(this.tree);

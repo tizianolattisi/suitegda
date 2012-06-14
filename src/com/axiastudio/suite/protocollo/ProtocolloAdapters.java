@@ -12,7 +12,7 @@ import com.axiastudio.suite.protocollo.entities.Attribuzione;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class Adapters {
+public class ProtocolloAdapters {
     @Adapter
     public static Attribuzione adaptUfficioToAttribuzione(Ufficio ufficio){
         Attribuzione ap = new Attribuzione();

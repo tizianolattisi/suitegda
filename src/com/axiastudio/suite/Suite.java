@@ -13,12 +13,13 @@ import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.protocollo.Adapters;
-import com.axiastudio.suite.protocollo.Validators;
+import com.axiastudio.suite.pratiche.PraticheValidators;
+import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.protocollo.ProtocolloAdapters;
+import com.axiastudio.suite.protocollo.ProtocolloValidators;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -39,8 +40,9 @@ public class Suite {
         //EntityManager em = emf.createEntityManager();
 
         // registro adapter e validatori
-        Register.registerAdapters(Resolver.adaptersFromClass(Adapters.class));
-        Register.registerValidators(Resolver.validatorsFromClass(Validators.class));
+        Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
+        Register.registerValidators(Resolver.validatorsFromClass(ProtocolloValidators.class));
+        Register.registerValidators(Resolver.validatorsFromClass(PraticheValidators.class));
 
         // qualche dato di base
         Ufficio u1 = new Ufficio();
@@ -70,12 +72,15 @@ public class Suite {
         p3.setNote("Note del protocollo3");
         p3.setTipo(TipoProtocollo.INTERNO);
 
+        Pratica pr = new Pratica();
+        pr.setDescrizione("Pratica demo");
         
         // commit
         Controller controller = new Controller(emf, Protocollo.class);
         controller.commit(p);
         controller.commit(p2);
         controller.commit(p3);
+        controller.commit(pr);
         
         Application app = new Application(args);
         
@@ -87,6 +92,10 @@ public class Suite {
         Form formSoggetto = Register.registerForm(db.getEntityManagerFactory(),
                             "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
                             Soggetto.class);
+
+        Form formPratica = Register.registerForm(db.getEntityManagerFactory(),
+                           "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",
+                           Pratica.class);
 
 
         /* 
@@ -105,8 +114,11 @@ public class Suite {
 
         
         Mdi mdi = new Mdi();
-        mdi.show();
+        mdi.showMaximized();
+        //mdi.show();
         
+        app.setCustomApplicationName("PyPaPi Suite");
+        app.setCustomApplicationCredits("Copyright AXIA Studio 2012<br/>");
         app.exec();
     
     }
