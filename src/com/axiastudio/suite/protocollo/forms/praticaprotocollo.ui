@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>417</width>
+    <height>242</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Protocollo contenuto nella pratica</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>30</y>
+      <width>271</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="column" stdset="0">
+     <string>titolo</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>ISTANZA</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>INTEGRAZIONE</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>DETERMINA</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>DELIBERA</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

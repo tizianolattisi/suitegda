@@ -4,7 +4,7 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
-import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.pratiche.entities.Pratica;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -13,19 +13,19 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
-public class SoggettoProtocollo implements Serializable {
+public class PraticaProtocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @JoinColumn(name = "soggetto", referencedColumnName = "id")
+    @JoinColumn(name = "pratica", referencedColumnName = "id")
     @ManyToOne
-    private Soggetto soggetto;
+    private Pratica pratica;
     @JoinColumn(name = "protocollo", referencedColumnName = "id")
     @ManyToOne
     private Protocollo protocollo;
     @Enumerated(EnumType.STRING)
-    private TitoloSoggettoProtocollo titolo;
+    private TitoloPraticaProtocollo titolo;
 
     public Long getId() {
         return id;
@@ -33,6 +33,14 @@ public class SoggettoProtocollo implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Pratica getPratica() {
+        return pratica;
+    }
+
+    public void setPratica(Pratica pratica) {
+        this.pratica = pratica;
     }
 
     public Protocollo getProtocollo() {
@@ -43,19 +51,11 @@ public class SoggettoProtocollo implements Serializable {
         this.protocollo = protocollo;
     }
 
-    public Soggetto getSoggetto() {
-        return soggetto;
-    }
-
-    public void setSoggetto(Soggetto soggetto) {
-        this.soggetto = soggetto;
-    }
-
-    public TitoloSoggettoProtocollo getTitolo() {
+    public TitoloPraticaProtocollo getTitolo() {
         return titolo;
     }
 
-    public void setTitolo(TitoloSoggettoProtocollo titolo) {
+    public void setTitolo(TitoloPraticaProtocollo titolo) {
         this.titolo = titolo;
     }
 
@@ -69,10 +69,10 @@ public class SoggettoProtocollo implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SoggettoProtocollo)) {
+        if (!(object instanceof PraticaProtocollo)) {
             return false;
         }
-        SoggettoProtocollo other = (SoggettoProtocollo) object;
+        PraticaProtocollo other = (PraticaProtocollo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -81,7 +81,7 @@ public class SoggettoProtocollo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.protocollo.entities.SoggettoProtocollo[ id=" + id + " ]";
+        return "com.axiastudio.suite.protocollo.entities.PraticaProtocollo[ id=" + id + " ]";
     }
     
 }

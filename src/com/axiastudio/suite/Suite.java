@@ -17,7 +17,9 @@ import com.axiastudio.suite.pratiche.PraticheValidators;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloValidators;
+import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
+import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import javax.persistence.EntityManagerFactory;
@@ -96,6 +98,14 @@ public class Suite {
         Form formPratica = Register.registerForm(db.getEntityManagerFactory(),
                            "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",
                            Pratica.class);
+
+        Form formSoggettoProtocollo = Register.registerForm(db.getEntityManagerFactory(),
+                           "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
+                           SoggettoProtocollo.class);
+
+        Form formPraticaProtocollo = Register.registerForm(db.getEntityManagerFactory(),
+                           "classpath:com/axiastudio/suite/protocollo/forms/praticaprotocollo.ui",
+                           PraticaProtocollo.class);
 
 
         /* 

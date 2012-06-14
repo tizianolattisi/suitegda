@@ -43,6 +43,8 @@ public class Protocollo implements Serializable {
     private Collection<UfficioProtocollo> ufficioProtocolloCollection;
     @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Attribuzione> attribuzioneCollection;
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<PraticaProtocollo> praticaProtocolloCollection;
     @Column(name="annullato")
     private Boolean annullato=false;
     @Column(name="annullamentorichiesto")
@@ -211,6 +213,14 @@ public class Protocollo implements Serializable {
 
     public void setUfficioProtocolloCollection(Collection<UfficioProtocollo> ufficioProtocolloCollection) {
         this.ufficioProtocolloCollection = ufficioProtocolloCollection;
+    }
+
+    public Collection<PraticaProtocollo> getPraticaProtocolloCollection() {
+        return praticaProtocolloCollection;
+    }
+
+    public void setPraticaProtocolloCollection(Collection<PraticaProtocollo> praticaProtocolloCollection) {
+        this.praticaProtocolloCollection = praticaProtocolloCollection;
     }
 
     public Date getDatariferimentomittente() {

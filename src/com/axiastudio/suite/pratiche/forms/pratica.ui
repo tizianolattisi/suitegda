@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Pratiche</string>
+  </property>
+  <property name="searchcolumns" stdset="0">
+   <string>&gt;idpratica&lt;,&lt;descrizione&gt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox">
@@ -51,6 +54,9 @@
      <property name="column" stdset="0">
       <string>idpratica</string>
      </property>
+     <property name="search" stdset="0">
+      <bool>true</bool>
+     </property>
     </widget>
     <widget class="QTextEdit" name="textEdit">
      <property name="geometry">
@@ -63,6 +69,9 @@
      </property>
      <property name="column" stdset="0">
       <string>descrizione</string>
+     </property>
+     <property name="search" stdset="0">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QTextEdit" name="textEdit_2">
