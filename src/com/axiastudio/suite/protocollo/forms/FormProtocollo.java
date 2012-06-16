@@ -34,13 +34,17 @@ class ProtocolloMenuBar extends PyPaPiToolBar {
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class FormProtocollo extends Form {
-    private final ProtocolloMenuBar protocolloMenuBar;
+    private  ProtocolloMenuBar protocolloMenuBar=null;
     private QTabWidget tabWidget;
     private AlfrescoHelper alfrescoHelper;
     private final String ALFRESCOCMIS="http://127.0.0.1:8080/alfresco/service/cmis";
     private final String ALFRESCOHOST="127.0.0.1";
     private final Integer ALFRESCOPORT=8080;
     private final String ALFRESCOURL="http://127.0.0.1:8080/share/page/dologin?username=admin&password=admin&success=/share/page/site/protocollo/documentlibrary#filter=path%%7C/%s&page=1";
+    
+    public FormProtocollo(FormProtocollo form){
+        super(form.uiFile, form.entityClass, form.title);
+    }
     
     public FormProtocollo(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);

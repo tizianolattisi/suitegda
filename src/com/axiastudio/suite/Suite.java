@@ -44,9 +44,7 @@ public class Suite {
         Register.registerValidators(Resolver.validatorsFromClass(PraticheValidators.class));
         
         // dati di base
-        DemoData.initBase();
-        DemoData.initAnagrafiche();
-        DemoData.initProtocollo();
+        DemoData.initData();
         
         Application app = new Application(args);
         
@@ -58,15 +56,15 @@ public class Suite {
         Form formSoggetto = Register.registerForm(db.getEntityManagerFactory(),
                             "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
                             Soggetto.class);
-
+        
         Form formPratica = Register.registerForm(db.getEntityManagerFactory(),
                            "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",
                            Pratica.class);
-
+                          
         Form formSoggettoProtocollo = Register.registerForm(db.getEntityManagerFactory(),
                            "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
                            SoggettoProtocollo.class);
-
+      
         Form formPraticaProtocollo = Register.registerForm(db.getEntityManagerFactory(),
                            "classpath:com/axiastudio/suite/protocollo/forms/praticaprotocollo.ui",
                            PraticaProtocollo.class);
@@ -84,12 +82,11 @@ public class Suite {
         Form formProtocollo = new FormProtocollo("classpath:com/axiastudio/suite/protocollo/forms/protocollo.ui", Protocollo.class, "Protocolli");
         Register.registerUtility(formProtocollo, IForm.class, Protocollo.class.getName());
         Register.registerUtility(Protocollo.class, IFactory.class, Protocollo.class.getName());
-        formProtocollo.init();
 
         
         Mdi mdi = new Mdi();
-        mdi.showMaximized();
-        //mdi.show();
+        //mdi.showMaximized();
+        mdi.show();
         
         app.setCustomApplicationName("PyPaPi Suite");
         app.setCustomApplicationCredits("Copyright AXIA Studio 2012<br/>");

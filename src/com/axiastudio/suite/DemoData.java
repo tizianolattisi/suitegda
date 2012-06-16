@@ -11,8 +11,10 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
+import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.protocollo.entities.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -21,6 +23,9 @@ import javax.persistence.EntityManagerFactory;
  */
 public class DemoData {
     
+    public DemoData() {
+    }
+    
     private static Controller createController(){
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManagerFactory emf = db.getEntityManagerFactory();   
@@ -28,52 +33,66 @@ public class DemoData {
         return controller;
     }
     
-    public static void initBase(){
+    public static void initData(){
         Controller ctrl = DemoData.createController();
 
-        Ufficio u1 = new Ufficio();
-        u1.setDescrizione("Ufficio informativo");
-        Ufficio u2 = new Ufficio();
-        u2.setDescrizione("Ufficio protocollo");
+        /* uffici */
+        Ufficio uffInf = new Ufficio();
+        uffInf.setDescrizione("Ufficio informativo");
+        Ufficio uffPro = new Ufficio();
+        uffPro.setDescrizione("Ufficio protocollo");
         
-        ctrl.commit(u1);
-        ctrl.commit(u2);
-    }
-    
-    public static void initAnagrafiche(){
-        Controller ctrl = DemoData.createController();
+        /* soggetti */
+        Soggetto tiziano = new Soggetto();
+        tiziano.setNome("Tiziano");
+        tiziano.setCognome("Lattisi");
+        tiziano.setTipologiaSoggetto(TipologiaSoggetto.PERSONA);
         
-        Soggetto s = new Soggetto();
-        s.setNome("Tiziano");
-        s.setCognome("Lattisi");
-        s.setTipologiaSoggetto(TipologiaSoggetto.PERSONA);
+        /* pratiche */
+        //Pratica pratica = new Pratica();
+        //pratica.setDescrizione("Pratica demo");
         
-        ctrl.commit(s);
-    }
-    
-    public static void initProtocollo(){
-        Controller ctrl = DemoData.createController();
-        
-        Protocollo p1 = new Protocollo();
-        p1.setOggetto("Oggetto del protocollo");
-        p1.setNote("Note del protocollo");
-        p1.setTipo(TipoProtocollo.USCITA);
-        //p.setSportello(u2);
-        p1.setRichiederisposta(Boolean.TRUE);
+        /* protocolli */
+        Protocollo pro1 = new Protocollo();
+        pro1.setOggetto("Oggetto del protocollo");
+        pro1.setNote("Note del protocollo");
+        pro1.setTipo(TipoProtocollo.ENTRATA);
+        pro1.setSportello(uffInf);
+        pro1.setRichiederisposta(Boolean.TRUE);
+        UfficioProtocollo up = new UfficioProtocollo();
+        up.setUfficio(uffInf);
+        List<UfficioProtocollo> ufficiprotocollo = new ArrayList<UfficioProtocollo>();
+        ufficiprotocollo.add(up);
+        pro1.setUfficioProtocolloCollection(ufficiprotocollo);
+        List<Attribuzione> attribuzioni = new ArrayList<Attribuzione>();
+        Attribuzione a1 = new Attribuzione();
+        a1.setUfficio(uffInf);
+        Attribuzione a2 = new Attribuzione();
+        a2.setUfficio(uffPro);
+        attribuzioni.add(a1);
+        attribuzioni.add(a2);
+        pro1.setAttribuzioneCollection(attribuzioni);
+        SoggettoProtocollo sp = new SoggettoProtocollo();
+        sp.setSoggetto(tiziano);
+        List<SoggettoProtocollo> soggettiprotocollo = new ArrayList<SoggettoProtocollo>();
+        soggettiprotocollo.add(sp);
+        pro1.setSoggettoProtocolloCollection(soggettiprotocollo);
+        /*
+        PraticaProtocollo pp = new PraticaProtocollo();
+        pp.setPratica(pratica);
+        List<PraticaProtocollo> praticheprotocollo = new ArrayList<PraticaProtocollo>();
+        praticheprotocollo.add(pp);
+        pro1.setPraticaProtocolloCollection(praticheprotocollo);
+        * 
+        */
 
-        Protocollo p2 = new Protocollo();
-        p2.setOggetto("Oggetto del protocollo2");
-        p2.setNote("Note del protocollo2");
-        //p2.setSportello(u1);
-        p2.setTipo(TipoProtocollo.ENTRATA);
+        Protocollo pro2 = new Protocollo();
+        pro2.setOggetto("Oggetto del protocollo2");
+        pro2.setNote("Note del protocollo2");
+        pro2.setSportello(uffPro);
+        pro2.setTipo(TipoProtocollo.USCITA);
 
-        Protocollo p3 = new Protocollo();
-        p3.setOggetto("Oggetto del protocollo3");
-        p3.setNote("Note del protocollo3");
-        p3.setTipo(TipoProtocollo.INTERNO);
-        
-        ctrl.commit(p1);
-        ctrl.commit(p2);
-        ctrl.commit(p3);
+        ctrl.commit(pro1);
+        ctrl.commit(pro2);
     }
 }

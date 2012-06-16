@@ -99,8 +99,12 @@ public class Mdi extends QMainWindow {
     private void runTask() {
         String formName = this.tree.currentItem().text(1);
         Form form = (Form) Register.queryUtility(IForm.class, formName);
-        this.workspace.addSubWindow(form);
-        this.showForm(form);
+        //Form newForm = new Form(form);
+        Class<? extends Form> aClass = form.getClass();
+        Form newForm = aClass.cast(form);
+        newForm.init();
+        this.workspace.addSubWindow(newForm);
+        this.showForm(newForm);
     }
     
     private void showForm(Form form) {
