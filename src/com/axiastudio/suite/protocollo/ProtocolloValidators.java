@@ -7,6 +7,7 @@ package com.axiastudio.suite.protocollo;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.pypapi.db.Validator;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo_;
@@ -28,7 +29,18 @@ public class ProtocolloValidators {
      * Valida il protocollo e richiede il nuovo iddocumento
      */
     @Validator
-    public static Boolean validaProtocollo(Protocollo protocollo){
+    public static Validation validaProtocollo(Protocollo protocollo){
+        String msg = "";
+        Boolean res = true;
+        /* almeno un soggetto */
+        if( protocollo.getSoggettoProtocolloCollection().isEmpty() ){
+            msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
+            res = false;
+        }
+        if( res == false ){
+            return new Validation(false, msg);
+        }
+        
         if( protocollo.getId() == null ){
             Calendar calendar = Calendar.getInstance();
             Integer year = calendar.get(Calendar.YEAR);
@@ -60,7 +72,7 @@ public class ProtocolloValidators {
             }
             protocollo.setIddocumento(newIddocumento);
         }
-        return true;
+        return new Validation(true);
     }
     
 }
