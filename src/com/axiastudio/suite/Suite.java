@@ -12,6 +12,8 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.Form;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.UfficioUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.PraticheValidators;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
@@ -55,6 +57,12 @@ public class Suite {
                               Form.class,
                               "Uffici");
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/base/forms/utente.ui",
+                              Utente.class,
+                              Form.class,
+                              "Utenti");
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
                               Soggetto.class,

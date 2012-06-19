@@ -10,6 +10,8 @@
     <class>com.axiastudio.suite.protocollo.entities.SoggettoProtocollo</class>
     <class>com.axiastudio.suite.pratiche.entities.Pratica</class>
     <class>com.axiastudio.suite.protocollo.entities.PraticaProtocollo</class>
+    <class>com.axiastudio.suite.base.entities.Utente</class>
+    <class>com.axiastudio.suite.base.entities.UfficioUtente</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>

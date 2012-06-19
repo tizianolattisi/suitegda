@@ -91,6 +91,7 @@ public class Mdi extends QMainWindow {
         QTreeWidgetItem itemUtenti = new QTreeWidgetItem(itemAmministrazione);
         itemUtenti.setText(0, "Utenti");
         itemUtenti.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/user.png"));
+        itemUtenti.setText(1, "com.axiastudio.suite.base.entities.Utente");
 
         QTreeWidgetItem itemUffici = new QTreeWidgetItem(itemAmministrazione);
         itemUffici.setText(0, "Uffici");
