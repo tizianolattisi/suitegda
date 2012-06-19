@@ -5,9 +5,15 @@
 package com.axiastudio.suite;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.IFactory;
 import com.axiastudio.pypapi.ui.Form;
 import com.axiastudio.pypapi.ui.IForm;
+import com.axiastudio.pypapi.ui.IUIFile;
 import com.trolltech.qt.gui.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -97,14 +103,32 @@ public class Mdi extends QMainWindow {
     }
     
     private void runTask() {
+        Form form=null;
         String formName = this.tree.currentItem().text(1);
-        Form form = (Form) Register.queryUtility(IForm.class, formName);
-        //Form newForm = new Form(form);
-        Class<? extends Form> aClass = form.getClass();
-        Form newForm = aClass.cast(form);
-        newForm.init();
-        this.workspace.addSubWindow(newForm);
-        this.showForm(newForm);
+        Class<? extends Form> formClass = (Class) Register.queryUtility(IForm.class, formName);
+        String uiFile = (String) Register.queryUtility(IUIFile.class, formName);
+        Class factory = (Class) Register.queryUtility(IFactory.class, formName);
+        try {
+            Constructor<? extends Form> constructor = formClass.getConstructor(new Class[]{String.class, Class.class, String.class});
+            try {
+                form = constructor.newInstance(new Object[]{uiFile, factory, ""});
+            } catch (InstantiationException ex) {
+                Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        form.init(); // XXX: full store
+        this.workspace.addSubWindow(form);
+        this.showForm(form);
     }
     
     private void showForm(Form form) {
