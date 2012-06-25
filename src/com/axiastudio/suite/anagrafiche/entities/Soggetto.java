@@ -5,6 +5,7 @@
 package com.axiastudio.suite.anagrafiche.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.*;
 
 /**
@@ -26,6 +27,8 @@ public class Soggetto implements Serializable {
     private String cognome;
     @Column(name="ragionesociale")
     private String ragionesociale;
+    @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<Indirizzo> indirizzoCollection;
 
     public Long getId() {
         return id;
@@ -67,6 +70,14 @@ public class Soggetto implements Serializable {
         this.tipologiaSoggetto = tipologiaSoggetto;
     }
 
+    public Collection<Indirizzo> getIndirizzoCollection() {
+        return indirizzoCollection;
+    }
+
+    public void setIndirizzoCollection(Collection<Indirizzo> indirizzoCollection) {
+        this.indirizzoCollection = indirizzoCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -89,7 +100,15 @@ public class Soggetto implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.anagrafiche.entities.Soggetto[ id=" + id + " ]";
+        if( this.tipologiaSoggetto.equals(TipologiaSoggetto.PERSONA) ){
+            return this.nome+" "+this.cognome;
+        } else if( this.tipologiaSoggetto.equals(TipologiaSoggetto.AZIENDA) ){
+            return this.ragionesociale;
+        } else if ( this.tipologiaSoggetto.equals(TipologiaSoggetto.ENTE) ){
+            return "ente (da completare)";
+        }
+        return "-";
+        //return "com.axiastudio.suite.anagrafiche.entities.Soggetto[ id=" + id + " ]";
     }
     
 }

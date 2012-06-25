@@ -20,21 +20,23 @@ import java.util.logging.Logger;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class Mdi extends QMainWindow {
+    
+    private static String ICON = "classpath:com/axiastudio/pypapi/ui/resources/pypapi32.png";
     private QMdiArea workspace;
     private QTreeWidget tree;
     private QSystemTrayIcon trayIcon;
     
     public Mdi(){
+        this.setWindowIcon(new QIcon(ICON));
         this.createWorkspace();
         this.createTree();
         this.createSystemTray();
     }
     
     private void createSystemTray(){
-        QIcon pypapi = new QIcon("classpath:com/axiastudio/pypapi/ui/resources/pypapi32.png");
         QMenu menu = new QMenu(this);
         menu.addAction("prova");
-        this.trayIcon = new QSystemTrayIcon(pypapi, this);
+        this.trayIcon = new QSystemTrayIcon(new QIcon(ICON), this);
         this.trayIcon.setContextMenu(menu);
         this.trayIcon.show();
         this.trayIcon.showMessage("PyPaPi Suite", "Applicazione avviata.");

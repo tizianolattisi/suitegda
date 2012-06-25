@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.axiastudio.suite.protocollo.entities;
+package com.axiastudio.suite.anagrafiche.entities;
 
-import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -13,7 +12,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
-public class SoggettoProtocollo implements Serializable {
+public class Indirizzo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,11 +20,13 @@ public class SoggettoProtocollo implements Serializable {
     @JoinColumn(name = "soggetto", referencedColumnName = "id")
     @ManyToOne
     private Soggetto soggetto;
-    @JoinColumn(name = "protocollo", referencedColumnName = "id")
-    @ManyToOne
-    private Protocollo protocollo;
+    @Column(name="via")
+    private String via;
+    @Column(name="civico")
+    private String civico;
     @Enumerated(EnumType.STRING)
-    private TitoloSoggettoProtocollo titolo;
+    private Provincia provincia;
+    
 
     public Long getId() {
         return id;
@@ -35,12 +36,20 @@ public class SoggettoProtocollo implements Serializable {
         this.id = id;
     }
 
-    public Protocollo getProtocollo() {
-        return protocollo;
+    public String getCivico() {
+        return civico;
     }
 
-    public void setProtocollo(Protocollo protocollo) {
-        this.protocollo = protocollo;
+    public void setCivico(String civico) {
+        this.civico = civico;
+    }
+
+    public Provincia getProvincia() {
+        return provincia;
+    }
+
+    public void setProvincia(Provincia provincia) {
+        this.provincia = provincia;
     }
 
     public Soggetto getSoggetto() {
@@ -51,12 +60,12 @@ public class SoggettoProtocollo implements Serializable {
         this.soggetto = soggetto;
     }
 
-    public TitoloSoggettoProtocollo getTitolo() {
-        return titolo;
+    public String getVia() {
+        return via;
     }
 
-    public void setTitolo(TitoloSoggettoProtocollo titolo) {
-        this.titolo = titolo;
+    public void setVia(String via) {
+        this.via = via;
     }
 
     @Override
@@ -69,10 +78,10 @@ public class SoggettoProtocollo implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SoggettoProtocollo)) {
+        if (!(object instanceof Indirizzo)) {
             return false;
         }
-        SoggettoProtocollo other = (SoggettoProtocollo) object;
+        Indirizzo other = (Indirizzo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -81,8 +90,7 @@ public class SoggettoProtocollo implements Serializable {
 
     @Override
     public String toString() {
-        return this.soggetto.toString();
-        //return "com.axiastudio.suite.protocollo.entities.SoggettoProtocollo[ id=" + id + " ]";
+        return "com.axiastudio.suite.anagrafiche.entities.Indirizzo[ id=" + id + " ]";
     }
     
 }

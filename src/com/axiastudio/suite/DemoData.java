@@ -91,6 +91,9 @@ public class DemoData {
         pro2.setNote("Note del protocollo2");
         pro2.setSportello(uffPro);
         pro2.setTipo(TipoProtocollo.USCITA);
+        List<SoggettoProtocollo> soggettiprotocollo2 = new ArrayList<SoggettoProtocollo>();
+        soggettiprotocollo2.add(sp);
+        pro2.setSoggettoProtocolloCollection(soggettiprotocollo2);
 
         ctrl.commit(pro1);
         ctrl.commit(pro2);

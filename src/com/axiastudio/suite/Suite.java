@@ -10,7 +10,9 @@ import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.Form;
+import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
@@ -68,6 +70,13 @@ public class Suite {
                               Soggetto.class,
                               Form.class,
                               "Soggetti anagrafici");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/anagrafiche/forms/indirizzo.ui",
+                              Indirizzo.class,
+                              FormIndirizzo.class,
+                              "Indirizzo");
+
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",

@@ -194,6 +194,18 @@
        <attribute name="title">
         <string>Indirizzi postali</string>
        </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView">
+          <property name="entity" stdset="0">
+           <string>.indirizzoCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>via,&gt;civico&lt;,&gt;provincia&lt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
@@ -205,6 +217,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
+   <extends>QTableView</extends>
+   <header>pypapitableview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
