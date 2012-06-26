@@ -4,6 +4,8 @@
  */
 package com.axiastudio.suite.alfresco;
 
+import java.io.ByteArrayInputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +14,11 @@ import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
+import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
+import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 
 /**
  *
@@ -90,6 +95,27 @@ public class AlfrescoHelper {
         properties.put(PropertyIds.NAME, folderName);
         Folder folder = parentFolder.createFolder(properties);
         return folder;
+    }
+    
+    /*
+     * Crea un documento (upload)
+     */
+    public Document createDocument(String path, String name, byte[] content){
+        Folder folder;
+        Session session = this.createSession();
+        folder = (Folder) session.getObjectByPath(path);
+        
+        ByteArrayInputStream stream = new ByteArrayInputStream(content);
+        ContentStream contentStream = new ContentStreamImpl(name, BigInteger.valueOf(content.length), "application/pdf", stream);
+        
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
+        properties.put(PropertyIds.NAME, name);
+
+        Document document = folder.createDocument(properties, contentStream, VersioningState.MAJOR);
+        
+        return document;
+        
     }
     
 }

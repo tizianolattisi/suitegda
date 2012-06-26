@@ -10,10 +10,13 @@ import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
 import com.axiastudio.suite.alfresco.AlfrescoHelper;
 import com.axiastudio.suite.alfresco.AlfrescoObject;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
+import com.trolltech.qt.core.QFile;
+import com.trolltech.qt.core.QIODevice;
 import com.trolltech.qt.core.QUrl;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 import java.util.Calendar;
+import java.util.List;
 
 class ProtocolloMenuBar extends PyPaPiToolBar {
     public ProtocolloMenuBar(String title, Form parent){
@@ -24,9 +27,13 @@ class ProtocolloMenuBar extends PyPaPiToolBar {
         this.insertButton("convalidaProtocollo", "Convalida protocollo",
                 "classpath:com/axiastudio/suite/resources/lock_mail.png",
                 "Convalida della registrazione del protocollo", parent);
-        this.insertButton("spazioAlfresco", "Spazio Alfresco",
-                "classpath:com/axiastudio/suite/resources/alfresco.png",
-                "Apri spazio Alfresco nel browser", parent);
+        QAction spazioAlfresco = this.insertButton("spazioAlfresco", "Spazio Alfresco",
+                                       "classpath:com/axiastudio/suite/resources/alfresco.png",
+                                       "Apri spazio Alfresco nel browser", parent);
+        this.insertSeparator(spazioAlfresco);
+        this.insertButton("caricaDocumento", "Carica documento su Alfresco",
+                "classpath:com/axiastudio/suite/resources/folder_page.png",
+                "Carica un nuovo documento sullo spazio Alfresco", parent);
     }
 }
 
@@ -38,13 +45,15 @@ public class FormProtocollo extends Form {
     private  ProtocolloMenuBar protocolloMenuBar=null;
     private QTabWidget tabWidget;
     private AlfrescoHelper alfrescoHelper;
+    
     private final String ALFRESCOHOST="192.168.64.54";
     private final Integer ALFRESCOPORT=8080;
     private final String ALFRESCOUSER="pypapi";
     private final String ALFRESCOPASSWORD="0i2kiwi";
+    private final String ALFRESCOSITE="protocollo";
     private final String ALFRESCOCMIS="http://"+ALFRESCOHOST+":"+ALFRESCOPORT+"/alfresco/service/cmis";
     private final String ALFRESCOLOGIN="http://"+ALFRESCOHOST+":"+ALFRESCOPORT+"/share/page/dologin?username="+ALFRESCOUSER+"&password="+ALFRESCOPASSWORD+"&success=";
-    private final String ALFRESCOSPACE=ALFRESCOLOGIN+"/share/page/site/protocollo/documentlibrary#filter=path%%7C/%s&page=1";
+    private final String ALFRESCOSPACE=ALFRESCOLOGIN+"/share/page/site/"+ALFRESCOSITE+"/documentlibrary#filter=path%%7C/%s&page=1";
     private final String ALFRESCODOCUMENT=ALFRESCOLOGIN+"/share/page/document-details?nodeRef=%s";
     
     public FormProtocollo(FormProtocollo form){
@@ -97,7 +106,7 @@ public class FormProtocollo extends Form {
         QListWidget qlw = (QListWidget) this.findChild(QListWidget.class, "listWidgetAlfresco");
         qlw.clear();
         if( "Documenti".equals(tabText) ){
-            String path = "/Siti/protocollo/documentLibrary"+this.getAlfrescoPath();
+            String path = "/Siti/"+ALFRESCOSITE+"/documentLibrary"+this.getAlfrescoPath();
             for(AlfrescoObject object: this.alfrescoHelper.childrenNames(path)){
                 QListWidgetItem item = new QListWidgetItem(object.getName());
                 item.setData(Qt.ItemDataRole.UserRole, object.getObjectId());
@@ -124,8 +133,24 @@ public class FormProtocollo extends Form {
     }
 
     private void spazioAlfresco(){
-        String urlpath = String.format(this.ALFRESCOSPACE, this.getAlfrescoPath());
-        QDesktopServices.openUrl(new QUrl(urlpath));
+        String url = String.format(ALFRESCOSPACE, this.getAlfrescoPath());
+        QDesktopServices.openUrl(new QUrl(url));
+    }
+    
+    private void caricaDocumento(){
+        QFileDialog dialog = new QFileDialog(this, "Carica file");
+        int exec = dialog.exec();
+        List<String> selectedFiles = dialog.selectedFiles();
+        String path = "/Siti/"+ALFRESCOSITE+"/documentLibrary"+this.getAlfrescoPath();
+        for( String fileName: selectedFiles ){
+            QFile file = new QFile(fileName);
+            if (file.open(QIODevice.OpenModeFlag.ReadOnly)){
+                byte[] content = file.readAll().toByteArray();
+                String[] split = file.fileName().split("/");
+                String name = split[split.length-1];
+                this.alfrescoHelper.createDocument(path, name, content);
+            }
+        }
     }
 
 }
