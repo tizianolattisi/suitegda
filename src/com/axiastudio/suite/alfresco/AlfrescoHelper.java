@@ -61,7 +61,9 @@ public class AlfrescoHelper {
         ItemIterable<CmisObject> cmisChildren = folder.getChildren();
 
         for (CmisObject o : cmisChildren) {
-            children.add(new AlfrescoObject(o.getName()));
+            List<Property<?>> properties = o.getProperties();
+            String objectId = o.getProperty("cmis:objectId").getValue().toString();
+            children.add(new AlfrescoObject(o.getName(), objectId));
         }
         return children;
     }

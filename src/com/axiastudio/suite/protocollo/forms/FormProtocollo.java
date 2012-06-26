@@ -11,6 +11,7 @@ import com.axiastudio.suite.alfresco.AlfrescoHelper;
 import com.axiastudio.suite.alfresco.AlfrescoObject;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.trolltech.qt.core.QUrl;
+import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 import java.util.Calendar;
 
@@ -37,10 +38,14 @@ public class FormProtocollo extends Form {
     private  ProtocolloMenuBar protocolloMenuBar=null;
     private QTabWidget tabWidget;
     private AlfrescoHelper alfrescoHelper;
-    private final String ALFRESCOCMIS="http://127.0.0.1:8080/alfresco/service/cmis";
-    private final String ALFRESCOHOST="127.0.0.1";
+    private final String ALFRESCOHOST="192.168.64.54";
     private final Integer ALFRESCOPORT=8080;
-    private final String ALFRESCOURL="http://127.0.0.1:8080/share/page/dologin?username=admin&password=admin&success=/share/page/site/protocollo/documentlibrary#filter=path%%7C/%s&page=1";
+    private final String ALFRESCOUSER="pypapi";
+    private final String ALFRESCOPASSWORD="0i2kiwi";
+    private final String ALFRESCOCMIS="http://"+ALFRESCOHOST+":"+ALFRESCOPORT+"/alfresco/service/cmis";
+    private final String ALFRESCOLOGIN="http://"+ALFRESCOHOST+":"+ALFRESCOPORT+"/share/page/dologin?username="+ALFRESCOUSER+"&password="+ALFRESCOPASSWORD+"&success=";
+    private final String ALFRESCOSPACE=ALFRESCOLOGIN+"/share/page/site/protocollo/documentlibrary#filter=path%%7C/%s&page=1";
+    private final String ALFRESCODOCUMENT=ALFRESCOLOGIN+"/share/page/document-details?nodeRef=%s";
     
     public FormProtocollo(FormProtocollo form){
         super(form.uiFile, form.entityClass, form.title);
@@ -59,7 +64,7 @@ public class FormProtocollo extends Form {
         
         this.tabWidget = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget");
         this.tabWidget.currentChanged.connect(this, "currentTabChanged(int)");
-        this.alfrescoHelper = new AlfrescoHelper("admin", "admin", this.ALFRESCOCMIS);
+        this.alfrescoHelper = new AlfrescoHelper(ALFRESCOUSER, ALFRESCOPASSWORD, ALFRESCOCMIS);
     }
     
     private void convalidaAttribuzioni() {
@@ -75,11 +80,6 @@ public class FormProtocollo extends Form {
         this.getContext().getDirty();
     }
     
-    private void spazioAlfresco(){
-        String path = String.format(this.ALFRESCOURL, this.getAlfrescoPath());
-        QDesktopServices.openUrl(new QUrl(path));
-    }
-
     @Override
     protected void indexChanged(int row) {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
@@ -99,9 +99,12 @@ public class FormProtocollo extends Form {
         if( "Documenti".equals(tabText) ){
             String path = "/Siti/protocollo/documentLibrary"+this.getAlfrescoPath();
             for(AlfrescoObject object: this.alfrescoHelper.childrenNames(path)){
-                qlw.addItem(object.getName());
+                QListWidgetItem item = new QListWidgetItem(object.getName());
+                item.setData(Qt.ItemDataRole.UserRole, object.getObjectId());
+                qlw.addItem(item);
             }
         }
+        qlw.itemDoubleClicked.connect(this, "documentoAlfresco(QListWidgetItem)");
     }
     
     private String getAlfrescoPath(){
@@ -114,5 +117,15 @@ public class FormProtocollo extends Form {
                 protocollo.getIddocumento();
         return path;
     }
-        
+    
+    private void documentoAlfresco(QListWidgetItem item){
+        String url = String.format(ALFRESCODOCUMENT, item.data(Qt.ItemDataRole.UserRole));
+        QDesktopServices.openUrl(new QUrl(url));
+    }
+
+    private void spazioAlfresco(){
+        String urlpath = String.format(this.ALFRESCOSPACE, this.getAlfrescoPath());
+        QDesktopServices.openUrl(new QUrl(urlpath));
+    }
+
 }

@@ -11,7 +11,7 @@ package com.axiastudio.suite.alfresco;
 public class AlfrescoObject {
     
     private String name;
-    private String path;
+    private String objectId;
 
     public AlfrescoObject(String name) {
         this(name, "");
@@ -19,15 +19,15 @@ public class AlfrescoObject {
 
     public AlfrescoObject(String name, String path){
         this.name = name;
-        this.path = path;
+        this.objectId = path;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getPath() {
-        return path;
+    public String getObjectId() {
+        return objectId;
     }
     
     

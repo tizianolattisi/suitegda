@@ -503,10 +503,13 @@
               <string>.soggettoProtocolloCollection</string>
              </property>
              <property name="columns" stdset="0">
-              <string>soggetto</string>
+              <string>soggetto,titolo</string>
              </property>
              <property name="reference" stdset="0">
               <string>soggetto</string>
+             </property>
+             <property name="headers" stdset="0">
+              <string>soggetto,titolo</string>
              </property>
             </widget>
            </item>
@@ -637,14 +640,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
-   <extends>QDateEdit</extends>
-   <header>pypapidateedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
    <header>pypapitableview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>pypapidateedit.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
