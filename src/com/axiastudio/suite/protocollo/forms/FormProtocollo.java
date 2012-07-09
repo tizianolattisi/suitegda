@@ -73,7 +73,7 @@ public class FormProtocollo extends Form {
         
         this.tabWidget = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget");
         this.tabWidget.currentChanged.connect(this, "currentTabChanged(int)");
-        this.alfrescoHelper = new AlfrescoHelper(ALFRESCOUSER, ALFRESCOPASSWORD, ALFRESCOCMIS);
+        this.alfrescoHelper = new AlfrescoHelper(ALFRESCOUSER, ALFRESCOPASSWORD, ALFRESCOCMIS);        
     }
     
     private void convalidaAttribuzioni() {
@@ -99,6 +99,7 @@ public class FormProtocollo extends Form {
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
         tv.setEnabled(!convAttribuzioni);
         this.centralWidget().setEnabled(!convProtocollo);
+        super.indexChanged(row);
     }
 
     private void currentTabChanged(int tab) {
