@@ -5,16 +5,18 @@
 package com.axiastudio.suite;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.UfficioUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.entities.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -26,33 +28,51 @@ public class DemoData {
     public DemoData() {
     }
     
-    private static Controller createController(){
-        Database db = (Database) Register.queryUtility(IDatabase.class);
-        EntityManagerFactory emf = db.getEntityManagerFactory();   
-        Controller controller = new Controller(emf);
-        return controller;
-    }
-    
     public static void initData(){
-        Controller ctrl = DemoData.createController();
+        // inizializzo e apro la transazione
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManagerFactory emf = db.getEntityManagerFactory();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
 
-        /* uffici */
+        // uffici
         Ufficio uffInf = new Ufficio();
         uffInf.setDescrizione("Ufficio informativo");
         Ufficio uffPro = new Ufficio();
         uffPro.setDescrizione("Ufficio protocollo");
+        em.merge(uffInf);
+        em.merge(uffPro);
         
-        /* soggetti */
+        // utenti
+        Utente mario = new Utente();
+        mario.setLogin("mario");
+        mario.setPassword(SuiteUtil.digest("super"));
+        Utente luigi = new Utente();
+        luigi.setLogin("luigi");
+        luigi.setPassword(SuiteUtil.digest("bros"));
+        List<UfficioUtente> ufficiUtente = new ArrayList();
+        UfficioUtente uu = new UfficioUtente();
+        uu.setUfficio(uffInf);
+        uu.setVisualizza(Boolean.TRUE);
+        ufficiUtente.add(uu);
+        mario.setUfficioUtenteCollection(ufficiUtente);
+        em.merge(mario);
+        em.merge(luigi);
+
+        // soggetti
         Soggetto tiziano = new Soggetto();
         tiziano.setNome("Tiziano");
         tiziano.setCognome("Lattisi");
         tiziano.setTipologiaSoggetto(TipologiaSoggetto.PERSONA);
+        em.merge(tiziano);
         
-        /* pratiche */
-        //Pratica pratica = new Pratica();
-        //pratica.setDescrizione("Pratica demo");
+        // pratiche
+        Pratica pratica = new Pratica();
+        pratica.setDescrizione("Pratica demo");
+        em.merge(pratica);
         
-        /* protocolli */
+        // protocolli
         Protocollo pro1 = new Protocollo();
         pro1.setOggetto("Oggetto del protocollo");
         pro1.setNote("Note del protocollo");
@@ -77,15 +97,11 @@ public class DemoData {
         List<SoggettoProtocollo> soggettiprotocollo = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo.add(sp);
         pro1.setSoggettoProtocolloCollection(soggettiprotocollo);
-        /*
         PraticaProtocollo pp = new PraticaProtocollo();
         pp.setPratica(pratica);
         List<PraticaProtocollo> praticheprotocollo = new ArrayList<PraticaProtocollo>();
         praticheprotocollo.add(pp);
-        pro1.setPraticaProtocolloCollection(praticheprotocollo);
-        * 
-        */
-
+        pro1.setPraticaProtocolloCollection(praticheprotocollo);            
         Protocollo pro2 = new Protocollo();
         pro2.setOggetto("Oggetto del protocollo2");
         pro2.setNote("Note del protocollo2");
@@ -94,8 +110,11 @@ public class DemoData {
         List<SoggettoProtocollo> soggettiprotocollo2 = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo2.add(sp);
         pro2.setSoggettoProtocolloCollection(soggettiprotocollo2);
+        em.merge(pro1);
+        em.merge(pro2);
+      
+       // committo
+        em.getTransaction().commit();
 
-        ctrl.commit(pro1);
-        ctrl.commit(pro2);
     }
 }

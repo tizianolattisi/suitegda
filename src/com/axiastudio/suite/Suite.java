@@ -13,12 +13,14 @@ import com.axiastudio.pypapi.ui.Form;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
+import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
+import com.axiastudio.suite.base.entities.Login;
 import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.pratiche.PraticheValidators;
+import com.axiastudio.suite.pratiche.PraticaValidators;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
+import com.axiastudio.suite.protocollo.ProtocolloPrivate;
 import com.axiastudio.suite.protocollo.ProtocolloValidators;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
@@ -42,10 +44,11 @@ public class Suite {
         Register.registerUtility(db, IDatabase.class);
         EntityManagerFactory emf = db.getEntityManagerFactory();
 
-        // registro adapter e validatori
+        // registro adapter, validatori, e privacy
         Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
         Register.registerValidators(Resolver.validatorsFromClass(ProtocolloValidators.class));
-        Register.registerValidators(Resolver.validatorsFromClass(PraticheValidators.class));
+        Register.registerValidators(Resolver.validatorsFromClass(PraticaValidators.class));
+        Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));
         
         // dati di base
         DemoData.initData();
@@ -68,7 +71,7 @@ public class Suite {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
                               Soggetto.class,
-                              Form.class,
+                              FormSoggetto.class,
                               "Soggetti anagrafici");
 
         Register.registerForm(db.getEntityManagerFactory(),
@@ -101,14 +104,20 @@ public class Suite {
                               Protocollo.class,
                               FormProtocollo.class, // custom form
                               "Protocolli");
+
+        /* login */
+        Login login = new Login();
+        int res = login.exec();
+        if( res == 1 ){
         
-        Mdi mdi = new Mdi();
-        mdi.showMaximized();
-        //mdi.show();
-        
-        app.setCustomApplicationName("PyPaPi Suite");
-        app.setCustomApplicationCredits("Copyright AXIA Studio 2012<br/>");
-        app.exec();
+            Mdi mdi = new Mdi();
+            mdi.showMaximized();
+            //mdi.show();
+
+            app.setCustomApplicationName("PyPaPi Suite");
+            app.setCustomApplicationCredits("Copyright AXIA Studio 2012<br/>");
+            app.exec();
+        }
     
     }
 }

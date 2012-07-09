@@ -14,7 +14,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
-public class Utente implements Serializable {
+public class Utente implements IUtente {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

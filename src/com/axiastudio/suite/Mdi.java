@@ -9,6 +9,7 @@ import com.axiastudio.pypapi.db.IFactory;
 import com.axiastudio.pypapi.ui.Form;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.IUIFile;
+import com.axiastudio.suite.base.entities.CambiaPassword;
 import com.trolltech.qt.gui.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -99,6 +100,11 @@ public class Mdi extends QMainWindow {
         itemUffici.setText(0, "Uffici");
         itemUffici.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
         itemUffici.setText(1, "com.axiastudio.suite.base.entities.Ufficio");
+
+        QTreeWidgetItem itemPassword = new QTreeWidgetItem(itemAmministrazione);
+        itemPassword.setText(0, "Cambio password");
+        itemPassword.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/key.png"));
+        itemPassword.setText(1, "PASSWORD");
         
         this.tree.activated.connect(this, "runTask()");
         this.tree.setMinimumWidth(200);
@@ -106,32 +112,39 @@ public class Mdi extends QMainWindow {
     }
     
     private void runTask() {
-        Form form=null;
         String formName = this.tree.currentItem().text(1);
-        Class<? extends Form> formClass = (Class) Register.queryUtility(IForm.class, formName);
-        String uiFile = (String) Register.queryUtility(IUIFile.class, formName);
-        Class factory = (Class) Register.queryUtility(IFactory.class, formName);
-        try {
-            Constructor<? extends Form> constructor = formClass.getConstructor(new Class[]{String.class, Class.class, String.class});
+        /* cambio password */
+        if( "PASSWORD".equals(formName) ){
+            CambiaPassword passDlg = new CambiaPassword(this);
+            int exec = passDlg.exec();
+        } else {
+            /* form registrata */
+            Form form=null;
+            Class<? extends Form> formClass = (Class) Register.queryUtility(IForm.class, formName);
+            String uiFile = (String) Register.queryUtility(IUIFile.class, formName);
+            Class factory = (Class) Register.queryUtility(IFactory.class, formName);
             try {
-                form = constructor.newInstance(new Object[]{uiFile, factory, ""});
-            } catch (InstantiationException ex) {
+                Constructor<? extends Form> constructor = formClass.getConstructor(new Class[]{String.class, Class.class, String.class});
+                try {
+                    form = constructor.newInstance(new Object[]{uiFile, factory, ""});
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (NoSuchMethodException ex) {
                 Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
+            } catch (SecurityException ex) {
                 Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
+            form.init(); // XXX: full store
+            this.workspace.addSubWindow(form);
+            this.showForm(form);
         }
-        form.init(); // XXX: full store
-        this.workspace.addSubWindow(form);
-        this.showForm(form);
     }
     
     private void showForm(Form form) {
