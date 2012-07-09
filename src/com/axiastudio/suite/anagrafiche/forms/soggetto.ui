@@ -36,7 +36,7 @@
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="comboBoxTipologiaSoggetto">
       <property name="column" stdset="0">
        <string>tipologiaSoggetto</string>
       </property>
@@ -71,7 +71,10 @@
      </spacer>
     </item>
     <item row="1" column="0" colspan="4">
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabWidgetHeader">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -114,7 +117,11 @@
          </widget>
         </item>
         <item row="0" column="4">
-         <widget class="QLineEdit" name="lineEdit_4"/>
+         <widget class="QLineEdit" name="lineEdit_4">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_6">
@@ -186,7 +193,7 @@
      </widget>
     </item>
     <item row="2" column="0" colspan="5">
-     <widget class="QTabWidget" name="tabWidget_2">
+     <widget class="QTabWidget" name="tabWidgetBody">
       <property name="currentIndex">
        <number>0</number>
       </property>
