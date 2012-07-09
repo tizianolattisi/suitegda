@@ -23,7 +23,7 @@ import javax.persistence.criteria.Root;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class PraticheValidators {
+public class PraticaValidators {
         @Validator
     public static Boolean validaPratica(Pratica pratica){
         if( pratica.getId() == null ){
