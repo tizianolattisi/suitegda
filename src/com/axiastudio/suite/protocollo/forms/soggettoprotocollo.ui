@@ -6,81 +6,59 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>594</width>
-    <height>311</height>
+    <width>401</width>
+    <height>157</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Soggetto protocollo</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>20</y>
-      <width>241</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="column" stdset="0">
-     <string>titolo</string>
-    </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <property name="text">
-      <string>INTERESSATO</string>
-     </property>
+     <widget class="QComboBox" name="comboBox">
+      <property name="column" stdset="0">
+       <string>titolo</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>INTERESSATO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>TECNICO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>RICHIEDENTE</string>
+       </property>
+      </item>
+     </widget>
     </item>
     <item>
-     <property name="text">
-      <string>TECNICO</string>
-     </property>
+     <widget class="QCheckBox" name="checkBox">
+      <property name="text">
+       <string>conoscenza</string>
+      </property>
+     </widget>
     </item>
     <item>
-     <property name="text">
-      <string>RICHIEDENTE</string>
-     </property>
+     <widget class="QCheckBox" name="checkBox_2">
+      <property name="text">
+       <string>notifica</string>
+      </property>
+     </widget>
     </item>
-   </widget>
-   <widget class="QCheckBox" name="checkBox">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>70</y>
-      <width>131</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>conoscenza</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_2">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>100</y>
-      <width>131</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>notifica</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_3">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>130</y>
-      <width>131</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>corrispondenza</string>
-    </property>
-   </widget>
+    <item>
+     <widget class="QCheckBox" name="checkBox_3">
+      <property name="text">
+       <string>corrispondenza</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

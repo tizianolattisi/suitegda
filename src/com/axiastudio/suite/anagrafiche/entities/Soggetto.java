@@ -21,10 +21,20 @@ public class Soggetto implements Serializable {
     @Column(name="tipologiasoggetto")
     @Enumerated(EnumType.STRING)
     private TipologiaSoggetto tipologiaSoggetto;
+    @Column(name="sessosoggetto")
+    @Enumerated(EnumType.STRING)
+    private SessoSoggetto sessoSoggetto;
+    @Column(name="titolosoggetto")
+    @Enumerated(EnumType.STRING)
+    private TitoloSoggetto titoloSoggetto;
+    @Column(name="nick")
+    private String nick;
     @Column(name="nome")
     private String nome;
     @Column(name="cognome")
     private String cognome;
+    @Column(name="codicefiscale")
+    private String coficeFiscale;
     @Column(name="ragionesociale")
     private String ragionesociale;
     @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
@@ -44,6 +54,14 @@ public class Soggetto implements Serializable {
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
     public String getNome() {
@@ -68,6 +86,30 @@ public class Soggetto implements Serializable {
 
     public void setTipologiaSoggetto(TipologiaSoggetto tipologiaSoggetto) {
         this.tipologiaSoggetto = tipologiaSoggetto;
+    }
+
+    public SessoSoggetto getSessoSoggetto() {
+        return sessoSoggetto;
+    }
+
+    public void setSessoSoggetto(SessoSoggetto sessoSoggetto) {
+        this.sessoSoggetto = sessoSoggetto;
+    }
+
+    public TitoloSoggetto getTitoloSoggetto() {
+        return titoloSoggetto;
+    }
+
+    public void setTitoloSoggetto(TitoloSoggetto titoloSoggetto) {
+        this.titoloSoggetto = titoloSoggetto;
+    }
+
+    public String getCoficeFiscale() {
+        return coficeFiscale;
+    }
+
+    public void setCoficeFiscale(String coficeFiscale) {
+        this.coficeFiscale = coficeFiscale;
     }
 
     public Collection<Indirizzo> getIndirizzoCollection() {

@@ -7,12 +7,14 @@ package com.axiastudio.suite;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.anagrafiche.entities.SessoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.protocollo.ProtocolloValidators;
 import com.axiastudio.suite.protocollo.entities.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,10 @@ import javax.persistence.EntityManagerFactory;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class DemoData {
+    
+    public static void main(String[] args) {
+        DemoData.initData();
+    }
     
     public DemoData() {
     }
@@ -41,8 +47,15 @@ public class DemoData {
         uffInf.setDescrizione("Ufficio informativo");
         Ufficio uffPro = new Ufficio();
         uffPro.setDescrizione("Ufficio protocollo");
+        Ufficio uffEdi = new Ufficio();
+        uffEdi.setDescrizione("Ufficio edilizia");
+        Ufficio uffCom = new Ufficio();
+        uffCom.setDescrizione("Ufficio commercio");
         em.merge(uffInf);
         em.merge(uffPro);
+        em.merge(uffEdi);
+        em.merge(uffCom);
+
         
         // utenti
         Utente mario = new Utente();
@@ -64,6 +77,7 @@ public class DemoData {
         Soggetto tiziano = new Soggetto();
         tiziano.setNome("Tiziano");
         tiziano.setCognome("Lattisi");
+        tiziano.setSessoSoggetto(SessoSoggetto.M);
         tiziano.setTipologiaSoggetto(TipologiaSoggetto.PERSONA);
         em.merge(tiziano);
         
@@ -110,8 +124,10 @@ public class DemoData {
         List<SoggettoProtocollo> soggettiprotocollo2 = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo2.add(sp);
         pro2.setSoggettoProtocolloCollection(soggettiprotocollo2);
+        ProtocolloValidators.validaProtocollo(pro1);
+        //ProtocolloValidators.validaProtocollo(pro2);
         em.merge(pro1);
-        em.merge(pro2);
+        //em.merge(pro2);
       
        // committo
         em.getTransaction().commit();
