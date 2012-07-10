@@ -30,10 +30,6 @@ class ProtocolloMenuBar extends PyPaPiToolBar {
         QAction spazioAlfresco = this.insertButton("spazioAlfresco", "Spazio Alfresco",
                                        "classpath:com/axiastudio/suite/resources/alfresco.png",
                                        "Apri spazio Alfresco nel browser", parent);
-        this.insertSeparator(spazioAlfresco);
-        this.insertButton("caricaDocumento", "Carica documento su Alfresco",
-                "classpath:com/axiastudio/suite/resources/folder_page.png",
-                "Carica un nuovo documento sullo spazio Alfresco", parent);
     }
 }
 
@@ -70,7 +66,17 @@ public class FormProtocollo extends Form {
         labelConvalidaProtocollo.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_mail.png"));
         QLabel labelConvalidaAttribuzioni = (QLabel) this.findChild(QLabel.class, "labelConvalidaAttribuzioni");
         labelConvalidaAttribuzioni.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_group.png"));
-        
+        QToolButton alfrescoOpen = (QToolButton) this.findChild(QToolButton.class, "toolButtonAlfrescoOpen");
+        alfrescoOpen.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/open.png"));
+        alfrescoOpen.clicked.connect(this, "documentoAlfresco()");
+        QToolButton alfrescoSpace = (QToolButton) this.findChild(QToolButton.class, "toolButtonAlfrescoSpace");
+        alfrescoSpace.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/alfresco.png"));
+        alfrescoSpace.clicked.connect(this, "spazioAlfresco()");
+        QToolButton alfrescoInsert = (QToolButton) this.findChild(QToolButton.class, "toolButtonAlfrescoInsert");
+        alfrescoInsert.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/add.png"));
+        alfrescoInsert.clicked.connect(this, "caricaDocumento()");
+        QToolButton alfrescoDelete = (QToolButton) this.findChild(QToolButton.class, "toolButtonAlfrescoDelete");
+        alfrescoDelete.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/delete.png"));
         this.tabWidget = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget");
         this.tabWidget.currentChanged.connect(this, "currentTabChanged(int)");
         this.alfrescoHelper = new AlfrescoHelper(ALFRESCOUSER, ALFRESCOPASSWORD, ALFRESCOCMIS);        
@@ -128,6 +134,12 @@ public class FormProtocollo extends Form {
         return path;
     }
     
+    private void documentoAlfresco(){
+        QListWidget qlw = (QListWidget) this.findChild(QListWidget.class, "listWidgetAlfresco");
+        QListWidgetItem item = qlw.currentItem();
+        this.documentoAlfresco(item);
+    }
+
     private void documentoAlfresco(QListWidgetItem item){
         String url = String.format(ALFRESCODOCUMENT, item.data(Qt.ItemDataRole.UserRole));
         QDesktopServices.openUrl(new QUrl(url));
