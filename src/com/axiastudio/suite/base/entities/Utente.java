@@ -4,8 +4,6 @@
  */
 package com.axiastudio.suite.base.entities;
 
-import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
-import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.*;
 
@@ -19,12 +17,36 @@ public class Utente implements IUtente {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name="nome")
+    private String nome;
+    @Column(name="email")
+    private String email;
     @Column(name="login")
     private String login;
     @Column(name="password")
     private String password;
     @OneToMany(mappedBy = "utente", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioUtente> ufficioUtenteCollection;
+    @Column(name="amministratore")
+    private Boolean amministratore=false;
+    @Column(name="superutente")
+    private Boolean superutente=false;
+    @Column(name="operatoreanagrafiche")
+    private Boolean operatoreanagrafiche=false;
+    @Column(name="supervisoreanagrafiche")
+    private Boolean supervisoreanagrafiche=false;
+    @Column(name="operatoreprotocollo")
+    private Boolean operatoreprotocollo=false;
+    @Column(name="attributoreprotocollo")
+    private Boolean attributoreprotocollo=false;
+    @Column(name="supervisoreprotocollo")
+    private Boolean supervisoreprotocollo=false;
+    @Column(name="operatorepratiche")
+    private Boolean operatorepratiche=false;
+    @Column(name="supervisorepratiche")
+    private Boolean supervisorepratiche=false;
+    @Column(name="modellatorepratiche")
+    private Boolean modellatorepratiche=false;
 
     public Long getId() {
         return id;
@@ -32,6 +54,22 @@ public class Utente implements IUtente {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getLogin() {
@@ -56,6 +94,86 @@ public class Utente implements IUtente {
 
     public void setUfficioUtenteCollection(Collection<UfficioUtente> ufficioUtenteCollection) {
         this.ufficioUtenteCollection = ufficioUtenteCollection;
+    }
+
+    public Boolean getAmministratore() {
+        return amministratore;
+    }
+
+    public void setAmministratore(Boolean amministratore) {
+        this.amministratore = amministratore;
+    }
+
+    public Boolean getOperatoreanagrafiche() {
+        return operatoreanagrafiche;
+    }
+
+    public void setOperatoreanagrafiche(Boolean operatoreanagrafiche) {
+        this.operatoreanagrafiche = operatoreanagrafiche;
+    }
+
+    public Boolean getSupervisoreanagrafiche() {
+        return supervisoreanagrafiche;
+    }
+
+    public void setSupervisoreanagrafiche(Boolean supervisoreanagrafiche) {
+        this.supervisoreanagrafiche = supervisoreanagrafiche;
+    }
+
+    public Boolean getOperatorepratiche() {
+        return operatorepratiche;
+    }
+
+    public void setOperatorepratiche(Boolean operatorepratiche) {
+        this.operatorepratiche = operatorepratiche;
+    }
+
+    public Boolean getOperatoreprotocollo() {
+        return operatoreprotocollo;
+    }
+
+    public void setOperatoreprotocollo(Boolean operatoreprotocollo) {
+        this.operatoreprotocollo = operatoreprotocollo;
+    }
+
+    public Boolean getAttributoreprotocollo() {
+        return attributoreprotocollo;
+    }
+
+    public void setAttributoreprotocollo(Boolean attributoreprotocollo) {
+        this.attributoreprotocollo = attributoreprotocollo;
+    }
+
+    public Boolean getSuperutente() {
+        return superutente;
+    }
+
+    public void setSuperutente(Boolean superutente) {
+        this.superutente = superutente;
+    }
+
+    public Boolean getSupervisorepratiche() {
+        return supervisorepratiche;
+    }
+
+    public void setSupervisorepratiche(Boolean supervisorepratiche) {
+        this.supervisorepratiche = supervisorepratiche;
+    }
+
+    public Boolean getModellatorepratiche() {
+        return modellatorepratiche;
+    }
+
+    public void setModellatorepratiche(Boolean modellatorepratiche) {
+        this.modellatorepratiche = modellatorepratiche;
+    }
+
+    public Boolean getSupervisoreprotocollo() {
+        return supervisoreprotocollo;
+    }
+
+    public void setSupervisoreprotocollo(Boolean supervisoreprotocollo) {
+        this.supervisoreprotocollo = supervisoreprotocollo;
     }
 
     @Override

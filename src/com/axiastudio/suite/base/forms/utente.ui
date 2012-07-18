@@ -6,43 +6,83 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>565</width>
-    <height>340</height>
+    <width>708</width>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Utenti</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="0">
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
        <string>Utente</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <property name="margin">
+        <number>8</number>
+       </property>
        <item row="0" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>ID</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit_4"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Nome</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_3"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Email</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_5">
+         <property name="column" stdset="0">
+          <string>email</string>
+         </property>
+         <property name="validator" stdset="0">
+          <string>^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Login</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="3" column="1">
         <widget class="QLineEdit" name="lineEdit">
          <property name="column" stdset="0">
           <string>login</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="4" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Password</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="4" column="1">
         <widget class="QLineEdit" name="lineEdit_2">
          <property name="column" stdset="0">
           <string>password</string>
@@ -52,7 +92,187 @@
       </layout>
      </widget>
     </item>
-    <item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Permessi</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <property name="margin">
+        <number>8</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Generici</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="margin">
+           <number>8</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="checkBox">
+            <property name="text">
+             <string>Amministratore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>amministratore</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_2">
+            <property name="text">
+             <string>Super utente</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>superutente</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="1" rowspan="2">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>Protocollo</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="margin">
+           <number>8</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="checkBox_3">
+            <property name="text">
+             <string>Operatore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>operatoreprotocollo</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_10">
+            <property name="text">
+             <string>Attributore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>attributoreprotocollo</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_4">
+            <property name="text">
+             <string>Supervisore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>supervisoreprotocollo</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>50</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="2" rowspan="2">
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>Pratiche</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="margin">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="checkBox_6">
+            <property name="text">
+             <string>Operatore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>operatorepratiche</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_7">
+            <property name="text">
+             <string>Supervisore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>supervisorepratiche</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_8">
+            <property name="text">
+             <string>Istruttore</string>
+            </property>
+            <property name="istruttorepratiche" stdset="0">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_9">
+            <property name="text">
+             <string>Modellatore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>modellatorepratiche</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="title">
+          <string>Anagrafiche</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox_5">
+            <property name="text">
+             <string>Operatore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>operatoreanagrafiche</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="checkBox_11">
+            <property name="text">
+             <string>Supervisore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>supervisoreanagrafiche</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
