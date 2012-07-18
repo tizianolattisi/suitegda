@@ -687,14 +687,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
-   <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
-  </customwidget>
-  <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
    <extends>QDateEdit</extends>
    <header>pypapidateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
+   <extends>QTableView</extends>
+   <header>pypapitableview.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>

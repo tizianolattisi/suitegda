@@ -1,65 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>401</width>
-    <height>157</height>
+    <width>399</width>
+    <height>125</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Soggetto protocollo</string>
+   <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QComboBox" name="comboBox">
-      <property name="column" stdset="0">
-       <string>titolo</string>
-      </property>
-      <item>
-       <property name="text">
-        <string>INTERESSATO</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>TECNICO</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>RICHIEDENTE</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="checkBox">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QComboBox" name="comboBox">
+     <property name="column" stdset="0">
+      <string>titolo</string>
+     </property>
+     <item>
       <property name="text">
-       <string>conoscenza</string>
+       <string>INTERESSATO</string>
       </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="checkBox_2">
+     </item>
+     <item>
       <property name="text">
-       <string>notifica</string>
+       <string>TECNICO</string>
       </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="checkBox_3">
+     </item>
+     <item>
       <property name="text">
-       <string>corrispondenza</string>
+       <string>RICHIEDENTE</string>
       </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="text">
+      <string>conoscenza</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox_2">
+     <property name="text">
+      <string>notifica</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox_3">
+     <property name="text">
+      <string>corrispondenza</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
