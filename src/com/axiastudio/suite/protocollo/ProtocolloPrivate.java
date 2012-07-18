@@ -16,6 +16,9 @@ public class ProtocolloPrivate {
     @Private
     public static Boolean protocolloPrivato(Protocollo protocollo){
         // TODO
+        if( protocollo.getId() == null ){
+            return false;
+        }
         if( protocollo.getOggetto().equals("Oggetto riservato") ){
             return true;
         }
