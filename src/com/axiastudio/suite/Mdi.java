@@ -6,7 +6,7 @@ package com.axiastudio.suite;
 
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.IFactory;
-import com.axiastudio.pypapi.ui.Form;
+import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.IUIFile;
 import com.axiastudio.suite.base.entities.CambiaPassword;
@@ -119,12 +119,12 @@ public class Mdi extends QMainWindow {
             int exec = passDlg.exec();
         } else {
             /* form registrata */
-            Form form=null;
-            Class<? extends Form> formClass = (Class) Register.queryUtility(IForm.class, formName);
+            Window form=null;
+            Class<? extends Window> formClass = (Class) Register.queryUtility(IForm.class, formName);
             String uiFile = (String) Register.queryUtility(IUIFile.class, formName);
             Class factory = (Class) Register.queryUtility(IFactory.class, formName);
             try {
-                Constructor<? extends Form> constructor = formClass.getConstructor(new Class[]{String.class, Class.class, String.class});
+                Constructor<? extends Window> constructor = formClass.getConstructor(new Class[]{String.class, Class.class, String.class});
                 try {
                     form = constructor.newInstance(new Object[]{uiFile, factory, ""});
                 } catch (InstantiationException ex) {
@@ -147,7 +147,7 @@ public class Mdi extends QMainWindow {
         }
     }
     
-    private void showForm(Form form) {
+    private void showForm(Window form) {
         if( this.workspace.subWindowList().size()>1 ){
             form.show();
         } else {

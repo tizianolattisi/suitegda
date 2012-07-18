@@ -9,7 +9,8 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.ui.Form;
+import com.axiastudio.pypapi.ui.Dialog;
+import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
@@ -59,13 +60,13 @@ public class Suite {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/base/forms/ufficio.ui",
                               Ufficio.class,
-                              Form.class,
+                              Window.class,
                               "Uffici");
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/base/forms/utente.ui",
                               Utente.class,
-                              Form.class,
+                              Window.class,
                               "Utenti");
         
         Register.registerForm(db.getEntityManagerFactory(),
@@ -84,19 +85,19 @@ public class Suite {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",
                               Pratica.class,
-                              Form.class,
+                              Window.class,
                               "Prtiche");
                           
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
                               SoggettoProtocollo.class,
-                              Form.class,
+                              Dialog.class,
                               "Soggetto del protocollo");
       
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/praticaprotocollo.ui",
                               PraticaProtocollo.class,
-                              Form.class,
+                              Window.class,
                               "Pratica contenente il protocollo");
 
         Register.registerForm(db.getEntityManagerFactory(),
@@ -111,8 +112,8 @@ public class Suite {
         if( res == 1 ){
         
             Mdi mdi = new Mdi();
-            mdi.showMaximized();
-            //mdi.show();
+            //mdi.showMaximized();
+            mdi.show();
 
             app.setCustomApplicationName("PyPaPi Suite");
             app.setCustomApplicationCredits("Copyright AXIA Studio 2012<br/>");

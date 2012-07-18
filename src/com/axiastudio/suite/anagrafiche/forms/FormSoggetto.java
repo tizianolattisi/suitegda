@@ -4,7 +4,7 @@
  */
 package com.axiastudio.suite.anagrafiche.forms;
 
-import com.axiastudio.pypapi.ui.Form;
+import com.axiastudio.pypapi.ui.Window;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QTabWidget;
 
@@ -12,7 +12,7 @@ import com.trolltech.qt.gui.QTabWidget;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class FormSoggetto extends Form {
+public class FormSoggetto extends Window {
     
     public FormSoggetto(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);

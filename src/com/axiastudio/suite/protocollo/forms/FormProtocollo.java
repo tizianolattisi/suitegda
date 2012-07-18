@@ -4,7 +4,7 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
-import com.axiastudio.pypapi.ui.Form;
+import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
 import com.axiastudio.suite.alfresco.AlfrescoHelper;
@@ -19,7 +19,7 @@ import java.util.Calendar;
 import java.util.List;
 
 class ProtocolloMenuBar extends PyPaPiToolBar {
-    public ProtocolloMenuBar(String title, Form parent){
+    public ProtocolloMenuBar(String title, Window parent){
         super(title, parent);
         this.insertButton("convalidaAttribuzioni", "Convalida attribuzioni",
                 "classpath:com/axiastudio/suite/resources/lock_group.png",
@@ -37,7 +37,7 @@ class ProtocolloMenuBar extends PyPaPiToolBar {
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class FormProtocollo extends Form {
+public class FormProtocollo extends Window {
     private  ProtocolloMenuBar protocolloMenuBar=null;
     private QTabWidget tabWidget;
     private AlfrescoHelper alfrescoHelper;

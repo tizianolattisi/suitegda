@@ -4,7 +4,7 @@
  */
 package com.axiastudio.suite.anagrafiche.forms;
 
-import com.axiastudio.pypapi.ui.Form;
+import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.suite.anagrafiche.entities.Provincia;
 import com.trolltech.qt.gui.QComboBox;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class FormIndirizzo extends Form {
+public class FormIndirizzo extends Dialog {
 
     public FormIndirizzo(String uiFile, Class entityClass, String title) {
         super(uiFile, entityClass, title);   
