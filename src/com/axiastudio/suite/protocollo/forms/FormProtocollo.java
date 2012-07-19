@@ -4,19 +4,35 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.Resolver;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.IController;
+import com.axiastudio.pypapi.db.IStoreFactory;
+import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
 import com.axiastudio.suite.alfresco.AlfrescoHelper;
 import com.axiastudio.suite.alfresco.AlfrescoObject;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.UfficioUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.trolltech.qt.core.QFile;
 import com.trolltech.qt.core.QIODevice;
 import com.trolltech.qt.core.QUrl;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class ProtocolloMenuBar extends PyPaPiToolBar {
     public ProtocolloMenuBar(String title, Window parent){
@@ -79,7 +95,29 @@ public class FormProtocollo extends Window {
         alfrescoDelete.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/delete.png"));
         this.tabWidget = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget");
         this.tabWidget.currentChanged.connect(this, "currentTabChanged(int)");
-        this.alfrescoHelper = new AlfrescoHelper(ALFRESCOUSER, ALFRESCOPASSWORD, ALFRESCOCMIS);        
+        this.alfrescoHelper = new AlfrescoHelper(ALFRESCOUSER, ALFRESCOPASSWORD, ALFRESCOCMIS);
+        /* filtro per la selezione dello sportello */
+        try {
+            Method storeFactory = this.getClass().getMethod("storeSportello");
+            Register.registerUtility(storeFactory, IStoreFactory.class, "Sportello");
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(FormProtocollo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(FormProtocollo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    /*
+     * Uno store contenente solo gli uffici dell'utente
+     */
+    public Store storeSportello(){
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        List<Ufficio> uffici = new ArrayList();
+        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
+            uffici.add(uu.getUfficio());
+        }
+        return new Store(uffici);
     }
     
     private void convalidaAttribuzioni() {
