@@ -350,9 +350,6 @@
               <property name="text">
                <string/>
               </property>
-              <property name="pixmap">
-               <pixmap>:/icons/email_go.png</pixmap>
-              </property>
              </widget>
             </item>
             <item row="0" column="1">
@@ -379,9 +376,6 @@
               <property name="text">
                <string/>
               </property>
-              <property name="pixmap">
-               <pixmap>:/icons/lock_group.png</pixmap>
-              </property>
              </widget>
             </item>
             <item row="1" column="1">
@@ -407,9 +401,6 @@
               </property>
               <property name="text">
                <string/>
-              </property>
-              <property name="pixmap">
-               <pixmap>:/icons/lock_mail.png</pixmap>
               </property>
              </widget>
             </item>
@@ -687,14 +678,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
-   <extends>QDateEdit</extends>
-   <header>pypapidateedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
    <header>pypapitableview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>pypapidateedit.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
