@@ -13,6 +13,7 @@
     <class>com.axiastudio.suite.base.entities.Utente</class>
     <class>com.axiastudio.suite.base.entities.UfficioUtente</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Indirizzo</class>
+    <class>com.axiastudio.suite.protocollo.entities.Fascicolo</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:demo"/>
       <property name="javax.persistence.jdbc.password" value=""/>

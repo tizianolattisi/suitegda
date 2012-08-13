@@ -28,9 +28,9 @@ public class Protocollo implements Serializable {
     private Date dataprotocollo;
     @Column(name="anno")
     private Integer anno;
-    @Column(name="oggetto")
+    @Column(name="oggetto", length=512)
     private String oggetto;
-    @Column(name="note")
+    @Column(name="note", length=512)
     private String note;
     @Enumerated(EnumType.STRING)
     private TipoProtocollo tipo;
@@ -277,7 +277,8 @@ public class Protocollo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.protocollo.entities.Protocollo[ id=" + id + " ]";
+        //return "com.axiastudio.suite.protocollo.entities.Protocollo[ id=" + id + " ]";
+        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + "(" + this.dataprotocollo + ")";
     }
     
 }

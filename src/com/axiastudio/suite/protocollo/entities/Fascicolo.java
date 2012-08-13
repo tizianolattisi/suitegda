@@ -4,7 +4,6 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
-import com.axiastudio.suite.base.entities.Ufficio;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -13,18 +12,20 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
-public class UfficioProtocollo implements Serializable {
+public class Fascicolo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @JoinColumn(name = "ufficio", referencedColumnName = "id")
-    @ManyToOne
-    private Ufficio ufficio;
-    @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
-    @ManyToOne
-    private Protocollo protocollo;
-
+    @Column(name="categoria")
+    private Integer categoria;
+    @Column(name="classe")
+    private Integer classe;
+    @Column(name="fasciolo")
+    private Integer fascicolo;
+    @Column(name="descrizione")
+    private String descrizione;
+    
     public Long getId() {
         return id;
     }
@@ -33,20 +34,36 @@ public class UfficioProtocollo implements Serializable {
         this.id = id;
     }
 
-    public Protocollo getProtocollo() {
-        return protocollo;
+    public Integer getCategoria() {
+        return categoria;
     }
 
-    public void setProtocollo(Protocollo protocollo) {
-        this.protocollo = protocollo;
+    public void setCategoria(Integer categoria) {
+        this.categoria = categoria;
     }
 
-    public Ufficio getUfficio() {
-        return ufficio;
+    public Integer getClasse() {
+        return classe;
     }
 
-    public void setUfficio(Ufficio ufficio) {
-        this.ufficio = ufficio;
+    public void setClasse(Integer classe) {
+        this.classe = classe;
+    }
+
+    public Integer getFascicolo() {
+        return fascicolo;
+    }
+
+    public void setFascicolo(Integer fascicolo) {
+        this.fascicolo = fascicolo;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
     }
 
     @Override
@@ -59,10 +76,10 @@ public class UfficioProtocollo implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UfficioProtocollo)) {
+        if (!(object instanceof Fascicolo)) {
             return false;
         }
-        UfficioProtocollo other = (UfficioProtocollo) object;
+        Fascicolo other = (Fascicolo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -71,7 +88,7 @@ public class UfficioProtocollo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.protocollo.entities.UfficioProtocollo[ id=" + id + " ]";
+        return "com.axiastudio.suite.protocollo.entities.Fascicolo[ id=" + id + " ]";
     }
     
 }

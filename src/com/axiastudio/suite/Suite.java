@@ -23,10 +23,13 @@ import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloPrivate;
 import com.axiastudio.suite.protocollo.ProtocolloValidators;
+import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
+import com.axiastudio.suite.protocollo.forms.FormScrivania;
+import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -52,6 +55,7 @@ public class Suite {
         Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));
         
         // dati di base
+        
         DemoData.initData();
         
         Application app = new Application(args);
@@ -91,7 +95,7 @@ public class Suite {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
                               SoggettoProtocollo.class,
-                              Dialog.class,
+                              FormSoggettoProtocollo.class,
                               "Soggetto del protocollo");
       
         Register.registerForm(db.getEntityManagerFactory(),

@@ -6,6 +6,7 @@ package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.*;
 
 /**
@@ -57,6 +58,38 @@ public class Attribuzione implements Serializable {
 
     public void setPrincipale(Boolean principale) {
         this.principale = principale;
+    }
+    
+    public String getIddocumento(){
+        return this.protocollo.getIddocumento();
+    }
+    
+    public void setIddocumento(String iddocumento){
+        
+    }
+    
+    public TipoProtocollo getTipoprotocollo(){
+        return this.protocollo.getTipo();
+    }
+    
+    public void setTipoprotocollo(TipoProtocollo tipoProtocollo){
+        
+    }
+    
+    public Date getDataprotocollo(){
+        return this.protocollo.getDataprotocollo();
+    }
+    
+    public void setDataprotocollo(Date dataProtocollo){
+        
+    }
+    
+    public String getOggetto(){
+        return this.protocollo.getOggetto();
+    }
+    
+    public void setOggetto(String oggetto){
+
     }
 
     @Override

@@ -42,6 +42,13 @@ public class DemoData {
         em.getTransaction().begin();
         
 
+        // amministratore
+        Utente admin = new Utente();
+        admin.setLogin("admin");
+        admin.setPassword(SuiteUtil.digest("pypapi"));
+        admin.setAmministratore(Boolean.TRUE);
+        em.merge(admin);
+        
         // uffici
         Ufficio uffInf = new Ufficio();
         uffInf.setDescrizione("Ufficio informativo");
@@ -61,14 +68,22 @@ public class DemoData {
         Utente mario = new Utente();
         mario.setLogin("mario");
         mario.setPassword(SuiteUtil.digest("super"));
+        mario.setOperatoreprotocollo(Boolean.TRUE);
+        mario.setOperatoreanagrafiche(Boolean.TRUE);
+        mario.setOperatorepratiche(Boolean.TRUE);
         Utente luigi = new Utente();
         luigi.setLogin("luigi");
         luigi.setPassword(SuiteUtil.digest("bros"));
         List<UfficioUtente> ufficiUtente = new ArrayList();
         UfficioUtente uu = new UfficioUtente();
         uu.setUfficio(uffInf);
+        uu.setRicerca(Boolean.TRUE);
         uu.setVisualizza(Boolean.TRUE);
         ufficiUtente.add(uu);
+        UfficioUtente uu2 = new UfficioUtente();
+        uu2.setUfficio(uffPro);
+        uu2.setRicerca(Boolean.TRUE);
+        ufficiUtente.add(uu2);
         mario.setUfficioUtenteCollection(ufficiUtente);
         em.merge(mario);
         em.merge(luigi);
@@ -108,6 +123,7 @@ public class DemoData {
         pro1.setAttribuzioneCollection(attribuzioni);
         SoggettoProtocollo sp = new SoggettoProtocollo();
         sp.setSoggetto(tiziano);
+        sp.setTitolo(TitoloSoggettoProtocollo.TECNICO);
         List<SoggettoProtocollo> soggettiprotocollo = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo.add(sp);
         pro1.setSoggettoProtocolloCollection(soggettiprotocollo);

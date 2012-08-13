@@ -202,6 +202,9 @@
           <property name="column" stdset="0">
            <string>cognome</string>
           </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="2" column="2">
@@ -215,6 +218,9 @@
          <widget class="QLineEdit" name="lineEdit_2">
           <property name="column" stdset="0">
            <string>nome</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
