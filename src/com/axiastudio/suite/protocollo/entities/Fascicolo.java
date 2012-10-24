@@ -12,6 +12,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@Table(schema="PROTOCOLLO")
 public class Fascicolo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

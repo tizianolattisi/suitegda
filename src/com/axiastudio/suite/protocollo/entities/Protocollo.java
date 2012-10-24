@@ -16,6 +16,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@Table(schema="PROTOCOLLO")
 public class Protocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -28,9 +29,9 @@ public class Protocollo implements Serializable {
     private Date dataprotocollo;
     @Column(name="anno")
     private Integer anno;
-    @Column(name="oggetto", length=512)
+    @Column(name="oggetto", length=1024)
     private String oggetto;
-    @Column(name="note", length=512)
+    @Column(name="note", length=1024)
     private String note;
     @Enumerated(EnumType.STRING)
     private TipoProtocollo tipo;

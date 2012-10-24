@@ -13,6 +13,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@Table(schema="PROTOCOLLO")
 public class SoggettoProtocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -21,7 +22,7 @@ public class SoggettoProtocollo implements Serializable {
     @JoinColumn(name = "soggetto", referencedColumnName = "id")
     @ManyToOne
     private Soggetto soggetto;
-    @JoinColumn(name = "protocollo", referencedColumnName = "id")
+    @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
     @Enumerated(EnumType.STRING)

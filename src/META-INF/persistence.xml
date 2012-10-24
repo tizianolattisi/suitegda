@@ -10,16 +10,16 @@
     <class>com.axiastudio.suite.protocollo.entities.SoggettoProtocollo</class>
     <class>com.axiastudio.suite.pratiche.entities.Pratica</class>
     <class>com.axiastudio.suite.protocollo.entities.PraticaProtocollo</class>
-    <class>com.axiastudio.suite.base.entities.Utente</class>
     <class>com.axiastudio.suite.base.entities.UfficioUtente</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Indirizzo</class>
     <class>com.axiastudio.suite.protocollo.entities.Fascicolo</class>
+    <class>com.axiastudio.suite.base.entities.Utente</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:demo"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
       <property name="javax.persistence.jdbc.user" value=""/>
-      <property name="eclipselink.ddl-generation" value="create-tables"/>
+      <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
     </properties>
   </persistence-unit>
 </persistence>

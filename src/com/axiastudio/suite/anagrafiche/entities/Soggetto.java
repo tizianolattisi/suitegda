@@ -34,9 +34,11 @@ public class Soggetto implements Serializable {
     @Column(name="cognome")
     private String cognome;
     @Column(name="codicefiscale")
-    private String coficeFiscale;
+    private String codiceFiscale;
     @Column(name="ragionesociale")
     private String ragionesociale;
+    @Column(name="denominazione")
+    private String denominazione;
     @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Indirizzo> indirizzoCollection;
 
@@ -104,12 +106,20 @@ public class Soggetto implements Serializable {
         this.titoloSoggetto = titoloSoggetto;
     }
 
-    public String getCoficeFiscale() {
-        return coficeFiscale;
+    public String getCodiceFiscale() {
+        return codiceFiscale;
     }
 
-    public void setCoficeFiscale(String coficeFiscale) {
-        this.coficeFiscale = coficeFiscale;
+    public void setCodiceFiscale(String coficeFiscale) {
+        this.codiceFiscale = coficeFiscale;
+    }
+
+    public String getDenominazione() {
+        return denominazione;
+    }
+
+    public void setDenominazione(String denominazione) {
+        this.denominazione = denominazione;
     }
 
     public Collection<Indirizzo> getIndirizzoCollection() {
@@ -147,7 +157,7 @@ public class Soggetto implements Serializable {
         } else if( this.tipologiaSoggetto.equals(TipologiaSoggetto.AZIENDA) ){
             return this.ragionesociale;
         } else if ( this.tipologiaSoggetto.equals(TipologiaSoggetto.ENTE) ){
-            return "ente (da completare)";
+            return this.denominazione;
         }
         return "-";
         //return "com.axiastudio.suite.anagrafiche.entities.Soggetto[ id=" + id + " ]";

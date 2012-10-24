@@ -16,8 +16,14 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProtocolloValidators;
 import com.axiastudio.suite.protocollo.entities.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -34,12 +40,33 @@ public class DemoData {
     public DemoData() {
     }
     
+    public static void initSchema(){
+        // inizializza gli schemi
+        List<String> schema = new ArrayList();
+        schema.add("BASE");
+        schema.add("PROTOCOLLO");
+        schema.add("PRATICHE");
+        for( String name: schema){
+            try {
+                Connection conn = DriverManager.getConnection("jdbc:h2:~/suite","","");
+                Statement st = conn.createStatement();
+                st.executeUpdate("DROP SCHEMA IF EXISTS " + name + ";");
+                st.executeUpdate("CREATE SCHEMA " + name + ";");
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Suite.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+    
     public static void initData(){
         // inizializzo e apro la transazione
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManagerFactory emf = db.getEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
+        //em.getTransaction().begin();
         
 
         // amministratore
@@ -110,25 +137,30 @@ public class DemoData {
         pro1.setRichiederisposta(Boolean.TRUE);
         UfficioProtocollo up = new UfficioProtocollo();
         up.setUfficio(uffInf);
+        up.setProtocollo(pro1);
         List<UfficioProtocollo> ufficiprotocollo = new ArrayList<UfficioProtocollo>();
         ufficiprotocollo.add(up);
         pro1.setUfficioProtocolloCollection(ufficiprotocollo);
         List<Attribuzione> attribuzioni = new ArrayList<Attribuzione>();
         Attribuzione a1 = new Attribuzione();
         a1.setUfficio(uffInf);
+        a1.setProtocollo(pro1);
         Attribuzione a2 = new Attribuzione();
         a2.setUfficio(uffPro);
+        a2.setProtocollo(pro1);
         attribuzioni.add(a1);
         attribuzioni.add(a2);
         pro1.setAttribuzioneCollection(attribuzioni);
         SoggettoProtocollo sp = new SoggettoProtocollo();
         sp.setSoggetto(tiziano);
         sp.setTitolo(TitoloSoggettoProtocollo.TECNICO);
+        sp.setProtocollo(pro1);
         List<SoggettoProtocollo> soggettiprotocollo = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo.add(sp);
         pro1.setSoggettoProtocolloCollection(soggettiprotocollo);
         PraticaProtocollo pp = new PraticaProtocollo();
         pp.setPratica(pratica);
+        pp.setProtocollo(pro1);
         List<PraticaProtocollo> praticheprotocollo = new ArrayList<PraticaProtocollo>();
         praticheprotocollo.add(pp);
         pro1.setPraticaProtocolloCollection(praticheprotocollo);            
@@ -137,16 +169,23 @@ public class DemoData {
         pro2.setNote("Note del protocollo2");
         pro2.setSportello(uffPro);
         pro2.setTipo(TipoProtocollo.USCITA);
+        SoggettoProtocollo sp2 = new SoggettoProtocollo();
+        sp2.setSoggetto(tiziano);
+        sp2.setTitolo(TitoloSoggettoProtocollo.TECNICO);
+        sp2.setProtocollo(pro2);
         List<SoggettoProtocollo> soggettiprotocollo2 = new ArrayList<SoggettoProtocollo>();
-        soggettiprotocollo2.add(sp);
+        soggettiprotocollo2.add(sp2);
         pro2.setSoggettoProtocolloCollection(soggettiprotocollo2);
+        
         ProtocolloValidators.validaProtocollo(pro1);
-        //ProtocolloValidators.validaProtocollo(pro2);
+        em.getTransaction().begin();
         em.merge(pro1);
-        //em.merge(pro2);
-      
-       // committo
         em.getTransaction().commit();
-
+        
+        ProtocolloValidators.validaProtocollo(pro2);
+        em.getTransaction().begin();
+        em.merge(pro2);
+        em.getTransaction().commit();
+      
     }
 }

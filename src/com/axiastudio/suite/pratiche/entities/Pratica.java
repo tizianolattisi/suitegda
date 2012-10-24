@@ -13,6 +13,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@Table(schema="PRATICHE")
 public class Pratica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

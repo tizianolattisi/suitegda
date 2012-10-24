@@ -14,6 +14,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@Table(schema="PROTOCOLLO")
 public class Attribuzione implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -22,7 +23,7 @@ public class Attribuzione implements Serializable {
     @JoinColumn(name = "ufficio", referencedColumnName = "id")
     @ManyToOne
     private Ufficio ufficio;
-    @JoinColumn(name = "protocollo", referencedColumnName = "id")
+    @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
     @Column(name="principale")
