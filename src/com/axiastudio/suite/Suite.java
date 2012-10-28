@@ -100,7 +100,7 @@ public class Suite {
         }
         
         Application app = new Application(args);
-        
+        app.setLanguage("it");
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/base/forms/ufficio.ui",
