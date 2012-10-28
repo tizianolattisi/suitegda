@@ -88,7 +88,7 @@
             <item>
              <widget class="QLineEdit" name="lineEdit">
               <property name="enabled">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="column" stdset="0">
                <string>iddocumento</string>
@@ -107,6 +107,9 @@
             </item>
             <item>
              <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>120</width>
@@ -149,6 +152,9 @@
              <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_3">
               <property name="column" stdset="0">
                <string>Sportello</string>
+              </property>
+              <property name="search" stdset="0">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -509,13 +515,13 @@
               <string>.soggettoProtocolloCollection</string>
              </property>
              <property name="columns" stdset="0">
-              <string>soggetto,titolo</string>
+              <string>&gt;soggetto&lt;,titolo</string>
              </property>
              <property name="reference" stdset="0">
               <string>soggetto</string>
              </property>
              <property name="headers" stdset="0">
-              <string>soggetto,titolo</string>
+              <string>soggetto,titolone</string>
              </property>
             </widget>
            </item>
@@ -702,6 +708,33 @@
    <header>pypapicombobox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>comboBox</tabstop>
+  <tabstop>comboBox_3</tabstop>
+  <tabstop>textEdit_2</tabstop>
+  <tabstop>tableView_2</tabstop>
+  <tabstop>tableView_3</tabstop>
+  <tabstop>tableViewAttribuzioni</tabstop>
+  <tabstop>tableView_4</tabstop>
+  <tabstop>comboBox_2</tabstop>
+  <tabstop>dateEdit_2</tabstop>
+  <tabstop>lineEdit_3</tabstop>
+  <tabstop>textEdit</tabstop>
+  <tabstop>annullato</tabstop>
+  <tabstop>annullamentorichiesto</tabstop>
+  <tabstop>richiederisposta</tabstop>
+  <tabstop>spedito</tabstop>
+  <tabstop>riservato</tabstop>
+  <tabstop>corrispostoostornato</tabstop>
+  <tabstop>toolButtonAlfrescoDelete</tabstop>
+  <tabstop>toolButtonAlfrescoInsert</tabstop>
+  <tabstop>listWidgetAlfresco</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>dateEdit</tabstop>
+  <tabstop>toolButtonAlfrescoSpace</tabstop>
+  <tabstop>toolButtonAlfrescoOpen</tabstop>
+  <tabstop>tabWidget</tabstop>
+ </tabstops>
  <resources>
   <include location="../../../../../../../../pypapi/pypapi/lib/pypapi/ui/resources/resources.qrc"/>
  </resources>
