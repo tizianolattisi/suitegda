@@ -54,7 +54,7 @@ public class AlfrescoHelper {
     /*
      * Oggetti contenuti in una cartella
      */
-    public List<AlfrescoObject> childrenNames(String path) {
+    public List<AlfrescoObject> children(String path) {
         List<AlfrescoObject> children = new ArrayList<AlfrescoObject>();
         Folder folder;
         Session session = this.createSession();
@@ -66,7 +66,7 @@ public class AlfrescoHelper {
         ItemIterable<CmisObject> cmisChildren = folder.getChildren();
 
         for (CmisObject o : cmisChildren) {
-            List<Property<?>> properties = o.getProperties();
+            //List<Property<?>> properties = o.getProperties();
             String objectId = o.getProperty("cmis:objectId").getValue().toString();
             children.add(new AlfrescoObject(o.getName(), objectId));
         }

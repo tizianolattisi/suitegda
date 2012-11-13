@@ -147,7 +147,7 @@ public class FormProtocollo extends Window {
         qlw.clear();
         if( "Documenti".equals(tabText) ){
             String path = "/Siti/"+ALFRESCOSITE+"/documentLibrary"+this.getAlfrescoPath();
-            for(AlfrescoObject object: this.alfrescoHelper.childrenNames(path)){
+            for(AlfrescoObject object: this.alfrescoHelper.children(path)){
                 QListWidgetItem item = new QListWidgetItem(object.getName());
                 item.setData(Qt.ItemDataRole.UserRole, object.getObjectId());
                 qlw.addItem(item);
