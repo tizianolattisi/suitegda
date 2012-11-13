@@ -4,6 +4,7 @@
  */
 package com.axiastudio.suite;
 
+import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;

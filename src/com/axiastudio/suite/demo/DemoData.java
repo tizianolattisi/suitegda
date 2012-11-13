@@ -2,11 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.axiastudio.suite;
+package com.axiastudio.suite.demo;
 
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.Suite;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.anagrafiche.entities.SessoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
