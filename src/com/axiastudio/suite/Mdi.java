@@ -82,9 +82,9 @@ public class Mdi extends QMainWindow {
         itemProtocollo.setText(0, "Protocollo");
         itemProtocollo.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemProtocollo.setText(1, "com.axiastudio.suite.protocollo.entities.Protocollo");
-        Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.protocollo.entities.Protocollo");
-        Store store = controller.createStore(10);
-        itemProtocollo.setData(1, Qt.ItemDataRole.UserRole, store);
+        Controller controllerProtocollo = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.protocollo.entities.Protocollo");
+        Store storeProtocollo = controllerProtocollo.createStore(10);
+        itemProtocollo.setData(1, Qt.ItemDataRole.UserRole, storeProtocollo);
 
         QTreeWidgetItem itemTitolario = new QTreeWidgetItem(itemProtocolloInformatico);
         itemTitolario.setText(0, "Titolario");
@@ -101,6 +101,9 @@ public class Mdi extends QMainWindow {
         itemSoggetti.setText(0, "Soggetti");
         itemSoggetti.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemSoggetti.setText(1, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
+        Controller controllerSoggetto = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
+        Store storeSoggetto = controllerSoggetto.createStore(10);
+        itemSoggetti.setData(1, Qt.ItemDataRole.UserRole, storeSoggetto);
         
         /* Pratiche */
         QTreeWidgetItem itemPraticheRoot = new QTreeWidgetItem(this.tree);
