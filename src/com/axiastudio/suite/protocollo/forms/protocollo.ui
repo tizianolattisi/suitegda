@@ -61,6 +61,9 @@
               <property name="search" stdset="0">
                <bool>true</bool>
               </property>
+              <property name="export" stdset="0">
+               <bool>true</bool>
+              </property>
               <item>
                <property name="text">
                 <string>ENTRATA</string>
@@ -94,6 +97,9 @@
                <string>iddocumento</string>
               </property>
               <property name="search" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="export" stdset="0">
                <bool>true</bool>
               </property>
              </widget>
@@ -134,6 +140,9 @@
               <property name="search" stdset="0">
                <bool>true</bool>
               </property>
+              <property name="export" stdset="0">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
            </layout>
@@ -154,6 +163,9 @@
                <string>Sportello</string>
               </property>
               <property name="search" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="export" stdset="0">
                <bool>true</bool>
               </property>
              </widget>
@@ -301,6 +313,9 @@
               </property>
               <property name="column" stdset="0">
                <string>riservato</string>
+              </property>
+              <property name="export" stdset="0">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -480,6 +495,9 @@
            <property name="private" stdset="0">
             <bool>false</bool>
            </property>
+           <property name="export" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
         </layout>
@@ -521,7 +539,7 @@
               <string>soggetto</string>
              </property>
              <property name="headers" stdset="0">
-              <string>soggetto,titolone</string>
+              <string>soggetto,titolo</string>
              </property>
             </widget>
            </item>
