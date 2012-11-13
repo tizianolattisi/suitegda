@@ -42,21 +42,6 @@ public class Suite {
      */
     public static void main(String[] args) {
         
-        /*
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:h2:~/suite","","");
-            Statement st = conn.createStatement();
-            st.executeUpdate("DROP SCHEMA IF EXISTS BASE;");
-            st.executeUpdate("CREATE SCHEMA BASE;");
-            st.close();
-            conn.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Suite.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
-        
-
-        
         String jdbcUrl = System.getProperty("jdbc.url");
         String jdbcUser = System.getProperty("jdbc.user");
         String jdbcPassword = System.getProperty("jdbc.password");
