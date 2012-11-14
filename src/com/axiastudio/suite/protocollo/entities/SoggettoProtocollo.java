@@ -27,6 +27,12 @@ public class SoggettoProtocollo implements Serializable {
     private Protocollo protocollo;
     @Enumerated(EnumType.STRING)
     private TitoloSoggettoProtocollo titolo;
+    @Column(name="conoscenza")
+    private Boolean conoscenza=false;
+    @Column(name="notifica")
+    private Boolean notifica=false;
+    @Column(name="corrispondenza")
+    private Boolean corrispondenza=false;
 
     public Long getId() {
         return id;
@@ -58,6 +64,30 @@ public class SoggettoProtocollo implements Serializable {
 
     public void setTitolo(TitoloSoggettoProtocollo titolo) {
         this.titolo = titolo;
+    }
+
+    public Boolean getConoscenza() {
+        return conoscenza;
+    }
+
+    public void setConoscenza(Boolean conoscenza) {
+        this.conoscenza = conoscenza;
+    }
+
+    public Boolean getNotifica() {
+        return notifica;
+    }
+
+    public void setNotifica(Boolean notifica) {
+        this.notifica = notifica;
+    }
+
+    public Boolean getCorrispondenza() {
+        return corrispondenza;
+    }
+
+    public void setCorrispondenza(Boolean corrispondenza) {
+        this.corrispondenza = corrispondenza;
     }
 
     @Override

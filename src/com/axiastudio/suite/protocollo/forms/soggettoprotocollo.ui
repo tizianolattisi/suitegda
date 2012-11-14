@@ -21,6 +21,11 @@
      </property>
      <item>
       <property name="text">
+       <string>ND</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>INTERESSATO</string>
       </property>
      </item>
@@ -41,6 +46,9 @@
      <property name="text">
       <string>conoscenza</string>
      </property>
+     <property name="column" stdset="0">
+      <string>conoscenza</string>
+     </property>
     </widget>
    </item>
    <item>
@@ -48,11 +56,17 @@
      <property name="text">
       <string>notifica</string>
      </property>
+     <property name="column" stdset="0">
+      <string>notifica</string>
+     </property>
     </widget>
    </item>
    <item>
     <widget class="QCheckBox" name="checkBox_3">
      <property name="text">
+      <string>corrispondenza</string>
+     </property>
+     <property name="column" stdset="0">
       <string>corrispondenza</string>
      </property>
     </widget>
