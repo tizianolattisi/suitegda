@@ -7,6 +7,7 @@ package com.axiastudio.suite.pratiche;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.pypapi.db.Validator;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Pratica_;
@@ -24,8 +25,9 @@ import javax.persistence.criteria.Root;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class PraticaValidators {
-        @Validator
-    public static Boolean validaPratica(Pratica pratica){
+    
+    @Validator
+    public static Validation validaPratica(Pratica pratica){
         if( pratica.getId() == null ){
             Calendar calendar = Calendar.getInstance();
             Integer year = calendar.get(Calendar.YEAR);
@@ -57,6 +59,6 @@ public class PraticaValidators {
             }
             pratica.setIdpratica(newIdpratica);
         }
-        return true;
+        return new Validation(true);
     }
 }

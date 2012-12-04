@@ -4,7 +4,9 @@
  */
 package com.axiastudio.suite.pratiche.entities;
 
+import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -30,6 +32,8 @@ public class Pratica implements Serializable {
     private String descrizione;
     @Column(name="note")
     private String note;
+    @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<PraticaProtocollo> praticaProtocolloCollection;
 
     public Long getId() {
         return id;
@@ -77,6 +81,14 @@ public class Pratica implements Serializable {
 
     public void setDescrizione(String oggetto) {
         this.descrizione = oggetto;
+    }
+
+    public Collection<PraticaProtocollo> getPraticaProtocolloCollection() {
+        return praticaProtocolloCollection;
+    }
+
+    public void setPraticaProtocolloCollection(Collection<PraticaProtocollo> praticaProtocolloCollection) {
+        this.praticaProtocolloCollection = praticaProtocolloCollection;
     }
 
     @Override

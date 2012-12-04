@@ -533,13 +533,13 @@
               <string>.soggettoProtocolloCollection</string>
              </property>
              <property name="columns" stdset="0">
-              <string>&gt;soggetto&lt;,titolo</string>
+              <string>&gt;soggetto&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
              </property>
              <property name="reference" stdset="0">
               <string>soggetto</string>
              </property>
              <property name="headers" stdset="0">
-              <string>soggetto,titolo</string>
+              <string>soggetto,titolo,con,not,cor</string>
              </property>
             </widget>
            </item>

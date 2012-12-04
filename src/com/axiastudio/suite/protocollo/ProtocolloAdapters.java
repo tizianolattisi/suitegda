@@ -17,6 +17,7 @@ public class ProtocolloAdapters {
     public static Attribuzione adaptUfficioToAttribuzione(Ufficio ufficio){
         Attribuzione ap = new Attribuzione();
         ap.setUfficio(ufficio);
+        ap.setPrincipale(Boolean.TRUE);
         return ap;
     }
 }
