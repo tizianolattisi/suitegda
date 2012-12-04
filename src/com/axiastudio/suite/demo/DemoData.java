@@ -15,6 +15,7 @@ import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.pratiche.PraticaValidators;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProtocolloValidators;
 import com.axiastudio.suite.protocollo.entities.*;
@@ -128,6 +129,7 @@ public class DemoData {
         // pratiche
         Pratica pratica = new Pratica();
         pratica.setDescrizione("Pratica demo");
+        PraticaValidators.validaPratica(pratica);
         em.merge(pratica);
         
         // protocolli
