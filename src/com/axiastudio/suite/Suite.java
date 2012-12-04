@@ -4,12 +4,12 @@
  */
 package com.axiastudio.suite;
 
-import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.plugins.cmis.CMIS;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
@@ -18,6 +18,7 @@ import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
 import com.axiastudio.suite.base.entities.Login;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.suite.pratiche.PraticaValidators;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
@@ -136,6 +137,11 @@ public class Suite {
                               Protocollo.class,
                               FormProtocollo.class, // custom form
                               "Protocolli");
+        
+        // Plugin CMIS per accedere ad Alfresco
+        CMIS cmisPlugin = new CMIS();
+        cmisPlugin.setup("127.0.0.1", 8080, "/alfresco/service/cmis", "admin", "admin", "/Siti/test/documentLibrary");
+        Register.registerPlugin(cmisPlugin, FormProtocollo.class);
 
         /* login */
         Login login = new Login();

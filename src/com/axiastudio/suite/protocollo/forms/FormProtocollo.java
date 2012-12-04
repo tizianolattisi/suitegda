@@ -38,9 +38,11 @@ class ProtocolloMenuBar extends PyPaPiToolBar {
         this.insertButton("convalidaProtocollo", "Convalida protocollo",
                 "classpath:com/axiastudio/suite/resources/lock_mail.png",
                 "Convalida della registrazione del protocollo", parent);
+        /*
         QAction spazioAlfresco = this.insertButton("spazioAlfresco", "Spazio Alfresco",
                                        "classpath:com/axiastudio/suite/resources/alfresco.png",
                                        "Apri spazio Alfresco nel browser", parent);
+                                       */
     }
 }
 
@@ -51,6 +53,8 @@ class ProtocolloMenuBar extends PyPaPiToolBar {
 public class FormProtocollo extends Window {
     private  ProtocolloMenuBar protocolloMenuBar=null;
     private QTabWidget tabWidget;
+    
+    /*
     private AlfrescoHelper alfrescoHelper;
     
     private final String ALFRESCOHOST="192.168.64.54";
@@ -62,6 +66,7 @@ public class FormProtocollo extends Window {
     private final String ALFRESCOLOGIN="http://"+ALFRESCOHOST+":"+ALFRESCOPORT+"/share/page/dologin?username="+ALFRESCOUSER+"&password="+ALFRESCOPASSWORD+"&success=";
     private final String ALFRESCOSPACE=ALFRESCOLOGIN+"/share/page/site/"+ALFRESCOSITE+"/documentlibrary#filter=path%%7C/%s&page=1";
     private final String ALFRESCODOCUMENT=ALFRESCOLOGIN+"/share/page/document-details?nodeRef=%s";
+    */
     
     public FormProtocollo(FormProtocollo form){
         super(form.uiFile, form.entityClass, form.title);
@@ -77,6 +82,8 @@ public class FormProtocollo extends Window {
         labelConvalidaProtocollo.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_mail.png"));
         QLabel labelConvalidaAttribuzioni = (QLabel) this.findChild(QLabel.class, "labelConvalidaAttribuzioni");
         labelConvalidaAttribuzioni.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_group.png"));
+        
+        /*
         QToolButton alfrescoOpen = (QToolButton) this.findChild(QToolButton.class, "toolButtonAlfrescoOpen");
         alfrescoOpen.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/open.png"));
         alfrescoOpen.clicked.connect(this, "documentoAlfresco()");
@@ -91,6 +98,7 @@ public class FormProtocollo extends Window {
         this.tabWidget = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget");
         this.tabWidget.currentChanged.connect(this, "currentTabChanged(int)");
         this.alfrescoHelper = new AlfrescoHelper(ALFRESCOUSER, ALFRESCOPASSWORD, ALFRESCOCMIS);
+        */
         /* filtro per la selezione dello sportello */
         try {
             Method storeFactory = this.getClass().getMethod("storeSportello");
@@ -141,6 +149,7 @@ public class FormProtocollo extends Window {
         super.indexChanged(row);
     }
 
+    /*
     private void currentTabChanged(int tab) {
         String tabText = this.tabWidget.tabText(tab);
         QListWidget qlw = (QListWidget) this.findChild(QListWidget.class, "listWidgetAlfresco");
@@ -155,7 +164,8 @@ public class FormProtocollo extends Window {
         }
         qlw.itemDoubleClicked.connect(this, "documentoAlfresco(QListWidgetItem)");
     }
-    
+    */
+    /*
     private String getAlfrescoPath(){
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         Calendar c = Calendar.getInstance();
@@ -198,5 +208,6 @@ public class FormProtocollo extends Window {
             }
         }
     }
+    */
 
 }
