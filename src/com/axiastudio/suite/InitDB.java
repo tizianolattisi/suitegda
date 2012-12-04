@@ -5,8 +5,16 @@
 package com.axiastudio.suite;
 
 import com.axiastudio.pypapi.db.Database;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -21,11 +29,13 @@ public class InitDB {
     public static void main(String[] args) {
         
         /*
-         * 1. dropdb -h 127.0.0.1 suite && createdb -h 127.0.0.1 suite
+         * 1. dropdb suite && createdb suite
          * 
-         * 2. esecuzione di questo main
+         * 2. imposta configurazione su "Local Postgresql"
          * 
-         * 3. nice -n 10 time python import.py | /Library/PostgreSQL/9.1/bin/psql -h 127.0.0.1 suite
+         * 3. esecuzione di questo main
+         * 
+         * 4. nice -n 10 time python import.py | psql  suite
          * 
          */
         
@@ -52,8 +62,27 @@ public class InitDB {
         Database db = new Database();
         db.open("SuitePU", properties);
         EntityManagerFactory emf = db.getEntityManagerFactory();
+        
+        // inizializza gli schemi
+        List<String> schema = new ArrayList();
+        schema.add("BASE");
+        schema.add("PROTOCOLLO");
+        schema.add("PRATICHE");
+        for( String name: schema){
+            try {
+                Connection conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/suite","pypapidev","");
+                Statement st = conn.createStatement();
+                st.executeUpdate("DROP SCHEMA IF EXISTS " + name + ";");
+                st.executeUpdate("CREATE SCHEMA " + name + ";");
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Suite.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         EntityManager em = emf.createEntityManager();
         
         System.out.println("Done.");
     }
-}
+            }
