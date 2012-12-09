@@ -28,6 +28,8 @@ public class Attribuzione implements Serializable {
     private Protocollo protocollo;
     @Column(name="principale")
     private Boolean principale;
+    @Column(name="letto")
+    private Boolean letto=false;
 
     public Long getId() {
         return id;
@@ -91,6 +93,14 @@ public class Attribuzione implements Serializable {
     
     public void setOggetto(String oggetto){
 
+    }
+
+    public Boolean getLetto() {
+        return letto;
+    }
+
+    public void setLetto(Boolean letto) {
+        this.letto = letto;
     }
 
     @Override

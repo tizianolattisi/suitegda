@@ -10,6 +10,7 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
+import com.axiastudio.suite.protocollo.entities.Attribuzione_;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -51,7 +52,7 @@ public class SuiteUtil {
         CriteriaQuery<Attribuzione> cq = cb.createQuery(Attribuzione.class);
         Root<Attribuzione> root = cq.from(Attribuzione.class);
         cq.select(root);
-        //cq.where(cb.equal(root.get(Attribuzione_.ufficio), year));
+        cq.where(cb.equal(root.get(Attribuzione_.letto), Boolean.FALSE));
         TypedQuery<Attribuzione> tq = em.createQuery(cq);
         List<Attribuzione> resultList = tq.getResultList();
         store = new Store(resultList);
