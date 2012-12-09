@@ -9,6 +9,8 @@ import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.plugins.IPlugin;
+import com.axiastudio.pypapi.plugins.cmis.CMIS;
 import com.axiastudio.pypapi.ui.Column;
 import com.axiastudio.pypapi.ui.Delegate;
 import com.axiastudio.pypapi.ui.IForm;
@@ -166,7 +168,13 @@ public class FormScrivania  extends QMainWindow {
     }
 
     private void apriDocumenti(){
-            
+        Protocollo protocollo = this.selection.get(0).getProtocollo();
+        List<IPlugin> plugins = (List) Register.queryPlugins(FormProtocollo.class);
+        for(IPlugin plugin: plugins){
+            if( "CMIS".equals(plugin.getName()) ){
+                ((CMIS) plugin).showForm(protocollo);
+            }
+        }
     }
     
     private void aggiornaLista(){
