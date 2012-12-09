@@ -166,18 +166,10 @@ public class Mdi extends QMainWindow {
                 Constructor<? extends Window> constructor = formClass.getConstructor(new Class[]{String.class, Class.class, String.class});
                 try {
                     form = constructor.newInstance(new Object[]{uiFile, factory, ""});
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalArgumentException ex) {
-                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvocationTargetException ex) {
+                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                     Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SecurityException ex) {
+            } catch (NoSuchMethodException | SecurityException ex) {
                 Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
             }
             if( store != null ){
