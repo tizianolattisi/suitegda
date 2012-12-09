@@ -46,6 +46,10 @@ public class Protocollo implements Serializable {
     private Collection<Attribuzione> attribuzioneCollection;
     @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<PraticaProtocollo> praticaProtocolloCollection;
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<RiferimentoProtocollo> riferimentoProtocolloCollection;
+    @OneToMany(mappedBy = "precedente", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<RiferimentoProtocollo> riferimentoProtocolloSuccessivoCollection;
     @Column(name="annullato")
     private Boolean annullato=false;
     @Column(name="annullamentorichiesto")
@@ -222,6 +226,22 @@ public class Protocollo implements Serializable {
 
     public void setPraticaProtocolloCollection(Collection<PraticaProtocollo> praticaProtocolloCollection) {
         this.praticaProtocolloCollection = praticaProtocolloCollection;
+    }
+
+    public Collection<RiferimentoProtocollo> getRiferimentoProtocolloCollection() {
+        return riferimentoProtocolloCollection;
+    }
+
+    public void setRiferimentoProtocolloCollection(Collection<RiferimentoProtocollo> riferimentoProtocolloCollection) {
+        this.riferimentoProtocolloCollection = riferimentoProtocolloCollection;
+    }
+
+    public Collection<RiferimentoProtocollo> getRiferimentoProtocolloSuccessivoCollection() {
+        return riferimentoProtocolloSuccessivoCollection;
+    }
+
+    public void setRiferimentoProtocolloSuccessivoCollection(Collection<RiferimentoProtocollo> riferimentoProtocolloSuccessivoCollection) {
+        this.riferimentoProtocolloSuccessivoCollection = riferimentoProtocolloSuccessivoCollection;
     }
 
     public Date getDatariferimentomittente() {

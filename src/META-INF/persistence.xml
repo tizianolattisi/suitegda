@@ -14,6 +14,7 @@
     <class>com.axiastudio.suite.anagrafiche.entities.Indirizzo</class>
     <class>com.axiastudio.suite.protocollo.entities.Fascicolo</class>
     <class>com.axiastudio.suite.base.entities.Utente</class>
+    <class>com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>
