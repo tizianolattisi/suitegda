@@ -7,7 +7,6 @@ package com.axiastudio.suite.protocollo.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Column;
@@ -27,6 +26,7 @@ import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.designer.QUiLoader;
 import com.trolltech.qt.designer.QUiLoaderException;
 import com.trolltech.qt.gui.QAbstractItemView;
+import com.trolltech.qt.gui.QHeaderView;
 import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QItemSelection;
 import com.trolltech.qt.gui.QItemSelectionModel;
@@ -63,8 +63,13 @@ public class FormScrivania  extends QMainWindow {
         pushButtonApriDocumenti.setEnabled(false);
         QPushButton pushButtonAggiornaLista = (QPushButton) this.findChild(QPushButton.class, "pushButtonAggiornaLista");
         pushButtonAggiornaLista.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/arrow_refresh.png"));
-        pushButtonAggiornaLista.clicked.connect(this, "apriDocumenti()");
-        pushButtonAggiornaLista.setEnabled(false);
+        pushButtonAggiornaLista.clicked.connect(this, "aggiornaLista()");
+
+        QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
+        tableView.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
+        tableView.setSortingEnabled(true);
+        //tableView.installEventFilter(this);
+        tableView.setItemDelegate(new Delegate(tableView));
 
         this.popolaAttribuzioni();
     }
@@ -86,6 +91,7 @@ public class FormScrivania  extends QMainWindow {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         Store attribuzioni = SuiteUtil.attribuzioni(autenticato);
         List<Column> colonne = new ArrayList();
+        QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         colonne.add(new Column("iddocumento", "Protocollo", "Numero di protocollo"));
         colonne.add(new Column("tipoprotocollo", "E/U/I", "Entrata / Uscita / Interno"));
         colonne.add(new Column("dataprotocollo", "Data", "Data di protocollazione"));
@@ -93,17 +99,18 @@ public class FormScrivania  extends QMainWindow {
         colonne.add(new Column("principale", "Pr.", "Attribuzione in via principale"));
         colonne.add(new Column("oggetto", "Oggetto", "Oggetto del protocollo"));
         TableModel model = new TableModel(attribuzioni, colonne);
-        QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         tableView.clearSelection();
-        tableView.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
-        tableView.setSortingEnabled(true);
-        tableView.installEventFilter(this);
-        tableView.setItemDelegate(new Delegate(tableView));
         model.setEditable(false);
         tableView.setModel(model);
         QItemSelectionModel selectionModel = new QItemSelectionModel(model);
         tableView.setSelectionModel(selectionModel);
         selectionModel.selectionChanged.connect(this, "selectRows(QItemSelection, QItemSelection)");
+        tableView.horizontalHeader().setResizeMode(0, QHeaderView.ResizeMode.ResizeToContents); // iddocumento
+        tableView.horizontalHeader().setResizeMode(1, QHeaderView.ResizeMode.ResizeToContents); // tipoprotocollo
+        tableView.horizontalHeader().setResizeMode(2, QHeaderView.ResizeMode.ResizeToContents); // dataprotocollo
+        tableView.horizontalHeader().setResizeMode(3, QHeaderView.ResizeMode.ResizeToContents); // ufficio
+        tableView.horizontalHeader().setResizeMode(4, QHeaderView.ResizeMode.ResizeToContents); // principale
+        tableView.horizontalHeader().setResizeMode(5, QHeaderView.ResizeMode.Stretch);          // oggetto
     }
     
     private void selectRows(QItemSelection selected, QItemSelection deselected){
@@ -163,7 +170,7 @@ public class FormScrivania  extends QMainWindow {
     }
     
     private void aggiornaLista(){
-        
+        this.popolaAttribuzioni();
     }
 
 }
