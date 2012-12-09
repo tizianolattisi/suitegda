@@ -23,23 +23,23 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="pushButtonApriProtocollo">
       <property name="text">
-       <string>PushButton</string>
+       <string>apri protocollo</string>
       </property>
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="pushButtonApriDocumenti">
       <property name="text">
-       <string>PushButton</string>
+       <string>apri documenti</string>
       </property>
      </widget>
     </item>
     <item row="0" column="3">
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="pushButtonAggiornaLista">
       <property name="text">
-       <string>PushButton</string>
+       <string>aggiorna lista</string>
       </property>
      </widget>
     </item>

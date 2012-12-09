@@ -12,6 +12,7 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Column;
 import com.axiastudio.pypapi.ui.Delegate;
+import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.TableModel;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
@@ -19,6 +20,7 @@ import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.trolltech.qt.core.QByteArray;
 import com.trolltech.qt.core.QFile;
 import com.trolltech.qt.core.QModelIndex;
@@ -29,6 +31,7 @@ import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QItemSelection;
 import com.trolltech.qt.gui.QItemSelectionModel;
 import com.trolltech.qt.gui.QMainWindow;
+import com.trolltech.qt.gui.QMdiArea;
 import com.trolltech.qt.gui.QPushButton;
 import com.trolltech.qt.gui.QTableView;
 import java.util.ArrayList;
@@ -50,6 +53,18 @@ public class FormScrivania  extends QMainWindow {
         pushButtonDaiPerLetto.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/tick.png"));
         pushButtonDaiPerLetto.clicked.connect(this, "daiPerLetto()");
         pushButtonDaiPerLetto.setEnabled(false);
+        QPushButton pushButtonApriProtocollo = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriProtocollo");
+        pushButtonApriProtocollo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+        pushButtonApriProtocollo.clicked.connect(this, "apriProtocollo()");
+        pushButtonApriProtocollo.setEnabled(false);
+        QPushButton pushButtonApriDocumenti = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriDocumenti");
+        pushButtonApriDocumenti.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/cmis.png"));
+        pushButtonApriDocumenti.clicked.connect(this, "apriDocumenti()");
+        pushButtonApriDocumenti.setEnabled(false);
+        QPushButton pushButtonAggiornaLista = (QPushButton) this.findChild(QPushButton.class, "pushButtonAggiornaLista");
+        pushButtonAggiornaLista.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/arrow_refresh.png"));
+        pushButtonAggiornaLista.clicked.connect(this, "apriDocumenti()");
+        pushButtonAggiornaLista.setEnabled(false);
 
         this.popolaAttribuzioni();
     }
@@ -79,6 +94,7 @@ public class FormScrivania  extends QMainWindow {
         colonne.add(new Column("oggetto", "Oggetto", "Oggetto del protocollo"));
         TableModel model = new TableModel(attribuzioni, colonne);
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
+        tableView.clearSelection();
         tableView.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
         tableView.setSortingEnabled(true);
         tableView.installEventFilter(this);
@@ -93,6 +109,8 @@ public class FormScrivania  extends QMainWindow {
     private void selectRows(QItemSelection selected, QItemSelection deselected){
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         QPushButton pushButtonDaiPerLetto = (QPushButton) this.findChild(QPushButton.class, "pushButtonDaiPerLetto");
+        QPushButton pushButtonApriProtocollo = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriProtocollo");
+        QPushButton pushButtonApriDocumenti = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriDocumenti");
         TableModel model = (TableModel) tableView.model();
         List<Integer> selectedIndexes = new ArrayList();
         List<Integer> deselectedIndexes = new ArrayList();
@@ -113,8 +131,8 @@ public class FormScrivania  extends QMainWindow {
             boolean res = this.selection.remove((Attribuzione) model.getEntityByRow(idx));
         }
         pushButtonDaiPerLetto.setEnabled(this.selection.size()>0);
-        
-
+        pushButtonApriProtocollo.setEnabled(this.selection.size()==1);
+        pushButtonApriDocumenti.setEnabled(this.selection.size()==1);
     }
     
     private void daiPerLetto(){
@@ -126,5 +144,26 @@ public class FormScrivania  extends QMainWindow {
         }
         this.popolaAttribuzioni();
     }
+
+    private void apriProtocollo(){
+        Protocollo protocollo = this.selection.get(0).getProtocollo();
+        IForm form = Util.formFromEntity(protocollo);
+        if( form == null ){
+            return;
+        }
+        QMdiArea workspace = Util.findParentMdiArea(this);
+        if( workspace != null ){
+            workspace.addSubWindow((QMainWindow) form);
+        }
+        form.show();
+    }
+
+    private void apriDocumenti(){
+            
+    }
+    
+    private void aggiornaLista(){
         
+    }
+
 }
