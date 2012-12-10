@@ -9,6 +9,7 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.trolltech.qt.gui.QDialog;
+import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QTreeWidget;
 import com.trolltech.qt.gui.QTreeWidgetItem;
 import com.trolltech.qt.gui.QVBoxLayout;
@@ -41,7 +42,7 @@ public class FormTitolario extends QDialog {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(Fascicolo.class);
         Root root = cq.from(Fascicolo.class);
-        cq.orderBy(cb.asc(root.get("categoria")), cb.asc(root.get("categoria")), cb.asc(root.get("classe")), cb.asc(root.get("fascicolo")));
+        cq.orderBy(cb.asc(root.get("categoria")), cb.asc(root.get("classe")), cb.asc(root.get("fascicolo")));
         Query q = em.createQuery(cq);
         List store = q.getResultList();        
         QTreeWidgetItem itemCategoria=null;
@@ -61,6 +62,10 @@ public class FormTitolario extends QDialog {
                     String descrizione = "(" + fascicolo.getCategoria() + "-" +
                             fascicolo.getClasse() + ") " + fascicolo.getDescrizione();
                     itemClasse.setText(0, descrizione);
+                    if( !"".equals(fascicolo.getNote()) ){
+                        itemClasse.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/note.png"));
+                        itemClasse.setToolTip(0, "<FONT COLOR=black>" + fascicolo.getNote() + "</FONT>");
+                    }
                     itemCategoria.addChild(itemClasse);
                 }
             } else {
@@ -69,8 +74,11 @@ public class FormTitolario extends QDialog {
                         fascicolo.getClasse() + "-" + fascicolo.getFascicolo() +
                         ") " + fascicolo.getDescrizione();
                 itemFascicolo.setText(0, descrizione);
+                if( !"".equals(fascicolo.getNote()) ){
+                    itemFascicolo.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/note.png"));
+                    itemFascicolo.setToolTip(0, "<FONT COLOR=black>" + fascicolo.getNote() + "</FONT>");
+                }
                 itemClasse.addChild(itemFascicolo);
-                
             }
         }
     }
