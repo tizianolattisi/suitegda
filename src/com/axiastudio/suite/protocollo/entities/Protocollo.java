@@ -74,6 +74,9 @@ public class Protocollo implements Serializable {
     private Boolean ConvalidaAttribuzioni=false;
     @Column(name="convalidaprotocollo")
     private Boolean ConvalidaProtocollo=false;
+    @JoinColumn(name = "fascicolo", referencedColumnName = "id")
+    @ManyToOne
+    private Fascicolo fascicolo;
 
 
 
@@ -275,6 +278,14 @@ public class Protocollo implements Serializable {
 
     public void setConvalidaProtocollo(Boolean ConvalidaProtocollo) {
         this.ConvalidaProtocollo = ConvalidaProtocollo;
+    }
+
+    public Fascicolo getFascicolo() {
+        return fascicolo;
+    }
+
+    public void setFascicolo(Fascicolo fascicolo) {
+        this.fascicolo = fascicolo;
     }
 
     @Override

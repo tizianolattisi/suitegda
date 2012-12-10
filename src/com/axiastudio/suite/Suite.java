@@ -24,6 +24,7 @@ import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloPrivate;
 import com.axiastudio.suite.protocollo.ProtocolloValidators;
+import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
@@ -137,7 +138,13 @@ public class Suite {
                               Protocollo.class,
                               FormProtocollo.class, // custom form
                               "Protocolli");
-        
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Fascicolo.class,
+                              Window.class,
+                              "Finestra fascicolo");
+
         // Plugin CMIS per accedere ad Alfresco
         CMIS cmisPlugin = new CMIS();
         cmisPlugin.setup("127.0.0.1", 8080, "/alfresco/service/cmis", "admin", "admin", 

@@ -515,134 +515,117 @@
         <string>Corrispondenti e referenti</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_5">
-        <property name="margin">
-         <number>4</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QGroupBox" name="groupBox_6">
-          <property name="title">
+        <item row="0" column="0" colspan="2">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
            <string>Mittenti</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_5">
-           <property name="margin">
-            <number>4</number>
-           </property>
-           <item>
-            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
-             <property name="entity" stdset="0">
-              <string>.soggettoProtocolloCollection</string>
-             </property>
-             <property name="columns" stdset="0">
-              <string>&gt;soggetto&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
-             </property>
-             <property name="reference" stdset="0">
-              <string>soggetto</string>
-             </property>
-             <property name="headers" stdset="0">
-              <string>soggetto,titolo,con,not,cor</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QGroupBox" name="groupBox_7">
-          <property name="minimumSize">
-           <size>
-            <width>300</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>300</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="title">
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
            <string>Destinatari</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
-           <property name="margin">
-            <number>4</number>
-           </property>
-           <item>
-            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_3">
-             <property name="entity" stdset="0">
-              <string>.ufficioProtocolloCollection</string>
-             </property>
-             <property name="columns" stdset="0">
-              <string>&lt;ufficio&gt;</string>
-             </property>
-             <property name="reference" stdset="0">
-              <string>ufficio</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QGroupBox" name="groupBox_9">
-          <property name="title">
-           <string>Pratiche correlate</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
-           <property name="margin">
-            <number>4</number>
-           </property>
-           <item>
-            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_4">
-             <property name="columns" stdset="0">
-              <string>pratica</string>
-             </property>
-             <property name="reference" stdset="0">
-              <string>pratica</string>
-             </property>
-             <property name="entity" stdset="0">
-              <string>.praticaProtocolloCollection</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QGroupBox" name="groupBox_8">
+        <item row="1" column="0" colspan="2">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
           <property name="minimumSize">
            <size>
-            <width>300</width>
+            <width>0</width>
             <height>0</height>
            </size>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>300</width>
-            <height>16777215</height>
-           </size>
+          <property name="entity" stdset="0">
+           <string>.soggettoProtocolloCollection</string>
           </property>
-          <property name="title">
-           <string>Attribuzioni</string>
+          <property name="columns" stdset="0">
+           <string>&gt;soggetto&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <property name="margin">
-            <number>4</number>
-           </property>
-           <item>
-            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewAttribuzioni">
-             <property name="entity" stdset="0">
-              <string>.attribuzioneCollection</string>
-             </property>
-             <property name="columns" stdset="0">
-              <string>&gt;principale&lt;,&lt;ufficio&gt;</string>
-             </property>
-             <property name="reference" stdset="0">
-              <string>Ufficio</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <property name="reference" stdset="0">
+           <string>soggetto</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>soggetto,titolo,con,not,cor</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_3">
+          <property name="entity" stdset="0">
+           <string>.ufficioProtocolloCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&lt;ufficio&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>ufficio</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Pratiche contenitore</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>Lista di attribuzione</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_4">
+          <property name="columns" stdset="0">
+           <string>pratica</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>pratica</string>
+          </property>
+          <property name="entity" stdset="0">
+           <string>.praticaProtocolloCollection</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2" rowspan="3">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewAttribuzioni">
+          <property name="entity" stdset="0">
+           <string>.attribuzioneCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;principale&lt;,&lt;ufficio&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>Ufficio</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0" colspan="2">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Fascicolazione</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_4">
+          <property name="column" stdset="0">
+           <string>Fascicolo</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QToolButton" name="toolButtonTitolario">
+          <property name="text">
+           <string>...</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -730,10 +713,6 @@
   <tabstop>comboBox</tabstop>
   <tabstop>comboBox_3</tabstop>
   <tabstop>textEdit_2</tabstop>
-  <tabstop>tableView_2</tabstop>
-  <tabstop>tableView_3</tabstop>
-  <tabstop>tableViewAttribuzioni</tabstop>
-  <tabstop>tableView_4</tabstop>
   <tabstop>comboBox_2</tabstop>
   <tabstop>dateEdit_2</tabstop>
   <tabstop>lineEdit_3</tabstop>

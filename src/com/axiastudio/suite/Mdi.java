@@ -151,6 +151,7 @@ public class Mdi extends QMainWindow {
             int exec = passDlg.exec();
         } else if( "TITOLARIO".equals(formName) ){
             FormTitolario titolario = new FormTitolario();
+            this.workspace.addSubWindow(titolario);
             int exec = titolario.exec();
         } else if( "SCRIVANIA".equals(formName) ){
             FormScrivania form = new FormScrivania();

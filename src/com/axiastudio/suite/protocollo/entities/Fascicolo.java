@@ -100,7 +100,7 @@ public class Fascicolo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.protocollo.entities.Fascicolo[ id=" + id + " ]";
+        return "(" + categoria + "-" + classe + "-" + fascicolo + ") " + this.getDescrizione();
     }
     
 }

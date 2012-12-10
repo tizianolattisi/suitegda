@@ -13,6 +13,7 @@ import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QTreeWidget;
 import com.trolltech.qt.gui.QTreeWidgetItem;
 import com.trolltech.qt.gui.QVBoxLayout;
+import com.trolltech.qt.gui.QWidget;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -28,6 +29,11 @@ import javax.persistence.criteria.Root;
 public class FormTitolario extends QDialog {
 
     public FormTitolario(){
+        this(null);
+    }
+        
+    public FormTitolario(QWidget parent){
+        super(parent);
         QTreeWidget tree = new QTreeWidget();
         QVBoxLayout layout = new QVBoxLayout();
         layout.addWidget(tree);

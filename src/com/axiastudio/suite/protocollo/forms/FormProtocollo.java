@@ -66,6 +66,11 @@ public class FormProtocollo extends Window {
             Logger.getLogger(FormProtocollo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        /* fascicolazione */
+        QToolButton toolButtonTitolario = (QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario");
+        toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
+        toolButtonTitolario.clicked.connect(this, "apriTitolario()");
+        
     }
     
     /*
@@ -91,6 +96,11 @@ public class FormProtocollo extends Window {
         protocollo.setConvalidaAttribuzioni(Boolean.TRUE);
         protocollo.setConvalidaProtocollo(Boolean.TRUE);
         this.getContext().getDirty();
+    }
+    
+    private void apriTitolario() {
+        FormTitolario titolario = new FormTitolario();
+        int exec = titolario.exec();
     }
     
     @Override
