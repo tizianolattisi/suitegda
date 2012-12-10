@@ -14,7 +14,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(schema="PROTOCOLLO")
-@SequenceGenerator(name="gensoggettoprotocollo", sequenceName="soggettoprotocollo_id_seq", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="gensoggettoprotocollo", sequenceName="protocollo.soggettoprotocollo_id_seq", initialValue=1, allocationSize=1)
 public class SoggettoProtocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

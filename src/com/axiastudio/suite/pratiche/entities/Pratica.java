@@ -16,7 +16,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(schema="PRATICHE")
-@SequenceGenerator(name="genpratica", sequenceName="pratica_id_seq", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="genpratica", sequenceName="pratiche.pratica_id_seq", initialValue=1, allocationSize=1)
 public class Pratica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

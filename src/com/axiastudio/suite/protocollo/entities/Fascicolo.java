@@ -13,7 +13,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(schema="PROTOCOLLO")
-@SequenceGenerator(name="genfascicolo", sequenceName="fascicolo_id_seq", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="genfascicolo", sequenceName="protocollo.fascicolo_id_seq", initialValue=1, allocationSize=1)
 public class Fascicolo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

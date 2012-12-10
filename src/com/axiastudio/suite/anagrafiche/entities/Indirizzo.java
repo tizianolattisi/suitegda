@@ -13,7 +13,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(schema="ANAGRAFICHE")
-@SequenceGenerator(name="genindirizzo", sequenceName="indirizzo_id_seq", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="genindirizzo", sequenceName="anagrafiche.indirizzo_id_seq", initialValue=1, allocationSize=1)
 public class Indirizzo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

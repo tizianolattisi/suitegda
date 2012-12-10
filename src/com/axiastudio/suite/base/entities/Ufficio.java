@@ -18,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema="BASE")
-@SequenceGenerator(name="genufficio", sequenceName="ufficio_id_seq", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="genufficio", sequenceName="base.ufficio_id_seq", initialValue=1, allocationSize=1)
 public class Ufficio implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

@@ -13,10 +13,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(schema="BASE")
+@SequenceGenerator(name="genufficioutente", sequenceName="base.ufficioutente_id_seq", initialValue=1, allocationSize=1)
 public class UfficioUtente implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genufficioutente")
     private Long id;
     @JoinColumn(name = "ufficio", referencedColumnName = "id")
     @ManyToOne

@@ -20,7 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema="PROTOCOLLO")
-@SequenceGenerator(name="genriferimentoprotocollo", sequenceName="riferimentoprotocollo_id_seq", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="genriferimentoprotocollo", sequenceName="protocollo.riferimentoprotocollo_id_seq", initialValue=1, allocationSize=1)
 public class RiferimentoProtocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
