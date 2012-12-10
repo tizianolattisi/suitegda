@@ -148,7 +148,8 @@ CREATE TABLE protocollo (
     spedito boolean,
     tipo character varying(255),
     tiporiferimentomittente character varying(255),
-    sportello bigint
+    sportello bigint,
+    fascicolo bigint
 );
 ALTER TABLE protocollo.protocollo OWNER TO tiziano;
 ALTER TABLE ONLY protocollo
@@ -157,6 +158,8 @@ ALTER TABLE ONLY protocollo
     ADD CONSTRAINT protocollo_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY protocollo
     ADD CONSTRAINT fk_protocollo_sportello FOREIGN KEY (sportello) REFERENCES base.ufficio(id);
+ALTER TABLE ONLY protocollo
+    ADD CONSTRAINT fk_protocollo_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
 
 CREATE TABLE attribuzione (
     id bigserial NOT NULL,
