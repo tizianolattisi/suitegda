@@ -17,10 +17,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(schema="PROTOCOLLO")
+@SequenceGenerator(name="genprotocollo", sequenceName="protocollo_id_seq", initialValue=1, allocationSize=1)
 public class Protocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genprotocollo")
     private Long id;
     @Column(name="iddocumento", unique=true)
     private String iddocumento;

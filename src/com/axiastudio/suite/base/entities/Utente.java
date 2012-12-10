@@ -13,10 +13,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(schema="BASE")
+@SequenceGenerator(name="genutente", sequenceName="utente_id_seq", initialValue=1, allocationSize=1)
 public class Utente implements IUtente {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genutente")
     private Long id;
     @Column(name="nome")
     private String nome;

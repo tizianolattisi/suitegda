@@ -13,10 +13,12 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@Table(schema="ANAGRAFICHE")
+@SequenceGenerator(name="gensoggetto", sequenceName="anagrafiche.soggetto_id_seq", initialValue=1, allocationSize=1)
 public class Soggetto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gensoggetto")
     private Long id;
     @Column(name="tipologiasoggetto")
     @Enumerated(EnumType.STRING)

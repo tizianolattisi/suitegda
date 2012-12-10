@@ -14,10 +14,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(schema="PROTOCOLLO")
+@SequenceGenerator(name="genpraticaprotocollo", sequenceName="praticaprotocollo_id_seq", initialValue=1, allocationSize=1)
 public class PraticaProtocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genpraticaprotocollo")
     private Long id;
     @JoinColumn(name = "pratica", referencedColumnName = "id")
     @ManyToOne

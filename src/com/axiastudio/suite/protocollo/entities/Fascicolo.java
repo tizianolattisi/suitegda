@@ -13,19 +13,22 @@ import javax.persistence.*;
  */
 @Entity
 @Table(schema="PROTOCOLLO")
+@SequenceGenerator(name="genfascicolo", sequenceName="fascicolo_id_seq", initialValue=1, allocationSize=1)
 public class Fascicolo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genfascicolo")
     private Long id;
     @Column(name="categoria")
     private Integer categoria;
     @Column(name="classe")
     private Integer classe;
-    @Column(name="fasciolo")
+    @Column(name="fascicolo")
     private Integer fascicolo;
     @Column(name="descrizione")
     private String descrizione;
+    @Column(name="note")
+    private String note;
     
     public Long getId() {
         return id;
@@ -65,6 +68,14 @@ public class Fascicolo implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     @Override

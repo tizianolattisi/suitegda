@@ -11,16 +11,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@Table(schema="PROTOCOLLO")
+@SequenceGenerator(name="genriferimentoprotocollo", sequenceName="riferimentoprotocollo_id_seq", initialValue=1, allocationSize=1)
 public class RiferimentoProtocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genriferimentoprotocollo")
     private Long id;
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne

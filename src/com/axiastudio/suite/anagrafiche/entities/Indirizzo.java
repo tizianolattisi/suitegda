@@ -12,10 +12,12 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@Table(schema="ANAGRAFICHE")
+@SequenceGenerator(name="genindirizzo", sequenceName="indirizzo_id_seq", initialValue=1, allocationSize=1)
 public class Indirizzo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genindirizzo")
     private Long id;
     @JoinColumn(name = "soggetto", referencedColumnName = "id")
     @ManyToOne
