@@ -1,0 +1,9 @@
+Il file titolario_utf8.txt è stato ottenuto copiando dal pdf della Provincia, incollando in Pages, e successivamente salvando in testo.
+
+La sintassi per produrre il codice sql da importare è:
+
+python exportTitolario.py > titolario_2011.sql
+
+Per poi inserire in Postgres alla creazione della base dati:
+
+psql -f titolario_2011.sql suite
