@@ -66,6 +66,7 @@ public class InitDB {
         // inizializza gli schemi
         List<String> schema = new ArrayList();
         schema.add("BASE");
+        schema.add("ANAGRAFICHE");
         schema.add("PROTOCOLLO");
         schema.add("PRATICHE");
         for( String name: schema){
