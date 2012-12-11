@@ -4,7 +4,7 @@
  */
 package com.axiastudio.suite.protocollo;
 
-import com.axiastudio.pypapi.db.Private;
+import com.axiastudio.pypapi.annotations.Private;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 
 /**

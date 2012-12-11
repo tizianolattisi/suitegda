@@ -19,11 +19,11 @@ import com.axiastudio.suite.base.entities.Login;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.demo.DemoData;
-import com.axiastudio.suite.pratiche.PraticaValidators;
+import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloPrivate;
-import com.axiastudio.suite.protocollo.ProtocolloValidators;
+import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
@@ -77,8 +77,8 @@ public class Suite {
         
         // registro adapter, validatori, e privacy
         Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
-        Register.registerValidators(Resolver.validatorsFromClass(ProtocolloValidators.class));
-        Register.registerValidators(Resolver.validatorsFromClass(PraticaValidators.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
         Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));
         
         // dati di base

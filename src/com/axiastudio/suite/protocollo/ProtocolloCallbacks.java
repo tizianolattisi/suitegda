@@ -5,10 +5,11 @@
 package com.axiastudio.suite.protocollo;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.annotations.Callback;
+import com.axiastudio.pypapi.annotations.CallbackType;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Validation;
-import com.axiastudio.pypapi.db.Validator;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo_;
 import java.util.Calendar;
@@ -24,14 +25,19 @@ import javax.persistence.criteria.Root;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class ProtocolloValidators {
+public class ProtocolloCallbacks {
     /*
      * Valida il protocollo e richiede il nuovo iddocumento
      */
-    @Validator
+    @Callback(type=CallbackType.BEFORECOMMIT)
     public static Validation validaProtocollo(Protocollo protocollo){
         String msg = "";
         Boolean res = true;
+        /* sportello obbligatorio */
+        if( protocollo.getSportello() == null ){
+            msg += "Deve essere dichiarato uno sportello ricevente";
+            res = false;
+        }
         /* almeno un soggetto */
         if( protocollo.getSoggettoProtocolloCollection().isEmpty() ){
             msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
@@ -71,6 +77,17 @@ public class ProtocolloValidators {
                 newIddocumento = year+"00000001";
             }
             protocollo.setIddocumento(newIddocumento);
+            /*
+            if( protocollo.getTipo() == null ) protocollo.setTipo(TipoProtocollo.ENTRATA);
+            if( protocollo.getFascicolo() == null ){
+                Controller controller = (Controller) Register.queryUtility(IController.class, Fascicolo.class.getName());
+                HashMap hm = new HashMap();
+                hm.put("categoria", 0);
+                hm.put("classe", 0);
+                hm.put("fascicolo", 0);
+                Store store = controller.createCriteriaStore(hm);
+                System.out.println(store);
+            }*/
         }
         return new Validation(true);
     }

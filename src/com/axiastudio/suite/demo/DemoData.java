@@ -15,9 +15,9 @@ import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.pratiche.PraticaValidators;
+import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.protocollo.ProtocolloValidators;
+import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.entities.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -130,7 +130,7 @@ public class DemoData {
         // pratiche
         Pratica pratica = new Pratica();
         pratica.setDescrizione("Pratica demo");
-        PraticaValidators.validaPratica(pratica);
+        PraticaCallbacks.validaPratica(pratica);
         em.merge(pratica);
         
         // protocolli
@@ -182,12 +182,12 @@ public class DemoData {
         soggettiprotocollo2.add(sp2);
         pro2.setSoggettoProtocolloCollection(soggettiprotocollo2);
         
-        ProtocolloValidators.validaProtocollo(pro1);
+        ProtocolloCallbacks.validaProtocollo(pro1);
         em.getTransaction().begin();
         em.merge(pro1);
         em.getTransaction().commit();
         
-        ProtocolloValidators.validaProtocollo(pro2);
+        ProtocolloCallbacks.validaProtocollo(pro2);
         em.getTransaction().begin();
         em.merge(pro2);
         em.getTransaction().commit();

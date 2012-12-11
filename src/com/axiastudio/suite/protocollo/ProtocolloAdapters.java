@@ -4,7 +4,7 @@
  */
 package com.axiastudio.suite.protocollo;
 
-import com.axiastudio.pypapi.db.Adapter;
+import com.axiastudio.pypapi.annotations.Adapter;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Protocollo;

@@ -5,10 +5,11 @@
 package com.axiastudio.suite.pratiche;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.annotations.Callback;
+import com.axiastudio.pypapi.annotations.CallbackType;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Validation;
-import com.axiastudio.pypapi.db.Validator;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Pratica_;
 import java.util.Calendar;
@@ -24,9 +25,9 @@ import javax.persistence.criteria.Root;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class PraticaValidators {
+public class PraticaCallbacks {
     
-    @Validator
+    @Callback(type=CallbackType.BEFORECOMMIT)
     public static Validation validaPratica(Pratica pratica){
         if( pratica.getId() == null ){
             Calendar calendar = Calendar.getInstance();
