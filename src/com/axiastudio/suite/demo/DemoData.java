@@ -182,12 +182,12 @@ public class DemoData {
         soggettiprotocollo2.add(sp2);
         pro2.setSoggettoProtocolloCollection(soggettiprotocollo2);
         
-        ProtocolloCallbacks.validaProtocollo(pro1);
+        ProtocolloCallbacks.beforeCommit(pro1);
         em.getTransaction().begin();
         em.merge(pro1);
         em.getTransaction().commit();
         
-        ProtocolloCallbacks.validaProtocollo(pro2);
+        ProtocolloCallbacks.beforeCommit(pro2);
         em.getTransaction().begin();
         em.merge(pro2);
         em.getTransaction().commit();
