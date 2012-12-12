@@ -26,11 +26,12 @@ import javax.persistence.criteria.Root;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class ProtocolloCallbacks {
+    
     /*
      * Valida il protocollo e richiede il nuovo iddocumento
      */
     @Callback(type=CallbackType.BEFORECOMMIT)
-    public static Validation validaProtocollo(Protocollo protocollo){
+    public static Validation beforeCommit(Protocollo protocollo){
         String msg = "";
         Boolean res = true;
         /* sportello obbligatorio */
@@ -92,4 +93,13 @@ public class ProtocolloCallbacks {
         return new Validation(true);
     }
     
+    /*
+     * CallbackType.AFTERCOMMIT
+     */
+    @Callback(type=CallbackType.AFTERCOMMIT)
+    public static Validation afterCommit(Protocollo protocollo){
+        // placeholder
+        return new Validation(true);
+    }
+
 }
