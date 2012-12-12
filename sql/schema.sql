@@ -129,6 +129,18 @@ ALTER TABLE ONLY pratica
 -- Protocollo
 SET search_path = protocollo, pg_catalog;
 
+CREATE TABLE fascicolo (
+    id bigserial NOT NULL,
+    categoria integer,
+    classe integer,
+    descrizione character varying(255),
+    note character varying(2048),
+    fascicolo integer
+);
+ALTER TABLE protocollo.fascicolo OWNER TO tiziano;
+ALTER TABLE ONLY fascicolo
+    ADD CONSTRAINT fascicolo_pkey PRIMARY KEY (id);
+
 CREATE TABLE protocollo (
     id bigserial NOT NULL,
     convalidaattribuzioni boolean,
@@ -175,18 +187,6 @@ ALTER TABLE ONLY attribuzione
     ADD CONSTRAINT fk_attribuzione_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 ALTER TABLE ONLY attribuzione
     ADD CONSTRAINT fk_attribuzione_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
-
-CREATE TABLE fascicolo (
-    id bigserial NOT NULL,
-    categoria integer,
-    classe integer,
-    descrizione character varying(255),
-    note character varying(2048),
-    fascicolo integer
-);
-ALTER TABLE protocollo.fascicolo OWNER TO tiziano;
-ALTER TABLE ONLY fascicolo
-    ADD CONSTRAINT fascicolo_pkey PRIMARY KEY (id);
 
 CREATE TABLE praticaprotocollo (
     id bigserial NOT NULL,
