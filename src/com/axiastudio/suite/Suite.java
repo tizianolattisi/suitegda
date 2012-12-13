@@ -10,6 +10,8 @@ import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.plugins.cmis.CMIS;
+import com.axiastudio.pypapi.plugins.extraattributes.ExtraAttributes;
+import com.axiastudio.pypapi.plugins.ooops.Ooops;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
@@ -21,9 +23,10 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
-import com.axiastudio.suite.protocollo.ProtocolloPrivate;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
+import com.axiastudio.suite.protocollo.ProtocolloPrivate;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
@@ -118,7 +121,7 @@ public class Suite {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",
                               Pratica.class,
-                              Window.class,
+                              FormPratica.class,
                               "Prtiche");
                           
         Register.registerForm(db.getEntityManagerFactory(),
@@ -150,6 +153,14 @@ public class Suite {
         cmisPlugin.setup("127.0.0.1", 8080, "/alfresco/service/cmis", "admin", "admin", 
                 "/Protocollo/${dataprotocollo,date,YYYY}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
+
+        // Plugin Ooops per interazione con OpenOffice
+        Ooops ooopsPlugin = new Ooops();
+        Register.registerPlugin(ooopsPlugin, FormPratica.class);
+
+        // Plugin Ooops per interazione con OpenOffice
+        ExtraAttributes extraAttributesPlugin = new ExtraAttributes();
+        Register.registerPlugin(extraAttributesPlugin, FormPratica.class);
 
         /* login */
         Login login = new Login();
