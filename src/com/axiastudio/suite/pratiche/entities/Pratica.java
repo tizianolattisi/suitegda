@@ -4,6 +4,7 @@
  */
 package com.axiastudio.suite.pratiche.entities;
 
+import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import java.io.Serializable;
 import java.util.Collection;
@@ -35,6 +36,17 @@ public class Pratica implements Serializable {
     private String note;
     @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<PraticaProtocollo> praticaProtocolloCollection;
+    @JoinColumn(name = "attribuzione", referencedColumnName = "id")
+    @ManyToOne
+    private Ufficio attribuzione;
+    @JoinColumn(name = "gestione", referencedColumnName = "id")
+    @ManyToOne
+    private Ufficio gestione;
+    @JoinColumn(name = "ubicazione", referencedColumnName = "id")
+    @ManyToOne
+    private Ufficio ubicazione;
+    @Column(name="dettaglioubicazione")
+    private String dettaglioubicazione;
 
     public Long getId() {
         return id;
@@ -90,6 +102,38 @@ public class Pratica implements Serializable {
 
     public void setPraticaProtocolloCollection(Collection<PraticaProtocollo> praticaProtocolloCollection) {
         this.praticaProtocolloCollection = praticaProtocolloCollection;
+    }
+
+    public Ufficio getAttribuzione() {
+        return attribuzione;
+    }
+
+    public void setAttribuzione(Ufficio attribuzione) {
+        this.attribuzione = attribuzione;
+    }
+
+    public Ufficio getGestione() {
+        return gestione;
+    }
+
+    public void setGestione(Ufficio gestione) {
+        this.gestione = gestione;
+    }
+
+    public Ufficio getUbicazione() {
+        return ubicazione;
+    }
+
+    public void setUbicazione(Ufficio ubicazione) {
+        this.ubicazione = ubicazione;
+    }
+
+    public String getDettaglioubicazione() {
+        return dettaglioubicazione;
+    }
+
+    public void setDettaglioubicazione(String dettaglioubicazione) {
+        this.dettaglioubicazione = dettaglioubicazione;
     }
 
     @Override
