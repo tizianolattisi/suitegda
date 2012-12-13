@@ -116,13 +116,23 @@ CREATE TABLE pratica (
     datapratica date,
     descrizione character varying(255),
     idpratica character varying(255),
-    note character varying(255)
+    note character varying(255),
+    attribuzione bigint,
+    gestione bigint,
+    ubicazione bigint,
+    dettaglioubicazione character varying(255)
 );
 ALTER TABLE pratiche.pratica OWNER TO tiziano;
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT pratica_idpratica_key UNIQUE (idpratica);
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT pratica_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY pratica
+    ADD CONSTRAINT fk_pratica_attribuzione FOREIGN KEY (attribuzione) REFERENCES base.ufficio(id);
+ALTER TABLE ONLY pratica
+    ADD CONSTRAINT fk_pratica_gestione FOREIGN KEY (gestione) REFERENCES base.ufficio(id);
+ALTER TABLE ONLY pratica
+    ADD CONSTRAINT fk_pratica_ubicazione FOREIGN KEY (ubicazione) REFERENCES base.ufficio(id);
 
 
 

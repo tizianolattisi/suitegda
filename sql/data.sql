@@ -29,7 +29,7 @@ SELECT setval('anagrafiche.soggetto_id_seq', 2, true);
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
-INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, note) VALUES (1, 2012, '2012-12-10', 'Pratica demo', '201200000001', NULL);
+INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, note, attribuzione, gestione, ubicazione, dettaglioubicazione) VALUES (1, 2012, '2012-12-10', 'Pratica demo', '201200000001', NULL, 3, 4, 3, 'scaffale in alto');
 SELECT setval('pratiche.pratica_id_seq', 2, true);
 
 -- Protocollo
