@@ -50,7 +50,7 @@ public class FormTitolario extends QDialog {
         Root root = cq.from(Fascicolo.class);
         cq.orderBy(cb.asc(root.get("categoria")), cb.asc(root.get("classe")), cb.asc(root.get("fascicolo")));
         Query q = em.createQuery(cq);
-        List store = q.getResultList();        
+        List store = q.getResultList();
         QTreeWidgetItem itemCategoria=null;
         QTreeWidgetItem itemClasse=null;
         QTreeWidgetItem itemFascicolo;

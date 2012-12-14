@@ -15,6 +15,7 @@ import com.axiastudio.pypapi.ui.IUIFile;
 import com.axiastudio.suite.base.entities.CambiaPassword;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.pratiche.forms.FormTipologiePratica;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.trolltech.qt.core.Qt;
@@ -116,6 +117,16 @@ public class Mdi extends QMainWindow {
         itemPratiche.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemPratiche.setText(1, "com.axiastudio.suite.pratiche.entities.Pratica");
 
+        QTreeWidgetItem itemTipologiaPratica = new QTreeWidgetItem(itemPraticheRoot);
+        itemTipologiaPratica.setText(0, "Tipologia pratica");
+        itemTipologiaPratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemTipologiaPratica.setText(1, "com.axiastudio.suite.pratiche.entities.TipologiaPratica");
+        
+        QTreeWidgetItem itemTipologiePratica = new QTreeWidgetItem(itemPraticheRoot);
+        itemTipologiePratica.setText(0, "Tipologie Pratica");
+        itemTipologiePratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+        itemTipologiePratica.setText(1, "TIPOLOGIEPRATICA");
+
         /* Amministrazione */
         QTreeWidgetItem itemAmministrazione = new QTreeWidgetItem(this.tree);
         itemAmministrazione.setText(0, "Amministrazione");
@@ -153,6 +164,10 @@ public class Mdi extends QMainWindow {
             FormTitolario titolario = new FormTitolario();
             this.workspace.addSubWindow(titolario);
             int exec = titolario.exec();
+        } else if( "TIPOLOGIEPRATICA".equals(formName) ){
+            FormTipologiePratica tipologiepratica = new FormTipologiePratica();
+            this.workspace.addSubWindow(tipologiepratica);
+            int exec = tipologiepratica.exec();
         } else if( "SCRIVANIA".equals(formName) ){
             FormScrivania form = new FormScrivania();
             this.workspace.addSubWindow(form);

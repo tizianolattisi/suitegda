@@ -23,6 +23,7 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.pratiche.entities.TipologiaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
@@ -122,8 +123,14 @@ public class Suite {
                               "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",
                               Pratica.class,
                               FormPratica.class,
-                              "Prtiche");
-                          
+                              "Pratiche");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/pratiche/forms/tipologiapratica.ui",
+                              TipologiaPratica.class,
+                              Window.class,
+                              "Tipologia Pratica");
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
                               SoggettoProtocollo.class,
