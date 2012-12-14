@@ -29,6 +29,11 @@ SELECT setval('anagrafiche.soggetto_id_seq', 2, true);
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
+INSERT INTO tipologiapratica (id, codice, descrizione, tipologiapadre) VALUES (1, 'DET', 'Determine', NULL);
+INSERT INTO tipologiapratica (id, codice, descrizione, tipologiapadre) VALUES (2, 'GES', 'Ramo GES', NULL);
+INSERT INTO tipologiapratica (id, codice, descrizione, tipologiapadre) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1);
+SELECT setval('pratiche.tipologiapratica_id_seq', 4, true);
+
 INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, note, attribuzione, gestione, ubicazione, dettaglioubicazione) VALUES (1, 2012, '2012-12-10', 'Pratica demo', '201200000001', NULL, 3, 4, 3, 'scaffale in alto');
 SELECT setval('pratiche.pratica_id_seq', 2, true);
 

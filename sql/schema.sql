@@ -110,6 +110,19 @@ ALTER TABLE ONLY indirizzo
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
+CREATE TABLE tipologiapratica (
+    id bigserial NOT NULL,
+    codice character varying(255),
+    descrizione character varying(255),
+    tipologiapadre bigint
+);
+ALTER TABLE pratiche.tipologiapratica OWNER TO tiziano;
+ALTER TABLE ONLY tipologiapratica
+    ADD CONSTRAINT tipologiapratica_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY tipologiapratica
+    ADD CONSTRAINT fk_tipologiapratica_tipologiapadre FOREIGN KEY (tipologiapadre) REFERENCES pratiche.tipologiapratica(id);
+
+
 CREATE TABLE pratica (
     id bigserial NOT NULL,
     anno integer,
