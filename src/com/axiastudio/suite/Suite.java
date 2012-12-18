@@ -9,6 +9,7 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.plugins.barcode.Barcode;
 import com.axiastudio.pypapi.plugins.cmis.CMIS;
 import com.axiastudio.pypapi.plugins.extraattributes.ExtraAttributes;
 import com.axiastudio.pypapi.plugins.ooops.Ooops;
@@ -161,11 +162,16 @@ public class Suite {
                 "/Protocollo/${dataprotocollo,date,YYYY}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
 
+        // Plugin Barcode per la stampa del DataMatrix
+        Barcode barcodePlugin = new Barcode();
+        barcodePlugin.setup("lp -d Zebra_Technologies_ZTC_GK420t", ".\nS1\nb245,34,D,h6,\"0123456789\"\nP1\n.\n");
+        Register.registerPlugin(barcodePlugin, FormProtocollo.class);
+
         // Plugin Ooops per interazione con OpenOffice
         Ooops ooopsPlugin = new Ooops();
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
 
-        // Plugin Ooops per interazione con OpenOffice
+        // Plugin ExtraAttributes per le pratiche
         ExtraAttributes extraAttributesPlugin = new ExtraAttributes();
         Register.registerPlugin(extraAttributesPlugin, FormPratica.class);
 
