@@ -68,6 +68,7 @@ public class InitDB {
         schema.add("BASE");
         schema.add("ANAGRAFICHE");
         schema.add("PROTOCOLLO");
+        schema.add("PROCEDIMENTI");
         schema.add("PRATICHE");
         for( String name: schema){
             try {
