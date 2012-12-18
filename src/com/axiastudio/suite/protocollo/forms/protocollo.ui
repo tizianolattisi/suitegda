@@ -456,7 +456,7 @@
           </widget>
          </item>
          <item>
-          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_4">
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxTitolario">
            <property name="column" stdset="0">
             <string>Fascicolo</string>
            </property>
@@ -755,7 +755,7 @@
   <tabstop>richiederisposta</tabstop>
   <tabstop>corrispostoostornato</tabstop>
   <tabstop>comboBox_3</tabstop>
-  <tabstop>comboBox_4</tabstop>
+  <tabstop>comboBoxTitolario</tabstop>
   <tabstop>toolButtonTitolario</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>tableView_2</tabstop>
