@@ -8,12 +8,14 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.IStoreFactory;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.trolltech.qt.gui.*;
 import java.lang.reflect.Method;
@@ -101,6 +103,12 @@ public class FormProtocollo extends Window {
     private void apriTitolario() {
         FormTitolario titolario = new FormTitolario();
         int exec = titolario.exec();
+        if( exec == 1 ){
+            Fascicolo selection = titolario.getSelection();
+            PyPaPiComboBox comboBoxTitolario = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBoxTitolario");
+            comboBoxTitolario.select(selection);
+            this.getContext().getDirty();
+        }
     }
     
     @Override
