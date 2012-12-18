@@ -14,6 +14,8 @@ CREATE SCHEMA anagrafiche;
 ALTER SCHEMA anagrafiche OWNER TO pypapidev;
 CREATE SCHEMA protocollo;
 ALTER SCHEMA protocollo OWNER TO pypapidev;
+CREATE SCHEMA procedimenti;
+ALTER SCHEMA procedimenti OWNER TO pypapidev;
 CREATE SCHEMA pratiche;
 ALTER SCHEMA pratiche OWNER TO pypapidev;
 
@@ -106,6 +108,17 @@ ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT fk_indirizzo_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
 
 
+-- Procedimenti
+SET search_path = procedimenti, pg_catalog;
+
+CREATE TABLE procedimento (
+    id bigserial NOT NULL,
+    descrizione character varying(255)
+);
+ALTER TABLE procedimenti.procedimento OWNER TO tiziano;
+ALTER TABLE ONLY procedimento
+    ADD CONSTRAINT procedimento_pkey PRIMARY KEY (id);
+
 
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
@@ -114,13 +127,16 @@ CREATE TABLE tipologiapratica (
     id bigserial NOT NULL,
     codice character varying(255),
     descrizione character varying(255),
-    tipologiapadre bigint
+    tipologiapadre bigint,
+    procedimento bigint
 );
 ALTER TABLE pratiche.tipologiapratica OWNER TO tiziano;
 ALTER TABLE ONLY tipologiapratica
     ADD CONSTRAINT tipologiapratica_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY tipologiapratica
     ADD CONSTRAINT fk_tipologiapratica_tipologiapadre FOREIGN KEY (tipologiapadre) REFERENCES pratiche.tipologiapratica(id);
+ALTER TABLE ONLY tipologiapratica
+    ADD CONSTRAINT fk_tipologiapratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
 
 
 CREATE TABLE pratica (
