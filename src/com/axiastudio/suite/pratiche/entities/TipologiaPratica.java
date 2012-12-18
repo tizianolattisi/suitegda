@@ -4,6 +4,7 @@
  */
 package com.axiastudio.suite.pratiche.entities;
 
+import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +35,9 @@ public class TipologiaPratica implements Serializable {
     @JoinColumn(name = "tipologiapadre", referencedColumnName = "id")
     @ManyToOne
     private TipologiaPratica tipologiapadre;
+    @JoinColumn(name="procedimento", referencedColumnName = "id")
+    @ManyToOne
+    private Procedimento procedimento;
 
     public Long getId() {
         return id;
@@ -65,6 +69,14 @@ public class TipologiaPratica implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public Procedimento getProcedimento() {
+        return procedimento;
+    }
+
+    public void setProcedimento(Procedimento procedimento) {
+        this.procedimento = procedimento;
     }
 
     @Override
