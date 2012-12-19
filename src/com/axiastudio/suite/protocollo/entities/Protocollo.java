@@ -35,7 +35,7 @@ public class Protocollo implements Serializable {
     @Column(name="note", length=1024)
     private String note;
     @Enumerated(EnumType.STRING)
-    private TipoProtocollo tipo;
+    private TipoProtocollo tipo=TipoProtocollo.ENTRATA;
     @JoinColumn(name = "sportello", referencedColumnName = "id")
     @ManyToOne
     private Ufficio sportello;

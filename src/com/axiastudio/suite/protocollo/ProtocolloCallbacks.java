@@ -78,17 +78,6 @@ public class ProtocolloCallbacks {
                 newIddocumento = year+"00000001";
             }
             protocollo.setIddocumento(newIddocumento);
-            /*
-            if( protocollo.getTipo() == null ) protocollo.setTipo(TipoProtocollo.ENTRATA);
-            if( protocollo.getFascicolo() == null ){
-                Controller controller = (Controller) Register.queryUtility(IController.class, Fascicolo.class.getName());
-                HashMap hm = new HashMap();
-                hm.put("categoria", 0);
-                hm.put("classe", 0);
-                hm.put("fascicolo", 0);
-                Store store = controller.createCriteriaStore(hm);
-                System.out.println(store);
-            }*/
         }
         return new Validation(true);
     }
