@@ -13,10 +13,12 @@ import com.axiastudio.pypapi.plugins.barcode.Barcode;
 import com.axiastudio.pypapi.plugins.cmis.CMIS;
 import com.axiastudio.pypapi.plugins.extraattributes.ExtraAttributes;
 import com.axiastudio.pypapi.plugins.ooops.Ooops;
+import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
+import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
 import com.axiastudio.suite.base.entities.Login;
 import com.axiastudio.suite.base.entities.Ufficio;
@@ -113,6 +115,8 @@ public class Suite {
                               FormSoggetto.class,
                               "Soggetti anagrafici");
 
+        Register.registerUtility(FormQuickInsertSoggetto.class, IQuickInsertDialog.class, Soggetto.class.getName());
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/indirizzo.ui",
                               Indirizzo.class,
