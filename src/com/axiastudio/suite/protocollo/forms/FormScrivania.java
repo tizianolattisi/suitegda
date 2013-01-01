@@ -72,6 +72,7 @@ public class FormScrivania  extends QMainWindow {
         tableView.setSortingEnabled(true);
         //tableView.installEventFilter(this);
         tableView.setItemDelegate(new Delegate(tableView));
+        tableView.doubleClicked.connect(this, "apriProtocollo()");
 
         this.popolaAttribuzioni();
     }
