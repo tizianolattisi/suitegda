@@ -102,9 +102,9 @@ public class Mdi extends QMainWindow {
         itemSoggetti.setText(0, "Soggetti");
         itemSoggetti.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemSoggetti.setText(1, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
-        Controller controllerSoggetto = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
-        Store storeSoggetto = controllerSoggetto.createStore(10);
-        itemSoggetti.setData(1, Qt.ItemDataRole.UserRole, storeSoggetto);
+        //Controller controllerSoggetto = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
+        //Store storeSoggetto = controllerSoggetto.createStore(10);
+        //itemSoggetti.setData(1, Qt.ItemDataRole.UserRole, storeSoggetto);
         
         /* Pratiche */
         QTreeWidgetItem itemPraticheRoot = new QTreeWidgetItem(this.tree);
@@ -131,17 +131,18 @@ public class Mdi extends QMainWindow {
         QTreeWidgetItem itemAmministrazione = new QTreeWidgetItem(this.tree);
         itemAmministrazione.setText(0, "Amministrazione");
         this.tree.addTopLevelItem(itemAmministrazione);
-        itemAmministrazione.setDisabled(!autenticato.getAmministratore());
 
         QTreeWidgetItem itemUtenti = new QTreeWidgetItem(itemAmministrazione);
         itemUtenti.setText(0, "Utenti");
         itemUtenti.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/user.png"));
         itemUtenti.setText(1, "com.axiastudio.suite.base.entities.Utente");
+        itemUtenti.setDisabled(!autenticato.getAmministratore());
 
         QTreeWidgetItem itemUffici = new QTreeWidgetItem(itemAmministrazione);
         itemUffici.setText(0, "Uffici");
         itemUffici.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
         itemUffici.setText(1, "com.axiastudio.suite.base.entities.Ufficio");
+        itemUffici.setDisabled(!autenticato.getAmministratore());
 
         QTreeWidgetItem itemPassword = new QTreeWidgetItem(itemAmministrazione);
         itemPassword.setText(0, "Cambio password");
@@ -155,7 +156,6 @@ public class Mdi extends QMainWindow {
     
     private void runTask() {
         String formName = this.tree.currentItem().text(1);
-        Store store = (Store) this.tree.currentItem().data(1, Qt.ItemDataRole.UserRole);
         /* cambio password */
         if( "PASSWORD".equals(formName) ){
             CambiaPassword passDlg = new CambiaPassword(this);
@@ -188,6 +188,10 @@ public class Mdi extends QMainWindow {
             } catch (NoSuchMethodException | SecurityException ex) {
                 Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
             }
+            // XXX
+            //Controller controller = (Controller) Register.queryUtility(IController.class, factory.getName());
+            //Store store = controller.createStore(3);
+            Store store = null;
             if( store != null ){
                 form.init(store);
             } else {
