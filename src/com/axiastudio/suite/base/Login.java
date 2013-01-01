@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.axiastudio.suite.base.entities;
+package com.axiastudio.suite.base;
 
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
@@ -10,6 +10,8 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.trolltech.qt.gui.*;
 import java.util.List;
 import javax.persistence.EntityManager;
