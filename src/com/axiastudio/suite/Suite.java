@@ -13,6 +13,8 @@ import com.axiastudio.pypapi.plugins.barcode.Barcode;
 import com.axiastudio.pypapi.plugins.cmis.CMIS;
 import com.axiastudio.pypapi.plugins.extraattributes.ExtraAttributes;
 import com.axiastudio.pypapi.plugins.ooops.Ooops;
+import com.axiastudio.pypapi.plugins.ooops.RuleSet;
+import com.axiastudio.pypapi.plugins.ooops.Template;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
@@ -173,6 +175,13 @@ public class Suite {
 
         // Plugin Ooops per interazione con OpenOffice
         Ooops ooopsPlugin = new Ooops();
+        ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+        HashMap<String,String> rules = new HashMap();
+        rules.put("oggetto", "return obj.getDescrizione()");
+        RuleSet ruleSet = new RuleSet(rules);
+        String url = "file:///Users/tiziano/NetBeansProjects/PyPaPi/plugins/PyPaPiOoops/template/test.ott";
+        Template template = new Template(url, "Prova", "Template di prova", ruleSet);
+        ooopsPlugin.addTemplate(template);
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
 
         // Plugin ExtraAttributes per le pratiche
