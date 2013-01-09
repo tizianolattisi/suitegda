@@ -61,12 +61,13 @@ public class FormProtocollo extends Window {
         labelConvalidaAttribuzioni.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_group.png"));
         
         /* filtro per la selezione dello sportello */
+        /* commentato perché il controllo ora è nella callback
         try {
             Method storeFactory = this.getClass().getMethod("storeSportello");
             Register.registerUtility(storeFactory, IStoreFactory.class, "Sportello");
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(FormProtocollo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         
         /* fascicolazione */
         QToolButton toolButtonTitolario = (QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario");

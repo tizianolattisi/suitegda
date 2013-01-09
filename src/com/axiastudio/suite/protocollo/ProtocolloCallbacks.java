@@ -10,10 +10,16 @@ import com.axiastudio.pypapi.annotations.CallbackType;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Validation;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.UfficioUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo_;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -34,11 +40,24 @@ public class ProtocolloCallbacks {
     public static Validation beforeCommit(Protocollo protocollo){
         String msg = "";
         Boolean res = true;
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        
         /* sportello obbligatorio */
         if( protocollo.getSportello() == null ){
             msg += "Deve essere dichiarato uno sportello ricevente";
             res = false;
         }
+        
+        /* sportello tra quelli dell'utente */
+        List<Ufficio> uffici = new ArrayList();
+        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
+            uffici.add(uu.getUfficio());
+        }
+        if( !uffici.contains(protocollo.getSportello()) ){
+            msg += "Lo sportello deve essere scelto tra gli uffici dell'utente";
+            res = false;
+        }
+        
         /* almeno un soggetto */
         if( protocollo.getSoggettoProtocolloCollection().isEmpty() ){
             msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
