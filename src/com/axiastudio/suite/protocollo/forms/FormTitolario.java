@@ -10,7 +10,6 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QDialog;
-import com.trolltech.qt.gui.QDialogButtonBox;
 import com.trolltech.qt.gui.QHBoxLayout;
 import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QSizePolicy;
