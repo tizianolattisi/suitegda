@@ -9,15 +9,15 @@ SET escape_string_warning = off;
 
 -- creazione schemi
 CREATE SCHEMA base;
-ALTER SCHEMA base OWNER TO pypapidev;
+ALTER SCHEMA base OWNER TO postgres;
 CREATE SCHEMA anagrafiche;
-ALTER SCHEMA anagrafiche OWNER TO pypapidev;
+ALTER SCHEMA anagrafiche OWNER TO postgres;
 CREATE SCHEMA protocollo;
-ALTER SCHEMA protocollo OWNER TO pypapidev;
+ALTER SCHEMA protocollo OWNER TO postgres;
 CREATE SCHEMA procedimenti;
-ALTER SCHEMA procedimenti OWNER TO pypapidev;
+ALTER SCHEMA procedimenti OWNER TO postgres;
 CREATE SCHEMA pratiche;
-ALTER SCHEMA pratiche OWNER TO pypapidev;
+ALTER SCHEMA pratiche OWNER TO postgres;
 
 CREATE PROCEDURAL LANGUAGE plpgsql;
 ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
@@ -46,7 +46,7 @@ CREATE TABLE utente (
     supervisorepratiche boolean,
     supervisoreprotocollo boolean
 );
-ALTER TABLE base.utente OWNER TO tiziano;
+ALTER TABLE base.utente OWNER TO postgres;
 ALTER TABLE ONLY utente
     ADD CONSTRAINT utente_pkey PRIMARY KEY (id);
 
@@ -54,7 +54,7 @@ CREATE TABLE ufficio (
     id bigserial NOT NULL,
     descrizione character varying(255)
 );
-ALTER TABLE base.ufficio OWNER TO tiziano;
+ALTER TABLE base.ufficio OWNER TO postgres;
 ALTER TABLE ONLY ufficio
     ADD CONSTRAINT ufficio_pkey PRIMARY KEY (id);
 
@@ -66,7 +66,7 @@ CREATE TABLE ufficioutente (
     ufficio bigint,
     utente bigint
 );
-ALTER TABLE base.ufficioutente OWNER TO tiziano;
+ALTER TABLE base.ufficioutente OWNER TO postgres;
 ALTER TABLE ONLY ufficioutente
     ADD CONSTRAINT ufficioutente_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY ufficioutente
@@ -90,7 +90,7 @@ CREATE TABLE soggetto (
     tipologiasoggetto character varying(255),
     titolosoggetto character varying(255)
 );
-ALTER TABLE anagrafiche.soggetto OWNER TO tiziano;
+ALTER TABLE anagrafiche.soggetto OWNER TO postgres;
 ALTER TABLE ONLY soggetto
     ADD CONSTRAINT soggetto_pkey PRIMARY KEY (id);
 
@@ -101,7 +101,7 @@ CREATE TABLE indirizzo (
     via character varying(255),
     soggetto bigint
 );
-ALTER TABLE anagrafiche.indirizzo OWNER TO tiziano;
+ALTER TABLE anagrafiche.indirizzo OWNER TO postgres;
 ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT indirizzo_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY indirizzo
@@ -115,7 +115,7 @@ CREATE TABLE procedimento (
     id bigserial NOT NULL,
     descrizione character varying(255)
 );
-ALTER TABLE procedimenti.procedimento OWNER TO tiziano;
+ALTER TABLE procedimenti.procedimento OWNER TO postgres;
 ALTER TABLE ONLY procedimento
     ADD CONSTRAINT procedimento_pkey PRIMARY KEY (id);
 
@@ -130,7 +130,7 @@ CREATE TABLE tipologiapratica (
     tipologiapadre bigint,
     procedimento bigint
 );
-ALTER TABLE pratiche.tipologiapratica OWNER TO tiziano;
+ALTER TABLE pratiche.tipologiapratica OWNER TO postgres;
 ALTER TABLE ONLY tipologiapratica
     ADD CONSTRAINT tipologiapratica_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY tipologiapratica
@@ -149,9 +149,10 @@ CREATE TABLE pratica (
     attribuzione bigint,
     gestione bigint,
     ubicazione bigint,
-    dettaglioubicazione character varying(255)
+    dettaglioubicazione character varying(255),
+    tipologiapratica bigint
 );
-ALTER TABLE pratiche.pratica OWNER TO tiziano;
+ALTER TABLE pratiche.pratica OWNER TO postgres;
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT pratica_idpratica_key UNIQUE (idpratica);
 ALTER TABLE ONLY pratica
@@ -162,6 +163,8 @@ ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_gestione FOREIGN KEY (gestione) REFERENCES base.ufficio(id);
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_ubicazione FOREIGN KEY (ubicazione) REFERENCES base.ufficio(id);
+ALTER TABLE ONLY pratica
+    ADD CONSTRAINT fk_pratica_tipologiapratica FOREIGN KEY (tipologiapratica) REFERENCES pratiche.tipologiapratica(id);
 
 
 
@@ -176,7 +179,7 @@ CREATE TABLE fascicolo (
     note character varying(2048),
     fascicolo integer
 );
-ALTER TABLE protocollo.fascicolo OWNER TO tiziano;
+ALTER TABLE protocollo.fascicolo OWNER TO postgres;
 ALTER TABLE ONLY fascicolo
     ADD CONSTRAINT fascicolo_pkey PRIMARY KEY (id);
 
@@ -202,7 +205,7 @@ CREATE TABLE protocollo (
     sportello bigint,
     fascicolo bigint
 );
-ALTER TABLE protocollo.protocollo OWNER TO tiziano;
+ALTER TABLE protocollo.protocollo OWNER TO postgres;
 ALTER TABLE ONLY protocollo
     ADD CONSTRAINT protocollo_iddocumento_key UNIQUE (iddocumento);
 ALTER TABLE ONLY protocollo
@@ -219,7 +222,7 @@ CREATE TABLE attribuzione (
     protocollo character varying(255),
     ufficio bigint
 );
-ALTER TABLE protocollo.attribuzione OWNER TO tiziano;
+ALTER TABLE protocollo.attribuzione OWNER TO postgres;
 ALTER TABLE ONLY attribuzione
     ADD CONSTRAINT attribuzione_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY attribuzione
@@ -233,7 +236,7 @@ CREATE TABLE praticaprotocollo (
     pratica bigint,
     protocollo bigint
 );
-ALTER TABLE protocollo.praticaprotocollo OWNER TO tiziano;
+ALTER TABLE protocollo.praticaprotocollo OWNER TO postgres;
 ALTER TABLE ONLY praticaprotocollo
     ADD CONSTRAINT praticaprotocollo_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY praticaprotocollo
@@ -246,7 +249,7 @@ CREATE TABLE riferimentoprotocollo (
     precedente character varying(255),
     protocollo character varying(255)
 );
-ALTER TABLE protocollo.riferimentoprotocollo OWNER TO tiziano;
+ALTER TABLE protocollo.riferimentoprotocollo OWNER TO postgres;
 ALTER TABLE ONLY riferimentoprotocollo
     ADD CONSTRAINT riferimentoprotocollo_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY riferimentoprotocollo
@@ -263,7 +266,7 @@ CREATE TABLE soggettoprotocollo (
     protocollo character varying(255),
     soggetto bigint
 );
-ALTER TABLE protocollo.soggettoprotocollo OWNER TO tiziano;
+ALTER TABLE protocollo.soggettoprotocollo OWNER TO postgres;
 ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT soggettoprotocollo_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY soggettoprotocollo
@@ -276,7 +279,7 @@ CREATE TABLE ufficioprotocollo (
     protocollo character varying(255),
     ufficio bigint
 );
-ALTER TABLE protocollo.ufficioprotocollo OWNER TO tiziano;
+ALTER TABLE protocollo.ufficioprotocollo OWNER TO postgres;
 ALTER TABLE ONLY ufficioprotocollo
     ADD CONSTRAINT ufficioprotocollo_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY ufficioprotocollo
@@ -293,7 +296,7 @@ ALTER TABLE ONLY ufficioprotocollo
 --    seq_count numeric(38,0)
 --);
 --INSERT INTO sequence (seq_name, seq_count) VALUES ('SEQ_GEN', 0);
---ALTER TABLE public.sequence OWNER TO tiziano;
+--ALTER TABLE public.sequence OWNER TO postgres;
 
 
 

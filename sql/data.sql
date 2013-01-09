@@ -34,7 +34,7 @@ INSERT INTO tipologiapratica (id, codice, descrizione, tipologiapadre) VALUES (2
 INSERT INTO tipologiapratica (id, codice, descrizione, tipologiapadre) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1);
 SELECT setval('pratiche.tipologiapratica_id_seq', 4, true);
 
-INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, note, attribuzione, gestione, ubicazione, dettaglioubicazione) VALUES (1, 2012, '2012-12-10', 'Pratica demo', '201200000001', NULL, 3, 4, 3, 'scaffale in alto');
+INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipologiapratica) VALUES (1, 2012, '2012-12-10', 'Pratica demo', '201200000001', NULL, 3, 4, 3, 'scaffale in alto', 3);
 SELECT setval('pratiche.pratica_id_seq', 2, true);
 
 -- Protocollo
