@@ -39,6 +39,8 @@ public class Utente implements IUtente {
     private Boolean supervisoreanagrafiche=false;
     @Column(name="operatoreprotocollo")
     private Boolean operatoreprotocollo=false;
+    @Column(name="ricercatoreprotocollo")
+    private Boolean ricercatoreprotocollo=false;
     @Column(name="attributoreprotocollo")
     private Boolean attributoreprotocollo=false;
     @Column(name="supervisoreprotocollo")
@@ -136,6 +138,14 @@ public class Utente implements IUtente {
 
     public void setOperatoreprotocollo(Boolean operatoreprotocollo) {
         this.operatoreprotocollo = operatoreprotocollo;
+    }
+
+    public Boolean getRicercatoreprotocollo() {
+        return ricercatoreprotocollo;
+    }
+
+    public void setRicercatoreprotocollo(Boolean ricercatoreprotocollo) {
+        this.ricercatoreprotocollo = ricercatoreprotocollo;
     }
 
     public Boolean getAttributoreprotocollo() {
