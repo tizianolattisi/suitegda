@@ -44,7 +44,8 @@ CREATE TABLE utente (
     superutente boolean,
     supervisoreanagrafiche boolean,
     supervisorepratiche boolean,
-    supervisoreprotocollo boolean
+    supervisoreprotocollo boolean,
+    ricercatoreprotocollo boolean
 );
 ALTER TABLE base.utente OWNER TO postgres;
 ALTER TABLE ONLY utente
