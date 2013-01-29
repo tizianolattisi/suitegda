@@ -40,7 +40,7 @@ public class Mdi extends QMainWindow {
         this.setWindowIcon(new QIcon(ICON));
         this.createWorkspace();
         this.createTree();
-        this.createSystemTray();
+        //this.createSystemTray();
     }
     
     private void createSystemTray(){
