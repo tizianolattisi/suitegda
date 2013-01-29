@@ -91,6 +91,11 @@ public class Mdi extends QMainWindow {
         itemTitolario.setText(0, "Titolario");
         itemTitolario.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemTitolario.setText(1, "TITOLARIO");
+
+        QTreeWidgetItem itemPubblicazioni = new QTreeWidgetItem(itemProtocolloInformatico);
+        itemPubblicazioni.setText(0, "Pubblicazioni");
+        itemPubblicazioni.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+        itemPubblicazioni.setText(1, "com.axiastudio.suite.pubblicazioni.entities.Pubblicazione");
         
         /* Anagrafiche */
         QTreeWidgetItem itemAnagrafiche = new QTreeWidgetItem(this.tree);

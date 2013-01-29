@@ -39,6 +39,8 @@ import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
+import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
+import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
@@ -162,12 +164,23 @@ public class Suite {
                               Window.class,
                               "Finestra fascicolo");
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/pubblicazioni/forms/pubblicazione.ui",
+                              Pubblicazione.class,
+                              FormPubblicazione.class,
+                              "Pubblicazione all'albo");
+        
         // Plugin CMIS per accedere ad Alfresco
         CMIS cmisPlugin = new CMIS();
         cmisPlugin.setup("127.0.0.1", 8080, "/alfresco/service/cmis", "admin", "admin", 
                 "/Protocollo/${dataprotocollo,date,YYYY}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
 
+        CMIS cmisPluginPubblicazioni = new CMIS();
+        cmisPluginPubblicazioni.setup("127.0.0.1", 8080, "/alfresco/service/cmis", "admin", "admin", 
+                "/Pubblicazioni/${inizioconsultazione,date,YYYY}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
+        Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
+        
         // Plugin Barcode per la stampa del DataMatrix
         Barcode barcodePlugin = new Barcode();
         barcodePlugin.setup("lp -d Zebra_Technologies_ZTC_GK420t", ".\nS1\nb245,34,D,h6,\"0123456789\"\nP1\n.\n");
@@ -176,12 +189,22 @@ public class Suite {
         // Plugin Ooops per interazione con OpenOffice
         Ooops ooopsPlugin = new Ooops();
         ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+        
+        // template 1
         HashMap<String,String> rules = new HashMap();
         rules.put("oggetto", "return obj.getDescrizione()");
         RuleSet ruleSet = new RuleSet(rules);
         String url = "file:///Users/tiziano/NetBeansProjects/PyPaPi/plugins/PyPaPiOoops/template/test.ott";
         Template template = new Template(url, "Prova", "Template di prova", ruleSet);
         ooopsPlugin.addTemplate(template);
+        
+        // template 2
+        HashMap<String,String> rules2 = new HashMap();        
+        rules2.put("oggetto", "return obj.getDescrizione()+\"!!\"");
+        RuleSet ruleSet2 = new RuleSet(rules2);
+        Template template2 = new Template(url, "Prova 2", "(come sopra, ma con dei punti esclamativi)", ruleSet2);
+        ooopsPlugin.addTemplate(template2);
+        
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
 
         // Plugin ExtraAttributes per le pratiche
