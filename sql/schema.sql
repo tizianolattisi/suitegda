@@ -18,6 +18,8 @@ CREATE SCHEMA procedimenti;
 ALTER SCHEMA procedimenti OWNER TO postgres;
 CREATE SCHEMA pratiche;
 ALTER SCHEMA pratiche OWNER TO postgres;
+CREATE SCHEMA pubblicazioni;
+ALTER SCHEMA pubblicazioni OWNER TO postgres;
 
 CREATE PROCEDURAL LANGUAGE plpgsql;
 ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
@@ -288,6 +290,22 @@ ALTER TABLE ONLY ufficioprotocollo
 ALTER TABLE ONLY ufficioprotocollo
     ADD CONSTRAINT fk_ufficioprotocollo_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
+
+-- Pubblicazioni
+SET search_path = pubblicazioni, pg_catalog;
+
+CREATE TABLE pubblicazione (
+    id bigserial NOT NULL,
+    titolo character varying(255),
+    descrizione character varying(2048),
+    richiedente character varying(255),
+    inizioconsultazione date,
+    fineconsultazione date,
+    pubblicato boolean
+);
+ALTER TABLE pubblicazioni.pubblicazione OWNER TO postgres;
+ALTER TABLE ONLY pubblicazione
+    ADD CONSTRAINT pubblicazione_pkey PRIMARY KEY (id);
 
 -- Sequenze (tmp)
 --SET search_path = public, pg_catalog;
