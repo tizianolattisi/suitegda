@@ -79,6 +79,7 @@ public class FormProtocollo extends Window {
     /*
      * Uno store contenente solo gli uffici dell'utente
      */
+    /*
     public Store storeSportello(){
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         List<Ufficio> uffici = new ArrayList();
@@ -86,7 +87,7 @@ public class FormProtocollo extends Window {
             uffici.add(uu.getUfficio());
         }
         return new Store(uffici);
-    }
+    }*/
     
     private void convalidaAttribuzioni() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
