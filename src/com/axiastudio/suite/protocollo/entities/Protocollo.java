@@ -5,6 +5,8 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -18,6 +20,7 @@ import javax.persistence.*;
 @Entity
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genprotocollo", sequenceName="protocollo.protocollo_id_seq", initialValue=1, allocationSize=1)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Protocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
