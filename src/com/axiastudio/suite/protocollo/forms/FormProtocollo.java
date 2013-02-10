@@ -4,25 +4,13 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
-import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.IStoreFactory;
-import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
-import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.base.entities.UfficioUtente;
-import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.trolltech.qt.gui.*;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 class ProtocolloMenuBar extends PyPaPiToolBar {
     public ProtocolloMenuBar(String title, Window parent){
