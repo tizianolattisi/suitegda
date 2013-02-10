@@ -149,6 +149,18 @@ public class Mdi extends QMainWindow {
         itemUffici.setText(1, "com.axiastudio.suite.base.entities.Ufficio");
         itemUffici.setDisabled(!autenticato.getAmministratore());
 
+        QTreeWidgetItem itemTipologieSeduta = new QTreeWidgetItem(itemAmministrazione);
+        itemTipologieSeduta.setText(0, "Tipologie seduta");
+        itemTipologieSeduta.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
+        itemTipologieSeduta.setText(1, "com.axiastudio.suite.sedute.entities.TipologiaSeduta");
+        itemTipologieSeduta.setDisabled(!autenticato.getAmministratore());
+
+        QTreeWidgetItem itemSedute = new QTreeWidgetItem(itemAmministrazione);
+        itemSedute.setText(0, "Sedute (da spostare...)");
+        itemSedute.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
+        itemSedute.setText(1, "com.axiastudio.suite.sedute.entities.Seduta");
+        itemSedute.setDisabled(!autenticato.getAmministratore());
+        
         QTreeWidgetItem itemPassword = new QTreeWidgetItem(itemAmministrazione);
         itemPassword.setText(0, "Cambio password");
         itemPassword.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/key.png"));

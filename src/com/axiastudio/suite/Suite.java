@@ -41,6 +41,9 @@ import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
+import com.axiastudio.suite.sedute.entities.Seduta;
+import com.axiastudio.suite.sedute.entities.TipologiaSeduta;
+import com.axiastudio.suite.sedute.forms.FormTipologiaSeduta;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
@@ -169,6 +172,19 @@ public class Suite {
                               Pubblicazione.class,
                               FormPubblicazione.class,
                               "Pubblicazione all'albo");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/sedute/forms/tipologiaseduta.ui",
+                              TipologiaSeduta.class,
+                              FormTipologiaSeduta.class,
+                              "Tipologia seduta");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/sedute/forms/seduta.ui",
+                              Seduta.class,
+                              Window.class,
+                              "Seduta");
+
         
         // Plugin CMIS per accedere ad Alfresco
         CMIS cmisPlugin = new CMIS();
