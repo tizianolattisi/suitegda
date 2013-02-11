@@ -19,11 +19,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema="SEDUTE")
-@SequenceGenerator(name="gencommissione", sequenceName="sedute.commissione_id_seq", initialValue=1, allocationSize=1)
-public class Commissione implements Serializable {
+@SequenceGenerator(name="gencarica", sequenceName="sedute.carica_id_seq", initialValue=1, allocationSize=1)
+public class Carica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gencommissione")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gencarica")
     private Long id;
     @Column(name="descrizione", length=1024)
     private String descrizione;
@@ -54,10 +54,10 @@ public class Commissione implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Commissione)) {
+        if (!(object instanceof Carica)) {
             return false;
         }
-        Commissione other = (Commissione) object;
+        Carica other = (Carica) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -66,7 +66,7 @@ public class Commissione implements Serializable {
 
     @Override
     public String toString() {
-        return this.getDescrizione();
+        return "com.axiastudio.suite.sedute.entities.Carica[ id=" + id + " ]";
     }
-
+    
 }

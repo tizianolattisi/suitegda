@@ -20,6 +20,9 @@
     <class>com.axiastudio.suite.pubblicazioni.entities.Pubblicazione</class>
     <class>com.axiastudio.suite.sedute.entities.TipologiaSeduta</class>
     <class>com.axiastudio.suite.sedute.entities.Seduta</class>
+    <class>com.axiastudio.suite.sedute.entities.Carica</class>
+    <class>com.axiastudio.suite.sedute.entities.CaricaCommissione</class>
+    <class>com.axiastudio.suite.sedute.entities.Commissione</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>

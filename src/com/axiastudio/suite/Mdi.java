@@ -132,6 +132,33 @@ public class Mdi extends QMainWindow {
         itemTipologiePratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemTipologiePratica.setText(1, "TIPOLOGIEPRATICA");
 
+        /* Configurazione sedute */
+        QTreeWidgetItem itemConfigurazioneSeduteRoot = new QTreeWidgetItem(this.tree);
+        itemConfigurazioneSeduteRoot.setText(0, "Configurazione sedute");
+        this.tree.addTopLevelItem(itemConfigurazioneSeduteRoot);
+        itemConfigurazioneSeduteRoot.setDisabled(!autenticato.getAmministratore());
+
+        QTreeWidgetItem itemCarica = new QTreeWidgetItem(itemConfigurazioneSeduteRoot);
+        itemCarica.setText(0, "Cariche");
+        itemCarica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemCarica.setText(1, "com.axiastudio.suite.sedute.entities.Carica");
+
+        QTreeWidgetItem itemCommissione = new QTreeWidgetItem(itemConfigurazioneSeduteRoot);
+        itemCommissione.setText(0, "Commissioni");
+        itemCommissione.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemCommissione.setText(1, "com.axiastudio.suite.sedute.entities.Commissione");
+
+        QTreeWidgetItem itemCaricaCommissione = new QTreeWidgetItem(itemConfigurazioneSeduteRoot);
+        itemCaricaCommissione.setText(0, "Cariche-commissioni");
+        itemCaricaCommissione.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemCaricaCommissione.setText(1, "com.axiastudio.suite.sedute.entities.CaricaCommissione");
+        
+        QTreeWidgetItem itemTipologieSeduta = new QTreeWidgetItem(itemConfigurazioneSeduteRoot);
+        itemTipologieSeduta.setText(0, "Tipologie seduta");
+        itemTipologieSeduta.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
+        itemTipologieSeduta.setText(1, "com.axiastudio.suite.sedute.entities.TipologiaSeduta");
+        itemTipologieSeduta.setDisabled(!autenticato.getAmministratore());
+
         /* Amministrazione */
         QTreeWidgetItem itemAmministrazione = new QTreeWidgetItem(this.tree);
         itemAmministrazione.setText(0, "Amministrazione");
@@ -148,12 +175,6 @@ public class Mdi extends QMainWindow {
         itemUffici.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
         itemUffici.setText(1, "com.axiastudio.suite.base.entities.Ufficio");
         itemUffici.setDisabled(!autenticato.getAmministratore());
-
-        QTreeWidgetItem itemTipologieSeduta = new QTreeWidgetItem(itemAmministrazione);
-        itemTipologieSeduta.setText(0, "Tipologie seduta");
-        itemTipologieSeduta.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
-        itemTipologieSeduta.setText(1, "com.axiastudio.suite.sedute.entities.TipologiaSeduta");
-        itemTipologieSeduta.setDisabled(!autenticato.getAmministratore());
 
         QTreeWidgetItem itemSedute = new QTreeWidgetItem(itemAmministrazione);
         itemSedute.setText(0, "Sedute (da spostare...)");

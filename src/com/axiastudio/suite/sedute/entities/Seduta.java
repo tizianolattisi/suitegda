@@ -38,7 +38,7 @@ public class Seduta implements Serializable {
     @ManyToOne
     private TipologiaSeduta tipologiaSeduta;
     @Column(name="dataoraconvocazione")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataoraconvocazione;
     @Enumerated(EnumType.STRING)
     private FaseSeduta faseseduta=FaseSeduta.IN_GESTIONE;

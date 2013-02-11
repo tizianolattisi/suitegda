@@ -41,6 +41,9 @@ import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
+import com.axiastudio.suite.sedute.entities.Carica;
+import com.axiastudio.suite.sedute.entities.CaricaCommissione;
+import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
 import com.axiastudio.suite.sedute.entities.TipologiaSeduta;
 import com.axiastudio.suite.sedute.forms.FormTipologiaSeduta;
@@ -173,6 +176,24 @@ public class Suite {
                               FormPubblicazione.class,
                               "Pubblicazione all'albo");
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Carica.class,
+                              Window.class,
+                              "Carica");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Commissione.class,
+                              Window.class,
+                              "Commissione");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              CaricaCommissione.class,
+                              Window.class,
+                              "Carica-commissione");
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/sedute/forms/tipologiaseduta.ui",
                               TipologiaSeduta.class,

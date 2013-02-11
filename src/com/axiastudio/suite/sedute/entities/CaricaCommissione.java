@@ -5,11 +5,12 @@
 package com.axiastudio.suite.sedute.entities;
 
 import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -19,14 +20,19 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema="SEDUTE")
-@SequenceGenerator(name="gencommissione", sequenceName="sedute.commissione_id_seq", initialValue=1, allocationSize=1)
-public class Commissione implements Serializable {
+@SequenceGenerator(name="gencaricacommissione", sequenceName="sedute.caricaommissione_id_seq", initialValue=1, allocationSize=1)
+
+public class CaricaCommissione implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gencommissione")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gencaricacommissione")
     private Long id;
-    @Column(name="descrizione", length=1024)
-    private String descrizione;
+    @JoinColumn(name = "commissione", referencedColumnName = "id")
+    @ManyToOne
+    private Commissione commissione;
+    @JoinColumn(name = "carica", referencedColumnName = "id")
+    @ManyToOne
+    private Carica carica;
 
     public Long getId() {
         return id;
@@ -36,12 +42,20 @@ public class Commissione implements Serializable {
         this.id = id;
     }
 
-    public String getDescrizione() {
-        return descrizione;
+    public Commissione getCommissione() {
+        return commissione;
     }
 
-    public void setDescrizione(String descrizione) {
-        this.descrizione = descrizione;
+    public void setCommissione(Commissione commissione) {
+        this.commissione = commissione;
+    }
+
+    public Carica getCarica() {
+        return carica;
+    }
+
+    public void setCarica(Carica carica) {
+        this.carica = carica;
     }
 
     @Override
@@ -54,10 +68,10 @@ public class Commissione implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Commissione)) {
+        if (!(object instanceof CaricaCommissione)) {
             return false;
         }
-        Commissione other = (Commissione) object;
+        CaricaCommissione other = (CaricaCommissione) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -66,7 +80,7 @@ public class Commissione implements Serializable {
 
     @Override
     public String toString() {
-        return this.getDescrizione();
+        return "com.axiastudio.suite.sedute.entities.CaricaCommissione[ id=" + id + " ]";
     }
-
+    
 }

@@ -8,7 +8,6 @@ import com.axiastudio.suite.pratiche.entities.TipologiaPratica;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,8 +31,9 @@ public class TipologiaSeduta implements Serializable {
     private Long id;
     @Column(name="descrizione", length=1024)
     private String descrizione;
-    @Enumerated(EnumType.STRING)
-    private Commissione commissione=Commissione.CONSIGLIO;
+    @JoinColumn(name = "commissione", referencedColumnName = "id")
+    @ManyToOne
+    private Commissione commissione;
     @JoinColumn(name = "tipologiapratica", referencedColumnName = "id")
     @ManyToOne
     private TipologiaPratica tipologiaPratica;
