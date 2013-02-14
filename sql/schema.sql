@@ -116,6 +116,20 @@ ALTER TABLE ONLY indirizzo
 ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT fk_indirizzo_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
 
+-- Finanziaria (per ora solo i servizi per delibere e determine)
+SET search_path = finanziaria, pg_catalog;
+
+CREATE TABLE servizio (
+    id bigserial NOT NULL,
+    descrizione character varying(1024),
+    ufficio bigint
+);
+ALTER TABLE finanziaria.servizio OWNER TO postgres;
+ALTER TABLE ONLY servizio
+    ADD CONSTRAINT servizio_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY servizio
+    ADD CONSTRAINT fk_servizio_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+
 
 -- Procedimenti
 SET search_path = procedimenti, pg_catalog;
@@ -127,6 +141,36 @@ CREATE TABLE procedimento (
 ALTER TABLE procedimenti.procedimento OWNER TO postgres;
 ALTER TABLE ONLY procedimento
     ADD CONSTRAINT procedimento_pkey PRIMARY KEY (id);
+
+CREATE TABLE delega (
+    id bigserial NOT NULL,
+    codice character varying(255),
+    utente bigint,
+    ufficio bigint,
+    servizio bigint,
+    procedimento bigint,
+    inizio date,
+    fine date,
+    titolare boolean,
+    segretario boolean,
+    delegato boolean,
+    suassenza boolean,
+    delegante bigint
+
+);
+ALTER TABLE procedimenti.delega OWNER TO postgres;
+ALTER TABLE ONLY delega
+    ADD CONSTRAINT delega_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY delega
+    ADD CONSTRAINT fk_delega_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
+ALTER TABLE ONLY delega
+    ADD CONSTRAINT fk_delega_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+ALTER TABLE ONLY delega
+    ADD CONSTRAINT fk_delega_servizio FOREIGN KEY (servizio) REFERENCES finanziaria.servizio(id);
+ALTER TABLE ONLY delega
+    ADD CONSTRAINT fk_delega_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
+ALTER TABLE ONLY delega
+    ADD CONSTRAINT fk_delega_utentedelegante FOREIGN KEY (delegante) REFERENCES base.utente(id);
 
 
 -- Pratiche
@@ -312,20 +356,6 @@ CREATE TABLE pubblicazione (
 ALTER TABLE pubblicazioni.pubblicazione OWNER TO postgres;
 ALTER TABLE ONLY pubblicazione
     ADD CONSTRAINT pubblicazione_pkey PRIMARY KEY (id);
-
--- Finanziaria (per ora solo i servizi per delibere e determine)
-SET search_path = finanziaria, pg_catalog;
-
-CREATE TABLE servizio (
-    id bigserial NOT NULL,
-    descrizione character varying(1024),
-    ufficio bigint
-);
-ALTER TABLE finanziaria.servizio OWNER TO postgres;
-ALTER TABLE ONLY servizio
-    ADD CONSTRAINT servizio_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY servizio
-    ADD CONSTRAINT fk_servizio_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
 
 -- Sedute
