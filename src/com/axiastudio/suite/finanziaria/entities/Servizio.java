@@ -80,7 +80,7 @@ public class Servizio implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.finanziaria.entities.Servizio[ id=" + id + " ]";
+        return this.getDescrizione();
     }
     
 }

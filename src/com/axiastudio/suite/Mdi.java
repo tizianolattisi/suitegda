@@ -176,6 +176,12 @@ public class Mdi extends QMainWindow {
         itemUffici.setText(1, "com.axiastudio.suite.base.entities.Ufficio");
         itemUffici.setDisabled(!autenticato.getAmministratore());
 
+        QTreeWidgetItem itemDeleghe = new QTreeWidgetItem(itemAmministrazione);
+        itemDeleghe.setText(0, "Incarichi e deleghe");
+        itemDeleghe.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
+        itemDeleghe.setText(1, "com.axiastudio.suite.procedimenti.entities.Delega");
+        itemDeleghe.setDisabled(!autenticato.getAmministratore());
+        
         QTreeWidgetItem itemSedute = new QTreeWidgetItem(itemAmministrazione);
         itemSedute.setText(0, "Sedute (da spostare...)");
         itemSedute.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));

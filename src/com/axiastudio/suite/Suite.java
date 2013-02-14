@@ -26,10 +26,13 @@ import com.axiastudio.suite.base.Login;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.demo.DemoData;
+import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipologiaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
+import com.axiastudio.suite.procedimenti.entities.Delega;
+import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.ProtocolloPrivate;
@@ -204,6 +207,24 @@ public class Suite {
                               Seduta.class,
                               Window.class,
                               "Seduta");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Servizio.class,
+                              Window.class,
+                              "Servizi");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Procedimento.class,
+                              Window.class,
+                              "Procedimenti");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
+                              Delega.class,
+                              Window.class,
+                              "Incarichi e deleghe");
 
         
         // Plugin CMIS per accedere ad Alfresco

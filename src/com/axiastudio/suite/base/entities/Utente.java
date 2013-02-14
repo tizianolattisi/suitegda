@@ -210,7 +210,7 @@ public class Utente implements IUtente {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.base.entities.Utente[ id=" + id + " ]";
+        return this.getNome();
     }
     
 }

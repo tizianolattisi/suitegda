@@ -10,16 +10,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@Table(schema="PROCEDIMENTI")
+@SequenceGenerator(name="genprocedimento", sequenceName="procedimenti.procedimento_id_seq", initialValue=1, allocationSize=1)
 public class Procedimento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genprocedimento")
     private Long id;
     @Column(name="descrizione")
     private String descrizione;
@@ -62,7 +66,7 @@ public class Procedimento implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.procedimenti.entities.Procedimento[ id=" + id + " ]";
+        return this.getDescrizione();
     }
     
 }

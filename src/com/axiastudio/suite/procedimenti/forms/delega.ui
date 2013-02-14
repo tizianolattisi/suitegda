@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>787</width>
+    <height>607</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Incarichi e deleghe</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>13</x>
+      <y>12</y>
+      <width>471</width>
+      <height>159</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Incarico</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Codifica</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBox_6">
+       <property name="column" stdset="0">
+        <string>codice</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>SINDACO</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>SEGRETARIO</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>RESPONSABILE_DI_SERVIZIO</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>RESPONSABILE_DI_BILANCIO</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Ufficio</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_2">
+       <property name="column" stdset="0">
+        <string>ufficio</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Servizio</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_3">
+       <property name="column" stdset="0">
+        <string>servizio</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Procedimento</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_4">
+       <property name="column" stdset="0">
+        <string>procedimento</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>13</x>
+      <y>173</y>
+      <width>471</width>
+      <height>263</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Delega</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Inizio</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="column" stdset="0">
+        <string>inizio</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>220</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Fine</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_2">
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="column" stdset="0">
+        <string>fine</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>220</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Utente</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="2">
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
+       <property name="column" stdset="0">
+        <string>utente</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" colspan="2">
+      <widget class="QCheckBox" name="checkBox">
+       <property name="text">
+        <string>titolare dell'incarico</string>
+       </property>
+       <property name="column" stdset="0">
+        <string>titolare</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QCheckBox" name="checkBox_2">
+       <property name="text">
+        <string>segretario</string>
+       </property>
+       <property name="column" stdset="0">
+        <string>segretario</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1" colspan="2">
+      <widget class="QCheckBox" name="checkBox_3">
+       <property name="text">
+        <string>utente delegato</string>
+       </property>
+       <property name="column" stdset="0">
+        <string>delegato</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1" colspan="2">
+      <widget class="QCheckBox" name="checkBox_4">
+       <property name="text">
+        <string>solo su assenza del titolare</string>
+       </property>
+       <property name="column" stdset="0">
+        <string>suassenza</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Delegante</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1" colspan="2">
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_5">
+       <property name="column" stdset="0">
+        <string>delegante</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>pypapidateedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
