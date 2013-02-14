@@ -20,6 +20,12 @@ CREATE SCHEMA pratiche;
 ALTER SCHEMA pratiche OWNER TO postgres;
 CREATE SCHEMA pubblicazioni;
 ALTER SCHEMA pubblicazioni OWNER TO postgres;
+CREATE SCHEMA sedute;
+ALTER SCHEMA sedute OWNER TO postgres;
+CREATE SCHEMA finanziaria;
+ALTER SCHEMA finanziaria OWNER TO postgres;
+CREATE SCHEMA deliberedetermine;
+ALTER SCHEMA deliberedetermine OWNER TO postgres;
 
 CREATE PROCEDURAL LANGUAGE plpgsql;
 ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
@@ -306,6 +312,111 @@ CREATE TABLE pubblicazione (
 ALTER TABLE pubblicazioni.pubblicazione OWNER TO postgres;
 ALTER TABLE ONLY pubblicazione
     ADD CONSTRAINT pubblicazione_pkey PRIMARY KEY (id);
+
+-- Finanziaria (per ora solo i servizi per delibere e determine)
+SET search_path = finanziaria, pg_catalog;
+
+CREATE TABLE servizio (
+    id bigserial NOT NULL,
+    descrizione character varying(1024),
+    ufficio bigint
+);
+ALTER TABLE finanziaria.servizio OWNER TO postgres;
+ALTER TABLE ONLY servizio
+    ADD CONSTRAINT servizio_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY servizio
+    ADD CONSTRAINT fk_servizio_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+
+
+-- Sedute
+SET search_path = sedute, pg_catalog;
+
+CREATE TABLE carica (
+    id bigserial NOT NULL,
+    descrizione character varying(1024)
+);
+ALTER TABLE sedute.carica OWNER TO postgres;
+ALTER TABLE ONLY carica
+    ADD CONSTRAINT carica_pkey PRIMARY KEY (id);
+
+CREATE TABLE commissione (
+    id bigserial NOT NULL,
+    descrizione character varying(1024)
+);
+ALTER TABLE sedute.commissione OWNER TO postgres;
+ALTER TABLE ONLY commissione
+    ADD CONSTRAINT commissione_pkey PRIMARY KEY (id);
+
+CREATE TABLE tipologiaseduta (
+    id bigserial NOT NULL,
+    descrizione character varying(1024),
+    commissione bigint,
+    tipologiapratica bigint
+);
+ALTER TABLE sedute.tipologiaseduta OWNER TO postgres;
+ALTER TABLE ONLY tipologiaseduta
+    ADD CONSTRAINT tipologiaseduta_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY tipologiaseduta
+    ADD CONSTRAINT fk_tipologiaseduta_commissione FOREIGN KEY (commissione) REFERENCES sedute.commissione(id);
+ALTER TABLE ONLY tipologiaseduta
+    ADD CONSTRAINT fk_tipologiaseduta_tipologiapratica FOREIGN KEY (tipologiapratica) REFERENCES pratiche.tipologiapratica(id);
+
+CREATE TABLE caricacommissione (
+    id bigserial NOT NULL,
+    carica bigint,
+    commissione bigint
+);
+ALTER TABLE sedute.caricacommissione OWNER TO postgres;
+ALTER TABLE ONLY caricacommissione
+    ADD CONSTRAINT caricacommissione_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY caricacommissione
+    ADD CONSTRAINT fk_caricacommissione_carica FOREIGN KEY (carica) REFERENCES sedute.carica(id);
+ALTER TABLE ONLY caricacommissione
+    ADD CONSTRAINT fk_caricacommissione_commissione FOREIGN KEY (commissione) REFERENCES sedute.commissione(id);
+
+CREATE TABLE seduta (
+    id bigserial NOT NULL,
+    datacreazione date,
+    tipologiaseduta bigint,
+    dataoraconvocazione timestamp,
+    faseseduta character varying(255),
+    statoseduta character varying(255),
+    inizioseduta timestamp,
+    cambiostatoseduta timestamp,
+    fineseduta timestamp
+);
+ALTER TABLE sedute.seduta OWNER TO postgres;
+ALTER TABLE ONLY seduta
+    ADD CONSTRAINT seduta_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY seduta
+    ADD CONSTRAINT fk_seduta_tipologiaseduta FOREIGN KEY (tipologiaseduta) REFERENCES sedute.tipologiaseduta(id);
+    
+
+-- Determine
+SET search_path = deliberedetermine, pg_catalog;
+
+CREATE TABLE determina (
+    id bigserial NOT NULL,
+    oggetto character varying(2048)
+);
+ALTER TABLE deliberedetermine.determina OWNER TO postgres;
+ALTER TABLE ONLY determina
+    ADD CONSTRAINT determina_pkey PRIMARY KEY (id);
+
+CREATE TABLE serviziodetermina (
+    id bigserial NOT NULL,
+    determina bigint,
+    servizio bigint
+);
+ALTER TABLE deliberedetermine.serviziodetermina OWNER TO postgres;
+ALTER TABLE ONLY serviziodetermina
+    ADD CONSTRAINT serviziodetermina_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY serviziodetermina
+    ADD CONSTRAINT fk_serviziodetermina_determina FOREIGN KEY (determina) REFERENCES deliberedetermine.determina(id);
+ALTER TABLE ONLY serviziodetermina
+    ADD CONSTRAINT fk_serviziodetermina_servizio FOREIGN KEY (servizio) REFERENCES finanziaria.servizio(id);
+
+
 
 -- Sequenze (tmp)
 --SET search_path = public, pg_catalog;

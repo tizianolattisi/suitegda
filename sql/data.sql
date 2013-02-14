@@ -58,3 +58,49 @@ SELECT setval('protocollo.soggettoprotocollo_id_seq', 3, true);
 INSERT INTO ufficioprotocollo (id, protocollo, ufficio) VALUES (1, '201200000001', 2);
 INSERT INTO ufficioprotocollo (id, protocollo, ufficio) VALUES (2, '201200000002', 1);
 SELECT setval('protocollo.ufficioprotocollo_id_seq', 3, true);
+
+
+-- Finanziaria
+SET search_path = finanziaria, pg_catalog;
+
+INSERT INTO servizio (id, descrizione, ufficio) VALUES (1, 'Segreteria generale, personale e organizzazione', 1);
+SELECT setval('finanziaria.servizio_id_seq', 3, true);
+
+
+-- Sedute
+SET search_path = sedute, pg_catalog;
+
+INSERT INTO carica (id, descrizione) VALUES (1, 'Sindaco');
+INSERT INTO carica (id, descrizione) VALUES (2, 'Assessore attività culturali');
+INSERT INTO carica (id, descrizione) VALUES (3, 'Assessore attività sociali');
+INSERT INTO carica (id, descrizione) VALUES (4, 'Vice Sindaco');
+INSERT INTO carica (id, descrizione) VALUES (5, 'Segretario');
+SELECT setval('sedute.carica_id_seq', 6, true);
+
+INSERT INTO commissione (id, descrizione) VALUES (1, 'Commissione per la giunta');
+INSERT INTO commissione (id, descrizione) VALUES (2, 'Commissione per il consiglio');
+SELECT setval('sedute.commissione_id_seq', 3, true);
+
+INSERT INTO caricacommissione (id, carica, commissione) VALUES (1, 1, 1);
+INSERT INTO caricacommissione (id, carica, commissione) VALUES (2, 2, 1);
+INSERT INTO caricacommissione (id, carica, commissione) VALUES (3, 3, 1);
+INSERT INTO caricacommissione (id, carica, commissione) VALUES (4, 1, 2);
+SELECT setval('sedute.caricacommissione_id_seq', 5, true);
+
+
+INSERT INTO tipologiaseduta (id, descrizione, commissione, tipologiapratica) VALUES (1, 'Giunta comunale', 1, 1);
+INSERT INTO tipologiaseduta (id, descrizione, commissione, tipologiapratica) VALUES (2, 'Consiglio comunale', 2, 1);
+SELECT setval('sedute.tipologiaseduta_id_seq', 3, true);
+
+INSERT INTO seduta (id, datacreazione, tipologiaseduta, dataoraconvocazione, faseseduta, statoseduta, inizioseduta, cambiostatoseduta, fineseduta) VALUES (1, '01-13-2013', 1, NULL, 'IN_GESTIONE', 'A', NULL, NULL, NULL);
+SELECT setval('sedute.seduta_id_seq', 2, true);
+
+
+-- Delibere e determine
+SET search_path = deliberedetermine, pg_catalog;
+
+INSERT INTO determina (id, oggetto) VALUES (1, 'Determina di prova');
+SELECT setval('deliberedetermine.determina_id_seq', 3, true);
+
+INSERT INTO serviziodetermina (id, determina, servizio) VALUES (1, 1, 1);
+SELECT setval('deliberedetermine.serviziodetermina_id_seq', 2, true);
