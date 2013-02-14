@@ -37,20 +37,10 @@
      </widget>
     </item>
     <item row="1" column="1" colspan="2">
-     <widget class="QComboBox" name="comboBox">
+     <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
       <property name="column" stdset="0">
        <string>commissione</string>
       </property>
-      <item>
-       <property name="text">
-        <string>GIUNTA</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>CONSIGLIO</string>
-       </property>
-      </item>
      </widget>
     </item>
     <item row="1" column="3">

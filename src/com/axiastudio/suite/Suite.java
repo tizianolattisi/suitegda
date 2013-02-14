@@ -133,7 +133,6 @@ public class Suite {
                               FormIndirizzo.class,
                               "Indirizzo");
 
-        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",
                               Pratica.class,
@@ -189,7 +188,7 @@ public class Suite {
                               "Commissione");
 
         Register.registerForm(db.getEntityManagerFactory(),
-                              null,
+                              "classpath:com/axiastudio/suite/sedute/forms/caricacommissione.ui",
                               CaricaCommissione.class,
                               Window.class,
                               "Carica-commissione");

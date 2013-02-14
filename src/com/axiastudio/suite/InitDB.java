@@ -71,6 +71,8 @@ public class InitDB {
         schema.add("PROCEDIMENTI");
         schema.add("PRATICHE");
         schema.add("SEDUTE");
+        schema.add("FINANZIARIA");
+        schema.add("DELIBEREDETERMINE");
         for( String name: schema){
             try {
                 Connection conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/suite","pypapidev","");
