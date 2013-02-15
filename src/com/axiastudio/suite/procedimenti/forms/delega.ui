@@ -35,30 +35,10 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="comboBox_6">
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_6">
        <property name="column" stdset="0">
-        <string>codice</string>
+        <string>carica</string>
        </property>
-       <item>
-        <property name="text">
-         <string>SINDACO</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>SEGRETARIO</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>RESPONSABILE_DI_SERVIZIO</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>RESPONSABILE_DI_BILANCIO</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="1" column="0">

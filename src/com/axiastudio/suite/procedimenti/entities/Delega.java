@@ -33,9 +33,10 @@ public class Delega implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendelega")
-    private Long id;
-    @Enumerated(EnumType.STRING)
-    Incarico codice;
+    private Long id;    
+    @JoinColumn(name = "carica", referencedColumnName = "id")
+    @ManyToOne
+    private Carica carica;
     @JoinColumn(name = "utente", referencedColumnName = "id")
     @ManyToOne
     private Utente utente;
@@ -74,12 +75,12 @@ public class Delega implements Serializable {
         this.id = id;
     }
 
-    public Incarico getCodice() {
-        return codice;
+    public Carica getCarica() {
+        return carica;
     }
 
-    public void setCodice(Incarico codice) {
-        this.codice = codice;
+    public void setCarica(Carica carica) {
+        this.carica = carica;
     }
 
     public Utente getUtente() {

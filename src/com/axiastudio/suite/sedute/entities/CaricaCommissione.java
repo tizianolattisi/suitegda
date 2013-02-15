@@ -4,6 +4,7 @@
  */
 package com.axiastudio.suite.sedute.entities;
 
+import com.axiastudio.suite.procedimenti.entities.Carica;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.axiastudio.suite.sedute.entities;
+package com.axiastudio.suite.procedimenti.entities;
 
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -18,7 +18,7 @@ import javax.persistence.Table;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 @Entity
-@Table(schema="SEDUTE")
+@Table(schema="PROCEDIMENTI")
 @SequenceGenerator(name="gencarica", sequenceName="sedute.carica_id_seq", initialValue=1, allocationSize=1)
 public class Carica implements Serializable {
     private static final long serialVersionUID = 1L;
