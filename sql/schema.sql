@@ -142,9 +142,17 @@ ALTER TABLE procedimenti.procedimento OWNER TO postgres;
 ALTER TABLE ONLY procedimento
     ADD CONSTRAINT procedimento_pkey PRIMARY KEY (id);
 
+CREATE TABLE carica (
+    id bigserial NOT NULL,
+    descrizione character varying(1024)
+);
+ALTER TABLE procedimenti.carica OWNER TO postgres;
+ALTER TABLE ONLY carica
+    ADD CONSTRAINT carica_pkey PRIMARY KEY (id);
+
 CREATE TABLE delega (
     id bigserial NOT NULL,
-    codice character varying(255),
+    carica bigint,
     utente bigint,
     ufficio bigint,
     servizio bigint,
@@ -161,6 +169,8 @@ CREATE TABLE delega (
 ALTER TABLE procedimenti.delega OWNER TO postgres;
 ALTER TABLE ONLY delega
     ADD CONSTRAINT delega_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY delega
+    ADD CONSTRAINT fk_delega_carica FOREIGN KEY (carica) REFERENCES procedimenti.carica(id);
 ALTER TABLE ONLY delega
     ADD CONSTRAINT fk_delega_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
 ALTER TABLE ONLY delega
@@ -361,14 +371,6 @@ ALTER TABLE ONLY pubblicazione
 -- Sedute
 SET search_path = sedute, pg_catalog;
 
-CREATE TABLE carica (
-    id bigserial NOT NULL,
-    descrizione character varying(1024)
-);
-ALTER TABLE sedute.carica OWNER TO postgres;
-ALTER TABLE ONLY carica
-    ADD CONSTRAINT carica_pkey PRIMARY KEY (id);
-
 CREATE TABLE commissione (
     id bigserial NOT NULL,
     descrizione character varying(1024)
@@ -400,7 +402,7 @@ ALTER TABLE sedute.caricacommissione OWNER TO postgres;
 ALTER TABLE ONLY caricacommissione
     ADD CONSTRAINT caricacommissione_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY caricacommissione
-    ADD CONSTRAINT fk_caricacommissione_carica FOREIGN KEY (carica) REFERENCES sedute.carica(id);
+    ADD CONSTRAINT fk_caricacommissione_carica FOREIGN KEY (carica) REFERENCES procedimenti.carica(id);
 ALTER TABLE ONLY caricacommissione
     ADD CONSTRAINT fk_caricacommissione_commissione FOREIGN KEY (commissione) REFERENCES sedute.commissione(id);
 

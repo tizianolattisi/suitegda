@@ -75,21 +75,21 @@ SET search_path = procedimenti, pg_catalog;
 INSERT INTO procedimento (id, descrizione) VALUES (1, 'Unico procedimento di prova');
 SELECT setval('procedimenti.procedimento_id_seq', 2, true);
 
-INSERT INTO delega (id, codice, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
-  VALUES (1, 'SINDACO', 4, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
-INSERT INTO delega (id, codice, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
-  VALUES (2, 'SEGRETARIO', 5, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
-SELECT setval('procedimenti.delega_id_seq', 3, true);
-
--- Sedute
-SET search_path = sedute, pg_catalog;
-
 INSERT INTO carica (id, descrizione) VALUES (1, 'Sindaco');
 INSERT INTO carica (id, descrizione) VALUES (2, 'Assessore attività culturali');
 INSERT INTO carica (id, descrizione) VALUES (3, 'Assessore attività sociali');
 INSERT INTO carica (id, descrizione) VALUES (4, 'Vice Sindaco');
 INSERT INTO carica (id, descrizione) VALUES (5, 'Segretario');
-SELECT setval('sedute.carica_id_seq', 6, true);
+SELECT setval('procedimenti.carica_id_seq', 6, true);
+
+INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
+  VALUES (1, 1, 4, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
+INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
+  VALUES (2, 5, 5, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
+SELECT setval('procedimenti.delega_id_seq', 3, true);
+
+-- Sedute
+SET search_path = sedute, pg_catalog;
 
 INSERT INTO commissione (id, descrizione) VALUES (1, 'Commissione per la giunta');
 INSERT INTO commissione (id, descrizione) VALUES (2, 'Commissione per il consiglio');
