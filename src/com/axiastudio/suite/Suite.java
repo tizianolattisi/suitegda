@@ -10,9 +10,9 @@ import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.plugins.barcode.Barcode;
-import com.axiastudio.pypapi.plugins.cmis.CMIS;
+import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.plugins.extraattributes.ExtraAttributes;
-import com.axiastudio.pypapi.plugins.ooops.Ooops;
+import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
 import com.axiastudio.pypapi.plugins.ooops.RuleSet;
 import com.axiastudio.pypapi.plugins.ooops.Template;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
@@ -227,13 +227,13 @@ public class Suite {
                               "Incarichi e deleghe");
 
         
-        // Plugin CMIS per accedere ad Alfresco
-        CMIS cmisPlugin = new CMIS();
+        // Plugin CmisPlugin per accedere ad Alfresco
+        CmisPlugin cmisPlugin = new CmisPlugin();
         cmisPlugin.setup("127.0.0.1", 8080, "/alfresco/service/cmis", "admin", "admin", 
                 "/Protocollo/${dataprotocollo,date,YYYY}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
 
-        CMIS cmisPluginPubblicazioni = new CMIS();
+        CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
         cmisPluginPubblicazioni.setup("127.0.0.1", 8080, "/alfresco/service/cmis", "admin", "admin", 
                 "/Pubblicazioni/${inizioconsultazione,date,YYYY}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
@@ -243,8 +243,8 @@ public class Suite {
         barcodePlugin.setup("lp -d Zebra_Technologies_ZTC_GK420t", ".\nS1\nb245,34,D,h6,\"0123456789\"\nP1\n.\n");
         Register.registerPlugin(barcodePlugin, FormProtocollo.class);
 
-        // Plugin Ooops per interazione con OpenOffice
-        Ooops ooopsPlugin = new Ooops();
+        // Plugin OoopsPlugin per interazione con OpenOffice
+        OoopsPlugin ooopsPlugin = new OoopsPlugin();
         ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
         
         // template 1
