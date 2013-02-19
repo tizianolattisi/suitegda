@@ -429,11 +429,42 @@ SET search_path = deliberedetermine, pg_catalog;
 
 CREATE TABLE determina (
     id bigserial NOT NULL,
-    oggetto character varying(2048)
+    oggetto character varying(2048),
+    dientrata boolean,
+    dispesa boolean,
+    diregolarizzazione boolean,
+    referentepolitico character varying(255),
+    ufficioresponsabile character varying(255),
+    nomeresponsabile character varying(255),
+    vistoresponsabile boolean,
+    datavistoresponsabile date,
+    titolarevistoresponsabile boolean,
+    segretariovistoresponsabile boolean,
+    delegatovistoresponsabile boolean,
+    utentevistoresponsabile bigint,
+    vistobilancio boolean,
+    datavistobilancio date,
+    titolarevistobilancio boolean,
+    segretariovistobilancio boolean,
+    delegatovistobilancio boolean,
+    utentevistobilancio bigint,
+    vistonegato boolean,
+    datavistonegato date,
+    titolarevistonegato boolean,
+    segretariovistonegato boolean,
+    delegatovistonegato boolean,
+    utentevistonegato bigint
 );
 ALTER TABLE deliberedetermine.determina OWNER TO postgres;
 ALTER TABLE ONLY determina
     ADD CONSTRAINT determina_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY determina
+    ADD CONSTRAINT fk_determina_utentevistoresponsabile FOREIGN KEY (utentevistoresponsabile) REFERENCES base.utente(id);
+ALTER TABLE ONLY determina
+    ADD CONSTRAINT fk_determina_utentevistobilancio FOREIGN KEY (utentevistobilancio) REFERENCES base.utente(id);
+ALTER TABLE ONLY determina
+    ADD CONSTRAINT fk_determina_utentevistonegato FOREIGN KEY (utentevistonegato) REFERENCES base.utente(id);
+
 
 CREATE TABLE serviziodetermina (
     id bigserial NOT NULL,
