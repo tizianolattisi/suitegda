@@ -132,6 +132,17 @@ public class Mdi extends QMainWindow {
         itemTipologiePratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemTipologiePratica.setText(1, "TIPOLOGIEPRATICA");
 
+        /* Delibere e determine */
+        QTreeWidgetItem itemDelibereDetermineRoot = new QTreeWidgetItem(this.tree);
+        itemDelibereDetermineRoot.setText(0, "Delibere e determine");
+        this.tree.addTopLevelItem(itemDelibereDetermineRoot);
+        itemDelibereDetermineRoot.setDisabled(!autenticato.getOperatorepratiche());
+
+        QTreeWidgetItem itemDetermine = new QTreeWidgetItem(itemDelibereDetermineRoot);
+        itemDetermine.setText(0, "Determine");
+        itemDetermine.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemDetermine.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
+        
         /* Configurazione sedute */
         QTreeWidgetItem itemConfigurazioneSeduteRoot = new QTreeWidgetItem(this.tree);
         itemConfigurazioneSeduteRoot.setText(0, "Configurazione sedute");

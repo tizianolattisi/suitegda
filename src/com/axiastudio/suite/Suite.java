@@ -25,6 +25,7 @@ import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
 import com.axiastudio.suite.base.Login;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
@@ -209,11 +210,18 @@ public class Suite {
                               "Seduta");
 
         Register.registerForm(db.getEntityManagerFactory(),
-                              null,
+                              "classpath:com/axiastudio/suite/finanziaria/forms/servizio.ui",
                               Servizio.class,
                               Window.class,
                               "Servizi");
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
+                              Determina.class,
+                              Window.class,
+                              "Determine");
+        
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               Procedimento.class,

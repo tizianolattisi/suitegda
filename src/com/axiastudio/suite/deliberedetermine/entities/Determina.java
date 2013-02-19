@@ -4,7 +4,6 @@
  */
 package com.axiastudio.suite.deliberedetermine.entities;
 
-import com.axiastudio.suite.protocollo.entities.UfficioProtocollo;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.CascadeType;
