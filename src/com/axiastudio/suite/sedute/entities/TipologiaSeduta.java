@@ -20,6 +20,13 @@ import javax.persistence.Table;
 /**
  *
  * @author AXIA Studio (http://www.axiastudio.com)
+ * 
+ * I tipi di seduta caratterizzano gli incontri di una commissione, specificando
+ * la commissione pertinente e il genere di pratica che viene trattato.
+ * Questi possono essere di vario tipo, ad esempio la giunta comunale o il
+ * consiglo comunale.
+ * E' possibile che una commissione partecipi a diversi tipi di seduta.
+ * 
  */
 @Entity
 @Table(schema="SEDUTE")

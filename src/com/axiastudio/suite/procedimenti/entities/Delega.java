@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,6 +24,10 @@ import javax.persistence.Temporal;
 /**
  *
  * @author AXIA Studio (http://www.axiastudio.com)
+ * 
+ * L'entità delega esprime la carica che un determinato soggetto ha per
+ * titolarità o per delega.
+ * 
  */
 @Entity
 @Table(schema="PROCEDIMENTI")
