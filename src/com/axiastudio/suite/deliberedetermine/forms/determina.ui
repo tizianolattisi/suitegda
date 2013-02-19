@@ -6,153 +6,267 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>733</width>
-    <height>432</height>
+    <width>745</width>
+    <height>498</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Determine</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>286</width>
-      <height>171</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Servizi</string>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView">
-       <property name="entity" stdset="0">
-        <string>.servizioDeterminaCollection</string>
-       </property>
-       <property name="reference" stdset="0">
-        <string>servizio</string>
-       </property>
-       <property name="columns" stdset="0">
-        <string>&lt;servizio&gt;</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_2">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>20</y>
-      <width>164</width>
-      <height>137</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Visti</string>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>del responsabile</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>di bilancio</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="text">
-        <string>visto negato</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_3">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>270</y>
-      <width>691</width>
-      <height>146</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Stato</string>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+   <layout class="QVBoxLayout" name="verticalLayout_9">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="QGroupBox" name="groupBox_4">
+          <property name="title">
+           <string>Tipo di determina</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QCheckBox" name="checkBox_4">
+             <property name="text">
+              <string>di spesa</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>diSpesa</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="checkBox_5">
+             <property name="text">
+              <string>di entrata</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>diEntrata</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="checkBox_6">
+             <property name="text">
+              <string>di regolarizzazione</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>diRegolarizzazione</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>Visti</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="text">
+              <string>del responsabile</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_2">
+             <property name="text">
+              <string>di bilancio</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_3">
+             <property name="text">
+              <string>visto negato</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="title">
+         <string>Servizi</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView">
+           <property name="entity" stdset="0">
+            <string>.servizioDeterminaCollection</string>
+           </property>
+           <property name="reference" stdset="0">
+            <string>servizio</string>
+           </property>
+           <property name="columns" stdset="0">
+            <string>&lt;servizio&gt;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_5">
+        <property name="title">
+         <string>Oggetto</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <item>
+          <widget class="QTextEdit" name="textEdit">
+           <property name="column" stdset="0">
+            <string>oggetto</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>Stato</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
        <item>
-        <widget class="QCheckBox" name="checkBox">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>visto del responsabile</string>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QCheckBox" name="checkBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>visto del responsabile</string>
+           </property>
+           <property name="column" stdset="0">
+            <string>vistoResponsabile</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>visto di bilancio</string>
+           </property>
+           <property name="column" stdset="0">
+            <string>vistoBilancio</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_3">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>visto negato</string>
+           </property>
+           <property name="column" stdset="0">
+            <string>vistoNegato</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_2">
-         <property name="enabled">
-          <bool>false</bool>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="spacing">
+          <number>-1</number>
          </property>
-         <property name="text">
-          <string>visto di bilancio</string>
-         </property>
-        </widget>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>utenteVistoResponsabile</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>utenteVistoBilancio</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_3">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>utenteVistoNegato</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_3">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>visto negato</string>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>dataVistoResponsabile</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>dataVistoBilancio</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_3">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>dataVistoNegato</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <widget class="QComboBox" name="comboBox"/>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_2"/>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_3"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <widget class="QDateTimeEdit" name="dateTimeEdit"/>
-       </item>
-       <item>
-        <widget class="QDateTimeEdit" name="dateTimeEdit_2"/>
-       </item>
-       <item>
-        <widget class="QDateTimeEdit" name="dateTimeEdit_3"/>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>52</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
   </widget>
  </widget>
  <customwidgets>
@@ -160,6 +274,16 @@
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
    <header>pypapitableview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>pypapidateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
