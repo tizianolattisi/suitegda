@@ -49,6 +49,7 @@ public class FormDetermina extends Window {
     
     private Boolean checkResponsabile() {
         IGestoreDeleghe gestore = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
+        /// TODO: da completare con il servizio
         return gestore.checkDelega(CodiceCarica.RESPONSABILE_DI_SERVIZIO);
     }
 

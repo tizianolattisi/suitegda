@@ -12,17 +12,23 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Column;
 import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.procedimenti.entities.Delega_;
+import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -33,7 +39,7 @@ import javax.persistence.criteria.Root;
 public class GestoreDeleghe implements IGestoreDeleghe {
     
     @Override
-    public Boolean checkDelega(CodiceCarica codiceCarica){
+    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
 
         Carica carica = this.findCarica(codiceCarica);
         
@@ -43,14 +49,47 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         CriteriaQuery<Delega> cq = cb.createQuery(Delega.class);
         Root from = cq.from(Delega.class);
         
-        // l'utente
-        Utente utente = (Utente) Register.queryUtility(IUtente.class);
-        Predicate pUtente = cb.equal(from.get(Delega_.utente), utente);
+        List<Predicate> predicates = new ArrayList();
+
         // la carica richiesta
-        Predicate pCarica = cb.equal(from.get(Delega_.carica), carica);
+        predicates.add(cb.equal(from.get(Delega_.carica), carica));
+        
+        // servizio
+        if( servizio != null ){
+            predicates.add(cb.equal(from.get(Delega_.servizio), servizio));
+        }
+
+        // procedimento
+        if( procedimento != null ){
+            predicates.add(cb.equal(from.get(Delega_.procedimento), procedimento));
+        }
+
+        // ufficio
+        if( servizio != null ){
+            predicates.add(cb.equal(from.get(Delega_.ufficio), ufficio));
+        }
+        
+        // data verifica
+        if( dataVerifica == null ){
+            dataVerifica = new Date();
+        }
+
+        predicates.add(cb.lessThanOrEqualTo(from.get(Delega_.inizio), dataVerifica));
+        //predicates.add(cb.greaterThanOrEqualTo(from.get(Delega_.fine), dataVerifica));
+        predicates.add(cb.or(
+                             cb.isNull(from.get(Delega_.fine)),
+                             cb.greaterThanOrEqualTo(from.get(Delega_.fine), dataVerifica)
+                            )
+                      );
+        
+        // l'utente
+        if( utente == null ){
+            utente = (Utente) Register.queryUtility(IUtente.class);
+        }
+        predicates.add(cb.equal(from.get(Delega_.utente), utente));
         
         // where
-        cq = cq.where(cb.and(pUtente, pCarica));
+        cq = cq.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
         
         TypedQuery<Delega> tq = em.createQuery(cq);
         List<Delega> deleghe = tq.getResultList();
@@ -67,6 +106,30 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         return carica;        
     }
 
+    @Override
+    public Boolean checkDelega(CodiceCarica codiceCarica) {
+        return this.checkDelega(codiceCarica, null, null, null, null, null);
+    }
+
+    @Override
+    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio) {
+        return this.checkDelega(codiceCarica, servizio, null, null, null, null);
+    }
+
+    @Override
+    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento) {
+        return this.checkDelega(codiceCarica, servizio, procedimento, null, null, null);
+    }
+
+    @Override
+    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio) {
+        return this.checkDelega(codiceCarica, servizio, procedimento, ufficio, null, null);
+    }
+
+    @Override
+    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente) {
+        return this.checkDelega(codiceCarica, servizio, procedimento, ufficio, utente, null);
+    }
 
     
 }
