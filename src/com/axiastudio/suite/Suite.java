@@ -12,6 +12,7 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.plugins.barcode.Barcode;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.plugins.extraattributes.ExtraAttributes;
+import com.axiastudio.pypapi.plugins.jente.JEntePlugin;
 import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
 import com.axiastudio.pypapi.plugins.ooops.RuleSet;
 import com.axiastudio.pypapi.plugins.ooops.Template;
@@ -26,12 +27,15 @@ import com.axiastudio.suite.base.Login;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
+import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipologiaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
+import com.axiastudio.suite.procedimenti.GestoreDeleghe;
+import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
@@ -218,7 +222,7 @@ public class Suite {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
                               Determina.class,
-                              Window.class,
+                              FormDetermina.class,
                               "Determine");
         
         
@@ -270,12 +274,30 @@ public class Suite {
         Template template2 = new Template(url, "Prova 2", "(come sopra, ma con dei punti esclamativi)", ruleSet2);
         ooopsPlugin.addTemplate(template2);
         
+        // template http://127.0.0.1/determina.ott
+        HashMap<String,String> rules3 = new HashMap();
+        rules.put("oggetto", "return obj.getDescrizione()+\"??\"");
+        RuleSet ruleSet3 = new RuleSet(rules);
+        String url3 = "http://127.0.0.1/determina.ott";
+        Template template3 = new Template(url3, "Prova 3", "Template di prova da http", ruleSet3);
+        ooopsPlugin.addTemplate(template3);
+        
+        
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
 
         // Plugin ExtraAttributes per le pratiche
         ExtraAttributes extraAttributesPlugin = new ExtraAttributes();
         Register.registerPlugin(extraAttributesPlugin, FormPratica.class);
 
+        // Plugin JEnte
+        JEntePlugin jEntePlugin = new JEntePlugin();
+        jEntePlugin.setup();
+        Register.registerPlugin(jEntePlugin, FormDetermina.class);
+        
+        // gestore deleghe
+        GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
+        Register.registerUtility(gestoreDeleghe, IGestoreDeleghe.class);
+        
         /* login */
         Login login = new Login();
         int res = login.exec();
@@ -289,6 +311,8 @@ public class Suite {
             app.setCustomApplicationCredits("Copyright AXIA Studio 2012<br/>");
             app.exec();
         }
+        
+        System.exit(res);
     
     }
     
