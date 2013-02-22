@@ -7,7 +7,6 @@ package com.axiastudio.suite.deliberedetermine.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
-import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.trolltech.qt.gui.QPushButton;

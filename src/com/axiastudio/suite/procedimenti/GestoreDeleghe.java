@@ -9,8 +9,6 @@ import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.db.Store;
-import com.axiastudio.pypapi.ui.Column;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
@@ -22,13 +20,11 @@ import com.axiastudio.suite.procedimenti.entities.Delega_;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -75,7 +71,6 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         }
 
         predicates.add(cb.lessThanOrEqualTo(from.get(Delega_.inizio), dataVerifica));
-        //predicates.add(cb.greaterThanOrEqualTo(from.get(Delega_.fine), dataVerifica));
         predicates.add(cb.or(
                              cb.isNull(from.get(Delega_.fine)),
                              cb.greaterThanOrEqualTo(from.get(Delega_.fine), dataVerifica)

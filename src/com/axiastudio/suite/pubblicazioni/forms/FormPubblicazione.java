@@ -8,7 +8,7 @@ import com.axiastudio.pypapi.ui.Window;
 
 /**
  *
- * @author tiziano
+ * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class FormPubblicazione extends Window {
     

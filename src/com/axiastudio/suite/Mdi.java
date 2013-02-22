@@ -142,6 +142,11 @@ public class Mdi extends QMainWindow {
         itemDetermine.setText(0, "Determine");
         itemDetermine.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemDetermine.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
+
+        QTreeWidgetItem itemSedute = new QTreeWidgetItem(itemDelibereDetermineRoot);
+        itemSedute.setText(0, "Sedute");
+        itemSedute.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
+        itemSedute.setText(1, "com.axiastudio.suite.sedute.entities.Seduta");
         
         /* Configurazione sedute */
         QTreeWidgetItem itemConfigurazioneSeduteRoot = new QTreeWidgetItem(this.tree);
@@ -152,7 +157,7 @@ public class Mdi extends QMainWindow {
         QTreeWidgetItem itemCarica = new QTreeWidgetItem(itemConfigurazioneSeduteRoot);
         itemCarica.setText(0, "Cariche");
         itemCarica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
-        itemCarica.setText(1, "com.axiastudio.suite.sedute.entities.Carica");
+        itemCarica.setText(1, "com.axiastudio.suite.procedimenti.entities.Carica");
 
         QTreeWidgetItem itemCommissione = new QTreeWidgetItem(itemConfigurazioneSeduteRoot);
         itemCommissione.setText(0, "Commissioni");
@@ -192,12 +197,6 @@ public class Mdi extends QMainWindow {
         itemDeleghe.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
         itemDeleghe.setText(1, "com.axiastudio.suite.procedimenti.entities.Delega");
         itemDeleghe.setDisabled(!autenticato.getAmministratore());
-        
-        QTreeWidgetItem itemSedute = new QTreeWidgetItem(itemAmministrazione);
-        itemSedute.setText(0, "Sedute (da spostare...)");
-        itemSedute.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
-        itemSedute.setText(1, "com.axiastudio.suite.sedute.entities.Seduta");
-        itemSedute.setDisabled(!autenticato.getAmministratore());
         
         QTreeWidgetItem itemPassword = new QTreeWidgetItem(itemAmministrazione);
         itemPassword.setText(0, "Cambio password");
