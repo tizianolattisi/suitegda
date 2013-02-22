@@ -24,7 +24,9 @@ public class Pratica implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genpratica")
     private Long id;
     @Column(name="idpratica", unique=true)
-    private String idpratica;
+    private String idPratica;
+    @Column(name="codiceinterno", unique=true)
+    private String codiceInterno;
     @Column(name="datapratica")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datapratica;
@@ -75,12 +77,20 @@ public class Pratica implements Serializable {
         this.datapratica = datapratica;
     }
 
-    public String getIdpratica() {
-        return idpratica;
+    public String getIdPratica() {
+        return idPratica;
     }
 
-    public void setIdpratica(String idpratica) {
-        this.idpratica = idpratica;
+    public void setIdPratica(String idPratica) {
+        this.idPratica = idPratica;
+    }
+
+    public String getCodiceInterno() {
+        return codiceInterno;
+    }
+
+    public void setCodiceInterno(String codiceInterno) {
+        this.codiceInterno = codiceInterno;
     }
 
     public String getNote() {

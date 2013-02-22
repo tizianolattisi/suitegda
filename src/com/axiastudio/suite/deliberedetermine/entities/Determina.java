@@ -33,6 +33,10 @@ public class Determina implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
     private Long id;
+    @Column(name="idpratica")
+    private String idPratica;
+    @Column(name="codiceinterno", unique=true)
+    private String codiceInterno;
     @Column(name="oggetto", length=2048)
     private String oggetto;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
@@ -104,6 +108,22 @@ public class Determina implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIdPratica() {
+        return idPratica;
+    }
+
+    public void setIdPratica(String idPratica) {
+        this.idPratica = idPratica;
+    }
+
+    public String getCodiceInterno() {
+        return codiceInterno;
+    }
+
+    public void setCodiceInterno(String codiceInterno) {
+        this.codiceInterno = codiceInterno;
     }
 
     public String getOggetto() {

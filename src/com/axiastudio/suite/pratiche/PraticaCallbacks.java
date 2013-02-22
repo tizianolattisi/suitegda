@@ -50,15 +50,15 @@ public class PraticaCallbacks {
             } catch (NoResultException ex) {
                 max=null;
             }
-            String newIdpratica;
+            String newIdPratica;
             if( max != null ){
-                Integer i = Integer.parseInt(max.getIdpratica().substring(4));
+                Integer i = Integer.parseInt(max.getIdPratica().substring(4));
                 i++;
-                newIdpratica = year+String.format("%08d", i);
+                newIdPratica = year+String.format("%08d", i);
             } else {
-                newIdpratica = year+"00000001";
+                newIdPratica = year+"00000001";
             }
-            pratica.setIdpratica(newIdpratica);
+            pratica.setIdPratica(newIdPratica);
         }
         return new Validation(true);
     }
