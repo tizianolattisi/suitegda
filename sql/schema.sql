@@ -208,6 +208,7 @@ CREATE TABLE pratica (
     datapratica date,
     descrizione character varying(255),
     idpratica character varying(255),
+    codiceinterno character varying(255),
     note character varying(255),
     attribuzione bigint,
     gestione bigint,
@@ -429,6 +430,8 @@ SET search_path = deliberedetermine, pg_catalog;
 
 CREATE TABLE determina (
     id bigserial NOT NULL,
+    idpratica character varying(255),
+    codiceinterno character varying(255),
     oggetto character varying(2048),
     dientrata boolean,
     dispesa boolean,
