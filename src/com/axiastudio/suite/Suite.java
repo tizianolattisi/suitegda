@@ -5,14 +5,17 @@
 package com.axiastudio.suite;
 
 import com.axiastudio.pypapi.Application;
+import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.plugins.barcode.Barcode;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
+import com.axiastudio.pypapi.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.pypapi.plugins.extraattributes.ExtraAttributes;
 import com.axiastudio.pypapi.plugins.jente.JEntePlugin;
+import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
 import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
 import com.axiastudio.pypapi.plugins.ooops.RuleSet;
 import com.axiastudio.pypapi.plugins.ooops.Template;
@@ -241,12 +244,12 @@ public class Suite {
         
         // Plugin CmisPlugin per accedere ad Alfresco
         CmisPlugin cmisPlugin = new CmisPlugin();
-        cmisPlugin.setup("127.0.0.1", 8080, "/alfresco/service/cmis", "admin", "admin", 
+        cmisPlugin.setup("http://127.0.0.1:8080/alfresco/service/cmis", "admin", "admin", 
                 "/Protocollo/${dataprotocollo,date,YYYY}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
 
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
-        cmisPluginPubblicazioni.setup("127.0.0.1", 8080, "/alfresco/service/cmis", "admin", "admin", 
+        cmisPluginPubblicazioni.setup("http://127.0.0.1:8080/alfresco/service/cmis", "admin", "admin", 
                 "/Pubblicazioni/${inizioconsultazione,date,YYYY}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
         
@@ -259,30 +262,25 @@ public class Suite {
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
         ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
         
-        // template 1
+        // template da file system
         HashMap<String,String> rules = new HashMap();
         rules.put("oggetto", "return obj.getDescrizione()");
         RuleSet ruleSet = new RuleSet(rules);
-        String url = "file:///Users/tiziano/NetBeansProjects/PyPaPi/plugins/PyPaPiOoops/template/test.ott";
-        Template template = new Template(url, "Prova", "Template di prova", ruleSet);
+        IStreamProvider streamProvider1 = new FileStreamProvider("/Users/tiziano/NetBeansProjects/PyPaPi/plugins/PyPaPiOoops/template/test.ott");
+        Template template = new Template(streamProvider1, "Prova", "Template di prova", ruleSet);
         ooopsPlugin.addTemplate(template);
         
-        // template 2
+        // template da Cmis
+        
         HashMap<String,String> rules2 = new HashMap();        
-        rules2.put("oggetto", "return obj.getDescrizione()+\"!!\"");
+        rules2.put("oggetto", "return obj.getDescrizione()+\", da Alfresco!!\"");
         RuleSet ruleSet2 = new RuleSet(rules2);
-        Template template2 = new Template(url, "Prova 2", "(come sopra, ma con dei punti esclamativi)", ruleSet2);
+        IStreamProvider streamProvider2 = new CmisStreamProvider("http://127.0.0.1:8080/alfresco/service/cmis", "admin", "admin", 
+                                                                 "workspace://SpacesStore/7b3a2895-51e7-4f2c-9e3d-cf67f7043257");
+        Template template2 = new Template(streamProvider2, "Prova 2", "(template proveniente da Alfresco)", ruleSet2);
         ooopsPlugin.addTemplate(template2);
         
-        // template http://127.0.0.1/determina.ott
-        HashMap<String,String> rules3 = new HashMap();
-        rules.put("oggetto", "return obj.getDescrizione()+\"??\"");
-        RuleSet ruleSet3 = new RuleSet(rules);
-        String url3 = "http://127.0.0.1/determina.ott";
-        Template template3 = new Template(url3, "Prova 3", "Template di prova da http", ruleSet3);
-        ooopsPlugin.addTemplate(template3);
-        
-        
+                
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
 
         // Plugin ExtraAttributes per le pratiche

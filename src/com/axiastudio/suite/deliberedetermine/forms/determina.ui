@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>791</width>
-    <height>583</height>
+    <width>795</width>
+    <height>680</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -288,18 +288,42 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="1">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+    <item row="3" column="0" colspan="3">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>52</height>
-       </size>
-      </property>
-     </spacer>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Impegni</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
+          <property name="entity" stdset="0">
+           <string>.impegnoDeterminaCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;determina&lt;,importo</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>determina,importo</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Impegni (da finanziaria)</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <widget class="QTableWidget" name="tableWidgetImpegni"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>

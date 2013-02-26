@@ -41,6 +41,8 @@ public class Determina implements Serializable {
     private String oggetto;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<ServizioDetermina> servizioDeterminaCollection;
+    @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<ImpegnoDetermina> impegnoDeterminaCollection;
     @Column(name="dispesa")
     private Boolean diSpesa;
     @Column(name="dientrata")
@@ -140,6 +142,14 @@ public class Determina implements Serializable {
 
     public void setServizioDeterminaCollection(Collection<ServizioDetermina> servizioDeterminaCollection) {
         this.servizioDeterminaCollection = servizioDeterminaCollection;
+    }
+
+    public Collection<ImpegnoDetermina> getImpegnoDeterminaCollection() {
+        return impegnoDeterminaCollection;
+    }
+
+    public void setImpegnoDeterminaCollection(Collection<ImpegnoDetermina> impegnoDeterminaCollection) {
+        this.impegnoDeterminaCollection = impegnoDeterminaCollection;
     }
 
     public Boolean getDiSpesa() {
