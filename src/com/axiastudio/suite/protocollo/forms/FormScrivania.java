@@ -71,8 +71,9 @@ public class FormScrivania  extends QMainWindow {
         tableView.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
         tableView.setSortingEnabled(true);
         //tableView.installEventFilter(this);
-        tableView.setItemDelegate(new Delegate(tableView));
+        tableView.setItemDelegate(new DelegateScrivania(tableView));
         tableView.doubleClicked.connect(this, "apriProtocollo()");
+        
 
         this.popolaAttribuzioni();
     }
@@ -95,6 +96,7 @@ public class FormScrivania  extends QMainWindow {
         Store attribuzioni = SuiteUtil.attribuzioni(autenticato);
         List<Column> colonne = new ArrayList();
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
+        colonne.add(new Column("evidenza", "Ev.", "Attribuzione in evidenza"));
         colonne.add(new Column("iddocumento", "Protocollo", "Numero di protocollo"));
         colonne.add(new Column("tipoprotocollo", "E/U/I", "Entrata / Uscita / Interno"));
         colonne.add(new Column("dataprotocollo", "Data", "Data di protocollazione"));
@@ -108,12 +110,13 @@ public class FormScrivania  extends QMainWindow {
         QItemSelectionModel selectionModel = new QItemSelectionModel(model);
         tableView.setSelectionModel(selectionModel);
         selectionModel.selectionChanged.connect(this, "selectRows(QItemSelection, QItemSelection)");
-        tableView.horizontalHeader().setResizeMode(0, QHeaderView.ResizeMode.ResizeToContents); // iddocumento
-        tableView.horizontalHeader().setResizeMode(1, QHeaderView.ResizeMode.ResizeToContents); // tipoprotocollo
-        tableView.horizontalHeader().setResizeMode(2, QHeaderView.ResizeMode.ResizeToContents); // dataprotocollo
-        tableView.horizontalHeader().setResizeMode(3, QHeaderView.ResizeMode.ResizeToContents); // ufficio
-        tableView.horizontalHeader().setResizeMode(4, QHeaderView.ResizeMode.ResizeToContents); // principale
-        tableView.horizontalHeader().setResizeMode(5, QHeaderView.ResizeMode.Stretch);          // oggetto
+        tableView.horizontalHeader().setResizeMode(0, QHeaderView.ResizeMode.ResizeToContents); // evidenza
+        tableView.horizontalHeader().setResizeMode(1, QHeaderView.ResizeMode.ResizeToContents); // iddocumento
+        tableView.horizontalHeader().setResizeMode(2, QHeaderView.ResizeMode.ResizeToContents); // tipoprotocollo
+        tableView.horizontalHeader().setResizeMode(3, QHeaderView.ResizeMode.ResizeToContents); // dataprotocollo
+        tableView.horizontalHeader().setResizeMode(4, QHeaderView.ResizeMode.ResizeToContents); // ufficio
+        tableView.horizontalHeader().setResizeMode(5, QHeaderView.ResizeMode.ResizeToContents); // principale
+        tableView.horizontalHeader().setResizeMode(6, QHeaderView.ResizeMode.Stretch);          // oggetto
     }
     
     private void selectRows(QItemSelection selected, QItemSelection deselected){

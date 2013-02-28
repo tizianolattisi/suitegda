@@ -31,6 +31,8 @@ public class Attribuzione implements Serializable {
     private Boolean principale;
     @Column(name="letto")
     private Boolean letto=false;
+    @Column(name="evidenza", length=1)
+    private String evidenza;
 
     public Long getId() {
         return id;
@@ -104,7 +106,15 @@ public class Attribuzione implements Serializable {
         this.letto = letto;
     }
 
-    @Override
+    public String getEvidenza() {
+        return evidenza;
+    }
+
+    public void setEvidenza(String evidenza) {
+        this.evidenza = evidenza;
+    }
+
+   @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
