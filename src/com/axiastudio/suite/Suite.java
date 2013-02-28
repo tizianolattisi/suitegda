@@ -14,7 +14,6 @@ import com.axiastudio.pypapi.plugins.barcode.Barcode;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.pypapi.plugins.extraattributes.ExtraAttributes;
-import com.axiastudio.pypapi.plugins.jente.JEntePlugin;
 import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
 import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
 import com.axiastudio.pypapi.plugins.ooops.RuleSet;
@@ -287,11 +286,6 @@ public class Suite {
         ExtraAttributes extraAttributesPlugin = new ExtraAttributes();
         Register.registerPlugin(extraAttributesPlugin, FormPratica.class);
 
-        // Plugin JEnte
-        JEntePlugin jEntePlugin = new JEntePlugin();
-        jEntePlugin.setup();
-        Register.registerPlugin(jEntePlugin, FormDetermina.class);
-        
         // gestore deleghe
         GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
         Register.registerUtility(gestoreDeleghe, IGestoreDeleghe.class);
