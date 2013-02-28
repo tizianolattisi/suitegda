@@ -47,8 +47,8 @@ INSERT INTO protocollo (id, convalidaattribuzioni, convalidaprotocollo, anno, an
 INSERT INTO protocollo (id, convalidaattribuzioni, convalidaprotocollo, anno, annullamentorichiesto, annullato, corrispostoostornato, dataprotocollo, datariferimentomittente, iddocumento, note, oggetto, richiederisposta, riferimentomittente, riservato, spedito, tipo, tiporiferimentomittente, sportello) VALUES (2, false, false, 2012, false, false, false, '2012-12-10', NULL, '201200000002', 'Note del protocollo2', 'Oggetto del protocollo2', false, NULL, false, false, 'USCITA', NULL, 3);
 SELECT setval('protocollo.protocollo_id_seq', 3, true);
 
-INSERT INTO attribuzione (id, letto, principale, protocollo, ufficio) VALUES (1, false, NULL, '201200000001', 2);
-INSERT INTO attribuzione (id, letto, principale, protocollo, ufficio) VALUES (2, false, NULL, '201200000001', 1);
+INSERT INTO attribuzione (id, letto, principale, protocollo, ufficio, evidenza) VALUES (1, false, NULL, '201200000001', 2, 'E');
+INSERT INTO attribuzione (id, letto, principale, protocollo, ufficio, evidenza) VALUES (2, false, NULL, '201200000001', 1, 'N');
 SELECT setval('protocollo.attribuzione_id_seq', 3, true);
 
 INSERT INTO praticaprotocollo (id, titolo, pratica, protocollo) VALUES (1, NULL, 1, 1);
@@ -123,3 +123,7 @@ SELECT setval('deliberedetermine.determina_id_seq', 2, true);
 
 INSERT INTO serviziodetermina (id, determina, servizio) VALUES (1, 1, 1);
 SELECT setval('deliberedetermine.serviziodetermina_id_seq', 2, true);
+
+INSERT INTO impegnodetermina (id, determina, importo) VALUES (1, 1, 10.00);
+INSERT INTO impegnodetermina (id, determina, importo) VALUES (2, 1, 30.50);
+SELECT setval('deliberedetermine.impegnodetermina_id_seq', 3, true);

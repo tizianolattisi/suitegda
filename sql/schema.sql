@@ -284,7 +284,8 @@ CREATE TABLE attribuzione (
     letto boolean,
     principale boolean,
     protocollo character varying(255),
-    ufficio bigint
+    ufficio bigint,
+    evidenza character varying(1)
 );
 ALTER TABLE protocollo.attribuzione OWNER TO postgres;
 ALTER TABLE ONLY attribuzione
@@ -483,6 +484,14 @@ ALTER TABLE ONLY serviziodetermina
     ADD CONSTRAINT fk_serviziodetermina_servizio FOREIGN KEY (servizio) REFERENCES finanziaria.servizio(id);
 
 
+CREATE TABLE impegnodetermina (
+    id bigserial NOT NULL,
+    determina bigint,
+    importo numeric(10,2)
+);
+ALTER TABLE deliberedetermine.impegnodetermina OWNER TO postgres;
+ALTER TABLE ONLY impegnodetermina
+    ADD CONSTRAINT fk_impegnodetermina_determina FOREIGN KEY (determina) REFERENCES determina(id);
 
 -- Sequenze (tmp)
 --SET search_path = public, pg_catalog;
