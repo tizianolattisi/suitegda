@@ -434,6 +434,7 @@ CREATE TABLE determina (
     idpratica character varying(255),
     codiceinterno character varying(255),
     oggetto character varying(2048),
+    datapratica date,
     dientrata boolean,
     dispesa boolean,
     diregolarizzazione boolean,
