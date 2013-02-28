@@ -39,6 +39,9 @@ public class Determina implements Serializable {
     private String codiceInterno;
     @Column(name="oggetto", length=2048)
     private String oggetto;
+    @Column(name="datapratica")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataPratica;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<ServizioDetermina> servizioDeterminaCollection;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
@@ -134,6 +137,14 @@ public class Determina implements Serializable {
 
     public void setOggetto(String oggetto) {
         this.oggetto = oggetto;
+    }
+
+    public Date getDataPratica() {
+        return dataPratica;
+    }
+
+    public void setDataPratica(Date dataPratica) {
+        this.dataPratica = dataPratica;
     }
 
     public Collection<ServizioDetermina> getServizioDeterminaCollection() {
