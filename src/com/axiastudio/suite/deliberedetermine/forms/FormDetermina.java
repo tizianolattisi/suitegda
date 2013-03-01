@@ -6,16 +6,11 @@ package com.axiastudio.suite.deliberedetermine.forms;
 
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
-import com.axiastudio.suite.deliberedetermine.entities.ImpegnoDetermina;
-import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
-import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.trolltech.qt.gui.QPushButton;
-import com.trolltech.qt.gui.QTabWidget;
-import com.trolltech.qt.gui.QTableWidget;
-import com.trolltech.qt.gui.QTableWidgetItem;
-import java.util.List;
+import java.util.Date;
 
 /**
  *
@@ -37,66 +32,56 @@ public class FormDetermina extends Window {
         
     }
     
-    private void vistoResponsabile() {
-        if( this.checkResponsabile() ){
-            // TODO
-            
-        }
+    protected Boolean vistoResponsabile() {
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        Utente utente = (Utente) Register.queryUtility(IUtente.class);
+        determina.setVistoResponsabile(Boolean.TRUE);
+        determina.setDataVistoResponsabile(new Date());
+        determina.setUtenteVistoResponsabile(utente);
+        return true;
     }
 
-    private void vistoBilancio() {
-        
+    protected Boolean vistoBilancio() {
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        Utente utente = (Utente) Register.queryUtility(IUtente.class);
+        determina.setVistoBilancio(Boolean.TRUE);
+        determina.setDataVistoBilancio(new Date());
+        determina.setUtenteVistoBilancio(utente);
+        return true;
     }
 
-    private void vistoNegato() {
+    protected Boolean vistoNegato() {
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        Utente utente = (Utente) Register.queryUtility(IUtente.class);
+        determina.setVistoNegato(Boolean.TRUE);
+        determina.setDataVistoNegato(new Date());
+        determina.setUtenteVistoNegato(utente);
+        return true;
         
     }
     
-    private Boolean checkResponsabile() {
-        IGestoreDeleghe gestore = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
-        /// TODO: da completare con il servizio
-        return gestore.checkDelega(CodiceCarica.RESPONSABILE_DI_SERVIZIO);
+    /*
+     * Verifica delle condizioni di abilitazione alla firma del responsabile
+     * del servizio.
+     */
+    protected Boolean checkResponsabile() {
+        return false;
     }
 
-    private Boolean checkBilancio() {
+    protected Boolean checkBilancio() {
         return true;
     }
 
     @Override
     protected void indexChanged(int row) {
+        super.indexChanged(row);
         Determina d = (Determina) this.getContext().getCurrentEntity();
         Boolean vResp = !d.getVistoResponsabile() && this.checkResponsabile();
         Boolean vBil = d.getVistoResponsabile() && !d.getVistoBilancio() && this.checkBilancio();
         Boolean vNeg = vBil;
         this.pushButtonResponsabile.setEnabled(vResp);
         this.pushButtonBilancio.setEnabled(vBil);
-        this.pushButtonVistoNegato.setEnabled(vNeg);
-        // impegni da utilità finanziaria esterna?
-        QTabWidget tabWidget = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget");
-        Object objFinanziariaUtil = Register.queryUtility(IFinanziaria.class);
-        if( objFinanziariaUtil != null ){
-            if( tabWidget.isTabEnabled(0) ){
-                tabWidget.setTabEnabled(0, false);
-            }
-            IFinanziaria finanziariaUtil = (IFinanziaria) objFinanziariaUtil;
-            List<ImpegnoDetermina> impegni = finanziariaUtil.getImpegniDetermina("A", "DT", "2009", "1150");
-            QTableWidget tableWidget = (QTableWidget) this.findChild(QTableWidget.class, "tableWidgetImpegni");
-            tableWidget.clear();
-            tableWidget.setColumnCount(1);
-            int i = 0;
-            for( ImpegnoDetermina impegno: impegni ){
-                tableWidget.insertRow(i);
-                QTableWidgetItem itemImporto = new QTableWidgetItem(impegno.getImporto().toString());
-                tableWidget.setItem(i, 0, itemImporto);
-                i++;
-            }
-        } else {
-            if( tabWidget.isTabEnabled(1) ){
-                tabWidget.setTabEnabled(1, false);
-            }
-        }
-        
-        super.indexChanged(row);
+        this.pushButtonVistoNegato.setEnabled(vNeg);        
     }
 
 
