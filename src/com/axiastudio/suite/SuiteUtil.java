@@ -9,6 +9,8 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.pratiche.entities.Pratica_;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Attribuzione_;
 import java.security.MessageDigest;
@@ -57,6 +59,19 @@ public class SuiteUtil {
         List<Attribuzione> resultList = tq.getResultList();
         store = new Store(resultList);
         return store;
+    }
+    
+    public static Pratica findPratica(String idPratica){
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Pratica> cq = cb.createQuery(Pratica.class);
+        Root<Pratica> root = cq.from(Pratica.class);
+        cq.select(root);
+        cq.where(cb.equal(root.get(Pratica_.idPratica), idPratica));
+        TypedQuery<Pratica> tq = em.createQuery(cq);
+        Pratica pratica = tq.getSingleResult();
+        return pratica;
     }
     
 }
