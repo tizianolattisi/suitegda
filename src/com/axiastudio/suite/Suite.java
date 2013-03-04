@@ -13,7 +13,6 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.plugins.barcode.Barcode;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.plugins.cmis.CmisStreamProvider;
-import com.axiastudio.pypapi.plugins.extraattributes.ExtraAttributes;
 import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
 import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
 import com.axiastudio.pypapi.plugins.ooops.RuleSet;
@@ -281,10 +280,6 @@ public class Suite {
         
                 
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
-
-        // Plugin ExtraAttributes per le pratiche
-        ExtraAttributes extraAttributesPlugin = new ExtraAttributes();
-        Register.registerPlugin(extraAttributesPlugin, FormPratica.class);
 
         // gestore deleghe
         GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
