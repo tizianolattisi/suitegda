@@ -110,7 +110,7 @@ INSERT INTO tipologiaseduta (id, descrizione, commissione, tipologiapratica) VAL
 INSERT INTO tipologiaseduta (id, descrizione, commissione, tipologiapratica) VALUES (2, 'Consiglio comunale', 2, 1);
 SELECT setval('sedute.tipologiaseduta_id_seq', 3, true);
 
-INSERT INTO seduta (id, datacreazione, tipologiaseduta, dataoraconvocazione, faseseduta, statoseduta, inizioseduta, cambiostatoseduta, fineseduta) VALUES (1, '01-13-2013', 1, NULL, 'IN_GESTIONE', 'A', NULL, NULL, NULL);
+INSERT INTO seduta (id, datacreazione, tipologiaseduta, dataoraconvocazione, faseseduta, statoseduta, inizioseduta, cambiostatoseduta, fineseduta) VALUES (1, '13/01/2013', 1, NULL, 'IN_GESTIONE', 'A', NULL, NULL, NULL);
 SELECT setval('sedute.seduta_id_seq', 2, true);
 
 
