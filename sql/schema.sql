@@ -441,6 +441,8 @@ CREATE TABLE determina (
     referentepolitico character varying(255),
     ufficioresponsabile character varying(255),
     nomeresponsabile character varying(255),
+    anno integer,
+    numero integer,
     vistoresponsabile boolean,
     datavistoresponsabile date,
     titolarevistoresponsabile boolean,
