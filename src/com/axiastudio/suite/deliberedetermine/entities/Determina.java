@@ -70,6 +70,10 @@ public class Determina implements Serializable {
     private String ufficioResponsabile;
     @Column(name="nomeresponsabile")
     private String nomeResponsabile;
+    @Column(name="anno")
+    private Integer anno;
+    @Column(name="numero")
+    private Integer numero;
     
     /* visto del responsabile del servizio */
     @Column(name="vistoresponsabile")
@@ -221,6 +225,22 @@ public class Determina implements Serializable {
 
     public void setNomeResponsabile(String nomeResponsabile) {
         this.nomeResponsabile = nomeResponsabile;
+    }
+
+    public Integer getAnno() {
+        return anno;
+    }
+
+    public void setAnno(Integer anno) {
+        this.anno = anno;
+    }
+
+    public Integer getNumero() {
+        return numero;
+    }
+
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
 
     public Boolean getVistoResponsabile() {
