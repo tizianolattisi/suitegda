@@ -196,7 +196,22 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit_4">
+        <widget class="QSpinBox" name="spinBox">
+         <property name="frame">
+          <bool>true</bool>
+         </property>
+         <property name="keyboardTracking">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>2000</number>
+         </property>
+         <property name="maximum">
+          <number>2040</number>
+         </property>
+         <property name="value">
+          <number>2013</number>
+         </property>
          <property name="column" stdset="0">
           <string>anno</string>
          </property>
