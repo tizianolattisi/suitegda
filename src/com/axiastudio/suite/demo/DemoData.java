@@ -24,6 +24,7 @@ import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.anagrafiche.entities.SessoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
+import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
@@ -61,8 +62,12 @@ public class DemoData {
         schema.add("BASE");
         schema.add("ANAGRAFICHE");
         schema.add("PROTOCOLLO");
+        schema.add("PUBBLICAZIONI");
         schema.add("PROCEDIMENTI");
         schema.add("PRATICHE");
+        schema.add("SEDUTE");
+        schema.add("FINANZIARIA");
+        schema.add("DELIBEREDETERMINE");
         for( String name: schema){
             try {
                 Connection conn = DriverManager.getConnection("jdbc:h2:~/suite","","");
@@ -108,13 +113,14 @@ public class DemoData {
         em.merge(uffCom);
 
         
-        // utenti
+        // utenti (mario è l'utente autenticato)
         Utente mario = new Utente();
         mario.setLogin("mario");
         mario.setPassword(SuiteUtil.digest("super"));
         mario.setOperatoreprotocollo(Boolean.TRUE);
         mario.setOperatoreanagrafiche(Boolean.TRUE);
         mario.setOperatorepratiche(Boolean.TRUE);
+        Register.registerUtility(mario, IUtente.class);
         Utente luigi = new Utente();
         luigi.setLogin("luigi");
         luigi.setPassword(SuiteUtil.digest("bros"));
@@ -141,10 +147,10 @@ public class DemoData {
         em.merge(tiziano);
         
         // pratiche
-        Pratica pratica = new Pratica();
-        pratica.setDescrizione("Pratica demo");
-        PraticaCallbacks.validaPratica(pratica);
-        em.merge(pratica);
+        //Pratica pratica = new Pratica();
+        //pratica.setDescrizione("Pratica demo");
+        //PraticaCallbacks.validaPratica(pratica);
+        //em.merge(pratica);
         
         // protocolli
         Protocollo pro1 = new Protocollo();
@@ -177,7 +183,7 @@ public class DemoData {
         soggettiprotocollo.add(sp);
         pro1.setSoggettoProtocolloCollection(soggettiprotocollo);
         PraticaProtocollo pp = new PraticaProtocollo();
-        pp.setPratica(pratica);
+        //pp.setPratica(pratica);
         pp.setProtocollo(pro1);
         List<PraticaProtocollo> praticheprotocollo = new ArrayList<PraticaProtocollo>();
         praticheprotocollo.add(pp);
