@@ -68,9 +68,9 @@ import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
 import com.axiastudio.suite.sedute.entities.TipologiaSeduta;
 import com.axiastudio.suite.sedute.forms.FormTipologiaSeduta;
+import com.trolltech.qt.gui.QMessageBox;
 import java.util.HashMap;
 import java.util.Map;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -109,9 +109,6 @@ public class Suite {
             db.open("SuitePU", properties);
         }
         Register.registerUtility(db, IDatabase.class);
-        EntityManagerFactory emf = db.getEntityManagerFactory();
-        
-        
         
         // registro adapter, validatori, e privacy
         Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
@@ -126,6 +123,7 @@ public class Suite {
         }
         
         Application app = new Application(args);
+        
         app.setLanguage("it");
         
         Register.registerForm(db.getEntityManagerFactory(),
@@ -254,12 +252,12 @@ public class Suite {
         
         // Plugin CmisPlugin per accedere ad Alfresco
         CmisPlugin cmisPlugin = new CmisPlugin();
-        cmisPlugin.setup("http://127.0.0.1:8080/alfresco/service/cmis", "admin", "admin", 
+        cmisPlugin.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
                 "/Protocollo/${dataprotocollo,date,YYYY}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
 
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
-        cmisPluginPubblicazioni.setup("http://127.0.0.1:8080/alfresco/service/cmis", "admin", "admin", 
+        cmisPluginPubblicazioni.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
                 "/Pubblicazioni/${inizioconsultazione,date,YYYY}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
         
@@ -285,7 +283,7 @@ public class Suite {
         HashMap<String,String> rules2 = new HashMap();        
         rules2.put("oggetto", "return obj.getDescrizione()+\", da Alfresco!!\"");
         RuleSet ruleSet2 = new RuleSet(rules2);
-        IStreamProvider streamProvider2 = new CmisStreamProvider("http://127.0.0.1:8080/alfresco/service/cmis", "admin", "admin", 
+        IStreamProvider streamProvider2 = new CmisStreamProvider("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
                                                                  "workspace://SpacesStore/7b3a2895-51e7-4f2c-9e3d-cf67f7043257");
         Template template2 = new Template(streamProvider2, "Prova 2", "(template proveniente da Alfresco)", ruleSet2);
         ooopsPlugin.addTemplate(template2);
@@ -296,6 +294,57 @@ public class Suite {
         // gestore deleghe
         GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
         Register.registerUtility(gestoreDeleghe, IGestoreDeleghe.class);
+        
+        /* demo? */
+        if( properties.isEmpty() ){
+            /*
+             * Attenzione!
+             * 
+             * L'applicazione PyPaPi SuitePA non è stata avviata con una configurazione
+             * valida per l'accesso ai servizi server come il database centralizzato,
+             * l'archiviazione documentale, l'acquisizione massiva dei protocolli,
+             * o la generazione automatica dei documenti.
+             * 
+             * Verrà avviata una versione di PyPaPi SuitePA risiedente unicamente in memoria,
+             * con precaricati alcuni dati fittizi a puro titolo dimostrativo.
+             * Sono attivi in questa versione, ma con funzionalità parziali, solo i moduli
+             * del protocollo informatico, delle pratiche generiche, e delle determine.
+             * 
+             * Per ogni dubbio, commento o richiesta informazioni,
+             * potete scrivere a info@axiastudio.com
+             * 
+             */
+            String msg = "";
+            msg += "Attenzione!\n";
+            msg += "\n";
+            msg += "L'applicazione PyPaPi SuitePA non è stata\n";
+            msg += "avviata con una configurazione\n";
+            msg += "valida per l'accesso ai servizi server come\n";
+            msg += "il database centralizzato, l'archiviazione\n";
+            msg += "documentale, l'acquisizione \n";
+            msg += "massiva dei protocolli, o la generazione\n";
+            msg += "automatica dei documenti.\n";
+            msg += "\n";
+            msg += "Verrà avviata una versione di SuitePA\n";
+            msg += "risiedente unicamente in memoria del pc,\n";
+            msg += "con precaricati alcuni dati fittizi a puro \n";
+            msg += "titolo dimostrativo.\n";
+            msg += "Sono attivi in questa versione, ma con\n";
+            msg += "funzionalità parziali, solo i moduli \n\n";
+            msg += "protocollo informatico, pratiche generiche,\n";
+            msg += "e determine.\n";
+            msg += "\n";
+            msg += "Login e password:\n";
+            msg += "\n";
+            msg += "mario / super (utente normale)\n";
+            msg += "admin / admin (utente amministratore)\n";
+            msg += "\n";
+            msg += "Per ogni dubbio, commento o richiesta\n";
+            msg += "informazioni, potete scrivere a:\n";
+            msg += "\n";
+            msg += "info@axiastudio.com\n";
+            int res = QMessageBox.warning(null, "Modalità demo", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+        }
         
         /* login */
         Login login = new Login();

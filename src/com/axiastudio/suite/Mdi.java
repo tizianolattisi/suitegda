@@ -108,6 +108,7 @@ public class Mdi extends QMainWindow {
         itemPubblicazioni.setText(0, "Pubblicazioni");
         itemPubblicazioni.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemPubblicazioni.setText(1, "com.axiastudio.suite.pubblicazioni.entities.Pubblicazione");
+        itemPubblicazioni.setDisabled(true);
         
         /* Anagrafiche */
         QTreeWidgetItem itemAnagrafiche = new QTreeWidgetItem(this.tree);
@@ -150,6 +151,12 @@ public class Mdi extends QMainWindow {
         this.tree.addTopLevelItem(itemDelibereDetermineRoot);
         itemDelibereDetermineRoot.setDisabled(!autenticato.getOperatorepratiche());
 
+        QTreeWidgetItem itemDelibere = new QTreeWidgetItem(itemDelibereDetermineRoot);
+        itemDelibere.setText(0, "Delibere");
+        itemDelibere.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemDelibere.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
+        itemDelibere.setDisabled(true);
+
         QTreeWidgetItem itemDetermine = new QTreeWidgetItem(itemDelibereDetermineRoot);
         itemDetermine.setText(0, "Determine");
         itemDetermine.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
@@ -159,6 +166,7 @@ public class Mdi extends QMainWindow {
         itemSedute.setText(0, "Sedute");
         itemSedute.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
         itemSedute.setText(1, "com.axiastudio.suite.sedute.entities.Seduta");
+        itemSedute.setDisabled(true);
         
         /* Configurazione sedute */
         QTreeWidgetItem itemConfigurazioneSeduteRoot = new QTreeWidgetItem(this.tree);

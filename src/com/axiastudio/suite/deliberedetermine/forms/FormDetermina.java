@@ -87,13 +87,22 @@ public class FormDetermina extends Window {
     @Override
     protected void indexChanged(int row) {
         super.indexChanged(row);
+        verificaAbilitazionePulsanti();
+    }
+
+    protected void verificaAbilitazionePulsanti() {
         Determina d = (Determina) this.getContext().getCurrentEntity();
-        Boolean vResp = !d.getVistoResponsabile() && this.checkResponsabile();
-        Boolean vBil = d.getVistoResponsabile() && !d.getVistoBilancio() && this.checkBilancio();
-        Boolean vNeg = vBil;
+        Boolean vResp = false;
+        Boolean vBil = false;
+        Boolean vNeg = false;
+        if( d != null ){
+            vResp = !d.getVistoResponsabile() && this.checkResponsabile();
+            vBil = d.getVistoResponsabile() && !d.getVistoBilancio() && this.checkBilancio();
+            vNeg = vBil;
+        }
         this.pushButtonResponsabile.setEnabled(vResp);
         this.pushButtonBilancio.setEnabled(vBil);
-        this.pushButtonVistoNegato.setEnabled(vNeg);        
+        this.pushButtonVistoNegato.setEnabled(vNeg);
     }
 
 

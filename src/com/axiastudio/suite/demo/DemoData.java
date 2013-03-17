@@ -28,6 +28,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
@@ -210,6 +211,17 @@ public class DemoData {
         em.getTransaction().begin();
         em.merge(pro2);
         em.getTransaction().commit();
-      
+        
+        // Servizi
+        Servizio s1 = new Servizio();
+        s1.setDescrizione("Servizio 1");
+        Servizio s2 = new Servizio();
+        s2.setDescrizione("Servizio 2");
+        
+        em.getTransaction().begin();
+        em.merge(s1);
+        em.merge(s2);
+        em.getTransaction().commit();
+        
     }
 }
