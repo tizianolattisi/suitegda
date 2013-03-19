@@ -34,11 +34,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema="deliberedetermine")
-@SequenceGenerator(name="genimpegnodetermina", sequenceName="deliberedetermine.impegnodetermina_id_seq", initialValue=1, allocationSize=1)
-public class ImpegnoDetermina implements Serializable {
+@SequenceGenerator(name="genmovimentodetermina", sequenceName="deliberedetermine.movimentodetermina_id_seq", initialValue=1, allocationSize=1)
+public class MovimentoDetermina implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genimpegnodetermina")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genmovimentodetermina")
     private Long id;
     @JoinColumn(name = "determina", referencedColumnName = "id")
     @ManyToOne
@@ -82,10 +82,10 @@ public class ImpegnoDetermina implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ImpegnoDetermina)) {
+        if (!(object instanceof MovimentoDetermina)) {
             return false;
         }
-        ImpegnoDetermina other = (ImpegnoDetermina) object;
+        MovimentoDetermina other = (MovimentoDetermina) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -94,7 +94,7 @@ public class ImpegnoDetermina implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.deliberedetermine.entities.ImpegnoDetermina[ id=" + id + " ]";
+        return "com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina[ id=" + id + " ]";
     }
     
 }

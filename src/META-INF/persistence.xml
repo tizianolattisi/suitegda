@@ -28,7 +28,7 @@
     <class>com.axiastudio.suite.procedimenti.entities.Delega</class>
     <class>com.axiastudio.suite.procedimenti.entities.Carica</class>
     <class>com.axiastudio.suite.sedute.entities.DelegaSeduta</class>
-    <class>com.axiastudio.suite.deliberedetermine.entities.ImpegnoDetermina</class>
+    <class>com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>

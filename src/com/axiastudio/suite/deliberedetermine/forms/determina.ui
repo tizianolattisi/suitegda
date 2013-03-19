@@ -373,7 +373,7 @@
         <item>
          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
           <property name="entity" stdset="0">
-           <string>.impegnoDeterminaCollection</string>
+           <string>.movimentoDeterminaCollection</string>
           </property>
           <property name="columns" stdset="0">
            <string>&gt;determina&lt;,importo</string>
