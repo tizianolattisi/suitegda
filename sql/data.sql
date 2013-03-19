@@ -117,13 +117,13 @@ SELECT setval('sedute.seduta_id_seq', 2, true);
 -- Delibere e determine
 SET search_path = deliberedetermine, pg_catalog;
 
-INSERT INTO determina (id, idpratica, codiceinterno, oggetto, datapratica, dispesa, dientrata, diregolarizzazione, referentepolitico, ufficioresponsabile, nomeresponsabile, vistoresponsabile, datavistoresponsabile, titolarevistoresponsabile, segretariovistoresponsabile, delegatovistoresponsabile, utentevistoresponsabile, vistobilancio, datavistobilancio, titolarevistobilancio, segretariovistobilancio, delegatovistobilancio, utentevistobilancio, vistonegato, datavistonegato, titolarevistonegato, segretariovistonegato, delegatovistonegato, utentevistonegato)
-  VALUES (1, '2012000001', 'DETRS2012000001', 'Determina di prova', '01/01/2012', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL);
+INSERT INTO determina (id, idpratica, codiceinterno, oggetto, datapratica, dispesa, dientrata, diregolarizzazione, referentepolitico, ufficioresponsabile, nomeresponsabile, vistoresponsabile, datavistoresponsabile, titolarevistoresponsabile, segretariovistoresponsabile, delegatovistoresponsabile, utentevistoresponsabile, vistobilancio, datavistobilancio, titolarevistobilancio, segretariovistobilancio, delegatovistobilancio, utentevistobilancio, vistonegato, datavistonegato, titolarevistonegato, segretariovistonegato, delegatovistonegato, utentevistonegato, iddocumento)
+  VALUES (1, '2012000001', 'DETRS2012000001', 'Determina di prova', '01/01/2012', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, NULL);
 SELECT setval('deliberedetermine.determina_id_seq', 2, true);
 
 INSERT INTO serviziodetermina (id, determina, servizio) VALUES (1, 1, 1);
 SELECT setval('deliberedetermine.serviziodetermina_id_seq', 2, true);
 
-INSERT INTO impegnodetermina (id, determina, importo) VALUES (1, 1, 10.00);
-INSERT INTO impegnodetermina (id, determina, importo) VALUES (2, 1, 30.50);
-SELECT setval('deliberedetermine.impegnodetermina_id_seq', 3, true);
+INSERT INTO movimentodetermina (id, determina, importo) VALUES (1, 1, 10.00);
+INSERT INTO movimentodetermina (id, determina, importo) VALUES (2, 1, 30.50);
+SELECT setval('deliberedetermine.movimentodetermina_id_seq', 3, true);

@@ -257,7 +257,7 @@ CREATE TABLE protocollo (
     corrispostoostornato boolean,
     dataprotocollo date,
     datariferimentomittente date,
-    iddocumento character varying(255),
+    iddocumento character varying(12),
     note character varying(1024),
     oggetto character varying(1024),
     richiederisposta boolean,
@@ -460,7 +460,8 @@ CREATE TABLE determina (
     titolarevistonegato boolean,
     segretariovistonegato boolean,
     delegatovistonegato boolean,
-    utentevistonegato bigint
+    utentevistonegato bigint,
+    iddocumento character varying(12)
 );
 ALTER TABLE deliberedetermine.determina OWNER TO postgres;
 ALTER TABLE ONLY determina
@@ -487,14 +488,14 @@ ALTER TABLE ONLY serviziodetermina
     ADD CONSTRAINT fk_serviziodetermina_servizio FOREIGN KEY (servizio) REFERENCES finanziaria.servizio(id);
 
 
-CREATE TABLE impegnodetermina (
+CREATE TABLE movimentodetermina (
     id bigserial NOT NULL,
     determina bigint,
     importo numeric(10,2)
 );
-ALTER TABLE deliberedetermine.impegnodetermina OWNER TO postgres;
-ALTER TABLE ONLY impegnodetermina
-    ADD CONSTRAINT fk_impegnodetermina_determina FOREIGN KEY (determina) REFERENCES determina(id);
+ALTER TABLE deliberedetermine.movimentodetermina OWNER TO postgres;
+ALTER TABLE ONLY movimentodetermina
+    ADD CONSTRAINT fk_movimentodetermina_determina FOREIGN KEY (determina) REFERENCES determina(id);
 
 -- Sequenze (tmp)
 --SET search_path = public, pg_catalog;
