@@ -38,7 +38,7 @@ public class Protocollo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genprotocollo")
     private Long id;
-    @Column(name="iddocumento", unique=true)
+    @Column(name="iddocumento", length=12, unique=true)
     private String iddocumento;
     @Column(name="dataprotocollo")
     @Temporal(javax.persistence.TemporalType.DATE)

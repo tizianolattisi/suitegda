@@ -121,7 +121,11 @@ public class Determina implements Serializable {
     @Column(name="segretariovistonegato")
     private Boolean segretarioVistoNegato;
     @Column(name="delegatovistonegato")
-    private Boolean delegatoVistoNegato;    
+    private Boolean delegatoVistoNegato;
+    
+    /* protocollo */
+    @Column(name="iddocumento", length=12)
+    private String iddocumento;
     
     public Long getId() {
         return id;
@@ -385,6 +389,14 @@ public class Determina implements Serializable {
 
     public void setDelegatoVistoNegato(Boolean delegatoVistoNegato) {
         this.delegatoVistoNegato = delegatoVistoNegato;
+    }
+
+    public String getIddocumento() {
+        return iddocumento;
+    }
+
+    public void setIddocumento(String iddocumento) {
+        this.iddocumento = iddocumento;
     }
 
     @Override
