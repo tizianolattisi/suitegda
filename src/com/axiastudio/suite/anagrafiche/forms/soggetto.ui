@@ -40,6 +40,12 @@
       <property name="column" stdset="0">
        <string>tipologiaSoggetto</string>
       </property>
+      <property name="search" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="export" stdset="0">
+       <bool>true</bool>
+      </property>
       <item>
        <property name="text">
         <string>PERSONA</string>

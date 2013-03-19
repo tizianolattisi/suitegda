@@ -30,11 +30,15 @@ public class FormSoggetto extends Window {
         super(uiFile, entityClass, title);
         QComboBox tipologiaSoggetto = (QComboBox) this.findChild(QComboBox.class, "comboBoxTipologiaSoggetto");
         tipologiaSoggetto.currentIndexChanged.connect(this, "refresh(Integer)");
+        this.refresh(tipologiaSoggetto.currentIndex());
     }
     
     private void refresh(Integer idx){
         QTabWidget tab = (QTabWidget) this.findChild(QTabWidget.class, "tabWidgetHeader");
         tab.setCurrentIndex(idx);
+        for( int i=0; i<3; i++ ){
+                tab.setTabEnabled(i, i==idx);
+        }
     }
     
 }

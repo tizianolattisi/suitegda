@@ -32,9 +32,9 @@ public class Soggetto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gensoggetto")
     private Long id;
-    @Column(name="tipologiasoggetto")
+    @Column(name="tipologiasoggetto", nullable=false)
     @Enumerated(EnumType.STRING)
-    private TipologiaSoggetto tipologiaSoggetto;
+    private TipologiaSoggetto tipologiaSoggetto = TipologiaSoggetto.PERSONA;
     @Column(name="sessosoggetto")
     @Enumerated(EnumType.STRING)
     private SessoSoggetto sessoSoggetto;
@@ -166,6 +166,9 @@ public class Soggetto implements Serializable {
 
     @Override
     public String toString() {
+        if( this.tipologiaSoggetto == null ){
+            return "-";
+        }
         if( this.tipologiaSoggetto.equals(TipologiaSoggetto.PERSONA) ){
             return this.nome+" "+this.cognome;
         } else if( this.tipologiaSoggetto.equals(TipologiaSoggetto.AZIENDA) ){
