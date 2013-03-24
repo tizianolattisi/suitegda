@@ -34,6 +34,8 @@ CATASTO
 LIBRO FONDIARIO
 OGGETTI DIVERSI"""
 
+print TEMPLATE % ("0", "0", "0", "NON CLASSIFICATO", "")
+
 i = 0
 for row in CATEGORIE.split("\n"):
     i += 1
