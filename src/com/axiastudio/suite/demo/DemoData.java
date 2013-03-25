@@ -28,6 +28,9 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.deliberedetermine.entities.Determina;
+import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
+import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
@@ -218,9 +221,27 @@ public class DemoData {
         Servizio s2 = new Servizio();
         s2.setDescrizione("Servizio 2");
         
+        // Capitoli
+        Capitolo c1 = new Capitolo();
+        c1.setDescrizione("Capitolo 1");
+        Capitolo c2 = new Capitolo();
+        c2.setDescrizione("Capitolo 2");
+        
+        // Determina
+        Determina determina = new Determina();
+        determina.setOggetto("Determina di test");
+        List<ServizioDetermina> servizioDeterminaCollection = new ArrayList();
+        ServizioDetermina servizioDetermina = new ServizioDetermina();
+        servizioDetermina.setServizio(s1);
+        servizioDeterminaCollection.add(servizioDetermina);
+        determina.setServizioDeterminaCollection(servizioDeterminaCollection);
+        
         em.getTransaction().begin();
         em.merge(s1);
         em.merge(s2);
+        em.merge(c1);
+        em.merge(c2);
+        em.merge(determina);
         em.getTransaction().commit();
         
     }
