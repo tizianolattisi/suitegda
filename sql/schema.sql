@@ -507,7 +507,7 @@ CREATE TABLE movimentodetermina (
     sottoimpegno character varying(255),
     descrizioneimpegno character varying(255),
     annoimpegno bigint,
-    importo numeric(10,2),
+    importo numeric(15,2),
     tipomovimento character varying(255),
     annoesercizio bigint
 );
