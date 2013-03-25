@@ -130,6 +130,13 @@ ALTER TABLE ONLY servizio
 ALTER TABLE ONLY servizio
     ADD CONSTRAINT fk_servizio_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
+CREATE TABLE capitolo (
+    id bigserial NOT NULL,
+    descrizione character varying(1024)
+);
+ALTER TABLE finanziaria.capitolo OWNER TO postgres;
+ALTER TABLE ONLY capitolo
+    ADD CONSTRAINT capitolo_pkey PRIMARY KEY (id);
 
 -- Procedimenti
 SET search_path = procedimenti, pg_catalog;
@@ -491,7 +498,18 @@ ALTER TABLE ONLY serviziodetermina
 CREATE TABLE movimentodetermina (
     id bigserial NOT NULL,
     determina bigint,
-    importo numeric(10,2)
+    capitolo bigint,
+    codicecapitolo character varying(255),
+    descrizionecapitolo character varying(255),
+    articolo character varying(255),
+    codicemeccanografico character varying(255),
+    impegno character varying(255),
+    sottoimpegno character varying(255),
+    descrizioneimpegno character varying(255),
+    annoimpegno bigint,
+    importo numeric(10,2),
+    tipomovimento character varying(255),
+    annoesercizio bigint
 );
 ALTER TABLE deliberedetermine.movimentodetermina OWNER TO postgres;
 ALTER TABLE ONLY movimentodetermina

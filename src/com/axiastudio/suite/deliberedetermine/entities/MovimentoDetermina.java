@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.deliberedetermine.entities;
 
+import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -25,6 +26,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -43,8 +45,33 @@ public class MovimentoDetermina implements Serializable {
     @JoinColumn(name = "determina", referencedColumnName = "id")
     @ManyToOne
     private Determina determina;
+    @JoinColumn(name = "capitolo", referencedColumnName = "id")
+    @ManyToOne
+    private Capitolo capitolo;
+    @Column(name="codicecapitolo")
+    private Long codiceCapitolo;
+    @Column(name="descrizionecapitolo")
+    private String descrizioneCapitolo;
+    @Column(name="articolo")
+    private String articolo;
+    @Column(name="codicemeccanografico")
+    private String codiceMeccanografico;
+    @Column(name="impegno")
+    private String impegno;
+    @Column(name="sottoimpegno")
+    private String sottoImpegno;
+    @Column(name="descrizioneimpegno")
+    private String descrizioneImpegno;
+    @Column(name="annoimpegno")
+    private Long annoImpegno;
     @Column(name="importo")
     private BigDecimal importo;
+    @Column(name="tipomovimento")
+    private String tipoMovimento;
+    @Column(name="annoesercizio")
+    private Long annoEsercizio;
+
+
             
 
 
@@ -64,6 +91,78 @@ public class MovimentoDetermina implements Serializable {
         this.determina = determina;
     }
 
+    public Capitolo getCapitolo() {
+        return capitolo;
+    }
+
+    public void setCapitolo(Capitolo capitolo) {
+        this.capitolo = capitolo;
+    }
+
+    public Long getCodiceCapitolo() {
+        return codiceCapitolo;
+    }
+
+    public void setCodiceCapitolo(Long codiceCapitolo) {
+        this.codiceCapitolo = codiceCapitolo;
+    }
+
+    public String getDescrizioneCapitolo() {
+        return descrizioneCapitolo;
+    }
+
+    public void setDescrizioneCapitolo(String descrizioneCapitolo) {
+        this.descrizioneCapitolo = descrizioneCapitolo;
+    }
+
+    public String getArticolo() {
+        return articolo;
+    }
+
+    public void setArticolo(String articolo) {
+        this.articolo = articolo;
+    }
+
+    public String getCodiceMeccanografico() {
+        return codiceMeccanografico;
+    }
+
+    public void setCodiceMeccanografico(String codiceMeccanografico) {
+        this.codiceMeccanografico = codiceMeccanografico;
+    }
+
+    public String getImpegno() {
+        return impegno;
+    }
+
+    public void setImpegno(String impegno) {
+        this.impegno = impegno;
+    }
+
+    public String getSottoImpegno() {
+        return sottoImpegno;
+    }
+
+    public void setSottoImpegno(String sottoImpegno) {
+        this.sottoImpegno = sottoImpegno;
+    }
+
+    public String getDescrizioneImpegno() {
+        return descrizioneImpegno;
+    }
+
+    public void setDescrizioneImpegno(String descrizioneImpegno) {
+        this.descrizioneImpegno = descrizioneImpegno;
+    }
+
+    public Long getAnnoImpegno() {
+        return annoImpegno;
+    }
+
+    public void setAnnoImpegno(Long annoImpegno) {
+        this.annoImpegno = annoImpegno;
+    }
+
     public BigDecimal getImporto() {
         return importo;
     }
@@ -71,6 +170,23 @@ public class MovimentoDetermina implements Serializable {
     public void setImporto(BigDecimal importo) {
         this.importo = importo;
     }
+
+    public String getTipoMovimento() {
+        return tipoMovimento;
+    }
+
+    public void setTipoMovimento(String tipoMovimento) {
+        this.tipoMovimento = tipoMovimento;
+    }
+
+    public Long getAnnoEsercizio() {
+        return annoEsercizio;
+    }
+
+    public void setAnnoEsercizio(Long annoEsercizio) {
+        this.annoEsercizio = annoEsercizio;
+    }
+
 
     @Override
     public int hashCode() {

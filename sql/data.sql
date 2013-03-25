@@ -69,6 +69,9 @@ SET search_path = finanziaria, pg_catalog;
 INSERT INTO servizio (id, descrizione, ufficio) VALUES (1, 'Segreteria generale, personale e organizzazione', 1);
 SELECT setval('finanziaria.servizio_id_seq', 2, true);
 
+INSERT INTO capitolo (id, descrizione) VALUES (1, 'Descrizione del capitolo');
+SELECT setval('finanziaria.capitolo_id_seq', 2, true);
+
 
 -- Procedimenti
 SET search_path = procedimenti, pg_catalog;

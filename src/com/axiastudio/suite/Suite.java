@@ -231,11 +231,22 @@ public class Suite {
                               "Servizi");
 
         Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Capitolo.class,
+                              Window.class,
+                              "Capitoli");
+
+        Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
                               Determina.class,
                               FormDetermina.class,
                               "Determine");
-        
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/deliberedetermine/forms/movimentodetermina.ui",
+                              MovimentoDetermina.class,
+                              Dialog.class,
+                              "Movimento determina");
         
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
