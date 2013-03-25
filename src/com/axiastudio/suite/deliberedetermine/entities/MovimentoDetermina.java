@@ -21,6 +21,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,6 +47,8 @@ public class MovimentoDetermina implements Serializable {
     @JoinColumn(name = "determina", referencedColumnName = "id")
     @ManyToOne
     private Determina determina;
+    @Enumerated(EnumType.STRING)
+    private TipoMovimento tipoMovimento;
     @JoinColumn(name = "capitolo", referencedColumnName = "id")
     @ManyToOne
     private Capitolo capitolo;
@@ -66,14 +70,8 @@ public class MovimentoDetermina implements Serializable {
     private Long annoImpegno;
     @Column(name="importo")
     private BigDecimal importo;
-    @Column(name="tipomovimento")
-    private String tipoMovimento;
     @Column(name="annoesercizio")
     private Long annoEsercizio;
-
-
-            
-
 
     public Long getId() {
         return id;
@@ -89,6 +87,14 @@ public class MovimentoDetermina implements Serializable {
 
     public void setDetermina(Determina determina) {
         this.determina = determina;
+    }
+
+    public TipoMovimento getTipoMovimento() {
+        return tipoMovimento;
+    }
+
+    public void setTipoMovimento(TipoMovimento tipoMovimento) {
+        this.tipoMovimento = tipoMovimento;
     }
 
     public Capitolo getCapitolo() {
@@ -169,14 +175,6 @@ public class MovimentoDetermina implements Serializable {
 
     public void setImporto(BigDecimal importo) {
         this.importo = importo;
-    }
-
-    public String getTipoMovimento() {
-        return tipoMovimento;
-    }
-
-    public void setTipoMovimento(String tipoMovimento) {
-        this.tipoMovimento = tipoMovimento;
     }
 
     public Long getAnnoEsercizio() {
