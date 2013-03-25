@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 AXIA Studio (http://www.axiastudio.com)
+ * Copyright (C) 2013 AXIA Studio (http://www.axiastudio.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -22,9 +22,6 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.plugins.barcode.Barcode;
-import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
-import com.axiastudio.pypapi.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
 import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
 import com.axiastudio.pypapi.plugins.ooops.RuleSet;
@@ -52,6 +49,7 @@ import com.axiastudio.suite.pratiche.entities.TipologiaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
+import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
@@ -65,7 +63,6 @@ import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
-import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
@@ -73,49 +70,26 @@ import com.axiastudio.suite.sedute.entities.TipologiaSeduta;
 import com.axiastudio.suite.sedute.forms.FormTipologiaSeduta;
 import com.trolltech.qt.gui.QMessageBox;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
- * @author Tiziano Lattisi <tiziano at axiastudio.it>
+ * @author AXIA Studio (http://www.axiastudio.com)
  */
-public class Suite {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+public class SuiteDemo {
+    
+    public static void setAndStartDemo(String[] args){
         
-        String jdbcUrl = System.getProperty("jdbc.url");
-        if( jdbcUrl == null ){
-            /* Avvio in modalità demo */
-            SuiteDemo.setAndStartDemo(args);        
-        }
-        String jdbcUser = System.getProperty("jdbc.user");
-        String jdbcPassword = System.getProperty("jdbc.password");
-        String jdbcDriver = System.getProperty("jdbc.driver");
-        Map properties = new HashMap();
-        properties.put("javax.persistence.jdbc.url", jdbcUrl);
-        if( jdbcUser != null ){
-            properties.put("javax.persistence.jdbc.user", jdbcUser);
-        }
-        if( jdbcPassword != null ){
-            properties.put("javax.persistence.jdbc.password", jdbcPassword);
-        }
-        if( jdbcDriver != null ){
-            properties.put("javax.persistence.jdbc.driver", jdbcDriver);
-        }
-
         Database db = new Database();
-        properties.put("eclipselink.ddl-generation", "");
-        db.open("SuitePU", properties);
+        db.open("SuitePU");
         Register.registerUtility(db, IDatabase.class);
         
-        // registro adapter, validatori, e privacy
         Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
         Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));
+        
+        DemoData.initSchema();
+        DemoData.initData();
         
         Application app = new Application(args);
         
@@ -230,6 +204,12 @@ public class Suite {
                               Capitolo.class,
                               Window.class,
                               "Capitoli");
+        
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
+                              Determina.class,
+                              FormDetermina.class,
+                              "Determine");
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
@@ -248,60 +228,39 @@ public class Suite {
                               Procedimento.class,
                               Window.class,
                               "Procedimenti");
-
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
                               Delega.class,
                               Window.class,
                               "Incarichi e deleghe");
 
-        
-        // Plugin CmisPlugin per accedere ad Alfresco
-        CmisPlugin cmisPlugin = new CmisPlugin();
-        cmisPlugin.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-                "/Protocollo/${dataprotocollo,date,YYYY}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
-        Register.registerPlugin(cmisPlugin, FormProtocollo.class);
-
-        CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
-        cmisPluginPubblicazioni.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-                "/Pubblicazioni/${inizioconsultazione,date,YYYY}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
-        Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
-        
-        // Plugin Barcode per la stampa del DataMatrix
-        Barcode barcodePlugin = new Barcode();
-        barcodePlugin.setup("lp -d Zebra_Technologies_ZTC_GK420t", ".\nS1\nb245,34,D,h6,\"0123456789\"\nP1\n.\n");
-        Register.registerPlugin(barcodePlugin, FormProtocollo.class);
-
-        // Plugin OoopsPlugin per interazione con OpenOffice
-        OoopsPlugin ooopsPlugin = new OoopsPlugin();
-        ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
-        
-        // template da file system
-        HashMap<String,String> rules = new HashMap();
-        rules.put("oggetto", "return obj.getDescrizione()");
-        RuleSet ruleSet = new RuleSet(rules);
-        IStreamProvider streamProvider1 = new FileStreamProvider("/Users/tiziano/NetBeansProjects/PyPaPi/plugins/PyPaPiOoops/template/test.ott");
-        Template template = new Template(streamProvider1, "Prova", "Template di prova", ruleSet);
-        ooopsPlugin.addTemplate(template);
-        
-        // template da Cmis
-        
-        HashMap<String,String> rules2 = new HashMap();        
-        rules2.put("oggetto", "return obj.getDescrizione()+\", da Alfresco!!\"");
-        RuleSet ruleSet2 = new RuleSet(rules2);
-        IStreamProvider streamProvider2 = new CmisStreamProvider("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-                                                                 "workspace://SpacesStore/7b3a2895-51e7-4f2c-9e3d-cf67f7043257");
-        Template template2 = new Template(streamProvider2, "Prova 2", "(template proveniente da Alfresco)", ruleSet2);
-        ooopsPlugin.addTemplate(template2);
-        
-                
-        Register.registerPlugin(ooopsPlugin, FormPratica.class);
-
         // gestore deleghe
         GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
         Register.registerUtility(gestoreDeleghe, IGestoreDeleghe.class);
         
-        /* login */
+        // Plugin OoopsPlugin per interazione con OpenOffice
+        OoopsPlugin ooopsPlugin = new OoopsPlugin();
+        ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+        
+        // template demo Determina
+        HashMap<String,String> rules = new HashMap();
+        rules.put("oggetto", "return obj.getDescrizione()");
+        RuleSet ruleSet = new RuleSet(rules);
+        IStreamProvider streamProviderDetermina = new FileStreamProvider("/Users/tiziano/NetBeansProjects/PyPaPi/plugins/PyPaPiOoops/template/test.ott");
+        Template template = new Template(streamProviderDetermina, "Determina", "Template determina", ruleSet);
+        ooopsPlugin.addTemplate(template);
+        
+        Register.registerPlugin(ooopsPlugin, FormDetermina.class);
+        
+        String msg = "";
+        msg += "Avvio in modalità dimostrativa.";
+        msg += "Login e password:\n";
+        msg += "\n";
+        msg += "mario / super (utente normale)\n";
+        msg += "admin / admin (utente amministratore)\n";
+        QMessageBox.warning(null, "Modalità demo", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+        
         Login login = new Login();
         int res = login.exec();
         if( res == 1 ){
@@ -310,13 +269,11 @@ public class Suite {
             //mdi.showMaximized();
             mdi.show();
             
-            app.setCustomApplicationName("PyPaPi Suite");
+            app.setCustomApplicationName("PyPaPi SuitePA - modalità dimostrazione");
             app.setCustomApplicationCredits("Copyright AXIA Studio 2012<br/>");
             app.exec();
         }
         
         System.exit(res);
-    
     }
-    
 }
