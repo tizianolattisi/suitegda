@@ -47,6 +47,7 @@ public class MovimentoDetermina implements Serializable {
     @JoinColumn(name = "determina", referencedColumnName = "id")
     @ManyToOne
     private Determina determina;
+    @Column(name="tipomovimento")
     @Enumerated(EnumType.STRING)
     private TipoMovimento tipoMovimento;
     @JoinColumn(name = "capitolo", referencedColumnName = "id")
