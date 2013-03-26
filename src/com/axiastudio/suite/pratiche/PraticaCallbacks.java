@@ -52,7 +52,7 @@ public class PraticaCallbacks {
             Root<Pratica> root = cq.from(Pratica.class);
             cq.select(root);
             cq.where(cb.equal(root.get(Pratica_.anno), year));
-            cq.orderBy(cb.desc(root.get("idpratica")));
+            cq.orderBy(cb.desc(root.get("idPratica")));
             TypedQuery<Pratica> tq = em.createQuery(cq).setMaxResults(1);
             Pratica max;
             pratica.setDatapratica(date);
