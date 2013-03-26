@@ -258,7 +258,7 @@ public class SuiteDemo {
         msg += "Login e password:\n";
         msg += "\n";
         msg += "mario / super (utente normale)\n";
-        msg += "admin / admin (utente amministratore)\n";
+        msg += "admin / pypapi (utente amministratore)\n";
         QMessageBox.warning(null, "Modalità demo", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
         
         Login login = new Login();
