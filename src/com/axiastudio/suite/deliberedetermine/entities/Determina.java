@@ -74,10 +74,11 @@ public class Determina implements Serializable {
     private Integer anno;
     @Column(name="numero")
     private Integer numero;
+    // data determina == data protocollo
     
     /* visto del responsabile del servizio */
     @Column(name="vistoresponsabile")
-    private Boolean vistoResponsabile;
+    private Boolean vistoResponsabile=false;
     @Column(name="datavistoresponsabile")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataVistoResponsabile;
@@ -93,7 +94,7 @@ public class Determina implements Serializable {
 
     /* visto del responsabile di bilancio */
     @Column(name="vistobilancio")
-    private Boolean vistoBilancio;
+    private Boolean vistoBilancio=false;
     @Column(name="datavistobilancio")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataVistoBilancio;
@@ -109,7 +110,7 @@ public class Determina implements Serializable {
 
     /* visto del responsabile di bilancio */
     @Column(name="vistonegato")
-    private Boolean vistoNegato;
+    private Boolean vistoNegato=false;
     @Column(name="datavistonegato")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataVistoNegato;

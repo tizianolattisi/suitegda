@@ -149,13 +149,7 @@ public class DemoData {
         tiziano.setSessoSoggetto(SessoSoggetto.M);
         tiziano.setTipologiaSoggetto(TipologiaSoggetto.PERSONA);
         em.merge(tiziano);
-        
-        // pratiche
-        //Pratica pratica = new Pratica();
-        //pratica.setDescrizione("Pratica demo");
-        //PraticaCallbacks.validaPratica(pratica);
-        //em.merge(pratica);
-        
+                
         // protocolli
         Protocollo pro1 = new Protocollo();
         pro1.setOggetto("Oggetto del protocollo");
@@ -226,7 +220,15 @@ public class DemoData {
         c1.setDescrizione("Capitolo 1");
         Capitolo c2 = new Capitolo();
         c2.setDescrizione("Capitolo 2");
-        
+
+        // pratiche
+        Pratica pratica = new Pratica();
+        pratica.setDescrizione("Pratica contenente una determina");
+        PraticaCallbacks.validaPratica(pratica);
+        em.getTransaction().begin();
+        em.merge(pratica);
+        em.getTransaction().commit();
+
         // Determina
         Determina determina = new Determina();
         determina.setOggetto("Determina di test");
@@ -235,6 +237,8 @@ public class DemoData {
         servizioDetermina.setServizio(s1);
         servizioDeterminaCollection.add(servizioDetermina);
         determina.setServizioDeterminaCollection(servizioDeterminaCollection);
+        determina.setIdPratica(pratica.getIdPratica());
+        determina.setCodiceInterno("DETRS201300001");
         
         em.getTransaction().begin();
         em.merge(s1);

@@ -70,6 +70,7 @@ import com.axiastudio.suite.sedute.entities.TipologiaSeduta;
 import com.axiastudio.suite.sedute.forms.FormTipologiaSeduta;
 import com.trolltech.qt.gui.QMessageBox;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -241,14 +242,44 @@ public class SuiteDemo {
         
         // Plugin OoopsPlugin per interazione con OpenOffice
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
-        ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+        ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager", false);
+        //ooopsPlugin.setup("uno:socket,host=192.168.64.59,port=2002;urp;StarOffice.ServiceManager");
         
         // template demo Determina
         HashMap<String,String> rules = new HashMap();
-        rules.put("oggetto", "return obj.getDescrizione()");
+        rules.put("CODICE", "return Determina.getCodiceInterno();");
+        rules.put("CODICE1", "return Determina.getCodiceInterno();");
+        rules.put("DIC_IMP_PROVV", "if( Determina.getDiSpesa() ){ return \"Imegno come da allegato per totali euro\"; } else return \"\"");
+        rules.put("SPESA", "if( Determina.getDiSpesa() ){ return \"Somma degli importi\"; } else return \"\""); // TODO: completare
+        rules.put("PEG_CORRENTE", "return \"PEG approvato con bilancio...\""); // TODO: da strutturare
+        rules.put("INDIRIZZO", ""); // TODO: cerca Michela
+        rules.put("bar_code", "return Determina.getIdDocumento();");
+        rules.put("BAR_COD_PRATICA", "return Determina.getIdPratica();");
+        rules.put("OGGETTO", "return Determina.getOggetto();");
+        rules.put("FRASE_IMPEGNO", "if( Determina.getDiSpesa() ){ return \"con impegno di spesa\"; } else return \"\"");
+        rules.put("OBIETTIVO", ""); // per ora vuoro
+        rules.put("ISTRUTTORE", ""); // XXX: istruttore... vedi appunti. :-)
+        rules.put("SERVIZIO", "Determina.getServizioDeterminaCollection().toArray()[0].getServizio().getDescrizione()");
+        rules.put("REGOLARIZZAZIONE", "if( Determina.getDiRegolarizzazione() ){ return \"frasetta REGOLARIZZAZIONE\"; } else return \"\""); // TODO: recuperare testo
+        rules.put("CASO_SPESA", "if( Determina.getDiSpesa() ){ return \"frasetta CASO_SPESA\"; } else return \"\""); // TODO: recuperare testo
+        rules.put("DISPOSIZIONI_SPESE", "if( Determina.getDiSpesa() ){ return \"frasetta DISPOSIZIONI_SPESE\"; } else return \"\""); // TODO: recuperare testo
+        rules.put("UFFICI_DETER", ""); // TODO: uffici allegati alla determina, tipo attribuzioni con principale (manca nel modello)
+        rules.put("ASSESSORE", "return Determina.getReferentePolitico();");
+        rules.put("allegati", ""); // TODO: gli allegati sulla determina (titolo), in ordine di data
+        rules.put("SIGLA", ""); // "Documento redatto da "+sigla utente autenticato
+        rules.put("DELEGA", ""); // "IL" oppure "PER ASSENZA DEL" nel caso chi firmi (resp. servizio) sia un delegato
+        rules.put("ufficio", ""); // l'ufficio collegato al servizio di bilancio o il servizio (Michela chiede)?
+        rules.put("DELEGA1", ""); // "frasetta" come per delega
+        rules.put("FIRMA", ""); // cognome e nome di chi ha firmato come responsabile del servizio
+        rules.put("PRATICA", ""); // la pratica o le pratiche da cui dipende la determina: cod_interno+ubicazione
+        rules.put("data", ""); // data della determina (e del protocollo)
+        rules.put("numero", "return Determina.getAnno()+\" - \"+Determina.getNumero();");
+        rules.put("protocollo", "return Determina.getIdDocumento();");
         RuleSet ruleSet = new RuleSet(rules);
-        IStreamProvider streamProviderDetermina = new FileStreamProvider("/Users/tiziano/NetBeansProjects/PyPaPi/plugins/PyPaPiOoops/template/test.ott");
-        Template template = new Template(streamProviderDetermina, "Determina", "Template determina", ruleSet);
+        IStreamProvider streamProviderDetermina = new FileStreamProvider("/Users/tiziano/NetBeansProjects/PyPaPi/Suite/demo/determina.ott");
+        Map<String, Object> objectsMap = new HashMap();
+        objectsMap.put("gestoreDeleghe", gestoreDeleghe);
+        Template template = new Template(streamProviderDetermina, "Determina", "Template determina", ruleSet, objectsMap);
         ooopsPlugin.addTemplate(template);
         
         Register.registerPlugin(ooopsPlugin, FormDetermina.class);
