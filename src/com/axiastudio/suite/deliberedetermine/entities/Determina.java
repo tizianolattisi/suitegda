@@ -125,7 +125,7 @@ public class Determina implements Serializable {
     
     /* protocollo */
     @Column(name="iddocumento", length=12)
-    private String iddocumento;
+    private String idDocumento;
     
     public Long getId() {
         return id;
@@ -391,12 +391,12 @@ public class Determina implements Serializable {
         this.delegatoVistoNegato = delegatoVistoNegato;
     }
 
-    public String getIddocumento() {
-        return iddocumento;
+    public String getIdDocumento() {
+        return idDocumento;
     }
 
-    public void setIddocumento(String iddocumento) {
-        this.iddocumento = iddocumento;
+    public void setIdDocumento(String iddocumento) {
+        this.idDocumento = iddocumento;
     }
 
     @Override
