@@ -514,6 +514,8 @@ CREATE TABLE movimentodetermina (
 ALTER TABLE deliberedetermine.movimentodetermina OWNER TO postgres;
 ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_determina FOREIGN KEY (determina) REFERENCES determina(id);
+ALTER TABLE ONLY movimentodetermina
+    ADD CONSTRAINT fk_movimentodetermina_capitolo FOREIGN KEY (capitolo) REFERENCES finanziaria.capitolo(id);
 
 -- Sequenze (tmp)
 --SET search_path = public, pg_catalog;
