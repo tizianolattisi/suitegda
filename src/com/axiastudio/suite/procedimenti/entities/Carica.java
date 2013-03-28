@@ -33,7 +33,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema="PROCEDIMENTI")
-@SequenceGenerator(name="gencarica", sequenceName="sedute.carica_id_seq", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="gencarica", sequenceName="procedimenti.carica_id_seq", initialValue=1, allocationSize=1)
 public class Carica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
