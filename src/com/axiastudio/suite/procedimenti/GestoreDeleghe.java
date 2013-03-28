@@ -32,6 +32,7 @@ import com.axiastudio.suite.procedimenti.entities.Delega_;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -45,9 +46,8 @@ import javax.persistence.criteria.Root;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class GestoreDeleghe implements IGestoreDeleghe {
-    
-    @Override
-    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
+        
+    private List<Delega> trovaTitoliEDeleghe(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
 
         Carica carica = this.findCarica(codiceCarica);
         
@@ -63,19 +63,13 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         predicates.add(cb.equal(from.get(Delega_.carica), carica));
         
         // servizio
-        if( servizio != null ){
-            predicates.add(cb.equal(from.get(Delega_.servizio), servizio));
-        }
+        predicates.add(cb.equal(from.get(Delega_.servizio), servizio));
 
         // procedimento
-        if( procedimento != null ){
-            predicates.add(cb.equal(from.get(Delega_.procedimento), procedimento));
-        }
+        predicates.add(cb.equal(from.get(Delega_.procedimento), procedimento));
 
         // ufficio
-        if( servizio != null ){
-            predicates.add(cb.equal(from.get(Delega_.ufficio), ufficio));
-        }
+        predicates.add(cb.equal(from.get(Delega_.ufficio), ufficio));
         
         // data verifica
         if( dataVerifica == null ){
@@ -100,43 +94,115 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         
         TypedQuery<Delega> tq = em.createQuery(cq);
         List<Delega> deleghe = tq.getResultList();
-        if( deleghe.size()>0 ){
-            return true;
-        }
-        return false;
+        return deleghe;
     }
     
     private Carica findCarica(CodiceCarica codiceCarica){
         Controller ctrlCarica = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.procedimenti.entities.Carica");
-        Integer i = codiceCarica.ordinal()+1;
-        Carica carica = (Carica) ctrlCarica.get(i.longValue());
-        return carica;        
+        for (Iterator it = ctrlCarica.createFullStore().iterator(); it.hasNext();) {
+            Carica carica = (Carica) it.next();
+            if( codiceCarica.equals(carica.getCodiceCarica()) ){
+                return carica;
+            }
+        }
+        return null;
+    }
+
+    /*
+     * Ricerca secca della carica, non esiste una delega più ampia
+     */
+    @Override
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica) {
+        return this.checkTitoloODelega(codiceCarica, null, null, null, null, null);
     }
 
     @Override
-    public Boolean checkDelega(CodiceCarica codiceCarica) {
-        return this.checkDelega(codiceCarica, null, null, null, null, null);
+    /*
+     * Ricerca per servizio, da verificare il caso più ampio "tutti i servizi"
+     */
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio) {
+        return this.checkTitoloODelega(codiceCarica, servizio, null, null, null, null);
     }
 
     @Override
-    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio) {
-        return this.checkDelega(codiceCarica, servizio, null, null, null, null);
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento) {
+        return this.checkTitoloODelega(codiceCarica, servizio, procedimento, null, null, null);
     }
 
     @Override
-    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento) {
-        return this.checkDelega(codiceCarica, servizio, procedimento, null, null, null);
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio) {
+        return this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, null, null);
     }
 
     @Override
-    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio) {
-        return this.checkDelega(codiceCarica, servizio, procedimento, ufficio, null, null);
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente) {
+        return this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, utente, null);
     }
 
     @Override
-    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente) {
-        return this.checkDelega(codiceCarica, servizio, procedimento, ufficio, utente, null);
-    }
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
 
+        // prima cerchiamo un titolo o una delega esatta
+        List<Delega> titoliEDeleghe = this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, ufficio, utente, dataVerifica);
+        // se è una delega verifico che il delegante abbia titolo per delegare
+        for( Delega titoloODelega: titoliEDeleghe ){
+            if( titoloODelega.getTitolare() ){
+                return true;
+            }
+            if( this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, titoloODelega.getDelegante(), dataVerifica) ){
+                return true;
+            }
+        }
+        
+        // Cerchiamo tutti i titoli e le deleghe più ampi della richiesta
+        List<Delega> titoliEDelegheAmpie = new ArrayList();
+        if( ufficio != null ){
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, null, utente, dataVerifica));
+            if( procedimento != null ){
+                titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
+            }
+            if( servizio != null ){
+                titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica));
+            }
+        }
+        if( procedimento != null ){
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, ufficio, utente, dataVerifica));
+            if( servizio != null ){
+                titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica));
+            }
+        }
+        if( servizio != null ){
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, ufficio, utente, dataVerifica));
+        }
+        // Prima andiamo alla ricerca delle titolarità
+        for( Delega titoloODelega: titoliEDelegheAmpie ){
+            if( titoloODelega.getTitolare() ){
+                // L'utente ha una titolarità più ampia del richiesto
+                return true;
+            }
+        }
+        // Poi cerchiamo tra le deleghe
+        for( Delega titoloODelega: titoliEDelegheAmpie ){
+            if( titoloODelega.getDelegato() ){
+                // L'utente è delegato, quindi devo verificare se il delegante ha titolo per delegare
+                if( this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, titoloODelega.getDelegante(), dataVerifica) ){
+                    return true;
+                }
+            }
+        }        
+        return false;
+    }
+    
+    /*
+     * L'utente autenticato può visualizzare le sue deleghe, sia come titolare che come delegato,
+     * e le deleghe fatte da lui verso altri utenti.
+     */
+    public static Predicate filtroDelegheUtente(CriteriaBuilder cb, Root from) {
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        Predicate cariche = cb.equal(from.get(Delega_.utente), autenticato);
+        Predicate deleghe = cb.equal(from.get(Delega_.delegante), autenticato);
+        Predicate predicate = cb.or(cariche, deleghe);
+        return predicate;
+    }
     
 }

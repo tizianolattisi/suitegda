@@ -34,6 +34,9 @@ import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.procedimenti.entities.Carica;
+import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
+import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.entities.*;
 import java.sql.Connection;
@@ -95,14 +98,55 @@ public class DemoData {
         //em.getTransaction().begin();
         
 
-        // amministratore
+        /* 
+         * AMMINISTRATORE
+         */
         Utente admin = new Utente();
         admin.setLogin("admin");
+        admin.setNome("Amministratore");
         admin.setPassword(SuiteUtil.digest("pypapi"));
         admin.setAmministratore(Boolean.TRUE);
-        em.merge(admin);
+        em.getTransaction().begin();
+        em.persist(admin);
+        em.getTransaction().commit();
         
-        // uffici
+        /*
+         * CARICHE
+         */
+        Carica sindaco = new Carica();
+        sindaco.setDescrizione("Sindaco");
+        sindaco.setCodiceCarica(CodiceCarica.SINDACO);
+        Carica viceSindaco = new Carica();
+        viceSindaco.setDescrizione("Vice Sindaco");
+        viceSindaco.setCodiceCarica(CodiceCarica.VICE_SINDACO);
+        Carica segretario = new Carica();
+        segretario.setDescrizione("Segretario");
+        segretario.setCodiceCarica(CodiceCarica.SEGRETARIO);
+        Carica responsabile = new Carica();
+        responsabile.setDescrizione("Responsabile del servizio di bilancio");
+        responsabile.setCodiceCarica(CodiceCarica.RESPONSABILE_DI_SERVIZIO);
+        em.getTransaction().begin();
+        em.persist(sindaco);
+        em.persist(viceSindaco);
+        em.persist(segretario);
+        em.persist(responsabile);
+        em.getTransaction().commit();
+        
+        /*
+         * SERVIZI
+         */
+        Servizio servizioAffariGenerali = new Servizio();
+        servizioAffariGenerali.setDescrizione("Servizio affari generali");
+        Servizio servizioInformativoComunale = new Servizio();
+        servizioInformativoComunale.setDescrizione("Servizio informativo comunale");
+        em.getTransaction().begin();
+        em.persist(servizioAffariGenerali);
+        em.persist(servizioInformativoComunale);
+        em.getTransaction().commit();
+
+        /*
+         * UFFICI
+         */
         Ufficio uffInf = new Ufficio();
         uffInf.setDescrizione("Ufficio informativo");
         Ufficio uffPro = new Ufficio();
@@ -111,23 +155,47 @@ public class DemoData {
         uffEdi.setDescrizione("Ufficio edilizia");
         Ufficio uffCom = new Ufficio();
         uffCom.setDescrizione("Ufficio commercio");
-        em.merge(uffInf);
-        em.merge(uffPro);
-        em.merge(uffEdi);
-        em.merge(uffCom);
-
+        em.getTransaction().begin();
+        em.persist(uffInf);
+        em.persist(uffPro);
+        em.persist(uffEdi);
+        em.persist(uffCom);
+        em.getTransaction().commit();
         
-        // utenti (mario è l'utente autenticato)
+        /*
+         * UTENTI (mario è l'utente autenticato)
+         * 
+         * Luigi è segretario
+         * Mario è responsabile di servizio informativo
+         * 
+         * Mario ha anche la delega come segretario da Luigi
+         * 
+         */
+        Utente luigi = new Utente();
+        luigi.setLogin("luigi");
+        luigi.setNome("Luigi Bros");
+        luigi.setSigla("L.B.");
+        luigi.setPassword(SuiteUtil.digest("bros"));
+        List<Delega> delegheLuigi = new ArrayList();
+        Delega titolareSegretario = new Delega();
+        titolareSegretario.setUtente(luigi);
+        titolareSegretario.setCarica(segretario);
+        titolareSegretario.setTitolare(Boolean.TRUE);
+        delegheLuigi.add(titolareSegretario);
+        luigi.setDelegaCollection(delegheLuigi);
+        em.getTransaction().begin();
+        em.persist(luigi);
+        em.getTransaction().commit();
+        
         Utente mario = new Utente();
         mario.setLogin("mario");
+        mario.setNome("Mario Super");
+        mario.setSigla("M.S.");
         mario.setPassword(SuiteUtil.digest("super"));
         mario.setOperatoreprotocollo(Boolean.TRUE);
         mario.setOperatoreanagrafiche(Boolean.TRUE);
         mario.setOperatorepratiche(Boolean.TRUE);
         Register.registerUtility(mario, IUtente.class);
-        Utente luigi = new Utente();
-        luigi.setLogin("luigi");
-        luigi.setPassword(SuiteUtil.digest("bros"));
         List<UfficioUtente> ufficiUtente = new ArrayList();
         UfficioUtente uu = new UfficioUtente();
         uu.setUfficio(uffInf);
@@ -139,17 +207,44 @@ public class DemoData {
         uu2.setRicerca(Boolean.TRUE);
         ufficiUtente.add(uu2);
         mario.setUfficioUtenteCollection(ufficiUtente);
-        em.merge(mario);
-        em.merge(luigi);
-
-        // soggetti
+        List<Delega> delegheMario = new ArrayList();
+        Delega titolareResponsabile = new Delega();
+        titolareResponsabile.setUtente(mario);
+        titolareResponsabile.setCarica(responsabile);
+        titolareResponsabile.setServizio(servizioInformativoComunale);
+        titolareResponsabile.setTitolare(Boolean.TRUE);
+        delegheMario.add(titolareResponsabile);
+        Delega delegaSegretario = new Delega();
+        delegaSegretario.setUtente(mario);
+        delegaSegretario.setDelegante(luigi);
+        delegaSegretario.setCarica(segretario);
+        delegaSegretario.setDelegato(Boolean.TRUE);
+        delegheMario.add(delegaSegretario);
+        mario.setDelegaCollection(delegheMario);
+        em.getTransaction().begin();
+        em.persist(mario);
+        em.getTransaction().commit();
+        
+        /*
+         * SOGGETTI
+         */
         Soggetto tiziano = new Soggetto();
         tiziano.setNome("Tiziano");
         tiziano.setCognome("Lattisi");
         tiziano.setSessoSoggetto(SessoSoggetto.M);
         tiziano.setTipologiaSoggetto(TipologiaSoggetto.PERSONA);
-        em.merge(tiziano);
-                
+        em.getTransaction().begin();
+        em.persist(tiziano);
+        em.getTransaction().commit();
+        
+        // pratiche
+        Pratica pratica = new Pratica();
+        pratica.setDescrizione("Pratica demo");
+        PraticaCallbacks.validaPratica(pratica);
+        em.getTransaction().begin();
+        em.persist(pratica);
+        em.getTransaction().commit();
+        
         // protocolli
         Protocollo pro1 = new Protocollo();
         pro1.setOggetto("Oggetto del protocollo");
@@ -181,7 +276,7 @@ public class DemoData {
         soggettiprotocollo.add(sp);
         pro1.setSoggettoProtocolloCollection(soggettiprotocollo);
         PraticaProtocollo pp = new PraticaProtocollo();
-        //pp.setPratica(pratica);
+        pp.setPratica(pratica);
         pp.setProtocollo(pro1);
         List<PraticaProtocollo> praticheprotocollo = new ArrayList<PraticaProtocollo>();
         praticheprotocollo.add(pp);
@@ -201,19 +296,14 @@ public class DemoData {
         
         ProtocolloCallbacks.beforeCommit(pro1);
         em.getTransaction().begin();
-        em.merge(pro1);
+        em.persist(pro1);
         em.getTransaction().commit();
         
         ProtocolloCallbacks.beforeCommit(pro2);
         em.getTransaction().begin();
-        em.merge(pro2);
+        em.persist(pro2);
         em.getTransaction().commit();
         
-        // Servizi
-        Servizio s1 = new Servizio();
-        s1.setDescrizione("Servizio 1");
-        Servizio s2 = new Servizio();
-        s2.setDescrizione("Servizio 2");
         
         // Capitoli
         Capitolo c1 = new Capitolo();
@@ -221,31 +311,23 @@ public class DemoData {
         Capitolo c2 = new Capitolo();
         c2.setDescrizione("Capitolo 2");
 
-        // pratiche
-        Pratica pratica = new Pratica();
-        pratica.setDescrizione("Pratica contenente una determina");
-        PraticaCallbacks.validaPratica(pratica);
-        em.getTransaction().begin();
-        em.merge(pratica);
-        em.getTransaction().commit();
-
         // Determina
         Determina determina = new Determina();
         determina.setOggetto("Determina di test");
         List<ServizioDetermina> servizioDeterminaCollection = new ArrayList();
         ServizioDetermina servizioDetermina = new ServizioDetermina();
-        servizioDetermina.setServizio(s1);
+        servizioDetermina.setServizio(servizioAffariGenerali);
         servizioDeterminaCollection.add(servizioDetermina);
         determina.setServizioDeterminaCollection(servizioDeterminaCollection);
         determina.setIdPratica(pratica.getIdPratica());
         determina.setCodiceInterno("DETRS201300001");
         
         em.getTransaction().begin();
-        em.merge(s1);
-        em.merge(s2);
-        em.merge(c1);
-        em.merge(c2);
-        em.merge(determina);
+        em.persist(servizioAffariGenerali);
+        em.persist(servizioInformativoComunale);
+        em.persist(c1);
+        em.persist(c2);
+        em.persist(determina);
         em.getTransaction().commit();
         
     }

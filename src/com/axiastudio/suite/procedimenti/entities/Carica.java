@@ -19,6 +19,8 @@ package com.axiastudio.suite.procedimenti.entities;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +33,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema="PROCEDIMENTI")
-@SequenceGenerator(name="gencarica", sequenceName="sedute.carica_id_seq", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="gencarica", sequenceName="procedimenti.carica_id_seq", initialValue=1, allocationSize=1)
 public class Carica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,6 +41,9 @@ public class Carica implements Serializable {
     private Long id;
     @Column(name="descrizione", length=1024)
     private String descrizione;
+    @Column(name="codicecarica")
+    @Enumerated(EnumType.STRING)
+    private CodiceCarica codiceCarica;
 
     public Long getId() {
         return id;
@@ -54,6 +59,14 @@ public class Carica implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public CodiceCarica getCodiceCarica() {
+        return codiceCarica;
+    }
+
+    public void setCodiceCarica(CodiceCarica codiceCarica) {
+        this.codiceCarica = codiceCarica;
     }
 
     @Override
