@@ -21,6 +21,7 @@ import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.ui.Column;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
@@ -32,7 +33,10 @@ import com.axiastudio.suite.procedimenti.entities.Delega_;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -108,9 +112,17 @@ public class GestoreDeleghe implements IGestoreDeleghe {
     
     private Carica findCarica(CodiceCarica codiceCarica){
         Controller ctrlCarica = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.procedimenti.entities.Carica");
+        for (Iterator it = ctrlCarica.createFullStore().iterator(); it.hasNext();) {
+            Carica carica = (Carica) it.next();
+            if( codiceCarica.equals(carica.getCodiceCarica()) ){
+                return carica;
+            }
+        }
+        return null;
+        /*
         Integer i = codiceCarica.ordinal()+1;
         Carica carica = (Carica) ctrlCarica.get(i.longValue());
-        return carica;        
+        return carica;*/        
     }
 
     @Override
@@ -138,5 +150,9 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         return this.checkDelega(codiceCarica, servizio, procedimento, ufficio, utente, null);
     }
 
+    public static CriteriaQuery createExtraCriteria(CriteriaQuery cq) {
+        System.out.println("**");
+        return cq;
+    }
     
 }

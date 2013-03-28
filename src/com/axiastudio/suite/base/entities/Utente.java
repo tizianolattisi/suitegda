@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.base.entities;
 
+import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.*;
 
@@ -26,13 +27,15 @@ import javax.persistence.*;
 @Entity
 @Table(schema="BASE")
 @SequenceGenerator(name="genutente", sequenceName="base.utente_id_seq", initialValue=1, allocationSize=1)
-public class Utente implements IUtente {
+public class Utente implements Serializable, IUtente {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genutente")
     private Long id;
     @Column(name="nome")
     private String nome;
+    @Column(name="sigla")
+    private String sigla;
     @Column(name="email")
     private String email;
     @Column(name="login")
@@ -78,6 +81,14 @@ public class Utente implements IUtente {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getSigla() {
+        return sigla;
+    }
+
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
     }
 
     public String getEmail() {

@@ -34,6 +34,9 @@ import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.procedimenti.entities.Carica;
+import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
+import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.entities.*;
 import java.sql.Connection;
@@ -98,6 +101,7 @@ public class DemoData {
         // amministratore
         Utente admin = new Utente();
         admin.setLogin("admin");
+        admin.setNome("Amministratore");
         admin.setPassword(SuiteUtil.digest("pypapi"));
         admin.setAmministratore(Boolean.TRUE);
         em.merge(admin);
@@ -120,6 +124,8 @@ public class DemoData {
         // utenti (mario è l'utente autenticato)
         Utente mario = new Utente();
         mario.setLogin("mario");
+        mario.setNome("Mario Super");
+        mario.setSigla("M.S.");
         mario.setPassword(SuiteUtil.digest("super"));
         mario.setOperatoreprotocollo(Boolean.TRUE);
         mario.setOperatoreanagrafiche(Boolean.TRUE);
@@ -127,6 +133,8 @@ public class DemoData {
         Register.registerUtility(mario, IUtente.class);
         Utente luigi = new Utente();
         luigi.setLogin("luigi");
+        luigi.setNome("Luigi Bros");
+        luigi.setSigla("L.B.");
         luigi.setPassword(SuiteUtil.digest("bros"));
         List<UfficioUtente> ufficiUtente = new ArrayList();
         UfficioUtente uu = new UfficioUtente();
@@ -243,6 +251,48 @@ public class DemoData {
         em.merge(c2);
         em.merge(determina);
         em.getTransaction().commit();
+        
+        // gestione deleghe
+        
+        // Cariche
+        Carica sindaco = new Carica();
+        sindaco.setDescrizione("Sindaco");
+        sindaco.setCodiceCarica(CodiceCarica.SINDACO);
+        Carica viceSindaco = new Carica();
+        viceSindaco.setDescrizione("Vice Sindaco");
+        viceSindaco.setCodiceCarica(CodiceCarica.VICE_SINDACO);
+        Carica segretario = new Carica();
+        segretario.setDescrizione("Segretario");
+        segretario.setCodiceCarica(CodiceCarica.SEGRETARIO);
+        Carica responsabile = new Carica();
+        responsabile.setDescrizione("Responsabile del servizio di bilancio");
+        responsabile.setCodiceCarica(CodiceCarica.RESPONSABILE_DI_SERVIZIO);
+        
+        // Deleghe
+        Delega titolareSegretario = new Delega();
+        titolareSegretario.setUtente(luigi);
+        titolareSegretario.setCarica(segretario);
+        titolareSegretario.setTitolare(Boolean.TRUE);
+        Delega titolareResponsabile = new Delega();
+        titolareResponsabile.setUtente(mario);
+        titolareResponsabile.setCarica(responsabile);
+        titolareResponsabile.setTitolare(Boolean.TRUE);
+        Delega delegatoSegretario = new Delega();
+        delegatoSegretario.setUtente(mario);
+        delegatoSegretario.setDelegante(luigi);
+        delegatoSegretario.setCarica(segretario);
+        delegatoSegretario.setDelegato(Boolean.TRUE);
+
+        em.getTransaction().begin();
+        em.merge(sindaco);
+        em.merge(viceSindaco);
+        em.merge(segretario);
+        em.merge(responsabile);
+        em.merge(titolareSegretario);
+        em.merge(titolareResponsabile);
+        em.merge(delegatoSegretario);
+        em.getTransaction().commit();
+        
         
     }
 }

@@ -216,7 +216,7 @@ public class Mdi extends QMainWindow {
         itemDeleghe.setText(0, "Incarichi e deleghe");
         itemDeleghe.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
         itemDeleghe.setText(1, "com.axiastudio.suite.procedimenti.entities.Delega");
-        itemDeleghe.setDisabled(!autenticato.getAmministratore());
+        //itemDeleghe.setDisabled(!autenticato.getAmministratore());
         
         QTreeWidgetItem itemPassword = new QTreeWidgetItem(itemAmministrazione);
         itemPassword.setText(0, "Cambio password");
