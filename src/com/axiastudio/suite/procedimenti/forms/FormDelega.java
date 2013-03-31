@@ -17,13 +17,17 @@
 package com.axiastudio.suite.procedimenti.forms;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.trolltech.qt.gui.QCheckBox;
+import com.trolltech.qt.gui.QComboBox;
+import com.trolltech.qt.gui.QDateEdit;
 import com.trolltech.qt.gui.QPushButton;
-import com.trolltech.qt.gui.QToolButton;
+import java.util.Date;
 
 /**
  *
@@ -45,8 +49,36 @@ public class FormDelega extends Window {
         pbCreaDelega.clicked.connect(this, "creaDelega()");
     }
     
+    /*
+     * Crea una nuova delega a partire dalla delega visualizzata
+     */
     private void creaDelega(){
-        System.out.println("delega");
+        Delega titolarita = (Delega) this.getContext().getCurrentEntity();
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        
+        // Solo se l'utente autenticato è titolare
+        if( titolarita.getTitolare() && titolarita.getUtente().equals(autenticato) ){
+            Delega delega = new Delega();
+            delega.setDelegante(autenticato);
+            delega.setCarica(titolarita.getCarica());
+            if( titolarita.getUfficio() != null ){
+                delega.setUfficio(titolarita.getUfficio());
+            }
+            if( titolarita.getServizio()!= null ){
+                delega.setServizio(titolarita.getServizio());
+            }
+            if( titolarita.getProcedimento()!= null ){
+                delega.setProcedimento(titolarita.getProcedimento());
+            }
+            delega.setTitolare(Boolean.FALSE);
+            delega.setSegretario(Boolean.FALSE);
+            delega.setSuassenza(Boolean.FALSE);
+            delega.setDelegato(Boolean.TRUE);
+            delega.setInizio(new Date());
+            Controller controller = (Controller) Register.queryUtility(IController.class, Delega.class.getName());
+            controller.commit(delega);
+            this.getContext().insertElement(delega);
+        }
     }
 
     @Override
@@ -54,15 +86,38 @@ public class FormDelega extends Window {
         Delega delega = (Delega) this.getContext().getCurrentEntity();
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         
-        // Solo l'amministratore può usare i flag titolare, segretario, utente delegato
-        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_titolare")).setEnabled(autenticato.getAmministratore());
-        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_segretario")).setEnabled(autenticato.getAmministratore());
-        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_delegato")).setEnabled(autenticato.getAmministratore());
+        // Amministratore, titolare dell'incarico, delegato dal titolare, o delegante ad altro utente?
+        Boolean eAmministratore = autenticato.getAmministratore();
+        Boolean eTitolare = delega.getTitolare() && autenticato.equals(delega.getUtente());
+        Boolean eDelegato = delega.getDelegato() && autenticato.equals(delega.getUtente());
+        Boolean eDelegante = delega.getDelegato() && autenticato.equals(delega.getDelegante());
         
-        // Solo il titolare può delegare
-        Boolean puoDelegare = delega.getTitolare() && !((Utente) Register.queryUtility(IUtente.class)).getAmministratore();
-        ((QPushButton) this.findChild(QPushButton.class, "pushButton_creaDelega")).setEnabled(puoDelegare);
+        // Solo l'amministratore può usare i flag titolare, segretario, utente delegato, e modificare le selezioni a piacere
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_titolare")).setEnabled(eAmministratore);
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_segretario")).setEnabled(eAmministratore);
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_delegato")).setEnabled(eAmministratore);
+        
+        // Solo l'amministratore o il delegante possono modificare la delega solo su assenza e le date
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_assenza")).setEnabled(eAmministratore || eDelegante);
+        ((QDateEdit) this.findChild(QDateEdit.class, "dateEdit_inizio")).setEnabled(eAmministratore || eDelegante);
+        ((QDateEdit) this.findChild(QDateEdit.class, "dateEdit_fine")).setEnabled(eAmministratore || eDelegante);
+        
+        // Solo l'amministratore può modificare la carica
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_carica")).setEnabled(eAmministratore);
+
+        // Solo l'amministratore e il delegante possono modificare ufficio, servizio e procedimento e utente delegato
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_ufficio")).setEnabled(eAmministratore || eDelegante);
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_servizio")).setEnabled(eAmministratore || eDelegante);
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_procedimento")).setEnabled(eAmministratore || eDelegante);
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_utente")).setEnabled(eAmministratore || eDelegante);
+
+        // Solo l'amministratore può modificare il delegante
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_delegante")).setEnabled(eAmministratore);
+
+        // Solo il titolare non amministratore può delegare
+        ((QPushButton) this.findChild(QPushButton.class, "pushButton_creaDelega")).setEnabled(eTitolare && !eAmministratore);
         super.indexChanged(row);
+        
     }
     
 }

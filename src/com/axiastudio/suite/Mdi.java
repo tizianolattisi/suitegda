@@ -96,8 +96,8 @@ public class Mdi extends QMainWindow {
         itemProtocollo.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemProtocollo.setText(1, "com.axiastudio.suite.protocollo.entities.Protocollo");
         Controller controllerProtocollo = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.protocollo.entities.Protocollo");
-        Store storeProtocollo = controllerProtocollo.createStore(10);
-        itemProtocollo.setData(1, Qt.ItemDataRole.UserRole, storeProtocollo);
+        //Store storeProtocollo = controllerProtocollo.createStore(10);
+        //itemProtocollo.setData(1, Qt.ItemDataRole.UserRole, storeProtocollo);
 
         QTreeWidgetItem itemTitolario = new QTreeWidgetItem(itemProtocolloInformatico);
         itemTitolario.setText(0, "Titolario");

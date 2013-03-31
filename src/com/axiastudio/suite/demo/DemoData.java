@@ -133,6 +133,18 @@ public class DemoData {
         em.getTransaction().commit();
         
         /*
+         * SERVIZI
+         */
+        Servizio servizioAffariGenerali = new Servizio();
+        servizioAffariGenerali.setDescrizione("Servizio affari generali");
+        Servizio servizioInformativoComunale = new Servizio();
+        servizioInformativoComunale.setDescrizione("Servizio informativo comunale");
+        em.getTransaction().begin();
+        em.persist(servizioAffariGenerali);
+        em.persist(servizioInformativoComunale);
+        em.getTransaction().commit();
+
+        /*
          * UFFICI
          */
         Ufficio uffInf = new Ufficio();
@@ -152,6 +164,12 @@ public class DemoData {
         
         /*
          * UTENTI (mario è l'utente autenticato)
+         * 
+         * Luigi è segretario
+         * Mario è responsabile di servizio informativo
+         * 
+         * Mario ha anche la delega come segretario da Luigi
+         * 
          */
         Utente luigi = new Utente();
         luigi.setLogin("luigi");
@@ -193,6 +211,7 @@ public class DemoData {
         Delega titolareResponsabile = new Delega();
         titolareResponsabile.setUtente(mario);
         titolareResponsabile.setCarica(responsabile);
+        titolareResponsabile.setServizio(servizioInformativoComunale);
         titolareResponsabile.setTitolare(Boolean.TRUE);
         delegheMario.add(titolareResponsabile);
         Delega delegaSegretario = new Delega();
@@ -207,7 +226,7 @@ public class DemoData {
         em.getTransaction().commit();
         
         /*
-         * SOGGETTO
+         * SOGGETTI
          */
         Soggetto tiziano = new Soggetto();
         tiziano.setNome("Tiziano");
@@ -285,11 +304,6 @@ public class DemoData {
         em.persist(pro2);
         em.getTransaction().commit();
         
-        // Servizi
-        Servizio s1 = new Servizio();
-        s1.setDescrizione("Servizio 1");
-        Servizio s2 = new Servizio();
-        s2.setDescrizione("Servizio 2");
         
         // Capitoli
         Capitolo c1 = new Capitolo();
@@ -302,13 +316,13 @@ public class DemoData {
         determina.setOggetto("Determina di test");
         List<ServizioDetermina> servizioDeterminaCollection = new ArrayList();
         ServizioDetermina servizioDetermina = new ServizioDetermina();
-        servizioDetermina.setServizio(s1);
+        servizioDetermina.setServizio(servizioAffariGenerali);
         servizioDeterminaCollection.add(servizioDetermina);
         determina.setServizioDeterminaCollection(servizioDeterminaCollection);
         
         em.getTransaction().begin();
-        em.persist(s1);
-        em.persist(s2);
+        em.persist(servizioAffariGenerali);
+        em.persist(servizioInformativoComunale);
         em.persist(c1);
         em.persist(c2);
         em.persist(determina);

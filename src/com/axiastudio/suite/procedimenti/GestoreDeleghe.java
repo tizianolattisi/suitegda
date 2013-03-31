@@ -150,9 +150,16 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         return this.checkDelega(codiceCarica, servizio, procedimento, ufficio, utente, null);
     }
 
-    public static CriteriaQuery createExtraCriteria(CriteriaQuery cq) {
-        System.out.println("**");
-        return cq;
+    /*
+     * L'utente autenticato può visualizzare le sue deleghe, sia come titolare che come delegato,
+     * e le deleghe fatte da lui verso altri utenti.
+     */
+    public static Predicate filtroDelegheUtente(CriteriaBuilder cb, Root from) {
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        Predicate cariche = cb.equal(from.get(Delega_.utente), autenticato);
+        Predicate deleghe = cb.equal(from.get(Delega_.delegante), autenticato);
+        Predicate predicate = cb.or(cariche, deleghe);
+        return predicate;
     }
     
 }

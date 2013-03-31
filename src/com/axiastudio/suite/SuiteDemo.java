@@ -75,6 +75,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -233,21 +236,20 @@ public class SuiteDemo {
                               Delega.class,
                               FormDelega.class,
                               "Incarichi e deleghe");
-
-        // gestore deleghe
-        GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
-        Register.registerUtility(gestoreDeleghe, IGestoreDeleghe.class);
-        /*
-        try {
-            Method extraCriteriaFactory = GestoreDeleghe.class.getMethod("createExtraCriteria");
-            Register.registerUtility(extraCriteriaFactory, ICriteriaFactory.class, Delega.class.getName());
+        // TODO: filtro sulle deleghe
+       try {
+            Method provider = GestoreDeleghe.class.getMethod("filtroDelegheUtente", CriteriaBuilder.class, Root.class);
+            Register.registerUtility(provider, ICriteriaFactory.class, Delega.class.getName());
         } catch (NoSuchMethodException ex) {
             Logger.getLogger(SuiteDemo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
             Logger.getLogger(SuiteDemo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        */
-        
+
+
+        // gestore deleghe
+        GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
+        Register.registerUtility(gestoreDeleghe, IGestoreDeleghe.class);        
         
         // Plugin OoopsPlugin per interazione con OpenOffice
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
