@@ -21,6 +21,7 @@ import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.ICriteriaFactory;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
 import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
@@ -52,6 +53,7 @@ import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.procedimenti.forms.FormDelega;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.ProtocolloPrivate;
@@ -69,7 +71,13 @@ import com.axiastudio.suite.sedute.entities.Seduta;
 import com.axiastudio.suite.sedute.entities.TipologiaSeduta;
 import com.axiastudio.suite.sedute.forms.FormTipologiaSeduta;
 import com.trolltech.qt.gui.QMessageBox;
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -211,13 +219,7 @@ public class SuiteDemo {
                               FormDetermina.class,
                               "Determine");
 
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
-                              Determina.class,
-                              FormDetermina.class,
-                              "Determine");
-
-        Register.registerForm(db.getEntityManagerFactory(),
+       Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/deliberedetermine/forms/movimentodetermina.ui",
                               MovimentoDetermina.class,
                               Dialog.class,
@@ -232,12 +234,22 @@ public class SuiteDemo {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
                               Delega.class,
-                              Window.class,
+                              FormDelega.class,
                               "Incarichi e deleghe");
+        // TODO: filtro sulle deleghe
+       try {
+            Method provider = GestoreDeleghe.class.getMethod("filtroDelegheUtente", CriteriaBuilder.class, Root.class);
+            Register.registerUtility(provider, ICriteriaFactory.class, Delega.class.getName());
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(SuiteDemo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(SuiteDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
 
         // gestore deleghe
         GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
-        Register.registerUtility(gestoreDeleghe, IGestoreDeleghe.class);
+        Register.registerUtility(gestoreDeleghe, IGestoreDeleghe.class);        
         
         // Plugin OoopsPlugin per interazione con OpenOffice
         OoopsPlugin ooopsPlugin = new OoopsPlugin();

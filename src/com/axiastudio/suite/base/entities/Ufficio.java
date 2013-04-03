@@ -17,6 +17,7 @@
 package com.axiastudio.suite.base.entities;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,6 +37,7 @@ public class Ufficio implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genufficio")
     private Long id;
+    @Column(name="descrizione")
     private String descrizione;
 
     public Long getId() {

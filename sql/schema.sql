@@ -45,6 +45,7 @@ CREATE TABLE utente (
     login character varying(255),
     modellatorepratiche boolean,
     nome character varying(255),
+    sigla character varying(255),
     operatoreanagrafiche boolean,
     operatorepratiche boolean,
     operatoreprotocollo boolean,
@@ -151,7 +152,8 @@ ALTER TABLE ONLY procedimento
 
 CREATE TABLE carica (
     id bigserial NOT NULL,
-    descrizione character varying(1024)
+    descrizione character varying(1024),
+    codicecarica character varying(255)
 );
 ALTER TABLE procedimenti.carica OWNER TO postgres;
 ALTER TABLE ONLY carica
@@ -512,6 +514,8 @@ CREATE TABLE movimentodetermina (
     annoesercizio bigint
 );
 ALTER TABLE deliberedetermine.movimentodetermina OWNER TO postgres;
+ALTER TABLE ONLY movimentodetermina
+    ADD CONSTRAINT movimentodetermina_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_determina FOREIGN KEY (determina) REFERENCES determina(id);
 ALTER TABLE ONLY movimentodetermina

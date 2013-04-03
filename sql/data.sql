@@ -9,11 +9,11 @@ INSERT INTO ufficio (id, descrizione) VALUES (4, 'Ufficio edilizia');
 INSERT INTO ufficio (id, descrizione) VALUES (5, 'Ufficio protocollo');
 SELECT setval('base.ufficio_id_seq', 6, true);
 
-INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (1, true, false, NULL, 'admin', false, 'Utente amministrativo', false, false, false, '956b329eb8028e15ac00279623f2ef76', false, false, false, false, false);
-INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (2, false, false, NULL, 'mario', false, 'Mario', true, true, true, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
-INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (3, false, false, NULL, 'luigi', false, 'Luigi', true, true, true, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
-INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (4, false, false, NULL, 'sindaco', false, 'Franco il sindaco', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
-INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (5, false, false, NULL, 'segretario', false, 'Beppe il segretario', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (1, true, false, NULL, 'admin', 'ADM', false, 'Utente amministrativo', false, false, false, '956b329eb8028e15ac00279623f2ef76', false, false, false, false, false);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (2, false, false, NULL, 'mario', 'M.S.', false, 'Mario', true, true, true, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (3, false, false, NULL, 'luigi', 'L.B.', false, 'Luigi', true, true, true, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (4, false, false, NULL, 'sindaco', 'F.S.', false, 'Franco il sindaco', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (5, false, false, NULL, 'segretario', 'B.S.', false, 'Beppe il segretario', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
 SELECT setval('base.utente_id_seq', 6, true);
 
 INSERT INTO ufficioutente (id, privato, ricerca, visualizza, ufficio, utente) VALUES (1, NULL, true, true, 1, 3);
@@ -79,12 +79,12 @@ SET search_path = procedimenti, pg_catalog;
 INSERT INTO procedimento (id, descrizione) VALUES (1, 'Unico procedimento di prova');
 SELECT setval('procedimenti.procedimento_id_seq', 2, true);
 
-INSERT INTO carica (id, descrizione) VALUES (1, 'Sindaco');
-INSERT INTO carica (id, descrizione) VALUES (2, 'Vice Sindaco');
-INSERT INTO carica (id, descrizione) VALUES (3, 'Segretario');
-INSERT INTO carica (id, descrizione) VALUES (4, 'Responsabile di servizio');
-INSERT INTO carica (id, descrizione) VALUES (5, 'Assessore attività culturali');
-INSERT INTO carica (id, descrizione) VALUES (6, 'Assessore attività sociali');
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (1, 'Sindaco', 'SINDACO');
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (2, 'Vice Sindaco', 'VICE_SINDACO');
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (3, 'Segretario', 'SEGRETARIO');
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (4, 'Responsabile di servizio', 'RESPONSABILE_DI_SERVIZIO');
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (5, 'Assessore attività culturali', null);
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (6, 'Assessore attività sociali', null);
 SELECT setval('procedimenti.carica_id_seq', 7, true);
 
 INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)

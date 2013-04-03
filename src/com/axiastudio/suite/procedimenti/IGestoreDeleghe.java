@@ -29,16 +29,16 @@ import java.util.Date;
  */
 public interface IGestoreDeleghe {
     
-    public Boolean checkDelega(CodiceCarica codiceCarica);
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica);
 
-    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio);
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio);
     
-    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento);
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento);
 
-    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio);
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio);
 
-    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente);
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente);
 
-    public Boolean checkDelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica);
+    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica);
 
 }
