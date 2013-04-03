@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.finanziaria.entities;
 
+import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
 import java.util.List;
 
@@ -33,5 +34,7 @@ import java.util.List;
 public interface IFinanziaria {
     
     public List<MovimentoDetermina> getMovimentiDetermina(String attoOBozza, String organoSettore, String anno, String numero);
+    
+    public void apriGestoreMovimenti(Determina determina);
     
 }
