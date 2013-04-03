@@ -287,7 +287,7 @@ public class SuiteDemo {
         rules.put("numero", "return Determina.getAnno()+\" - \"+Determina.getNumero();");
         rules.put("protocollo", "return Determina.getIdDocumento();");
         RuleSet ruleSet = new RuleSet(rules);
-        IStreamProvider streamProviderDetermina = new FileStreamProvider("/Users/tiziano/NetBeansProjects/PyPaPi/Suite/demo/determina.ott");
+        IStreamProvider streamProviderDetermina = new FileStreamProvider("demo/determina.ott");
         Map<String, Object> objectsMap = new HashMap();
         objectsMap.put("gestoreDeleghe", gestoreDeleghe);
         Template template = new Template(streamProviderDetermina, "Determina", "Template determina", ruleSet, objectsMap);
