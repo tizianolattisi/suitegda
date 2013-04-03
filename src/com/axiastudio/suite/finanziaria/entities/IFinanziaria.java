@@ -25,15 +25,16 @@ import java.util.List;
  * @author AXIA Studio (http://www.axiastudio.com)
  * 
  * Per le realtà che hanno una gestione delle finanziaria è possibile scrivere
- * e registrare un utilità per la gestione dell'interoperabilità.
+ * e registrare un'utilità per la gestione dell'interoperabilità di un gestore
+ * della finanziaria esterno.
  * 
- * IFinanziaria è un'interfaccia segnaposto. L'utilità registrata non deve
- * necessariamente dichiarare la sua implementazione.
+ * Tale utilità deve essere in grado di fornire la lista dei movimenti legati ad
+ * una determina, e di aprire un gestore dei movimenti per la loro modifica.
  * 
  */
 public interface IFinanziaria {
     
-    public List<MovimentoDetermina> getMovimentiDetermina(String attoOBozza, String organoSettore, String anno, String numero);
+    public List<MovimentoDetermina> getMovimentiDetermina(Determina determina);
     
     public void apriGestoreMovimenti(Determina determina);
     
