@@ -75,8 +75,6 @@ public class FormDelega extends Window {
             delega.setSuassenza(Boolean.FALSE);
             delega.setDelegato(Boolean.TRUE);
             delega.setInizio(new Date());
-            Controller controller = (Controller) Register.queryUtility(IController.class, Delega.class.getName());
-            controller.commit(delega);
             this.getContext().insertElement(delega);
         }
     }
