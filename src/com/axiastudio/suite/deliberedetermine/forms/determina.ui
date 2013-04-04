@@ -403,16 +403,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>Impegni (da finanziaria)</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_9">
-        <item>
-         <widget class="QTableWidget" name="tableWidgetImpegni"/>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </item>
    </layout>
