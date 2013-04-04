@@ -36,7 +36,7 @@
       </rect>
      </property>
      <property name="column" stdset="0">
-      <string>tipologiaSeduta</string>
+      <string>tipoSeduta</string>
      </property>
     </widget>
     <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">

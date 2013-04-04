@@ -36,9 +36,9 @@
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="QComboBox" name="comboBoxTipologiaSoggetto">
+     <widget class="QComboBox" name="comboBoxTipoSoggetto">
       <property name="column" stdset="0">
-       <string>tipologiaSoggetto</string>
+       <string>Tipo</string>
       </property>
       <property name="search" stdset="0">
        <bool>true</bool>

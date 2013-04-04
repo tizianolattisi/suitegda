@@ -46,7 +46,7 @@ import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.pratiche.entities.TipologiaPratica;
+import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
@@ -69,8 +69,8 @@ import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
-import com.axiastudio.suite.sedute.entities.TipologiaSeduta;
-import com.axiastudio.suite.sedute.forms.FormTipologiaSeduta;
+import com.axiastudio.suite.sedute.entities.TipoSeduta;
+import com.axiastudio.suite.sedute.forms.FormTipoSeduta;
 import com.trolltech.qt.gui.QFileDialog;
 import com.trolltech.qt.gui.QMessageBox;
 import java.io.IOException;
@@ -139,10 +139,10 @@ public class SuiteDemo {
                               "Pratiche");
 
         Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/pratiche/forms/tipologiapratica.ui",
-                              TipologiaPratica.class,
+                              "classpath:com/axiastudio/suite/pratiche/forms/tipopratica.ui",
+                              TipoPratica.class,
                               Window.class,
-                              "Tipologia Pratica");
+                              "Tipo Pratica");
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
@@ -193,10 +193,10 @@ public class SuiteDemo {
                               "Carica-commissione");
         
         Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/sedute/forms/tipologiaseduta.ui",
-                              TipologiaSeduta.class,
-                              FormTipologiaSeduta.class,
-                              "Tipologia seduta");
+                              "classpath:com/axiastudio/suite/sedute/forms/tiposeduta.ui",
+                              TipoSeduta.class,
+                              FormTipoSeduta.class,
+                              "Tipo seduta");
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/sedute/forms/seduta.ui",

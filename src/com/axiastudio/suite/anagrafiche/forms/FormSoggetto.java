@@ -28,9 +28,9 @@ public class FormSoggetto extends Window {
     
     public FormSoggetto(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
-        QComboBox tipologiaSoggetto = (QComboBox) this.findChild(QComboBox.class, "comboBoxTipologiaSoggetto");
-        tipologiaSoggetto.currentIndexChanged.connect(this, "refresh(Integer)");
-        this.refresh(tipologiaSoggetto.currentIndex());
+        QComboBox tipoSoggetto = (QComboBox) this.findChild(QComboBox.class, "comboBoxTipoSoggetto");
+        tipoSoggetto.currentIndexChanged.connect(this, "refresh(Integer)");
+        this.refresh(tipoSoggetto.currentIndex());
     }
     
     private void refresh(Integer idx){

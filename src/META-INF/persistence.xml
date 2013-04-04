@@ -15,10 +15,8 @@
     <class>com.axiastudio.suite.protocollo.entities.Fascicolo</class>
     <class>com.axiastudio.suite.base.entities.Utente</class>
     <class>com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo</class>
-    <class>com.axiastudio.suite.pratiche.entities.TipologiaPratica</class>
     <class>com.axiastudio.suite.procedimenti.entities.Procedimento</class>
     <class>com.axiastudio.suite.pubblicazioni.entities.Pubblicazione</class>
-    <class>com.axiastudio.suite.sedute.entities.TipologiaSeduta</class>
     <class>com.axiastudio.suite.sedute.entities.Seduta</class>
     <class>com.axiastudio.suite.sedute.entities.CaricaCommissione</class>
     <class>com.axiastudio.suite.sedute.entities.Commissione</class>
@@ -35,6 +33,8 @@
     <class>com.axiastudio.suite.procedimenti.entities.NormaProcedimento</class>
     <class>com.axiastudio.suite.procedimenti.entities.UfficioProcedimento</class>
     <class>com.axiastudio.suite.procedimenti.entities.UtenteProcedimento</class>
+    <class>com.axiastudio.suite.pratiche.entities.TipoPratica</class>
+    <class>com.axiastudio.suite.sedute.entities.TipoSeduta</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>

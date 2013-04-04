@@ -27,10 +27,9 @@ import com.axiastudio.pypapi.ui.IUIFile;
 import com.axiastudio.suite.base.entities.CambiaPassword;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.pratiche.forms.FormTipologiePratica;
+import com.axiastudio.suite.pratiche.forms.FormTipoPratica;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
-import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -135,15 +134,15 @@ public class Mdi extends QMainWindow {
         itemPratiche.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemPratiche.setText(1, "com.axiastudio.suite.pratiche.entities.Pratica");
 
-        QTreeWidgetItem itemTipologiaPratica = new QTreeWidgetItem(itemPraticheRoot);
-        itemTipologiaPratica.setText(0, "Tipologia pratica");
-        itemTipologiaPratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
-        itemTipologiaPratica.setText(1, "com.axiastudio.suite.pratiche.entities.TipologiaPratica");
+        QTreeWidgetItem itemTipoPratica = new QTreeWidgetItem(itemPraticheRoot);
+        itemTipoPratica.setText(0, "Tipo di pratica");
+        itemTipoPratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemTipoPratica.setText(1, "com.axiastudio.suite.pratiche.entities.TipoPratica");
         
-        QTreeWidgetItem itemTipologiePratica = new QTreeWidgetItem(itemPraticheRoot);
-        itemTipologiePratica.setText(0, "Tipologie Pratica");
-        itemTipologiePratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
-        itemTipologiePratica.setText(1, "TIPOLOGIEPRATICA");
+        QTreeWidgetItem itemTipiPratica = new QTreeWidgetItem(itemPraticheRoot);
+        itemTipiPratica.setText(0, "Struttura tipi di pratica");
+        itemTipiPratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+        itemTipiPratica.setText(1, "TIPIPRATICA");
 
         /* Delibere e determine */
         QTreeWidgetItem itemDelibereDetermineRoot = new QTreeWidgetItem(this.tree);
@@ -205,11 +204,11 @@ public class Mdi extends QMainWindow {
         itemCaricaCommissione.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemCaricaCommissione.setText(1, "com.axiastudio.suite.sedute.entities.CaricaCommissione");
         
-        QTreeWidgetItem itemTipologieSeduta = new QTreeWidgetItem(itemConfigurazioneSeduteRoot);
-        itemTipologieSeduta.setText(0, "Tipologie seduta");
-        itemTipologieSeduta.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
-        itemTipologieSeduta.setText(1, "com.axiastudio.suite.sedute.entities.TipologiaSeduta");
-        itemTipologieSeduta.setDisabled(!autenticato.getAmministratore());
+        QTreeWidgetItem itemTipoSeduta = new QTreeWidgetItem(itemConfigurazioneSeduteRoot);
+        itemTipoSeduta.setText(0, "Tipi di seduta");
+        itemTipoSeduta.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
+        itemTipoSeduta.setText(1, "com.axiastudio.suite.sedute.entities.TipoSeduta");
+        itemTipoSeduta.setDisabled(!autenticato.getAmministratore());
 
         /* Amministrazione */
         QTreeWidgetItem itemAmministrazione = new QTreeWidgetItem(this.tree);
@@ -254,10 +253,10 @@ public class Mdi extends QMainWindow {
             FormTitolario titolario = new FormTitolario();
             this.workspace.addSubWindow(titolario);
             int exec = titolario.exec();
-        } else if( "TIPOLOGIEPRATICA".equals(formName) ){
-            FormTipologiePratica tipologiepratica = new FormTipologiePratica();
-            this.workspace.addSubWindow(tipologiepratica);
-            int exec = tipologiepratica.exec();
+        } else if( "TIPIPRATICA".equals(formName) ){
+            FormTipoPratica tipipratica = new FormTipoPratica();
+            this.workspace.addSubWindow(tipipratica);
+            int exec = tipipratica.exec();
         } else if( "SCRIVANIA".equals(formName) ){
             FormScrivania form = new FormScrivania();
             this.workspace.addSubWindow(form);

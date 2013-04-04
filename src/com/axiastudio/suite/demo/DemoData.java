@@ -23,7 +23,7 @@ import com.axiastudio.suite.Suite;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.anagrafiche.entities.SessoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
-import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
+import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
@@ -232,7 +232,7 @@ public class DemoData {
         tiziano.setNome("Tiziano");
         tiziano.setCognome("Lattisi");
         tiziano.setSessoSoggetto(SessoSoggetto.M);
-        tiziano.setTipologiaSoggetto(TipologiaSoggetto.PERSONA);
+        tiziano.setTipo(TipoSoggetto.PERSONA);
         em.getTransaction().begin();
         em.persist(tiziano);
         em.getTransaction().commit();

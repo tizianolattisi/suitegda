@@ -20,7 +20,7 @@ import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.SessoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
-import com.axiastudio.suite.anagrafiche.entities.TipologiaSoggetto;
+import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QGridLayout;
@@ -196,18 +196,18 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
             sessi.add(SessoSoggetto.ND);
             sessi.add(SessoSoggetto.M);
             sessi.add(SessoSoggetto.F);
-            s.setTipologiaSoggetto(TipologiaSoggetto.PERSONA);
+            s.setTipo(TipoSoggetto.PERSONA);
             s.setNome(lineEditNome.text());
             s.setCognome(lineEditCognome.text());
             s.setCodiceFiscale(lineEditCodicefiscale.text());
             s.setSessoSoggetto(sessi.get(comboBoxSesso.currentIndex()));
         } else if( idx == 1 ){
-            s.setTipologiaSoggetto(TipologiaSoggetto.AZIENDA);
+            s.setTipo(TipoSoggetto.AZIENDA);
             s.setRagionesociale(lineEditRagionesociale.text());
             s.setCodiceFiscale(lineEditCodicefiscale2.text());
             //s.setPartitaiva(lineEditPartitaiva.text());
         } else if( idx == 2 ){
-            s.setTipologiaSoggetto(TipologiaSoggetto.ENTE);
+            s.setTipo(TipoSoggetto.ENTE);
             s.setDenominazione(lineEditDenominazione.text());
             //s.setDenominazione2(lineEditDenominazione2.text());
             //s.setDenominazione3(lineEditDenominazione3.text());

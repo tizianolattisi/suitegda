@@ -34,19 +34,19 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema="PRATICHE")
-@SequenceGenerator(name="gentipologiapratica", sequenceName="pratiche.tipologiapratica_id_seq", initialValue=1, allocationSize=1)
-public class TipologiaPratica implements Serializable {
+@SequenceGenerator(name="gentipopratica", sequenceName="pratiche.tipopratica_id_seq", initialValue=1, allocationSize=1)
+public class TipoPratica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentipologiapratica")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentipopratica")
     private Long id;
     @Column(name="codice")
     private String codice;
     @Column(name="descrizione")
     private String descrizione;
-    @JoinColumn(name = "tipologiapadre", referencedColumnName = "id")
+    @JoinColumn(name = "tipopadre", referencedColumnName = "id")
     @ManyToOne
-    private TipologiaPratica tipologiapadre;
+    private TipoPratica tipopadre;
     @JoinColumn(name="procedimento", referencedColumnName = "id")
     @ManyToOne
     private Procedimento procedimento;
@@ -67,12 +67,12 @@ public class TipologiaPratica implements Serializable {
         this.codice = codice;
     }
 
-    public TipologiaPratica getTipologiapadre() {
-        return tipologiapadre;
+    public TipoPratica getTipopadre() {
+        return tipopadre;
     }
 
-    public void setTipologiapadre(TipologiaPratica tipologiapadre) {
-        this.tipologiapadre = tipologiapadre;
+    public void setTipopadre(TipoPratica tipopadre) {
+        this.tipopadre = tipopadre;
     }
 
     public String getDescrizione() {
@@ -101,10 +101,10 @@ public class TipologiaPratica implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipologiaPratica)) {
+        if (!(object instanceof TipoPratica)) {
             return false;
         }
-        TipologiaPratica other = (TipologiaPratica) object;
+        TipoPratica other = (TipoPratica) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
