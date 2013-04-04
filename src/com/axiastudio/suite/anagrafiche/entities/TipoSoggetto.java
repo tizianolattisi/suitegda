@@ -20,6 +20,6 @@ package com.axiastudio.suite.anagrafiche.entities;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public enum TipologiaSoggetto {
+public enum TipoSoggetto {
     PERSONA, AZIENDA, ENTE
 }

@@ -32,9 +32,9 @@ public class Soggetto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gensoggetto")
     private Long id;
-    //@Column(name="tipologiasoggetto", nullable=false)
+    @Column(name="tipo", nullable=false)
     @Enumerated(EnumType.STRING)
-    private TipologiaSoggetto tipo = TipologiaSoggetto.PERSONA;
+    private TipoSoggetto tipo = TipoSoggetto.PERSONA;
     @Column(name="sessosoggetto")
     @Enumerated(EnumType.STRING)
     private SessoSoggetto sessoSoggetto;
@@ -96,11 +96,11 @@ public class Soggetto implements Serializable {
         this.ragionesociale = ragionesociale;
     }
 
-    public TipologiaSoggetto getTipo() {
+    public TipoSoggetto getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipologiaSoggetto tipo) {
+    public void setTipo(TipoSoggetto tipo) {
         this.tipo = tipo;
     }
 
@@ -169,11 +169,11 @@ public class Soggetto implements Serializable {
         if( this.tipo == null ){
             return "-";
         }
-        if( this.tipo.equals(TipologiaSoggetto.PERSONA) ){
+        if( this.tipo.equals(TipoSoggetto.PERSONA) ){
             return this.nome+" "+this.cognome;
-        } else if( this.tipo.equals(TipologiaSoggetto.AZIENDA) ){
+        } else if( this.tipo.equals(TipoSoggetto.AZIENDA) ){
             return this.ragionesociale;
-        } else if ( this.tipo.equals(TipologiaSoggetto.ENTE) ){
+        } else if ( this.tipo.equals(TipoSoggetto.ENTE) ){
             return this.denominazione;
         }
         return "-";
