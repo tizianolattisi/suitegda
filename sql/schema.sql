@@ -501,8 +501,6 @@ CREATE TABLE movimentodetermina (
     id bigserial NOT NULL,
     determina bigint,
     capitolo bigint,
-    codicecapitolo character varying(255),
-    descrizionecapitolo character varying(255),
     articolo character varying(255),
     codicemeccanografico character varying(255),
     impegno character varying(255),
