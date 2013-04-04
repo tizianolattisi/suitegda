@@ -97,7 +97,7 @@ CREATE TABLE soggetto (
     nome character varying(255),
     ragionesociale character varying(255),
     sessosoggetto character varying(255),
-    tipologiasoggetto character varying(255),
+    tiposoggetto character varying(255),
     titolosoggetto character varying(255)
 );
 ALTER TABLE anagrafiche.soggetto OWNER TO postgres;
@@ -195,20 +195,20 @@ ALTER TABLE ONLY delega
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
-CREATE TABLE tipologiapratica (
+CREATE TABLE tipopratica (
     id bigserial NOT NULL,
     codice character varying(255),
     descrizione character varying(255),
-    tipologiapadre bigint,
+    tipopadre bigint,
     procedimento bigint
 );
-ALTER TABLE pratiche.tipologiapratica OWNER TO postgres;
-ALTER TABLE ONLY tipologiapratica
-    ADD CONSTRAINT tipologiapratica_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY tipologiapratica
-    ADD CONSTRAINT fk_tipologiapratica_tipologiapadre FOREIGN KEY (tipologiapadre) REFERENCES pratiche.tipologiapratica(id);
-ALTER TABLE ONLY tipologiapratica
-    ADD CONSTRAINT fk_tipologiapratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
+ALTER TABLE pratiche.tipopratica OWNER TO postgres;
+ALTER TABLE ONLY tipopratica
+    ADD CONSTRAINT tipopratica_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY tipopratica
+    ADD CONSTRAINT fk_tipopratica_tipopadre FOREIGN KEY (tipopadre) REFERENCES pratiche.tipopratica(id);
+ALTER TABLE ONLY tipopratica
+    ADD CONSTRAINT fk_tipopratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
 
 
 CREATE TABLE pratica (
@@ -223,7 +223,7 @@ CREATE TABLE pratica (
     gestione bigint,
     ubicazione bigint,
     dettaglioubicazione character varying(255),
-    tipologiapratica bigint
+    tipopratica bigint
 );
 ALTER TABLE pratiche.pratica OWNER TO postgres;
 ALTER TABLE ONLY pratica
@@ -237,7 +237,7 @@ ALTER TABLE ONLY pratica
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_ubicazione FOREIGN KEY (ubicazione) REFERENCES base.ufficio(id);
 ALTER TABLE ONLY pratica
-    ADD CONSTRAINT fk_pratica_tipologiapratica FOREIGN KEY (tipologiapratica) REFERENCES pratiche.tipologiapratica(id);
+    ADD CONSTRAINT fk_pratica_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
 
 
 
@@ -390,19 +390,19 @@ ALTER TABLE sedute.commissione OWNER TO postgres;
 ALTER TABLE ONLY commissione
     ADD CONSTRAINT commissione_pkey PRIMARY KEY (id);
 
-CREATE TABLE tipologiaseduta (
+CREATE TABLE tiposeduta (
     id bigserial NOT NULL,
     descrizione character varying(1024),
     commissione bigint,
-    tipologiapratica bigint
+    tipopratica bigint
 );
-ALTER TABLE sedute.tipologiaseduta OWNER TO postgres;
-ALTER TABLE ONLY tipologiaseduta
-    ADD CONSTRAINT tipologiaseduta_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY tipologiaseduta
-    ADD CONSTRAINT fk_tipologiaseduta_commissione FOREIGN KEY (commissione) REFERENCES sedute.commissione(id);
-ALTER TABLE ONLY tipologiaseduta
-    ADD CONSTRAINT fk_tipologiaseduta_tipologiapratica FOREIGN KEY (tipologiapratica) REFERENCES pratiche.tipologiapratica(id);
+ALTER TABLE sedute.tiposeduta OWNER TO postgres;
+ALTER TABLE ONLY tiposeduta
+    ADD CONSTRAINT tiposeduta_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY tiposeduta
+    ADD CONSTRAINT fk_tiposeduta_commissione FOREIGN KEY (commissione) REFERENCES sedute.commissione(id);
+ALTER TABLE ONLY tiposeduta
+    ADD CONSTRAINT fk_tiposeduta_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
 
 CREATE TABLE caricacommissione (
     id bigserial NOT NULL,
@@ -420,7 +420,7 @@ ALTER TABLE ONLY caricacommissione
 CREATE TABLE seduta (
     id bigserial NOT NULL,
     datacreazione date,
-    tipologiaseduta bigint,
+    tiposeduta bigint,
     dataoraconvocazione timestamp,
     faseseduta character varying(255),
     statoseduta character varying(255),
@@ -432,7 +432,7 @@ ALTER TABLE sedute.seduta OWNER TO postgres;
 ALTER TABLE ONLY seduta
     ADD CONSTRAINT seduta_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY seduta
-    ADD CONSTRAINT fk_seduta_tipologiaseduta FOREIGN KEY (tipologiaseduta) REFERENCES sedute.tipologiaseduta(id);
+    ADD CONSTRAINT fk_seduta_tiposeduta FOREIGN KEY (tiposeduta) REFERENCES sedute.tiposeduta(id);
     
 
 -- Determine
