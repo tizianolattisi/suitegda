@@ -232,7 +232,7 @@ public class DemoData {
         tiziano.setNome("Tiziano");
         tiziano.setCognome("Lattisi");
         tiziano.setSessoSoggetto(SessoSoggetto.M);
-        tiziano.setTipologiaSoggetto(TipologiaSoggetto.PERSONA);
+        tiziano.setTipo(TipologiaSoggetto.PERSONA);
         em.getTransaction().begin();
         em.persist(tiziano);
         em.getTransaction().commit();

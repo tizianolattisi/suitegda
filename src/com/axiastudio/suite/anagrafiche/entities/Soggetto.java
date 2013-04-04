@@ -32,9 +32,9 @@ public class Soggetto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gensoggetto")
     private Long id;
-    @Column(name="tipologiasoggetto", nullable=false)
+    //@Column(name="tipologiasoggetto", nullable=false)
     @Enumerated(EnumType.STRING)
-    private TipologiaSoggetto tipologiaSoggetto = TipologiaSoggetto.PERSONA;
+    private TipologiaSoggetto tipo = TipologiaSoggetto.PERSONA;
     @Column(name="sessosoggetto")
     @Enumerated(EnumType.STRING)
     private SessoSoggetto sessoSoggetto;
@@ -96,12 +96,12 @@ public class Soggetto implements Serializable {
         this.ragionesociale = ragionesociale;
     }
 
-    public TipologiaSoggetto getTipologiaSoggetto() {
-        return tipologiaSoggetto;
+    public TipologiaSoggetto getTipo() {
+        return tipo;
     }
 
-    public void setTipologiaSoggetto(TipologiaSoggetto tipologiaSoggetto) {
-        this.tipologiaSoggetto = tipologiaSoggetto;
+    public void setTipo(TipologiaSoggetto tipo) {
+        this.tipo = tipo;
     }
 
     public SessoSoggetto getSessoSoggetto() {
@@ -166,14 +166,14 @@ public class Soggetto implements Serializable {
 
     @Override
     public String toString() {
-        if( this.tipologiaSoggetto == null ){
+        if( this.tipo == null ){
             return "-";
         }
-        if( this.tipologiaSoggetto.equals(TipologiaSoggetto.PERSONA) ){
+        if( this.tipo.equals(TipologiaSoggetto.PERSONA) ){
             return this.nome+" "+this.cognome;
-        } else if( this.tipologiaSoggetto.equals(TipologiaSoggetto.AZIENDA) ){
+        } else if( this.tipo.equals(TipologiaSoggetto.AZIENDA) ){
             return this.ragionesociale;
-        } else if ( this.tipologiaSoggetto.equals(TipologiaSoggetto.ENTE) ){
+        } else if ( this.tipo.equals(TipologiaSoggetto.ENTE) ){
             return this.denominazione;
         }
         return "-";
