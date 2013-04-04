@@ -167,6 +167,22 @@ public class Mdi extends QMainWindow {
         itemSedute.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
         itemSedute.setText(1, "com.axiastudio.suite.sedute.entities.Seduta");
         itemSedute.setDisabled(true);
+
+        /* Procedimento */
+        QTreeWidgetItem itemProcedimentiRoot = new QTreeWidgetItem(this.tree);
+        itemProcedimentiRoot.setText(0, "Procedimenti");
+        this.tree.addTopLevelItem(itemProcedimentiRoot);
+        itemProcedimentiRoot.setDisabled(!autenticato.getAmministratore());
+
+        QTreeWidgetItem itemProcedimento = new QTreeWidgetItem(itemProcedimentiRoot);
+        itemProcedimento.setText(0, "Procedimenti");
+        itemProcedimento.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemProcedimento.setText(1, "com.axiastudio.suite.procedimenti.entities.Procedimento");
+
+        QTreeWidgetItem itemNorma = new QTreeWidgetItem(itemProcedimentiRoot);
+        itemNorma.setText(0, "Norme");
+        itemNorma.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemNorma.setText(1, "com.axiastudio.suite.procedimenti.entities.Norma");
         
         /* Configurazione sedute */
         QTreeWidgetItem itemConfigurazioneSeduteRoot = new QTreeWidgetItem(this.tree);

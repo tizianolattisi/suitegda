@@ -52,6 +52,7 @@ import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
+import com.axiastudio.suite.procedimenti.entities.Norma;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.procedimenti.forms.FormDelega;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
@@ -219,14 +220,20 @@ public class SuiteDemo {
                               FormDetermina.class,
                               "Determine");
 
-       Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/deliberedetermine/forms/movimentodetermina.ui",
-                              MovimentoDetermina.class,
-                              Dialog.class,
-                              "Movimento determina");
-        
+        Register.registerForm(db.getEntityManagerFactory(),
+                               "classpath:com/axiastudio/suite/deliberedetermine/forms/movimentodetermina.ui",
+                               MovimentoDetermina.class,
+                               Dialog.class,
+                               "Movimento determina");
+
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
+                              Norma.class,
+                              Window.class,
+                              "Norma");
+       
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/procedimenti/forms/procedimento.ui",
                               Procedimento.class,
                               Window.class,
                               "Procedimenti");

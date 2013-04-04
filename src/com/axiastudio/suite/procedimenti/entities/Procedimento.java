@@ -16,12 +16,20 @@
  */
 package com.axiastudio.suite.procedimenti.entities;
 
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import java.io.Serializable;
+import java.util.Collection;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -39,6 +47,23 @@ public class Procedimento implements Serializable {
     private Long id;
     @Column(name="descrizione")
     private String descrizione;
+    @Column(name="normativa")
+    private String normativa;
+    @Column(name="maxgiorniistruttoria")
+    private Integer maxGiorniIstruttoria;
+    @Enumerated(EnumType.STRING)
+    private Iniziativa iniziativa;
+    @JoinColumn(name = "soggetto", referencedColumnName = "id")
+    @ManyToOne
+    private Soggetto soggetto;
+    @Column(name="attivo")
+    private Boolean attivo=true;
+    @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<NormaProcedimento> normaProcedimentoCollection;
+    @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<UfficioProcedimento> ufficioProcedimentoCollection;
+    @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<UtenteProcedimento> utenteProcedimentoCollection;
 
     public Long getId() {
         return id;
@@ -54,6 +79,70 @@ public class Procedimento implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public String getNormativa() {
+        return normativa;
+    }
+
+    public void setNormativa(String normativa) {
+        this.normativa = normativa;
+    }
+
+    public Integer getMaxGiorniIstruttoria() {
+        return maxGiorniIstruttoria;
+    }
+
+    public void setMaxGiorniIstruttoria(Integer maxGiorniIstruttoria) {
+        this.maxGiorniIstruttoria = maxGiorniIstruttoria;
+    }
+
+    public Iniziativa getIniziativa() {
+        return iniziativa;
+    }
+
+    public void setIniziativa(Iniziativa iniziativa) {
+        this.iniziativa = iniziativa;
+    }
+
+    public Soggetto getSoggetto() {
+        return soggetto;
+    }
+
+    public void setSoggetto(Soggetto soggetto) {
+        this.soggetto = soggetto;
+    }
+
+    public Boolean getAttivo() {
+        return attivo;
+    }
+
+    public void setAttivo(Boolean attivo) {
+        this.attivo = attivo;
+    }
+
+    public Collection<NormaProcedimento> getNormaProcedimentoCollection() {
+        return normaProcedimentoCollection;
+    }
+
+    public void setNormaProcedimentoCollection(Collection<NormaProcedimento> normaProcedimentoCollection) {
+        this.normaProcedimentoCollection = normaProcedimentoCollection;
+    }
+
+    public Collection<UfficioProcedimento> getUfficioProcedimentoCollection() {
+        return ufficioProcedimentoCollection;
+    }
+
+    public void setUfficioProcedimentoCollection(Collection<UfficioProcedimento> ufficioProcedimentoCollection) {
+        this.ufficioProcedimentoCollection = ufficioProcedimentoCollection;
+    }
+
+    public Collection<UtenteProcedimento> getUtenteProcedimentoCollection() {
+        return utenteProcedimentoCollection;
+    }
+
+    public void setUtenteProcedimentoCollection(Collection<UtenteProcedimento> utenteProcedimentoCollection) {
+        this.utenteProcedimentoCollection = utenteProcedimentoCollection;
     }
 
     @Override
