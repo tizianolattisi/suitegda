@@ -28,7 +28,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -53,10 +52,6 @@ public class MovimentoDetermina implements Serializable {
     @JoinColumn(name = "capitolo", referencedColumnName = "id")
     @ManyToOne
     private Capitolo capitolo;
-    @Column(name="codicecapitolo")
-    private Long codiceCapitolo;
-    @Column(name="descrizionecapitolo")
-    private String descrizioneCapitolo;
     @Column(name="articolo")
     private String articolo;
     @Column(name="codicemeccanografico")
@@ -104,22 +99,6 @@ public class MovimentoDetermina implements Serializable {
 
     public void setCapitolo(Capitolo capitolo) {
         this.capitolo = capitolo;
-    }
-
-    public Long getCodiceCapitolo() {
-        return codiceCapitolo;
-    }
-
-    public void setCodiceCapitolo(Long codiceCapitolo) {
-        this.codiceCapitolo = codiceCapitolo;
-    }
-
-    public String getDescrizioneCapitolo() {
-        return descrizioneCapitolo;
-    }
-
-    public void setDescrizioneCapitolo(String descrizioneCapitolo) {
-        this.descrizioneCapitolo = descrizioneCapitolo;
     }
 
     public String getArticolo() {
