@@ -46,9 +46,9 @@ public class Seduta implements Serializable {
     @Column(name="datacreazione")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datacreazione;
-    @JoinColumn(name = "tipologiaseduta", referencedColumnName = "id")
+    @JoinColumn(name = "tiposeduta", referencedColumnName = "id")
     @ManyToOne
-    private TipologiaSeduta tipologiaSeduta;
+    private TipoSeduta tipoSeduta;
     @Column(name="dataoraconvocazione")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataoraconvocazione;
@@ -83,12 +83,12 @@ public class Seduta implements Serializable {
         this.datacreazione = datacreazione;
     }
 
-    public TipologiaSeduta getTipologiaSeduta() {
-        return tipologiaSeduta;
+    public TipoSeduta getTipoSeduta() {
+        return tipoSeduta;
     }
 
-    public void setTipologiaSeduta(TipologiaSeduta tipologiaSeduta) {
-        this.tipologiaSeduta = tipologiaSeduta;
+    public void setTipoSeduta(TipoSeduta tipo) {
+        this.tipoSeduta = tipo;
     }
 
     public Date getDataoraconvocazione() {

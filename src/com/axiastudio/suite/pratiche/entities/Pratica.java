@@ -61,9 +61,9 @@ public class Pratica implements Serializable {
     private Ufficio ubicazione;
     @Column(name="dettaglioubicazione")
     private String dettaglioubicazione;
-    @JoinColumn(name = "tipologiapratica", referencedColumnName = "id")
+    @JoinColumn(name = "tipo", referencedColumnName = "id")
     @ManyToOne
-    private TipologiaPratica tipologiaPratica;
+    private TipoPratica tipo;
 
     public Long getId() {
         return id;
@@ -161,12 +161,12 @@ public class Pratica implements Serializable {
         this.dettaglioubicazione = dettaglioubicazione;
     }
 
-    public TipologiaPratica getTipologiaPratica() {
-        return tipologiaPratica;
+    public TipoPratica getTipo() {
+        return tipo;
     }
 
-    public void setTipologiaPratica(TipologiaPratica tipologiaPratica) {
-        this.tipologiaPratica = tipologiaPratica;
+    public void setTipo(TipoPratica tipo) {
+        this.tipo = tipo;
     }
 
     @Override

@@ -19,7 +19,7 @@ package com.axiastudio.suite.pratiche.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.suite.pratiche.entities.TipologiaPratica;
+import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QHBoxLayout;
@@ -43,14 +43,14 @@ import javax.persistence.criteria.Root;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class FormTipologiePratica extends QDialog {
+public class FormTipoPratica extends QDialog {
     private QTreeWidget tree;
     
-    public FormTipologiePratica(){
+    public FormTipoPratica(){
         this(null);
     }
         
-    public FormTipologiePratica(QWidget parent){
+    public FormTipoPratica(QWidget parent){
         super(parent);
         tree = new QTreeWidget();
         this.tree.header().hide();
@@ -73,42 +73,42 @@ public class FormTipologiePratica extends QDialog {
                 
     }
     
-    private List<TipologiaPratica> children(EntityManager em, TipologiaPratica parent){
+    private List<TipoPratica> children(EntityManager em, TipoPratica parent){
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery cq = cb.createQuery(TipologiaPratica.class);
-        Root root = cq.from(TipologiaPratica.class);
+        CriteriaQuery cq = cb.createQuery(TipoPratica.class);
+        Root root = cq.from(TipoPratica.class);
         if( parent == null ){
-            cq.where(cb.isNull(root.get("tipologiapadre")));
+            cq.where(cb.isNull(root.get("tipopadre")));
         } else {
-            cq.where(cb.equal(root.get("tipologiapadre"), parent));
+            cq.where(cb.equal(root.get("tipopadre"), parent));
         }
         Query q = em.createQuery(cq);
         return q.getResultList();
     }
     
-     public TipologiaPratica getSelection() {
+     public TipoPratica getSelection() {
         QTreeWidgetItem currentItem = this.tree.currentItem();
-        TipologiaPratica tipologia = (TipologiaPratica) currentItem.data(0, Qt.ItemDataRole.UserRole);
-        return tipologia;
+        TipoPratica tipo = (TipoPratica) currentItem.data(0, Qt.ItemDataRole.UserRole);
+        return tipo;
     }
    
-    public void popola(QTreeWidget tree, QTreeWidgetItem parentItem, TipologiaPratica parent){
+    public void popola(QTreeWidget tree, QTreeWidgetItem parentItem, TipoPratica parent){
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManagerFactory emf = db.getEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
-        List<TipologiaPratica> children = this.children(em, parent);
+        List<TipoPratica> children = this.children(em, parent);
         for( int i=0; i<children.size(); i++ ){
-            TipologiaPratica tipologiaPratica = (TipologiaPratica) children.get(i);
+            TipoPratica tipoPratica = (TipoPratica) children.get(i);
             QTreeWidgetItem item = new QTreeWidgetItem();
-            item.setText(0, tipologiaPratica.getCodice());
-            item.setToolTip(0, "<FONT COLOR=black>" + tipologiaPratica.getDescrizione() + "</FONT>");
-            item.setData(0, Qt.ItemDataRole.UserRole, tipologiaPratica);
+            item.setText(0, tipoPratica.getCodice());
+            item.setToolTip(0, "<FONT COLOR=black>" + tipoPratica.getDescrizione() + "</FONT>");
+            item.setData(0, Qt.ItemDataRole.UserRole, tipoPratica);
             if( parentItem == null ){
                 tree.addTopLevelItem(item);
             } else {
                 parentItem.addChild(item);
             }
-            this.popola(tree, item, tipologiaPratica);
+            this.popola(tree, item, tipoPratica);
         }
     }
 }

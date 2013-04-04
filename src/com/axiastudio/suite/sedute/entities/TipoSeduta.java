@@ -16,7 +16,7 @@
  */
 package com.axiastudio.suite.sedute.entities;
 
-import com.axiastudio.suite.pratiche.entities.TipologiaPratica;
+import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,20 +41,20 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema="SEDUTE")
-@SequenceGenerator(name="gentipologiaseduta", sequenceName="sedute.tipologiaseduta_id_seq", initialValue=1, allocationSize=1)
-public class TipologiaSeduta implements Serializable {
+@SequenceGenerator(name="gentiposeduta", sequenceName="sedute.tiposeduta_id_seq", initialValue=1, allocationSize=1)
+public class TipoSeduta implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentipologiaseduta")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentiposeduta")
     private Long id;
     @Column(name="descrizione", length=1024)
     private String descrizione;
     @JoinColumn(name = "commissione", referencedColumnName = "id")
     @ManyToOne
     private Commissione commissione;
-    @JoinColumn(name = "tipologiapratica", referencedColumnName = "id")
+    @JoinColumn(name = "tipopratica", referencedColumnName = "id")
     @ManyToOne
-    private TipologiaPratica tipologiaPratica;
+    private TipoPratica tipopratica;
 
     public Long getId() {
         return id;
@@ -80,12 +80,12 @@ public class TipologiaSeduta implements Serializable {
         this.commissione = commissione;
     }
 
-    public TipologiaPratica getTipologiaPratica() {
-        return tipologiaPratica;
+    public TipoPratica getTipopratica() {
+        return tipopratica;
     }
 
-    public void setTipologiaPratica(TipologiaPratica tipologiaPratica) {
-        this.tipologiaPratica = tipologiaPratica;
+    public void setTipopratica(TipoPratica tipopratica) {
+        this.tipopratica = tipopratica;
     }
 
     @Override
@@ -98,10 +98,10 @@ public class TipologiaSeduta implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipologiaSeduta)) {
+        if (!(object instanceof TipoSeduta)) {
             return false;
         }
-        TipologiaSeduta other = (TipologiaSeduta) object;
+        TipoSeduta other = (TipoSeduta) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

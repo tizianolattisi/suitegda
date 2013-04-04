@@ -18,8 +18,8 @@ package com.axiastudio.suite.sedute.forms;
 
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
-import com.axiastudio.suite.pratiche.entities.TipologiaPratica;
-import com.axiastudio.suite.pratiche.forms.FormTipologiePratica;
+import com.axiastudio.suite.pratiche.entities.TipoPratica;
+import com.axiastudio.suite.pratiche.forms.FormTipoPratica;
 import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QToolButton;
 
@@ -27,28 +27,28 @@ import com.trolltech.qt.gui.QToolButton;
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
-public class FormTipologiaSeduta extends Window {
+public class FormTipoSeduta extends Window {
     
-    public FormTipologiaSeduta(String uiFile, Class entityClass, String title){
+    public FormTipoSeduta(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
         
-        /* tipologia */
-        QToolButton toolButtonTipologia = (QToolButton) this.findChild(QToolButton.class, "toolButtonTipologia");
-        toolButtonTipologia.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
-        toolButtonTipologia.clicked.connect(this, "apriTipologia()");
+        /* tipo */
+        QToolButton toolButtonTipo = (QToolButton) this.findChild(QToolButton.class, "toolButtonTipo");
+        toolButtonTipo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
+        toolButtonTipo.clicked.connect(this, "apriTipo()");
     }
         
     
     /*
      * XXX: copia e incolla da FormPratica
      */
-    private void apriTipologia(){
-        FormTipologiePratica tipologie = new FormTipologiePratica();
-        int exec = tipologie.exec();
+    private void apriTipo(){
+        FormTipoPratica tipo = new FormTipoPratica();
+        int exec = tipo.exec();
         if( exec == 1 ){
-            TipologiaPratica selection = tipologie.getSelection();
-            PyPaPiComboBox comboBoxTipologia = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBoxTipologia");
-            comboBoxTipologia.select(selection);
+            TipoPratica selection = tipo.getSelection();
+            PyPaPiComboBox comboBoxTipo = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBoxTipo");
+            comboBoxTipo.select(selection);
             this.getContext().getDirty();
 
         }

@@ -79,7 +79,7 @@
      </rect>
     </property>
     <property name="column" stdset="0">
-     <string>tipologiapadre</string>
+     <string>tipopadre</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">

@@ -18,7 +18,7 @@ package com.axiastudio.suite.pratiche.forms;
 
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
-import com.axiastudio.suite.pratiche.entities.TipologiaPratica;
+import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QToolButton;
 
@@ -31,23 +31,23 @@ public class FormPratica extends Window {
     public FormPratica(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
         
-        /* tipologia */
-        QToolButton toolButtonTipologia = (QToolButton) this.findChild(QToolButton.class, "toolButtonTipologia");
-        toolButtonTipologia.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
-        toolButtonTipologia.clicked.connect(this, "apriTipologia()");
+        /* tipo */
+        QToolButton toolButtonTipo = (QToolButton) this.findChild(QToolButton.class, "toolButtonTipo");
+        toolButtonTipo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
+        toolButtonTipo.clicked.connect(this, "apriTipo()");
 
     }
     
     /*
-     * XXX: copia e incolla in FormTipologiaSeduta
+     * XXX: copia e incolla in FormTipoSeduta
      */
-    private void apriTipologia(){
-        FormTipologiePratica tipologie = new FormTipologiePratica();
-        int exec = tipologie.exec();
+    private void apriTipo(){
+        FormTipoPratica tipi = new FormTipoPratica();
+        int exec = tipi.exec();
         if( exec == 1 ){
-            TipologiaPratica selection = tipologie.getSelection();
-            PyPaPiComboBox comboBoxTipologia = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBoxTipologia");
-            comboBoxTipologia.select(selection);
+            TipoPratica selection = tipi.getSelection();
+            PyPaPiComboBox comboBoxTipo = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBoxTipo");
+            comboBoxTipo.select(selection);
             this.getContext().getDirty();
         }
     }
