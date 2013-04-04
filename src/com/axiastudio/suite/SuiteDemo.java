@@ -70,7 +70,9 @@ import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
 import com.axiastudio.suite.sedute.entities.TipologiaSeduta;
 import com.axiastudio.suite.sedute.forms.FormTipologiaSeduta;
+import com.trolltech.qt.gui.QFileDialog;
 import com.trolltech.qt.gui.QMessageBox;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -302,6 +304,23 @@ public class SuiteDemo {
         msg += "mario / super (utente normale)\n";
         msg += "admin / pypapi (utente amministratore)\n";
         QMessageBox.warning(null, "Modalità demo", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+        /* Selezione openoffice */
+        String sofficeUrl = null;
+        if( "Mac OS X".equals(System.getProperty("os.name")) ){
+            sofficeUrl = "/Applications/OpenOffice.org.app/Contents/MacOS/soffice -accept=socket,host=localhost,port=8100;urp;";
+        } else {
+            // XXX: da testare!
+            String oooDir = QFileDialog.getExistingDirectory(null, "Seleziona la cartella contenente OpenOffice");
+            sofficeUrl = oooDir + "/soffice -accept=socket,host=localhost,port=8100;urp;";
+        }
+        if( sofficeUrl != null ){
+        Runtime runtime = Runtime.getRuntime();
+            try {
+                Process proc = runtime.exec(sofficeUrl);
+            } catch (IOException ex) {
+                Logger.getLogger(SuiteDemo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
         Login login = new Login();
         int res = login.exec();
