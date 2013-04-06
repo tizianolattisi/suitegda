@@ -36,6 +36,7 @@
     <class>com.axiastudio.suite.pratiche.entities.TipoPratica</class>
     <class>com.axiastudio.suite.sedute.entities.TipoSeduta</class>
     <class>com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento</class>
+    <class>com.axiastudio.suite.deliberedetermine.entities.UfficioDetermina</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>
