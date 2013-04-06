@@ -34,9 +34,16 @@ import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
+import com.axiastudio.suite.procedimenti.entities.Iniziativa;
+import com.axiastudio.suite.procedimenti.entities.Norma;
+import com.axiastudio.suite.procedimenti.entities.NormaProcedimento;
+import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.procedimenti.entities.TipoNorma;
+import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.entities.*;
 import java.sql.Connection;
@@ -237,9 +244,65 @@ public class DemoData {
         em.persist(tiziano);
         em.getTransaction().commit();
         
+        /*
+         * TIPI DI PRATICA
+         */
+        TipoPratica det = new TipoPratica();
+        det.setCodice("DET");
+        det.setDescrizione("Determina");
+        TipoPratica detrs = new TipoPratica();
+        detrs.setCodice("DETRS");
+        detrs.setDescrizione("Determina del responsabile");
+        detrs.setTipopadre(det);
+        em.getTransaction().begin();
+        em.persist(det);
+        em.persist(detrs);
+        em.getTransaction().commit();
+        
+        /*
+         * NORME
+         */
+        Norma norma1 = new Norma();
+        norma1.setTipo(TipoNorma.COMUNALE);
+        norma1.setDescrizione("Esempio di norma comunale");
+        Norma norma2 = new Norma();
+        norma2.setTipo(TipoNorma.REGIONALE);
+        norma2.setDescrizione("Esempio di norma regionale");
+        em.getTransaction().begin();
+        em.persist(norma1);
+        em.persist(norma2);
+        em.getTransaction().commit();
+
+        /*
+         * PROCEDIMENTI
+         */
+        Procedimento procedimento = new Procedimento();
+        procedimento.setDescrizione("Determina del responsabile del servizio");
+        procedimento.setMaxGiorniIstruttoria(30);
+        procedimento.setIniziativa(Iniziativa.DI_UFFICIO);
+        procedimento.setNormativa("Descrizione generica della normativa");
+        procedimento.setAttivo(Boolean.TRUE);
+        List<NormaProcedimento> norme = new ArrayList();
+        NormaProcedimento norma1Procedimento = new NormaProcedimento();
+        norma1Procedimento.setNorma(norma1);
+        norme.add(norma1Procedimento);
+        NormaProcedimento norma2Procedimento = new NormaProcedimento();
+        norma2Procedimento.setNorma(norma2);
+        norme.add(norma2Procedimento);
+        procedimento.setNormaProcedimentoCollection(norme);
+        List<TipoPraticaProcedimento> tipiPratica = new ArrayList();
+        TipoPraticaProcedimento detrsProcedimento = new TipoPraticaProcedimento();
+        detrsProcedimento.setTipoPratica(detrs);
+        tipiPratica.add(detrsProcedimento);
+        procedimento.setTipoPraticaProcedimentoCollection(tipiPratica);
+        em.getTransaction().begin();
+        em.persist(procedimento);
+        em.getTransaction().commit();
+        
         // pratiche
         Pratica pratica = new Pratica();
         pratica.setDescrizione("Pratica demo");
+        pratica.setTipo(detrs);
         PraticaCallbacks.validaPratica(pratica);
         em.getTransaction().begin();
         em.persist(pratica);

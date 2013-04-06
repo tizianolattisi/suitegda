@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 AXIA Studio (http://www.axiastudio.com)
+ * Copyright (C) 2013 AXIA Studio (http://www.axiastudio.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -11,14 +11,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Afffero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.axiastudio.suite.pratiche.entities;
+package com.axiastudio.suite.procedimenti.entities;
 
-import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,26 +29,24 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Tiziano Lattisi <tiziano at axiastudio.it>
+ * @author AXIA Studio (http://www.axiastudio.com)
  */
 @Entity
-@Table(schema="PRATICHE")
-@SequenceGenerator(name="gentipopratica", sequenceName="pratiche.tipopratica_id_seq", initialValue=1, allocationSize=1)
-public class TipoPratica implements Serializable {
+@Table(schema="PROCEDIMENTI")
+@SequenceGenerator(name="gentipopraticaprocedimento", sequenceName="procedimenti.tipopraticaprocedimento_id_seq", initialValue=1, allocationSize=1)
+public class TipoPraticaProcedimento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentipopratica")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentipopraticaprocedimento")
     private Long id;
-    @Column(name="codice")
-    private String codice;
-    @Column(name="descrizione")
-    private String descrizione;
-    @JoinColumn(name = "tipopadre", referencedColumnName = "id")
-    @ManyToOne
-    private TipoPratica tipopadre;
-    @JoinColumn(name="procedimento", referencedColumnName = "id")
+    @JoinColumn(name = "procedimento", referencedColumnName = "id")
     @ManyToOne
     private Procedimento procedimento;
+    @JoinColumn(name = "tipopratica", referencedColumnName = "id")
+    @ManyToOne
+    private TipoPratica tipoPratica;
+
+
 
     public Long getId() {
         return id;
@@ -59,36 +56,20 @@ public class TipoPratica implements Serializable {
         this.id = id;
     }
 
-    public String getCodice() {
-        return codice;
-    }
-
-    public void setCodice(String codice) {
-        this.codice = codice;
-    }
-
-    public TipoPratica getTipopadre() {
-        return tipopadre;
-    }
-
-    public void setTipopadre(TipoPratica tipopadre) {
-        this.tipopadre = tipopadre;
-    }
-
-    public String getDescrizione() {
-        return descrizione;
-    }
-
-    public void setDescrizione(String descrizione) {
-        this.descrizione = descrizione;
-    }
-
     public Procedimento getProcedimento() {
         return procedimento;
     }
 
     public void setProcedimento(Procedimento procedimento) {
         this.procedimento = procedimento;
+    }
+
+    public TipoPratica getTipoPratica() {
+        return tipoPratica;
+    }
+
+    public void setTipoPratica(TipoPratica tipoPratica) {
+        this.tipoPratica = tipoPratica;
     }
 
     @Override
@@ -101,10 +82,10 @@ public class TipoPratica implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoPratica)) {
+        if (!(object instanceof TipoPraticaProcedimento)) {
             return false;
         }
-        TipoPratica other = (TipoPratica) object;
+        TipoPraticaProcedimento other = (TipoPraticaProcedimento) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -113,7 +94,7 @@ public class TipoPratica implements Serializable {
 
     @Override
     public String toString() {
-        return this.getCodice()+" - "+this.getDescrizione();
+        return "com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento[ id=" + id + " ]";
     }
     
 }

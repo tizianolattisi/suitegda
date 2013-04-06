@@ -100,7 +100,7 @@ public class Norma implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.procedimenti.entities.Norma[ id=" + id + " ]";
+        return this.getTipo() + " - " + this.getDescrizione();
     }
     
 }
