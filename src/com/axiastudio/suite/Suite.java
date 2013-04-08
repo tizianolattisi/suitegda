@@ -43,7 +43,6 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
-import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
@@ -66,12 +65,12 @@ import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 import com.axiastudio.suite.procedimenti.entities.Carica;
+import com.axiastudio.suite.procedimenti.entities.Norma;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
 import com.axiastudio.suite.sedute.entities.TipoSeduta;
 import com.axiastudio.suite.sedute.forms.FormTipoSeduta;
-import com.trolltech.qt.gui.QMessageBox;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -244,7 +243,13 @@ public class Suite {
                               "Movimento determina");
         
         Register.registerForm(db.getEntityManagerFactory(),
-                              null,
+                              "classpath:com/axiastudio/suite/procedimenti/forms/norma.ui",
+                              Norma.class,
+                              Window.class,
+                              "Norma");
+       
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/procedimenti/forms/procedimento.ui",
                               Procedimento.class,
                               Window.class,
                               "Procedimenti");
