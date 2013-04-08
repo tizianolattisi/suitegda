@@ -25,18 +25,18 @@ SELECT setval('base.ufficioutente_id_seq', 5, true);
 -- Anagrafiche
 SET search_path = anagrafiche, pg_catalog;
 
-INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipologiasoggetto, titolosoggetto) VALUES (1, NULL, 'Lattisi', NULL, NULL, 'Tiziano', NULL, 'M', 'PERSONA', NULL);
+INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tiposoggetto, titolosoggetto) VALUES (1, NULL, 'Lattisi', NULL, NULL, 'Tiziano', NULL, 'M', 'PERSONA', NULL);
 SELECT setval('anagrafiche.soggetto_id_seq', 2, true);
 
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
-INSERT INTO tipologiapratica (id, codice, descrizione, tipologiapadre) VALUES (1, 'DET', 'Determine', NULL);
-INSERT INTO tipologiapratica (id, codice, descrizione, tipologiapadre) VALUES (2, 'GES', 'Ramo GES', NULL);
-INSERT INTO tipologiapratica (id, codice, descrizione, tipologiapadre) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1);
-SELECT setval('pratiche.tipologiapratica_id_seq', 4, true);
+INSERT INTO tipopratica (id, codice, descrizione, tipopadre) VALUES (1, 'DET', 'Determine', NULL);
+INSERT INTO tipopratica (id, codice, descrizione, tipopadre) VALUES (2, 'GES', 'Ramo GES', NULL);
+INSERT INTO tipopratica (id, codice, descrizione, tipopadre) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1);
+SELECT setval('pratiche.tipopratica_id_seq', 4, true);
 
-INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipologiapratica)
+INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipopratica)
   VALUES (1, 2012, '2012-12-10', 'Pratica demo', '2012000001', 'DETDS2012000001', NULL, 3, 4, 3, 'scaffale in alto', 3);
 SELECT setval('pratiche.pratica_id_seq', 2, true);
 
@@ -109,11 +109,11 @@ INSERT INTO caricacommissione (id, carica, commissione) VALUES (4, 1, 2);
 SELECT setval('sedute.caricacommissione_id_seq', 5, true);
 
 
-INSERT INTO tipologiaseduta (id, descrizione, commissione, tipologiapratica) VALUES (1, 'Giunta comunale', 1, 1);
-INSERT INTO tipologiaseduta (id, descrizione, commissione, tipologiapratica) VALUES (2, 'Consiglio comunale', 2, 1);
-SELECT setval('sedute.tipologiaseduta_id_seq', 3, true);
+INSERT INTO tiposeduta (id, descrizione, commissione, tipopratica) VALUES (1, 'Giunta comunale', 1, 1);
+INSERT INTO tiposeduta (id, descrizione, commissione, tipopratica) VALUES (2, 'Consiglio comunale', 2, 1);
+SELECT setval('sedute.tiposeduta_id_seq', 3, true);
 
-INSERT INTO seduta (id, datacreazione, tipologiaseduta, dataoraconvocazione, faseseduta, statoseduta, inizioseduta, cambiostatoseduta, fineseduta) VALUES (1, '13/01/2013', 1, NULL, 'IN_GESTIONE', 'A', NULL, NULL, NULL);
+INSERT INTO seduta (id, datacreazione, tiposeduta, dataoraconvocazione, faseseduta, statoseduta, inizioseduta, cambiostatoseduta, fineseduta) VALUES (1, '13/01/2013', 1, NULL, 'IN_GESTIONE', 'A', NULL, NULL, NULL);
 SELECT setval('sedute.seduta_id_seq', 2, true);
 
 
@@ -130,3 +130,6 @@ SELECT setval('deliberedetermine.serviziodetermina_id_seq', 2, true);
 INSERT INTO movimentodetermina (id, determina, importo) VALUES (1, 1, 10.00);
 INSERT INTO movimentodetermina (id, determina, importo) VALUES (2, 1, 30.50);
 SELECT setval('deliberedetermine.movimentodetermina_id_seq', 3, true);
+
+INSERT INTO ufficiodetermina (id, determina, ufficio) VALUES (1, 1, 1);
+SELECT setval('deliberedetermine.ufficiodetermina_id_seq', 2, true);

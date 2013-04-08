@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 AXIA Studio (http://www.axiastudio.com)
+ * Copyright (C) 2013 AXIA Studio (http://www.axiastudio.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -11,14 +11,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Afffero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.axiastudio.suite.pratiche.entities;
+package com.axiastudio.suite.deliberedetermine.entities;
 
-import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
 import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,26 +30,22 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Tiziano Lattisi <tiziano at axiastudio.it>
+ * @author AXIA Studio (http://www.axiastudio.com)
  */
 @Entity
-@Table(schema="PRATICHE")
-@SequenceGenerator(name="gentipopratica", sequenceName="pratiche.tipopratica_id_seq", initialValue=1, allocationSize=1)
-public class TipoPratica implements Serializable {
+@Table(schema="deliberedetermine")
+@SequenceGenerator(name="genufficiodetermina", sequenceName="protocollo.ufficiodetermina_id_seq", initialValue=1, allocationSize=1)
+public class UfficioDetermina implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentipopratica")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genufficiodetermina")
     private Long id;
-    @Column(name="codice")
-    private String codice;
-    @Column(name="descrizione")
-    private String descrizione;
-    @JoinColumn(name = "tipopadre", referencedColumnName = "id")
+    @JoinColumn(name = "ufficio", referencedColumnName = "id")
     @ManyToOne
-    private TipoPratica tipopadre;
-    @JoinColumn(name="procedimento", referencedColumnName = "id")
+    private Ufficio ufficio;
+    @JoinColumn(name = "determina", referencedColumnName = "id")
     @ManyToOne
-    private Procedimento procedimento;
+    private Determina determina;
 
     public Long getId() {
         return id;
@@ -59,36 +55,20 @@ public class TipoPratica implements Serializable {
         this.id = id;
     }
 
-    public String getCodice() {
-        return codice;
+    public Ufficio getUfficio() {
+        return ufficio;
     }
 
-    public void setCodice(String codice) {
-        this.codice = codice;
+    public void setUfficio(Ufficio ufficio) {
+        this.ufficio = ufficio;
     }
 
-    public TipoPratica getTipopadre() {
-        return tipopadre;
+    public Determina getDetermina() {
+        return determina;
     }
 
-    public void setTipopadre(TipoPratica tipopadre) {
-        this.tipopadre = tipopadre;
-    }
-
-    public String getDescrizione() {
-        return descrizione;
-    }
-
-    public void setDescrizione(String descrizione) {
-        this.descrizione = descrizione;
-    }
-
-    public Procedimento getProcedimento() {
-        return procedimento;
-    }
-
-    public void setProcedimento(Procedimento procedimento) {
-        this.procedimento = procedimento;
+    public void setDetermina(Determina determina) {
+        this.determina = determina;
     }
 
     @Override
@@ -101,10 +81,10 @@ public class TipoPratica implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoPratica)) {
+        if (!(object instanceof UfficioDetermina)) {
             return false;
         }
-        TipoPratica other = (TipoPratica) object;
+        UfficioDetermina other = (UfficioDetermina) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -113,7 +93,7 @@ public class TipoPratica implements Serializable {
 
     @Override
     public String toString() {
-        return this.getCodice()+" - "+this.getDescrizione();
+        return "com.axiastudio.suite.deliberedetermine.entities.UfficioDetermina[ id=" + id + " ]";
     }
     
 }

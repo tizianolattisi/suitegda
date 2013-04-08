@@ -58,6 +58,8 @@ public class Determina implements Serializable {
     private Collection<ServizioDetermina> servizioDeterminaCollection;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<MovimentoDetermina> movimentoDeterminaCollection;
+    @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<UfficioDetermina> ufficioDeterminaCollection;
     @Column(name="dispesa")
     private Boolean diSpesa;
     @Column(name="dientrata")
@@ -78,7 +80,7 @@ public class Determina implements Serializable {
     
     /* visto del responsabile del servizio */
     @Column(name="vistoresponsabile")
-    private Boolean vistoResponsabile=false;
+    private Boolean vistoResponsabile = false;
     @Column(name="datavistoresponsabile")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataVistoResponsabile;
@@ -94,7 +96,7 @@ public class Determina implements Serializable {
 
     /* visto del responsabile di bilancio */
     @Column(name="vistobilancio")
-    private Boolean vistoBilancio=false;
+    private Boolean vistoBilancio = false;
     @Column(name="datavistobilancio")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataVistoBilancio;
@@ -110,7 +112,7 @@ public class Determina implements Serializable {
 
     /* visto del responsabile di bilancio */
     @Column(name="vistonegato")
-    private Boolean vistoNegato=false;
+    private Boolean vistoNegato = false;
     @Column(name="datavistonegato")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataVistoNegato;
@@ -182,6 +184,14 @@ public class Determina implements Serializable {
 
     public void setMovimentoDeterminaCollection(Collection<MovimentoDetermina> movimentoDeterminaCollection) {
         this.movimentoDeterminaCollection = movimentoDeterminaCollection;
+    }
+
+    public Collection<UfficioDetermina> getUfficioDeterminaCollection() {
+        return ufficioDeterminaCollection;
+    }
+
+    public void setUfficioDeterminaCollection(Collection<UfficioDetermina> ufficioDeterminaCollection) {
+        this.ufficioDeterminaCollection = ufficioDeterminaCollection;
     }
 
     public Boolean getDiSpesa() {

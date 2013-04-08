@@ -27,7 +27,19 @@ ALTER SCHEMA finanziaria OWNER TO postgres;
 CREATE SCHEMA deliberedetermine;
 ALTER SCHEMA deliberedetermine OWNER TO postgres;
 
-CREATE PROCEDURAL LANGUAGE plpgsql;
+-- Create pgplsql
+CREATE OR REPLACE FUNCTION public.create_plpgsql_language ()
+        RETURNS TEXT
+        AS $$
+            CREATE PROCEDURAL LANGUAGE plpgsql;
+            SELECT 'language plpgsql created'::TEXT;
+        $$
+LANGUAGE 'sql';
+SELECT CASE WHEN (SELECT true::BOOLEAN FROM pg_language WHERE lanname='plpgsql')
+    THEN (SELECT 'language plpgsql already installed'::TEXT)
+    ELSE (SELECT public.create_plpgsql_language())
+    END;
+DROP FUNCTION public.create_plpgsql_language ();
 ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
 
 SET default_tablespace = '';
@@ -97,7 +109,7 @@ CREATE TABLE soggetto (
     nome character varying(255),
     ragionesociale character varying(255),
     sessosoggetto character varying(255),
-    tipologiasoggetto character varying(255),
+    tiposoggetto character varying(255),
     titolosoggetto character varying(255)
 );
 ALTER TABLE anagrafiche.soggetto OWNER TO postgres;
@@ -144,11 +156,102 @@ SET search_path = procedimenti, pg_catalog;
 
 CREATE TABLE procedimento (
     id bigserial NOT NULL,
-    descrizione character varying(255)
+    descrizione character varying(255),
+    normativa character varying(255),
+    maxgiorniistruttoria integer,
+    iniziativa character varying(255),
+    soggetto bigint,
+    attivo boolean
 );
 ALTER TABLE procedimenti.procedimento OWNER TO postgres;
 ALTER TABLE ONLY procedimento
     ADD CONSTRAINT procedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY procedimento
+    ADD CONSTRAINT fk_procedimento_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+
+CREATE TABLE norma (
+    id bigserial NOT NULL,
+    tipo character varying(255),
+    descrizione character varying(255),
+    idobject character varying(255)
+);
+ALTER TABLE procedimenti.norma OWNER TO postgres;
+ALTER TABLE ONLY norma
+    ADD CONSTRAINT norma_pkey PRIMARY KEY (id);
+
+CREATE TABLE normaprocedimento (
+    id bigserial NOT NULL,
+    procedimento bigint,
+    norma bigint
+);
+ALTER TABLE procedimenti.normaprocedimento OWNER TO postgres;
+ALTER TABLE ONLY normaprocedimento
+    ADD CONSTRAINT normaprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY normaprocedimento
+    ADD CONSTRAINT fk_normaprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY normaprocedimento
+    ADD CONSTRAINT fk_normaprocedimento_norma FOREIGN KEY (norma) REFERENCES norma(id);
+
+CREATE TABLE ufficioprocedimento (
+    id bigserial NOT NULL,
+    procedimento bigint,
+    ufficio bigint,
+    principale boolean
+);
+ALTER TABLE procedimenti.ufficioprocedimento OWNER TO postgres;
+ALTER TABLE ONLY ufficioprocedimento
+    ADD CONSTRAINT ufficioprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY ufficioprocedimento
+    ADD CONSTRAINT fk_ufficioprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY ufficioprocedimento
+    ADD CONSTRAINT fk_ufficioprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+
+CREATE TABLE utenteprocedimento (
+    id bigserial NOT NULL,
+    procedimento bigint,
+    utente bigint,
+    ufficio bigint,
+    responsabile boolean,
+    abilitato boolean,
+    abituale boolean
+);
+ALTER TABLE procedimenti.utenteprocedimento OWNER TO postgres;
+ALTER TABLE ONLY utenteprocedimento
+    ADD CONSTRAINT utenteprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY utenteprocedimento
+    ADD CONSTRAINT fk_utenteprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY utenteprocedimento
+    ADD CONSTRAINT fk_utenteprocedimento_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
+ALTER TABLE ONLY ufficioprocedimento
+    ADD CONSTRAINT fk_utenteprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+
+CREATE TABLE pratiche.tipopratica (
+    id bigserial NOT NULL,
+    codice character varying(255),
+    descrizione character varying(255),
+    tipopadre bigint,
+    procedimento bigint
+);
+ALTER TABLE pratiche.tipopratica OWNER TO postgres;
+ALTER TABLE ONLY pratiche.tipopratica
+    ADD CONSTRAINT tipopratica_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY pratiche.tipopratica
+    ADD CONSTRAINT fk_tipopratica_tipopadre FOREIGN KEY (tipopadre) REFERENCES pratiche.tipopratica(id);
+ALTER TABLE ONLY pratiche.tipopratica
+    ADD CONSTRAINT fk_tipopratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
+
+CREATE TABLE tipopraticaprocedimento (
+    id bigserial NOT NULL,
+    procedimento bigint,
+    tipopratica bigint
+);
+ALTER TABLE procedimenti.tipopraticaprocedimento OWNER TO postgres;
+ALTER TABLE ONLY tipopraticaprocedimento
+    ADD CONSTRAINT tipopraticaprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY tipopraticaprocedimento
+    ADD CONSTRAINT fk_tipopraticaprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY tipopraticaprocedimento
+    ADD CONSTRAINT fk_tipopraticaprocedimento_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
 
 CREATE TABLE carica (
     id bigserial NOT NULL,
@@ -195,22 +298,6 @@ ALTER TABLE ONLY delega
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
-CREATE TABLE tipologiapratica (
-    id bigserial NOT NULL,
-    codice character varying(255),
-    descrizione character varying(255),
-    tipologiapadre bigint,
-    procedimento bigint
-);
-ALTER TABLE pratiche.tipologiapratica OWNER TO postgres;
-ALTER TABLE ONLY tipologiapratica
-    ADD CONSTRAINT tipologiapratica_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY tipologiapratica
-    ADD CONSTRAINT fk_tipologiapratica_tipologiapadre FOREIGN KEY (tipologiapadre) REFERENCES pratiche.tipologiapratica(id);
-ALTER TABLE ONLY tipologiapratica
-    ADD CONSTRAINT fk_tipologiapratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
-
-
 CREATE TABLE pratica (
     id bigserial NOT NULL,
     anno integer,
@@ -223,7 +310,7 @@ CREATE TABLE pratica (
     gestione bigint,
     ubicazione bigint,
     dettaglioubicazione character varying(255),
-    tipologiapratica bigint
+    tipopratica bigint
 );
 ALTER TABLE pratiche.pratica OWNER TO postgres;
 ALTER TABLE ONLY pratica
@@ -237,7 +324,7 @@ ALTER TABLE ONLY pratica
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_ubicazione FOREIGN KEY (ubicazione) REFERENCES base.ufficio(id);
 ALTER TABLE ONLY pratica
-    ADD CONSTRAINT fk_pratica_tipologiapratica FOREIGN KEY (tipologiapratica) REFERENCES pratiche.tipologiapratica(id);
+    ADD CONSTRAINT fk_pratica_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
 
 
 
@@ -390,19 +477,19 @@ ALTER TABLE sedute.commissione OWNER TO postgres;
 ALTER TABLE ONLY commissione
     ADD CONSTRAINT commissione_pkey PRIMARY KEY (id);
 
-CREATE TABLE tipologiaseduta (
+CREATE TABLE tiposeduta (
     id bigserial NOT NULL,
     descrizione character varying(1024),
     commissione bigint,
-    tipologiapratica bigint
+    tipopratica bigint
 );
-ALTER TABLE sedute.tipologiaseduta OWNER TO postgres;
-ALTER TABLE ONLY tipologiaseduta
-    ADD CONSTRAINT tipologiaseduta_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY tipologiaseduta
-    ADD CONSTRAINT fk_tipologiaseduta_commissione FOREIGN KEY (commissione) REFERENCES sedute.commissione(id);
-ALTER TABLE ONLY tipologiaseduta
-    ADD CONSTRAINT fk_tipologiaseduta_tipologiapratica FOREIGN KEY (tipologiapratica) REFERENCES pratiche.tipologiapratica(id);
+ALTER TABLE sedute.tiposeduta OWNER TO postgres;
+ALTER TABLE ONLY tiposeduta
+    ADD CONSTRAINT tiposeduta_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY tiposeduta
+    ADD CONSTRAINT fk_tiposeduta_commissione FOREIGN KEY (commissione) REFERENCES sedute.commissione(id);
+ALTER TABLE ONLY tiposeduta
+    ADD CONSTRAINT fk_tiposeduta_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
 
 CREATE TABLE caricacommissione (
     id bigserial NOT NULL,
@@ -420,7 +507,7 @@ ALTER TABLE ONLY caricacommissione
 CREATE TABLE seduta (
     id bigserial NOT NULL,
     datacreazione date,
-    tipologiaseduta bigint,
+    tiposeduta bigint,
     dataoraconvocazione timestamp,
     faseseduta character varying(255),
     statoseduta character varying(255),
@@ -432,7 +519,7 @@ ALTER TABLE sedute.seduta OWNER TO postgres;
 ALTER TABLE ONLY seduta
     ADD CONSTRAINT seduta_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY seduta
-    ADD CONSTRAINT fk_seduta_tipologiaseduta FOREIGN KEY (tipologiaseduta) REFERENCES sedute.tipologiaseduta(id);
+    ADD CONSTRAINT fk_seduta_tiposeduta FOREIGN KEY (tiposeduta) REFERENCES sedute.tiposeduta(id);
     
 
 -- Determine
@@ -495,6 +582,19 @@ ALTER TABLE ONLY serviziodetermina
     ADD CONSTRAINT fk_serviziodetermina_determina FOREIGN KEY (determina) REFERENCES deliberedetermine.determina(id);
 ALTER TABLE ONLY serviziodetermina
     ADD CONSTRAINT fk_serviziodetermina_servizio FOREIGN KEY (servizio) REFERENCES finanziaria.servizio(id);
+
+CREATE TABLE ufficiodetermina (
+    id bigserial NOT NULL,
+    determina bigint,
+    ufficio bigint
+);
+ALTER TABLE deliberedetermine.ufficiodetermina OWNER TO postgres;
+ALTER TABLE ONLY ufficiodetermina
+    ADD CONSTRAINT ufficiodetermina_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY ufficiodetermina
+    ADD CONSTRAINT fk_ufficiodetermina_determina FOREIGN KEY (determina) REFERENCES deliberedetermine.determina(id);
+ALTER TABLE ONLY ufficiodetermina
+    ADD CONSTRAINT fk_ufficiodetermina_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
 
 CREATE TABLE movimentodetermina (

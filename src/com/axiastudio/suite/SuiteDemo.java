@@ -229,7 +229,7 @@ public class SuiteDemo {
                                "Movimento determina");
 
         Register.registerForm(db.getEntityManagerFactory(),
-                              null,
+                              "classpath:com/axiastudio/suite/procedimenti/forms/norma.ui",
                               Norma.class,
                               Window.class,
                               "Norma");

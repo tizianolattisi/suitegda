@@ -403,6 +403,26 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Protocollazione</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_3">
+          <property name="entity" stdset="0">
+           <string>.ufficioDeterminaCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&lt;ufficio&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>ufficio</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
