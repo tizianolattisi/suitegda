@@ -27,7 +27,19 @@ ALTER SCHEMA finanziaria OWNER TO postgres;
 CREATE SCHEMA deliberedetermine;
 ALTER SCHEMA deliberedetermine OWNER TO postgres;
 
-CREATE PROCEDURAL LANGUAGE plpgsql;
+-- Create pgplsql
+CREATE OR REPLACE FUNCTION public.create_plpgsql_language ()
+        RETURNS TEXT
+        AS $$
+            CREATE PROCEDURAL LANGUAGE plpgsql;
+            SELECT 'language plpgsql created'::TEXT;
+        $$
+LANGUAGE 'sql';
+SELECT CASE WHEN (SELECT true::BOOLEAN FROM pg_language WHERE lanname='plpgsql')
+    THEN (SELECT 'language plpgsql already installed'::TEXT)
+    ELSE (SELECT public.create_plpgsql_language())
+    END;
+DROP FUNCTION public.create_plpgsql_language ();
 ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
 
 SET default_tablespace = '';
