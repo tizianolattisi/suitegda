@@ -76,6 +76,7 @@ public class Determina implements Serializable {
     private Integer anno;
     @Column(name="numero")
     private Integer numero;
+    // data determina == data protocollo
     
     /* visto del responsabile del servizio */
     @Column(name="vistoresponsabile")

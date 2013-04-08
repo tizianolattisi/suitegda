@@ -373,7 +373,7 @@ public class DemoData {
         c1.setDescrizione("Capitolo 1");
         Capitolo c2 = new Capitolo();
         c2.setDescrizione("Capitolo 2");
-        
+
         // Determina
         Determina determina = new Determina();
         determina.setOggetto("Determina di test");
@@ -382,6 +382,8 @@ public class DemoData {
         servizioDetermina.setServizio(servizioAffariGenerali);
         servizioDeterminaCollection.add(servizioDetermina);
         determina.setServizioDeterminaCollection(servizioDeterminaCollection);
+        determina.setIdPratica(pratica.getIdPratica());
+        determina.setCodiceInterno("DETRS201300001");
         
         em.getTransaction().begin();
         em.persist(servizioAffariGenerali);
