@@ -130,3 +130,6 @@ SELECT setval('deliberedetermine.serviziodetermina_id_seq', 2, true);
 INSERT INTO movimentodetermina (id, determina, importo) VALUES (1, 1, 10.00);
 INSERT INTO movimentodetermina (id, determina, importo) VALUES (2, 1, 30.50);
 SELECT setval('deliberedetermine.movimentodetermina_id_seq', 3, true);
+
+INSERT INTO ufficiodetermina (id, determina, ufficio) VALUES (1, 1, 1);
+SELECT setval('deliberedetermine.ufficiodetermina_id_seq', 2, true);

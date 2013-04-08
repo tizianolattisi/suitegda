@@ -508,6 +508,19 @@ ALTER TABLE ONLY serviziodetermina
 ALTER TABLE ONLY serviziodetermina
     ADD CONSTRAINT fk_serviziodetermina_servizio FOREIGN KEY (servizio) REFERENCES finanziaria.servizio(id);
 
+CREATE TABLE ufficiodetermina (
+    id bigserial NOT NULL,
+    determina bigint,
+    ufficio bigint
+);
+ALTER TABLE deliberedetermine.ufficiodetermina OWNER TO postgres;
+ALTER TABLE ONLY ufficiodetermina
+    ADD CONSTRAINT ufficiodetermina_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY ufficiodetermina
+    ADD CONSTRAINT fk_ufficiodetermina_determina FOREIGN KEY (determina) REFERENCES deliberedetermine.determina(id);
+ALTER TABLE ONLY ufficiodetermina
+    ADD CONSTRAINT fk_ufficiodetermina_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+
 
 CREATE TABLE movimentodetermina (
     id bigserial NOT NULL,
