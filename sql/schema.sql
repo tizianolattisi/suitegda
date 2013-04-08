@@ -156,11 +156,102 @@ SET search_path = procedimenti, pg_catalog;
 
 CREATE TABLE procedimento (
     id bigserial NOT NULL,
-    descrizione character varying(255)
+    descrizione character varying(255),
+    normativa character varying(255),
+    maxgiorniistruttoria integer,
+    iniziativa character varying(255),
+    soggetto bigint,
+    attivo boolean
 );
 ALTER TABLE procedimenti.procedimento OWNER TO postgres;
 ALTER TABLE ONLY procedimento
     ADD CONSTRAINT procedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY procedimento
+    ADD CONSTRAINT fk_procedimento_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+
+CREATE TABLE norma (
+    id bigserial NOT NULL,
+    tipo character varying(255),
+    descrizione character varying(255),
+    idobject character varying(255)
+);
+ALTER TABLE procedimenti.norma OWNER TO postgres;
+ALTER TABLE ONLY norma
+    ADD CONSTRAINT norma_pkey PRIMARY KEY (id);
+
+CREATE TABLE normaprocedimento (
+    id bigserial NOT NULL,
+    procedimento bigint,
+    norma bigint
+);
+ALTER TABLE procedimenti.normaprocedimento OWNER TO postgres;
+ALTER TABLE ONLY normaprocedimento
+    ADD CONSTRAINT normaprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY normaprocedimento
+    ADD CONSTRAINT fk_normaprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY normaprocedimento
+    ADD CONSTRAINT fk_normaprocedimento_norma FOREIGN KEY (norma) REFERENCES norma(id);
+
+CREATE TABLE ufficioprocedimento (
+    id bigserial NOT NULL,
+    procedimento bigint,
+    ufficio bigint,
+    principale boolean
+);
+ALTER TABLE procedimenti.ufficioprocedimento OWNER TO postgres;
+ALTER TABLE ONLY ufficioprocedimento
+    ADD CONSTRAINT ufficioprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY ufficioprocedimento
+    ADD CONSTRAINT fk_ufficioprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY ufficioprocedimento
+    ADD CONSTRAINT fk_ufficioprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+
+CREATE TABLE utenteprocedimento (
+    id bigserial NOT NULL,
+    procedimento bigint,
+    utente bigint,
+    ufficio bigint,
+    responsabile boolean,
+    abilitato boolean,
+    abituale boolean
+);
+ALTER TABLE procedimenti.utenteprocedimento OWNER TO postgres;
+ALTER TABLE ONLY utenteprocedimento
+    ADD CONSTRAINT utenteprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY utenteprocedimento
+    ADD CONSTRAINT fk_utenteprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY utenteprocedimento
+    ADD CONSTRAINT fk_utenteprocedimento_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
+ALTER TABLE ONLY ufficioprocedimento
+    ADD CONSTRAINT fk_utenteprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+
+CREATE TABLE pratiche.tipopratica (
+    id bigserial NOT NULL,
+    codice character varying(255),
+    descrizione character varying(255),
+    tipopadre bigint,
+    procedimento bigint
+);
+ALTER TABLE pratiche.tipopratica OWNER TO postgres;
+ALTER TABLE ONLY pratiche.tipopratica
+    ADD CONSTRAINT tipopratica_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY pratiche.tipopratica
+    ADD CONSTRAINT fk_tipopratica_tipopadre FOREIGN KEY (tipopadre) REFERENCES pratiche.tipopratica(id);
+ALTER TABLE ONLY pratiche.tipopratica
+    ADD CONSTRAINT fk_tipopratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
+
+CREATE TABLE tipopraticaprocedimento (
+    id bigserial NOT NULL,
+    procedimento bigint,
+    tipopratica bigint
+);
+ALTER TABLE procedimenti.tipopraticaprocedimento OWNER TO postgres;
+ALTER TABLE ONLY tipopraticaprocedimento
+    ADD CONSTRAINT tipopraticaprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY tipopraticaprocedimento
+    ADD CONSTRAINT fk_tipopraticaprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY tipopraticaprocedimento
+    ADD CONSTRAINT fk_tipopraticaprocedimento_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
 
 CREATE TABLE carica (
     id bigserial NOT NULL,
@@ -206,22 +297,6 @@ ALTER TABLE ONLY delega
 
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
-
-CREATE TABLE tipopratica (
-    id bigserial NOT NULL,
-    codice character varying(255),
-    descrizione character varying(255),
-    tipopadre bigint,
-    procedimento bigint
-);
-ALTER TABLE pratiche.tipopratica OWNER TO postgres;
-ALTER TABLE ONLY tipopratica
-    ADD CONSTRAINT tipopratica_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY tipopratica
-    ADD CONSTRAINT fk_tipopratica_tipopadre FOREIGN KEY (tipopadre) REFERENCES pratiche.tipopratica(id);
-ALTER TABLE ONLY tipopratica
-    ADD CONSTRAINT fk_tipopratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
-
 
 CREATE TABLE pratica (
     id bigserial NOT NULL,
