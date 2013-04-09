@@ -109,7 +109,7 @@ CREATE TABLE soggetto (
     nome character varying(255),
     ragionesociale character varying(255),
     sessosoggetto character varying(255),
-    tiposoggetto character varying(255),
+    tipo character varying(255),
     titolosoggetto character varying(255)
 );
 ALTER TABLE anagrafiche.soggetto OWNER TO postgres;
@@ -310,7 +310,7 @@ CREATE TABLE pratica (
     gestione bigint,
     ubicazione bigint,
     dettaglioubicazione character varying(255),
-    tipopratica bigint
+    tipo bigint
 );
 ALTER TABLE pratiche.pratica OWNER TO postgres;
 ALTER TABLE ONLY pratica
@@ -324,7 +324,7 @@ ALTER TABLE ONLY pratica
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_ubicazione FOREIGN KEY (ubicazione) REFERENCES base.ufficio(id);
 ALTER TABLE ONLY pratica
-    ADD CONSTRAINT fk_pratica_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
+    ADD CONSTRAINT fk_pratica_tipopratica FOREIGN KEY (tipo) REFERENCES pratiche.tipopratica(id);
 
 
 
