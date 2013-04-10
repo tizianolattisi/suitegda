@@ -16,10 +16,10 @@ INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sig
 INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (5, false, false, NULL, 'segretario', 'B.S.', false, 'Beppe il segretario', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
 SELECT setval('base.utente_id_seq', 6, true);
 
-INSERT INTO ufficioutente (id, privato, ricerca, visualizza, ufficio, utente) VALUES (1, NULL, true, true, 1, 3);
-INSERT INTO ufficioutente (id, privato, ricerca, visualizza, ufficio, utente) VALUES (2, NULL, true, NULL, 3, 2);
-INSERT INTO ufficioutente (id, privato, ricerca, visualizza, ufficio, utente) VALUES (3, NULL, true, NULL, 4, 2);
-INSERT INTO ufficioutente (id, privato, ricerca, visualizza, ufficio, utente) VALUES (4, NULL, true, NULL, 5, 2);
+INSERT INTO ufficioutente (id, privato, ricerca, visualizza, ufficio, utente) VALUES (1, false, true, true, 1, 3);
+INSERT INTO ufficioutente (id, privato, ricerca, visualizza, ufficio, utente) VALUES (2, false, true, false, 3, 2);
+INSERT INTO ufficioutente (id, privato, ricerca, visualizza, ufficio, utente) VALUES (3, false, true, false, 4, 2);
+INSERT INTO ufficioutente (id, privato, ricerca, visualizza, ufficio, utente) VALUES (4, false, true, false, 5, 2);
 SELECT setval('base.ufficioutente_id_seq', 5, true);
 
 -- Anagrafiche
