@@ -16,12 +16,14 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
+import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.trolltech.qt.gui.*;
 
 class ProtocolloMenuBar extends PyPaPiToolBar {
@@ -60,34 +62,12 @@ public class FormProtocollo extends Window {
         QLabel labelConvalidaAttribuzioni = (QLabel) this.findChild(QLabel.class, "labelConvalidaAttribuzioni");
         labelConvalidaAttribuzioni.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_group.png"));
         
-        /* filtro per la selezione dello sportello */
-        /* commentato perché il controllo ora è nella callback
-        try {
-            Method storeFactory = this.getClass().getMethod("storeSportello");
-            Register.registerUtility(storeFactory, IStoreFactory.class, "Sportello");
-        } catch (NoSuchMethodException | SecurityException ex) {
-            Logger.getLogger(FormProtocollo.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        
         /* fascicolazione */
         QToolButton toolButtonTitolario = (QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario");
         toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
         toolButtonTitolario.clicked.connect(this, "apriTitolario()");
         
     }
-    
-    /*
-     * Uno store contenente solo gli uffici dell'utente
-     */
-    /*
-    public Store storeSportello(){
-        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        List<Ufficio> uffici = new ArrayList();
-        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
-            uffici.add(uu.getUfficio());
-        }
-        return new Store(uffici);
-    }*/
     
     private void convalidaAttribuzioni() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
@@ -115,15 +95,29 @@ public class FormProtocollo extends Window {
     
     @Override
     protected void indexChanged(int row) {
+        super.indexChanged(row);
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         Boolean convAttribuzioni = protocollo.getConvalidaAttribuzioni() == true;
         Boolean convProtocollo = protocollo.getConvalidaProtocollo() == true;
-        PyPaPiTableView tv = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableViewAttribuzioni");
+        PyPaPiTableView tv = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
         tv.setEnabled(!convAttribuzioni);
         this.centralWidget().setEnabled(!convProtocollo);
-        super.indexChanged(row);
+        
+        Util.setWidgetReadOnly((QWidget) this.findChild(QDateEdit.class, "dateEdit_data"), true);
+        Util.setWidgetReadOnly((QWidget) this.findChild(QLineEdit.class, "lineEdit_iddocumento"), true);
+        Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "annullato"), true);
+        Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "annullamentorichiesto"), true);
+        
+        if( protocollo.getId() != null ){
+            Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_sportello"), true);
+            Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_tipo"), true);
+        }
+        
+        if( protocollo.getTipo().equals(TipoProtocollo.USCITA) ){
+            
+        }
     }
-
+        
 }

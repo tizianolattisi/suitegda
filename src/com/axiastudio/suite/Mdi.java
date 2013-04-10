@@ -83,6 +83,7 @@ public class Mdi extends QMainWindow {
         itemScrivania.setText(0, "Scrivania");
         itemScrivania.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/house.png"));
         itemScrivania.setText(1, "SCRIVANIA");
+        itemScrivania.setDisabled(!autenticato.getOperatoreprotocollo());
 
         /* Protocollo informatico */
         QTreeWidgetItem itemProtocolloInformatico = new QTreeWidgetItem(this.tree);

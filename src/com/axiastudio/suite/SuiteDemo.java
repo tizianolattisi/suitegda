@@ -314,7 +314,7 @@ public class SuiteDemo {
         /* Selezione openoffice */
         String sofficeUrl = null;
         if( "Mac OS X".equals(System.getProperty("os.name")) ){
-            sofficeUrl = "/Applications/OpenOffice.org.app/Contents/MacOS/soffice -accept=socket,host=localhost,port=8100;urp;";
+            //sofficeUrl = "/Applications/OpenOffice.org.app/Contents/MacOS/soffice -accept=socket,host=localhost,port=8100;urp;";
         } else {
             // XXX: da testare!
             String oooDir = QFileDialog.getExistingDirectory(null, "Seleziona la cartella contenente OpenOffice");

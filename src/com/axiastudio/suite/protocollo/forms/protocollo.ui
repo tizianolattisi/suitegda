@@ -19,7 +19,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_5">
     <item row="0" column="0">
-     <widget class="QGroupBox" name="groupBox">
+     <widget class="QGroupBox" name="groupBox_testa">
       <property name="minimumSize">
        <size>
         <width>640</width>
@@ -49,7 +49,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox">
+          <widget class="QComboBox" name="comboBox_tipo">
            <property name="column" stdset="0">
             <string>Tipo</string>
            </property>
@@ -84,9 +84,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit">
+          <widget class="QLineEdit" name="lineEdit_iddocumento">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="column" stdset="0">
             <string>iddocumento</string>
@@ -107,9 +107,9 @@
           </widget>
          </item>
          <item>
-          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_data">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="minimumSize">
             <size>
@@ -242,7 +242,7 @@
          <item row="0" column="0">
           <widget class="QCheckBox" name="annullato">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="text">
             <string>Annullato</string>
@@ -268,7 +268,7 @@
          <item row="1" column="0">
           <widget class="QCheckBox" name="annullamentorichiesto">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="text">
             <string>Annull. richiesto</string>
@@ -420,7 +420,7 @@
           </widget>
          </item>
          <item>
-          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_3">
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_sportello">
            <property name="column" stdset="0">
             <string>Sportello</string>
            </property>
@@ -504,12 +504,12 @@
           <string>Note</string>
          </property>
          <property name="buddy">
-          <cstring>textEdit</cstring>
+          <cstring>textEdit_note</cstring>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit">
+        <widget class="QTextEdit" name="textEdit_note">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -533,12 +533,12 @@
           <string>Oggetto</string>
          </property>
          <property name="buddy">
-          <cstring>textEdit_2</cstring>
+          <cstring>textEdit_oggetto</cstring>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit_2">
+        <widget class="QTextEdit" name="textEdit_oggetto">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -555,7 +555,7 @@
           <bool>true</bool>
          </property>
          <property name="private" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="export" stdset="0">
           <bool>true</bool>
@@ -579,14 +579,14 @@
          <number>8</number>
         </property>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_5">
+         <widget class="QLabel" name="label_mittenti">
           <property name="text">
            <string>Mittenti</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLabel" name="label_6">
+         <widget class="QLabel" name="label_destinatari">
           <property name="text">
            <string>Destinatari</string>
           </property>
@@ -611,6 +611,9 @@
           </property>
           <property name="headers" stdset="0">
            <string>soggetto,titolo,con,not,cor</string>
+          </property>
+          <property name="private" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -642,7 +645,7 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_4">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_pratiche">
           <property name="columns" stdset="0">
            <string>pratica</string>
           </property>
@@ -655,7 +658,7 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewAttribuzioni">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_attribuzioni">
           <property name="entity" stdset="0">
            <string>.attribuzioneCollection</string>
           </property>
@@ -742,9 +745,9 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>textEdit_2</tabstop>
-  <tabstop>comboBox</tabstop>
-  <tabstop>lineEdit</tabstop>
+  <tabstop>textEdit_oggetto</tabstop>
+  <tabstop>comboBox_tipo</tabstop>
+  <tabstop>lineEdit_iddocumento</tabstop>
   <tabstop>comboBox_2</tabstop>
   <tabstop>lineEdit_3</tabstop>
   <tabstop>dateEdit_2</tabstop>
@@ -754,16 +757,16 @@
   <tabstop>spedito</tabstop>
   <tabstop>richiederisposta</tabstop>
   <tabstop>corrispostoostornato</tabstop>
-  <tabstop>comboBox_3</tabstop>
+  <tabstop>comboBox_sportello</tabstop>
   <tabstop>comboBoxTitolario</tabstop>
   <tabstop>toolButtonTitolario</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>tableView_2</tabstop>
   <tabstop>tableView_3</tabstop>
-  <tabstop>tableView_4</tabstop>
-  <tabstop>tableViewAttribuzioni</tabstop>
-  <tabstop>textEdit</tabstop>
-  <tabstop>dateEdit</tabstop>
+  <tabstop>tableView_pratiche</tabstop>
+  <tabstop>tableView_attribuzioni</tabstop>
+  <tabstop>textEdit_note</tabstop>
+  <tabstop>dateEdit_data</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../../../../../pypapi/pypapi/lib/pypapi/ui/resources/resources.qrc"/>
