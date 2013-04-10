@@ -16,15 +16,19 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.pypapi.ui.TableModel;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
+import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
+import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
+import java.util.List;
 
 class ProtocolloMenuBar extends PyPaPiToolBar {
     public ProtocolloMenuBar(String title, Window parent){
@@ -67,6 +71,9 @@ public class FormProtocollo extends Window {
         toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
         toolButtonTitolario.clicked.connect(this, "apriTitolario()");
         
+        /* impostazione attribuzione principale */
+        ((QPushButton) this.findChild(QPushButton.class, "pushButton_principale")).clicked.connect(this, "impostaAttribuzionePrincipale()");
+               
     }
     
     private void convalidaAttribuzioni() {
@@ -91,6 +98,23 @@ public class FormProtocollo extends Window {
             comboBoxTitolario.select(selection);
             this.getContext().getDirty();
         }
+    }
+    
+    private void impostaAttribuzionePrincipale(){
+        PyPaPiTableView tv = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
+        List<QModelIndex> rows = tv.selectionModel().selectedRows();
+        if( rows.size() == 0){
+            return;
+        }
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
+            attribuzione.setPrincipale(Boolean.FALSE);
+        }
+        for (QModelIndex idx: rows){
+            Attribuzione attribuzione = (Attribuzione) ((TableModel) tv.model()).getEntityByRow(idx.row());
+            attribuzione.setPrincipale(Boolean.TRUE);
+        }
+        this.getContext().getDirty();
     }
     
     @Override

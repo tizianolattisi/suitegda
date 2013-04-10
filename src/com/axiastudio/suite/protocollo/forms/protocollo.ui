@@ -644,7 +644,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item row="3" column="0" rowspan="2">
          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_pratiche">
           <property name="columns" stdset="0">
            <string>pratica</string>
@@ -667,6 +667,13 @@
           </property>
           <property name="reference" stdset="0">
            <string>Ufficio</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QPushButton" name="pushButton_principale">
+          <property name="text">
+           <string>Imposta come attribuzione principale</string>
           </property>
          </widget>
         </item>
