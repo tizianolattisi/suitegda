@@ -40,7 +40,7 @@ public class Attribuzione implements Serializable {
     @ManyToOne
     private Protocollo protocollo;
     @Column(name="principale")
-    private Boolean principale;
+    private Boolean principale=false;
     @Column(name="letto")
     private Boolean letto=false;
     @Column(name="evidenza", length=1)
