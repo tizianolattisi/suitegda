@@ -38,11 +38,11 @@ public class UfficioUtente implements Serializable {
     @ManyToOne
     private Utente utente;
     @Column(name="ricerca")
-    private Boolean ricerca;
+    private Boolean ricerca=true;
     @Column(name="visualizza")
-    private Boolean visualizza;
+    private Boolean visualizza=true;
     @Column(name="privato")
-    private Boolean privato;
+    private Boolean privato=false;
 
     public Long getId() {
         return id;
