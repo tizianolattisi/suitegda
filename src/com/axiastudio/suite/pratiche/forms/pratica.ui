@@ -14,7 +14,7 @@
    <string>Pratiche</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>&gt;idpratica&lt;,&lt;descrizione&gt;</string>
+   <string>&gt;idPratica&lt;,&lt;descrizione&gt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_5">
