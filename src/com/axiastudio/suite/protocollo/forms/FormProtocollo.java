@@ -115,11 +115,12 @@ public class FormProtocollo extends Window {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         Boolean convAttribuzioni = protocollo.getConvalidaAttribuzioni() == true;
         Boolean convProtocollo = protocollo.getConvalidaProtocollo() == true;
-        PyPaPiTableView tv = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
-        tv.setEnabled(!convAttribuzioni);
-        this.centralWidget().setEnabled(!convProtocollo);
+
+        PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
+        tableViewAttribuzioni.setEnabled(!convAttribuzioni);
+        //this.centralWidget().setEnabled(!convProtocollo);
         
         Util.setWidgetReadOnly((QWidget) this.findChild(QDateEdit.class, "dateEdit_data"), true);
         Util.setWidgetReadOnly((QWidget) this.findChild(QLineEdit.class, "lineEdit_iddocumento"), true);
@@ -131,9 +132,17 @@ public class FormProtocollo extends Window {
             Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_tipo"), true);
         }
         
+        String labelMittenti;
+        String labelDestinatari;
         if( protocollo.getTipo().equals(TipoProtocollo.USCITA) ){
-            
+            labelDestinatari = "Mittenti";
+            labelMittenti = "Destinatari";
+        } else {
+            labelMittenti = "Mittenti";
+            labelDestinatari = "Destinatari";            
         }
+        ((QLabel) this.findChild(QLabel.class, "label_mittenti")).setText(labelMittenti);
+        ((QLabel) this.findChild(QLabel.class, "label_destinatari")).setText(labelDestinatari);
     }
         
 }
