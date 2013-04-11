@@ -21,7 +21,6 @@ import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
-import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
@@ -30,29 +29,22 @@ import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
 import java.util.List;
 
-class ProtocolloMenuBar extends PyPaPiToolBar {
-    public ProtocolloMenuBar(String title, Window parent){
-        super(title, parent);
-        this.insertButton("convalidaAttribuzioni", "Convalida attribuzioni",
-                "classpath:com/axiastudio/suite/resources/lock_group.png",
-                "Convalida degli uffici attribuiti al protocollo", parent);
-        this.insertButton("convalidaProtocollo", "Convalida protocollo",
-                "classpath:com/axiastudio/suite/resources/lock_mail.png",
-                "Convalida della registrazione del protocollo", parent);
-    }
-}
 
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class FormProtocollo extends Window {
-    private  ProtocolloMenuBar protocolloMenuBar=null;
+    /**
+     *
+     */
+    public ProtocolloMenuBar protocolloMenuBar;
     private QTabWidget tabWidget;
     
     
     public FormProtocollo(FormProtocollo form){
         super(form.uiFile, form.entityClass, form.title);
+        this.protocolloMenuBar = null;
     }
     
     public FormProtocollo(String uiFile, Class entityClass, String title){
@@ -103,7 +95,7 @@ public class FormProtocollo extends Window {
     private void impostaAttribuzionePrincipale(){
         PyPaPiTableView tv = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
         List<QModelIndex> rows = tv.selectionModel().selectedRows();
-        if( rows.size() == 0){
+        if( rows.isEmpty()){
             return;
         }
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
