@@ -43,19 +43,23 @@ public class ProfiloUtenteProtocollo {
         this.autenticato = autenticato;
 
         this.sportello = protocollo.getSportello();
-        for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
-            this.attribuzioni.add(attribuzione.getUfficio());
-            if( attribuzione.getPrincipale() ){
-                this.attribuzionePrincipale = attribuzione.getUfficio();
+        if( protocollo.getAttribuzioneCollection() != null ){
+            for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
+                this.attribuzioni.add(attribuzione.getUfficio());
+                if( attribuzione.getPrincipale() ){
+                    this.attribuzionePrincipale = attribuzione.getUfficio();
+                }
             }
         }
-        for(UfficioUtente uu: this.autenticato.getUfficioUtenteCollection()){
-            this.ufficiUtente.add(uu.getUfficio());
-            if( uu.getRicerca() ){
-                this.ufficiRicercaUtente.add(uu.getUfficio());
-            }
-            if( uu.getPrivato() ){
-                this.ufficiRiservatoUtente.add(uu.getUfficio());
+        if( this.autenticato.getUfficioUtenteCollection() != null ){
+            for(UfficioUtente uu: this.autenticato.getUfficioUtenteCollection()){
+                this.ufficiUtente.add(uu.getUfficio());
+                if( uu.getRicerca() ){
+                    this.ufficiRicercaUtente.add(uu.getUfficio());
+                }
+                if( uu.getPrivato() ){
+                    this.ufficiRiservatoUtente.add(uu.getUfficio());
+                }
             }
         }
     }
