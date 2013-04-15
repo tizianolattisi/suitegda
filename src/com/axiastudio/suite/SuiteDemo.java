@@ -62,6 +62,7 @@ import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
+import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
@@ -150,6 +151,12 @@ public class SuiteDemo {
                               FormSoggettoProtocollo.class,
                               "Soggetto del protocollo");
       
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
+                              SoggettoRiservatoProtocollo.class,
+                              FormSoggettoProtocollo.class,
+                              "Soggetto riservato del protocollo");
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/praticaprotocollo.ui",
                               PraticaProtocollo.class,

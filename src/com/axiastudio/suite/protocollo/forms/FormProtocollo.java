@@ -119,30 +119,31 @@ public class FormProtocollo extends Window {
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
 
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
-        tableViewAttribuzioni.setEnabled(!convAttribuzioni);
-        //this.centralWidget().setEnabled(!convProtocollo);
+        Util.setWidgetReadOnly(tableViewAttribuzioni, convAttribuzioni);
         
         Util.setWidgetReadOnly((QWidget) this.findChild(QDateEdit.class, "dateEdit_data"), true);
         Util.setWidgetReadOnly((QWidget) this.findChild(QLineEdit.class, "lineEdit_iddocumento"), true);
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "annullato"), true);
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "annullamentorichiesto"), true);
         
-        if( protocollo.getId() != null ){
-            Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_sportello"), true);
-            Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_tipo"), true);
-        }
-        
-        String labelMittenti;
-        String labelDestinatari;
+        Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_sportello"), protocollo.getId() != null);
+        Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_tipo"), protocollo.getId() != null);
+                
+        String labelSinistra;
+        String labelDestra;
+        int nrRiservati = protocollo.getSoggettoRiservatoProtocolloCollection().size();
         if( protocollo.getTipo().equals(TipoProtocollo.USCITA) ){
-            labelDestinatari = "Mittenti";
-            labelMittenti = "Destinatari";
+            labelDestra = "Mittenti";
+            labelSinistra = "Destinatari";
         } else {
-            labelMittenti = "Mittenti";
-            labelDestinatari = "Destinatari";            
+            labelSinistra = "Mittenti";
+            labelDestra = "Destinatari";            
         }
-        ((QLabel) this.findChild(QLabel.class, "label_mittenti")).setText(labelMittenti);
-        ((QLabel) this.findChild(QLabel.class, "label_destinatari")).setText(labelDestinatari);
+        ((QLabel) this.findChild(QLabel.class, "label_destra")).setText(labelDestra);
+        QTabWidget tabWidgetSoggettiProtocollo = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget_sinistra");
+        tabWidgetSoggettiProtocollo.setTabText(0, labelSinistra);
+        tabWidgetSoggettiProtocollo.setTabText(1, labelSinistra+" riservati (" + nrRiservati +")");
+        
     }
         
 }

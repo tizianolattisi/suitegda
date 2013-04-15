@@ -435,6 +435,23 @@ ALTER TABLE ONLY soggettoprotocollo
 ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
 
+CREATE TABLE soggettoriservatoprotocollo (
+    id bigserial NOT NULL,
+    conoscenza boolean,
+    corrispondenza boolean,
+    notifica boolean,
+    titolo character varying(255),
+    protocollo character varying(255),
+    soggetto bigint
+);
+ALTER TABLE protocollo.soggettoriservatoprotocollo OWNER TO postgres;
+ALTER TABLE ONLY soggettoriservatoprotocollo
+    ADD CONSTRAINT soggettoriservatoprotocollo_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY soggettoriservatoprotocollo
+    ADD CONSTRAINT fk_soggettoriservatoprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
+ALTER TABLE ONLY soggettoriservatoprotocollo
+    ADD CONSTRAINT fk_soggettoriservatoprotocollo_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+
 CREATE TABLE ufficioprotocollo (
     id bigserial NOT NULL,
     protocollo character varying(255),
