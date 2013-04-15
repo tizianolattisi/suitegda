@@ -54,6 +54,8 @@ public class Protocollo implements Serializable {
     @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<SoggettoProtocollo> soggettoProtocolloCollection;
     @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<SoggettoRiservatoProtocollo> soggettoRiservatoProtocolloCollection;
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioProtocollo> ufficioProtocolloCollection;
     @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Attribuzione> attribuzioneCollection;
@@ -226,6 +228,14 @@ public class Protocollo implements Serializable {
 
     public void setSoggettoProtocolloCollection(Collection<SoggettoProtocollo> soggettoProtocolloCollection) {
         this.soggettoProtocolloCollection = soggettoProtocolloCollection;
+    }
+
+    public Collection<SoggettoRiservatoProtocollo> getSoggettoRiservatoProtocolloCollection() {
+        return soggettoRiservatoProtocolloCollection;
+    }
+
+    public void setSoggettoRiservatoProtocolloCollection(Collection<SoggettoRiservatoProtocollo> soggettoRiservatoProtocolloCollection) {
+        this.soggettoRiservatoProtocolloCollection = soggettoRiservatoProtocolloCollection;
     }
 
     public Collection<UfficioProtocollo> getUfficioProtocolloCollection() {

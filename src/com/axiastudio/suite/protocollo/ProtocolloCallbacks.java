@@ -53,6 +53,14 @@ public class ProtocolloCallbacks {
         String msg = "";
         Boolean res = true;
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(protocollo, autenticato);
+        
+        // La modifica di un protocollo è permessa solo a sportello e attribuzione principale
+        if( protocollo.getId() != null && !profilo.inSportelloOAttribuzionePrincipale() ){
+            msg += "Devi appartenere allo sportello o all'attribuzione principale\n";
+            msg += "per poter modificare il protocollo.";
+            return new Validation(false, msg);
+        }
         
         /* sportello obbligatorio */
         if( protocollo.getSportello() == null ){

@@ -66,6 +66,7 @@ import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Norma;
+import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
@@ -157,13 +158,19 @@ public class Suite {
                               TipoPratica.class,
                               Window.class,
                               "Tipo Pratica");
-        
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
                               SoggettoProtocollo.class,
                               FormSoggettoProtocollo.class,
                               "Soggetto del protocollo");
-      
+        
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
+                              SoggettoRiservatoProtocollo.class,
+                              FormSoggettoProtocollo.class,
+                              "Soggetto riservato del protocollo");
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/praticaprotocollo.ui",
                               PraticaProtocollo.class,

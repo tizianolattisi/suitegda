@@ -41,33 +41,16 @@ public class ProtocolloPrivate {
             return false;
         }
         
-        // L'utente
+        // Profilo dell'utente
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
+        ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(protocollo, utente);
         
-        // L'utente è un ricercatore o un supervisore protocollo
-        if( utente.getRicercatoreprotocollo() == true ||
-                utente.getSupervisoreprotocollo() == true){
+        if( utente.getSupervisoreprotocollo() == true){
             return false;
         }
         
-        // Gli uffici in cui l'utente è inserito con flag "ricerca"
-        List<Ufficio> uffici = new ArrayList();
-        for( UfficioUtente uu: utente.getUfficioUtenteCollection() ){
-            if( uu.getRicerca() == true ){
-                uffici.add(uu.getUfficio());
-            }
-        }
-        
-        // L'utente è presente nello sportello?
-        if( uffici.contains(protocollo.getSportello()) ){
+        if( profilo.inSportelloOAttribuzione() ){
             return false;
-        }
-        
-        // L'utente è presente in almeno una attribuzione?
-        for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
-            if( uffici.contains(attribuzione.getUfficio())){
-                return false;
-            }
         }
         
         return true;
