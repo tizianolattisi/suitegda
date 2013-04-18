@@ -95,6 +95,7 @@ public class Mdi extends QMainWindow {
         itemProtocollo.setText(0, "Protocollo");
         itemProtocollo.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemProtocollo.setText(1, "com.axiastudio.suite.protocollo.entities.Protocollo");
+        itemProtocollo.setText(2, "NEW");
         Controller controllerProtocollo = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.protocollo.entities.Protocollo");
         //Store storeProtocollo = controllerProtocollo.createStore(10);
         //itemProtocollo.setData(1, Qt.ItemDataRole.UserRole, storeProtocollo);
@@ -120,6 +121,7 @@ public class Mdi extends QMainWindow {
         itemSoggetti.setText(0, "Soggetti");
         itemSoggetti.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemSoggetti.setText(1, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
+        itemSoggetti.setText(2, "NEW");
         //Controller controllerSoggetto = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
         //Store storeSoggetto = controllerSoggetto.createStore(10);
         //itemSoggetti.setData(1, Qt.ItemDataRole.UserRole, storeSoggetto);
@@ -134,6 +136,7 @@ public class Mdi extends QMainWindow {
         itemPratiche.setText(0, "Pratiche");
         itemPratiche.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemPratiche.setText(1, "com.axiastudio.suite.pratiche.entities.Pratica");
+        itemPratiche.setText(2, "NEW");
 
         QTreeWidgetItem itemTipoPratica = new QTreeWidgetItem(itemPraticheRoot);
         itemTipoPratica.setText(0, "Tipo di pratica");
@@ -155,17 +158,20 @@ public class Mdi extends QMainWindow {
         itemDelibere.setText(0, "Delibere");
         itemDelibere.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemDelibere.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
+        itemDelibere.setText(2, "NEW");
         itemDelibere.setDisabled(true);
 
         QTreeWidgetItem itemDetermine = new QTreeWidgetItem(itemDelibereDetermineRoot);
         itemDetermine.setText(0, "Determine");
         itemDetermine.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemDetermine.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
+        itemDetermine.setText(2, "NEW");
 
         QTreeWidgetItem itemSedute = new QTreeWidgetItem(itemDelibereDetermineRoot);
         itemSedute.setText(0, "Sedute");
         itemSedute.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
         itemSedute.setText(1, "com.axiastudio.suite.sedute.entities.Seduta");
+        itemSedute.setText(2, "NEW");
         itemSedute.setDisabled(true);
 
         /* Procedimento */
@@ -178,11 +184,13 @@ public class Mdi extends QMainWindow {
         itemProcedimento.setText(0, "Procedimenti");
         itemProcedimento.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemProcedimento.setText(1, "com.axiastudio.suite.procedimenti.entities.Procedimento");
+        itemProcedimento.setText(2, "NEW");
 
         QTreeWidgetItem itemNorma = new QTreeWidgetItem(itemProcedimentiRoot);
         itemNorma.setText(0, "Norme");
         itemNorma.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemNorma.setText(1, "com.axiastudio.suite.procedimenti.entities.Norma");
+        itemNorma.setText(2, "NEW");
         
         /* Configurazione sedute */
         QTreeWidgetItem itemConfigurazioneSeduteRoot = new QTreeWidgetItem(this.tree);
@@ -246,7 +254,11 @@ public class Mdi extends QMainWindow {
     
     private void runTask() {
         String formName = this.tree.currentItem().text(1);
+        String mode = this.tree.currentItem().text(2);
         /* cambio password */
+        if( "NEW".equals(formName) ){
+            
+        }
         if( "PASSWORD".equals(formName) ){
             CambiaPassword passDlg = new CambiaPassword(this);
             int exec = passDlg.exec();
@@ -286,10 +298,12 @@ public class Mdi extends QMainWindow {
             } catch (SecurityException ex) {
                 Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
             }
-            // XXX
-            //Controller controller = (Controller) Register.queryUtility(IController.class, factory.getName());
-            //Store store = controller.createStore(3);
+            // A store with a new element
             Store store = null;
+            if( "NEW".equals(mode) ){
+                Controller controller = (Controller) Register.queryUtility(IController.class, factory.getName());
+                store = controller.createNewStore();
+            }
             if( store != null ){
                 form.init(store);
             } else {
