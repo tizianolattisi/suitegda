@@ -637,7 +637,7 @@ ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_capitolo FOREIGN KEY (capitolo) REFERENCES finanziaria.capitolo(id);
 
 -- Sequenze (tmp)
---SET search_path = public, pg_catalog;
+SET search_path = public, pg_catalog;
 
 --CREATE TABLE sequence (
 --    seq_name character varying(50) NOT NULL,
