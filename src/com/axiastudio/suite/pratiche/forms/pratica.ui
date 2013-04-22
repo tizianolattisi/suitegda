@@ -127,7 +127,7 @@
           <widget class="QComboBox" name="comboBox_2"/>
          </item>
          <item row="2" column="3">
-          <widget class="QCheckBox" name="checkBox">
+          <widget class="QCheckBox" name="checkBox_riservata">
            <property name="text">
             <string>riservata</string>
            </property>
@@ -199,7 +199,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_4">
+           <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_gestione">
             <property name="column" stdset="0">
              <string>gestione</string>
             </property>

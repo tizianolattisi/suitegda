@@ -16,11 +16,16 @@
  */
 package com.axiastudio.suite.pratiche.forms;
 
+import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.UfficioUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
+import com.trolltech.qt.gui.QCheckBox;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QPushButton;
@@ -66,12 +71,27 @@ public class FormPratica extends Window {
     
     @Override
     protected void indexChanged(int row) {
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         Boolean nuovoInserimento = pratica.getId() == null;
         
         // Abilitazione scelta della tipologia
         Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, "comboBoxTipo"), !nuovoInserimento);
         ((QToolButton) this.findChild(QToolButton.class, "toolButtonTipo")).setEnabled(nuovoInserimento);
+        
+        // Se non sei nell'ufficio gestore, ti blocco l'ufficio gestore e il check riservato
+        Boolean inUfficioGestore = false;
+        for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
+            if( uu.getUfficio().equals(pratica.getGestione()) && uu.getModificapratica() ){
+                // se la pratica è riservata, mi serve anche il flag
+                if( !pratica.getRiservata() || uu.getPrivato() ){
+                    inUfficioGestore = true;
+                    break;
+                }
+            }
+        }
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_gestione")).setEnabled(nuovoInserimento || inUfficioGestore);
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_riservata")).setEnabled(nuovoInserimento || inUfficioGestore);
     }
     
 }

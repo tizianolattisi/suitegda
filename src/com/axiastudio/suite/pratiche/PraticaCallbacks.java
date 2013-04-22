@@ -23,6 +23,7 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Pratica_;
@@ -46,6 +47,16 @@ public class PraticaCallbacks {
         String msg = "";
         Boolean res = true;
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        Boolean inUfficioGestore = false;
+        for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
+            if( uu.getUfficio().equals(pratica.getGestione()) && uu.getModificapratica() ){
+                // se la pratica è riservata, mi serve anche il flag
+                if( !pratica.getRiservata() || uu.getPrivato() ){
+                    inUfficioGestore = true;
+                    break;
+                }
+            }
+        }
         
         // se l'utente non è istruttore non può inserire o modificare pratiche
         if( !autenticato.getIstruttorepratiche() ){
@@ -53,7 +64,7 @@ public class PraticaCallbacks {
             msg += "o modificare una pratica";
             return new Validation(false, msg);
         }
-        
+                        
         // devono essese definite attribuzione e tipologia
         if( pratica.getAttribuzione() == null ){
             msg = "Devi selezionare un'attribuzione.";
@@ -103,6 +114,11 @@ public class PraticaCallbacks {
                 pratica.setUbicazione(pratica.getAttribuzione());
             }
         } else {
+            // se l'utente non è inserito nell'ufficio gestore con flag modificapratiche non può modificare
+            if( !inUfficioGestore ){
+                msg = "Per modificare la pratica devi appartenere all'ufficio gestore con i permessi di modifica, ed eventuali privilegi sulle pratiche riservate.";
+                return new Validation(false, msg);
+            }
             // impossibile togliere gli uffici
             if( pratica.getGestione() == null || pratica.getAttribuzione() == null || pratica.getUbicazione() == null){
                 msg = "Non è permesso rimuovere attribuzione, gestione o ubicazione.";
