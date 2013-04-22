@@ -332,8 +332,7 @@ public class Protocollo implements Serializable {
 
     @Override
     public String toString() {
-        //return "com.axiastudio.suite.protocollo.entities.Protocollo[ id=" + id + " ]";
-        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + "(" + this.dataprotocollo + ")";
+        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + " (" + this.dataprotocollo + ")";
     }
     
 }
