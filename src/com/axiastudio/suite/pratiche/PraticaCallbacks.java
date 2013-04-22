@@ -58,10 +58,10 @@ public class PraticaCallbacks {
             }
         }
         
-        // se l'utente non è istruttore non può inserire o modificare pratiche
+        // se l'utente non è istruttore non può inserire o modificare pratiche,
         if( !autenticato.getIstruttorepratiche() ){
             msg = "Devi avere come ruolo \"istruttore\" per poter inserire\n";
-            msg += "o modificare una pratica";
+            msg += "o modificare una pratica.";
             return new Validation(false, msg);
         }
                         
@@ -114,15 +114,20 @@ public class PraticaCallbacks {
                 pratica.setUbicazione(pratica.getAttribuzione());
             }
         } else {
-            // se l'utente non è inserito nell'ufficio gestore con flag modificapratiche non può modificare
-            if( !inUfficioGestore ){
-                msg = "Per modificare la pratica devi appartenere all'ufficio gestore con i permessi di modifica, ed eventuali privilegi sulle pratiche riservate.";
-                return new Validation(false, msg);
-            }
-            // impossibile togliere gli uffici
-            if( pratica.getGestione() == null || pratica.getAttribuzione() == null || pratica.getUbicazione() == null){
-                msg = "Non è permesso rimuovere attribuzione, gestione o ubicazione.";
-                return new Validation(false, msg);
+            // l'amministratore pratiche modifica anche se non appartenente all'ufficio gestore e
+            // anche se la pratica è archiviata.
+            if( !autenticato.getSupervisorepratiche() ){
+                // se l'utente non è inserito nell'ufficio gestore con flag modificapratiche non può modificare
+                if( !inUfficioGestore ){
+                    msg = "Per modificare la pratica devi appartenere all'ufficio gestore con i permessi di modifica, ed eventuali privilegi sulle pratiche riservate.";
+                    return new Validation(false, msg);
+                }
+                // impossibile togliere gli uffici
+                if( pratica.getGestione() == null || pratica.getAttribuzione() == null || pratica.getUbicazione() == null){
+                    msg = "Non è permesso rimuovere attribuzione, gestione o ubicazione.";
+                    return new Validation(false, msg);
+                }
+                // Se la pratica è archiviata, non posso modificarla, ma ciò viene implementato con il cambio di ufficio gestore
             }
         }
         return new Validation(true);
