@@ -37,12 +37,26 @@ public class UfficioUtente implements Serializable {
     @JoinColumn(name = "utente", referencedColumnName = "id")
     @ManyToOne
     private Utente utente;
+    @Column(name="ospite")
+    private Boolean ospite=false;
     @Column(name="ricerca")
     private Boolean ricerca=true;
     @Column(name="visualizza")
     private Boolean visualizza=true;
     @Column(name="privato")
     private Boolean privato=false;
+    @Column(name="daiperletto")
+    private Boolean daiperletto=false;
+    @Column(name="modificapratica")
+    private Boolean modificapratica=false;
+    @Column(name="inseriscepratica")
+    private Boolean inseriscepratica=false;
+    @Column(name="consolida")
+    private Boolean consolida=false;
+    @Column(name="responsabile")
+    private Boolean responsabile=false;
+    @Column(name="procedimenti")
+    private Boolean procedimenti=false;
 
     public Long getId() {
         return id;
@@ -90,6 +104,62 @@ public class UfficioUtente implements Serializable {
 
     public void setVisualizza(Boolean visualizza) {
         this.visualizza = visualizza;
+    }
+
+    public Boolean getOspite() {
+        return ospite;
+    }
+
+    public void setOspite(Boolean ospite) {
+        this.ospite = ospite;
+    }
+
+    public Boolean getDaiperletto() {
+        return daiperletto;
+    }
+
+    public void setDaiperletto(Boolean daiperletto) {
+        this.daiperletto = daiperletto;
+    }
+
+    public Boolean getModificapratica() {
+        return modificapratica;
+    }
+
+    public void setModificapratica(Boolean modificapratica) {
+        this.modificapratica = modificapratica;
+    }
+
+    public Boolean getInseriscepratica() {
+        return inseriscepratica;
+    }
+
+    public void setInseriscepratica(Boolean inseriscepratica) {
+        this.inseriscepratica = inseriscepratica;
+    }
+
+    public Boolean getConsolida() {
+        return consolida;
+    }
+
+    public void setConsolida(Boolean consolida) {
+        this.consolida = consolida;
+    }
+
+    public Boolean getResponsabile() {
+        return responsabile;
+    }
+
+    public void setResponsabile(Boolean responsabile) {
+        this.responsabile = responsabile;
+    }
+
+    public Boolean getProcedimenti() {
+        return procedimenti;
+    }
+
+    public void setProcedimenti(Boolean procedimenti) {
+        this.procedimenti = procedimenti;
     }
 
     @Override

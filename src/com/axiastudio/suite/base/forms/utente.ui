@@ -348,7 +348,7 @@
            <string>.ufficioUtenteCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;ufficio&lt;,ricerca,visualizza,privato</string>
+           <string>&gt;ufficio&lt;,ospite,ricerca,visualizza,privato,daiperletto,inseriscepratica,modificapratica,consolida,responsabile,procedimenti</string>
           </property>
           <property name="reference" stdset="0">
            <string>ufficio</string>
