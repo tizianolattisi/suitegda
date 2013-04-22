@@ -269,8 +269,8 @@
             <property name="text">
              <string>Istruttore</string>
             </property>
-            <property name="istruttorepratiche" stdset="0">
-             <string/>
+            <property name="column" stdset="0">
+             <string>istruttorepratiche</string>
             </property>
            </widget>
           </item>
@@ -283,6 +283,19 @@
              <string>modellatorepratiche</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>65</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>

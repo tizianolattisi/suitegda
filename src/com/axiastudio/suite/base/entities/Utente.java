@@ -67,6 +67,8 @@ public class Utente implements Serializable, IUtente {
     private Boolean supervisorepratiche=false;
     @Column(name="modellatorepratiche")
     private Boolean modellatorepratiche=false;
+    @Column(name="istruttorepratiche")
+    private Boolean istruttorepratiche=false;
     @OneToMany(mappedBy = "utente", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Delega> delegaCollection;
 
@@ -220,6 +222,14 @@ public class Utente implements Serializable, IUtente {
 
     public void setDelegaCollection(Collection<Delega> delegaCollection) {
         this.delegaCollection = delegaCollection;
+    }
+
+    public Boolean getIstruttorepratiche() {
+        return istruttorepratiche;
+    }
+
+    public void setIstruttorepratiche(Boolean istruttorepratiche) {
+        this.istruttorepratiche = istruttorepratiche;
     }
 
     @Override
