@@ -71,6 +71,7 @@ public class FormPratica extends Window {
     
     @Override
     protected void indexChanged(int row) {
+        super.indexChanged(row);
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         Boolean nuovoInserimento = pratica.getId() == null;
