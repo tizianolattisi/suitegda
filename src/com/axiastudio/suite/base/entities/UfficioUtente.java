@@ -43,8 +43,8 @@ public class UfficioUtente implements Serializable {
     private Boolean ricerca=true;
     @Column(name="visualizza")
     private Boolean visualizza=true;
-    @Column(name="privato")
-    private Boolean privato=false;
+    @Column(name="riservato")
+    private Boolean riservato=false;
     @Column(name="daiperletto")
     private Boolean daiperletto=false;
     @Column(name="modificapratica")
@@ -82,12 +82,12 @@ public class UfficioUtente implements Serializable {
         this.utente = utente;
     }
 
-    public Boolean getPrivato() {
-        return privato;
+    public Boolean getRiservato() {
+        return riservato;
     }
 
-    public void setPrivato(Boolean privato) {
-        this.privato = privato;
+    public void setRiservato(Boolean riservato) {
+        this.riservato = riservato;
     }
 
     public Boolean getRicerca() {

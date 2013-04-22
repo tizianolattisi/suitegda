@@ -57,7 +57,7 @@ public class ProfiloUtenteProtocollo {
                 if( uu.getRicerca() ){
                     this.ufficiRicercaUtente.add(uu.getUfficio());
                 }
-                if( uu.getPrivato() ){
+                if( uu.getRiservato() ){
                     this.ufficiRiservatoUtente.add(uu.getUfficio());
                 }
             }

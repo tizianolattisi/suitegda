@@ -83,16 +83,16 @@ ALTER TABLE ONLY ufficio
 
 CREATE TABLE ufficioutente (
     id bigserial NOT NULL,
-    ospite boolean,
-    privato boolean,
-    ricerca boolean,
-    visualizza boolean,
-    daiperletto boolean,
-    inseriscepratica boolean,
-    modificapratica boolean,
-    consolida boolean,
-    responsabile boolean,
-    procedimenti boolean,
+    ospite boolean NOT NULL DEFAULT FALSE,
+    riservato boolean NOT NULL DEFAULT FALSE,
+    ricerca boolean NOT NULL DEFAULT TRUE,
+    visualizza boolean NOT NULL DEFAULT TRUE,
+    daiperletto boolean NOT NULL DEFAULT FALSE,
+    inseriscepratica boolean NOT NULL DEFAULT FALSE,
+    modificapratica boolean NOT NULL DEFAULT FALSE,
+    consolida boolean NOT NULL DEFAULT FALSE,
+    responsabile boolean NOT NULL DEFAULT FALSE,
+    procedimenti boolean NOT NULL DEFAULT FALSE,
     ufficio bigint,
     utente bigint
 );

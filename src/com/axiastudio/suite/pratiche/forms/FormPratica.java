@@ -84,7 +84,7 @@ public class FormPratica extends Window {
         for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
             if( uu.getUfficio().equals(pratica.getGestione()) && uu.getModificapratica() ){
                 // se la pratica è riservata, mi serve anche il flag
-                if( !pratica.getRiservata() || uu.getPrivato() ){
+                if( !pratica.getRiservata() || uu.getRiservato() ){
                     inUfficioGestore = true;
                     break;
                 }
