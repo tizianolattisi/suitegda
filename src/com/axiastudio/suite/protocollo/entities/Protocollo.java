@@ -16,7 +16,11 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -142,6 +146,32 @@ public class Protocollo implements Serializable {
         this.oggetto = oggetto;
     }
 
+    public String getOggettop() {
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(this, autenticato);
+        if( !profilo.inSportelloOAttribuzione() ){
+            return "RISERVATO";
+        }
+        return this.getOggetto();
+    }
+
+    public void setOggettop(String oggetto) {
+        /* nulla da fare */
+    }
+
+    public String getNotep() {
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(this, autenticato);
+        if( !profilo.inSportelloOAttribuzione() ){
+            return "RISERVATO";
+        }
+        return this.getNote();
+    }
+
+    public void setNotep(String note) {
+        /* nulla da fare */
+    }
+    
     public TipoProtocollo getTipo() {
         return tipo;
     }
@@ -332,7 +362,7 @@ public class Protocollo implements Serializable {
 
     @Override
     public String toString() {
-        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + " (" + this.dataprotocollo + ")";
+        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + " (" + this.dataprotocollo + ") " + this.getOggettop();
     }
     
 }

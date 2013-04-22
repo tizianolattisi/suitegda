@@ -14,7 +14,7 @@
    <string>Protocolli</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>&gt;iddocumento&lt;,&gt;tipo&lt;,&gt;dataprotocollo&lt;,&lt;oggetto&gt;</string>
+   <string>&gt;iddocumento&lt;,&gt;tipo&lt;,&gt;dataprotocollo&lt;,&lt;oggettop&gt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_5">
