@@ -298,6 +298,18 @@ ALTER TABLE ONLY delega
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
+CREATE TABLE protocollo.fascicolo (
+    id bigserial NOT NULL,
+    categoria integer,
+    classe integer,
+    descrizione character varying(255),
+    note character varying(2048),
+    fascicolo integer
+);
+ALTER TABLE protocollo.fascicolo OWNER TO postgres;
+ALTER TABLE ONLY protocollo.fascicolo
+    ADD CONSTRAINT fascicolo_pkey PRIMARY KEY (id);
+
 CREATE TABLE pratica (
     id bigserial NOT NULL,
     anno integer,
@@ -311,7 +323,8 @@ CREATE TABLE pratica (
     ubicazione bigint,
     dettaglioubicazione character varying(255),
     tipo bigint,
-    riservata boolean
+    riservata boolean,
+    fascicolo bigint
 );
 ALTER TABLE pratiche.pratica OWNER TO postgres;
 ALTER TABLE ONLY pratica
@@ -326,23 +339,13 @@ ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_ubicazione FOREIGN KEY (ubicazione) REFERENCES base.ufficio(id);
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_tipopratica FOREIGN KEY (tipo) REFERENCES pratiche.tipopratica(id);
+ALTER TABLE ONLY pratica
+    ADD CONSTRAINT fk_pratica_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
 
 
 
 -- Protocollo
 SET search_path = protocollo, pg_catalog;
-
-CREATE TABLE fascicolo (
-    id bigserial NOT NULL,
-    categoria integer,
-    classe integer,
-    descrizione character varying(255),
-    note character varying(2048),
-    fascicolo integer
-);
-ALTER TABLE protocollo.fascicolo OWNER TO postgres;
-ALTER TABLE ONLY fascicolo
-    ADD CONSTRAINT fascicolo_pkey PRIMARY KEY (id);
 
 CREATE TABLE protocollo (
     id bigserial NOT NULL,

@@ -17,6 +17,7 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import java.io.Serializable;
 import java.util.Collection;
@@ -66,6 +67,9 @@ public class Pratica implements Serializable {
     private TipoPratica tipo;
     @Column(name="riservata")
     private Boolean riservata=false;
+    @JoinColumn(name = "fascicolo", referencedColumnName = "id")
+    @ManyToOne
+    private Fascicolo fascicolo;
 
 
     public Long getId() {
@@ -189,6 +193,14 @@ public class Pratica implements Serializable {
 
     public void setRiservata(Boolean riservata) {
         this.riservata = riservata;
+    }
+
+    public Fascicolo getFascicolo() {
+        return fascicolo;
+    }
+
+    public void setFascicolo(Fascicolo fascicolo) {
+        this.fascicolo = fascicolo;
     }
 
     @Override
