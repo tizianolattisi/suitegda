@@ -310,7 +310,8 @@ CREATE TABLE pratica (
     gestione bigint,
     ubicazione bigint,
     dettaglioubicazione character varying(255),
-    tipo bigint
+    tipo bigint,
+    riservata boolean
 );
 ALTER TABLE pratiche.pratica OWNER TO postgres;
 ALTER TABLE ONLY pratica

@@ -37,7 +37,7 @@ INSERT INTO tipopratica (id, codice, descrizione, tipopadre) VALUES (3, 'DETRS',
 SELECT setval('pratiche.tipopratica_id_seq', 4, true);
 
 INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipo)
-  VALUES (1, 2012, '2012-12-10', 'Pratica demo', '2012000001', 'DETDS2012000001', NULL, 3, 4, 3, 'scaffale in alto', 3);
+  VALUES (1, 2012, '2012-12-10', 'Pratica demo', '201200000001', 'DETDS201200000001', NULL, 3, 4, 3, 'scaffale in alto', 3);
 SELECT setval('pratiche.pratica_id_seq', 2, true);
 
 -- Protocollo

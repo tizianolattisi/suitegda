@@ -14,7 +14,7 @@
    <string>Pratiche</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>&gt;idpratica&lt;,&lt;descrizione&gt;</string>
+   <string>&gt;idpratica&lt;,&lt;descrizioner&gt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_5">
@@ -129,6 +129,9 @@
          <item row="2" column="3">
           <widget class="QCheckBox" name="checkBox">
            <property name="text">
+            <string>riservata</string>
+           </property>
+           <property name="column" stdset="0">
             <string>riservata</string>
            </property>
           </widget>

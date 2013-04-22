@@ -281,7 +281,7 @@ public class SuiteDemo {
         rules.put("PEG_CORRENTE", "return \"PEG approvato con bilancio...\""); // TODO: da strutturare
         rules.put("INDIRIZZO", ""); // TODO: cerca Michela
         rules.put("bar_code", "return Determina.getIdDocumento();");
-        rules.put("BAR_COD_PRATICA", "return Determina.getIdPratica();");
+        rules.put("BAR_COD_PRATICA", "return Determina.getIdpratica();");
         rules.put("OGGETTO", "return Determina.getOggetto();");
         rules.put("FRASE_IMPEGNO", "if( Determina.getDiSpesa() ){ return \"con impegno di spesa\"; } else return \"\"");
         rules.put("OBIETTIVO", ""); // per ora vuoro

@@ -64,6 +64,9 @@ public class Pratica implements Serializable {
     @JoinColumn(name = "tipo", referencedColumnName = "id")
     @ManyToOne
     private TipoPratica tipo;
+    @Column(name="riservata")
+    private Boolean riservata=false;
+
 
     public Long getId() {
         return id;
@@ -120,7 +123,18 @@ public class Pratica implements Serializable {
     public void setDescrizione(String oggetto) {
         this.descrizione = oggetto;
     }
+    
+    public String getDescrizioner() {
+        if( this.getRiservata() != null && this.getRiservata() == true ){
+            return "RISERVATA";
+        }
+        return this.getDescrizione();
+    }
 
+    public void setDescrizioner(String descrizione) {
+        /* nulla da fare */
+    }
+    
     public Collection<PraticaProtocollo> getPraticaProtocolloCollection() {
         return praticaProtocolloCollection;
     }
@@ -169,6 +183,14 @@ public class Pratica implements Serializable {
         this.tipo = tipo;
     }
 
+    public Boolean getRiservata() {
+        return riservata;
+    }
+
+    public void setRiservata(Boolean riservata) {
+        this.riservata = riservata;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -189,9 +211,13 @@ public class Pratica implements Serializable {
         return true;
     }
 
+    /*
+     * Le pratiche riservate non riportano l'oggetto
+     */
     @Override
     public String toString() {
-        return "com.axiastudio.suite.pratiche.entities.Pratica[ id=" + id + " ]";
+        String out = this.getIdpratica() + " - " + this.getDescrizioner();
+        return out;
     }
     
 }
