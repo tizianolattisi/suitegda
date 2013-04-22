@@ -50,11 +50,11 @@ public class Utente implements Serializable, IUtente {
     @Column(name="superutente")
     private Boolean superutente=false;
     @Column(name="operatoreanagrafiche")
-    private Boolean operatoreanagrafiche=false;
+    private Boolean operatoreanagrafiche=true;
     @Column(name="supervisoreanagrafiche")
     private Boolean supervisoreanagrafiche=false;
     @Column(name="operatoreprotocollo")
-    private Boolean operatoreprotocollo=false;
+    private Boolean operatoreprotocollo=true;
     @Column(name="ricercatoreprotocollo")
     private Boolean ricercatoreprotocollo=false;
     @Column(name="attributoreprotocollo")
@@ -62,7 +62,7 @@ public class Utente implements Serializable, IUtente {
     @Column(name="supervisoreprotocollo")
     private Boolean supervisoreprotocollo=false;
     @Column(name="operatorepratiche")
-    private Boolean operatorepratiche=false;
+    private Boolean operatorepratiche=true;
     @Column(name="supervisorepratiche")
     private Boolean supervisorepratiche=false;
     @Column(name="modellatorepratiche")

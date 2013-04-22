@@ -52,22 +52,22 @@ SET search_path = base, pg_catalog;
 CREATE TABLE utente (
     id bigserial NOT NULL,
     amministratore boolean,
-    attributoreprotocollo boolean,
+    attributoreprotocollo boolean NOT NULL DEFAULT FALSE,
     email character varying(255),
     login character varying(255),
-    modellatorepratiche boolean,
+    modellatorepratiche boolean NOT NULL DEFAULT FALSE,
     nome character varying(255),
     sigla character varying(255),
-    operatoreanagrafiche boolean,
-    operatorepratiche boolean,
-    operatoreprotocollo boolean,
+    operatoreanagrafiche boolean NOT NULL DEFAULT TRUE,
+    operatorepratiche boolean NOT NULL DEFAULT TRUE,
+    operatoreprotocollo boolean NOT NULL DEFAULT TRUE,
     password character varying(255),
-    superutente boolean,
-    supervisoreanagrafiche boolean,
-    supervisorepratiche boolean,
-    supervisoreprotocollo boolean,
-    ricercatoreprotocollo boolean,
-    istruttorepratiche boolean
+    superutente boolean NOT NULL DEFAULT FALSE,
+    supervisoreanagrafiche boolean NOT NULL DEFAULT FALSE,
+    supervisorepratiche boolean NOT NULL DEFAULT FALSE,
+    supervisoreprotocollo boolean NOT NULL DEFAULT FALSE,
+    ricercatoreprotocollo boolean NOT NULL DEFAULT FALSE,
+    istruttorepratiche boolean NOT NULL DEFAULT FALSE
 );
 ALTER TABLE base.utente OWNER TO postgres;
 ALTER TABLE ONLY utente
