@@ -63,9 +63,6 @@ public class FormProtocollo extends Window {
         toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
         toolButtonTitolario.clicked.connect(this, "apriTitolario()");
         
-        /* impostazione attribuzione principale */
-        ((QPushButton) this.findChild(QPushButton.class, "pushButton_principale")).clicked.connect(this, "impostaAttribuzionePrincipale()");
-               
     }
     
     private void convalidaAttribuzioni() {
