@@ -73,14 +73,14 @@ public class SuiteUtil {
         return store;
     }
     
-    public static Pratica findPratica(String idPratica){
+    public static Pratica findPratica(String idpratica){
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Pratica> cq = cb.createQuery(Pratica.class);
         Root<Pratica> root = cq.from(Pratica.class);
         cq.select(root);
-        cq.where(cb.equal(root.get(Pratica_.idPratica), idPratica));
+        cq.where(cb.equal(root.get(Pratica_.idpratica), idpratica));
         TypedQuery<Pratica> tq = em.createQuery(cq);
         Pratica pratica = tq.getSingleResult();
         return pratica;

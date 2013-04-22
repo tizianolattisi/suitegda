@@ -36,7 +36,7 @@ public class Pratica implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genpratica")
     private Long id;
     @Column(name="idpratica", unique=true)
-    private String idPratica;
+    private String idpratica;
     @Column(name="codiceinterno", unique=true)
     private String codiceInterno;
     @Column(name="datapratica")
@@ -89,12 +89,12 @@ public class Pratica implements Serializable {
         this.datapratica = datapratica;
     }
 
-    public String getIdPratica() {
-        return idPratica;
+    public String getIdpratica() {
+        return idpratica;
     }
 
-    public void setIdPratica(String idPratica) {
-        this.idPratica = idPratica;
+    public void setIdpratica(String idpratica) {
+        this.idpratica = idpratica;
     }
 
     public String getCodiceInterno() {

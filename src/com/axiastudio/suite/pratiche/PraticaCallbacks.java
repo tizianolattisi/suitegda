@@ -52,7 +52,7 @@ public class PraticaCallbacks {
             Root<Pratica> root = cq.from(Pratica.class);
             cq.select(root);
             cq.where(cb.equal(root.get(Pratica_.anno), year));
-            cq.orderBy(cb.desc(root.get(Pratica_.idPratica)));
+            cq.orderBy(cb.desc(root.get(Pratica_.idpratica)));
             TypedQuery<Pratica> tq = em.createQuery(cq).setMaxResults(1);
             Pratica max;
             pratica.setDatapratica(date);
@@ -62,15 +62,15 @@ public class PraticaCallbacks {
             } catch (NoResultException ex) {
                 max=null;
             }
-            String newIdPratica;
+            String newIdpratica;
             if( max != null ){
-                Integer i = Integer.parseInt(max.getIdPratica().substring(4));
+                Integer i = Integer.parseInt(max.getIdpratica().substring(4));
                 i++;
-                newIdPratica = year+String.format("%08d", i);
+                newIdpratica = year+String.format("%08d", i);
             } else {
-                newIdPratica = year+"00000001";
+                newIdpratica = year+"00000001";
             }
-            pratica.setIdPratica(newIdPratica);
+            pratica.setIdpratica(newIdpratica);
         }
         return new Validation(true);
     }

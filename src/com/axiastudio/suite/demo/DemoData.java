@@ -382,7 +382,7 @@ public class DemoData {
         servizioDetermina.setServizio(servizioAffariGenerali);
         servizioDeterminaCollection.add(servizioDetermina);
         determina.setServizioDeterminaCollection(servizioDeterminaCollection);
-        determina.setIdPratica(pratica.getIdPratica());
+        determina.setIdpratica(pratica.getIdpratica());
         determina.setCodiceInterno("DETRS201300001");
         
         em.getTransaction().begin();

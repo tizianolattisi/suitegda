@@ -14,7 +14,7 @@
    <string>Pratiche</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>&gt;idPratica&lt;,&lt;descrizione&gt;</string>
+   <string>&gt;idpratica&lt;,&lt;descrizione&gt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_5">
@@ -28,7 +28,7 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>16777215</width>
+        <width>800</width>
         <height>290</height>
        </size>
       </property>
@@ -51,7 +51,7 @@
             <bool>false</bool>
            </property>
            <property name="column" stdset="0">
-            <string>idPratica</string>
+            <string>idpratica</string>
            </property>
            <property name="search" stdset="0">
             <bool>true</bool>
@@ -100,6 +100,9 @@
            </property>
            <property name="column" stdset="0">
             <string>codiceInterno</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -376,35 +379,14 @@
        <attribute name="title">
         <string>Pratiche relazionate</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="margin">
-         <number>8</number>
-        </property>
-        <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
-          <property name="entity" stdset="0">
-           <string>.praticaProtocolloCollection</string>
-          </property>
-          <property name="columns" stdset="0">
-           <string>&gt;protocollo&lt;</string>
-          </property>
-          <property name="reference" stdset="0">
-           <string>protocollo</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
         <string>Protocolli associati</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="margin">
-         <number>8</number>
-        </property>
         <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
           <property name="entity" stdset="0">
            <string>.praticaProtocolloCollection</string>
           </property>
