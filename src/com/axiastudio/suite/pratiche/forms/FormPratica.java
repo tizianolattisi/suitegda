@@ -16,11 +16,16 @@
  */
 package com.axiastudio.suite.pratiche.forms;
 
+import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
+import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
+import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QIcon;
+import com.trolltech.qt.gui.QPushButton;
 import com.trolltech.qt.gui.QToolButton;
+import com.trolltech.qt.gui.QWidget;
 
 /**
  *
@@ -35,13 +40,19 @@ public class FormPratica extends Window {
         QToolButton toolButtonTipo = (QToolButton) this.findChild(QToolButton.class, "toolButtonTipo");
         toolButtonTipo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
         toolButtonTipo.clicked.connect(this, "apriTipo()");
-
+        
     }
     
     /*
      * XXX: copia e incolla in FormTipoSeduta
      */
     private void apriTipo(){
+        Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+        if( pratica.getAttribuzione() == null ){
+            String msg = "Per poter selezionare una tipologia devi prima attribuire un ufficio";
+            Util.warningBox((QWidget) this, "Error", msg);
+            return;
+        }
         FormTipoPratica tipi = new FormTipoPratica();
         int exec = tipi.exec();
         if( exec == 1 ){
@@ -50,6 +61,17 @@ public class FormPratica extends Window {
             comboBoxTipo.select(selection);
             this.getContext().getDirty();
         }
+    }
+    
+    
+    @Override
+    protected void indexChanged(int row) {
+        Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+        Boolean nuovoInserimento = pratica.getId() == null;
+        
+        // Abilitazione scelta della tipologia
+        Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, "comboBoxTipo"), !nuovoInserimento);
+        ((QToolButton) this.findChild(QToolButton.class, "toolButtonTipo")).setEnabled(nuovoInserimento);
     }
     
 }

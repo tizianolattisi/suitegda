@@ -54,6 +54,16 @@ public class PraticaCallbacks {
             return new Validation(false, msg);
         }
         
+        // devono essese definite attribuzione e tipologia
+        if( pratica.getAttribuzione() == null ){
+            msg = "Devi selezionare un'attribuzione.";
+            return new Validation(false, msg);
+        } else if( pratica.getTipo() == null ){
+            msg = "Devi selezionare un tipo di pratica.";
+            return new Validation(false, msg);
+        }
+
+        
         if( pratica.getId() == null ){
             Calendar calendar = Calendar.getInstance();
             Integer year = calendar.get(Calendar.YEAR);
@@ -84,6 +94,20 @@ public class PraticaCallbacks {
                 newIdpratica = year+"00000001";
             }
             pratica.setIdpratica(newIdpratica);
+            
+            // se mancano gestione e ubicazione, li fisso come l'attribuzione
+            if( pratica.getGestione() == null ){
+                pratica.setGestione(pratica.getAttribuzione());
+            }
+            if( pratica.getUbicazione() == null ){
+                pratica.setUbicazione(pratica.getAttribuzione());
+            }
+        } else {
+            // impossibile togliere gli uffici
+            if( pratica.getGestione() == null || pratica.getAttribuzione() == null || pratica.getUbicazione() == null){
+                msg = "Non è permesso rimuovere attribuzione, gestione o ubicazione.";
+                return new Validation(false, msg);
+            }
         }
         return new Validation(true);
     }
