@@ -331,7 +331,7 @@ CREATE TABLE pratica (
     ubicazione bigint,
     dettaglioubicazione character varying(255),
     tipo bigint,
-    riservata boolean,
+    riservata boolean NOT NULL DEFAULT FALSE,
     fascicolo bigint
 );
 ALTER TABLE pratiche.pratica OWNER TO postgres;
