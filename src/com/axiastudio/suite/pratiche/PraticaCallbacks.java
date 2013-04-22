@@ -22,6 +22,8 @@ import com.axiastudio.pypapi.annotations.CallbackType;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Validation;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Pratica_;
 import java.util.Calendar;
@@ -41,6 +43,17 @@ public class PraticaCallbacks {
     
     @Callback(type=CallbackType.BEFORECOMMIT)
     public static Validation validaPratica(Pratica pratica){
+        String msg = "";
+        Boolean res = true;
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        
+        // se l'utente non è istruttore non può inserire o modificare pratiche
+        if( !autenticato.getIstruttorepratiche() ){
+            msg = "Devi avere come ruolo \"istruttore\" per poter inserire\n";
+            msg += "o modificare una pratica";
+            return new Validation(false, msg);
+        }
+        
         if( pratica.getId() == null ){
             Calendar calendar = Calendar.getInstance();
             Integer year = calendar.get(Calendar.YEAR);
