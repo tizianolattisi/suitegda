@@ -695,7 +695,7 @@
         <item row="3" column="0">
          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_pratiche">
           <property name="columns" stdset="0">
-           <string>&lt;pratica&gt;</string>
+           <string>&gt;originale&lt;,&lt;pratica&gt;</string>
           </property>
           <property name="reference" stdset="0">
            <string>pratica</string>

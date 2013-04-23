@@ -390,7 +390,7 @@ ALTER TABLE ONLY protocollo
 CREATE TABLE attribuzione (
     id bigserial NOT NULL,
     letto boolean,
-    principale boolean,
+    principale boolean NOT NULL DEFAULT FALSE,
     protocollo character varying(255),
     ufficio bigint,
     evidenza character varying(1)
@@ -407,7 +407,8 @@ CREATE TABLE praticaprotocollo (
     id bigserial NOT NULL,
     titolo character varying(255),
     pratica bigint,
-    protocollo bigint
+    protocollo bigint,
+    originale boolean NOT NULL DEFAULT FALSE
 );
 ALTER TABLE protocollo.praticaprotocollo OWNER TO postgres;
 ALTER TABLE ONLY praticaprotocollo

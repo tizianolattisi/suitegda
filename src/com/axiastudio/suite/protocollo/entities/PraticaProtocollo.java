@@ -40,6 +40,8 @@ public class PraticaProtocollo implements Serializable {
     private Protocollo protocollo;
     @Enumerated(EnumType.STRING)
     private TitoloPraticaProtocollo titolo;
+    @Column(name="originale")
+    private Boolean originale=false;
 
     public Long getId() {
         return id;
@@ -71,6 +73,14 @@ public class PraticaProtocollo implements Serializable {
 
     public void setTitolo(TitoloPraticaProtocollo titolo) {
         this.titolo = titolo;
+    }
+
+    public Boolean getOriginale() {
+        return originale;
+    }
+
+    public void setOriginale(Boolean originale) {
+        this.originale = originale;
     }
 
     @Override
