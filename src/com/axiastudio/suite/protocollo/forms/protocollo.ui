@@ -23,13 +23,13 @@
       <property name="minimumSize">
        <size>
         <width>640</width>
-        <height>256</height>
+        <height>244</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>640</width>
-        <height>256</height>
+        <height>244</height>
        </size>
       </property>
       <property name="title">
@@ -420,6 +420,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QLineEdit" name="lineEdit_sportello">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_sportello">
            <property name="column" stdset="0">
             <string>Sportello</string>
@@ -482,13 +489,13 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>256</height>
+        <height>244</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>259</height>
+        <height>244</height>
        </size>
       </property>
       <property name="title">
@@ -676,6 +683,9 @@
           <property name="reference" stdset="0">
            <string>ufficio</string>
           </property>
+          <property name="filters" stdset="0">
+           <string>mittenteodestinatario=true</string>
+          </property>
          </widget>
         </item>
         <item row="2" column="0">
@@ -715,6 +725,9 @@
           </property>
           <property name="reference" stdset="0">
            <string>Ufficio</string>
+          </property>
+          <property name="filters" stdset="0">
+           <string>attribuzione=true</string>
           </property>
          </widget>
         </item>
