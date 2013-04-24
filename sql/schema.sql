@@ -75,7 +75,10 @@ ALTER TABLE ONLY utente
 
 CREATE TABLE ufficio (
     id bigserial NOT NULL,
-    descrizione character varying(255)
+    descrizione character varying(255),
+    sportello boolean NOT NULL DEFAULT FALSE,
+    mittenteodestinatario boolean NOT NULL DEFAULT FALSE,
+    attribuzione boolean NOT NULL DEFAULT FALSE
 );
 ALTER TABLE base.ufficio OWNER TO postgres;
 ALTER TABLE ONLY ufficio
