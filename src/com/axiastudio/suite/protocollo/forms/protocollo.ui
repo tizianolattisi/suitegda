@@ -676,6 +676,9 @@
           <property name="reference" stdset="0">
            <string>ufficio</string>
           </property>
+          <property name="filters" stdset="0">
+           <string>mittenteodestinatario=true</string>
+          </property>
          </widget>
         </item>
         <item row="2" column="0">
@@ -715,6 +718,9 @@
           </property>
           <property name="reference" stdset="0">
            <string>Ufficio</string>
+          </property>
+          <property name="filters" stdset="0">
+           <string>attribuzione=true</string>
           </property>
          </widget>
         </item>

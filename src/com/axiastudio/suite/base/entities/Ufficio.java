@@ -39,6 +39,13 @@ public class Ufficio implements Serializable {
     private Long id;
     @Column(name="descrizione")
     private String descrizione;
+    @Column(name="sportello")
+    private Boolean sportello=false;
+    @Column(name="mittenteodestinatario")
+    private Boolean mittenteodestinatario=false;
+    @Column(name="attribuzione")
+    private Boolean attribuzione=false;
+
 
     public Long getId() {
         return id;
@@ -54,6 +61,30 @@ public class Ufficio implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public Boolean getSportello() {
+        return sportello;
+    }
+
+    public void setSportello(Boolean sportello) {
+        this.sportello = sportello;
+    }
+
+    public Boolean getMittenteodestinatario() {
+        return mittenteodestinatario;
+    }
+
+    public void setMittenteodestinatario(Boolean mittenteodestinatario) {
+        this.mittenteodestinatario = mittenteodestinatario;
+    }
+
+    public Boolean getAttribuzione() {
+        return attribuzione;
+    }
+
+    public void setAttribuzione(Boolean attribuzione) {
+        this.attribuzione = attribuzione;
     }
 
     @Override
