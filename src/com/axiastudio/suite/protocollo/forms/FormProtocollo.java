@@ -16,18 +16,29 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.IStoreFactory;
+import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.TableModel;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.UfficioUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -58,6 +69,15 @@ public class FormProtocollo extends Window {
         QLabel labelConvalidaAttribuzioni = (QLabel) this.findChild(QLabel.class, "labelConvalidaAttribuzioni");
         labelConvalidaAttribuzioni.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_group.png"));
         
+        try {
+            Method storeFactory = this.getClass().getMethod("storeSportello");
+            Register.registerUtility(storeFactory, IStoreFactory.class, "Sportello");
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(FormProtocollo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(FormProtocollo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         /* fascicolazione */
         QToolButton toolButtonTitolario = (QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario");
         toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
@@ -65,6 +85,20 @@ public class FormProtocollo extends Window {
         
     }
     
+    /*
+     * Uno store contenente solo gli uffici dell'utente
+     */
+    public Store storeSportello(){
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        List<Ufficio> uffici = new ArrayList();
+        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
+            if( uu.getUfficio().getSportello() ){
+                uffici.add(uu.getUfficio());
+            }
+        }
+        return new Store(uffici);
+    }
+
     private void convalidaAttribuzioni() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         protocollo.setConvalidaAttribuzioni(Boolean.TRUE);
@@ -141,6 +175,18 @@ public class FormProtocollo extends Window {
         tabWidgetSoggettiProtocollo.setTabText(0, labelSinistra);
         tabWidgetSoggettiProtocollo.setTabText(1, labelSinistra+" riservati (" + nrRiservati +")");
         
+        // gestione sportello
+        QComboBox comboBox_sportello = (QComboBox) this.findChild(QComboBox.class, "comboBox_sportello");
+        QLineEdit lineEdit_sportello = (QLineEdit) this.findChild(QLineEdit.class, "lineEdit_sportello");
+        if( protocollo.getId() == null ){
+            lineEdit_sportello.setText("");
+            lineEdit_sportello.hide();
+            comboBox_sportello.show();
+        } else {
+            lineEdit_sportello.setText(protocollo.getSportello().toString());
+            comboBox_sportello.hide();
+            lineEdit_sportello.show();
+        }
     }
         
 }

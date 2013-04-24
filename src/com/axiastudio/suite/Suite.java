@@ -321,8 +321,8 @@ public class Suite {
         if( res == 1 ){
         
             Mdi mdi = new Mdi();
-            //mdi.showMaximized();
-            mdi.show();
+            mdi.showMaximized();
+            //mdi.show();
             
             app.setCustomApplicationName("PyPaPi Suite");
             app.setCustomApplicationCredits("Copyright AXIA Studio 2012<br/>");
