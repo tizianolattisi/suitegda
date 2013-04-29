@@ -292,7 +292,10 @@ CREATE TABLE pratiche.tipopratica (
     codice character varying(255),
     descrizione character varying(255),
     tipopadre bigint,
-    procedimento bigint
+    procedimento bigint,
+    formulacodifica character varying(255),
+    porzionenumeroda integer,
+    porzionenumeroa integer
 );
 ALTER TABLE pratiche.tipopratica OWNER TO postgres;
 ALTER TABLE ONLY pratiche.tipopratica
