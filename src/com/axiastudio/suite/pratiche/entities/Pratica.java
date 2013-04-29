@@ -17,6 +17,7 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import java.io.Serializable;
@@ -31,7 +32,7 @@ import javax.persistence.*;
 @Entity
 @Table(schema="PRATICHE")
 @SequenceGenerator(name="genpratica", sequenceName="pratiche.pratica_id_seq", initialValue=1, allocationSize=1)
-public class Pratica implements Serializable {
+public class Pratica implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genpratica")
@@ -71,6 +72,13 @@ public class Pratica implements Serializable {
     @ManyToOne
     private Fascicolo fascicolo;
 
+    /* timestamped */
+    @Column(name="rec_creato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
 
     public Long getId() {
         return id;
@@ -203,6 +211,24 @@ public class Pratica implements Serializable {
         this.fascicolo = fascicolo;
     }
 
+    @Override
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        
+    }
+
+    @Override
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

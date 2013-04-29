@@ -17,7 +17,9 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.generale.ITimeStamped;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.*;
 
 /**
@@ -27,7 +29,7 @@ import javax.persistence.*;
 @Entity
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="gensoggettoprotocollo", sequenceName="protocollo.soggettoprotocollo_id_seq", initialValue=1, allocationSize=1)
-public class SoggettoProtocollo implements Serializable {
+public class SoggettoProtocollo implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gensoggettoprotocollo")
@@ -47,6 +49,14 @@ public class SoggettoProtocollo implements Serializable {
     @Column(name="corrispondenza")
     private Boolean corrispondenza=false;
 
+    /* timestamped */
+    @Column(name="rec_creato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    
     public Long getId() {
         return id;
     }
@@ -103,6 +113,24 @@ public class SoggettoProtocollo implements Serializable {
         this.corrispondenza = corrispondenza;
     }
 
+    @Override
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        
+    }
+
+    @Override
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

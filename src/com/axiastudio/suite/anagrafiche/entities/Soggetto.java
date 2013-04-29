@@ -16,8 +16,10 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
+import com.axiastudio.suite.generale.ITimeStamped;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.*;
 
 /**
@@ -27,7 +29,7 @@ import javax.persistence.*;
 @Entity
 @Table(schema="ANAGRAFICHE")
 @SequenceGenerator(name="gensoggetto", sequenceName="anagrafiche.soggetto_id_seq", initialValue=1, allocationSize=1)
-public class Soggetto implements Serializable {
+public class Soggetto implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gensoggetto")
@@ -56,6 +58,14 @@ public class Soggetto implements Serializable {
     @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Indirizzo> indirizzoCollection;
 
+    /* timestamped */
+    @Column(name="rec_creato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    
     public Long getId() {
         return id;
     }
@@ -144,6 +154,24 @@ public class Soggetto implements Serializable {
         this.indirizzoCollection = indirizzoCollection;
     }
 
+        @Override
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        
+    }
+
+    @Override
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

@@ -17,6 +17,7 @@
 package com.axiastudio.suite.anagrafiche.forms;
 
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.suite.SuiteUiUtil;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QTabWidget;
 
@@ -39,6 +40,10 @@ public class FormSoggetto extends Window {
         for( int i=0; i<3; i++ ){
                 tab.setTabEnabled(i, i==idx);
         }
+    }
+    
+    private void information() {
+        SuiteUiUtil.showInfo(this);
     }
     
 }

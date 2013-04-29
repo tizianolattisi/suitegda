@@ -24,6 +24,7 @@ import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
+import com.axiastudio.suite.SuiteUiUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
@@ -187,6 +188,10 @@ public class FormProtocollo extends Window {
             comboBox_sportello.hide();
             lineEdit_sportello.show();
         }
+    }
+    
+    private void information() {
+        SuiteUiUtil.showInfo(this);
     }
         
 }
