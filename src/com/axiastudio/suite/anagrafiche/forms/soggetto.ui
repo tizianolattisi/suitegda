@@ -555,7 +555,7 @@
         <item row="6" column="1">
          <widget class="QLineEdit" name="lineEdit_20">
           <property name="column" stdset="0">
-           <string>codicepao</string>
+           <string>indicepao</string>
           </property>
          </widget>
         </item>
@@ -569,7 +569,7 @@
         <item row="6" column="4" colspan="2">
          <widget class="QLineEdit" name="lineEdit_21">
           <property name="column" stdset="0">
-           <string>codicepaaoo</string>
+           <string>indicepaaoo</string>
           </property>
          </widget>
         </item>
