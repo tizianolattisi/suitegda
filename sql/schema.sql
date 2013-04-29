@@ -151,21 +151,46 @@ ALTER TABLE ONLY ufficioutente
 -- Anagrafiche
 SET search_path = anagrafiche, pg_catalog;
 
+CREATE TABLE alboprofessionale (
+    id bigserial NOT NULL,
+    descrizione character varying(255)
+);
+ALTER TABLE anagrafiche.alboprofessionale OWNER TO postgres;
+ALTER TABLE ONLY alboprofessionale
+    ADD CONSTRAINT alboprofessionale_pkey PRIMARY KEY (id);
+
 CREATE TABLE soggetto (
     id bigserial NOT NULL,
     codicefiscale character varying(255),
     cognome character varying(255),
     denominazione character varying(255),
+    denominazione2 character varying(255),
+    denominazione3 character varying(255),
     nick character varying(255),
     nome character varying(255),
     ragionesociale character varying(255),
+    partitaiva character varying(255),
     sessosoggetto character varying(255),
     tipo character varying(255),
-    titolosoggetto character varying(255)
+    titolosoggetto character varying(255),
+    referente character varying(255),
+    comunedinascita character varying(255),
+    datanascita date,
+    datacessazione date,
+    descrizionecessazione character varying(255),
+    alboprofessionale bigint,
+    provinciaalbo character varying(2),
+    numeroiscrizionealbo character varying(255),
+    indicepao character varying(255),
+    indicepaaoo character varying(255),
+    residente boolean,
+    codiceanagrafe character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.soggetto OWNER TO postgres;
 ALTER TABLE ONLY soggetto
     ADD CONSTRAINT soggetto_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY soggetto
+    ADD CONSTRAINT fk_soggetto_alboprofessionale FOREIGN KEY (alboprofessionale) REFERENCES alboprofessionale(id);
 
 CREATE TRIGGER trg_ins_ts_soggetto
   BEFORE INSERT

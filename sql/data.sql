@@ -23,6 +23,14 @@ SELECT setval('base.ufficioutente_id_seq', 4, true);
 -- Anagrafiche
 SET search_path = anagrafiche, pg_catalog;
 
+INSERT INTO alboprofessionale (id, descrizione) VALUES (1, 'AGRONOMO');
+INSERT INTO alboprofessionale (id, descrizione) VALUES (2, 'ARCHITETTO');
+INSERT INTO alboprofessionale (id, descrizione) VALUES (3, 'GEOMETRA');
+INSERT INTO alboprofessionale (id, descrizione) VALUES (4, 'INGEGNERE');
+INSERT INTO alboprofessionale (id, descrizione) VALUES (5, 'PERITO');
+INSERT INTO alboprofessionale (id, descrizione) VALUES (6, 'GEOLOGO');
+SELECT setval('anagrafiche.alboprofessionale_id_seq', 7, true);
+
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (1, NULL, 'Lattisi', NULL, NULL, 'Tiziano', NULL, 'M', 'PERSONA', NULL);
 SELECT setval('anagrafiche.soggetto_id_seq', 2, true);
 
