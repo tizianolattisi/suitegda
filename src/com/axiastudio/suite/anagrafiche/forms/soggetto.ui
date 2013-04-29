@@ -14,7 +14,7 @@
    <string>Soggetti</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>cognome,nome</string>
+   <string>cognome,nome,ragionesociale,denominazione,denominazione2,denominazione3</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
