@@ -125,6 +125,10 @@ public class Mdi extends QMainWindow {
         //Controller controllerSoggetto = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
         //Store storeSoggetto = controllerSoggetto.createStore(10);
         //itemSoggetti.setData(1, Qt.ItemDataRole.UserRole, storeSoggetto);
+        QTreeWidgetItem itemGruppi = new QTreeWidgetItem(itemAnagrafiche);
+        itemGruppi.setText(0, "Gruppi");
+        itemGruppi.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemGruppi.setText(1, "com.axiastudio.suite.anagrafiche.entities.Gruppo");
         
         /* Pratiche */
         QTreeWidgetItem itemPraticheRoot = new QTreeWidgetItem(this.tree);

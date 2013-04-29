@@ -88,9 +88,10 @@ public class Soggetto implements Serializable, ITimeStamped {
     private Boolean residente=false;
     @Column(name="codiceanagrafe")
     private String codiceanagrafe;
-
     @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Indirizzo> indirizzoCollection;
+    @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<GruppoSoggetto> gruppoSoggettoCollection;
 
     /* timestamped */
     @Column(name="rec_creato")
@@ -306,6 +307,14 @@ public class Soggetto implements Serializable, ITimeStamped {
 
     public void setCodiceanagrafe(String codiceanagrafe) {
         this.codiceanagrafe = codiceanagrafe;
+    }
+
+    public Collection<GruppoSoggetto> getGruppoSoggettoCollection() {
+        return gruppoSoggettoCollection;
+    }
+
+    public void setGruppoSoggettoCollection(Collection<GruppoSoggetto> gruppoSoggettoCollection) {
+        this.gruppoSoggettoCollection = gruppoSoggettoCollection;
     }
 
     @Override

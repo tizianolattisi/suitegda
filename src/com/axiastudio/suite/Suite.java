@@ -33,6 +33,8 @@ import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
+import com.axiastudio.suite.anagrafiche.entities.Gruppo;
+import com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
@@ -141,7 +143,13 @@ public class Suite {
                               AlboProfessionale.class,
                               Window.class,
                               "Albo professionale");
-        
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/anagrafiche/forms/gruppo.ui",
+                              Gruppo.class,
+                              Window.class,
+                              "Gruppo");
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
                               Soggetto.class,

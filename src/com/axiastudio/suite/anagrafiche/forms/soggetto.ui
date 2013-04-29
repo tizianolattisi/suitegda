@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>775</width>
-    <height>533</height>
+    <width>783</width>
+    <height>606</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -120,7 +120,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>43</height>
+           <height>84</height>
           </size>
          </property>
         </spacer>
@@ -433,7 +433,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>85</height>
+            <height>126</height>
            </size>
           </property>
          </spacer>
@@ -580,7 +580,7 @@
     <item row="2" column="0" colspan="5">
      <widget class="QTabWidget" name="tabWidgetBody">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
@@ -603,6 +603,26 @@
        <attribute name="title">
         <string>Altri riferimenti</string>
        </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_6">
+       <attribute name="title">
+        <string>Gruppi</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
+          <property name="entity" stdset="0">
+           <string>.gruppoSoggettoCollection</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>gruppo</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&lt;gruppo&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
