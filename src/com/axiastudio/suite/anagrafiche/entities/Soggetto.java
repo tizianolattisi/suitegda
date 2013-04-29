@@ -50,11 +50,45 @@ public class Soggetto implements Serializable, ITimeStamped {
     @Column(name="cognome")
     private String cognome;
     @Column(name="codicefiscale")
-    private String codiceFiscale;
+    private String codicefiscale;
+    @Column(name="partitaiva")
+    private String partitaiva;
     @Column(name="ragionesociale")
     private String ragionesociale;
     @Column(name="denominazione")
     private String denominazione;
+    @Column(name="denominazione2")
+    private String denominazione2;
+    @Column(name="denominazione3")
+    private String denominazione3;
+    @Column(name="referente")
+    private String referente;
+    @Column(name="comunedinascita")
+    private String comunedinascita;
+    @Column(name="datanascita")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datanascita;
+    @Column(name="datacessazione")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datacessazione;
+    @Column(name="descrizionecessazione")
+    private String descrizionecessazione;
+    @JoinColumn(name = "alboprofessionale", referencedColumnName = "id")
+    @ManyToOne
+    private AlboProfessionale alboprofessionale;
+    @Column(name="provinciaalbo", length=2)
+    private String provinciaalbo;
+    @Column(name="numeroiscrizionealbo")
+    private String numeroiscrizionealbo;
+    @Column(name="indicepao")
+    private String indicepao;
+    @Column(name="indicepaaoo")
+    private String indicepaaoo;
+    @Column(name="residente")
+    private Boolean residente=false;
+    @Column(name="codiceanagrafe")
+    private String codiceanagrafe;
+
     @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Indirizzo> indirizzoCollection;
 
@@ -130,12 +164,12 @@ public class Soggetto implements Serializable, ITimeStamped {
         this.titoloSoggetto = titoloSoggetto;
     }
 
-    public String getCodiceFiscale() {
-        return codiceFiscale;
+    public String getCodicefiscale() {
+        return codicefiscale;
     }
 
-    public void setCodiceFiscale(String coficeFiscale) {
-        this.codiceFiscale = coficeFiscale;
+    public void setCodicefiscale(String coficeFiscale) {
+        this.codicefiscale = coficeFiscale;
     }
 
     public String getDenominazione() {
@@ -154,7 +188,127 @@ public class Soggetto implements Serializable, ITimeStamped {
         this.indirizzoCollection = indirizzoCollection;
     }
 
-        @Override
+    public String getPartitaiva() {
+        return partitaiva;
+    }
+
+    public void setPartitaiva(String partitaiva) {
+        this.partitaiva = partitaiva;
+    }
+
+    public String getDenominazione2() {
+        return denominazione2;
+    }
+
+    public void setDenominazione2(String denominazione2) {
+        this.denominazione2 = denominazione2;
+    }
+
+    public String getDenominazione3() {
+        return denominazione3;
+    }
+
+    public void setDenominazione3(String denominazione3) {
+        this.denominazione3 = denominazione3;
+    }
+
+    public String getReferente() {
+        return referente;
+    }
+
+    public void setReferente(String referente) {
+        this.referente = referente;
+    }
+
+    public String getComunedinascita() {
+        return comunedinascita;
+    }
+
+    public void setComunedinascita(String comunedinascita) {
+        this.comunedinascita = comunedinascita;
+    }
+
+    public Date getDatanascita() {
+        return datanascita;
+    }
+
+    public void setDatanascita(Date datanascita) {
+        this.datanascita = datanascita;
+    }
+
+    public Date getDatacessazione() {
+        return datacessazione;
+    }
+
+    public void setDatacessazione(Date datacessazione) {
+        this.datacessazione = datacessazione;
+    }
+
+    public String getDescrizionecessazione() {
+        return descrizionecessazione;
+    }
+
+    public void setDescrizionecessazione(String descrizionecessazione) {
+        this.descrizionecessazione = descrizionecessazione;
+    }
+
+    public AlboProfessionale getAlboprofessionale() {
+        return alboprofessionale;
+    }
+
+    public void setAlboprofessionale(AlboProfessionale alboprofessionale) {
+        this.alboprofessionale = alboprofessionale;
+    }
+
+    public String getProvinciaalbo() {
+        return provinciaalbo;
+    }
+
+    public void setProvinciaalbo(String provinciaalbo) {
+        this.provinciaalbo = provinciaalbo;
+    }
+
+    public String getNumeroiscrizionealbo() {
+        return numeroiscrizionealbo;
+    }
+
+    public void setNumeroiscrizionealbo(String numeroiscrizionealbo) {
+        this.numeroiscrizionealbo = numeroiscrizionealbo;
+    }
+
+    public String getIndicepao() {
+        return indicepao;
+    }
+
+    public void setIndicepao(String indicepao) {
+        this.indicepao = indicepao;
+    }
+
+    public String getIndicepaaoo() {
+        return indicepaaoo;
+    }
+
+    public void setIndicepaaoo(String indicepaaoo) {
+        this.indicepaaoo = indicepaaoo;
+    }
+
+    public Boolean getResidente() {
+        return residente;
+    }
+
+    public void setResidente(Boolean residente) {
+        this.residente = residente;
+    }
+
+    public String getCodiceanagrafe() {
+        return codiceanagrafe;
+    }
+
+    public void setCodiceanagrafe(String codiceanagrafe) {
+        this.codiceanagrafe = codiceanagrafe;
+    }
+
+    @Override
     public Date getRecordcreato() {
         return recordcreato;
     }
