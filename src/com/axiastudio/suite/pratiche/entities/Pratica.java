@@ -40,7 +40,7 @@ public class Pratica implements Serializable, ITimeStamped {
     @Column(name="idpratica", unique=true)
     private String idpratica;
     @Column(name="codiceinterno", unique=true)
-    private String codiceInterno;
+    private String codiceinterno;
     @Column(name="datapratica")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datapratica;
@@ -112,12 +112,12 @@ public class Pratica implements Serializable, ITimeStamped {
         this.idpratica = idpratica;
     }
 
-    public String getCodiceInterno() {
-        return codiceInterno;
+    public String getCodiceinterno() {
+        return codiceinterno;
     }
 
-    public void setCodiceInterno(String codiceInterno) {
-        this.codiceInterno = codiceInterno;
+    public void setCodiceinterno(String codiceInterno) {
+        this.codiceinterno = codiceInterno;
     }
 
     public String getNote() {
