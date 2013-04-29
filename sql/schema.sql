@@ -26,6 +26,8 @@ CREATE SCHEMA finanziaria;
 ALTER SCHEMA finanziaria OWNER TO postgres;
 CREATE SCHEMA deliberedetermine;
 ALTER SCHEMA deliberedetermine OWNER TO postgres;
+CREATE SCHEMA generale;
+ALTER SCHEMA generale OWNER TO postgres;
 
 -- Create pgplsql
 CREATE OR REPLACE FUNCTION public.create_plpgsql_language ()
@@ -44,6 +46,44 @@ ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
 
 SET default_tablespace = '';
 SET default_with_oids = false;
+
+
+-- Generale
+SET search_path = generale, pg_catalog;
+CREATE TABLE withtimestamp
+(
+  rec_creato timestamp with time zone,
+  rec_creato_da character varying(255),
+  rec_modificato timestamp with time zone,
+  rec_modificato_da character varying(255)
+);
+ALTER TABLE withtimestamp OWNER TO postgres;
+
+CREATE OR REPLACE FUNCTION insert_timestamp()
+  RETURNS trigger AS
+$BODY$
+begin
+  if new.rec_creato is NULL then
+     new.rec_creato := 'now';
+  end if;
+  return new;
+end;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION insert_timestamp() OWNER TO postgres;
+
+CREATE OR REPLACE FUNCTION update_timestamp()
+  RETURNS trigger AS
+$BODY$
+begin
+  new.rec_modificato := 'now';
+  return new;
+end;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION update_timestamp() OWNER TO postgres;
 
 
 -- Base
@@ -122,10 +162,21 @@ CREATE TABLE soggetto (
     sessosoggetto character varying(255),
     tipo character varying(255),
     titolosoggetto character varying(255)
-);
+) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.soggetto OWNER TO postgres;
 ALTER TABLE ONLY soggetto
     ADD CONSTRAINT soggetto_pkey PRIMARY KEY (id);
+
+CREATE TRIGGER trg_ins_ts_soggetto
+  BEFORE INSERT
+  ON anagrafiche.soggetto
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_soggetto
+  BEFORE UPDATE
+  ON anagrafiche.soggetto
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE indirizzo (
     id bigserial NOT NULL,
@@ -336,7 +387,7 @@ CREATE TABLE pratica (
     tipo bigint,
     riservata boolean NOT NULL DEFAULT FALSE,
     fascicolo bigint
-);
+) INHERITS (generale.withtimestamp);
 ALTER TABLE pratiche.pratica OWNER TO postgres;
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT pratica_idpratica_key UNIQUE (idpratica);
@@ -353,6 +404,16 @@ ALTER TABLE ONLY pratica
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
 
+CREATE TRIGGER trg_ins_ts_pratica
+  BEFORE INSERT
+  ON pratiche.pratica
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_pratica
+  BEFORE UPDATE
+  ON pratiche.pratica
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
 
 
 -- Protocollo
@@ -379,7 +440,7 @@ CREATE TABLE protocollo (
     tiporiferimentomittente character varying(255),
     sportello bigint,
     fascicolo bigint
-);
+) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.protocollo OWNER TO postgres;
 ALTER TABLE ONLY protocollo
     ADD CONSTRAINT protocollo_iddocumento_key UNIQUE (iddocumento);
@@ -389,6 +450,17 @@ ALTER TABLE ONLY protocollo
     ADD CONSTRAINT fk_protocollo_sportello FOREIGN KEY (sportello) REFERENCES base.ufficio(id);
 ALTER TABLE ONLY protocollo
     ADD CONSTRAINT fk_protocollo_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
+
+CREATE TRIGGER trg_ins_ts_protocollo
+  BEFORE INSERT
+  ON protocollo.protocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_protocollo
+  BEFORE UPDATE
+  ON protocollo.protocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE attribuzione (
     id bigserial NOT NULL,
@@ -412,7 +484,7 @@ CREATE TABLE praticaprotocollo (
     pratica bigint,
     protocollo bigint,
     originale boolean NOT NULL DEFAULT FALSE
-);
+) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.praticaprotocollo OWNER TO postgres;
 ALTER TABLE ONLY praticaprotocollo
     ADD CONSTRAINT praticaprotocollo_pkey PRIMARY KEY (id);
@@ -420,6 +492,17 @@ ALTER TABLE ONLY praticaprotocollo
     ADD CONSTRAINT fk_praticaprotocollo_pratica FOREIGN KEY (pratica) REFERENCES pratiche.pratica(id);
 ALTER TABLE ONLY praticaprotocollo
     ADD CONSTRAINT fk_praticaprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(id);
+
+CREATE TRIGGER trg_ins_ts_praticaprotocollo
+  BEFORE INSERT
+  ON protocollo.praticaprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_praticaprotocollo
+  BEFORE UPDATE
+  ON protocollo.praticaprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE riferimentoprotocollo (
     id bigserial NOT NULL,
@@ -442,7 +525,7 @@ CREATE TABLE soggettoprotocollo (
     titolo character varying(255),
     protocollo character varying(255),
     soggetto bigint
-);
+) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.soggettoprotocollo OWNER TO postgres;
 ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT soggettoprotocollo_pkey PRIMARY KEY (id);
@@ -450,6 +533,17 @@ ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+
+CREATE TRIGGER trg_ins_ts_soggettoprotocollo
+  BEFORE INSERT
+  ON protocollo.soggettoprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_soggettoprotocollo
+  BEFORE UPDATE
+  ON protocollo.soggettoprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE soggettoriservatoprotocollo (
     id bigserial NOT NULL,
