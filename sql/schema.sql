@@ -159,6 +159,17 @@ ALTER TABLE anagrafiche.alboprofessionale OWNER TO postgres;
 ALTER TABLE ONLY alboprofessionale
     ADD CONSTRAINT alboprofessionale_pkey PRIMARY KEY (id);
 
+CREATE TABLE gruppo (
+    id bigserial NOT NULL,
+    descrizione character varying(255),
+    persona boolean NOT NULL DEFAULT FALSE,
+    azienda boolean NOT NULL DEFAULT FALSE,
+    ente boolean NOT NULL DEFAULT FALSE
+);
+ALTER TABLE anagrafiche.gruppo OWNER TO postgres;
+ALTER TABLE ONLY gruppo
+    ADD CONSTRAINT gruppo_pkey PRIMARY KEY (id);
+
 CREATE TABLE soggetto (
     id bigserial NOT NULL,
     codicefiscale character varying(255),
@@ -202,6 +213,20 @@ CREATE TRIGGER trg_upd_ts_soggetto
   ON anagrafiche.soggetto
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
+
+CREATE TABLE grupposoggetto (
+    id bigserial NOT NULL,
+    soggetto bigint,
+    gruppo bigint
+);
+ALTER TABLE anagrafiche.grupposoggetto OWNER TO postgres;
+ALTER TABLE ONLY grupposoggetto
+    ADD CONSTRAINT grupposoggetto_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY grupposoggetto
+    ADD CONSTRAINT fk_grupposoggetto_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
+ALTER TABLE ONLY grupposoggetto
+    ADD CONSTRAINT fk_grupposoggetto_gruppo FOREIGN KEY (gruppo) REFERENCES gruppo(id);
+
 
 CREATE TABLE indirizzo (
     id bigserial NOT NULL,
