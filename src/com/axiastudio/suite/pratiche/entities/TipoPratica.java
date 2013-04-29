@@ -50,6 +50,12 @@ public class TipoPratica implements Serializable {
     @JoinColumn(name="procedimento", referencedColumnName = "id")
     @ManyToOne
     private Procedimento procedimento;
+    @Column(name="formulacodifica")
+    private String formulacodifica;
+    @Column(name="porzionenumeroda")
+    private Integer porzionenumeroda;
+    @Column(name="porzionenumeroa")
+    private Integer porzionenumeroa;
 
     public Long getId() {
         return id;
@@ -89,6 +95,30 @@ public class TipoPratica implements Serializable {
 
     public void setProcedimento(Procedimento procedimento) {
         this.procedimento = procedimento;
+    }
+
+    public String getFormulacodifica() {
+        return formulacodifica;
+    }
+
+    public void setFormulacodifica(String formulacodifica) {
+        this.formulacodifica = formulacodifica;
+    }
+
+    public Integer getPorzionenumeroda() {
+        return porzionenumeroda;
+    }
+
+    public void setPorzionenumeroda(Integer porzionenumeroda) {
+        this.porzionenumeroda = porzionenumeroda;
+    }
+
+    public Integer getPorzionenumeroa() {
+        return porzionenumeroa;
+    }
+
+    public void setPorzionenumeroa(Integer porzionenumeroa) {
+        this.porzionenumeroa = porzionenumeroa;
     }
 
     @Override
