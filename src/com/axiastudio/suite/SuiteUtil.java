@@ -27,6 +27,7 @@ import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Attribuzione_;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,8 @@ import javax.persistence.criteria.Root;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class SuiteUtil {
+    
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy h:mm");
     
     public static String digest(String s){
         try {
