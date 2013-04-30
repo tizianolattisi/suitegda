@@ -262,6 +262,19 @@ ALTER TABLE ONLY indirizzo
 ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT fk_indirizzo_stato FOREIGN KEY (stato) REFERENCES stato(codice);
 
+CREATE TABLE riferimento (
+    id bigserial NOT NULL,
+    tipo character varying(255),
+    soggetto bigint,
+    riferimento character varying(255),
+    descrizione character varying(255)
+);
+ALTER TABLE anagrafiche.riferimento OWNER TO postgres;
+ALTER TABLE ONLY riferimento
+    ADD CONSTRAINT riferimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY riferimento
+    ADD CONSTRAINT fk_riferimento_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
+
 -- Finanziaria (per ora solo i servizi per delibere e determine)
 SET search_path = finanziaria, pg_catalog;
 
