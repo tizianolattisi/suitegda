@@ -205,7 +205,7 @@ public class Suite {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/praticaprotocollo.ui",
                               PraticaProtocollo.class,
-                              Window.class,
+                              Dialog.class,
                               "Pratica contenente il protocollo");
 
         Register.registerForm(db.getEntityManagerFactory(),
