@@ -94,6 +94,8 @@ public class Soggetto implements Serializable, ITimeStamped {
     private Collection<GruppoSoggetto> gruppoSoggettoCollection;
     @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Riferimento> riferimentoCollection;
+    @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<RelazioneSoggetto> relazioneSoggettoCollection;
 
     /* timestamped */
     @Column(name="rec_creato")
@@ -317,6 +319,14 @@ public class Soggetto implements Serializable, ITimeStamped {
 
     public void setGruppoSoggettoCollection(Collection<GruppoSoggetto> gruppoSoggettoCollection) {
         this.gruppoSoggettoCollection = gruppoSoggettoCollection;
+    }
+
+    public Collection<RelazioneSoggetto> getRelazioneSoggettoCollection() {
+        return relazioneSoggettoCollection;
+    }
+
+    public void setRelazioneSoggettoCollection(Collection<RelazioneSoggetto> relazioneSoggettoCollection) {
+        this.relazioneSoggettoCollection = relazioneSoggettoCollection;
     }
 
     public Collection<Riferimento> getRiferimentoCollection() {

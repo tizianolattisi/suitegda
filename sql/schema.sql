@@ -151,6 +151,20 @@ ALTER TABLE ONLY ufficioutente
 -- Anagrafiche
 SET search_path = anagrafiche, pg_catalog;
 
+CREATE TABLE relazione (
+    id bigserial NOT NULL,
+    descrizione character varying(255),
+    asx boolean NOT NULL DEFAULT FALSE,
+    psx boolean NOT NULL DEFAULT FALSE,
+    esx boolean NOT NULL DEFAULT FALSE,
+    adx boolean NOT NULL DEFAULT FALSE,
+    pdx boolean NOT NULL DEFAULT FALSE,
+    edx boolean NOT NULL DEFAULT FALSE
+);
+ALTER TABLE anagrafiche.relazione OWNER TO postgres;
+ALTER TABLE ONLY relazione
+    ADD CONSTRAINT relazione_pkey PRIMARY KEY (id);
+
 CREATE TABLE stato (
     id bigserial NOT NULL,
     codice character varying(3),
@@ -238,6 +252,24 @@ ALTER TABLE ONLY grupposoggetto
 ALTER TABLE ONLY grupposoggetto
     ADD CONSTRAINT fk_grupposoggetto_gruppo FOREIGN KEY (gruppo) REFERENCES gruppo(id);
 
+CREATE TABLE relazionesoggetto (
+    id bigserial NOT NULL,
+    soggetto bigint,
+    relazione bigint,
+    relazionato bigint,
+    datanascita date,
+    datacessazione date,
+    invertita boolean NOT NULL DEFAULT false
+);
+ALTER TABLE anagrafiche.relazionesoggetto OWNER TO postgres;
+ALTER TABLE ONLY relazionesoggetto
+    ADD CONSTRAINT relazionesoggetto_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY relazionesoggetto
+    ADD CONSTRAINT fk_relazionesoggetto_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
+ALTER TABLE ONLY relazionesoggetto
+    ADD CONSTRAINT fk_relazionesoggetto_soggettor FOREIGN KEY (relazionato) REFERENCES soggetto(id);
+ALTER TABLE ONLY relazionesoggetto
+    ADD CONSTRAINT fk_relazionesoggetto_relazione FOREIGN KEY (relazione) REFERENCES relazione(id);
 
 CREATE TABLE indirizzo (
     id bigserial NOT NULL,

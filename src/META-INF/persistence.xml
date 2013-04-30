@@ -44,6 +44,8 @@
     <class>com.axiastudio.suite.anagrafiche.entities.Stato</class>
     <class>com.axiastudio.suite.anagrafiche.entities.RiferimentoSoggetto</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Riferimento</class>
+    <class>com.axiastudio.suite.anagrafiche.entities.Relazione</class>
+    <class>com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>
