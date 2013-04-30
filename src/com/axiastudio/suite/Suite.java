@@ -33,6 +33,7 @@ import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
+import com.axiastudio.suite.anagrafiche.entities.AnagraficheAdapters;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
 import com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
@@ -120,6 +121,7 @@ public class Suite {
         Register.registerUtility(db, IDatabase.class);
         
         // registro adapter, validatori, e privacy
+        Register.registerAdapters(Resolver.adaptersFromClass(AnagraficheAdapters.class));
         Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
         Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));

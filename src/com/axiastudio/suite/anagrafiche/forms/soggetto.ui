@@ -650,7 +650,7 @@
            <string>relazionato</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;soggetto&lt;,&gt;relazione&lt;</string>
+           <string>&gt;soggetto&lt;,&gt;relazione&lt;,&gt;relazionato&lt;</string>
           </property>
          </widget>
         </item>
@@ -691,14 +691,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
-   <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
-  </customwidget>
-  <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
    <extends>QComboBox</extends>
    <header>pypapicombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
+   <extends>QTableView</extends>
+   <header>pypapitableview.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
