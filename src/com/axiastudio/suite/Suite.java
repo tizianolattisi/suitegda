@@ -37,6 +37,7 @@ import com.axiastudio.suite.anagrafiche.entities.Gruppo;
 import com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.anagrafiche.entities.Stato;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
@@ -142,7 +143,13 @@ public class Suite {
                               null,
                               AlboProfessionale.class,
                               Window.class,
-                              "Albo professionale");
+                              "Albi professionali");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Stato.class,
+                              Window.class,
+                              "Stati");
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/gruppo.ui",
