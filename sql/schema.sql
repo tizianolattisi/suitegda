@@ -151,6 +151,17 @@ ALTER TABLE ONLY ufficioutente
 -- Anagrafiche
 SET search_path = anagrafiche, pg_catalog;
 
+CREATE TABLE stato (
+    id bigserial NOT NULL,
+    codice character varying(3),
+    descrizione character varying(255)
+);
+ALTER TABLE anagrafiche.stato OWNER TO postgres;
+ALTER TABLE ONLY stato
+    ADD CONSTRAINT stato_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY stato
+    ADD CONSTRAINT stato_codice_key UNIQUE (codice);
+
 CREATE TABLE alboprofessionale (
     id bigserial NOT NULL,
     descrizione character varying(255)
@@ -230,16 +241,26 @@ ALTER TABLE ONLY grupposoggetto
 
 CREATE TABLE indirizzo (
     id bigserial NOT NULL,
-    civico character varying(255),
-    provincia character varying(255),
+    tipo character varying(255),
     via character varying(255),
-    soggetto bigint
+    civico character varying(6),
+    cap character varying(5),
+    localita character varying(255),
+    provincia character varying(2),
+    stato character varying(3),
+    soggetto bigint,
+    descrizione character varying(255),
+    principale boolean NOT NULL DEFAULT false,
+    datanascita date,
+    datacessazione date
 );
 ALTER TABLE anagrafiche.indirizzo OWNER TO postgres;
 ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT indirizzo_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT fk_indirizzo_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
+ALTER TABLE ONLY indirizzo
+    ADD CONSTRAINT fk_indirizzo_stato FOREIGN KEY (stato) REFERENCES stato(codice);
 
 -- Finanziaria (per ora solo i servizi per delibere e determine)
 SET search_path = finanziaria, pg_catalog;
