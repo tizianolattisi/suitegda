@@ -154,6 +154,7 @@ SET search_path = anagrafiche, pg_catalog;
 CREATE TABLE relazione (
     id bigserial NOT NULL,
     descrizione character varying(255),
+    inversa character varying(255),
     asx boolean NOT NULL DEFAULT FALSE,
     psx boolean NOT NULL DEFAULT FALSE,
     esx boolean NOT NULL DEFAULT FALSE,
