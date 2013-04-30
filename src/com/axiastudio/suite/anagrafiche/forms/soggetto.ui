@@ -603,6 +603,18 @@
        <attribute name="title">
         <string>Altri riferimenti</string>
        </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_3">
+          <property name="entity" stdset="0">
+           <string>.riferimentoCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;tipo&lt;,&gt;riferimento&lt;,&lt;descrizione&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_6">
        <attribute name="title">
