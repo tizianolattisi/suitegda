@@ -6,85 +6,176 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>375</width>
-    <height>81</height>
+    <width>667</width>
+    <height>167</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Indirizzo</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Via</string>
-       </property>
-      </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Via</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="6">
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="column" stdset="0">
+      <string>via</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="7">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Civico</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="8">
+    <widget class="QLineEdit" name="lineEdit_2">
+     <property name="maximumSize">
+      <size>
+       <width>80</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="column" stdset="0">
+      <string>civico</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>C.A.P.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="QLineEdit" name="lineEdit_3">
+     <property name="column" stdset="0">
+      <string>cap</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Località</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4" colspan="5">
+    <widget class="QLineEdit" name="lineEdit_4">
+     <property name="column" stdset="0">
+      <string>localita</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Provincia</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="comboBoxProvincia">
+     <property name="column" stdset="0">
+      <string>provincia</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>TN</string>
+      </property>
      </item>
-     <item row="0" column="1" colspan="2">
-      <widget class="QLineEdit" name="lineEdit">
-       <property name="column" stdset="0">
-        <string>via</string>
-       </property>
-      </widget>
+     <item>
+      <property name="text">
+       <string>BZ</string>
+      </property>
      </item>
-     <item row="0" column="3">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Civico</string>
-       </property>
-      </widget>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Stato</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3" colspan="2">
+    <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
+     <property name="column" stdset="0">
+      <string>stato</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="5">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Tipo</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="6" colspan="3">
+    <widget class="QComboBox" name="comboBoxProvincia_2">
+     <property name="column" stdset="0">
+      <string>tipo</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>DOMICILIO</string>
+      </property>
      </item>
-     <item row="0" column="4">
-      <widget class="QLineEdit" name="lineEdit_2">
-       <property name="column" stdset="0">
-        <string>civico</string>
-       </property>
-      </widget>
+     <item>
+      <property name="text">
+       <string>RESIDENZA</string>
+      </property>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Provincia</string>
-       </property>
-      </widget>
+     <item>
+      <property name="text">
+       <string>LAVORO</string>
+      </property>
      </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="comboBoxProvincia">
-       <property name="column" stdset="0">
-        <string>provincia</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>TN</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>BZ</string>
-        </property>
-       </item>
-      </widget>
+     <item>
+      <property name="text">
+       <string>VILLEGGIATURA</string>
+      </property>
      </item>
-     <item row="1" column="2" colspan="3">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>188</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
+     <item>
+      <property name="text">
+       <string>ALTRO</string>
+      </property>
      </item>
-    </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Descrizione</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="8">
+    <widget class="QLineEdit" name="lineEdit_5">
+     <property name="column" stdset="0">
+      <string>descrizione</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -38,6 +38,12 @@
     <class>com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento</class>
     <class>com.axiastudio.suite.deliberedetermine.entities.UfficioDetermina</class>
     <class>com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo</class>
+    <class>com.axiastudio.suite.anagrafiche.entities.AlboProfessionale</class>
+    <class>com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto</class>
+    <class>com.axiastudio.suite.anagrafiche.entities.Gruppo</class>
+    <class>com.axiastudio.suite.anagrafiche.entities.Stato</class>
+    <class>com.axiastudio.suite.anagrafiche.entities.RiferimentoSoggetto</class>
+    <class>com.axiastudio.suite.anagrafiche.entities.Riferimento</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>

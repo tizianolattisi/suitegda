@@ -32,8 +32,13 @@ import com.axiastudio.pypapi.plugins.ooops.Template;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
+import com.axiastudio.suite.anagrafiche.entities.Gruppo;
+import com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
+import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.anagrafiche.entities.Stato;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
@@ -134,7 +139,25 @@ public class Suite {
                               Utente.class,
                               Window.class,
                               "Utenti");
-        
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              AlboProfessionale.class,
+                              Window.class,
+                              "Albi professionali");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Stato.class,
+                              Window.class,
+                              "Stati");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/anagrafiche/forms/gruppo.ui",
+                              Gruppo.class,
+                              Window.class,
+                              "Gruppo");
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
                               Soggetto.class,
@@ -148,6 +171,12 @@ public class Suite {
                               Indirizzo.class,
                               FormIndirizzo.class,
                               "Indirizzo");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/anagrafiche/forms/riferimento.ui",
+                              Riferimento.class,
+                              Dialog.class,
+                              "Riferimento");
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",

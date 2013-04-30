@@ -199,19 +199,19 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
             s.setTipo(TipoSoggetto.PERSONA);
             s.setNome(lineEditNome.text());
             s.setCognome(lineEditCognome.text());
-            s.setCodiceFiscale(lineEditCodicefiscale.text());
+            s.setCodicefiscale(lineEditCodicefiscale.text());
             s.setSessoSoggetto(sessi.get(comboBoxSesso.currentIndex()));
         } else if( idx == 1 ){
             s.setTipo(TipoSoggetto.AZIENDA);
             s.setRagionesociale(lineEditRagionesociale.text());
-            s.setCodiceFiscale(lineEditCodicefiscale2.text());
+            s.setCodicefiscale(lineEditCodicefiscale2.text());
             //s.setPartitaiva(lineEditPartitaiva.text());
         } else if( idx == 2 ){
             s.setTipo(TipoSoggetto.ENTE);
             s.setDenominazione(lineEditDenominazione.text());
             //s.setDenominazione2(lineEditDenominazione2.text());
             //s.setDenominazione3(lineEditDenominazione3.text());
-            s.setCodiceFiscale(lineEditCodicefiscale3.text());
+            s.setCodicefiscale(lineEditCodicefiscale3.text());
         }
         List<Indirizzo> indirizzi = new ArrayList();
         Indirizzo indirizzo = new Indirizzo();

@@ -151,21 +151,68 @@ ALTER TABLE ONLY ufficioutente
 -- Anagrafiche
 SET search_path = anagrafiche, pg_catalog;
 
+CREATE TABLE stato (
+    id bigserial NOT NULL,
+    codice character varying(3),
+    descrizione character varying(255)
+);
+ALTER TABLE anagrafiche.stato OWNER TO postgres;
+ALTER TABLE ONLY stato
+    ADD CONSTRAINT stato_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY stato
+    ADD CONSTRAINT stato_codice_key UNIQUE (codice);
+
+CREATE TABLE alboprofessionale (
+    id bigserial NOT NULL,
+    descrizione character varying(255)
+);
+ALTER TABLE anagrafiche.alboprofessionale OWNER TO postgres;
+ALTER TABLE ONLY alboprofessionale
+    ADD CONSTRAINT alboprofessionale_pkey PRIMARY KEY (id);
+
+CREATE TABLE gruppo (
+    id bigserial NOT NULL,
+    descrizione character varying(255),
+    persona boolean NOT NULL DEFAULT FALSE,
+    azienda boolean NOT NULL DEFAULT FALSE,
+    ente boolean NOT NULL DEFAULT FALSE
+);
+ALTER TABLE anagrafiche.gruppo OWNER TO postgres;
+ALTER TABLE ONLY gruppo
+    ADD CONSTRAINT gruppo_pkey PRIMARY KEY (id);
+
 CREATE TABLE soggetto (
     id bigserial NOT NULL,
     codicefiscale character varying(255),
     cognome character varying(255),
     denominazione character varying(255),
+    denominazione2 character varying(255),
+    denominazione3 character varying(255),
     nick character varying(255),
     nome character varying(255),
     ragionesociale character varying(255),
+    partitaiva character varying(255),
     sessosoggetto character varying(255),
     tipo character varying(255),
-    titolosoggetto character varying(255)
+    titolosoggetto character varying(255),
+    referente character varying(255),
+    comunedinascita character varying(255),
+    datanascita date,
+    datacessazione date,
+    descrizionecessazione character varying(255),
+    alboprofessionale bigint,
+    provinciaalbo character varying(2),
+    numeroiscrizionealbo character varying(255),
+    indicepao character varying(255),
+    indicepaaoo character varying(255),
+    residente boolean,
+    codiceanagrafe character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.soggetto OWNER TO postgres;
 ALTER TABLE ONLY soggetto
     ADD CONSTRAINT soggetto_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY soggetto
+    ADD CONSTRAINT fk_soggetto_alboprofessionale FOREIGN KEY (alboprofessionale) REFERENCES alboprofessionale(id);
 
 CREATE TRIGGER trg_ins_ts_soggetto
   BEFORE INSERT
@@ -178,18 +225,55 @@ CREATE TRIGGER trg_upd_ts_soggetto
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
 
+CREATE TABLE grupposoggetto (
+    id bigserial NOT NULL,
+    soggetto bigint,
+    gruppo bigint
+);
+ALTER TABLE anagrafiche.grupposoggetto OWNER TO postgres;
+ALTER TABLE ONLY grupposoggetto
+    ADD CONSTRAINT grupposoggetto_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY grupposoggetto
+    ADD CONSTRAINT fk_grupposoggetto_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
+ALTER TABLE ONLY grupposoggetto
+    ADD CONSTRAINT fk_grupposoggetto_gruppo FOREIGN KEY (gruppo) REFERENCES gruppo(id);
+
+
 CREATE TABLE indirizzo (
     id bigserial NOT NULL,
-    civico character varying(255),
-    provincia character varying(255),
+    tipo character varying(255),
     via character varying(255),
-    soggetto bigint
+    civico character varying(6),
+    cap character varying(5),
+    localita character varying(255),
+    provincia character varying(2),
+    stato character varying(3),
+    soggetto bigint,
+    descrizione character varying(255),
+    principale boolean NOT NULL DEFAULT false,
+    datanascita date,
+    datacessazione date
 );
 ALTER TABLE anagrafiche.indirizzo OWNER TO postgres;
 ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT indirizzo_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT fk_indirizzo_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
+ALTER TABLE ONLY indirizzo
+    ADD CONSTRAINT fk_indirizzo_stato FOREIGN KEY (stato) REFERENCES stato(codice);
+
+CREATE TABLE riferimento (
+    id bigserial NOT NULL,
+    tipo character varying(255),
+    soggetto bigint,
+    riferimento character varying(255),
+    descrizione character varying(255)
+);
+ALTER TABLE anagrafiche.riferimento OWNER TO postgres;
+ALTER TABLE ONLY riferimento
+    ADD CONSTRAINT riferimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY riferimento
+    ADD CONSTRAINT fk_riferimento_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
 
 -- Finanziaria (per ora solo i servizi per delibere e determine)
 SET search_path = finanziaria, pg_catalog;

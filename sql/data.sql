@@ -23,6 +23,22 @@ SELECT setval('base.ufficioutente_id_seq', 4, true);
 -- Anagrafiche
 SET search_path = anagrafiche, pg_catalog;
 
+INSERT INTO alboprofessionale (id, descrizione) VALUES (1, 'AGRONOMO');
+INSERT INTO alboprofessionale (id, descrizione) VALUES (2, 'ARCHITETTO');
+INSERT INTO alboprofessionale (id, descrizione) VALUES (3, 'GEOMETRA');
+INSERT INTO alboprofessionale (id, descrizione) VALUES (4, 'INGEGNERE');
+INSERT INTO alboprofessionale (id, descrizione) VALUES (5, 'PERITO');
+INSERT INTO alboprofessionale (id, descrizione) VALUES (6, 'GEOLOGO');
+SELECT setval('anagrafiche.alboprofessionale_id_seq', 7, true);
+
+INSERT INTO gruppo (id, descrizione, persona, azienda, ente) VALUES (1, 'FORNITORE SOFTWARE', false, true, false);
+INSERT INTO gruppo (id, descrizione, persona, azienda, ente) VALUES (2, 'CONSULENZA INFORMATICA', false, true, false);
+INSERT INTO gruppo (id, descrizione, persona, azienda, ente) VALUES (3, 'DIPENDENTE COMUNALE', true, false, false);
+INSERT INTO gruppo (id, descrizione, persona, azienda, ente) VALUES (4, 'COMUNITA'' ALTO GARDA E LEDRO', false, false, true);
+INSERT INTO gruppo (id, descrizione, persona, azienda, ente) VALUES (5, 'COMUNITA'' VALLE DEI LAGHI', false, false, true);
+INSERT INTO gruppo (id, descrizione, persona, azienda, ente) VALUES (6, 'COLLABORATORE', true, true, false);
+SELECT setval('anagrafiche.gruppo_id_seq', 7, true);
+
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (1, NULL, 'Lattisi', NULL, NULL, 'Tiziano', NULL, 'M', 'PERSONA', NULL);
 SELECT setval('anagrafiche.soggetto_id_seq', 2, true);
 

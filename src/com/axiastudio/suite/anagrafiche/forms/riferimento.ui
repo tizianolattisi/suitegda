@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>515</width>
+    <height>105</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Riferimento</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Tipo</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="comboBox">
+     <property name="column" stdset="0">
+      <string>tipo</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>TELEFONO</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>CELLULARE</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>FAX</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>EMAIL</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>URL</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Riferimento</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="column" stdset="0">
+      <string>riferimento</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Descrizione</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="3">
+    <widget class="QLineEdit" name="lineEdit_2">
+     <property name="column" stdset="0">
+      <string>descrizione</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

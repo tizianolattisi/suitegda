@@ -25,7 +25,6 @@ import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import javax.annotation.Generated;
 import javax.persistence.*;
 
 

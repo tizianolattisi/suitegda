@@ -17,6 +17,7 @@
 package com.axiastudio.suite.anagrafiche.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.*;
 
 /**
@@ -34,13 +35,34 @@ public class Indirizzo implements Serializable {
     @JoinColumn(name = "soggetto", referencedColumnName = "id")
     @ManyToOne
     private Soggetto soggetto;
+    @Column(name="descrizione")
+    private String descrizione;
+    @Column(name="principale")
+    private Boolean principale=false;
+    @Column(name="tipo")
+    @Enumerated(EnumType.STRING)
+    private TipoIndirizzo tipo;
     @Column(name="via")
     private String via;
-    @Column(name="civico")
+    @Column(name="civico", length=6)
     private String civico;
+    @Column(name="cap", length=5)
+    private String cap;
+    @Column(name="localita")
+    private String localita;
+    @Column(name="provincia")
     @Enumerated(EnumType.STRING)
     private Provincia provincia;
-    
+    @JoinColumn(name = "stato", referencedColumnName = "codice")
+    @ManyToOne
+    private Stato stato;
+    @Column(name="datanascita")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datanascita;
+    @Column(name="datacessazione")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datacessazione;
+
 
     public Long getId() {
         return id;
@@ -80,6 +102,70 @@ public class Indirizzo implements Serializable {
 
     public void setVia(String via) {
         this.via = via;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public Boolean getPrincipale() {
+        return principale;
+    }
+
+    public void setPrincipale(Boolean principale) {
+        this.principale = principale;
+    }
+
+    public TipoIndirizzo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoIndirizzo tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getCap() {
+        return cap;
+    }
+
+    public void setCap(String cap) {
+        this.cap = cap;
+    }
+
+    public String getLocalita() {
+        return localita;
+    }
+
+    public void setLocalita(String localita) {
+        this.localita = localita;
+    }
+
+    public Stato getStato() {
+        return stato;
+    }
+
+    public void setStato(Stato stato) {
+        this.stato = stato;
+    }
+
+    public Date getDatanascita() {
+        return datanascita;
+    }
+
+    public void setDatanascita(Date datanascita) {
+        this.datanascita = datanascita;
+    }
+
+    public Date getDatacessazione() {
+        return datacessazione;
+    }
+
+    public void setDatacessazione(Date datacessazione) {
+        this.datacessazione = datacessazione;
     }
 
     @Override
