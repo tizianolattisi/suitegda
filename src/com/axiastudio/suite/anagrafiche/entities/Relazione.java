@@ -39,6 +39,8 @@ public class Relazione implements Serializable {
     private Long id;
     @Column(name="descrizione")
     private String descrizione;
+    @Column(name="inversa")
+    private String inversa;
     @Column(name="asx")
     private Boolean asx=false;
     @Column(name="psx")
@@ -66,6 +68,14 @@ public class Relazione implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public String getInversa() {
+        return inversa;
+    }
+
+    public void setInversa(String inversa) {
+        this.inversa = inversa;
     }
 
     public Boolean getAsx() {
