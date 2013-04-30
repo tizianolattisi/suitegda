@@ -46,7 +46,7 @@ public class RelazioneSoggetto implements Serializable {
     private Soggetto soggetto;
     @JoinColumn(name = "relazione", referencedColumnName = "id")
     @ManyToOne
-    private Gruppo relazione;
+    private Relazione relazione;
     @JoinColumn(name = "relazionato", referencedColumnName = "id")
     @ManyToOne
     private Soggetto relazionato;
@@ -75,11 +75,11 @@ public class RelazioneSoggetto implements Serializable {
         this.soggetto = soggetto;
     }
 
-    public Gruppo getRelazione() {
+    public Relazione getRelazione() {
         return relazione;
     }
 
-    public void setRelazione(Gruppo relazione) {
+    public void setRelazione(Relazione relazione) {
         this.relazione = relazione;
     }
 
