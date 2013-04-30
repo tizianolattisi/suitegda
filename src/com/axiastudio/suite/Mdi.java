@@ -129,6 +129,10 @@ public class Mdi extends QMainWindow {
         itemGruppi.setText(0, "Gruppi");
         itemGruppi.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemGruppi.setText(1, "com.axiastudio.suite.anagrafiche.entities.Gruppo");
+        QTreeWidgetItem itemRelazioni = new QTreeWidgetItem(itemAnagrafiche);
+        itemRelazioni.setText(0, "Relazioni");
+        itemRelazioni.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemRelazioni.setText(1, "com.axiastudio.suite.anagrafiche.entities.Relazione");
         
         /* Pratiche */
         QTreeWidgetItem itemPraticheRoot = new QTreeWidgetItem(this.tree);
