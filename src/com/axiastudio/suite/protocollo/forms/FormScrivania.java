@@ -33,6 +33,8 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
+import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
+import com.axiastudio.suite.protocollo.entities.UfficioProtocollo;
 import com.trolltech.qt.core.QByteArray;
 import com.trolltech.qt.core.QFile;
 import com.trolltech.qt.core.QModelIndex;
@@ -43,10 +45,14 @@ import com.trolltech.qt.gui.QHeaderView;
 import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QItemSelection;
 import com.trolltech.qt.gui.QItemSelectionModel;
+import com.trolltech.qt.gui.QListWidget;
+import com.trolltech.qt.gui.QListWidgetItem;
 import com.trolltech.qt.gui.QMainWindow;
 import com.trolltech.qt.gui.QMdiArea;
 import com.trolltech.qt.gui.QPushButton;
 import com.trolltech.qt.gui.QTableView;
+import com.trolltech.qt.gui.QTableWidget;
+import com.trolltech.qt.gui.QTextEdit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -157,6 +163,30 @@ public class FormScrivania  extends QMainWindow {
         pushButtonDaiPerLetto.setEnabled(this.selection.size()>0);
         pushButtonApriProtocollo.setEnabled(this.selection.size()==1);
         pushButtonApriDocumenti.setEnabled(this.selection.size()==1);
+        
+        // oggetto, uffici, soggetti
+        QTextEdit textEdit_oggetto = (QTextEdit) this.findChild(QTextEdit.class, "textEdit_oggetto");
+        QListWidget listWidget_uffici = (QListWidget) this.findChild(QListWidget.class, "listWidget_uffici");
+        QListWidget listWidget_soggetti = (QListWidget) this.findChild(QListWidget.class, "listWidget_soggetti");
+        listWidget_uffici.clear();
+        listWidget_soggetti.clear();
+        if( this.selection.size() == 1 ){
+            Attribuzione attribuzione = this.selection.get(0);
+            Protocollo protocollo = attribuzione.getProtocollo();
+            textEdit_oggetto.setText(protocollo.getOggetto());
+            for( UfficioProtocollo up: protocollo.getUfficioProtocolloCollection() ){
+                QListWidgetItem item = new QListWidgetItem();
+                item.setText(up.getUfficio().toString());
+                listWidget_uffici.addItem(item);
+            }
+            for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
+                QListWidgetItem item = new QListWidgetItem();
+                item.setText(sp.toString());
+                listWidget_soggetti.addItem(item);
+            }
+        } else {
+            textEdit_oggetto.setText("");
+        }
     }
     
     private void daiPerLetto(){
