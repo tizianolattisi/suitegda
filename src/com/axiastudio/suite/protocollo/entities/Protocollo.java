@@ -43,7 +43,7 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Column(name="iddocumento", length=12, unique=true)
     private String iddocumento;
     @Column(name="dataprotocollo")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataprotocollo;
     @Column(name="anno")
     private Integer anno;

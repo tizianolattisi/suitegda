@@ -551,7 +551,7 @@ CREATE TABLE protocollo (
     annullamentorichiesto boolean,
     annullato boolean,
     corrispostoostornato boolean,
-    dataprotocollo date,
+    dataprotocollo timestamp,
     datariferimentomittente date,
     iddocumento character varying(12),
     note character varying(1024),
