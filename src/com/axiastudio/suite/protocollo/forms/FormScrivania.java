@@ -51,7 +51,6 @@ import com.trolltech.qt.gui.QMainWindow;
 import com.trolltech.qt.gui.QMdiArea;
 import com.trolltech.qt.gui.QPushButton;
 import com.trolltech.qt.gui.QTableView;
-import com.trolltech.qt.gui.QTableWidget;
 import com.trolltech.qt.gui.QTextEdit;
 import java.util.ArrayList;
 import java.util.List;
