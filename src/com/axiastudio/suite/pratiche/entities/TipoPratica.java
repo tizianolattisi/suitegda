@@ -17,6 +17,7 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,6 +57,13 @@ public class TipoPratica implements Serializable {
     private Integer porzionenumeroda;
     @Column(name="porzionenumeroa")
     private Integer porzionenumeroa;
+    @JoinColumn(name = "fascicolo", referencedColumnName = "id")
+    @ManyToOne
+    private Fascicolo fascicolo;
+    @Column(name="foglia")
+    private Boolean foglia=false;
+    @Column(name="approvata")
+    private Boolean approvata=false;
 
     public Long getId() {
         return id;
@@ -119,6 +127,30 @@ public class TipoPratica implements Serializable {
 
     public void setPorzionenumeroa(Integer porzionenumeroa) {
         this.porzionenumeroa = porzionenumeroa;
+    }
+
+    public Fascicolo getFascicolo() {
+        return fascicolo;
+    }
+
+    public void setFascicolo(Fascicolo fascicolo) {
+        this.fascicolo = fascicolo;
+    }
+
+    public Boolean getFoglia() {
+        return foglia;
+    }
+
+    public void setFoglia(Boolean foglia) {
+        this.foglia = foglia;
+    }
+
+    public Boolean getApprovata() {
+        return approvata;
+    }
+
+    public void setApprovata(Boolean approvata) {
+        this.approvata = approvata;
     }
 
     @Override
