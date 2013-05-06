@@ -404,6 +404,18 @@ ALTER TABLE ONLY utenteprocedimento
 ALTER TABLE ONLY ufficioprocedimento
     ADD CONSTRAINT fk_utenteprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
+CREATE TABLE protocollo.fascicolo (
+    id bigserial NOT NULL,
+    categoria integer,
+    classe integer,
+    descrizione character varying(255),
+    note character varying(2048),
+    fascicolo integer
+);
+ALTER TABLE protocollo.fascicolo OWNER TO postgres;
+ALTER TABLE ONLY protocollo.fascicolo
+    ADD CONSTRAINT fascicolo_pkey PRIMARY KEY (id);
+
 CREATE TABLE pratiche.tipopratica (
     id bigserial NOT NULL,
     codice character varying(255),
@@ -412,7 +424,10 @@ CREATE TABLE pratiche.tipopratica (
     procedimento bigint,
     formulacodifica character varying(255),
     porzionenumeroda integer,
-    porzionenumeroa integer
+    porzionenumeroa integer,
+    fascicolo bigint,
+    foglia boolean NOT NULL DEFAULT false,
+    approvata boolean NOT NULL DEFAULT false
 );
 ALTER TABLE pratiche.tipopratica OWNER TO postgres;
 ALTER TABLE ONLY pratiche.tipopratica
@@ -421,6 +436,8 @@ ALTER TABLE ONLY pratiche.tipopratica
     ADD CONSTRAINT fk_tipopratica_tipopadre FOREIGN KEY (tipopadre) REFERENCES pratiche.tipopratica(id);
 ALTER TABLE ONLY pratiche.tipopratica
     ADD CONSTRAINT fk_tipopratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
+ALTER TABLE ONLY pratiche.tipopratica
+    ADD CONSTRAINT fk_tipopratica_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
 
 CREATE TABLE tipopraticaprocedimento (
     id bigserial NOT NULL,
@@ -479,18 +496,6 @@ ALTER TABLE ONLY delega
 
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
-
-CREATE TABLE protocollo.fascicolo (
-    id bigserial NOT NULL,
-    categoria integer,
-    classe integer,
-    descrizione character varying(255),
-    note character varying(2048),
-    fascicolo integer
-);
-ALTER TABLE protocollo.fascicolo OWNER TO postgres;
-ALTER TABLE ONLY protocollo.fascicolo
-    ADD CONSTRAINT fascicolo_pkey PRIMARY KEY (id);
 
 CREATE TABLE pratica (
     id bigserial NOT NULL,

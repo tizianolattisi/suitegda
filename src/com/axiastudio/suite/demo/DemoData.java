@@ -156,11 +156,23 @@ public class DemoData {
          */
         Ufficio uffInf = new Ufficio();
         uffInf.setDescrizione("Ufficio informativo");
+        uffInf.setSportello(Boolean.TRUE);
+        uffInf.setMittenteodestinatario(Boolean.TRUE);
+        uffInf.setAttribuzione(Boolean.TRUE);
         Ufficio uffPro = new Ufficio();
+        uffPro.setSportello(Boolean.TRUE);
+        uffPro.setMittenteodestinatario(Boolean.FALSE);
+        uffPro.setAttribuzione(Boolean.TRUE);
         uffPro.setDescrizione("Ufficio protocollo");
         Ufficio uffEdi = new Ufficio();
         uffEdi.setDescrizione("Ufficio edilizia");
+        uffEdi.setSportello(Boolean.FALSE);
+        uffEdi.setMittenteodestinatario(Boolean.TRUE);
+        uffEdi.setAttribuzione(Boolean.TRUE);
         Ufficio uffCom = new Ufficio();
+        uffCom.setSportello(Boolean.FALSE);
+        uffCom.setMittenteodestinatario(Boolean.TRUE);
+        uffCom.setAttribuzione(Boolean.TRUE);
         uffCom.setDescrizione("Ufficio commercio");
         em.getTransaction().begin();
         em.persist(uffInf);
