@@ -345,7 +345,7 @@ public class DemoData {
         pro1.setAttribuzioneCollection(attribuzioni);
         SoggettoProtocollo sp = new SoggettoProtocollo();
         sp.setSoggetto(tiziano);
-        sp.setTitolo(TitoloSoggettoProtocollo.TECNICO);
+        //sp.setTitolo(Titolo.TECNICO);
         sp.setProtocollo(pro1);
         List<SoggettoProtocollo> soggettiprotocollo = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo.add(sp);
@@ -363,7 +363,7 @@ public class DemoData {
         pro2.setTipo(TipoProtocollo.USCITA);
         SoggettoProtocollo sp2 = new SoggettoProtocollo();
         sp2.setSoggetto(tiziano);
-        sp2.setTitolo(TitoloSoggettoProtocollo.TECNICO);
+        //sp2.setTitolo(Titolo.TECNICO);
         sp2.setProtocollo(pro2);
         List<SoggettoProtocollo> soggettiprotocollo2 = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo2.add(sp2);
