@@ -37,6 +37,8 @@ public class ProfiloUtenteProtocollo {
     private ArrayList ufficiUtente = new ArrayList();
     private ArrayList ufficiRicercaUtente = new ArrayList();
     private ArrayList ufficiRiservatoUtente = new ArrayList();
+    private ArrayList ufficiVisualizzaUtente = new ArrayList();
+    private ArrayList ufficiConsolidaUtente = new ArrayList();
 
     public ProfiloUtenteProtocollo(Protocollo protocollo, Utente autenticato) {
         this.protocollo = protocollo;
@@ -60,10 +62,16 @@ public class ProfiloUtenteProtocollo {
                 if( uu.getRiservato() ){
                     this.ufficiRiservatoUtente.add(uu.getUfficio());
                 }
+                if( uu.getVisualizza() ){
+                    this.ufficiVisualizzaUtente.add(uu.getUfficio());
+                }
+                if( uu.getConsolida() ){
+                    this.ufficiConsolidaUtente.add(uu.getUfficio());
+                }
             }
         }
     }
-    
+        
     /*
      * Inserito nell'ufficio sportello o in almeno una attribuzione
      */
@@ -88,6 +96,15 @@ public class ProfiloUtenteProtocollo {
         intersezione.retainAll(ufficiUtente);
         return ufficiRiservatoUtente.contains(sportello) || intersezione.size()>0;
     }
+
+    /*
+     * Inserito nell'ufficio sportello o in almeno una attribuzione con flag visualizza
+     */
+    public Boolean inSportelloOAttribuzioneV(){
+        List intersezione = new ArrayList(attribuzioni);
+        intersezione.retainAll(ufficiUtente);
+        return ufficiVisualizzaUtente.contains(sportello) || intersezione.size()>0;
+    }
     
     /*
      * Inserito nell'ufficio sportello o nell'attribuzione principale con flag riservato
@@ -95,7 +112,21 @@ public class ProfiloUtenteProtocollo {
     public Boolean inSportelloOAttribuzionePrincipaleR(){
         return ufficiRiservatoUtente.contains(sportello) || ufficiRiservatoUtente.contains(attribuzionePrincipale);
     }
+
+    /*
+     * Inserito nell'ufficio sportello o nell'attribuzione principale con flag visualizza
+     */
+    public Boolean inSportelloOAttribuzionePrincipaleV(){
+        return ufficiVisualizzaUtente.contains(sportello) || ufficiVisualizzaUtente.contains(attribuzionePrincipale);
+    }
     
+    /*
+     * Inserito nell'attribuzione principale con flag consolida
+     */
+    public Boolean inAttribuzionePrincipaleC(){
+        return ufficiConsolidaUtente.contains(attribuzionePrincipale);
+    }
+
     /*
      * Non inserito nello sportello o in una attribuzione
      */

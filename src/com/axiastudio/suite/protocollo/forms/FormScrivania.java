@@ -31,6 +31,7 @@ import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
@@ -213,10 +214,34 @@ public class FormScrivania  extends QMainWindow {
 
     private void apriDocumenti(){
         Protocollo protocollo = this.selection.get(0).getProtocollo();
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
         List<IPlugin> plugins = (List) Register.queryPlugins(FormProtocollo.class);
         for(IPlugin plugin: plugins){
             if( "CMIS".equals(plugin.getName()) ){
-                ((CmisPlugin) plugin).showForm(protocollo);
+                Boolean view = false;
+                Boolean delete = false;
+                Boolean download = false;
+                Boolean parent = false;
+                Boolean upload = false;
+                Boolean version = false;
+                if( protocollo.getRiservato() ){
+                    view = pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR();
+                    download = view;
+                } else {
+                    view = autenticato.getSupervisoreprotocollo() || pup.inSportelloOAttribuzioneV();
+                    download = view;
+                }
+                if( protocollo.getConsolidadocumenti() ){
+                    delete = false;
+                    version = pup.inAttribuzionePrincipaleC();
+                    upload = version;
+                } else {
+                    upload = pup.inSportelloOAttribuzionePrincipale();
+                    delete = upload;
+                    version = upload;
+                }
+                ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);
             }
         }
     }

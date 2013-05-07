@@ -19,6 +19,8 @@ package com.axiastudio.suite.protocollo.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.IStoreFactory;
 import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.plugins.IPlugin;
+import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.ui.TableModel;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
@@ -29,6 +31,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
@@ -192,6 +195,44 @@ public class FormProtocollo extends Window {
     
     private void information() {
         SuiteUiUtil.showInfo(this);
+    }
+    
+    // XXX: codice simile a FormScrivania
+    private void apriDocumenti(){
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        if( protocollo == null || protocollo.getId() == null ){
+            return;
+        }
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
+        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
+        for(IPlugin plugin: plugins){
+            if( "CMIS".equals(plugin.getName()) ){
+                Boolean view = false;
+                Boolean delete = false;
+                Boolean download = false;
+                Boolean parent = false;
+                Boolean upload = false;
+                Boolean version = false;
+                if( protocollo.getRiservato() ){
+                    view = pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR();
+                    download = view;
+                } else {
+                    view = autenticato.getSupervisoreprotocollo() || pup.inSportelloOAttribuzioneV();
+                    download = view;
+                }
+                if( protocollo.getConsolidadocumenti() ){
+                    delete = false;
+                    version = pup.inAttribuzionePrincipaleC();
+                    upload = version;
+                } else {
+                    upload = pup.inSportelloOAttribuzionePrincipale();
+                    delete = upload;
+                    version = upload;
+                }
+                ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);
+            }
+        }
     }
         
 }
