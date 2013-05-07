@@ -118,6 +118,20 @@ public class DemoData {
         em.getTransaction().commit();
         
         /*
+         * TITOLI (soggetto-protocollo)
+         */
+        Titolo proprietario = new Titolo();
+        proprietario.setDescrizione("PROPRIETARIO");
+        proprietario.setTipo(TipoTitolo.PERSONA_INTERESSATA);
+        Titolo progettista = new Titolo();
+        progettista.setDescrizione("PROGETTISTA");
+        progettista.setTipo(TipoTitolo.TECNICO);
+        em.getTransaction().begin();
+        em.persist(proprietario);
+        em.persist(progettista);
+        em.getTransaction().commit();
+        
+        /*
          * CARICHE
          */
         Carica sindaco = new Carica();
@@ -345,7 +359,7 @@ public class DemoData {
         pro1.setAttribuzioneCollection(attribuzioni);
         SoggettoProtocollo sp = new SoggettoProtocollo();
         sp.setSoggetto(tiziano);
-        sp.setTitolo(TitoloSoggettoProtocollo.TECNICO);
+        sp.setTitolo(proprietario);
         sp.setProtocollo(pro1);
         List<SoggettoProtocollo> soggettiprotocollo = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo.add(sp);
@@ -363,7 +377,7 @@ public class DemoData {
         pro2.setTipo(TipoProtocollo.USCITA);
         SoggettoProtocollo sp2 = new SoggettoProtocollo();
         sp2.setSoggetto(tiziano);
-        sp2.setTitolo(TitoloSoggettoProtocollo.TECNICO);
+        sp2.setTitolo(progettista);
         sp2.setProtocollo(pro2);
         List<SoggettoProtocollo> soggettiprotocollo2 = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo2.add(sp2);

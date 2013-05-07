@@ -35,7 +35,6 @@ import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
 import com.axiastudio.suite.anagrafiche.entities.AnagraficheAdapters;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
-import com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Relazione;
 import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
@@ -75,7 +74,9 @@ import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Norma;
+import com.axiastudio.suite.protocollo.entities.Oggetto;
 import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
+import com.axiastudio.suite.protocollo.entities.Titolo;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
@@ -155,6 +156,18 @@ public class Suite {
                               Window.class,
                               "Albi professionali");
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Titolo.class,
+                              Window.class,
+                              "Titoli");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Oggetto.class,
+                              Window.class,
+                              "Oggetti");
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               Stato.class,

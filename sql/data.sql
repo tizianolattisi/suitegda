@@ -61,11 +61,19 @@ INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, po
 SELECT setval('pratiche.tipopratica_id_seq', 4, true);
 
 INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipo)
-  VALUES (1, 2012, '2012-12-10', 'Pratica demo', '201200000001', 'DETRS201200000001', NULL, 3, 4, 3, 'scaffale in alto', 3);
+  VALUES (1, 2012, '2012-12-10', 'Pratica demo', '201200001', 'DETRS201200000001', NULL, 3, 4, 3, 'scaffale in alto', 3);
 SELECT setval('pratiche.pratica_id_seq', 2, true);
 
 -- Protocollo
 SET search_path = protocollo, pg_catalog;
+
+INSERT INTO titolo (id, descrizione, tipo) VALUES (1, 'PROPRIETARIO', 'PERSONA_INTERESSATA');
+INSERT INTO titolo (id, descrizione, tipo) VALUES (2, 'CONSULENTE ESTERNO', 'TECNICO');
+SELECT setval('protocollo.titolo_id_seq', 3, true);
+
+INSERT INTO oggetto (id, descrizione) VALUES (1, 'ATTI RICEVUTI');
+INSERT INTO oggetto (id, descrizione) VALUES (2, 'RICHIESTA GENERICA');
+SELECT setval('protocollo.oggetto_id_seq', 3, true);
 
 INSERT INTO protocollo (id, convalidaattribuzioni, convalidaprotocollo, anno, annullamentorichiesto, annullato, corrispostoostornato, dataprotocollo, datariferimentomittente, iddocumento, note, oggetto, richiederisposta, riferimentomittente, riservato, spedito, tipo, tiporiferimentomittente, sportello) VALUES (1, false, false, 2012, false, false, false, '2012-12-10', NULL, '201200000001', 'Note del protocollo', 'Oggetto del protocollo', true, NULL, false, false, 'ENTRATA', NULL, 3);
 INSERT INTO protocollo (id, convalidaattribuzioni, convalidaprotocollo, anno, annullamentorichiesto, annullato, corrispostoostornato, dataprotocollo, datariferimentomittente, iddocumento, note, oggetto, richiederisposta, riferimentomittente, riservato, spedito, tipo, tiporiferimentomittente, sportello) VALUES (2, false, false, 2012, false, false, false, '2012-12-10', NULL, '201200000002', 'Note del protocollo2', 'Oggetto del protocollo2', false, NULL, false, false, 'USCITA', NULL, 3);
@@ -75,11 +83,11 @@ INSERT INTO attribuzione (id, letto, principale, protocollo, ufficio, evidenza) 
 INSERT INTO attribuzione (id, letto, principale, protocollo, ufficio, evidenza) VALUES (2, false, false, '201200000001', 1, 'N');
 SELECT setval('protocollo.attribuzione_id_seq', 3, true);
 
-INSERT INTO praticaprotocollo (id, titolo, pratica, protocollo) VALUES (1, NULL, 1, 1);
+INSERT INTO praticaprotocollo (id, oggetto, pratica, protocollo) VALUES (1, 2, '201200001', '201200000001');
 SELECT setval('protocollo.praticaprotocollo_id_seq', 2, true);
 
-INSERT INTO soggettoprotocollo (id, conoscenza, corrispondenza, notifica, titolo, protocollo, soggetto) VALUES (1, false, false, false, 'TECNICO', '201200000001', 1);
-INSERT INTO soggettoprotocollo (id, conoscenza, corrispondenza, notifica, titolo, protocollo, soggetto) VALUES (2, false, false, false, 'TECNICO', '201200000002', 1);
+INSERT INTO soggettoprotocollo (id, conoscenza, corrispondenza, notifica, titolo, protocollo, soggetto) VALUES (1, false, false, false, 1, '201200000001', 1);
+INSERT INTO soggettoprotocollo (id, conoscenza, corrispondenza, notifica, titolo, protocollo, soggetto) VALUES (2, false, false, false, 2, '201200000002', 1);
 SELECT setval('protocollo.soggettoprotocollo_id_seq', 3, true);
 
 INSERT INTO ufficioprotocollo (id, protocollo, ufficio) VALUES (1, '201200000001', 2);

@@ -40,8 +40,9 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
-    @Enumerated(EnumType.STRING)
-    private TitoloSoggettoProtocollo titolo;
+    @JoinColumn(name = "titolo", referencedColumnName = "id")
+    @ManyToOne
+    private Titolo titolo;
     @Column(name="conoscenza")
     private Boolean conoscenza=false;
     @Column(name="notifica")
@@ -81,11 +82,11 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.soggetto = soggetto;
     }
 
-    public TitoloSoggettoProtocollo getTitolo() {
+    public Titolo getTitolo() {
         return titolo;
     }
 
-    public void setTitolo(TitoloSoggettoProtocollo titolo) {
+    public void setTitolo(Titolo titolo) {
         this.titolo = titolo;
     }
 
