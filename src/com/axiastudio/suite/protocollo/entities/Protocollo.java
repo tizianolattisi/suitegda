@@ -90,9 +90,11 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datariferimentomittente;
     @Column(name="convalidaattribuzioni")
-    private Boolean ConvalidaAttribuzioni=false;
+    private Boolean convalidaattribuzioni=false;
     @Column(name="convalidaprotocollo")
-    private Boolean ConvalidaProtocollo=false;
+    private Boolean convalidaprotocollo=false;
+    @Column(name="consolidadocumenti")
+    private Boolean consolidadocumenti=false;
     @JoinColumn(name = "fascicolo", referencedColumnName = "id")
     @ManyToOne
     private Fascicolo fascicolo;
@@ -324,20 +326,28 @@ public class Protocollo implements Serializable, ITimeStamped {
         this.riferimentomittente = riferimentomittente;
     }
 
-    public Boolean getConvalidaAttribuzioni() {
-        return ConvalidaAttribuzioni;
+    public Boolean getConvalidaattribuzioni() {
+        return convalidaattribuzioni;
     }
 
-    public void setConvalidaAttribuzioni(Boolean ConvalidaAttribuzioni) {
-        this.ConvalidaAttribuzioni = ConvalidaAttribuzioni;
+    public void setConvalidaattribuzioni(Boolean convalidaattribuzioni) {
+        this.convalidaattribuzioni = convalidaattribuzioni;
     }
 
-    public Boolean getConvalidaProtocollo() {
-        return ConvalidaProtocollo;
+    public Boolean getConvalidaprotocollo() {
+        return convalidaprotocollo;
     }
 
-    public void setConvalidaProtocollo(Boolean ConvalidaProtocollo) {
-        this.ConvalidaProtocollo = ConvalidaProtocollo;
+    public void setConvalidaprotocollo(Boolean convalidaprotocollo) {
+        this.convalidaprotocollo = convalidaprotocollo;
+    }
+
+    public Boolean getConsolidadocumenti() {
+        return consolidadocumenti;
+    }
+
+    public void setConsolidadocumenti(Boolean consolidadocumenti) {
+        this.consolidadocumenti = consolidadocumenti;
     }
 
     public Fascicolo getFascicolo() {

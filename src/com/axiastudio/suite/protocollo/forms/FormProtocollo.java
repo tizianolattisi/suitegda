@@ -102,14 +102,14 @@ public class FormProtocollo extends Window {
 
     private void convalidaAttribuzioni() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        protocollo.setConvalidaAttribuzioni(Boolean.TRUE);
+        protocollo.setConvalidaattribuzioni(Boolean.TRUE);
         this.getContext().getDirty();
     }
 
     private void convalidaProtocollo() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        protocollo.setConvalidaAttribuzioni(Boolean.TRUE);
-        protocollo.setConvalidaProtocollo(Boolean.TRUE);
+        protocollo.setConvalidaattribuzioni(Boolean.TRUE);
+        protocollo.setConvalidaprotocollo(Boolean.TRUE);
         this.getContext().getDirty();
     }
     
@@ -145,8 +145,8 @@ public class FormProtocollo extends Window {
     protected void indexChanged(int row) {
         super.indexChanged(row);
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        Boolean convAttribuzioni = protocollo.getConvalidaAttribuzioni() == true;
-        Boolean convProtocollo = protocollo.getConvalidaProtocollo() == true;
+        Boolean convAttribuzioni = protocollo.getConvalidaattribuzioni() == true;
+        Boolean convProtocollo = protocollo.getConvalidaprotocollo() == true;
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
 

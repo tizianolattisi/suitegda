@@ -547,6 +547,7 @@ CREATE TABLE protocollo (
     id bigserial NOT NULL,
     convalidaattribuzioni boolean,
     convalidaprotocollo boolean,
+    consolidadocumenti boolean,
     anno integer,
     annullamentorichiesto boolean,
     annullato boolean,
