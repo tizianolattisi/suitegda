@@ -74,14 +74,13 @@ public class SuiteUtil {
         CriteriaQuery<Attribuzione> cq = cb.createQuery(Attribuzione.class);
         Root<Attribuzione> root = cq.from(Attribuzione.class);
         cq.select(root);
-        cq.where(cb.equal(root.get(Attribuzione_.letto), Boolean.FALSE));
         CriteriaBuilder.In<Long> in = cb.in(root.get(Attribuzione_.ufficio).get(Ufficio_.id));
         for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
             if( uu.getRicerca() ){
                 in = in.value(uu.getUfficio().getId());
             }
         }
-        cq.where(in);
+        cq.where(cb.and(cb.equal(root.get(Attribuzione_.letto), Boolean.FALSE), in));
         TypedQuery<Attribuzione> tq = em.createQuery(cq);
         List<Attribuzione> resultList = tq.getResultList();
         store = new Store(resultList);
