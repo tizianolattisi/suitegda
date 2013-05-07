@@ -35,7 +35,6 @@ import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
 import com.axiastudio.suite.anagrafiche.entities.AnagraficheAdapters;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
-import com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Relazione;
 import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
