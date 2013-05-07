@@ -632,7 +632,7 @@ CREATE TRIGGER trg_upd_ts_praticaprotocollo
 CREATE TABLE riferimentoprotocollo (
     id bigserial NOT NULL,
     precedente character varying(255),
-    protocollo character varying(255)
+    protocollo character varying(12)
 );
 ALTER TABLE protocollo.riferimentoprotocollo OWNER TO postgres;
 ALTER TABLE ONLY riferimentoprotocollo
@@ -642,13 +642,22 @@ ALTER TABLE ONLY riferimentoprotocollo
 ALTER TABLE ONLY riferimentoprotocollo
     ADD CONSTRAINT fk_riferimentoprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 
+CREATE TABLE titolo (
+    id bigserial NOT NULL,
+    descrizione character varying(255),
+    tipo character varying(255)
+);
+ALTER TABLE protocollo.titolo OWNER TO postgres;
+ALTER TABLE ONLY titolo
+    ADD CONSTRAINT titolo_pkey PRIMARY KEY (id);
+
 CREATE TABLE soggettoprotocollo (
     id bigserial NOT NULL,
     conoscenza boolean,
     corrispondenza boolean,
     notifica boolean,
-    titolo character varying(255),
-    protocollo character varying(255),
+    titolo bigint,
+    protocollo character varying(12),
     soggetto bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.soggettoprotocollo OWNER TO postgres;
@@ -658,6 +667,8 @@ ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+ALTER TABLE ONLY soggettoprotocollo
+    ADD CONSTRAINT fk_soggettoprotocollo_titolo FOREIGN KEY (titolo) REFERENCES titolo(id);
 
 CREATE TRIGGER trg_ins_ts_soggettoprotocollo
   BEFORE INSERT
@@ -675,7 +686,7 @@ CREATE TABLE soggettoriservatoprotocollo (
     conoscenza boolean,
     corrispondenza boolean,
     notifica boolean,
-    titolo character varying(255),
+    titolo bigint,
     protocollo character varying(255),
     soggetto bigint
 );
@@ -686,6 +697,8 @@ ALTER TABLE ONLY soggettoriservatoprotocollo
     ADD CONSTRAINT fk_soggettoriservatoprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 ALTER TABLE ONLY soggettoriservatoprotocollo
     ADD CONSTRAINT fk_soggettoriservatoprotocollo_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+ALTER TABLE ONLY soggettoriservatoprotocollo
+    ADD CONSTRAINT fk_soggettoriservatoprotocollo_titolo FOREIGN KEY (titolo) REFERENCES titolo(id);
 
 CREATE TABLE ufficioprotocollo (
     id bigserial NOT NULL,
