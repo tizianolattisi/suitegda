@@ -61,6 +61,10 @@ INSERT INTO titolo (id, descrizione, tipo) VALUES (1, 'PROPRIETARIO', 'PERSONA_I
 INSERT INTO titolo (id, descrizione, tipo) VALUES (2, 'CONSULENTE ESTERNO', 'TECNICO');
 SELECT setval('protocollo.titolo_id_seq', 3, true);
 
+INSERT INTO oggetto (id, descrizione) VALUES (1, 'ATTI RICEVUTI');
+INSERT INTO oggetto (id, descrizione) VALUES (2, 'RICHIESTA GENERICA');
+SELECT setval('protocollo.oggetto_id_seq', 3, true);
+
 INSERT INTO protocollo (id, convalidaattribuzioni, convalidaprotocollo, anno, annullamentorichiesto, annullato, corrispostoostornato, dataprotocollo, datariferimentomittente, iddocumento, note, oggetto, richiederisposta, riferimentomittente, riservato, spedito, tipo, tiporiferimentomittente, sportello) VALUES (1, false, false, 2012, false, false, false, '2012-12-10', NULL, '201200000001', 'Note del protocollo', 'Oggetto del protocollo', true, NULL, false, false, 'ENTRATA', NULL, 3);
 INSERT INTO protocollo (id, convalidaattribuzioni, convalidaprotocollo, anno, annullamentorichiesto, annullato, corrispostoostornato, dataprotocollo, datariferimentomittente, iddocumento, note, oggetto, richiederisposta, riferimentomittente, riservato, spedito, tipo, tiporiferimentomittente, sportello) VALUES (2, false, false, 2012, false, false, false, '2012-12-10', NULL, '201200000002', 'Note del protocollo2', 'Oggetto del protocollo2', false, NULL, false, false, 'USCITA', NULL, 3);
 SELECT setval('protocollo.protocollo_id_seq', 3, true);
@@ -69,7 +73,7 @@ INSERT INTO attribuzione (id, letto, principale, protocollo, ufficio, evidenza) 
 INSERT INTO attribuzione (id, letto, principale, protocollo, ufficio, evidenza) VALUES (2, false, false, '201200000001', 1, 'N');
 SELECT setval('protocollo.attribuzione_id_seq', 3, true);
 
-INSERT INTO praticaprotocollo (id, titolo, pratica, protocollo) VALUES (1, NULL, '201200001', '201200000001');
+INSERT INTO praticaprotocollo (id, oggetto, pratica, protocollo) VALUES (1, 2, '201200001', '201200000001');
 SELECT setval('protocollo.praticaprotocollo_id_seq', 2, true);
 
 INSERT INTO soggettoprotocollo (id, conoscenza, corrispondenza, notifica, titolo, protocollo, soggetto) VALUES (1, false, false, false, 1, '201200000001', 1);

@@ -603,9 +603,17 @@ ALTER TABLE ONLY attribuzione
 ALTER TABLE ONLY attribuzione
     ADD CONSTRAINT fk_attribuzione_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
+CREATE TABLE oggetto (
+    id bigserial NOT NULL,
+    descrizione character varying(255)
+);
+ALTER TABLE protocollo.oggetto OWNER TO postgres;
+ALTER TABLE ONLY oggetto
+    ADD CONSTRAINT oggetto_pkey PRIMARY KEY (id);
+
 CREATE TABLE praticaprotocollo (
     id bigserial NOT NULL,
-    titolo character varying(255),
+    oggetto bigint,
     pratica character varying(9),
     protocollo character varying(12),
     originale boolean NOT NULL DEFAULT FALSE
@@ -617,6 +625,8 @@ ALTER TABLE ONLY praticaprotocollo
     ADD CONSTRAINT fk_praticaprotocollo_pratica FOREIGN KEY (pratica) REFERENCES pratiche.pratica(idpratica);
 ALTER TABLE ONLY praticaprotocollo
     ADD CONSTRAINT fk_praticaprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
+ALTER TABLE ONLY praticaprotocollo
+    ADD CONSTRAINT fk_praticaprotocollo_oggetto FOREIGN KEY (oggetto) REFERENCES oggetto(id);
 
 CREATE TRIGGER trg_ins_ts_praticaprotocollo
   BEFORE INSERT
