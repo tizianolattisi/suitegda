@@ -67,6 +67,7 @@ import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
+import com.axiastudio.suite.protocollo.entities.Titolo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
@@ -129,6 +130,12 @@ public class SuiteDemo {
                               Window.class,
                               "Albo professionale");
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Titolo.class,
+                              Window.class,
+                              "Titoli");
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/gruppo.ui",
                               Gruppo.class,

@@ -19,6 +19,8 @@ package com.axiastudio.suite.protocollo.entities;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,7 +40,10 @@ public class Titolo implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentitolo")
     private Long id;
     @Column(name="tipo")
+    @Enumerated(EnumType.STRING)
     private TipoTitolo tipo;
+    @Column(name="descrizione")
+    private String descrizione;
 
 
     public Long getId() {
@@ -55,6 +60,14 @@ public class Titolo implements Serializable {
 
     public void setTipo(TipoTitolo tipo) {
         this.tipo = tipo;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
     }
 
     @Override
@@ -79,7 +92,7 @@ public class Titolo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.protocollo.entities.Titolo[ id=" + id + " ]";
+        return this.getDescrizione();
     }
     
 }
