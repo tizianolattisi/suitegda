@@ -40,8 +40,9 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
-    @Enumerated(EnumType.STRING)
-    private TitoloPraticaProtocollo titolo;
+    @JoinColumn(name = "oggetto", referencedColumnName = "id")
+    @ManyToOne
+    private Oggetto oggetto;
     @Column(name="originale")
     private Boolean originale=false;
 
@@ -77,13 +78,15 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
         this.protocollo = protocollo;
     }
 
-    public TitoloPraticaProtocollo getTitolo() {
-        return titolo;
+    public Oggetto getOggetto() {
+        return oggetto;
     }
 
-    public void setTitolo(TitoloPraticaProtocollo titolo) {
-        this.titolo = titolo;
+    public void setOggetto(Oggetto oggetto) {
+        this.oggetto = oggetto;
     }
+
+
 
     public Boolean getOriginale() {
         return originale;
