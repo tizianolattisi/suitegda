@@ -34,10 +34,10 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genpraticaprotocollo")
     private Long id;
-    @JoinColumn(name = "pratica", referencedColumnName = "id")
+    @JoinColumn(name = "pratica", referencedColumnName = "idpratica")
     @ManyToOne
     private Pratica pratica;
-    @JoinColumn(name = "protocollo", referencedColumnName = "id")
+    @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
     @Enumerated(EnumType.STRING)

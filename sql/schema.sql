@@ -501,7 +501,7 @@ CREATE TABLE pratica (
     anno integer,
     datapratica date,
     descrizione character varying(255),
-    idpratica character varying(255),
+    idpratica character varying(9),
     codiceinterno character varying(255),
     note character varying(255),
     attribuzione bigint,
@@ -606,17 +606,17 @@ ALTER TABLE ONLY attribuzione
 CREATE TABLE praticaprotocollo (
     id bigserial NOT NULL,
     titolo character varying(255),
-    pratica bigint,
-    protocollo bigint,
+    pratica character varying(9),
+    protocollo character varying(12),
     originale boolean NOT NULL DEFAULT FALSE
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.praticaprotocollo OWNER TO postgres;
 ALTER TABLE ONLY praticaprotocollo
     ADD CONSTRAINT praticaprotocollo_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY praticaprotocollo
-    ADD CONSTRAINT fk_praticaprotocollo_pratica FOREIGN KEY (pratica) REFERENCES pratiche.pratica(id);
+    ADD CONSTRAINT fk_praticaprotocollo_pratica FOREIGN KEY (pratica) REFERENCES pratiche.pratica(idpratica);
 ALTER TABLE ONLY praticaprotocollo
-    ADD CONSTRAINT fk_praticaprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(id);
+    ADD CONSTRAINT fk_praticaprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 
 CREATE TRIGGER trg_ins_ts_praticaprotocollo
   BEFORE INSERT
