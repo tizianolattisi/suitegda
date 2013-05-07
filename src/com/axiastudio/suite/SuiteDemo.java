@@ -63,10 +63,12 @@ import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.ProtocolloPrivate;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
+import com.axiastudio.suite.protocollo.entities.Oggetto;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
+import com.axiastudio.suite.protocollo.entities.Titolo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
@@ -129,6 +131,18 @@ public class SuiteDemo {
                               Window.class,
                               "Albo professionale");
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Titolo.class,
+                              Window.class,
+                              "Titoli");
+        
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Oggetto.class,
+                              Window.class,
+                              "Oggetti");
+                
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/gruppo.ui",
                               Gruppo.class,

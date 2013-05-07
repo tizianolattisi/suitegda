@@ -15,34 +15,21 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
      <property name="column" stdset="0">
-      <string>titolo</string>
+      <string>oggetto</string>
      </property>
-     <item>
-      <property name="text">
-       <string>ISTANZA</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>INTEGRAZIONE</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>DETERMINA</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>DELIBERA</string>
-      </property>
-     </item>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
