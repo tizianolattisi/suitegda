@@ -38,8 +38,9 @@ public class SoggettoRiservatoProtocollo implements Serializable {
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
-    @Enumerated(EnumType.STRING)
-    private TitoloSoggettoProtocollo titolo;
+    @JoinColumn(name = "titolo", referencedColumnName = "id")
+    @ManyToOne
+    private Titolo titolo;
     @Column(name="conoscenza")
     private Boolean conoscenza=false;
     @Column(name="notifica")
@@ -71,11 +72,11 @@ public class SoggettoRiservatoProtocollo implements Serializable {
         this.soggetto = soggetto;
     }
 
-    public TitoloSoggettoProtocollo getTitolo() {
+    public Titolo getTitolo() {
         return titolo;
     }
 
-    public void setTitolo(TitoloSoggettoProtocollo titolo) {
+    public void setTitolo(Titolo titolo) {
         this.titolo = titolo;
     }
 
