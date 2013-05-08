@@ -39,13 +39,13 @@ INSERT INTO gruppo (id, descrizione, persona, azienda, ente) VALUES (5, 'COMUNIT
 INSERT INTO gruppo (id, descrizione, persona, azienda, ente) VALUES (6, 'COLLABORATORE', true, true, false);
 SELECT setval('anagrafiche.gruppo_id_seq', 7, true);
 
-INSERT INTO relazione (id, descrizione, asx, psx, esx, adx, pdx, edx) VALUES (1, 'è titolare di', false, true, false, true, false, false);
-INSERT INTO relazione (id, descrizione, asx, psx, esx, adx, pdx, edx) VALUES (2, 'è dipendente di', false, true, false, true, false, true);
+INSERT INTO relazione (id, descrizione, inversa, asx, psx, esx, adx, pdx, edx) VALUES (1, 'è titolare di', 'è l''azienda di', false, true, false, true, false, false);
+INSERT INTO relazione (id, descrizione, inversa, asx, psx, esx, adx, pdx, edx) VALUES (2, 'è dipendente di', 'ha tra i suoi dipendenti', false, true, false, true, false, true);
 SELECT setval('anagrafiche.relazione_id_seq', 3, true);
 
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (1, NULL, 'Lattisi', NULL, NULL, 'Tiziano', NULL, 'M', 'PERSONA', NULL);
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (2, NULL, NULL, NULL, NULL, NULL, 'AXIA STUDIO', NULL, 'AZIENDA', NULL);
-INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (3, NULL, NULL, 'COUNE DI RIVA DEL GARDA', NULL, NULL, NULL, NULL, 'ENTE', NULL);
+INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (3, NULL, NULL, 'COMUNE DI RIVA DEL GARDA', NULL, NULL, NULL, NULL, 'ENTE', NULL);
 SELECT setval('anagrafiche.soggetto_id_seq', 4, true);
 
 -- Le relazioni "demo" vengono inserite direttamente nella tabella reale
