@@ -154,7 +154,6 @@ SET search_path = anagrafiche, pg_catalog;
 CREATE TABLE relazione (
     id bigserial NOT NULL,
     descrizione character varying(255),
-    inversa character varying(255),
     asx boolean NOT NULL DEFAULT FALSE,
     psx boolean NOT NULL DEFAULT FALSE,
     esx boolean NOT NULL DEFAULT FALSE,
@@ -253,24 +252,65 @@ ALTER TABLE ONLY grupposoggetto
 ALTER TABLE ONLY grupposoggetto
     ADD CONSTRAINT fk_grupposoggetto_gruppo FOREIGN KEY (gruppo) REFERENCES gruppo(id);
 
-CREATE TABLE relazionesoggetto (
+-- la tabella "reale" delle relazioni soggetto contiene solo le relazioni "dritte"
+CREATE TABLE zrelazionesoggetto (
     id bigserial NOT NULL,
     soggetto bigint,
     relazione bigint,
     relazionato bigint,
     datanascita date,
-    datacessazione date,
-    invertita boolean NOT NULL DEFAULT false
+    datacessazione date
 );
-ALTER TABLE anagrafiche.relazionesoggetto OWNER TO postgres;
-ALTER TABLE ONLY relazionesoggetto
-    ADD CONSTRAINT relazionesoggetto_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY relazionesoggetto
-    ADD CONSTRAINT fk_relazionesoggetto_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
-ALTER TABLE ONLY relazionesoggetto
-    ADD CONSTRAINT fk_relazionesoggetto_soggettor FOREIGN KEY (relazionato) REFERENCES soggetto(id);
-ALTER TABLE ONLY relazionesoggetto
-    ADD CONSTRAINT fk_relazionesoggetto_relazione FOREIGN KEY (relazione) REFERENCES relazione(id);
+ALTER TABLE anagrafiche.zrelazionesoggetto OWNER TO postgres;
+ALTER TABLE ONLY zrelazionesoggetto
+    ADD CONSTRAINT zrelazionesoggetto_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY zrelazionesoggetto
+    ADD CONSTRAINT fk_zrelazionesoggetto_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
+ALTER TABLE ONLY zrelazionesoggetto
+    ADD CONSTRAINT fk_zrelazionesoggetto_soggettor FOREIGN KEY (relazionato) REFERENCES soggetto(id);
+ALTER TABLE ONLY zrelazionesoggetto
+    ADD CONSTRAINT fk_zrelazionesoggetto_relazione FOREIGN KEY (relazione) REFERENCES relazione(id);
+
+-- la sequenza deve avere il nome senza la "z"
+CREATE SEQUENCE anagrafiche.relazionesoggetto_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 2
+  CACHE 1;
+ALTER TABLE anagrafiche.relazionesoggetto_id_seq
+  OWNER TO postgres;
+ALTER TABLE anagrafiche.zrelazionesoggetto ALTER COLUMN id SET DEFAULT nextval('anagrafiche.relazionesoggetto_id_seq'::regclass);
+DROP SEQUENCE anagrafiche.zrelazionesoggetto_id_seq;
+
+-- la vista delle relazioni è una union delle relazioni reali "dritte" con quelle "girate"
+-- tre regole gestiscono insert/update/delete dalla vista alla tabella reale.
+CREATE VIEW relazionesoggetto AS
+        SELECT id, soggetto, relazione, relazionato, datanascita, datacessazione,
+            FALSE AS invertita
+        FROM zrelazionesoggetto
+    UNION
+        SELECT (-(id)::integer) AS id, relazionato AS soggetto, relazione,
+            soggetto AS relazionato, datanascita, datacessazione,
+            TRUE AS invertita
+        FROM zrelazionesoggetto;
+
+CREATE RULE relazionesoggetto_delete AS ON DELETE TO relazionesoggetto DO INSTEAD
+	DELETE FROM zrelazionesoggetto
+	WHERE ((zrelazionesoggetto.id)::integer = old.id);
+
+CREATE RULE relazionesoggetto_insert AS ON INSERT TO relazionesoggetto DO INSTEAD
+	INSERT INTO zrelazionesoggetto (id, soggetto, relazione, relazionato, datanascita, datacessazione)
+            VALUES (new.id, new.soggetto, new.relazione, new.relazionato, new.datanascita, new.datacessazione)
+        RETURNING zrelazionesoggetto.id, zrelazionesoggetto.soggetto,
+            zrelazionesoggetto.relazione, zrelazionesoggetto.relazionato,
+            zrelazionesoggetto.datanascita, zrelazionesoggetto.datacessazione, FALSE;
+
+CREATE RULE relazionesoggetto_update AS ON UPDATE TO relazionesoggetto DO INSTEAD
+	UPDATE zrelazionesoggetto SET id = new.id, soggetto = new.soggetto,
+            relazione = new.relazione, relazionato = new.relazionato,
+            datanascita = new.datanascita, datacessazione = new.datacessazione
+        WHERE ((zrelazionesoggetto.id)::integer = old.id);
 
 CREATE TABLE indirizzo (
     id bigserial NOT NULL,

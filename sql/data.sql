@@ -39,18 +39,19 @@ INSERT INTO gruppo (id, descrizione, persona, azienda, ente) VALUES (5, 'COMUNIT
 INSERT INTO gruppo (id, descrizione, persona, azienda, ente) VALUES (6, 'COLLABORATORE', true, true, false);
 SELECT setval('anagrafiche.gruppo_id_seq', 7, true);
 
-INSERT INTO relazione (id, descrizione, inversa, psx, asx, esx, pdx, adx, edx) VALUES (1, 'è in relazione con', 'è in relazione con', true, true, true, true, true, true);
-INSERT INTO relazione (id, descrizione, inversa, psx, asx, esx, pdx, adx, edx) VALUES (2, 'è titolare di', 'è la ditta di', true, false, false, false, true, false);
-INSERT INTO relazione (id, descrizione, inversa, psx, asx, esx, pdx, adx, edx) VALUES (3, 'è dipendente di', 'è datore di lavoro di', true, false, false, false, true, true);
-SELECT setval('anagrafiche.relazione_id_seq', 4, true);
+INSERT INTO relazione (id, descrizione, asx, psx, esx, adx, pdx, edx) VALUES (1, 'è titolare di', false, true, false, true, false, false);
+INSERT INTO relazione (id, descrizione, asx, psx, esx, adx, pdx, edx) VALUES (2, 'è dipendente di', false, true, false, true, false, true);
+SELECT setval('anagrafiche.relazione_id_seq', 3, true);
 
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (1, NULL, 'Lattisi', NULL, NULL, 'Tiziano', NULL, 'M', 'PERSONA', NULL);
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (2, NULL, NULL, NULL, NULL, NULL, 'AXIA STUDIO', NULL, 'AZIENDA', NULL);
-INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (3, NULL, NULL, 'Comune di Riva del Garda', NULL, NULL, NULL, NULL, 'ENTE', NULL);
+INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (3, NULL, NULL, 'COUNE DI RIVA DEL GARDA', NULL, NULL, NULL, NULL, 'ENTE', NULL);
 SELECT setval('anagrafiche.soggetto_id_seq', 4, true);
 
-INSERT INTO relazionesoggetto (id, soggetto, relazionato, relazione) VALUES (1, 1, 2, 2);
-SELECT setval('anagrafiche.relazionesoggetto_id_seq', 4, true);
+-- Le relazioni "demo" vengono inserite direttamente nella tabella reale
+INSERT INTO relazionesoggetto (id, soggetto, relazione, relazionato) VALUES (1, 1, 1, 2);
+SELECT setval('anagrafiche.relazionesoggetto_id_seq', 2, true);
+
 
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
