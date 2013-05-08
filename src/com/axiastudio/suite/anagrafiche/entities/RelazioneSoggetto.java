@@ -114,6 +114,27 @@ public class RelazioneSoggetto implements Serializable {
     public void setInvertita(Boolean invertita) {
         this.invertita = invertita;
     }
+    
+    /*
+     * Il predicato esprime la relazione nel corretto verso
+     */
+    public String getPredicato(){
+        String out = "";
+        if( invertita ){
+            out += this.getSoggetto().toString();
+            out += " " + this.getRelazione().getInversa();
+            out += " " + this.getRelazionato().toString();
+        } else {
+            out += this.getSoggetto().toString();
+            out += " " + this.getRelazione().getDescrizione();
+            out += " " + this.getRelazionato().toString();
+        }
+        return out;
+    }
+    
+    public void setPredicato(String predicato){
+        // non deve fare nulla
+    }
 
     @Override
     public int hashCode() {
@@ -137,7 +158,7 @@ public class RelazioneSoggetto implements Serializable {
 
     @Override
     public String toString() {
-        return relazione.getDescrizione() + "... da completare...";
+        return this.getPredicato();
     }
     
 }

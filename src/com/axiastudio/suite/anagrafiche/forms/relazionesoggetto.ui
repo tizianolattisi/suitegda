@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>502</width>
-    <height>149</height>
+    <width>513</width>
+    <height>265</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Relazione tra soggetti</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
@@ -21,16 +21,16 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Soggetto</string>
+         <string>Soggetto relazionato</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_3">
+       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_relazionato">
         <property name="column" stdset="0">
-         <string>soggetto</string>
+         <string>relazionato</string>
         </property>
        </widget>
       </item>
@@ -42,23 +42,77 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_2">
+       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_relazione">
         <property name="column" stdset="0">
          <string>relazione</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Relazionato</string>
+         <string>Validità nel tempo</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
-        <property name="column" stdset="0">
-         <string>relazionato</string>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>da</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+          <property name="column" stdset="0">
+           <string>datanascita</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>a</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_2">
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+          <property name="column" stdset="0">
+           <string>datacessazione</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Predicato</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QCheckBox" name="checkBox_inverti">
+        <property name="text">
+         <string>inverti il predicato</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_predicato">
+        <property name="text">
+         <string>-</string>
         </property>
        </widget>
       </item>
@@ -72,6 +126,11 @@
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
    <extends>QComboBox</extends>
    <header>pypapicombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>pypapidateedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
