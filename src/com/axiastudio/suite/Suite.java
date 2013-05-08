@@ -43,6 +43,7 @@ import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.Stato;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
+import com.axiastudio.suite.anagrafiche.forms.FormRelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
 import com.axiastudio.suite.base.Login;
 import com.axiastudio.suite.base.entities.Ufficio;
@@ -195,7 +196,7 @@ public class Suite {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/relazionesoggetto.ui",
                               RelazioneSoggetto.class,
-                              Dialog.class,
+                              FormRelazioneSoggetto.class,
                               "Relazione soggetto");
         
         Register.registerUtility(FormQuickInsertSoggetto.class, IQuickInsertDialog.class, Soggetto.class.getName());
