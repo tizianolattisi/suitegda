@@ -64,7 +64,7 @@ SELECT setval('pratiche.tipopratica_id_seq', 4, true);
 INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipo)
   VALUES (1, 2012, '2012-12-10', 'Pratica demo', '201200001', 'DETRS201200000001', NULL, 3, 4, 3, 'scaffale in alto', 3);
 INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipo)
-  VALUES (2, 2012, '2012-12-11', 'Pratica demo che integra', '201200002', 'DETRS201200000002', NULL, 3, 4, 3, 'scaffale in alto', 3);
+  VALUES (2, 2012, '2012-12-11', 'Pratica demo che integra', '201200002', 'DETRS201200000002', NULL, 4, 3, 1, 'scaffale in alto', 3);
 SELECT setval('pratiche.pratica_id_seq', 3, true);
 
 INSERT INTO dipendenza (id, descrizionedominante, descrizionedipendente) VALUES (1, 'sostituisce', 'è sostituita da');
