@@ -27,6 +27,7 @@ import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.SuiteUiUtil;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
@@ -37,6 +38,7 @@ import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.trolltech.qt.core.QModelIndex;
+import com.trolltech.qt.core.QObject;
 import com.trolltech.qt.gui.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -190,6 +192,13 @@ public class FormProtocollo extends Window {
             lineEdit_sportello.setText(protocollo.getSportello().toString());
             comboBox_sportello.hide();
             lineEdit_sportello.show();
+        }
+        // etichette convalida
+        QLabel labelConvalida = (QLabel) this.findChild(QLabel.class, "label_convalida");
+        if( protocollo.getConvalidaprotocollo() ){
+            labelConvalida.setText(SuiteUtil.DATE_FORMAT.format(protocollo.getDataconvalida()));
+        } else {
+            labelConvalida.setText("-");
         }
     }
     
