@@ -33,7 +33,7 @@ import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
-import com.axiastudio.suite.anagrafiche.entities.AnagraficheAdapters;
+import com.axiastudio.suite.anagrafiche.AnagraficheAdapters;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Relazione;
