@@ -30,6 +30,7 @@ import com.axiastudio.pypapi.plugins.ooops.Template;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.suite.anagrafiche.AnagraficheAdapters;
 import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
@@ -51,7 +52,9 @@ import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
+import com.axiastudio.suite.pratiche.PraticaAdapters;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
+import com.axiastudio.suite.pratiche.PraticaPrivate;
 import com.axiastudio.suite.pratiche.entities.Dipendenza;
 import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
@@ -107,10 +110,13 @@ public class SuiteDemo {
         db.open("SuitePU");
         Register.registerUtility(db, IDatabase.class);
         
+        Register.registerAdapters(Resolver.adaptersFromClass(AnagraficheAdapters.class));
         Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
+        Register.registerAdapters(Resolver.adaptersFromClass(PraticaAdapters.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
-        Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
         Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
+        Register.registerPrivates(Resolver.privatesFromClass(PraticaPrivate.class));
         
         DemoData.initSchema();
         DemoData.initData();

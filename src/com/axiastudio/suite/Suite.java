@@ -53,6 +53,7 @@ import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
+import com.axiastudio.suite.pratiche.PraticaAdapters;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.PraticaPrivate;
 import com.axiastudio.suite.pratiche.entities.Dipendenza;
@@ -133,6 +134,7 @@ public class Suite {
         // registro adapter, validatori, e privacy
         Register.registerAdapters(Resolver.adaptersFromClass(AnagraficheAdapters.class));
         Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
+        Register.registerAdapters(Resolver.adaptersFromClass(PraticaAdapters.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
         Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
