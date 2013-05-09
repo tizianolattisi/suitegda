@@ -302,14 +302,23 @@ CREATE RULE relazionesoggetto_delete AS ON DELETE TO relazionesoggetto DO INSTEA
 
 CREATE RULE relazionesoggetto_insert AS ON INSERT TO relazionesoggetto DO INSTEAD
 	INSERT INTO zrelazionesoggetto (id, soggetto, relazione, relazionato, datanascita, datacessazione)
-            VALUES (new.id, new.soggetto, new.relazione, new.relazionato, new.datanascita, new.datacessazione)
-        RETURNING zrelazionesoggetto.id, zrelazionesoggetto.soggetto,
-            zrelazionesoggetto.relazione, zrelazionesoggetto.relazionato,
-            zrelazionesoggetto.datanascita, zrelazionesoggetto.datacessazione, FALSE;
+            VALUES (new.id,
+                    CASE WHEN new.invertita THEN new.relazionato ELSE new.soggetto END,
+                    new.relazione,
+                    CASE WHEN new.invertita THEN new.soggetto ELSE new.relazionato END,
+                    new.datanascita,
+                    new.datacessazione)
+        RETURNING   zrelazionesoggetto.id,
+                    zrelazionesoggetto.soggetto,
+                    zrelazionesoggetto.relazione,
+                    zrelazionesoggetto.relazionato,
+                    zrelazionesoggetto.datanascita,
+                    zrelazionesoggetto.datacessazione,
+                    FALSE;
 
 CREATE RULE relazionesoggetto_update AS ON UPDATE TO relazionesoggetto DO INSTEAD
-	UPDATE zrelazionesoggetto SET id = new.id, soggetto = new.soggetto,
-            relazione = new.relazione, relazionato = new.relazionato,
+	UPDATE zrelazionesoggetto SET --id = new.id, soggetto = new.soggetto,
+            relazione = new.relazione, --relazionato = new.relazionato,
             datanascita = new.datanascita, datacessazione = new.datacessazione
         WHERE ((zrelazionesoggetto.id)::integer = old.id);
 
@@ -636,13 +645,19 @@ CREATE RULE dipendenzapratica_delete AS ON DELETE TO dipendenzapratica DO INSTEA
 
 CREATE RULE dipendenzapratica_insert AS ON INSERT TO dipendenzapratica DO INSTEAD
 	INSERT INTO zdipendenzapratica (id, praticadominante, dipendenza, praticadipendente)
-            VALUES (new.id, new.praticadominante, new.dipendenza, new.praticadipendente)
-        RETURNING zdipendenzapratica.id, zdipendenzapratica.praticadominante,
-            zdipendenzapratica.dipendenza, zdipendenzapratica.praticadipendente, FALSE;
+            VALUES (new.id,
+                    CASE WHEN new.invertita THEN new.praticadipendente ELSE new.praticadominante END,
+                    new.dipendenza,
+                    CASE WHEN new.invertita THEN new.praticadominante ELSE new.praticadipendente END)
+        RETURNING   zdipendenzapratica.id,
+                    zdipendenzapratica.praticadominante,
+                    zdipendenzapratica.dipendenza,
+                    zdipendenzapratica.praticadipendente,
+                    FALSE;
 
 CREATE RULE dipendenzapratica_update AS ON UPDATE TO dipendenzapratica DO INSTEAD
-	UPDATE zdipendenzapratica SET id = new.id, praticadominante = new.praticadominante,
-            dipendenza = new.dipendenza, praticadipendente = new.praticadipendente
+	UPDATE zdipendenzapratica SET --id = new.id, praticadominante = new.praticadominante,
+            dipendenza = new.dipendenza--, praticadipendente = new.praticadipendente
         WHERE ((zdipendenzapratica.id)::integer = old.id);
 
 -- Protocollo
