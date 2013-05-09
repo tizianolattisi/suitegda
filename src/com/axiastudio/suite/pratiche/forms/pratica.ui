@@ -394,6 +394,21 @@
        <attribute name="title">
         <string>Pratiche relazionate</string>
        </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_3">
+          <property name="entity" stdset="0">
+           <string>.dipendenzaPraticaCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&lt;predicato&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>praticadipendente</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
