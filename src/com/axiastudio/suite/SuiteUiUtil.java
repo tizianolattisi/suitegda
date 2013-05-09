@@ -49,11 +49,11 @@ public class SuiteUiUtil {
         if( currentEntity instanceof ITimeStamped ){
             Date recordcreato = (Date) Resolver.valueFromFieldName(currentEntity, "recordcreato");
             if( recordcreato != null ){
-                credits += "<br/>Creato: " + SuiteUtil.DATE_FORMAT.format(recordcreato);
+                credits += "<br/>Creato: " + SuiteUtil.DATETIME_FORMAT.format(recordcreato);
             }
             Date recordmodificato = (Date) Resolver.valueFromFieldName(currentEntity, "recordmodificato");
             if( recordmodificato != null ){
-                credits += "<br/>Modificato: " + SuiteUtil.DATE_FORMAT.format(recordmodificato);
+                credits += "<br/>Modificato: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
             }
         }   
         QTextEdit text = new QTextEdit(credits);
