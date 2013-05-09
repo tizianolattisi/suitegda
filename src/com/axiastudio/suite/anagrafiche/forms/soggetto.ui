@@ -650,7 +650,7 @@
            <string>relazionato</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&lt;predicato&gt;,&gt;datanascita&lt;,&gt;datacessazione&lt;</string>
+           <string>&lt;predicato&gt;</string>
           </property>
          </widget>
         </item>

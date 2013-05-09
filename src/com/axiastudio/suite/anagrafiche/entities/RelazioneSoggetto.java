@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
+import com.axiastudio.suite.SuiteUtil;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -130,6 +131,12 @@ public class RelazioneSoggetto implements Serializable {
             out += " è in relazione con ";
         }
         out += this.getRelazionato().toString();
+        if( this.getDatanascita() != null ){
+            out += " dal " + SuiteUtil.DATE_FORMAT.format(this.getDatanascita());
+        }
+        if( this.getDatacessazione()!= null ){
+            out += "fino al " + SuiteUtil.DATE_FORMAT.format(this.getDatacessazione());
+        }
         return out;
     }
     
