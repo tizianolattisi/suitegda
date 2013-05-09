@@ -34,10 +34,13 @@ import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Relazione;
+import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.anagrafiche.entities.Stato;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
+import com.axiastudio.suite.anagrafiche.forms.FormRelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
 import com.axiastudio.suite.base.Login;
 import com.axiastudio.suite.base.entities.Ufficio;
@@ -49,8 +52,11 @@ import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
+import com.axiastudio.suite.pratiche.entities.Dipendenza;
+import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
+import com.axiastudio.suite.pratiche.forms.FormDipendenzaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
@@ -116,184 +122,175 @@ public class SuiteDemo {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/base/forms/ufficio.ui",
                               Ufficio.class,
-                              Window.class,
-                              "Uffici");
+                              Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/base/forms/utente.ui",
                               Utente.class,
-                              Window.class,
-                              "Utenti");
-        
+                              Window.class);
+
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               AlboProfessionale.class,
-                              Window.class,
-                              "Albo professionale");
+                              Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               Titolo.class,
-                              Window.class,
-                              "Titoli");
-        
+                              Window.class);
+
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               Oggetto.class,
-                              Window.class,
-                              "Oggetti");
-                
+                              Window.class);
+        
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Stato.class,
+                              Window.class);
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/gruppo.ui",
                               Gruppo.class,
-                              Window.class,
-                              "Gruppo");
-        
+                              Window.class);
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/relazione.ui",
                               Relazione.class,
-                              Window.class,
-                              "Gruppo");
-
+                              Window.class);
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
                               Soggetto.class,
-                              FormSoggetto.class,
-                              "Soggetti anagrafici");
+                              FormSoggetto.class);
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/anagrafiche/forms/relazionesoggetto.ui",
+                              RelazioneSoggetto.class,
+                              FormRelazioneSoggetto.class);
+        
         Register.registerUtility(FormQuickInsertSoggetto.class, IQuickInsertDialog.class, Soggetto.class.getName());
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/indirizzo.ui",
                               Indirizzo.class,
-                              FormIndirizzo.class,
-                              "Indirizzo");
-        
+                              FormIndirizzo.class);
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/riferimento.ui",
                               Riferimento.class,
-                              Dialog.class,
-                              "Riferimento");
+                              Dialog.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",
                               Pratica.class,
-                              FormPratica.class,
-                              "Pratiche");
+                              FormPratica.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/tipopratica.ui",
                               TipoPratica.class,
-                              Window.class,
-                              "Tipo Pratica");
+                              Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Dipendenza.class,
+                              Window.class);
+        
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/pratiche/forms/dipendenzapratica.ui",
+                              DipendenzaPratica.class,
+                              FormDipendenzaPratica.class);
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
                               SoggettoProtocollo.class,
-                              FormSoggettoProtocollo.class,
-                              "Soggetto del protocollo");
-      
+                              FormSoggettoProtocollo.class);
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
                               SoggettoRiservatoProtocollo.class,
-                              FormSoggettoProtocollo.class,
-                              "Soggetto riservato del protocollo");
+                              FormSoggettoProtocollo.class);
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/praticaprotocollo.ui",
                               PraticaProtocollo.class,
-                              Dialog.class,
-                              "Pratica contenente il protocollo");
+                              Dialog.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/protocollo.ui",
                               Protocollo.class,
-                              FormProtocollo.class, // custom form
-                              "Protocolli");
+                              FormProtocollo.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               Fascicolo.class,
-                              Window.class,
-                              "Finestra fascicolo");
+                              Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pubblicazioni/forms/pubblicazione.ui",
                               Pubblicazione.class,
-                              FormPubblicazione.class,
-                              "Pubblicazione all'albo");
+                              FormPubblicazione.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               Carica.class,
-                              Window.class,
-                              "Carica");
+                              Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               Commissione.class,
-                              Window.class,
-                              "Commissione");
+                              Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/sedute/forms/caricacommissione.ui",
                               CaricaCommissione.class,
-                              Window.class,
-                              "Carica-commissione");
+                              Window.class);
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/sedute/forms/tiposeduta.ui",
                               TipoSeduta.class,
-                              FormTipoSeduta.class,
-                              "Tipo seduta");
+                              FormTipoSeduta.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/sedute/forms/seduta.ui",
                               Seduta.class,
-                              Window.class,
-                              "Seduta");
+                              Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/finanziaria/forms/servizio.ui",
                               Servizio.class,
-                              Window.class,
-                              "Servizi");
+                              Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               Capitolo.class,
-                              Window.class,
-                              "Capitoli");
-        
+                              Window.class);
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
                               Determina.class,
-                              FormDetermina.class,
-                              "Determine");
+                              FormDetermina.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
-                               "classpath:com/axiastudio/suite/deliberedetermine/forms/movimentodetermina.ui",
-                               MovimentoDetermina.class,
-                               Dialog.class,
-                               "Movimento determina");
-
+                              "classpath:com/axiastudio/suite/deliberedetermine/forms/movimentodetermina.ui",
+                              MovimentoDetermina.class,
+                              Dialog.class);
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/norma.ui",
                               Norma.class,
-                              Window.class,
-                              "Norma");
+                              Window.class);
        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/procedimento.ui",
                               Procedimento.class,
-                              Window.class,
-                              "Procedimenti");
-        
+                              Window.class);
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
                               Delega.class,
-                              FormDelega.class,
-                              "Incarichi e deleghe");
+                              Window.class);
+
         // TODO: filtro sulle deleghe
        try {
             Method provider = GestoreDeleghe.class.getMethod("filtroDelegheUtente", CriteriaBuilder.class, Root.class);
@@ -379,15 +376,17 @@ public class SuiteDemo {
         }
         
         Login login = new Login();
+        login.setWindowTitle("PyPaPi Suite PA (demo)");
         int res = login.exec();
         if( res == 1 ){
         
             Mdi mdi = new Mdi();
+            mdi.setWindowTitle("PyPaPi Suite PA (demo)");
             mdi.showMaximized();
             //mdi.show();
             
             app.setCustomApplicationName("PyPaPi SuitePA - modalità dimostrazione");
-            app.setCustomApplicationCredits("Copyright AXIA Studio 2012<br/>");
+            app.setCustomApplicationCredits("Copyright AXIA Studio 2013<br/>");
             app.exec();
         }
         
