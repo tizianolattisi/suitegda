@@ -71,6 +71,8 @@ public class Pratica implements Serializable, ITimeStamped {
     @JoinColumn(name = "fascicolo", referencedColumnName = "id")
     @ManyToOne
     private Fascicolo fascicolo;
+    @OneToMany(mappedBy = "praticadominante", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<DipendenzaPratica> dipendenzaPraticaCollection;
 
     /* timestamped */
     @Column(name="rec_creato")
@@ -211,6 +213,18 @@ public class Pratica implements Serializable, ITimeStamped {
         this.fascicolo = fascicolo;
     }
 
+    public Collection<DipendenzaPratica> getDipendenzaPraticaCollection() {
+        return dipendenzaPraticaCollection;
+    }
+
+    public void setDipendenzaPraticaCollection(Collection<DipendenzaPratica> dipendenzaPraticaCollection) {
+        this.dipendenzaPraticaCollection = dipendenzaPraticaCollection;
+    }
+
+    
+    /*
+     * timestamped
+     */
     @Override
     public Date getRecordcreato() {
         return recordcreato;
