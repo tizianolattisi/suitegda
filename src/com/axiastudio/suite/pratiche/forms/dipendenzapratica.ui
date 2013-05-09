@@ -6,50 +6,38 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>536</width>
-    <height>211</height>
+    <width>533</width>
+    <height>109</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Dipendenza tra pratiche</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Dettagli dipendenza</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Pratica in dipendenza</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_pratica">
-        <property name="column" stdset="0">
-         <string>praticadipendente</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Dipendenza</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_dipendenza">
-        <property name="column" stdset="0">
-         <string>dipendenza</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Dipendenza</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_dipendenza">
+       <property name="column" stdset="0">
+        <string>dipendenza</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_inverti">
+       <property name="text">
+        <string>inverti</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
@@ -57,13 +45,6 @@
       <string>Predicato</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QCheckBox" name="checkBox_inverti">
-        <property name="text">
-         <string>inverti il predicato</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QLabel" name="label_predicato">
         <property name="text">

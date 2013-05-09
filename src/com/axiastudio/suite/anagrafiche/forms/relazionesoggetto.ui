@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>513</width>
-    <height>265</height>
+    <width>569</width>
+    <height>158</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,100 +15,94 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Dettagli relazione</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Soggetto relazionato</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_relazionato">
-        <property name="column" stdset="0">
-         <string>relazionato</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Relazione</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_relazione">
-        <property name="column" stdset="0">
-         <string>relazione</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Validità nel tempo</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>da</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
-          <property name="calendarPopup">
-           <bool>true</bool>
-          </property>
-          <property name="column" stdset="0">
-           <string>datanascita</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>a</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_2">
-          <property name="calendarPopup">
-           <bool>true</bool>
-          </property>
-          <property name="column" stdset="0">
-           <string>datacessazione</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Relazione</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_relazione">
+       <property name="column" stdset="0">
+        <string>relazione</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_inverti">
+       <property name="text">
+        <string>inverti</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Validità</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>da</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="column" stdset="0">
+        <string>datanascita</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>a</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_2">
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="column" stdset="0">
+        <string>datacessazione</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>138</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Predicato</string>
+      <string>Anteprima predicato</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QCheckBox" name="checkBox_inverti">
-        <property name="text">
-         <string>inverti il predicato</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QLabel" name="label_predicato">
         <property name="text">

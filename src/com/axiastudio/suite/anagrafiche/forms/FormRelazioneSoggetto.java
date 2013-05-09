@@ -33,8 +33,7 @@ public class FormRelazioneSoggetto extends Dialog {
     public FormRelazioneSoggetto(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
         ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_inverti")).stateChanged.connect(this, "aggiornaPredicato()");
-        ((QComboBox) this.findChild(QComboBox.class, "comboBox_relazionato")).currentIndexChanged.connect(this, "aggiornaPredicato()");
-        ((QComboBox) this.findChild(QComboBox.class, "comboBox_relazione")).currentIndexChanged.connect(this, "aggiornaPredicato()");
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_relazione")).currentStringChanged.connect(this, "aggiornaPredicato()");
         //this.aggiornaPredicato();
     }
     
@@ -50,17 +49,8 @@ public class FormRelazioneSoggetto extends Dialog {
         if( rs == null ){
             return;
         }
-        //out += rs.getSoggetto().toString();
-        out = "";
-        out += " ";
-        if( inverti ){
-            out += rs.getRelazione().getInversa();
-        } else {
-            out += rs.getRelazione().getDescrizione();
-        }
-        out += " ";
-        out += rs.getRelazionato().toString();
-        predicato.setText(out);
+        rs.setInvertita(inverti);
+        predicato.setText(rs.getPredicato());
     }
 
 }

@@ -120,15 +120,16 @@ public class RelazioneSoggetto implements Serializable {
      */
     public String getPredicato(){
         String out = "";
-        if( invertita ){
-            out += this.getSoggetto().toString();
-            out += " " + this.getRelazione().getInversa();
-            out += " " + this.getRelazionato().toString();
+        if( this.getRelazione() != null ){
+            if( invertita ){
+                out += " " + this.getRelazione().getInversa() + " ";
+            } else {
+                out += " " + this.getRelazione().getDescrizione() + " ";
+            }
         } else {
-            out += this.getSoggetto().toString();
-            out += " " + this.getRelazione().getDescrizione();
-            out += " " + this.getRelazionato().toString();
+            out += " è in relazione con ";
         }
+        out += this.getRelazionato().toString();
         return out;
     }
     

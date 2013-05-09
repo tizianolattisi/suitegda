@@ -16,7 +16,13 @@
  */
 package com.axiastudio.suite.pratiche.forms;
 
+import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.Dialog;
+import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
+import com.trolltech.qt.core.Qt;
+import com.trolltech.qt.gui.QCheckBox;
+import com.trolltech.qt.gui.QComboBox;
+import com.trolltech.qt.gui.QLabel;
 
 /**
  *
@@ -26,5 +32,23 @@ public class FormDipendenzaPratica extends Dialog {
     
     public FormDipendenzaPratica(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_inverti")).stateChanged.connect(this, "aggiornaPredicato()");
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_dipendenza")).currentStringChanged.connect(this, "aggiornaPredicato()");
+    }
+    
+    private void aggiornaPredicato(){
+        String out="";
+        QLabel predicato = (QLabel) this.findChild(QLabel.class, "label_predicato");
+        Boolean inverti = ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_inverti")).checkState().equals(Qt.CheckState.Checked);
+        Context context = this.getContext();
+        if( context == null ){
+            return;
+        }
+        DipendenzaPratica dp = (DipendenzaPratica) this.getContext().getModel().getStore().get(0); // XXX: perché non currentEntity??
+        if( dp == null ){
+            return;
+        }
+        dp.setInvertita(inverti);
+        predicato.setText(dp.getPredicato());
     }
 }

@@ -98,11 +98,14 @@ public class DipendenzaPratica implements Serializable {
      */
     public String getPredicato(){
         String out = "";
-        out += this.getPraticadominante().getIdpratica();
-        if( invertita ){
-            out += " " + this.getDipendenza().getDescrizionedipendente();
+        if( this.getDipendenza() != null ){
+            if( invertita ){
+                out += " " + this.getDipendenza().getDescrizionedipendente() + " ";
+            } else {
+                out += " " + this.getDipendenza().getDescrizionedominante() + " ";
+            }
         } else {
-            out += " " + this.getDipendenza().getDescrizionedominante();
+            out += " è in relazione con ";
         }
         out += " " + this.getPraticadipendente().getIdpratica();
         return out;
