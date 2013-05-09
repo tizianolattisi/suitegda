@@ -581,6 +581,69 @@ CREATE TRIGGER trg_upd_ts_pratica
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
 
+CREATE TABLE dipendenza (
+    id bigserial NOT NULL,
+    descrizionedominante character varying(255),
+    descrizionedipendente character varying(255)
+);
+ALTER TABLE pratiche.dipendenza OWNER TO postgres;
+ALTER TABLE ONLY dipendenza
+    ADD CONSTRAINT dipendenza_id_key UNIQUE (id);
+
+CREATE TABLE zdipendenzapratica (
+    id bigserial NOT NULL,
+    praticadominante character varying(9),
+    praticadipendente character varying(9),
+    dipendenza bigint
+);
+ALTER TABLE pratiche.zdipendenzapratica OWNER TO postgres;
+ALTER TABLE ONLY zdipendenzapratica
+    ADD CONSTRAINT zdipendenzapratica_id_key UNIQUE (id);
+ALTER TABLE ONLY zdipendenzapratica
+    ADD CONSTRAINT fk_zdipendenzapratica_praticadominante FOREIGN KEY (praticadominante) REFERENCES pratiche.pratica(idpratica);
+ALTER TABLE ONLY zdipendenzapratica
+    ADD CONSTRAINT fk_zdipendenzapratica_praticadipendente FOREIGN KEY (praticadipendente) REFERENCES pratiche.pratica(idpratica);
+ALTER TABLE ONLY zdipendenzapratica
+    ADD CONSTRAINT fk_zdipendenzapratica_dipendenza FOREIGN KEY (dipendenza) REFERENCES pratiche.dipendenza(id);
+
+-- la sequenza deve avere il nome senza la "z"
+CREATE SEQUENCE pratiche.dipendenzapratica_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 2
+  CACHE 1;
+ALTER TABLE pratiche.dipendenzapratica_id_seq
+  OWNER TO postgres;
+ALTER TABLE pratiche.zdipendenzapratica ALTER COLUMN id SET DEFAULT nextval('pratiche.dipendenzapratica_id_seq'::regclass);
+DROP SEQUENCE pratiche.zdipendenzapratica_id_seq;
+
+-- la vista delle dipendenze è una union delle dipendenze reali "dritte" con quelle "girate"
+-- tre regole gestiscono insert/update/delete dalla vista alla tabella reale.
+CREATE VIEW dipendenzapratica AS
+        SELECT id, praticadominante, dipendenza, praticadipendente,
+            FALSE AS invertita
+        FROM zdipendenzapratica
+    UNION
+        SELECT (-(id)::integer) AS id, praticadipendente AS praticadominante, dipendenza,
+            praticadominante AS praticadipendente,
+            TRUE AS invertita
+        FROM zdipendenzapratica;
+
+CREATE RULE dipendenzapratica_delete AS ON DELETE TO dipendenzapratica DO INSTEAD
+	DELETE FROM zdipendenzapratica
+	WHERE ((zdipendenzapratica.id)::integer = old.id);
+
+CREATE RULE dipendenzapratica_insert AS ON INSERT TO dipendenzapratica DO INSTEAD
+	INSERT INTO zdipendenzapratica (id, praticadominante, dipendenza, praticadipendente)
+            VALUES (new.id, new.praticadominante, new.dipendenza, new.praticadipendente)
+        RETURNING zdipendenzapratica.id, zdipendenzapratica.praticadominante,
+            zdipendenzapratica.dipendenza, zdipendenzapratica.praticadipendente, FALSE;
+
+CREATE RULE dipendenzapratica_update AS ON UPDATE TO dipendenzapratica DO INSTEAD
+	UPDATE zdipendenzapratica SET id = new.id, praticadominante = new.praticadominante,
+            dipendenza = new.dipendenza, praticadipendente = new.praticadipendente
+        WHERE ((zdipendenzapratica.id)::integer = old.id);
 
 -- Protocollo
 SET search_path = protocollo, pg_catalog;
