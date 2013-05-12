@@ -24,6 +24,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -34,6 +35,10 @@ import javax.persistence.Table;
 @Entity
 @Table(schema="PROCEDIMENTI")
 @SequenceGenerator(name="gentipopraticaprocedimento", sequenceName="procedimenti.tipopraticaprocedimento_id_seq", initialValue=1, allocationSize=1)
+@NamedQuery(name="trovaTipiPraticaPermessiDaAttribuzioni",
+            query = "SELECT tpp.tipopratica.id FROM TipoPraticaProcedimento tpp "
+                  + "JOIN tpp.procedimento p JOIN p.ufficioProcedimentoCollection up "
+                  + "WHERE up.ufficio.id = :id")
 public class TipoPraticaProcedimento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

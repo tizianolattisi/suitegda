@@ -29,7 +29,6 @@ import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.trolltech.qt.gui.QCheckBox;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QIcon;
-import com.trolltech.qt.gui.QPushButton;
 import com.trolltech.qt.gui.QToolButton;
 import com.trolltech.qt.gui.QWidget;
 
@@ -59,13 +58,15 @@ public class FormPratica extends Window {
             Util.warningBox((QWidget) this, "Error", msg);
             return;
         }
-        FormTipoPratica tipi = new FormTipoPratica();
+        FormTipoPratica tipi = new FormTipoPratica(this, pratica);
         int exec = tipi.exec();
         if( exec == 1 ){
             TipoPratica selection = tipi.getSelection();
-            PyPaPiComboBox comboBoxTipo = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBoxTipo");
-            comboBoxTipo.select(selection);
-            this.getContext().getDirty();
+            if( selection != null ){
+                PyPaPiComboBox comboBoxTipo = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBoxTipo");
+                comboBoxTipo.select(selection);
+                this.getContext().getDirty();
+            }
         }
     }
     
