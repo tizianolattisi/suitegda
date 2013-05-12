@@ -318,9 +318,9 @@ public class DemoData {
         procedimento.setNormaProcedimentoCollection(norme);
         List<TipoPraticaProcedimento> tipiPratica = new ArrayList();
         TipoPraticaProcedimento detrsProcedimento = new TipoPraticaProcedimento();
-        detrsProcedimento.setTipoPratica(detrs);
+        detrsProcedimento.setTipopratica(detrs);
         tipiPratica.add(detrsProcedimento);
-        procedimento.setTipoPraticaProcedimentoCollection(tipiPratica);
+        procedimento.setTipopraticaProcedimentoCollection(tipiPratica);
         em.getTransaction().begin();
         em.persist(procedimento);
         em.getTransaction().commit();

@@ -44,7 +44,7 @@ public class TipoPraticaProcedimento implements Serializable {
     private Procedimento procedimento;
     @JoinColumn(name = "tipopratica", referencedColumnName = "id")
     @ManyToOne
-    private TipoPratica tipoPratica;
+    private TipoPratica tipopratica;
 
 
 
@@ -64,12 +64,12 @@ public class TipoPraticaProcedimento implements Serializable {
         this.procedimento = procedimento;
     }
 
-    public TipoPratica getTipoPratica() {
-        return tipoPratica;
+    public TipoPratica getTipopratica() {
+        return tipopratica;
     }
 
-    public void setTipoPratica(TipoPratica tipoPratica) {
-        this.tipoPratica = tipoPratica;
+    public void setTipopratica(TipoPratica tipoPratica) {
+        this.tipopratica = tipoPratica;
     }
 
     @Override
