@@ -94,9 +94,9 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Column(name="convalidaprotocollo")
     private Boolean convalidaprotocollo=false;
 
-    @Column(name="dataconvalida")
+    @Column(name="dataconvalidaprotocollo")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dataconvalida;
+    private Date dataconvalidaprotocollo;
     
     
     @Column(name="consolidadocumenti")
@@ -348,12 +348,12 @@ public class Protocollo implements Serializable, ITimeStamped {
         this.convalidaprotocollo = convalidaprotocollo;
     }
 
-    public Date getDataconvalida() {
-        return dataconvalida;
+    public Date getDataconvalidaprotocollo() {
+        return dataconvalidaprotocollo;
     }
 
-    public void setDataconvalida(Date dataconvalida) {
-        this.dataconvalida = dataconvalida;
+    public void setDataconvalidaprotocollo(Date dataconvalida) {
+        this.dataconvalidaprotocollo = dataconvalida;
     }
 
     public Boolean getConsolidadocumenti() {

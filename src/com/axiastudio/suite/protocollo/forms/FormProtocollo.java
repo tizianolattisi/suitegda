@@ -38,7 +38,6 @@ import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.trolltech.qt.core.QModelIndex;
-import com.trolltech.qt.core.QObject;
 import com.trolltech.qt.gui.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -196,7 +195,7 @@ public class FormProtocollo extends Window {
         // etichette convalida
         QLabel labelConvalida = (QLabel) this.findChild(QLabel.class, "label_convalida");
         if( protocollo.getConvalidaprotocollo() ){
-            labelConvalida.setText(SuiteUtil.DATE_FORMAT.format(protocollo.getDataconvalida()));
+            labelConvalida.setText(SuiteUtil.DATE_FORMAT.format(protocollo.getDataconvalidaprotocollo()));
         } else {
             labelConvalida.setText("-");
         }
