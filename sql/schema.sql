@@ -52,9 +52,9 @@ SET default_with_oids = false;
 SET search_path = generale, pg_catalog;
 CREATE TABLE withtimestamp
 (
-  rec_creato timestamp with time zone,
+  rec_creato timestamp,
   rec_creato_da character varying(255),
-  rec_modificato timestamp with time zone,
+  rec_modificato timestamp,
   rec_modificato_da character varying(255)
 );
 ALTER TABLE withtimestamp OWNER TO postgres;
@@ -789,6 +789,10 @@ CREATE TRIGGER trg_upd_ts_pratica
   ON pratiche.pratica
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
+CREATE UNIQUE INDEX pratica_idpratica
+   ON pratiche.pratica (idpratica ASC NULLS LAST)
+  WITH (FILLFACTOR=95);
+ALTER TABLE pratiche.pratica CLUSTER ON pratica_idpratica;
 
 CREATE TABLE dipendenza (
     id bigserial NOT NULL,
@@ -932,6 +936,12 @@ CREATE TRIGGER trg_upd_ts_protocollo
   ON protocollo.protocollo
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
+CREATE UNIQUE INDEX protocollo_iddocumento
+  ON protocollo.protocollo
+  USING btree
+  (iddocumento )
+  WITH (FILLFACTOR=95);
+ALTER TABLE protocollo.protocollo CLUSTER ON protocollo_iddocumento;
 
 CREATE TABLE attribuzione (
     id bigserial NOT NULL,
