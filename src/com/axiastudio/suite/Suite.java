@@ -324,6 +324,7 @@ public class Suite {
         cmisPlugin.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
                 "/Protocollo/${dataprotocollo,date,YYYY}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
+        Register.registerPlugin(cmisPlugin, FormScrivania.class);
 
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
         cmisPluginPubblicazioni.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 

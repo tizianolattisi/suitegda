@@ -16,6 +16,8 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.menjazo.ClientWindow;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
@@ -23,6 +25,7 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
+import com.axiastudio.pypapi.plugins.cmis.CmisUtil;
 import com.axiastudio.pypapi.ui.Column;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.TableModel;
@@ -216,7 +219,7 @@ public class FormScrivania  extends QMainWindow {
         Protocollo protocollo = this.selection.get(0).getProtocollo();
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
-        List<IPlugin> plugins = (List) Register.queryPlugins(FormProtocollo.class);
+        List<IPlugin> plugins = (List) Register.queryPlugins(FormScrivania.class);
         for(IPlugin plugin: plugins){
             if( "CMIS".equals(plugin.getName()) ){
                 Boolean view = false;
@@ -241,7 +244,7 @@ public class FormScrivania  extends QMainWindow {
                     delete = upload;
                     version = upload;
                 }
-                ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);
+                ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);                
             }
         }
     }
