@@ -378,6 +378,9 @@
           <property name="column" stdset="0">
            <string>ragionesociale</string>
           </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="1" column="0">
@@ -459,6 +462,9 @@
          <widget class="QLineEdit" name="lineEdit_16">
           <property name="column" stdset="0">
            <string>denominazione</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -691,14 +697,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
-   <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
-  </customwidget>
-  <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
    <extends>QComboBox</extends>
    <header>pypapicombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
+   <extends>QTableView</extends>
+   <header>pypapitableview.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
