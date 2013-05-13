@@ -1058,9 +1058,10 @@ CREATE TRIGGER trg_upd_ts_titolo
 
 CREATE TABLE soggettoprotocollo (
     id bigserial NOT NULL,
-    conoscenza boolean,
-    corrispondenza boolean,
-    notifica boolean,
+    primoinserimento boolean NOT NULL DEFAULT FALSE,
+    conoscenza boolean NOT NULL DEFAULT FALSE,
+    corrispondenza boolean NOT NULL DEFAULT FALSE,
+    notifica boolean NOT NULL DEFAULT FALSE,
     titolo bigint,
     protocollo character varying(12),
     soggetto bigint
@@ -1087,9 +1088,10 @@ CREATE TRIGGER trg_upd_ts_soggettoprotocollo
 
 CREATE TABLE soggettoriservatoprotocollo (
     id bigserial NOT NULL,
-    conoscenza boolean,
-    corrispondenza boolean,
-    notifica boolean,
+    primoinserimento boolean NOT NULL DEFAULT FALSE,
+    conoscenza boolean NOT NULL DEFAULT FALSE,
+    corrispondenza boolean NOT NULL DEFAULT FALSE,
+    notifica boolean NOT NULL DEFAULT FALSE,
     titolo bigint,
     protocollo character varying(255),
     soggetto bigint
