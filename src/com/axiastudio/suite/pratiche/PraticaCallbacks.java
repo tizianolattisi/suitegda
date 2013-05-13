@@ -27,8 +27,10 @@ import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Pratica_;
+import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -76,11 +78,19 @@ public class PraticaCallbacks {
 
         
         if( pratica.getId() == null ){
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            EntityManager em = db.getEntityManagerFactory().createEntityManager();
+            /* controllo attribuzione - tipo pratica */
+            List ids = em.createNamedQuery("trovaTipiPraticaPermessiDaAttribuzioni", TipoPraticaProcedimento.class)
+                                      .setParameter("id", pratica.getAttribuzione().getId())
+                                      .getResultList();
+            if( !ids.contains(pratica.getTipo().getId()) ){
+                msg = "Manca corrispondenza tra l'attribuzione e la tipologia di pratica.";
+                return new Validation(false, msg);
+            }
             Calendar calendar = Calendar.getInstance();
             Integer year = calendar.get(Calendar.YEAR);
             Date date = calendar.getTime();
-            Database db = (Database) Register.queryUtility(IDatabase.class);
-            EntityManager em = db.getEntityManagerFactory().createEntityManager();
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Pratica> cq = cb.createQuery(Pratica.class);
             Root<Pratica> root = cq.from(Pratica.class);
@@ -100,9 +110,9 @@ public class PraticaCallbacks {
             if( max != null ){
                 Integer i = Integer.parseInt(max.getIdpratica().substring(4));
                 i++;
-                newIdpratica = year+String.format("%08d", i);
+                newIdpratica = year+String.format("%05d", i);
             } else {
-                newIdpratica = year+"00000001";
+                newIdpratica = year+"00001";
             }
             pratica.setIdpratica(newIdpratica);
             

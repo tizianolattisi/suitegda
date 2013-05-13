@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Procedimenti</string>
   </property>
+  <property name="searchcolumns" stdset="0">
+   <string>id,descrizione</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0" rowspan="2">
@@ -176,13 +179,13 @@
        <item>
         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_4">
          <property name="entity" stdset="0">
-          <string>.tipoPraticaProcedimentoCollection</string>
+          <string>.tipopraticaProcedimentoCollection</string>
          </property>
          <property name="columns" stdset="0">
-          <string>&lt;tipoPratica&gt;</string>
+          <string>&lt;tipopratica&gt;</string>
          </property>
          <property name="reference" stdset="0">
-          <string>tipoPratica</string>
+          <string>tipopratica</string>
          </property>
         </widget>
        </item>

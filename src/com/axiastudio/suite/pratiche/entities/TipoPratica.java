@@ -175,7 +175,7 @@ public class TipoPratica implements Serializable {
 
     @Override
     public String toString() {
-        return this.getCodice()+" - "+this.getDescrizione();
+        return " "+this.getCodice()+" - "+this.getDescrizione();
     }
     
 }

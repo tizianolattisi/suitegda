@@ -142,6 +142,8 @@ public class Suite {
         
         Application app = new Application(args);
         
+        // aggiungo la localizzazione di Menjazo e imposto a it
+        app.addQmFile("classpath:com/axiastudio/menjazo/lang/menjazo_{0}.qm");
         app.setLanguage("it");
         
         Register.registerForm(db.getEntityManagerFactory(),
