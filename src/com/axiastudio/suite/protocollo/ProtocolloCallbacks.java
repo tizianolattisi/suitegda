@@ -28,6 +28,7 @@ import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo_;
+import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -88,6 +89,12 @@ public class ProtocolloCallbacks {
         }
         
         if( protocollo.getId() == null ){
+            
+            /* primo inserimento */
+            for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
+                sp.setPrimoinserimento(Boolean.TRUE);
+            }
+            
             Calendar calendar = Calendar.getInstance();
             Integer year = calendar.get(Calendar.YEAR);
             Date date = calendar.getTime();

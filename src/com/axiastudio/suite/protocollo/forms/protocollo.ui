@@ -601,13 +601,13 @@
                <string>.soggettoProtocolloCollection</string>
               </property>
               <property name="columns" stdset="0">
-               <string>&gt;soggetto&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
+               <string>&gt;soggettoformattato&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
               </property>
               <property name="reference" stdset="0">
                <string>soggetto</string>
               </property>
               <property name="headers" stdset="0">
-               <string>soggetto,titolo,con,not,cor</string>
+               <string>soggettoformattato,titolo,con,not,cor</string>
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>
@@ -636,13 +636,13 @@
                <string>.soggettoRiservatoProtocolloCollection</string>
               </property>
               <property name="columns" stdset="0">
-               <string>&gt;soggetto&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
+               <string>&gt;soggettoformattato&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
               </property>
               <property name="reference" stdset="0">
                <string>soggetto</string>
               </property>
               <property name="headers" stdset="0">
-               <string>soggetto,titolo,con,not,cor</string>
+               <string>soggettoformattato,titolo,con,not,cor</string>
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>

@@ -17,10 +17,13 @@
 package com.axiastudio.suite.protocollo;
 
 import com.axiastudio.pypapi.annotations.Adapter;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo;
+import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
+import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
 
 /**
  *
@@ -43,4 +46,18 @@ public class ProtocolloAdapters {
         return rp;
     }
     
+    @Adapter
+    public static SoggettoProtocollo adaptSoggettoToSoggettoProtocollo(Soggetto soggetto){
+        SoggettoProtocollo sp = new SoggettoProtocollo();
+        sp.setSoggetto(soggetto);
+        return sp;
+    }
+
+    @Adapter
+    public static SoggettoRiservatoProtocollo adaptSoggettoToSoggettoRiservatoProtocollo(Soggetto soggetto){
+        SoggettoRiservatoProtocollo srp = new SoggettoRiservatoProtocollo();
+        srp.setSoggetto(soggetto);
+        return srp;
+    }
+
 }

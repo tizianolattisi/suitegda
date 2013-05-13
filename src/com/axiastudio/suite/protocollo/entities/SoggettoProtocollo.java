@@ -43,6 +43,8 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     @JoinColumn(name = "titolo", referencedColumnName = "id")
     @ManyToOne
     private Titolo titolo;
+    @Column(name="primoinserimento")
+    private Boolean primoinserimento=false;
     @Column(name="conoscenza")
     private Boolean conoscenza=false;
     @Column(name="notifica")
@@ -82,12 +84,36 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.soggetto = soggetto;
     }
 
+    /*
+     * SoggettoFormattato mette in bold i soggetti di primo inserimento
+     */
+    public String getSoggettoformattato() {
+        String pre = "";
+        String post = "";
+        if( this.getPrimoinserimento() ){
+            pre = "<b>";
+            post = "</b>";
+        }
+        return pre+soggetto.toString()+post;
+    }
+    public void setSoggettoformattato( String s ) {
+        
+    }
+    
     public Titolo getTitolo() {
         return titolo;
     }
 
     public void setTitolo(Titolo titolo) {
         this.titolo = titolo;
+    }
+
+    public Boolean getPrimoinserimento() {
+        return primoinserimento;
+    }
+
+    public void setPrimoinserimento(Boolean primoinserimento) {
+        this.primoinserimento = primoinserimento;
     }
 
     public Boolean getConoscenza() {
