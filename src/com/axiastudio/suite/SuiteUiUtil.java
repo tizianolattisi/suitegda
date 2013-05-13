@@ -16,12 +16,9 @@
  */
 package com.axiastudio.suite;
 
-import com.axiastudio.pypapi.Application;
-import com.axiastudio.pypapi.Consts;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.generale.ITimeStamped;
-import com.trolltech.qt.core.QDateTime;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QLabel;
