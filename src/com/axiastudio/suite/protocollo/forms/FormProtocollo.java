@@ -17,10 +17,14 @@
 package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IStoreFactory;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
+import com.axiastudio.pypapi.ui.CellEditorType;
+import com.axiastudio.pypapi.ui.Column;
 import com.axiastudio.pypapi.ui.TableModel;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
@@ -41,7 +45,9 @@ import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -240,6 +246,20 @@ public class FormProtocollo extends Window {
                 }
                 ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);
             }
+        }
+    }
+    
+    private void cercaDaBarcode() {
+        String barcode = QInputDialog.getText(this, "Read from barcode", "Barcode");
+        Controller controller = (Controller) Register.queryUtility(IController.class, this.getContext().getRootClass().getName());
+        Map map = new HashMap();
+        Column column = new Column("iddocumento", "iddocumento", "iddocumento");
+        column.setEditorType(CellEditorType.STRING);
+        map.put(column, barcode);
+        Store store = controller.createCriteriaStore(map);
+        if( store.size() == 1 ){
+            this.getContext().getModel().replaceRows(store);
+            this.getContext().firstElement();
         }
     }
         
