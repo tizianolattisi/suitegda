@@ -53,9 +53,9 @@ SET search_path = generale, pg_catalog;
 CREATE TABLE withtimestamp
 (
   rec_creato timestamp,
-  rec_creato_da character varying(255),
+  rec_creato_da character varying(40),
   rec_modificato timestamp,
-  rec_modificato_da character varying(255)
+  rec_modificato_da character varying(40)
 );
 ALTER TABLE withtimestamp OWNER TO postgres;
 
@@ -94,10 +94,10 @@ CREATE TABLE utente (
     amministratore boolean,
     attributoreprotocollo boolean NOT NULL DEFAULT FALSE,
     email character varying(255),
-    login character varying(255),
+    login character varying(40),
     modellatorepratiche boolean NOT NULL DEFAULT FALSE,
-    nome character varying(255),
-    sigla character varying(255),
+    nome character varying(60),
+    sigla character varying(10),
     operatoreanagrafiche boolean NOT NULL DEFAULT TRUE,
     operatorepratiche boolean NOT NULL DEFAULT TRUE,
     operatoreprotocollo boolean NOT NULL DEFAULT TRUE,
@@ -259,30 +259,30 @@ CREATE TRIGGER trg_upd_ts_gruppo
 
 CREATE TABLE soggetto (
     id bigserial NOT NULL,
-    codicefiscale character varying(255),
-    cognome character varying(255),
+    codicefiscale character varying(16),
+    cognome character varying(50),
+    nome character varying(50),
+    nick character varying(50),
     denominazione character varying(255),
     denominazione2 character varying(255),
     denominazione3 character varying(255),
-    nick character varying(255),
-    nome character varying(255),
-    ragionesociale character varying(255),
-    partitaiva character varying(255),
-    sessosoggetto character varying(255),
-    tipo character varying(255),
-    titolosoggetto character varying(255),
-    referente character varying(255),
-    comunedinascita character varying(255),
+    ragionesociale character varying(100),
+    partitaiva character varying(11),
+    sessosoggetto character varying(2),
+    tipo character varying(15),
+    titolosoggetto character varying(20),
+    referente character varying(100),
+    comunedinascita character varying(100),
     datanascita date,
     datacessazione date,
     descrizionecessazione character varying(255),
     alboprofessionale bigint,
     provinciaalbo character varying(2),
-    numeroiscrizionealbo character varying(255),
+    numeroiscrizionealbo character varying(15),
     indicepao character varying(255),
     indicepaaoo character varying(255),
     residente boolean,
-    codiceanagrafe character varying(255)
+    codiceanagrafe bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.soggetto OWNER TO postgres;
 ALTER TABLE ONLY soggetto
@@ -395,11 +395,11 @@ CREATE RULE relazionesoggetto_update AS ON UPDATE TO relazionesoggetto DO INSTEA
 
 CREATE TABLE indirizzo (
     id bigserial NOT NULL,
-    tipo character varying(255),
-    via character varying(255),
+    tipo character varying(50),
+    via character varying(100),
     civico character varying(8),
     cap character varying(5),
-    localita character varying(255),
+    localita character varying(100),
     provincia character varying(2),
     stato character varying(3),
     soggetto bigint,
@@ -428,7 +428,7 @@ CREATE TRIGGER trg_upd_ts_indirizzo
 
 CREATE TABLE riferimento (
     id bigserial NOT NULL,
-    tipo character varying(255),
+    tipo character varying(50),
     soggetto bigint,
     riferimento character varying(255),
     descrizione character varying(255)
@@ -489,7 +489,7 @@ CREATE TABLE procedimento (
     descrizione character varying(255),
     normativa character varying(255),
     maxgiorniistruttoria integer,
-    iniziativa character varying(255),
+    iniziativa character varying(20),
     soggetto bigint,
     attivo boolean
 ) INHERITS (generale.withtimestamp);
@@ -549,7 +549,7 @@ CREATE TRIGGER trg_ins_ts_normaprocedimento
 CREATE TRIGGER trg_upd_ts_normaprocedimento
   BEFORE UPDATE
   ON procedimenti.normaprocedimento
-  FOR EACH ROW
+  FOR EACH  ROW
   EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE ufficioprocedimento (
@@ -609,7 +609,7 @@ CREATE TABLE protocollo.fascicolo (
     id bigserial NOT NULL,
     categoria integer,
     classe integer,
-    descrizione character varying(255),
+    descrizione character varying(60),
     note character varying(2048),
     fascicolo integer
 ) INHERITS (generale.withtimestamp);
@@ -629,7 +629,7 @@ CREATE TRIGGER trg_upd_ts_fascicolo
 
 CREATE TABLE pratiche.tipopratica (
     id bigserial NOT NULL,
-    codice character varying(255),
+    codice character varying(10),
     descrizione character varying(255),
     tipopadre bigint,
     procedimento bigint,
@@ -752,9 +752,9 @@ CREATE TABLE pratica (
     id bigserial NOT NULL,
     anno integer,
     datapratica date,
-    descrizione character varying(255),
+    descrizione character varying(1024),
     idpratica character varying(9),
-    codiceinterno character varying(255),
+    codiceinterno character varying(50),
     note character varying(255),
     attribuzione bigint,
     gestione bigint,
@@ -890,20 +890,20 @@ CREATE TABLE protocollo (
     sportello bigint NOT NULL,
     oggetto character varying(1024) NOT NULL,
     note character varying(1024),
-    tiporiferimentomittente character varying(255),
+    tiporiferimentomittente character varying(25),
     riferimentomittente character varying(255),
     datariferimentomittente date,
     riservato boolean,
     convalidaattribuzioni boolean,
     dataconvalidaattribuzioni timestamp,
-    esecutoreconvalidaattribuzioni character varying(255),
+    esecutoreconvalidaattribuzioni character varying(40),
     convalidaprotocollo boolean,
     numeroconvalidaprotocollo character varying(10),
     dataconvalidaprotocollo timestamp,
-    esecutoreconvalidaprotocollo character varying(255),
+    esecutoreconvalidaprotocollo character varying(40),
     consolidadocumenti boolean,
     dataconsolidadocumenti timestamp,
-    esecutoreconsolidadocumenti character varying(255),
+    esecutoreconsolidadocumenti character varying(40),
     nrricevuta character varying(10),
     dataricevuta timestamp,
     annullamentorichiesto boolean,
@@ -912,8 +912,8 @@ CREATE TABLE protocollo (
     richiederisposta boolean,
     spedito boolean,
     dataspedizione timestamp,
-    esecutorespedizione character varying(255),
-    controlloreposta character varying(255),
+    esecutorespedizione character varying(40),
+    controlloreposta character varying(40),
     scansionemassiva boolean,
     fascicolo bigint
 ) INHERITS (generale.withtimestamp);
@@ -945,10 +945,13 @@ ALTER TABLE protocollo.protocollo CLUSTER ON protocollo_iddocumento;
 
 CREATE TABLE attribuzione (
     id bigserial NOT NULL,
-    letto boolean,
+    protocollo character varying(12) NOT NULL,
+    ufficio bigint NOT NULL,
+    dataattribuzioneprotocollo timestamp,
+    letto boolean NOT NULL DEFAULT FALSE,
+    dataletto timestamp,
+    esecutoreletto character varying(40),
     principale boolean NOT NULL DEFAULT FALSE,
-    protocollo character varying(255),
-    ufficio bigint,
     evidenza character varying(1)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.attribuzione OWNER TO postgres;
@@ -1040,7 +1043,7 @@ CREATE TRIGGER trg_upd_ts_riferimentoprotocollo
 CREATE TABLE titolo (
     id bigserial NOT NULL,
     descrizione character varying(255),
-    tipo character varying(255)
+    tipo character varying(50)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.titolo OWNER TO postgres;
 ALTER TABLE ONLY titolo
@@ -1058,13 +1061,19 @@ CREATE TRIGGER trg_upd_ts_titolo
 
 CREATE TABLE soggettoprotocollo (
     id bigserial NOT NULL,
-    primoinserimento boolean NOT NULL DEFAULT FALSE,
-    conoscenza boolean NOT NULL DEFAULT FALSE,
-    corrispondenza boolean NOT NULL DEFAULT FALSE,
-    notifica boolean NOT NULL DEFAULT FALSE,
     titolo bigint,
     protocollo character varying(12),
-    soggetto bigint
+    soggetto bigint,
+    corrispondenza boolean NOT NULL DEFAULT FALSE,
+    notifica boolean NOT NULL DEFAULT FALSE,
+    conoscenza boolean NOT NULL DEFAULT FALSE,
+    primoinserimento boolean NOT NULL DEFAULT FALSE,
+    datainizio date,
+    datafine date,
+    annullato boolean NOT NULL DEFAULT FALSE,
+    principale boolean NOT NULL DEFAULT FALSE,
+    soggettoreferente bigint,
+    abilitatoweb boolean NOT NULL DEFAULT FALSE
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.soggettoprotocollo OWNER TO postgres;
 ALTER TABLE ONLY soggettoprotocollo
@@ -1093,7 +1102,7 @@ CREATE TABLE soggettoriservatoprotocollo (
     corrispondenza boolean NOT NULL DEFAULT FALSE,
     notifica boolean NOT NULL DEFAULT FALSE,
     titolo bigint,
-    protocollo character varying(255),
+    protocollo character varying(12),
     soggetto bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.soggettoriservatoprotocollo OWNER TO postgres;
@@ -1118,7 +1127,7 @@ CREATE TRIGGER trg_upd_ts_soggettoriservatoprotocollo
 
 CREATE TABLE ufficioprotocollo (
     id bigserial NOT NULL,
-    protocollo character varying(255),
+    protocollo character varying(12),
     ufficio bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.ufficioprotocollo OWNER TO postgres;
@@ -1145,7 +1154,7 @@ SET search_path = pubblicazioni, pg_catalog;
 
 CREATE TABLE pubblicazione (
     id bigserial NOT NULL,
-    titolo character varying(255),
+    titolo character varying(25),
     descrizione character varying(2048),
     richiedente character varying(255),
     inizioconsultazione date,
@@ -1228,9 +1237,9 @@ SET search_path = deliberedetermine, pg_catalog;
 
 CREATE TABLE determina (
     id bigserial NOT NULL,
-    idpratica character varying(255),
-    codiceinterno character varying(255),
-    oggetto character varying(2048),
+    idpratica character varying(10),
+    codiceinterno character varying(50),
+    oggetto character varying(1024),
     datapratica date,
     dientrata boolean,
     dispesa boolean,
