@@ -28,7 +28,6 @@ import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.TableModel;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
-import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
