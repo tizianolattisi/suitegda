@@ -43,6 +43,8 @@ public class SoggettoRiservatoProtocollo implements Serializable {
     private Titolo titolo;
     @Column(name="primoinserimento")
     private Boolean primoinserimento=false;
+    @Column(name="annullato")
+    private Boolean annullato=false;
     @Column(name="conoscenza")
     private Boolean conoscenza=false;
     @Column(name="notifica")
@@ -80,7 +82,10 @@ public class SoggettoRiservatoProtocollo implements Serializable {
     public String getSoggettoformattato() {
         String pre = "";
         String post = "";
-        if( this.getPrimoinserimento() ){
+        if( this.getAnnullato() ){
+            pre = "- ";
+            post = "";
+        } else if( this.getPrimoinserimento() ){
             pre = "* ";
             post = "";
         }
@@ -104,6 +109,14 @@ public class SoggettoRiservatoProtocollo implements Serializable {
 
     public void setPrimoinserimento(Boolean primoinserimento) {
         this.primoinserimento = primoinserimento;
+    }
+
+    public Boolean getAnnullato() {
+        return annullato;
+    }
+
+    public void setAnnullato(Boolean annullato) {
+        this.annullato = annullato;
     }
 
     public Boolean getConoscenza() {

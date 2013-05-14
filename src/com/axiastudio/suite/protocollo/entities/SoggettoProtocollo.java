@@ -45,6 +45,8 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     private Titolo titolo;
     @Column(name="primoinserimento")
     private Boolean primoinserimento=false;
+    @Column(name="annullato")
+    private Boolean annullato=false;
     @Column(name="conoscenza")
     private Boolean conoscenza=false;
     @Column(name="notifica")
@@ -90,7 +92,10 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     public String getSoggettoformattato() {
         String pre = "";
         String post = "";
-        if( this.getPrimoinserimento() ){
+        if( this.getAnnullato() ){
+            pre = "- ";
+            post = "";
+        } else if( this.getPrimoinserimento() ){
             pre = "* ";
             post = "";
         }
@@ -114,6 +119,14 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
 
     public void setPrimoinserimento(Boolean primoinserimento) {
         this.primoinserimento = primoinserimento;
+    }
+
+    public Boolean getAnnullato() {
+        return annullato;
+    }
+
+    public void setAnnullato(Boolean annullato) {
+        this.annullato = annullato;
     }
 
     public Boolean getConoscenza() {
