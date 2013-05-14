@@ -1118,13 +1118,19 @@ CREATE TRIGGER trg_del_soggettoprotocollo
 
 CREATE TABLE soggettoriservatoprotocollo (
     id bigserial NOT NULL,
-    primoinserimento boolean NOT NULL DEFAULT FALSE,
-    conoscenza boolean NOT NULL DEFAULT FALSE,
-    corrispondenza boolean NOT NULL DEFAULT FALSE,
-    notifica boolean NOT NULL DEFAULT FALSE,
     titolo bigint,
     protocollo character varying(12),
-    soggetto bigint
+    soggetto bigint,
+    corrispondenza boolean NOT NULL DEFAULT FALSE,
+    notifica boolean NOT NULL DEFAULT FALSE,
+    conoscenza boolean NOT NULL DEFAULT FALSE,
+    primoinserimento boolean NOT NULL DEFAULT FALSE,
+    datainizio date,
+    datafine date,
+    annullato boolean NOT NULL DEFAULT FALSE,
+    principale boolean NOT NULL DEFAULT FALSE,
+    soggettoreferente bigint,
+    abilitatoweb boolean NOT NULL DEFAULT FALSE
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.soggettoriservatoprotocollo OWNER TO postgres;
 ALTER TABLE ONLY soggettoriservatoprotocollo
