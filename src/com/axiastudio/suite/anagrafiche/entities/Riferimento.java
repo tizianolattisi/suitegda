@@ -46,7 +46,7 @@ public class Riferimento implements Serializable {
     private Soggetto soggetto;
     @Column(name="tipo")
     @Enumerated(EnumType.STRING)
-    private TipoRiferimento tipo;
+    private TipoRiferimento tipo=TipoRiferimento.TELEFONO;
     @Column(name="riferimento")
     private String riferimento;
     @Column(name="descrizione")
