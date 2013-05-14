@@ -609,7 +609,7 @@ CREATE TABLE protocollo.fascicolo (
     id bigserial NOT NULL,
     categoria integer,
     classe integer,
-    descrizione character varying(60),
+    descrizione character varying(255),
     note character varying(2048),
     fascicolo integer
 ) INHERITS (generale.withtimestamp);
