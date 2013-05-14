@@ -33,6 +33,7 @@ import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.AnagraficheAdapters;
 import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
+import com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
 import com.axiastudio.suite.anagrafiche.entities.Relazione;
 import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
@@ -175,6 +176,11 @@ public class SuiteDemo {
                               RelazioneSoggetto.class,
                               FormRelazioneSoggetto.class);
         
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/anagrafiche/forms/grupposoggetto.ui",
+                              GruppoSoggetto.class,
+                              Dialog.class);
+   
         Register.registerUtility(FormQuickInsertSoggetto.class, IQuickInsertDialog.class, Soggetto.class.getName());
         
         Register.registerForm(db.getEntityManagerFactory(),

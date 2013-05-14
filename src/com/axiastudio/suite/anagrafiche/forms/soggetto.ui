@@ -636,7 +636,7 @@
            <string>gruppo</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&lt;gruppo&gt;</string>
+           <string>&lt;predicato&gt;</string>
           </property>
          </widget>
         </item>

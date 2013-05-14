@@ -135,7 +135,7 @@ public class RelazioneSoggetto implements Serializable {
             out += " dal " + SuiteUtil.DATE_FORMAT.format(this.getDatanascita());
         }
         if( this.getDatacessazione()!= null ){
-            out += "fino al " + SuiteUtil.DATE_FORMAT.format(this.getDatacessazione());
+            out += " fino al " + SuiteUtil.DATE_FORMAT.format(this.getDatacessazione());
         }
         return out;
     }
