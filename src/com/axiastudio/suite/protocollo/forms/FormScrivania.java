@@ -57,6 +57,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -109,8 +111,14 @@ public class FormScrivania  extends QMainWindow {
     }
 
     private void popolaAttribuzioni() {
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManagerFactory emf = db.getEntityManagerFactory();
+        EntityManager em = emf.createEntityManager();
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        Store attribuzioni = SuiteUtil.attribuzioni(autenticato);
+        List<Attribuzione> attribuzioni = em.createNamedQuery("trovaAttribuzioniUtente", Attribuzione.class)
+                                            .setParameter("id", autenticato.getId())
+                                            .getResultList();
+        Store store = new Store(attribuzioni);
         List<Column> colonne = new ArrayList();
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         colonne.add(new Column("evidenza", "Ev.", "Attribuzione in evidenza"));
@@ -120,7 +128,7 @@ public class FormScrivania  extends QMainWindow {
         colonne.add(new Column("ufficio", "Ufficio", "Ufficio di attribuzione"));
         colonne.add(new Column("principale", "Pr.", "Attribuzione in via principale"));
         colonne.add(new Column("oggetto", "Oggetto", "Oggetto del protocollo"));
-        TableModel model = new TableModel(attribuzioni, colonne);
+        TableModel model = new TableModel(store, colonne);
         tableView.clearSelection();
         model.setEditable(false);
         tableView.setModel(model);

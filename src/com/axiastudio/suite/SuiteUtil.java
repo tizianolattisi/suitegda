@@ -64,26 +64,6 @@ public class SuiteUtil {
         return null;
     }
     
-    public static Store attribuzioni(Utente autenticato){
-        Store store;
-        Database db = (Database) Register.queryUtility(IDatabase.class);
-        EntityManager em = db.getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Attribuzione> cq = cb.createQuery(Attribuzione.class);
-        Root<Attribuzione> root = cq.from(Attribuzione.class);
-        cq.select(root);
-        CriteriaBuilder.In<Long> in = cb.in(root.get(Attribuzione_.ufficio).get(Ufficio_.id));
-        for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
-            if( uu.getRicerca() ){
-                in = in.value(uu.getUfficio().getId());
-            }
-        }
-        cq.where(cb.and(cb.equal(root.get(Attribuzione_.letto), Boolean.FALSE), in));
-        TypedQuery<Attribuzione> tq = em.createQuery(cq);
-        List<Attribuzione> resultList = tq.getResultList();
-        store = new Store(resultList);
-        return store;
-    }
     
     public static Pratica findPratica(String idpratica){
         Database db = (Database) Register.queryUtility(IDatabase.class);

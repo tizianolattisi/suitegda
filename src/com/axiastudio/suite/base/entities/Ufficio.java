@@ -17,11 +17,14 @@
 package com.axiastudio.suite.base.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -45,6 +48,8 @@ public class Ufficio implements Serializable {
     private Boolean mittenteodestinatario=false;
     @Column(name="attribuzione")
     private Boolean attribuzione=false;
+    @OneToMany(mappedBy = "ufficio", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<UfficioUtente> ufficioUtenteCollection;
 
 
     public Long getId() {
@@ -85,6 +90,14 @@ public class Ufficio implements Serializable {
 
     public void setAttribuzione(Boolean attribuzione) {
         this.attribuzione = attribuzione;
+    }
+
+    public Collection<UfficioUtente> getUfficioUtenteCollection() {
+        return ufficioUtenteCollection;
+    }
+
+    public void setUfficioUtenteCollection(Collection<UfficioUtente> ufficioUtenteCollection) {
+        this.ufficioUtenteCollection = ufficioUtenteCollection;
     }
 
     @Override

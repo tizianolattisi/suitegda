@@ -28,6 +28,11 @@ import javax.persistence.*;
 @Entity
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genattribuzione", sequenceName="protocollo.attribuzione_id_seq", initialValue=1, allocationSize=1)
+@NamedQuery(name="trovaAttribuzioniUtente",
+            query = "SELECT a FROM Attribuzione a JOIN a.ufficio u "
+                  + "JOIN u.ufficioUtenteCollection uu "
+                  + "WHERE a.letto = FALSE AND uu.ricerca = TRUE "
+                  + "AND uu.utente.id = :id ORDER BY a.protocollo.iddocumento DESC")
 public class Attribuzione implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
