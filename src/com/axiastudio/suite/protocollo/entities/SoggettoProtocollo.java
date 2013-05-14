@@ -91,8 +91,8 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         String pre = "";
         String post = "";
         if( this.getPrimoinserimento() ){
-            pre = "<b>";
-            post = "</b>";
+            pre = "* ";
+            post = "";
         }
         return pre+soggetto.toString()+post;
     }

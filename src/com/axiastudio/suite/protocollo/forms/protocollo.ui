@@ -607,7 +607,7 @@
                <string>soggetto</string>
               </property>
               <property name="headers" stdset="0">
-               <string>soggettoformattato,titolo,con,not,cor</string>
+               <string>soggetto,titolo,con,not,cor</string>
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>
@@ -642,7 +642,7 @@
                <string>soggetto</string>
               </property>
               <property name="headers" stdset="0">
-               <string>soggettoformattato,titolo,con,not,cor</string>
+               <string>soggetto,titolo,con,not,cor</string>
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>
