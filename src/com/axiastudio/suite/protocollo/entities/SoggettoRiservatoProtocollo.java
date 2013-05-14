@@ -83,11 +83,11 @@ public class SoggettoRiservatoProtocollo implements Serializable {
         String pre = "";
         String post = "";
         if( this.getAnnullato() ){
-            pre = "- ";
-            post = "";
+            pre = "<del>";
+            post = "</del>";
         } else if( this.getPrimoinserimento() ){
-            pre = "* ";
-            post = "";
+            pre = "'''";
+            post = "'''";
         }
         return pre+soggetto.toString()+post;
     }
