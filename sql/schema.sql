@@ -1095,6 +1095,27 @@ CREATE TRIGGER trg_upd_ts_soggettoprotocollo
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
 
+-- i soggetti di primo inserimento vengono solo annullati
+CREATE OR REPLACE FUNCTION protocollo.delete_soggettoprotocollo()
+  RETURNS trigger AS
+$BODY$
+begin
+  if old.primoinserimento IS TRUE AND old.annullato IS NOT TRUE THEN
+     UPDATE protocollo.soggettoprotocollo SET annullato = TRUE WHERE id = old.id;
+     return NULL;
+  end if;
+  return old;
+end;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION protocollo.delete_soggettoprotocollo() OWNER TO postgres;
+CREATE TRIGGER trg_del_soggettoprotocollo
+  BEFORE DELETE
+  ON protocollo.soggettoprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE protocollo.delete_soggettoprotocollo();
+
 CREATE TABLE soggettoriservatoprotocollo (
     id bigserial NOT NULL,
     primoinserimento boolean NOT NULL DEFAULT FALSE,
@@ -1124,6 +1145,27 @@ CREATE TRIGGER trg_upd_ts_soggettoriservatoprotocollo
   ON protocollo.soggettoriservatoprotocollo
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
+
+-- i soggetti riservati di primo inserimento vengono solo annullati
+CREATE OR REPLACE FUNCTION protocollo.delete_soggettoriservatoprotocollo()
+  RETURNS trigger AS
+$BODY$
+begin
+  if old.primoinserimento IS TRUE AND old.annullato IS NOT TRUE THEN
+     UPDATE protocollo.soggettoriservatoprotocollo SET annullato = TRUE WHERE id = old.id;
+     return NULL;
+  end if;
+  return old;
+end;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION protocollo.delete_soggettoriservatoprotocollo() OWNER TO postgres;
+CREATE TRIGGER trg_del_soggettoriservatoprotocollo
+  BEFORE DELETE
+  ON protocollo.soggettoriservatoprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE protocollo.delete_soggettoriservatoprotocollo();
 
 CREATE TABLE ufficioprotocollo (
     id bigserial NOT NULL,
