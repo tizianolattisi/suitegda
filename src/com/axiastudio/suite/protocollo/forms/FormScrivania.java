@@ -16,8 +16,6 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
-import com.axiastudio.menjazo.AlfrescoHelper;
-import com.axiastudio.menjazo.ClientWindow;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
@@ -25,7 +23,6 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
-import com.axiastudio.pypapi.plugins.cmis.CmisUtil;
 import com.axiastudio.pypapi.ui.Column;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.TableModel;
@@ -170,9 +167,11 @@ public class FormScrivania  extends QMainWindow {
         // oggetto, uffici, soggetti
         QTextEdit textEdit_oggetto = (QTextEdit) this.findChild(QTextEdit.class, "textEdit_oggetto");
         QListWidget listWidget_uffici = (QListWidget) this.findChild(QListWidget.class, "listWidget_uffici");
+        QListWidget listWidget_attribuzioni = (QListWidget) this.findChild(QListWidget.class, "listWidget_attribuzioni");
         QListWidget listWidget_soggetti = (QListWidget) this.findChild(QListWidget.class, "listWidget_soggetti");
         listWidget_uffici.clear();
         listWidget_soggetti.clear();
+        listWidget_attribuzioni.clear();
         if( this.selection.size() == 1 ){
             Attribuzione attribuzione = this.selection.get(0);
             Protocollo protocollo = attribuzione.getProtocollo();
@@ -181,6 +180,15 @@ public class FormScrivania  extends QMainWindow {
                 QListWidgetItem item = new QListWidgetItem();
                 item.setText(up.getUfficio().toString());
                 listWidget_uffici.addItem(item);
+            }
+            for( Attribuzione a: protocollo.getAttribuzioneCollection() ){
+                QListWidgetItem item = new QListWidgetItem();
+                String pre = "";
+                if( a.getPrincipale() ){
+                    pre = "* ";
+                }
+                item.setText(pre+a.getUfficio().toString());
+                listWidget_attribuzioni.addItem(item);
             }
             for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
                 QListWidgetItem item = new QListWidgetItem();
