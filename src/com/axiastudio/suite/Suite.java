@@ -145,7 +145,7 @@ public class Suite {
         Application app = new Application(args);
         
         // aggiungo la localizzazione di Menjazo e imposto a it
-        app.addQmFile("classpath:com/axiastudio/menjazo/lang/menjazo_{0}.qm");
+        //app.addQmFile("classpath:com/axiastudio/menjazo/lang/menjazo_{0}.qm");
         app.setLanguage("it");
         
         Register.registerForm(db.getEntityManagerFactory(),
@@ -329,13 +329,13 @@ public class Suite {
         // Plugin CmisPlugin per accedere ad Alfresco
         CmisPlugin cmisPlugin = new CmisPlugin();
         cmisPlugin.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-                "/Protocollo/${dataprotocollo,date,YYYY}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
+                "/Protocollo/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
         Register.registerPlugin(cmisPlugin, FormScrivania.class);
 
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
         cmisPluginPubblicazioni.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-                "/Pubblicazioni/${inizioconsultazione,date,YYYY}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
+                "/Pubblicazioni/${inizioconsultazione,date,yyyy}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
         
         // Plugin Barcode per la stampa del DataMatrix
