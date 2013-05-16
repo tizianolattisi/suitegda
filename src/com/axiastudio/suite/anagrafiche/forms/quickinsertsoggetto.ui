@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>542</width>
+    <height>405</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Inserimento rapido nuovo soggetto</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabs">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Persona</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Nome</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="2">
+        <widget class="QLineEdit" name="lineEdit_nome">
+         <property name="maxLength">
+          <number>50</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Cognome</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QLineEdit" name="lineEdit_cognome">
+         <property name="maxLength">
+          <number>50</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Sesso</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="comboBox_sesso">
+         <item>
+          <property name="text">
+           <string>ND</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>M</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>F</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>322</width>
+           <height>19</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>C.F.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="2">
+        <widget class="QLineEdit" name="lineEdit_codicefiscaleP">
+         <property name="maxLength">
+          <number>16</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Azienda</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>Ragione sociale</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit_ragionesociale">
+         <property name="maxLength">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_14">
+         <property name="text">
+          <string>C.F.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_codicefiscaleA">
+         <property name="maxLength">
+          <number>16</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>P.IVA</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_partitaiva">
+         <property name="maxLength">
+          <number>11</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Ente</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>Denominazione</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit_denominazione">
+         <property name="maxLength">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_17">
+         <property name="text">
+          <string>Denominazione 2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_denominazione2">
+         <property name="maxLength">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>Denominazione 3</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_denominazione3">
+         <property name="maxLength">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>C.F.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="lineEdit_codicefiscaleE">
+         <property name="maxLength">
+          <number>16</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Dettagli indirizzo</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Via</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="6">
+       <widget class="QLineEdit" name="lineEdit_via">
+        <property name="maxLength">
+         <number>100</number>
+        </property>
+        <property name="column" stdset="0">
+         <string>via</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Civico</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="8">
+       <widget class="QLineEdit" name="lineEdit_civico">
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="maxLength">
+         <number>8</number>
+        </property>
+        <property name="column" stdset="0">
+         <string>civico</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>C.A.P.</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QLineEdit" name="lineEdit_cap">
+        <property name="maxLength">
+         <number>5</number>
+        </property>
+        <property name="column" stdset="0">
+         <string>cap</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Località</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4" colspan="5">
+       <widget class="QLineEdit" name="lineEdit_localita">
+        <property name="maxLength">
+         <number>100</number>
+        </property>
+        <property name="column" stdset="0">
+         <string>localita</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Provincia</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="comboBox_provincia">
+        <property name="column" stdset="0">
+         <string>provincia</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>TN</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>BZ</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Stato</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Descrizione</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" colspan="8">
+       <widget class="QLineEdit" name="lineEdit_descrizione">
+        <property name="maxLength">
+         <number>255</number>
+        </property>
+        <property name="column" stdset="0">
+         <string>descrizione</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="6" colspan="3">
+       <widget class="QComboBox" name="comboBox_tipo">
+        <property name="column" stdset="0">
+         <string>tipo</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>DOMICILIO</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>RESIDENZA</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>LAVORO</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>VILLEGGIATURA</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>ALTRO</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="5">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Tipo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" colspan="2">
+       <widget class="QComboBox" name="comboBox_stato">
+        <property name="column" stdset="0">
+         <string>stato</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>428</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QToolButton" name="buttonCancel">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="buttonAccept">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>lineEdit_nome</tabstop>
+  <tabstop>lineEdit_cognome</tabstop>
+  <tabstop>comboBox_sesso</tabstop>
+  <tabstop>lineEdit_codicefiscaleP</tabstop>
+  <tabstop>lineEdit_via</tabstop>
+  <tabstop>lineEdit_civico</tabstop>
+  <tabstop>lineEdit_cap</tabstop>
+  <tabstop>lineEdit_localita</tabstop>
+  <tabstop>comboBox_provincia</tabstop>
+  <tabstop>comboBox_stato</tabstop>
+  <tabstop>comboBox_tipo</tabstop>
+  <tabstop>lineEdit_descrizione</tabstop>
+  <tabstop>lineEdit_ragionesociale</tabstop>
+  <tabstop>lineEdit_codicefiscaleA</tabstop>
+  <tabstop>lineEdit_partitaiva</tabstop>
+  <tabstop>lineEdit_denominazione</tabstop>
+  <tabstop>lineEdit_denominazione2</tabstop>
+  <tabstop>lineEdit_denominazione3</tabstop>
+  <tabstop>lineEdit_codicefiscaleE</tabstop>
+  <tabstop>buttonCancel</tabstop>
+  <tabstop>buttonAccept</tabstop>
+  <tabstop>tabs</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

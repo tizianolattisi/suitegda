@@ -24,6 +24,7 @@ import com.axiastudio.suite.anagrafiche.entities.Gruppo;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo_;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.trolltech.qt.gui.QComboBox;
+import com.trolltech.qt.gui.QLineEdit;
 import com.trolltech.qt.gui.QTabWidget;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
@@ -54,6 +55,14 @@ public class FormSoggetto extends Window {
         tab.setCurrentIndex(idx);
         for( int i=0; i<3; i++ ){
             tab.setTabEnabled(i, i==idx);
+        }
+        QLineEdit lineEdit_pratitaiva = ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_partitaiva"));
+        if( idx == 0 ){
+            // Persona, disabilito la partita iva
+            lineEdit_pratitaiva.clear();
+            lineEdit_pratitaiva.setEnabled(false);
+        } else {
+            lineEdit_pratitaiva.setEnabled(true);
         }
         try {
             Method provider = FormSoggetto.class.getMethod("gruppo"+gruppi[idx]+"PredicateProvider", CriteriaBuilder.class, Root.class);
