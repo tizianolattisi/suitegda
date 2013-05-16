@@ -791,10 +791,6 @@ CREATE TRIGGER trg_upd_ts_pratica
   ON pratiche.pratica
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
-CREATE UNIQUE INDEX pratica_idpratica
-   ON pratiche.pratica (idpratica ASC NULLS LAST)
-  WITH (FILLFACTOR=95);
-ALTER TABLE pratiche.pratica CLUSTER ON pratica_idpratica;
 
 CREATE TABLE dipendenza (
     id bigserial NOT NULL,
@@ -906,7 +902,7 @@ CREATE TABLE protocollo (
     consolidadocumenti boolean,
     dataconsolidadocumenti timestamp,
     esecutoreconsolidadocumenti character varying(40),
-    nrricevuta character varying(10),
+    numeroricevuta character varying(10),
     dataricevuta timestamp,
     annullamentorichiesto boolean,
     annullato boolean,
@@ -938,12 +934,6 @@ CREATE TRIGGER trg_upd_ts_protocollo
   ON protocollo.protocollo
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
-CREATE UNIQUE INDEX protocollo_iddocumento
-  ON protocollo.protocollo
-  USING btree
-  (iddocumento )
-  WITH (FILLFACTOR=95);
-ALTER TABLE protocollo.protocollo CLUSTER ON protocollo_iddocumento;
 
 CREATE TABLE attribuzione (
     id bigserial NOT NULL,
@@ -1416,18 +1406,6 @@ CREATE TRIGGER trg_upd_ts_movimentodetermina
   ON deliberedetermine.movimentodetermina
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
-
--- Sequenze (tmp)
-SET search_path = public, pg_catalog;
-
---CREATE TABLE sequence (
---    seq_name character varying(50) NOT NULL,
---    seq_count numeric(38,0)
---);
---INSERT INTO sequence (seq_name, seq_count) VALUES ('SEQ_GEN', 0);
---ALTER TABLE public.sequence OWNER TO postgres;
-
-
 
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
