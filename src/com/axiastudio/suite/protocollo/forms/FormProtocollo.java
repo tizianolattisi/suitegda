@@ -94,6 +94,10 @@ public class FormProtocollo extends Window {
         toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
         toolButtonTitolario.clicked.connect(this, "apriTitolario()");
         
+        /* I riferimenti successivi sono sempre in sola lettura */
+        PyPaPiTableView tableViewRiferimentiSuccessivi = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_riferimentisuccessivi");
+        Util.setWidgetReadOnly(tableViewRiferimentiSuccessivi, true);
+
     }
     
     /*

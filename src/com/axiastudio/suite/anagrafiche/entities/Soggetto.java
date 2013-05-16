@@ -40,9 +40,9 @@ public class Soggetto implements Serializable, ITimeStamped {
     @Column(name="sessosoggetto")
     @Enumerated(EnumType.STRING)
     private SessoSoggetto sessoSoggetto;
-    @Column(name="titolosoggetto")
-    @Enumerated(EnumType.STRING)
-    private TitoloSoggetto titoloSoggetto;
+    @JoinColumn(name = "titolosoggetto", referencedColumnName = "id")
+    @ManyToOne
+    private TitoloSoggetto titolosoggetto;
     @Column(name="nick")
     private String nick;
     @Column(name="nome")
@@ -161,12 +161,12 @@ public class Soggetto implements Serializable, ITimeStamped {
         this.sessoSoggetto = sessoSoggetto;
     }
 
-    public TitoloSoggetto getTitoloSoggetto() {
-        return titoloSoggetto;
+    public TitoloSoggetto getTitolosoggetto() {
+        return titolosoggetto;
     }
 
-    public void setTitoloSoggetto(TitoloSoggetto titoloSoggetto) {
-        this.titoloSoggetto = titoloSoggetto;
+    public void setTitolosoggetto(TitoloSoggetto titolosoggetto) {
+        this.titolosoggetto = titolosoggetto;
     }
 
     public String getCodicefiscale() {

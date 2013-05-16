@@ -40,6 +40,7 @@ import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.Stato;
+import com.axiastudio.suite.anagrafiche.entities.TitoloSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormRelazioneSoggetto;
@@ -141,6 +142,11 @@ public class SuiteDemo {
                               AlboProfessionale.class,
                               Window.class);
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              TitoloSoggetto.class,
+                              Window.class);
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               Titolo.class,
@@ -301,7 +307,7 @@ public class SuiteDemo {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
                               Delega.class,
-                              Window.class);
+                              FormDelega.class);
 
         // TODO: filtro sulle deleghe
        try {

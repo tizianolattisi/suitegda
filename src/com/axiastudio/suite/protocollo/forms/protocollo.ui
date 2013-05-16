@@ -757,7 +757,7 @@
          </widget>
         </item>
         <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_5">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_riferimentisuccessivi">
           <property name="entity" stdset="0">
            <string>.riferimentoProtocolloSuccessivoCollection</string>
           </property>
