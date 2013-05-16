@@ -257,6 +257,14 @@ CREATE TRIGGER trg_upd_ts_gruppo
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
 
+CREATE TABLE anagrafiche.titolosoggetto (
+    id serial NOT NULL,
+    descrizione character varying(20)
+);
+ALTER TABLE anagrafiche.titolosoggetto OWNER TO postgres;
+ALTER TABLE ONLY anagrafiche.titolosoggetto
+    ADD CONSTRAINT titolosoggetto_pkey PRIMARY KEY (id);
+
 CREATE TABLE soggetto (
     id bigserial NOT NULL,
     codicefiscale character varying(16),
@@ -270,7 +278,7 @@ CREATE TABLE soggetto (
     partitaiva character varying(11),
     sessosoggetto character varying(2),
     tipo character varying(15),
-    titolosoggetto character varying(20),
+    titolosoggetto int,
     referente character varying(100),
     comunedinascita character varying(100),
     datanascita date,
@@ -289,6 +297,8 @@ ALTER TABLE ONLY soggetto
     ADD CONSTRAINT soggetto_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY soggetto
     ADD CONSTRAINT fk_soggetto_alboprofessionale FOREIGN KEY (alboprofessionale) REFERENCES alboprofessionale(id);
+ALTER TABLE ONLY soggetto
+    ADD CONSTRAINT fk_soggetto_titolosoggetto FOREIGN KEY (titolosoggetto) REFERENCES titolosoggetto(id);
 CREATE TRIGGER trg_ins_ts_soggetto
   BEFORE INSERT
   ON anagrafiche.soggetto
