@@ -42,6 +42,7 @@ import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.Stato;
+import com.axiastudio.suite.anagrafiche.entities.TitoloSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormRelazioneSoggetto;
@@ -161,6 +162,11 @@ public class Suite {
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               AlboProfessionale.class,
+                              Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              TitoloSoggetto.class,
                               Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
