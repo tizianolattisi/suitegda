@@ -4,6 +4,7 @@ select setval('anagrafiche.grupposoggetto_id_seq', coalesce((select max(id)+1 fr
 select setval('anagrafiche.indirizzo_id_seq', coalesce((select max(id)+1 from anagrafiche.indirizzo), 1), false);
 select setval('anagrafiche.relazione_id_seq', coalesce((select max(id)+1 from anagrafiche.relazione), 1), false);
 select setval('anagrafiche.relazionesoggetto_id_seq', coalesce((select max(id)+1 from anagrafiche.zrelazionesoggetto), 1), false);
+select setval('anagrafiche.titolosoggetto_id_seq', coalesce((select max(id)+1 from anagrafiche.titolosoggetto), 1), false);
 select setval('anagrafiche.riferimento_id_seq', coalesce((select max(id)+1 from anagrafiche.riferimento), 1), false);
 select setval('anagrafiche.soggetto_id_seq', coalesce((select max(id)+1 from anagrafiche.soggetto), 1), false);
 select setval('anagrafiche.stato_id_seq', coalesce((select max(id)+1 from anagrafiche.stato), 1), false);

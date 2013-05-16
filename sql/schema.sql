@@ -221,20 +221,10 @@ ALTER TABLE ONLY stato
 CREATE TABLE alboprofessionale (
     id bigserial NOT NULL,
     descrizione character varying(255)
-) INHERITS (generale.withtimestamp);
+);
 ALTER TABLE anagrafiche.alboprofessionale OWNER TO postgres;
 ALTER TABLE ONLY alboprofessionale
     ADD CONSTRAINT alboprofessionale_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_alboprofessionale
-  BEFORE INSERT
-  ON anagrafiche.alboprofessionale
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_alboprofessionale
-  BEFORE UPDATE
-  ON anagrafiche.alboprofessionale
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE gruppo (
     id bigserial NOT NULL,
@@ -290,7 +280,7 @@ CREATE TABLE soggetto (
     indicepao character varying(255),
     indicepaaoo character varying(255),
     residente boolean,
-    codiceanagrafe bigint
+    codiceanagrafe character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.soggetto OWNER TO postgres;
 ALTER TABLE ONLY soggetto
@@ -411,7 +401,8 @@ CREATE TABLE indirizzo (
     via character varying(100),
     civico character varying(8),
     cap character varying(5),
-    localita character varying(100),
+    frazione character varying(100),
+    comune character varying(100),
     provincia character varying(2),
     stato character varying(3),
     soggetto bigint,
@@ -1075,7 +1066,8 @@ CREATE TABLE soggettoprotocollo (
     annullato boolean NOT NULL DEFAULT FALSE,
     principale boolean NOT NULL DEFAULT FALSE,
     soggettoreferente bigint,
-    abilitatoweb boolean NOT NULL DEFAULT FALSE
+    abilitatoweb boolean NOT NULL DEFAULT FALSE,
+    note character varying(255) 
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.soggettoprotocollo OWNER TO postgres;
 ALTER TABLE ONLY soggettoprotocollo
@@ -1132,7 +1124,8 @@ CREATE TABLE soggettoriservatoprotocollo (
     annullato boolean NOT NULL DEFAULT FALSE,
     principale boolean NOT NULL DEFAULT FALSE,
     soggettoreferente bigint,
-    abilitatoweb boolean NOT NULL DEFAULT FALSE
+    abilitatoweb boolean NOT NULL DEFAULT FALSE,
+    note character varying(255) 
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.soggettoriservatoprotocollo OWNER TO postgres;
 ALTER TABLE ONLY soggettoriservatoprotocollo
