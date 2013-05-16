@@ -43,6 +43,12 @@ INSERT INTO relazione (id, descrizione, inversa, asx, psx, esx, adx, pdx, edx) V
 INSERT INTO relazione (id, descrizione, inversa, asx, psx, esx, adx, pdx, edx) VALUES (2, 'è dipendente di', 'ha tra i suoi dipendenti', false, true, false, true, false, true);
 SELECT setval('anagrafiche.relazione_id_seq', 3, true);
 
+INSERT INTO titolosoggetto (id, descrizione) VALUES (1, 'Sig.');
+INSERT INTO titolosoggetto (id, descrizione) VALUES (2, 'Sig.ra');
+INSERT INTO titolosoggetto (id, descrizione) VALUES (3, 'Dott.');
+INSERT INTO titolosoggetto (id, descrizione) VALUES (4, 'Ing.');
+SELECT setval('anagrafiche.titolosoggetto_id_seq', 5, true);
+
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (1, NULL, 'Lattisi', NULL, NULL, 'Tiziano', NULL, 'M', 'PERSONA', NULL);
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (2, NULL, NULL, NULL, NULL, NULL, 'AXIA STUDIO', NULL, 'AZIENDA', NULL);
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (3, NULL, NULL, 'COMUNE DI RIVA DEL GARDA', NULL, NULL, NULL, NULL, 'ENTE', NULL);
