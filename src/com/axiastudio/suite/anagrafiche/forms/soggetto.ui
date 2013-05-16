@@ -17,7 +17,17 @@
    <string>cognome,nome,ragionesociale,denominazione,denominazione2,denominazione3</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout_5">
+    <property name="margin">
+     <number>8</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Identificativo</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="1">
      <widget class="QLineEdit" name="lineEdit_3">
       <property name="enabled">
@@ -26,6 +36,34 @@
       <property name="column" stdset="0">
        <string>id</string>
       </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QComboBox" name="comboBoxTipoSoggetto">
+      <property name="column" stdset="0">
+       <string>Tipo</string>
+      </property>
+      <property name="search" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="export" stdset="0">
+       <bool>true</bool>
+      </property>
+      <item>
+       <property name="text">
+        <string>PERSONA</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>AZIENDA</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ENTE</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item row="0" column="3" colspan="2">
@@ -41,14 +79,389 @@
       </property>
      </spacer>
     </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Identificativo</string>
+    <item row="1" column="0" colspan="4">
+     <widget class="QTabWidget" name="tabWidgetHeader">
+      <property name="enabled">
+       <bool>true</bool>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Persona</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <property name="margin">
+         <number>8</number>
+        </property>
+        <item row="1" column="1" colspan="3">
+         <widget class="QLineEdit" name="lineEdit">
+          <property name="column" stdset="0">
+           <string>cognome</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="2">
+         <widget class="QLineEdit" name="lineEdit_4">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="column" stdset="0">
+           <string>nick</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Nome</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Titolo</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Sesso</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QComboBox" name="comboBox">
+          <property name="editable">
+           <bool>false</bool>
+          </property>
+          <property name="column" stdset="0">
+           <string>titoloSoggetto</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>ND</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>SIG</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>SIG_RA</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>DOTT</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>DOTT_SA</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>ING</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="3">
+         <widget class="QLineEdit" name="lineEdit_2">
+          <property name="column" stdset="0">
+           <string>nome</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4" rowspan="4" colspan="2">
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>Albo professionale</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <property name="margin">
+            <number>8</number>
+           </property>
+           <item row="0" column="0" colspan="2">
+            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_3">
+             <property name="column" stdset="0">
+              <string>alboprofessionale</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>Prov.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="lineEdit_8">
+             <property name="column" stdset="0">
+              <string>provinciaalbo</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_13">
+             <property name="text">
+              <string>Nr.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="lineEdit_9">
+             <property name="column" stdset="0">
+              <string>numeroiscrizionealbo</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="4" column="3">
+         <widget class="QCheckBox" name="checkBox">
+          <property name="text">
+           <string>residente</string>
+          </property>
+          <property name="column" stdset="0">
+           <string>residente</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Cognome</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Nick</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="5">
+         <widget class="QLineEdit" name="lineEdit_10">
+          <property name="column" stdset="0">
+           <string>codiceanagrafe</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="comboBox_2">
+          <property name="column" stdset="0">
+           <string>sessoSoggetto</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>ND</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>M</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>F</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="4" column="4">
+         <widget class="QLabel" name="label_14">
+          <property name="text">
+           <string>Cod. anagrafe</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Azienda</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>Ragione sociale</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEdit_6">
+          <property name="column" stdset="0">
+           <string>ragionesociale</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_17">
+          <property name="text">
+           <string>Referente</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineEdit_13">
+          <property name="column" stdset="0">
+           <string>referente</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>126</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Ente</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout">
+        <property name="margin">
+         <number>8</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Denominazione</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="4">
+         <widget class="QLineEdit" name="lineEdit_16">
+          <property name="column" stdset="0">
+           <string>denominazione</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_20">
+          <property name="text">
+           <string>Denominazione 2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="4">
+         <widget class="QLineEdit" name="lineEdit_17">
+          <property name="column" stdset="0">
+           <string>denominazione2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_21">
+          <property name="text">
+           <string>Denominazione 3</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="4">
+         <widget class="QLineEdit" name="lineEdit_18">
+          <property name="column" stdset="0">
+           <string>denominazione3</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_22">
+          <property name="text">
+           <string>Referente</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" colspan="4">
+         <widget class="QLineEdit" name="lineEdit_19">
+          <property name="column" stdset="0">
+           <string>referente</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_23">
+          <property name="text">
+           <string>Codice PA</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="lineEdit_20">
+          <property name="column" stdset="0">
+           <string>indicepao</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QLabel" name="label_24">
+          <property name="text">
+           <string>Codice AOO</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="3">
+         <widget class="QLineEdit" name="lineEdit_21">
+          <property name="column" stdset="0">
+           <string>indicepaaoo</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4">
+         <widget class="QPushButton" name="pushButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Aggiorna</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
-    <item row="1" column="4">
+    <item row="1" column="4" rowspan="2">
      <widget class="QGroupBox" name="groupBox">
       <property name="minimumSize">
        <size>
@@ -128,462 +541,47 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="0" colspan="4">
-     <widget class="QTabWidget" name="tabWidgetHeader">
-      <property name="enabled">
-       <bool>true</bool>
+    <item row="2" column="0" colspan="4">
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string/>
       </property>
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Persona</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <property name="margin">
-         <number>8</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Sesso</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QComboBox" name="comboBox_2">
-          <property name="column" stdset="0">
-           <string>sessoSoggetto</string>
-          </property>
-          <item>
-           <property name="text">
-            <string>ND</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>M</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>F</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Titolo</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QComboBox" name="comboBox">
-          <property name="editable">
-           <bool>false</bool>
-          </property>
-          <property name="column" stdset="0">
-           <string>titoloSoggetto</string>
-          </property>
-          <item>
-           <property name="text">
-            <string>ND</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>SIG</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>SIG_RA</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>DOTT</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>DOTT_SA</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>ING</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="0" column="4" rowspan="4" colspan="2">
-         <widget class="QGroupBox" name="groupBox_2">
-          <property name="title">
-           <string>Albo professionale</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <property name="margin">
-            <number>8</number>
-           </property>
-           <item row="0" column="0" colspan="2">
-            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_3">
-             <property name="column" stdset="0">
-              <string>alboprofessionale</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_12">
-             <property name="text">
-              <string>Prov.</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="lineEdit_8">
-             <property name="column" stdset="0">
-              <string>provinciaalbo</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_13">
-             <property name="text">
-              <string>Nr.</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="lineEdit_9">
-             <property name="column" stdset="0">
-              <string>numeroiscrizionealbo</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Cognome</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" colspan="3">
-         <widget class="QLineEdit" name="lineEdit">
-          <property name="column" stdset="0">
-           <string>cognome</string>
-          </property>
-          <property name="search" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Nome</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="3">
-         <widget class="QLineEdit" name="lineEdit_2">
-          <property name="column" stdset="0">
-           <string>nome</string>
-          </property>
-          <property name="search" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>C.Fiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1" colspan="3">
-         <widget class="QLineEdit" name="lineEdit_5">
-          <property name="column" stdset="0">
-           <string>codicefiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>Nick</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1" colspan="2">
-         <widget class="QLineEdit" name="lineEdit_4">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="column" stdset="0">
-           <string>nick</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="3">
-         <widget class="QCheckBox" name="checkBox">
-          <property name="text">
-           <string>residente</string>
-          </property>
-          <property name="column" stdset="0">
-           <string>residente</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="4">
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>Cod. anagrafe</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="5">
-         <widget class="QLineEdit" name="lineEdit_10">
-          <property name="column" stdset="0">
-           <string>codiceanagrafe</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>Azienda</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_4">
-        <property name="margin">
-         <number>8</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>Ragione sociale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" colspan="3">
-         <widget class="QLineEdit" name="lineEdit_6">
-          <property name="column" stdset="0">
-           <string>ragionesociale</string>
-          </property>
-          <property name="search" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_15">
-          <property name="text">
-           <string>Partita iva</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_11">
-          <property name="column" stdset="0">
-           <string>partitaiva</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_16">
-          <property name="text">
-           <string>Cod. fiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QLineEdit" name="lineEdit_12">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="column" stdset="0">
-           <string>codicefiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_17">
-          <property name="text">
-           <string>Referente</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="3">
-         <widget class="QLineEdit" name="lineEdit_13">
-          <property name="column" stdset="0">
-           <string>referente</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <spacer name="verticalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>126</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_3">
-       <attribute name="title">
-        <string>Ente</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <property name="margin">
-         <number>8</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>Denominazione</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" colspan="6">
-         <widget class="QLineEdit" name="lineEdit_16">
-          <property name="column" stdset="0">
-           <string>denominazione</string>
-          </property>
-          <property name="search" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_20">
-          <property name="text">
-           <string>Denominazione 2</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" colspan="6">
-         <widget class="QLineEdit" name="lineEdit_17">
-          <property name="column" stdset="0">
-           <string>denominazione2</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_21">
-          <property name="text">
-           <string>Denominazione 3</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="6">
-         <widget class="QLineEdit" name="lineEdit_18">
-          <property name="column" stdset="0">
-           <string>denominazione3</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_19">
-          <property name="text">
-           <string>Partita iva</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1" colspan="2">
-         <widget class="QLineEdit" name="lineEdit_14">
-          <property name="column" stdset="0">
-           <string>partitaiva</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3" colspan="2">
-         <widget class="QLabel" name="label_18">
-          <property name="text">
-           <string>Cod. fiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="5" colspan="2">
-         <widget class="QLineEdit" name="lineEdit_15">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="column" stdset="0">
-           <string>codicefiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0" rowspan="2">
-         <widget class="QLabel" name="label_22">
-          <property name="text">
-           <string>Referente</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1" rowspan="2" colspan="6">
-         <widget class="QLineEdit" name="lineEdit_19">
-          <property name="column" stdset="0">
-           <string>referente</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="6" rowspan="2">
-         <widget class="QPushButton" name="pushButton">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Aggiorna</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="label_23">
-          <property name="text">
-           <string>Codice PA</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="1">
-         <widget class="QLineEdit" name="lineEdit_20">
-          <property name="column" stdset="0">
-           <string>indicepao</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="2" colspan="2">
-         <widget class="QLabel" name="label_24">
-          <property name="text">
-           <string>Codice AOO</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="4" colspan="2">
-         <widget class="QLineEdit" name="lineEdit_21">
-          <property name="column" stdset="0">
-           <string>indicepaaoo</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>Cod. fiscale</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_15">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="column" stdset="0">
+          <string>codicefiscale</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>Partita iva</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_partitaiva">
+         <property name="column" stdset="0">
+          <string>partitaiva</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
-    <item row="2" column="0" colspan="5">
+    <item row="3" column="0" colspan="5">
      <widget class="QTabWidget" name="tabWidgetBody">
       <property name="currentIndex">
        <number>0</number>
@@ -662,34 +660,6 @@
         </item>
        </layout>
       </widget>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QComboBox" name="comboBoxTipoSoggetto">
-      <property name="column" stdset="0">
-       <string>Tipo</string>
-      </property>
-      <property name="search" stdset="0">
-       <bool>true</bool>
-      </property>
-      <property name="export" stdset="0">
-       <bool>true</bool>
-      </property>
-      <item>
-       <property name="text">
-        <string>PERSONA</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>AZIENDA</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>ENTE</string>
-       </property>
-      </item>
      </widget>
     </item>
    </layout>
