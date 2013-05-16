@@ -79,7 +79,7 @@ public class AlboProfessionale implements Serializable {
 
     @Override
     public String toString() {
-        return descrizione;
+        return " "+this.getDescrizione();
     }
     
 }
