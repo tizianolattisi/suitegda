@@ -139,7 +139,8 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
         indirizzo.setVia(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_via")).text());
         indirizzo.setCivico(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_civico")).text());
         indirizzo.setCap(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_cap")).text());
-        indirizzo.setLocalita(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_localita")).text());
+        indirizzo.setFrazione(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_frazione")).text());
+        indirizzo.setComune(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_comune")).text());
         indirizzo.setDescrizione(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_descrizione")).text());
         indirizzo.setProvincia(Provincia.valueOf(((QComboBox) this.findChild(QComboBox.class, "comboBox_provincia")).currentText()));
         indirizzo.setTipo(TipoIndirizzo.valueOf(((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo")).currentText()));

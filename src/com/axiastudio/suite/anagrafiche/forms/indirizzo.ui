@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>580</width>
-    <height>181</height>
+    <width>514</width>
+    <height>202</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,28 +20,7 @@
       <string>Dettagli indirizzo</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Via</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="6">
-       <widget class="QLineEdit" name="lineEdit">
-        <property name="column" stdset="0">
-         <string>via</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="7">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Civico</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="8">
        <widget class="QLineEdit" name="lineEdit_2">
         <property name="maximumSize">
          <size>
@@ -54,42 +33,35 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>C.A.P.</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="2">
+      <item row="2" column="1" colspan="2">
        <widget class="QLineEdit" name="lineEdit_3">
         <property name="column" stdset="0">
          <string>cap</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>C.A.P.</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Località</string>
+         <string>Comune</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="4" colspan="5">
-       <widget class="QLineEdit" name="lineEdit_4">
+      <item row="3" column="3" colspan="2">
+       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
         <property name="column" stdset="0">
-         <string>localita</string>
+         <string>stato</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Provincia</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
+      <item row="3" column="1">
        <widget class="QComboBox" name="comboBoxProvincia">
         <property name="column" stdset="0">
          <string>provincia</string>
@@ -106,28 +78,21 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item row="0" column="6">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Civico</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
        <widget class="QLabel" name="label_6">
         <property name="text">
          <string>Stato</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="3" colspan="2">
-       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
-        <property name="column" stdset="0">
-         <string>stato</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="5">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Tipo</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="6" colspan="3">
+      <item row="3" column="6" colspan="2">
        <widget class="QComboBox" name="comboBoxProvincia_2">
         <property name="column" stdset="0">
          <string>tipo</string>
@@ -159,14 +124,63 @@
         </item>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Indiirizzo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
          <string>Descrizione</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1" colspan="8">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Fraz./loc.</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Provincia</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="5">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Tipo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="5">
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="column" stdset="0">
+         <string>via</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="7">
+       <widget class="QLineEdit" name="lineEdit_6">
+        <property name="column" stdset="0">
+         <string>frazione</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4" colspan="4">
+       <widget class="QLineEdit" name="lineEdit_4">
+        <property name="column" stdset="0">
+         <string>comune</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" colspan="7">
        <widget class="QLineEdit" name="lineEdit_5">
         <property name="column" stdset="0">
          <string>descrizione</string>
