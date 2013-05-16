@@ -290,7 +290,7 @@ CREATE TABLE soggetto (
     indicepao character varying(255),
     indicepaaoo character varying(255),
     residente boolean,
-    codiceanagrafe bigint
+    codiceanagrafe character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.soggetto OWNER TO postgres;
 ALTER TABLE ONLY soggetto
