@@ -35,7 +35,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gensoggettoprotocollo")
     private Long id;
     @JoinColumn(name = "soggetto", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.PERSIST)
     private Soggetto soggetto;
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
