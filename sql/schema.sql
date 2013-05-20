@@ -302,10 +302,11 @@ CREATE TRIGGER trg_upd_ts_soggetto
 
 CREATE TABLE grupposoggetto (
     id bigserial NOT NULL,
-    soggetto bigint,
-    gruppo bigint,
+    soggetto bigint NOT NULL,
+    gruppo bigint NOT NULL,
     datanascita date,
-    datacessazione date
+    datacessazione date,
+    note character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.grupposoggetto OWNER TO postgres;
 ALTER TABLE ONLY grupposoggetto
