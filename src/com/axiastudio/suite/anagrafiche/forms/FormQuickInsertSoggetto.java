@@ -20,6 +20,7 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
@@ -148,6 +149,8 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
         indirizzo.setPrincipale(Boolean.TRUE);
         indirizzi.add(indirizzo);
         s.setIndirizzoCollection(indirizzi);
+        Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
+        controller.commit(s);
         this.entity = s;
         this.accept();
     }
