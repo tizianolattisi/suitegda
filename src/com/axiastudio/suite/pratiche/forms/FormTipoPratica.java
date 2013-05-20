@@ -41,6 +41,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Predicate;
 
 /**
  *
@@ -49,6 +50,7 @@ import javax.persistence.criteria.Root;
 public class FormTipoPratica extends QDialog {
     private QTreeWidget tree;
     private Pratica pratica=null;
+    private List ids;
     
     public FormTipoPratica(){
         this(null);
@@ -85,11 +87,26 @@ public class FormTipoPratica extends QDialog {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(TipoPratica.class);
         Root root = cq.from(TipoPratica.class);
+        
+        List<Predicate> predicates = new ArrayList();
+
+        // tipologie non obsolete
+        predicates.add(cb.isFalse(root.get("obsoleta")));       
+        
+//        if( parent == null ){
+//            cq.where(cb.isNull(root.get("tipopadre")));
+//        } else {
+//            cq.where(cb.equal(root.get("tipopadre"), parent));
+//       }
+        
         if( parent == null ){
-            cq.where(cb.isNull(root.get("tipopadre")));
+            predicates.add(cb.isNull(root.get("tipopadre")));
         } else {
-            cq.where(cb.equal(root.get("tipopadre"), parent));
+            predicates.add(cb.equal(root.get("tipopadre"), parent));
         }
+        // where
+        cq = cq.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+
         Query q = em.createQuery(cq);
         return q.getResultList();
     }
@@ -106,15 +123,17 @@ public class FormTipoPratica extends QDialog {
         EntityManager em = emf.createEntityManager();
         
         // cerco gli id di tipo pratica validi
-        List ids;
         if( this.pratica != null ){
             ids = em.createNamedQuery("trovaTipiPraticaPermessiDaAttribuzioni", TipoPraticaProcedimento.class)
-                                      .setParameter("id", this.pratica.getAttribuzione().getId())
-                                      .getResultList();
+                                          .setParameter("id", this.pratica.getAttribuzione().getId())
+                                          .getResultList();
         } else {
             ids = new ArrayList();
         }
-        
+        makeTree(em, parent, parentItem, tree);        
+    }
+
+    private void makeTree(EntityManager em, TipoPratica parent, QTreeWidgetItem parentItem, QTreeWidget tree) {
         // costruisco il tree
         List<TipoPratica> children = this.children(em, parent);
         for( int i=0; i<children.size(); i++ ){
@@ -132,7 +151,9 @@ public class FormTipoPratica extends QDialog {
             } else {
                 parentItem.addChild(item);
             }
-            this.popola(tree, item, tipoPratica);
+            if (tipoPratica.getFoglia().booleanValue() == Boolean.FALSE) {
+                this.makeTree(em, tipoPratica, item, tree);
+            }
         }
     }
     
