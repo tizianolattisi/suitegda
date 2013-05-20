@@ -159,8 +159,8 @@ public class FormProtocollo extends Window {
     protected void indexChanged(int row) {
         super.indexChanged(row);
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        Boolean convAttribuzioni = protocollo.getConvalidaattribuzioni() == true;
-        Boolean convProtocollo = protocollo.getConvalidaprotocollo() == true;
+        Boolean convAttribuzioni = protocollo.getConvalidaattribuzioni();
+        Boolean convProtocollo = protocollo.getConvalidaprotocollo();
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
 
@@ -203,12 +203,25 @@ public class FormProtocollo extends Window {
             lineEdit_sportello.show();
         }
         // etichette convalida
+        QLabel labelConvalidau = (QLabel) this.findChild(QLabel.class, "label_convalidau");
+        if( protocollo.getConvalidaattribuzioni() ){
+            labelConvalidau.setText(SuiteUtil.DATE_FORMAT.format(protocollo.getDataconvalidaattribuzioni()) + " " + protocollo.getEsecutoreconvalidaattribuzioni());
+        } else {
+            labelConvalidau.setText("-");
+        }
         QLabel labelConvalida = (QLabel) this.findChild(QLabel.class, "label_convalida");
         if( protocollo.getConvalidaprotocollo() ){
-            labelConvalida.setText(SuiteUtil.DATE_FORMAT.format(protocollo.getDataconvalidaprotocollo()));
+            labelConvalida.setText(SuiteUtil.DATE_FORMAT.format(protocollo.getDataconvalidaprotocollo()) + " " + protocollo.getEsecutoreconvalidaprotocollo());
         } else {
             labelConvalida.setText("-");
         }
+        QLabel labelConsolida = (QLabel) this.findChild(QLabel.class, "label_consolida");
+        if( protocollo.getConsolidadocumenti() ){
+            labelConsolida.setText(SuiteUtil.DATE_FORMAT.format(protocollo.getDataconsolidadocumenti()) + " " + protocollo.getEsecutoreconsolidadocumenti());
+        } else {
+            labelConsolida.setText("-");
+        }
+        
     }
     
     private void information() {

@@ -89,22 +89,36 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Column(name="datariferimentomittente")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datariferimentomittente;
-    @Column(name="convalidaattribuzioni")
-    private Boolean convalidaattribuzioni=false;
-    @Column(name="convalidaprotocollo")
-    private Boolean convalidaprotocollo=false;
-
-    @Column(name="dataconvalidaprotocollo")
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dataconvalidaprotocollo;
-    
-    
-    @Column(name="consolidadocumenti")
-    private Boolean consolidadocumenti=false;
     @JoinColumn(name = "fascicolo", referencedColumnName = "id")
     @ManyToOne
     private Fascicolo fascicolo;
+    
+    @Column(name="convalidaattribuzioni")
+    private Boolean convalidaattribuzioni=false;
+    @Column(name="dataconvalidaattribuzioni")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataconvalidaattribuzioni;
+    @Column(name="esecutoreconvalidaattribuzioni", length=40)
+    private String esecutoreconvalidaattribuzioni;
 
+    @Column(name="convalidaprotocollo")
+    private Boolean convalidaprotocollo=false;
+    @Column(name="dataconvalidaprotocollo")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataconvalidaprotocollo;
+    @Column(name="esecutoreconvalidaprotocollo", length=40)
+    private String esecutoreconvalidaprotocollo;
+    @Column(name="numeroconvalidaprotocollo", length=10)
+    private String numeroconvalidaprotocollo;
+    
+    @Column(name="consolidadocumenti")
+    private Boolean consolidadocumenti=false;
+    @Column(name="dataconsolidadocumenti")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataconsolidadocumenti;
+    @Column(name="esecutoreconsolidadocumenti", length=40)
+    private String esecutoreconsolidadocumenti;
+    
     /* timestamped */
     @Column(name="rec_creato")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -370,6 +384,46 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     public void setFascicolo(Fascicolo fascicolo) {
         this.fascicolo = fascicolo;
+    }
+
+    public Date getDataconvalidaattribuzioni() {
+        return dataconvalidaattribuzioni;
+    }
+
+    public void setDataconvalidaattribuzioni(Date dataconvalidaattribuzioni) {
+        this.dataconvalidaattribuzioni = dataconvalidaattribuzioni;
+    }
+
+    public String getEsecutoreconvalidaattribuzioni() {
+        return esecutoreconvalidaattribuzioni;
+    }
+
+    public void setEsecutoreconvalidaattribuzioni(String esecutoreconvalidaattribuzioni) {
+        this.esecutoreconvalidaattribuzioni = esecutoreconvalidaattribuzioni;
+    }
+
+    public String getEsecutoreconvalidaprotocollo() {
+        return esecutoreconvalidaprotocollo;
+    }
+
+    public void setEsecutoreconvalidaprotocollo(String esecutoreconvalidaprotocollo) {
+        this.esecutoreconvalidaprotocollo = esecutoreconvalidaprotocollo;
+    }
+
+    public Date getDataconsolidadocumenti() {
+        return dataconsolidadocumenti;
+    }
+
+    public void setDataconsolidadocumenti(Date dataconsolidadocumenti) {
+        this.dataconsolidadocumenti = dataconsolidadocumenti;
+    }
+
+    public String getEsecutoreconsolidadocumenti() {
+        return esecutoreconsolidadocumenti;
+    }
+
+    public void setEsecutoreconsolidadocumenti(String esecutoreconsolidadocumenti) {
+        this.esecutoreconsolidadocumenti = esecutoreconsolidadocumenti;
     }
 
     @Override
