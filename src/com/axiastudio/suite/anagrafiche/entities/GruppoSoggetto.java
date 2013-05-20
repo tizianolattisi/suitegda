@@ -54,6 +54,8 @@ public class GruppoSoggetto implements Serializable {
     @Column(name="datacessazione")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datacessazione;
+    @Column(name="note")
+    private String note;
 
     public Long getId() {
         return id;
@@ -93,6 +95,14 @@ public class GruppoSoggetto implements Serializable {
 
     public void setDatacessazione(Date datacessazione) {
         this.datacessazione = datacessazione;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
     
     /*

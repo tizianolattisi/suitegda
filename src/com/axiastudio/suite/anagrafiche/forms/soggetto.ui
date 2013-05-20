@@ -604,7 +604,7 @@
            <string>gruppo</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&lt;predicato&gt;</string>
+           <string>&gt;predicato&lt;,&lt;note&gt;</string>
           </property>
          </widget>
         </item>
