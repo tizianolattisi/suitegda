@@ -39,12 +39,14 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
+import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,19 +100,54 @@ public class FormProtocollo extends Window {
         PyPaPiTableView tableViewRiferimentiSuccessivi = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_riferimentisuccessivi");
         Util.setWidgetReadOnly(tableViewRiferimentiSuccessivi, true);
 
-        /* La prima attribuzione diventa in via principale */
+        /* Gestione attribuzione principale e pratica in originale */
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
         tableViewAttribuzioni.entityInserted.connect(this, "attribuzioneInserita(Object)");
+        tableViewAttribuzioni.entityRemoved.connect(this, "attribuzioneRimossa(Object)");
+        PyPaPiTableView tableViewPratica = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_pratiche");
+        tableViewPratica.entityInserted.connect(this, "praticaInserita(Object)");
+        tableViewPratica.entityRemoved.connect(this, "praticaRimossa(Object)");
+    
     }
 
     /*
-     * La prima attribuzione diventa in via principale
+     * La prima attribuzione diventa in via principale, e non può più essere rimossa
      */
     private void attribuzioneInserita(Object obj){
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         Attribuzione inserita = (Attribuzione) obj;
         if( protocollo.getAttribuzioneCollection().size() == 1 ){
             inserita.setPrincipale(Boolean.TRUE);
+        }
+    }
+    private void attribuzioneRimossa(Object obj){
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        Attribuzione rimossa = (Attribuzione) obj;
+        if( rimossa.getPrincipale() ){
+            QMessageBox.warning(this, "Attenzione", "L'attribuzione principale non può venir rimossa.");
+            PyPaPiTableView tableViewAttribuzione = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
+            ((TableModel) tableViewAttribuzione.model()).getContextHandle().insertElement(rimossa);
+        }
+    }
+
+    /*
+     * La prima pratica contiene il protocollo in originale e non può essere rimossa
+     */
+    private void praticaInserita(Object obj){
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        PraticaProtocollo praticaProtocollo = (PraticaProtocollo) obj;
+        if( protocollo.getPraticaProtocolloCollection().size() == 1 ){
+            praticaProtocollo.setOriginale(Boolean.TRUE);
+        }
+    }
+    private void praticaRimossa(Object obj){
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        PraticaProtocollo rimossa = (PraticaProtocollo) obj;
+        if( protocollo.getPraticaProtocolloCollection().size() == 0 || rimossa.getOriginale()){
+            QMessageBox.warning(this, "Attenzione", "Il protocollo non può essere rimosso dalla pratica che lo contiene in originale.");
+            PyPaPiTableView tableViewPratica = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_pratiche");
+            rimossa.setOriginale(Boolean.TRUE);
+            ((TableModel) tableViewPratica.model()).getContextHandle().insertElement(rimossa);
         }
     }
     
