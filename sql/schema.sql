@@ -302,10 +302,11 @@ CREATE TRIGGER trg_upd_ts_soggetto
 
 CREATE TABLE grupposoggetto (
     id bigserial NOT NULL,
-    soggetto bigint,
-    gruppo bigint,
+    soggetto bigint NOT NULL,
+    gruppo bigint NOT NULL,
     datanascita date,
-    datacessazione date
+    datacessazione date,
+    note character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.grupposoggetto OWNER TO postgres;
 ALTER TABLE ONLY grupposoggetto
@@ -332,7 +333,8 @@ CREATE TABLE zrelazionesoggetto (
     relazione bigint,
     relazionato bigint,
     datanascita date,
-    datacessazione date
+    datacessazione date,
+    abilitatoweb boolean
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.zrelazionesoggetto OWNER TO postgres;
 ALTER TABLE ONLY zrelazionesoggetto
@@ -369,12 +371,12 @@ DROP SEQUENCE anagrafiche.zrelazionesoggetto_id_seq;
 -- la vista delle relazioni è una union delle relazioni reali "dritte" con quelle "girate"
 -- tre regole gestiscono insert/update/delete dalla vista alla tabella reale.
 CREATE VIEW relazionesoggetto AS
-        SELECT id, soggetto, relazione, relazionato, datanascita, datacessazione,
+        SELECT id, soggetto, relazione, relazionato, datanascita, datacessazione, abilitatoweb,
             FALSE AS invertita
         FROM zrelazionesoggetto
     UNION
         SELECT (-(id)::integer) AS id, relazionato AS soggetto, relazione,
-            soggetto AS relazionato, datanascita, datacessazione,
+            soggetto AS relazionato, datanascita, datacessazione, abilitatoweb,
             TRUE AS invertita
         FROM zrelazionesoggetto;
 
@@ -383,16 +385,16 @@ CREATE RULE relazionesoggetto_delete AS ON DELETE TO relazionesoggetto DO INSTEA
 	WHERE ((zrelazionesoggetto.id)::integer = old.id);
 
 CREATE RULE relazionesoggetto_insert AS ON INSERT TO relazionesoggetto DO INSTEAD
-	INSERT INTO zrelazionesoggetto (id, soggetto, relazione, relazionato, datanascita, datacessazione)
-            VALUES (new.id, new.soggetto, new.relazione, new.relazionato, new.datanascita, new.datacessazione)
+	INSERT INTO zrelazionesoggetto (id, soggetto, relazione, relazionato, datanascita, datacessazione, abilitatoweb)
+            VALUES (new.id, new.soggetto, new.relazione, new.relazionato, new.datanascita, new.datacessazione, new.abilitatoweb)
         RETURNING zrelazionesoggetto.id, zrelazionesoggetto.soggetto,
             zrelazionesoggetto.relazione, zrelazionesoggetto.relazionato,
-            zrelazionesoggetto.datanascita, zrelazionesoggetto.datacessazione, FALSE;
+            zrelazionesoggetto.datanascita, zrelazionesoggetto.datacessazione, zrelazionesoggetto.abilitatoweb, FALSE;
 
 CREATE RULE relazionesoggetto_update AS ON UPDATE TO relazionesoggetto DO INSTEAD
 	UPDATE zrelazionesoggetto SET id = new.id, soggetto = new.soggetto,
             relazione = new.relazione, relazionato = new.relazionato,
-            datanascita = new.datanascita, datacessazione = new.datacessazione
+            datanascita = new.datanascita, datacessazione = new.datacessazione, abilitatoweb = new.abilitatoweb 
         WHERE ((zrelazionesoggetto.id)::integer = old.id);
 
 CREATE TABLE indirizzo (
