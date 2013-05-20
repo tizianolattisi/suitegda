@@ -87,6 +87,11 @@ INSERT INTO titolo (id, descrizione, tipo) VALUES (1, 'PROPRIETARIO', 'PERSONA_I
 INSERT INTO titolo (id, descrizione, tipo) VALUES (2, 'CONSULENTE ESTERNO', 'TECNICO');
 SELECT setval('protocollo.titolo_id_seq', 3, true);
 
+INSERT INTO motivazioneannullamento (id, descrizione) VALUES (1, 'Errore materiale');
+INSERT INTO motivazioneannullamento (id, descrizione) VALUES (2, 'Protocollo ritirato');
+SELECT setval('protocollo.motivazioneannullamento_id_seq', 3, true);
+
+
 INSERT INTO oggetto (id, descrizione) VALUES (1, 'ATTI RICEVUTI');
 INSERT INTO oggetto (id, descrizione) VALUES (2, 'RICHIESTA GENERICA');
 SELECT setval('protocollo.oggetto_id_seq', 3, true);
