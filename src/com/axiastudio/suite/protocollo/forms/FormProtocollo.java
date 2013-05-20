@@ -98,6 +98,20 @@ public class FormProtocollo extends Window {
         PyPaPiTableView tableViewRiferimentiSuccessivi = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_riferimentisuccessivi");
         Util.setWidgetReadOnly(tableViewRiferimentiSuccessivi, true);
 
+        /* La prima attribuzione diventa in via principale */
+        PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
+        tableViewAttribuzioni.entityInserted.connect(this, "attribuzioneInserita(Object)");
+    }
+
+    /*
+     * La prima attribuzione diventa in via principale
+     */
+    private void attribuzioneInserita(Object obj){
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        Attribuzione inserita = (Attribuzione) obj;
+        if( protocollo.getAttribuzioneCollection().size() == 1 ){
+            inserita.setPrincipale(Boolean.TRUE);
+        }
     }
     
     /*
