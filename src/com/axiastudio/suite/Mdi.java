@@ -329,4 +329,10 @@ public class Mdi extends QMainWindow {
             form.showMaximized();
         }
     }
+
+    public QMdiArea getWorkspace() {
+        return workspace;
+    }
+    
+    
 }
