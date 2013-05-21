@@ -16,14 +16,21 @@
  */
 package com.axiastudio.suite.protocollo;
 
+import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.annotations.Adapter;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
+import com.axiastudio.suite.protocollo.entities.MotivazioneAnnullamento;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -58,6 +65,19 @@ public class ProtocolloAdapters {
         SoggettoRiservatoProtocollo srp = new SoggettoRiservatoProtocollo();
         srp.setSoggetto(soggetto);
         return srp;
+    }
+    
+    @Adapter
+    public static AnnullamentoProtocollo adaptMotivazioneAnnullamentoToAnnullamentoProtocollo(MotivazioneAnnullamento motivazione){
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        AnnullamentoProtocollo ap = new AnnullamentoProtocollo();
+        ap.setMotivazioneannullamento(motivazione);
+        ap.setEsecutorerichiesta(autenticato.getLogin());
+        ap.setDatarichiesta(today);
+        return ap;
+        
     }
 
 }
