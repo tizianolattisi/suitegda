@@ -78,7 +78,7 @@ public class MotivazioneAnnullamento implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.procedimenti.entities.MotivazioneAnnullamento[ id=" + id + " ]";
+        return this.descrizione;
     }
     
 }

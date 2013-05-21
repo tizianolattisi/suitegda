@@ -70,6 +70,8 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Collection<RiferimentoProtocollo> riferimentoProtocolloCollection;
     @OneToMany(mappedBy = "precedente", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<RiferimentoProtocollo> riferimentoProtocolloSuccessivoCollection;
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<AnnullamentoProtocollo> annullamentoProtocolloCollection;
     @Column(name="annullato")
     private Boolean annullato=false;
     @Column(name="annullamentorichiesto")
@@ -330,6 +332,14 @@ public class Protocollo implements Serializable, ITimeStamped {
         this.riferimentoProtocolloSuccessivoCollection = riferimentoProtocolloSuccessivoCollection;
     }
 
+    public Collection<AnnullamentoProtocollo> getAnnullamentoProtocolloCollection() {
+        return annullamentoProtocolloCollection;
+    }
+
+    public void setAnnullamentoProtocolloCollection(Collection<AnnullamentoProtocollo> annullamentoProtocolloCollection) {
+        this.annullamentoProtocolloCollection = annullamentoProtocolloCollection;
+    }
+
     public Date getDatariferimentomittente() {
         return datariferimentomittente;
     }
@@ -424,6 +434,14 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     public void setEsecutoreconsolidadocumenti(String esecutoreconsolidadocumenti) {
         this.esecutoreconsolidadocumenti = esecutoreconsolidadocumenti;
+    }
+
+    public String getNumeroconvalidaprotocollo() {
+        return numeroconvalidaprotocollo;
+    }
+
+    public void setNumeroconvalidaprotocollo(String numeroconvalidaprotocollo) {
+        this.numeroconvalidaprotocollo = numeroconvalidaprotocollo;
     }
 
     @Override

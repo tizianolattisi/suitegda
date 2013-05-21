@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
+import com.axiastudio.suite.SuiteUtil;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -41,7 +42,6 @@ public class AnnullamentoProtocollo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genannullamentoprotocollo")
     private Long id;
-    // protocollo Protocollo
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
@@ -58,8 +58,8 @@ public class AnnullamentoProtocollo implements Serializable {
     private Date dataautorizzazione;
     @Column(name="esecutoreautorizzazione", length=40)
     private String esecutoreautorizzazione;
-    @Column(name="respinta")
-    private Boolean respinta=false;
+    @Column(name="respinto")
+    private Boolean respinto=false;
     
     public Long getId() {
         return id;
@@ -69,6 +69,75 @@ public class AnnullamentoProtocollo implements Serializable {
         this.id = id;
     }
 
+    public Protocollo getProtocollo() {
+        return protocollo;
+    }
+
+    public void setProtocollo(Protocollo protocollo) {
+        this.protocollo = protocollo;
+    }
+
+    public Date getDatarichiesta() {
+        return datarichiesta;
+    }
+
+    public void setDatarichiesta(Date datarichiesta) {
+        this.datarichiesta = datarichiesta;
+    }
+
+    public String getEsecutorerichiesta() {
+        return esecutorerichiesta;
+    }
+
+    public void setEsecutorerichiesta(String esecutorerichiesta) {
+        this.esecutorerichiesta = esecutorerichiesta;
+    }
+
+    public MotivazioneAnnullamento getMotivazioneannullamento() {
+        return motivazioneannullamento;
+    }
+
+    public void setMotivazioneannullamento(MotivazioneAnnullamento motivazioneannullamento) {
+        this.motivazioneannullamento = motivazioneannullamento;
+    }
+
+    public Date getDataautorizzazione() {
+        return dataautorizzazione;
+    }
+
+    public void setDataautorizzazione(Date dataautorizzazione) {
+        this.dataautorizzazione = dataautorizzazione;
+    }
+
+    public String getEsecutoreautorizzazione() {
+        return esecutoreautorizzazione;
+    }
+
+    public void setEsecutoreautorizzazione(String esecutoreautorizzazione) {
+        this.esecutoreautorizzazione = esecutoreautorizzazione;
+    }
+
+    public Boolean getRespinto() {
+        return respinto;
+    }
+
+    public void setRespinto(Boolean respinta) {
+        this.respinto = respinta;
+    }
+
+    public String getStatorichiesta() {
+        if( this.getRespinto() ){
+            return "respinta";
+        } else if( this.getEsecutoreautorizzazione() != null ){
+            return "autorizzata da " + this.getEsecutoreautorizzazione() + " il " + SuiteUtil.DATE_FORMAT.format(this.getDataautorizzazione());
+        }
+        return "in attesa";
+    }
+    
+    public void setStatorichiesta() {
+        
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
