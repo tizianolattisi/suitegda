@@ -86,6 +86,7 @@ import com.axiastudio.suite.protocollo.entities.MotivazioneAnnullamento;
 import com.axiastudio.suite.protocollo.entities.Oggetto;
 import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Titolo;
+import com.axiastudio.suite.protocollo.forms.FormAnnullamentoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
@@ -246,7 +247,7 @@ public class Suite {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/annullamentoprotocollo.ui",
                               AnnullamentoProtocollo.class,
-                              Dialog.class);
+                              FormAnnullamentoProtocollo.class);
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/dipendenzapratica.ui",

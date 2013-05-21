@@ -37,6 +37,7 @@ import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
+import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
@@ -107,7 +108,10 @@ public class FormProtocollo extends Window {
         PyPaPiTableView tableViewPratica = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_pratiche");
         tableViewPratica.entityInserted.connect(this, "praticaInserita(Object)");
         tableViewPratica.entityRemoved.connect(this, "praticaRimossa(Object)");
-    
+        
+        /* Gestione annullamenti protocollo */
+        PyPaPiTableView tableViewAnnullamento = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_annullamenti");
+        tableViewAnnullamento.entityRemoved.connect(this, "annullamentoRimosso(Object)");
     }
 
     /*
@@ -127,6 +131,19 @@ public class FormProtocollo extends Window {
             QMessageBox.warning(this, "Attenzione", "L'attribuzione principale non può venir rimossa.");
             PyPaPiTableView tableViewAttribuzione = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
             ((TableModel) tableViewAttribuzione.model()).getContextHandle().insertElement(rimossa);
+        }
+    }
+    
+    /*
+     * Solo il richiedente può annullare la sua richiesta di annullamento
+     */
+    private void annullamentoRimosso(Object obj){
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        AnnullamentoProtocollo annullamento = (AnnullamentoProtocollo) obj;
+        if( !autenticato.getLogin().equals(annullamento.getEsecutorerichiesta()) ){
+            QMessageBox.warning(this, "Attenzione", "Solo il richiedente può annullare la sua richiesta di annullamento.");
+            PyPaPiTableView tableViewAttribuzione = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
+            ((TableModel) tableViewAttribuzione.model()).getContextHandle().insertElement(annullamento);
         }
     }
 
