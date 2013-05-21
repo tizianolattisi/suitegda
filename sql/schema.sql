@@ -643,7 +643,8 @@ CREATE TABLE pratiche.tipopratica (
     porzionenumeroa integer,
     fascicolo bigint,
     foglia boolean NOT NULL DEFAULT false,
-    approvata boolean NOT NULL DEFAULT false
+    approvata boolean NOT NULL DEFAULT false,
+    obsoleta boolean NOT NULL DEFAULT false
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE pratiche.tipopratica OWNER TO postgres;
 ALTER TABLE ONLY pratiche.tipopratica
@@ -784,16 +785,6 @@ ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_tipopratica FOREIGN KEY (tipo) REFERENCES pratiche.tipopratica(id);
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
-CREATE TRIGGER trg_ins_ts_pratica
-  BEFORE INSERT
-  ON pratiche.pratica
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_pratica
-  BEFORE UPDATE
-  ON pratiche.pratica
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE dipendenza (
     id bigserial NOT NULL,
@@ -927,16 +918,6 @@ ALTER TABLE ONLY protocollo
     ADD CONSTRAINT fk_protocollo_sportello FOREIGN KEY (sportello) REFERENCES base.ufficio(id);
 ALTER TABLE ONLY protocollo
     ADD CONSTRAINT fk_protocollo_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
-CREATE TRIGGER trg_ins_ts_protocollo
-  BEFORE INSERT
-  ON protocollo.protocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_protocollo
-  BEFORE UPDATE
-  ON protocollo.protocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE attribuzione (
     id bigserial NOT NULL,
@@ -956,16 +937,6 @@ ALTER TABLE ONLY attribuzione
     ADD CONSTRAINT fk_attribuzione_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 ALTER TABLE ONLY attribuzione
     ADD CONSTRAINT fk_attribuzione_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
-CREATE TRIGGER trg_ins_ts_attribuzione
-  BEFORE INSERT
-  ON protocollo.attribuzione
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_attribuzione
-  BEFORE UPDATE
-  ON protocollo.attribuzione
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE oggetto (
     id bigserial NOT NULL,
@@ -1192,6 +1163,33 @@ CREATE TRIGGER trg_upd_ts_ufficioprotocollo
   ON protocollo.ufficioprotocollo
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
+
+CREATE TABLE motivazioneannullamento (
+       id bigserial NOT NULL,
+       descrizione character varying(100)
+);
+ALTER TABLE protocollo.motivazioneannullamento OWNER TO postgres;
+ALTER TABLE ONLY motivazioneannullamento
+    ADD CONSTRAINT motivazioneannullamento_pkey PRIMARY KEY (id);
+
+CREATE TABLE annullamentoprotocollo (
+       id bigserial NOT NULL,
+       protocollo character varying(12) NOT NULL,
+       messaggio bigint,
+       datarichiesta timestamp NOT NULL,
+       esecutorerichiesta character varying(40) NOT NULL,      
+       motivazioneannullamento bigint NOT NULL,
+       dataautorizzazione timestamp,
+       esecutoreautorizzazione character varying(40),
+       respinto boolean NOT NULL DEFAULT False
+);
+ALTER TABLE protocollo.annullamentoprotocollo OWNER TO postgres;
+ALTER TABLE ONLY annullamentoprotocollo
+    ADD CONSTRAINT annullamentoprotocollo_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY annullamentoprotocollo
+    ADD CONSTRAINT fk_annullamentoprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
+ALTER TABLE ONLY annullamentoprotocollo
+    ADD CONSTRAINT fk_annullamentoprotocollo_motivazioneannullamento FOREIGN KEY (motivazioneannullamento) REFERENCES motivazioneannullamento(id);
 
 
 -- Pubblicazioni

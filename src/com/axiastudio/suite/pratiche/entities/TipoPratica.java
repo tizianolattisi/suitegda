@@ -28,6 +28,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.FetchType;
 
 /**
  *
@@ -46,7 +47,7 @@ public class TipoPratica implements Serializable {
     @Column(name="descrizione")
     private String descrizione;
     @JoinColumn(name = "tipopadre", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private TipoPratica tipopadre;
     @JoinColumn(name="procedimento", referencedColumnName = "id")
     @ManyToOne
@@ -64,6 +65,8 @@ public class TipoPratica implements Serializable {
     private Boolean foglia=false;
     @Column(name="approvata")
     private Boolean approvata=false;
+    @Column(name="obsoleta")
+    private Boolean obsoleta=false;
 
     public Long getId() {
         return id;
@@ -151,6 +154,14 @@ public class TipoPratica implements Serializable {
 
     public void setApprovata(Boolean approvata) {
         this.approvata = approvata;
+    }
+
+    public Boolean getObsoleta() {
+        return obsoleta;
+    }
+
+    public void setObsoleta(Boolean obsoleta) {
+        this.obsoleta = obsoleta;
     }
 
     @Override

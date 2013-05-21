@@ -40,5 +40,12 @@ CREATE INDEX praticaprotocollo_pratica
   USING btree
   (pratica );
 
+SET search_path = anagrafiche, pg_catalog;
+CREATE INDEX indirizzo_soggetto
+  ON anagrafiche.indirizzo
+  USING btree
+  (soggetto );
+
+
 
 
