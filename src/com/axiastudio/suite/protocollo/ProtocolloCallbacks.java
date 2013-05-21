@@ -68,17 +68,7 @@ public class ProtocolloCallbacks {
             msg += "Deve essere dichiarato uno sportello ricevente";
             res = false;
         }
-        
-        /* sportello tra quelli dell'utente */
-        List<Ufficio> uffici = new ArrayList();
-        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
-            uffici.add(uu.getUfficio());
-        }
-        if( !uffici.contains(protocollo.getSportello()) ){
-            msg += "Lo sportello deve essere scelto tra gli uffici dell'utente";
-            res = false;
-        }
-        
+                
         /* almeno un soggetto */
         if( protocollo.getSoggettoProtocolloCollection().isEmpty() ){
             msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
@@ -97,7 +87,17 @@ public class ProtocolloCallbacks {
             for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
                 sp.setPrimoinserimento(Boolean.TRUE);
             }
-            
+
+            /* sportello tra quelli dell'utente */
+            List<Ufficio> uffici = new ArrayList();
+            for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
+                uffici.add(uu.getUfficio());
+            }
+            if( !uffici.contains(protocollo.getSportello()) ){
+                msg += "Lo sportello deve essere scelto tra gli uffici dell'utente";
+                res = false;
+            }
+
             Database db = (Database) Register.queryUtility(IDatabase.class);
             EntityManager em = db.getEntityManagerFactory().createEntityManager();
             CriteriaBuilder cb = em.getCriteriaBuilder();
