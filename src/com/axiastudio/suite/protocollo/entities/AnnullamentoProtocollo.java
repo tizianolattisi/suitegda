@@ -60,6 +60,8 @@ public class AnnullamentoProtocollo implements Serializable {
     private String esecutoreautorizzazione;
     @Column(name="respinto")
     private Boolean respinto=false;
+    @Column(name="autorizzato")
+    private Boolean autorizzato=false;
     
     public Long getId() {
         return id;
@@ -125,6 +127,14 @@ public class AnnullamentoProtocollo implements Serializable {
         this.respinto = respinta;
     }
 
+    public Boolean getAutorizzato() {
+        return autorizzato;
+    }
+
+    public void setAutorizzato(Boolean autorizzato) {
+        this.autorizzato = autorizzato;
+    }
+
     public String getStatorichiesta() {
         if( this.getRespinto() ){
             return "respinta";
@@ -134,7 +144,7 @@ public class AnnullamentoProtocollo implements Serializable {
         return "in attesa";
     }
     
-    public void setStatorichiesta() {
+    public void setStatorichiesta(String stato) {
         
     }
     

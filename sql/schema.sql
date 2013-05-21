@@ -1181,7 +1181,8 @@ CREATE TABLE annullamentoprotocollo (
        motivazioneannullamento bigint NOT NULL,
        dataautorizzazione timestamp,
        esecutoreautorizzazione character varying(40),
-       respinto boolean NOT NULL DEFAULT False
+       respinto boolean NOT NULL DEFAULT False,
+       autorizzato boolean NOT NULL DEFAULT False
 );
 ALTER TABLE protocollo.annullamentoprotocollo OWNER TO postgres;
 ALTER TABLE ONLY annullamentoprotocollo
