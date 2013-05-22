@@ -843,6 +843,33 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>Altro</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Richieste di annullamento</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_annullamenti">
+          <property name="entity" stdset="0">
+           <string>.annullamentoProtocolloCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;esecutorerichiesta&lt;,&gt;datarichiesta&lt;,&gt;statorichiesta&lt;,&lt;motivazioneannullamento&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>motivazioneannullamento</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>

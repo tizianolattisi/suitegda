@@ -81,9 +81,12 @@ import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Norma;
+import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
+import com.axiastudio.suite.protocollo.entities.MotivazioneAnnullamento;
 import com.axiastudio.suite.protocollo.entities.Oggetto;
 import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Titolo;
+import com.axiastudio.suite.protocollo.forms.FormAnnullamentoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
@@ -235,6 +238,16 @@ public class Suite {
                               null,
                               Dipendenza.class,
                               Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/protocollo/forms/motivazioneannullamento.ui",
+                              MotivazioneAnnullamento.class,
+                              Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/protocollo/forms/annullamentoprotocollo.ui",
+                              AnnullamentoProtocollo.class,
+                              FormAnnullamentoProtocollo.class);
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/dipendenzapratica.ui",
