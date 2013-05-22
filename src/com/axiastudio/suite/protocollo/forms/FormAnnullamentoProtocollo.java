@@ -17,11 +17,15 @@
 package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
 import com.trolltech.qt.gui.QCheckBox;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -31,7 +35,10 @@ public class FormAnnullamentoProtocollo extends Dialog {
     
     public FormAnnullamentoProtocollo(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
-        
+        this.storeInitialized.connect(this, "updatePermission()");        
+    }
+
+    private void updatePermission() {
         /* permesso di confermare o respingere */
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         AnnullamentoProtocollo annullamento = (AnnullamentoProtocollo) this.getContext().getCurrentEntity();
@@ -40,8 +47,24 @@ public class FormAnnullamentoProtocollo extends Dialog {
         Boolean modifica = !annullamento.getRespinto() && !annullamento.getAutorizzato() && autenticato.getAttributoreprotocollo();
         checkBox_autorizzato.setEnabled( modifica );
         checkBox_respinto.setEnabled( modifica );
-        
     }
+
+    @Override
+    public void accept() {
+        AnnullamentoProtocollo annullamento = (AnnullamentoProtocollo) this.getContext().getCurrentEntity();
+        if( annullamento.getId() != null && (annullamento.getAutorizzato() || annullamento.getRespinto()) ){
+            /* devo registrare indipendentemente dal protocollo */
+            Calendar calendar = Calendar.getInstance();
+            Date today = calendar.getTime();
+            Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+            annullamento.setEsecutoreautorizzazione(autenticato.getLogin());
+            annullamento.setDataautorizzazione(today);
+            Controller controller = (Controller) Register.queryUtility(IController.class, annullamento.getClass().getName());
+            controller.commit(annullamento);
+        }
+        super.accept();
+    }
+    
     
     
 }

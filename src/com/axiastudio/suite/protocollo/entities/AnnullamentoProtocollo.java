@@ -138,7 +138,7 @@ public class AnnullamentoProtocollo implements Serializable {
     public String getStatorichiesta() {
         if( this.getRespinto() ){
             return "respinta";
-        } else if( this.getEsecutoreautorizzazione() != null ){
+        } else if( this.getAutorizzato() ){
             return "autorizzata da " + this.getEsecutoreautorizzazione() + " il " + SuiteUtil.DATE_FORMAT.format(this.getDataautorizzazione());
         }
         return "in attesa";
