@@ -19,18 +19,13 @@ package com.axiastudio.suite;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.db.Store;
-import com.axiastudio.suite.base.entities.UfficioUtente;
-import com.axiastudio.suite.base.entities.Ufficio_;
-import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.generale.entities.Costante;
+import com.axiastudio.suite.generale.entities.Costante_;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Pratica_;
-import com.axiastudio.suite.protocollo.entities.Attribuzione;
-import com.axiastudio.suite.protocollo.entities.Attribuzione_;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -65,7 +60,7 @@ public class SuiteUtil {
     }
     
     
-    public static Pratica findPratica(String idpratica){
+    public static Pratica trovaPratica(String idpratica){
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -76,6 +71,19 @@ public class SuiteUtil {
         TypedQuery<Pratica> tq = em.createQuery(cq);
         Pratica pratica = tq.getSingleResult();
         return pratica;
+    }
+    
+    public static Costante trovaCostante(String name){
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Costante> cq = cb.createQuery(Costante.class);
+        Root<Costante> root = cq.from(Costante.class);
+        cq.select(root);
+        cq.where(cb.equal(root.get(Costante_.nome), name));
+        TypedQuery<Costante> tq = em.createQuery(cq);
+        Costante costante = tq.getSingleResult();
+        return costante;
     }
     
 }
