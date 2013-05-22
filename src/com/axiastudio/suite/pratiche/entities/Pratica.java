@@ -73,6 +73,22 @@ public class Pratica implements Serializable, ITimeStamped {
     private Fascicolo fascicolo;
     @OneToMany(mappedBy = "praticadominante", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<DipendenzaPratica> dipendenzaPraticaCollection;
+    @Column(name="annoinventario")
+    private Integer annoinventario;
+    @Column(name="numeroinventario")
+    private String numeroinventario;
+    @Column(name="datachiusura")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datachiusura;
+//    @JoinColumn(name = "fase", referencedColumnName = "id")
+//    @ManyToOne
+//    private TipoPratica fase;
+    @Column(name="datatermineistruttoria")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datatermineistruttoria;
+    @Column(name="datascadenza")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datascadenza;
 
     /* timestamped */
     @Column(name="rec_creato")
@@ -219,6 +235,46 @@ public class Pratica implements Serializable, ITimeStamped {
 
     public void setDipendenzaPraticaCollection(Collection<DipendenzaPratica> dipendenzaPraticaCollection) {
         this.dipendenzaPraticaCollection = dipendenzaPraticaCollection;
+    }
+
+    public Integer getAnnoinventario() {
+        return annoinventario;
+    }
+
+    public void setAnnoinventario(Integer annoinventario) {
+        this.annoinventario = annoinventario;
+    }
+
+    public String getNumeroinventario() {
+        return numeroinventario;
+    }
+
+    public void setNumeroinventario(String numeroinventario) {
+        this.numeroinventario = numeroinventario;
+    }
+
+    public Date getDatachiusura() {
+        return datachiusura;
+    }
+
+    public void setDatachiusura(Date datachiusura) {
+        this.datachiusura = datachiusura;
+    }
+
+    public Date getDatatermineistruttoria() {
+        return datatermineistruttoria;
+    }
+
+    public void setDatatermineistruttoria(Date datatermineistruttoria) {
+        this.datatermineistruttoria = datatermineistruttoria;
+    }
+
+    public Date getDatascadenza() {
+        return datascadenza;
+    }
+
+    public void setDatascadenza(Date datascadenza) {
+        this.datascadenza = datascadenza;
     }
 
     

@@ -22,6 +22,7 @@ select setval('pratiche.dipendenza_id_seq', coalesce((select max(id)+1 from prat
 select setval('pratiche.pratica_id_seq', coalesce((select max(id)+1 from pratiche.pratica), 1), false);
 select setval('pratiche.tipopratica_id_seq', coalesce((select max(id)+1 from pratiche.tipopratica), 1), false);
 select setval('pratiche.dipendenzapratica_id_seq', coalesce((select max(id)+1 from pratiche.zdipendenzapratica), 1), false);
+select setval('pratiche.fase_id_seq', coalesce((select max(id)+1 from pratiche.fase), 1), false);
 
 select setval('procedimenti.carica_id_seq', coalesce((select max(id)+1 from procedimenti.carica), 1), false);
 select setval('procedimenti.delega_id_seq', coalesce((select max(id)+1 from procedimenti.delega), 1), false);
@@ -42,6 +43,7 @@ select setval('protocollo.soggettoprotocollo_id_seq', coalesce((select max(id)+1
 select setval('protocollo.soggettoriservatoprotocollo_id_seq', coalesce((select max(id)+1 from protocollo.soggettoriservatoprotocollo), 1), false);
 select setval('protocollo.titolo_id_seq', coalesce((select max(id)+1 from protocollo.titolo), 1), false);
 select setval('protocollo.ufficioprotocollo_id_seq', coalesce((select max(id)+1 from protocollo.ufficioprotocollo), 1), false);
+select setval('protocollo.motivazioneannullamento_id_seq', coalesce((select max(id)+1 from protocollo.motivazioneannullamento), 1), false);
 
 select setval('sedute.caricacommissione_id_seq', coalesce((select max(id)+1 from sedute.caricacommissione), 1), false);
 select setval('sedute.commissione_id_seq', coalesce((select max(id)+1 from sedute.commissione), 1), false);

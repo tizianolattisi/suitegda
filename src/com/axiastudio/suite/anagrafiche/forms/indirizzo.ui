@@ -199,6 +199,17 @@
    <header>pypapicombobox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>lineEdit_6</tabstop>
+  <tabstop>lineEdit_3</tabstop>
+  <tabstop>lineEdit_4</tabstop>
+  <tabstop>comboBoxProvincia</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>comboBoxProvincia_2</tabstop>
+  <tabstop>lineEdit_5</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

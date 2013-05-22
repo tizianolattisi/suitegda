@@ -765,6 +765,18 @@ CREATE TRIGGER trg_upd_ts_delega
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
+CREATE TABLE fase (
+    id bigserial NOT NULL,
+    descrizione character varying(255) NOT NULL,
+    esclusivadaufficio bigint,
+    istruttoria boolean
+);
+ALTER TABLE pratiche.fase OWNER TO postgres;
+ALTER TABLE ONLY fase
+    ADD CONSTRAINT fase_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY fase
+    ADD CONSTRAINT fk_fase_ufficio FOREIGN KEY (esclusivadaufficio) REFERENCES base.ufficio(id);
+
 CREATE TABLE pratica (
     id bigserial NOT NULL,
     anno integer,
@@ -772,14 +784,21 @@ CREATE TABLE pratica (
     descrizione character varying(1024),
     idpratica character varying(9),
     codiceinterno character varying(50),
-    note character varying(255),
+    note character varying(6144),
     attribuzione bigint,
     gestione bigint,
     ubicazione bigint,
     dettaglioubicazione character varying(255),
     tipo bigint,
     riservata boolean NOT NULL DEFAULT FALSE,
-    fascicolo bigint
+    fascicolo bigint,
+    annoinventario integer,
+    numeroinventario character varying(10),
+    datachiusura date,
+    fase bigint,
+    datatermineistruttoria date,
+    datascadenza date,
+    procedimento bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE pratiche.pratica OWNER TO postgres;
 ALTER TABLE ONLY pratica
@@ -796,6 +815,10 @@ ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_tipopratica FOREIGN KEY (tipo) REFERENCES pratiche.tipopratica(id);
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT fk_pratica_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
+ALTER TABLE ONLY pratica
+    ADD CONSTRAINT fk_pratica_fase FOREIGN KEY (fase) REFERENCES pratiche.fase(id);
+ALTER TABLE ONLY pratica
+    ADD CONSTRAINT fk_pratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
 
 CREATE TABLE dipendenza (
     id bigserial NOT NULL,
@@ -1062,16 +1085,6 @@ ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
 ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_titolo FOREIGN KEY (titolo) REFERENCES titolo(id);
-CREATE TRIGGER trg_ins_ts_soggettoprotocollo
-  BEFORE INSERT
-  ON protocollo.soggettoprotocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_soggettoprotocollo
-  BEFORE UPDATE
-  ON protocollo.soggettoprotocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 -- i soggetti di primo inserimento vengono solo annullati
 CREATE OR REPLACE FUNCTION protocollo.delete_soggettoprotocollo()
@@ -1120,16 +1133,6 @@ ALTER TABLE ONLY soggettoriservatoprotocollo
     ADD CONSTRAINT fk_soggettoriservatoprotocollo_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
 ALTER TABLE ONLY soggettoriservatoprotocollo
     ADD CONSTRAINT fk_soggettoriservatoprotocollo_titolo FOREIGN KEY (titolo) REFERENCES titolo(id);
-CREATE TRIGGER trg_ins_ts_soggettoriservatoprotocollo
-  BEFORE INSERT
-  ON protocollo.soggettoriservatoprotocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_soggettoriservatoprotocollo
-  BEFORE UPDATE
-  ON protocollo.soggettoriservatoprotocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 -- i soggetti riservati di primo inserimento vengono solo annullati
 CREATE OR REPLACE FUNCTION protocollo.delete_soggettoriservatoprotocollo()
@@ -1164,16 +1167,6 @@ ALTER TABLE ONLY ufficioprotocollo
     ADD CONSTRAINT fk_ufficioprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 ALTER TABLE ONLY ufficioprotocollo
     ADD CONSTRAINT fk_ufficioprotocollo_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
-CREATE TRIGGER trg_ins_ts_ufficioprotocollo
-  BEFORE INSERT
-  ON protocollo.ufficioprotocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_ufficioprotocollo
-  BEFORE UPDATE
-  ON protocollo.ufficioprotocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE motivazioneannullamento (
        id bigserial NOT NULL,

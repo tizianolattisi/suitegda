@@ -23,6 +23,39 @@ CREATE TRIGGER trg_upd_ts_attribuzione
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
 
+CREATE TRIGGER trg_ins_ts_soggettoprotocollo
+  BEFORE INSERT
+  ON protocollo.soggettoprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_soggettoprotocollo
+  BEFORE UPDATE
+  ON protocollo.soggettoprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
+
+CREATE TRIGGER trg_ins_ts_soggettoriservatoprotocollo
+  BEFORE INSERT
+  ON protocollo.soggettoriservatoprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_soggettoriservatoprotocollo
+  BEFORE UPDATE
+  ON protocollo.soggettoriservatoprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
+
+CREATE TRIGGER trg_ins_ts_ufficioprotocollo
+  BEFORE INSERT
+  ON protocollo.ufficioprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_ufficioprotocollo
+  BEFORE UPDATE
+  ON protocollo.ufficioprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
+
 
 
 CREATE OR REPLACE FUNCTION pratiche.insert_uffici_pratica()
