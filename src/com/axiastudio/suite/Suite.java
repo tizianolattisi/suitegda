@@ -19,7 +19,6 @@ package com.axiastudio.suite;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.plugins.barcode.Barcode;
@@ -29,71 +28,13 @@ import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
 import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
 import com.axiastudio.pypapi.plugins.ooops.RuleSet;
 import com.axiastudio.pypapi.plugins.ooops.Template;
-import com.axiastudio.pypapi.ui.Dialog;
-import com.axiastudio.pypapi.ui.IQuickInsertDialog;
-import com.axiastudio.pypapi.ui.Window;
-import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
-import com.axiastudio.suite.anagrafiche.AnagraficheAdapters;
-import com.axiastudio.suite.anagrafiche.entities.Gruppo;
-import com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto;
-import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
-import com.axiastudio.suite.anagrafiche.entities.Relazione;
-import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
-import com.axiastudio.suite.anagrafiche.entities.Riferimento;
-import com.axiastudio.suite.anagrafiche.entities.Soggetto;
-import com.axiastudio.suite.anagrafiche.entities.Stato;
-import com.axiastudio.suite.anagrafiche.entities.TitoloSoggetto;
-import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
-import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
-import com.axiastudio.suite.anagrafiche.forms.FormRelazioneSoggetto;
-import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
 import com.axiastudio.suite.base.Login;
-import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.deliberedetermine.entities.Determina;
-import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
-import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
-import com.axiastudio.suite.finanziaria.entities.Capitolo;
-import com.axiastudio.suite.finanziaria.entities.Servizio;
-import com.axiastudio.suite.generale.entities.Costante;
-import com.axiastudio.suite.pratiche.PraticaAdapters;
-import com.axiastudio.suite.pratiche.PraticaCallbacks;
-import com.axiastudio.suite.pratiche.PraticaPrivate;
-import com.axiastudio.suite.pratiche.entities.Dipendenza;
-import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
-import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.pratiche.entities.TipoPratica;
-import com.axiastudio.suite.pratiche.forms.FormDipendenzaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.procedimenti.entities.Delega;
-import com.axiastudio.suite.procedimenti.entities.Procedimento;
-import com.axiastudio.suite.protocollo.ProtocolloAdapters;
-import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
-import com.axiastudio.suite.protocollo.ProtocolloPrivate;
-import com.axiastudio.suite.protocollo.entities.Fascicolo;
-import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
-import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
-import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
-import com.axiastudio.suite.procedimenti.entities.Carica;
-import com.axiastudio.suite.procedimenti.entities.Norma;
-import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
-import com.axiastudio.suite.protocollo.entities.MotivazioneAnnullamento;
-import com.axiastudio.suite.protocollo.entities.Oggetto;
-import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
-import com.axiastudio.suite.protocollo.entities.Titolo;
-import com.axiastudio.suite.protocollo.forms.FormAnnullamentoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
-import com.axiastudio.suite.sedute.entities.CaricaCommissione;
-import com.axiastudio.suite.sedute.entities.Commissione;
-import com.axiastudio.suite.sedute.entities.Seduta;
-import com.axiastudio.suite.sedute.entities.TipoSeduta;
-import com.axiastudio.suite.sedute.forms.FormTipoSeduta;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -138,13 +79,14 @@ public class Suite {
         db.open("SuitePU", properties);
         Register.registerUtility(db, IDatabase.class);
         
-        Configure.configure(db);
-        
         Application app = new Application(args);
-        
         // aggiungo la localizzazione di Menjazo e imposto a it
         //app.addQmFile("classpath:com/axiastudio/menjazo/lang/menjazo_{0}.qm");
         app.setLanguage("it");
+
+        Configure.configure(db);
+        
+        
            
         // Plugin CmisPlugin per accedere ad Alfresco
         CmisPlugin cmisPlugin = new CmisPlugin();
