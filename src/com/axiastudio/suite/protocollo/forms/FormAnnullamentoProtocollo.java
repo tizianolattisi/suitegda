@@ -20,12 +20,21 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.ui.Dialog;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.generale.entities.Costante;
+import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
+import com.axiastudio.suite.protocollo.entities.Attribuzione;
+import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.trolltech.qt.gui.QCheckBox;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -53,14 +62,53 @@ public class FormAnnullamentoProtocollo extends Dialog {
     public void accept() {
         AnnullamentoProtocollo annullamento = (AnnullamentoProtocollo) this.getContext().getCurrentEntity();
         if( annullamento.getId() != null && (annullamento.getAutorizzato() || annullamento.getRespinto()) ){
+            
             /* devo registrare indipendentemente dal protocollo */
             Calendar calendar = Calendar.getInstance();
             Date today = calendar.getTime();
             Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
             annullamento.setEsecutoreautorizzazione(autenticato.getLogin());
             annullamento.setDataautorizzazione(today);
-            Controller controller = (Controller) Register.queryUtility(IController.class, annullamento.getClass().getName());
-            controller.commit(annullamento);
+            
+            /* se è un annullamento:
+             *  - aggiungo l'ufficio protocollo come unica attribuzione
+             *  - inserisco nella pratica (unica) dei protocolli annullati
+             *  - consolido il protocollo
+             *  - marco il protocollo come annullato
+             */
+            if( annullamento.getAutorizzato() ){
+                Costante costantePraticaAnnullati = SuiteUtil.trovaCostante("PRATICA_ANNULLATI");
+                Long idPraticaAnnullati = Long.parseLong(costantePraticaAnnullati.getValore());
+                Controller controllerPratica = (Controller) Register.queryUtility(IController.class, Pratica.class.getName());
+                Pratica praticaAnnullati = (Pratica) controllerPratica.get(idPraticaAnnullati);
+                Costante costanteUfficioAnnullati = SuiteUtil.trovaCostante("UFFICIO_ANNULLATI");
+                Long idUfficioAnnullati = Long.parseLong(costanteUfficioAnnullati.getValore());
+                Controller controllerUfficio = (Controller) Register.queryUtility(IController.class, Ufficio.class.getName());
+                Ufficio ufficioAnnullati = (Ufficio) controllerUfficio.get(idUfficioAnnullati);
+                Protocollo protocollo = annullamento.getProtocollo();
+                protocollo.setAttribuzioneCollection(null);
+                protocollo.setPraticaProtocolloCollection(null);
+                List<Attribuzione> attribuzioni = new ArrayList();
+                Attribuzione attribuzione = new Attribuzione();
+                attribuzione.setUfficio(ufficioAnnullati);
+                attribuzione.setPrincipale(Boolean.TRUE);
+                attribuzioni.add(attribuzione);
+                protocollo.setAttribuzioneCollection(attribuzioni);
+                List<PraticaProtocollo> praticheProtocollo = new ArrayList();
+                PraticaProtocollo praticaProtocollo = new PraticaProtocollo();
+                praticaProtocollo.setPratica(praticaAnnullati);
+                praticaProtocollo.setOriginale(Boolean.TRUE);
+                praticheProtocollo.add(praticaProtocollo);
+                protocollo.setPraticaProtocolloCollection(praticheProtocollo);
+                protocollo.setConvalidaattribuzioni(Boolean.TRUE);
+                protocollo.setConvalidaprotocollo(Boolean.TRUE);
+                protocollo.setConsolidadocumenti(Boolean.TRUE);
+                Controller controllerProtocollo = (Controller) Register.queryUtility(IController.class, Protocollo.class.getName());
+                controllerProtocollo.commit(protocollo);
+            } else {
+                Controller controllerAnnullamento = (Controller) Register.queryUtility(IController.class, annullamento.getClass().getName());
+                controllerAnnullamento.commit(annullamento);
+            }
         }
         super.accept();
     }
