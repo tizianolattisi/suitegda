@@ -50,6 +50,17 @@ SET default_with_oids = false;
 
 -- Generale
 SET search_path = generale, pg_catalog;
+
+CREATE TABLE costante
+(
+    id bigserial NOT NULL,
+    nome character varying(32),
+    descrizione character varying(255),
+    valore character varying(32),
+    tipocostante character varying(16)
+);
+ALTER TABLE environment OWNER TO postgres;
+
 CREATE TABLE withtimestamp
 (
   rec_creato timestamp,

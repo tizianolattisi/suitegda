@@ -68,16 +68,18 @@ INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, po
 SELECT setval('pratiche.tipopratica_id_seq', 4, true);
 
 INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipo)
-  VALUES (1, 2012, '2012-12-10', 'Pratica demo', '201200001', 'DETRS201200000001', NULL, 3, 4, 3, 'scaffale in alto', 3);
+  VALUES (1, 2012, '2012-12-10', 'Pratica dei protocolli annullati', '201200001', 'DETRS201200000001', NULL, 1, 1, 1, 'scaffale in alto', 2);
 INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipo)
-  VALUES (2, 2012, '2012-12-11', 'Pratica demo che integra', '201200002', 'DETRS201200000002', NULL, 4, 3, 1, 'scaffale in alto', 3);
-SELECT setval('pratiche.pratica_id_seq', 3, true);
+  VALUES (2, 2012, '2012-12-10', 'Pratica demo', '201200002', 'DETRS201200000002', NULL, 3, 4, 3, 'scaffale in alto', 3);
+INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipo)
+  VALUES (3, 2012, '2012-12-11', 'Pratica demo che integra', '201200003', 'DETRS201200000003', NULL, 4, 3, 1, 'scaffale in alto', 3);
+SELECT setval('pratiche.pratica_id_seq', 4, true);
 
 INSERT INTO dipendenza (id, descrizionedominante, descrizionedipendente) VALUES (1, 'sostituisce', 'è sostituita da');
 INSERT INTO dipendenza (id, descrizionedominante, descrizionedipendente) VALUES (2, 'integra', 'è integrata da');
 SELECT setval('pratiche.pratica_id_seq', 3, true);
 
-INSERT INTO dipendenzapratica (id, praticadominante, praticadipendente, dipendenza) VALUES (1, '201200002', '201200001', 2);
+INSERT INTO dipendenzapratica (id, praticadominante, praticadipendente, dipendenza) VALUES (1, '201200003', '201200002', 2);
 SELECT setval('pratiche.dipendenzapratica_id_seq', 2, true);
 
 -- Protocollo
@@ -104,7 +106,7 @@ INSERT INTO attribuzione (id, letto, principale, protocollo, ufficio, evidenza) 
 INSERT INTO attribuzione (id, letto, principale, protocollo, ufficio, evidenza) VALUES (2, false, false, '201200000001', 1, 'N');
 SELECT setval('protocollo.attribuzione_id_seq', 3, true);
 
-INSERT INTO praticaprotocollo (id, oggetto, pratica, protocollo) VALUES (1, 2, '201200001', '201200000001');
+INSERT INTO praticaprotocollo (id, oggetto, pratica, protocollo) VALUES (1, 2, '201200002', '201200000001');
 SELECT setval('protocollo.praticaprotocollo_id_seq', 2, true);
 
 INSERT INTO soggettoprotocollo (id, conoscenza, corrispondenza, notifica, titolo, protocollo, soggetto) VALUES (1, false, false, false, 1, '201200000001', 1);
