@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>783</width>
+    <width>1030</width>
     <height>606</height>
    </rect>
   </property>
@@ -117,6 +117,9 @@
              <width>110</width>
              <height>0</height>
             </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font-weight:bold; font-size:9pt;</string>
            </property>
            <property name="text">
             <string>200000000001</string>
@@ -673,13 +676,13 @@
                <string>.soggettoProtocolloCollection</string>
               </property>
               <property name="columns" stdset="0">
-               <string>&gt;soggettoformattato&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
+               <string>&lt;soggettoformattato&gt;,titolo,&gt;corrispondenza&lt;,&gt;notifica&lt;,&gt;conoscenza&lt;</string>
               </property>
               <property name="reference" stdset="0">
                <string>soggetto</string>
               </property>
               <property name="headers" stdset="0">
-               <string>soggetto,titolo,con,not,cor</string>
+               <string>Soggetto,Titolo,cr,nt,cn</string>
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>
@@ -765,13 +768,16 @@
         <item row="3" column="0">
          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_pratiche">
           <property name="columns" stdset="0">
-           <string>&gt;originale&lt;,&lt;pratica&gt;</string>
+           <string>&gt;originale&lt;,oggetto,&lt;pratica&gt;</string>
           </property>
           <property name="reference" stdset="0">
            <string>pratica</string>
           </property>
           <property name="entity" stdset="0">
            <string>.praticaProtocolloCollection</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>Orig,Oggetto,Pratica</string>
           </property>
          </widget>
         </item>
@@ -788,6 +794,9 @@
           </property>
           <property name="filters" stdset="0">
            <string>attribuzione=true</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>,Ufficio</string>
           </property>
          </widget>
         </item>
