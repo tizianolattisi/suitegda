@@ -107,7 +107,7 @@ public class DipendenzaPratica implements Serializable {
         } else {
             out += " è in relazione con ";
         }
-        out += " " + this.getPraticadipendente().getIdpratica();
+        out += " " + this.getPraticadipendente().getCodiceinterno() + " (" + this.getPraticadipendente().getDescrizioner() + ")";
         return out;
     }
     

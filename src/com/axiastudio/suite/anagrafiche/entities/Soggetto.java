@@ -336,6 +336,36 @@ public class Soggetto implements Serializable, ITimeStamped {
     public void setRiferimentoCollection(Collection<Riferimento> riferimentoCollection) {
         this.riferimentoCollection = riferimentoCollection;
     }
+  
+/* In ricerca, ritorna l'unione delle denominazioni dei soggetti */
+    
+    public String getDescrizione(){
+        String out = "";
+        if ( this.denominazione != null) {
+            out += " " + this.denominazione;
+        }
+        if ( this.denominazione2 != null) {
+            out += " " + this.denominazione2;
+        }
+        if ( this.denominazione3 != null) {
+            out += " " + this.denominazione3;
+        }
+        if ( this.ragionesociale != null) {
+            out += " " + this.ragionesociale;
+        }
+        if ( this.cognome != null) {
+            out += " " + this.cognome;
+        }
+        if ( this.nome != null) {
+            out += " " + this.nome;
+        }
+        return out.trim();
+    }
+    
+    public void setDescrizione(String descrizione){
+        // non deve fare nulla
+    }
+
 
     @Override
     public Date getRecordcreato() {
