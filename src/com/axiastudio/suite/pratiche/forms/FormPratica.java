@@ -26,6 +26,8 @@ import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
+import com.axiastudio.suite.protocollo.entities.Fascicolo;
+import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.trolltech.qt.gui.QCheckBox;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QIcon;
@@ -46,6 +48,10 @@ public class FormPratica extends Window {
         toolButtonTipo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
         toolButtonTipo.clicked.connect(this, "apriTipo()");
         
+        /* fascicolazione */
+        QToolButton toolButtonTitolario = (QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario");
+        toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
+        toolButtonTitolario.clicked.connect(this, "apriTitolario()");       
     }
     
     /*
@@ -69,7 +75,18 @@ public class FormPratica extends Window {
             }
         }
     }
-    
+  
+//  XXX: by FormProtocollo
+    private void apriTitolario() {
+        FormTitolario titolario = new FormTitolario();
+        int exec = titolario.exec();
+        if( exec == 1 ){
+            Fascicolo selection = titolario.getSelection();
+            PyPaPiComboBox comboBoxTitolario = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBoxTitolario");
+            comboBoxTitolario.select(selection);
+            this.getContext().getDirty();
+        }
+    }
     
     @Override
     protected void indexChanged(int row) {

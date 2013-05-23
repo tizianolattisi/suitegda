@@ -19,9 +19,12 @@ package com.axiastudio.suite.pratiche.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
+import com.axiastudio.suite.protocollo.entities.Fascicolo;
+import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QHBoxLayout;
@@ -66,6 +69,10 @@ public class FormTipoPratica extends QDialog {
         tree = new QTreeWidget();
         this.tree.header().hide();
         this.tree.doubleClicked.connect(this, "accept()");
+        /* fascicolazione */
+        QToolButton toolButtonTitolario = (QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario");
+        toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
+        toolButtonTitolario.clicked.connect(this, "apriTitolario()");
         QVBoxLayout layout = new QVBoxLayout();
         layout.addWidget(this.tree);
         QHBoxLayout buttonLayout = new QHBoxLayout();
@@ -133,6 +140,18 @@ public class FormTipoPratica extends QDialog {
         makeTree(em, parent, parentItem, tree);        
     }
 
+// by FormProtocollo
+    private void apriTitolario() {
+        FormTitolario titolario = new FormTitolario();
+        int exec = titolario.exec();
+        if( exec == 1 ){
+            Fascicolo selection = titolario.getSelection();
+            PyPaPiComboBox comboBoxTitolario = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBoxTitolario");
+            comboBoxTitolario.select(selection);
+//            this.getContext().getDirty();
+        }
+    }
+    
     private void makeTree(EntityManager em, TipoPratica parent, QTreeWidgetItem parentItem, QTreeWidget tree) {
         // costruisco il tree
         List<TipoPratica> children = this.children(em, parent);

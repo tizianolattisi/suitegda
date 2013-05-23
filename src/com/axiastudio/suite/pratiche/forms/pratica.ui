@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>783</width>
+    <width>977</width>
     <height>606</height>
    </rect>
   </property>
@@ -14,12 +14,59 @@
    <string>Pratiche</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>&gt;idpratica&lt;,&lt;descrizioner&gt;</string>
+   <string>&gt;idpratica&lt;,&gt;codiceinterno&lt;,&lt;descrizioner&gt;,fase</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_5">
-    <item row="0" column="0">
-     <widget class="QGroupBox" name="groupBox_2">
+   <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0">
+    <item row="1" column="0" colspan="2">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Pratiche relazionate</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_3">
+          <property name="entity" stdset="0">
+           <string>.dipendenzaPraticaCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&lt;predicato&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>praticadipendente</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Protocolli associati</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
+          <property name="entity" stdset="0">
+           <string>.praticaProtocolloCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;originale&lt;,&lt;protocollo&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>protocollo</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -28,7 +75,77 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>800</width>
+        <width>16777215</width>
+        <height>290</height>
+       </size>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
+        <number>5</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Descrizione</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="textEdit">
+         <property name="column" stdset="0">
+          <string>descrizione</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="private" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Note</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="textEdit_2">
+         <property name="column" stdset="0">
+          <string>note</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>290</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>600</width>
         <height>290</height>
        </size>
       </property>
@@ -36,6 +153,12 @@
        <string/>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
+       <property name="margin">
+        <number>4</number>
+       </property>
+       <property name="spacing">
+        <number>4</number>
+       </property>
        <item row="0" column="0" colspan="2">
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
@@ -133,7 +256,17 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QComboBox" name="comboBox_2"/>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_fase">
+           <property name="column" stdset="0">
+            <string>fase</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="export" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="2" column="3">
           <widget class="QCheckBox" name="checkBox_riservata">
@@ -160,19 +293,19 @@
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <property name="margin">
-           <number>8</number>
+           <number>4</number>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_8">
             <property name="minimumSize">
              <size>
-              <width>80</width>
+              <width>70</width>
               <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>80</width>
+              <width>70</width>
               <height>16777215</height>
              </size>
             </property>
@@ -186,19 +319,25 @@
             <property name="column" stdset="0">
              <string>attribuzione</string>
             </property>
+            <property name="search" stdset="0">
+             <bool>true</bool>
+            </property>
+            <property name="export" stdset="0">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_9">
             <property name="minimumSize">
              <size>
-              <width>80</width>
+              <width>70</width>
               <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>80</width>
+              <width>70</width>
               <height>16777215</height>
              </size>
             </property>
@@ -212,19 +351,25 @@
             <property name="column" stdset="0">
              <string>gestione</string>
             </property>
+            <property name="search" stdset="0">
+             <bool>true</bool>
+            </property>
+            <property name="export" stdset="0">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_10">
             <property name="minimumSize">
              <size>
-              <width>80</width>
+              <width>70</width>
               <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>80</width>
+              <width>70</width>
               <height>16777215</height>
              </size>
             </property>
@@ -237,6 +382,12 @@
            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_5">
             <property name="column" stdset="0">
              <string>ubicazione</string>
+            </property>
+            <property name="search" stdset="0">
+             <bool>true</bool>
+            </property>
+            <property name="export" stdset="0">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -252,12 +403,18 @@
        </item>
        <item row="1" column="1">
         <widget class="QGroupBox" name="groupBox_4">
+         <property name="maximumSize">
+          <size>
+           <width>190</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="title">
           <string>Archiviazione</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <property name="margin">
-           <number>8</number>
+           <number>4</number>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_11">
@@ -270,7 +427,7 @@
            <widget class="QLineEdit" name="lineEdit_5"/>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_12">
+           <widget class="QLabel" name="label_13">
             <property name="text">
              <string>Numero</string>
             </property>
@@ -278,6 +435,44 @@
           </item>
           <item row="1" column="1">
            <widget class="QLineEdit" name="lineEdit_6"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Data chiusura</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_datachiusura">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="displayFormat">
+             <string>dd/MM/yyyy</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+            <property name="column" stdset="0">
+             <string>datachiusura</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -292,13 +487,13 @@
            <number>8</number>
           </property>
           <property name="topMargin">
-           <number>4</number>
+           <number>0</number>
           </property>
           <property name="rightMargin">
            <number>8</number>
           </property>
           <property name="bottomMargin">
-           <number>4</number>
+           <number>0</number>
           </property>
           <item>
            <widget class="QToolButton" name="toolButton">
@@ -324,112 +519,50 @@
          </layout>
         </widget>
        </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>290</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>290</height>
-       </size>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="margin">
-        <number>8</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Descrizione</string>
+       <item row="3" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="spacing">
+          <number>4</number>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTextEdit" name="textEdit">
-         <property name="column" stdset="0">
-          <string>descrizione</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="private" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Note</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTextEdit" name="textEdit_2">
-         <property name="column" stdset="0">
-          <string>note</string>
-         </property>
-        </widget>
+         <item>
+          <widget class="QLabel" name="label_14">
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>90</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Fascicolazione</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxTitolario">
+           <property name="column" stdset="0">
+            <string>Fascicolo</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonTitolario">
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>Pratiche relazionate</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_3">
-          <property name="entity" stdset="0">
-           <string>.dipendenzaPraticaCollection</string>
-          </property>
-          <property name="columns" stdset="0">
-           <string>&lt;predicato&gt;</string>
-          </property>
-          <property name="reference" stdset="0">
-           <string>praticadipendente</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Protocolli associati</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
-          <property name="entity" stdset="0">
-           <string>.praticaProtocolloCollection</string>
-          </property>
-          <property name="columns" stdset="0">
-           <string>&gt;originale&lt;,&lt;protocollo&gt;</string>
-          </property>
-          <property name="reference" stdset="0">
-           <string>protocollo</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -437,14 +570,19 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
    <header>pypapitableview.h</header>
   </customwidget>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
-   <extends>QComboBox</extends>
-   <header>pypapicombobox.h</header>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>pypapidateedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
