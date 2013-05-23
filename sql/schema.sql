@@ -59,7 +59,7 @@ CREATE TABLE costante
     valore character varying(32),
     tipocostante character varying(16)
 );
-ALTER TABLE environment OWNER TO postgres;
+ALTER TABLE costante OWNER TO postgres;
 
 CREATE TABLE withtimestamp
 (
