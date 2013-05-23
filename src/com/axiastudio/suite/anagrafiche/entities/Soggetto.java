@@ -410,12 +410,13 @@ public class Soggetto implements Serializable, ITimeStamped {
         if( this.tipo == null ){
             return "-";
         }
+        String out = "(" + this.id + ") ";
         if( this.tipo.equals(TipoSoggetto.PERSONA) ){
-            return this.nome+" "+this.cognome;
+            return out + this.nome+" "+this.cognome;
         } else if( this.tipo.equals(TipoSoggetto.AZIENDA) ){
-            return this.ragionesociale;
+            return out + this.ragionesociale;
         } else if ( this.tipo.equals(TipoSoggetto.ENTE) ){
-            return this.denominazione;
+            return out + this.denominazione;
         }
         return "-";
         //return "com.axiastudio.suite.anagrafiche.entities.Soggetto[ id=" + id + " ]";
