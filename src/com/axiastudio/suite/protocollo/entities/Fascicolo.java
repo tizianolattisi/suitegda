@@ -112,7 +112,7 @@ public class Fascicolo implements Serializable {
 
     @Override
     public String toString() {
-        return "(" + categoria + "-" + classe + "-" + fascicolo + ") " + this.getDescrizione();
+        return " (" + categoria + "-" + classe + "-" + fascicolo + ") " + this.getDescrizione();
     }
     
 }

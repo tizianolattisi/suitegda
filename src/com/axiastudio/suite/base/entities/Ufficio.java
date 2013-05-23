@@ -122,7 +122,7 @@ public class Ufficio implements Serializable {
 
     @Override
     public String toString() {
-        return "(" + id + ") " + this.getDescrizione();
+        return " (" + id + ") " + this.getDescrizione();
     }
     
 }
