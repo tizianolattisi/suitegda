@@ -207,6 +207,9 @@
             <property name="text">
              <string>RACCOMANDATA</string>
             </property>
+            <property name="text">
+             <string>PEC</string>
+            </property>
            </item>
           </widget>
          </item>
@@ -247,13 +250,13 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>110</width>
+             <width>90</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>110</width>
+             <width>100</width>
              <height>16777215</height>
             </size>
            </property>
@@ -653,8 +656,14 @@
           <property name="enabled">
            <bool>true</bool>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>600</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab_3">
            <attribute name="title">
@@ -711,13 +720,13 @@
                <string>.soggettoRiservatoProtocolloCollection</string>
               </property>
               <property name="columns" stdset="0">
-               <string>&gt;soggettoformattato&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
+               <string>&lt;soggettoformattato&gt;,titolo,&gt;corrispondenza&lt;,&gt;notifica&lt;,&gt;conoscenza&lt;</string>
               </property>
               <property name="reference" stdset="0">
                <string>soggetto</string>
               </property>
               <property name="headers" stdset="0">
-               <string>soggetto,titolo,con,not,cor</string>
+               <string>Soggetto,Titolo,cr,nt,cn</string>
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>
@@ -767,6 +776,18 @@
         </item>
         <item row="3" column="0">
          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_pratiche">
+          <property name="minimumSize">
+           <size>
+            <width>600</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="sizeIncrement">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="columns" stdset="0">
            <string>&gt;originale&lt;,oggetto,&lt;pratica&gt;</string>
           </property>
