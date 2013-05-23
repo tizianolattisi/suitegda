@@ -80,9 +80,9 @@ public class Pratica implements Serializable, ITimeStamped {
     @Column(name="datachiusura")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datachiusura;
-//    @JoinColumn(name = "fase", referencedColumnName = "id")
-//    @ManyToOne
-//    private TipoPratica fase;
+    @JoinColumn(name = "fase", referencedColumnName = "id")
+    @ManyToOne
+    private Fase fase;
     @Column(name="datatermineistruttoria")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datatermineistruttoria;
@@ -277,6 +277,14 @@ public class Pratica implements Serializable, ITimeStamped {
         this.datascadenza = datascadenza;
     }
 
+    public Fase getFase() {
+        return fase;
+    }
+
+    public void setFase(Fase fase) {
+        this.fase = fase;
+    }
+
     
     /*
      * timestamped
@@ -324,7 +332,7 @@ public class Pratica implements Serializable, ITimeStamped {
      */
     @Override
     public String toString() {
-        String out = this.getIdpratica() + " - " + this.getDescrizioner();
+        String out = this.getCodiceinterno() + " - " + this.getDescrizioner();
         return out;
     }
     

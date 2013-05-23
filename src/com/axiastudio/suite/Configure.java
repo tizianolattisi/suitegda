@@ -52,6 +52,7 @@ import com.axiastudio.suite.pratiche.entities.Dipendenza;
 import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
+import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.forms.FormDipendenzaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.entities.Carica;
@@ -314,6 +315,11 @@ public class Configure {
                               "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
                               Delega.class,
                               FormDelega.class);
-    }
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Fase.class,
+                              Window.class);
+}
     
 }
