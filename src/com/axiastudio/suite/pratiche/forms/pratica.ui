@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>977</width>
-    <height>606</height>
+    <height>663</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -70,13 +70,13 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>290</height>
+        <height>350</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>290</height>
+        <height>350</height>
        </size>
       </property>
       <property name="title">
@@ -140,23 +140,20 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>290</height>
+        <height>350</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>600</width>
-        <height>290</height>
+        <height>350</height>
        </size>
       </property>
       <property name="title">
        <string/>
       </property>
-      <layout class="QGridLayout" name="gridLayout_4">
+      <layout class="QGridLayout" name="gridLayout_6">
        <property name="margin">
-        <number>4</number>
-       </property>
-       <property name="spacing">
         <number>4</number>
        </property>
        <item row="0" column="0" colspan="2">
@@ -520,6 +517,147 @@
         </widget>
        </item>
        <item row="3" column="0" colspan="2">
+        <layout class="QGridLayout" name="gridLayout_4">
+         <property name="spacing">
+          <number>4</number>
+         </property>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>Scadenza x fase attuale</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEdit_8">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_18">
+           <property name="text">
+            <string>Termine max istruttoria</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="lineEdit_7">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>Incaricato istruttoria</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_17">
+           <property name="text">
+            <string>Responsabile-firma</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_datatermineistruttoria">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>90</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="keyboardTracking">
+            <bool>true</bool>
+           </property>
+           <property name="displayFormat">
+            <string>dd/MM/yyyy</string>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>datatermineistruttoria</string>
+           </property>
+           <property name="export" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_datascadenza">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>90</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="displayFormat">
+            <string>dd/MM/yyyy</string>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>datascadenza</string>
+           </property>
+           <property name="export" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
           <number>4</number>
@@ -585,6 +723,36 @@
    <header>pypapidateedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>comboBox_attribuzione</tabstop>
+  <tabstop>comboBox_gestione</tabstop>
+  <tabstop>comboBox_5</tabstop>
+  <tabstop>comboBoxTipo</tabstop>
+  <tabstop>lineEdit_3</tabstop>
+  <tabstop>textEdit</tabstop>
+  <tabstop>textEdit_2</tabstop>
+  <tabstop>comboBox_fase</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>toolButtonTipo</tabstop>
+  <tabstop>checkBox_riservata</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>tableView_3</tabstop>
+  <tabstop>tableView_2</tabstop>
+  <tabstop>lineEdit_4</tabstop>
+  <tabstop>lineEdit_5</tabstop>
+  <tabstop>lineEdit_6</tabstop>
+  <tabstop>dateEdit_datachiusura</tabstop>
+  <tabstop>toolButton</tabstop>
+  <tabstop>toolButton_2</tabstop>
+  <tabstop>toolButton_3</tabstop>
+  <tabstop>comboBoxTitolario</tabstop>
+  <tabstop>toolButtonTitolario</tabstop>
+  <tabstop>lineEdit_7</tabstop>
+  <tabstop>lineEdit_8</tabstop>
+  <tabstop>dateEdit_datatermineistruttoria</tabstop>
+  <tabstop>dateEdit_datascadenza</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
