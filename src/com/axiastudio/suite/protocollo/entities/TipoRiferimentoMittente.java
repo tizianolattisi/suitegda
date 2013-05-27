@@ -21,5 +21,5 @@ package com.axiastudio.suite.protocollo.entities;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public enum TipoRiferimentoMittente {
-    NESSUNO, EMAIL, FAX, LETTERA, PEC
+    NESSUNO, EMAIL, FAX, LETTERA, RACCOMANDATA, PEC
 }

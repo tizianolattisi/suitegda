@@ -207,6 +207,8 @@
             <property name="text">
              <string>RACCOMANDATA</string>
             </property>
+           </item>
+           <item>
             <property name="text">
              <string>PEC</string>
             </property>
