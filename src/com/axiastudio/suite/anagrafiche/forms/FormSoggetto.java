@@ -22,7 +22,6 @@ import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.SuiteUiUtil;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo_;
-import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QLineEdit;
 import com.trolltech.qt.gui.QTabWidget;

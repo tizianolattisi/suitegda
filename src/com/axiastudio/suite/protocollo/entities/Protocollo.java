@@ -21,7 +21,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.ITimeStamped;
-import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
+import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo; // XXX: brutto qui
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
