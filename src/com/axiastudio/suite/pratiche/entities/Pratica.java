@@ -68,6 +68,8 @@ public class Pratica implements Serializable, ITimeStamped {
     private TipoPratica tipo;
     @Column(name="riservata")
     private Boolean riservata=false;
+    @Column(name="archiviata")
+    private Boolean archiviata=false;
     @JoinColumn(name = "fascicolo", referencedColumnName = "id")
     @ManyToOne
     private Fascicolo fascicolo;
@@ -94,9 +96,13 @@ public class Pratica implements Serializable, ITimeStamped {
     @Column(name="rec_creato")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
     @Column(name="rec_modificato")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
 
     public Long getId() {
         return id;
@@ -221,6 +227,14 @@ public class Pratica implements Serializable, ITimeStamped {
         this.riservata = riservata;
     }
 
+    public Boolean getArchiviata() {
+        return archiviata;
+    }
+
+    public void setArchiviata(Boolean archiviata) {
+        this.archiviata = archiviata;
+    }
+
     public Fascicolo getFascicolo() {
         return fascicolo;
     }
@@ -305,6 +319,24 @@ public class Pratica implements Serializable, ITimeStamped {
 
     public void setRecordmodificato(Date recordmodificato) {
         
+    }
+    
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+   @Override
+   public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
     
     @Override
