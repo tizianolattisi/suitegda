@@ -21,6 +21,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo; // XXX: brutto qui
 import java.io.Serializable;
 import java.util.Collection;
@@ -507,7 +508,7 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     @Override
     public String toString() {
-        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + " (" + this.dataprotocollo + ") " + this.getOggettop();
+        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + " (" + SuiteUtil.DATETIME_FORMAT.format(this.dataprotocollo) + ") " + this.getOggettop();
     }
     
 }
