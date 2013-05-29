@@ -25,7 +25,7 @@ import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.ui.CellEditorType;
 import com.axiastudio.pypapi.ui.Column;
-import com.axiastudio.pypapi.ui.TableModel;
+import com.axiastudio.pypapi.ui.ITableModel;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
@@ -47,7 +47,6 @@ import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +129,7 @@ public class FormProtocollo extends Window {
         if( rimossa.getPrincipale() ){
             QMessageBox.warning(this, "Attenzione", "L'attribuzione principale non può venir rimossa.");
             PyPaPiTableView tableViewAttribuzione = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
-            ((TableModel) tableViewAttribuzione.model()).getContextHandle().insertElement(rimossa);
+            ((ITableModel) tableViewAttribuzione.model()).getContextHandle().insertElement(rimossa);
         }
     }
     
@@ -143,7 +142,7 @@ public class FormProtocollo extends Window {
         if( !autenticato.getLogin().equals(annullamento.getEsecutorerichiesta()) ){
             QMessageBox.warning(this, "Attenzione", "Solo il richiedente può annullare la sua richiesta di annullamento.");
             PyPaPiTableView tableViewAttribuzione = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
-            ((TableModel) tableViewAttribuzione.model()).getContextHandle().insertElement(annullamento);
+            ((ITableModel) tableViewAttribuzione.model()).getContextHandle().insertElement(annullamento);
         }
     }
 
@@ -164,7 +163,7 @@ public class FormProtocollo extends Window {
             QMessageBox.warning(this, "Attenzione", "Il protocollo non può essere rimosso dalla pratica che lo contiene in originale.");
             PyPaPiTableView tableViewPratica = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_pratiche");
             rimossa.setOriginale(Boolean.TRUE);
-            ((TableModel) tableViewPratica.model()).getContextHandle().insertElement(rimossa);
+            ((ITableModel) tableViewPratica.model()).getContextHandle().insertElement(rimossa);
         }
     }
     
@@ -217,7 +216,7 @@ public class FormProtocollo extends Window {
             attribuzione.setPrincipale(Boolean.FALSE);
         }
         for (QModelIndex idx: rows){
-            Attribuzione attribuzione = (Attribuzione) ((TableModel) tv.model()).getEntityByRow(idx.row());
+            Attribuzione attribuzione = (Attribuzione) ((ITableModel) tv.model()).getEntityByRow(idx.row());
             attribuzione.setPrincipale(Boolean.TRUE);
         }
         this.getContext().getDirty();
