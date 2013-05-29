@@ -18,6 +18,7 @@ package com.axiastudio.suite;
 
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QDialog;
@@ -44,11 +45,12 @@ public class SuiteUiUtil {
         String credits = "";
         Object currentEntity = window.getContext().getCurrentEntity();
         if( currentEntity instanceof ITimeStamped ){
-            Date recordcreato = (Date) Resolver.valueFromFieldName(currentEntity, "recordcreato");
+            ITimeStamped timeStamped = (ITimeStamped) currentEntity;
+            Date recordcreato = timeStamped.getRecordcreato();
             if( recordcreato != null ){
                 credits += "<br/>Creato: " + SuiteUtil.DATETIME_FORMAT.format(recordcreato);
             }
-            Date recordmodificato = (Date) Resolver.valueFromFieldName(currentEntity, "recordmodificato");
+            Date recordmodificato = timeStamped.getRecordmodificato();
             if( recordmodificato != null ){
                 credits += "<br/>Modificato: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
             }
