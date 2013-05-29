@@ -20,7 +20,6 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.Store;
-import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
@@ -122,7 +121,7 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
             s.setNome(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_nome")).text());
             s.setCognome(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_cognome")).text());
             s.setCodicefiscale(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_codicefiscaleP")).text());
-            s.setSessoSoggetto(sessi.get(((QComboBox) this.findChild(QComboBox.class, "comboBox_sesso")).currentIndex()));
+            s.setSessosoggetto(sessi.get(((QComboBox) this.findChild(QComboBox.class, "comboBox_sesso")).currentIndex()));
         } else if( idx == 1 ){
             s.setTipo(TipoSoggetto.AZIENDA);
             s.setRagionesociale(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_ragionesociale")).text());

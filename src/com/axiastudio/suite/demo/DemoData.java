@@ -265,7 +265,7 @@ public class DemoData {
         Soggetto tiziano = new Soggetto();
         tiziano.setNome("Tiziano");
         tiziano.setCognome("Lattisi");
-        tiziano.setSessoSoggetto(SessoSoggetto.M);
+        tiziano.setSessosoggetto(SessoSoggetto.M);
         tiziano.setTipo(TipoSoggetto.PERSONA);
         em.getTransaction().begin();
         em.persist(tiziano);

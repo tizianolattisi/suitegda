@@ -39,7 +39,7 @@ public class Soggetto implements Serializable, ITimeStamped {
     private TipoSoggetto tipo = TipoSoggetto.PERSONA;
     @Column(name="sessosoggetto")
     @Enumerated(EnumType.STRING)
-    private SessoSoggetto sessoSoggetto;
+    private SessoSoggetto sessosoggetto;
     @JoinColumn(name = "titolosoggetto", referencedColumnName = "id")
     @ManyToOne
     private TitoloSoggetto titolosoggetto;
@@ -157,12 +157,12 @@ public class Soggetto implements Serializable, ITimeStamped {
         this.tipo = tipo;
     }
 
-    public SessoSoggetto getSessoSoggetto() {
-        return sessoSoggetto;
+    public SessoSoggetto getSessosoggetto() {
+        return sessosoggetto;
     }
 
-    public void setSessoSoggetto(SessoSoggetto sessoSoggetto) {
-        this.sessoSoggetto = sessoSoggetto;
+    public void setSessosoggetto(SessoSoggetto sessoSoggetto) {
+        this.sessosoggetto = sessoSoggetto;
     }
 
     public TitoloSoggetto getTitolosoggetto() {
