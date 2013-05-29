@@ -101,9 +101,13 @@ public class Soggetto implements Serializable, ITimeStamped {
     @Column(name="rec_creato")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
     @Column(name="rec_modificato")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
     
     public Long getId() {
         return id;
@@ -336,7 +340,7 @@ public class Soggetto implements Serializable, ITimeStamped {
     public void setRiferimentoCollection(Collection<Riferimento> riferimentoCollection) {
         this.riferimentoCollection = riferimentoCollection;
     }
-  
+
 /* In ricerca, ritorna l'unione delle denominazioni dei soggetti */
     
     public String getDescrizione(){
@@ -384,6 +388,24 @@ public class Soggetto implements Serializable, ITimeStamped {
     public void setRecordmodificato(Date recordmodificato) {
         
     }
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+   @Override
+   public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
+    }
+  
     
     @Override
     public int hashCode() {

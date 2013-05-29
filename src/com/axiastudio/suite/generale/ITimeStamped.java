@@ -26,6 +26,9 @@ public interface ITimeStamped {
 
     public Date getRecordcreato();
     
+    public String getRecordcreatoda();
+
     public Date getRecordmodificato();
     
+    public String getRecordmodificatoda();
 }
