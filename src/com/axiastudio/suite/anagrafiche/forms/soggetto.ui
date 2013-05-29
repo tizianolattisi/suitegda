@@ -97,7 +97,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -181,7 +181,7 @@
         <item row="0" column="1">
          <widget class="QComboBox" name="comboBox_2">
           <property name="column" stdset="0">
-           <string>sessoSoggetto</string>
+           <string>sessosoggetto</string>
           </property>
           <item>
            <property name="text">
