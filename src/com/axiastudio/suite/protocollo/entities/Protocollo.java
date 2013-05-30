@@ -81,6 +81,11 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Boolean richiederisposta=false;
     @Column(name="spedito")
     private Boolean spedito=false;
+    @Column(name="dataspedizione")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataspedizione;
+    @Column(name="esecutorespedizione", length=40)
+    private String esecutorespedizione;
     @Column(name="riservato")
     private Boolean riservato=false;
     @Column(name="corrispostoostornato")
@@ -399,6 +404,22 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     public void setFascicolo(Fascicolo fascicolo) {
         this.fascicolo = fascicolo;
+    }
+    
+    public Date getDataspedizione() {
+        return dataspedizione;
+    }
+
+    public void setDataspedizione(Date dataspedizione) {
+        this.dataspedizione = dataspedizione;
+    }
+
+    public String getEsecutorespedizione() {
+        return esecutorespedizione;
+    }
+
+    public void setEsecutorespedizione(String esecutorespedizione) {
+        this.esecutorespedizione = esecutorespedizione;
     }
 
     public Date getDataconvalidaattribuzioni() {
