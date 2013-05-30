@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>835</width>
-    <height>606</height>
+    <width>807</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,75 +17,82 @@
    <string>id,descrizione</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_5">
-    <property name="margin">
-     <number>8</number>
-    </property>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Identificativo</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QSpinBox" name="spinBox">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="column" stdset="0">
-       <string>id</string>
-      </property>
-      <property name="search" stdset="0">
-       <bool>true</bool>
-      </property>
-      <property name="export" stdset="0">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QComboBox" name="comboBoxTipoSoggetto">
-      <property name="column" stdset="0">
-       <string>Tipo</string>
-      </property>
-      <property name="search" stdset="0">
-       <bool>true</bool>
-      </property>
-      <property name="export" stdset="0">
-       <bool>true</bool>
-      </property>
-      <item>
-       <property name="text">
-        <string>PERSONA</string>
-       </property>
+   <layout class="QGridLayout" name="gridLayout_7">
+    <item row="0" column="0" colspan="2">
+     <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,1">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Identificativo</string>
+        </property>
+       </widget>
       </item>
-      <item>
-       <property name="text">
-        <string>AZIENDA</string>
-       </property>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spinBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="maximum">
+         <number>1000000</number>
+        </property>
+        <property name="singleStep">
+         <number>0</number>
+        </property>
+        <property name="column" stdset="0">
+         <string>id</string>
+        </property>
+        <property name="search" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="export" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
-      <item>
-       <property name="text">
-        <string>ENTE</string>
-       </property>
+      <item row="0" column="2">
+       <widget class="QComboBox" name="comboBoxTipoSoggetto">
+        <property name="column" stdset="0">
+         <string>Tipo</string>
+        </property>
+        <property name="search" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="export" stdset="0">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>PERSONA</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>AZIENDA</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>ENTE</string>
+         </property>
+        </item>
+       </widget>
       </item>
-     </widget>
+      <item row="0" column="3">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>478</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
-    <item row="0" column="3" colspan="2">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>401</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="1" column="0" colspan="4">
+    <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidgetHeader">
       <property name="enabled">
        <bool>true</bool>
@@ -165,9 +172,12 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="label_2">
           <property name="text">
            <string>Cognome</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit</cstring>
           </property>
          </widget>
         </item>
@@ -175,6 +185,9 @@
          <widget class="QLabel" name="label_4">
           <property name="text">
            <string>Sesso</string>
+          </property>
+          <property name="buddy">
+           <cstring>comboBox_2</cstring>
           </property>
          </widget>
         </item>
@@ -221,9 +234,12 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="label_3">
           <property name="text">
            <string>Nome</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_2</cstring>
           </property>
          </widget>
         </item>
@@ -241,6 +257,9 @@
          <widget class="QLabel" name="label_5">
           <property name="text">
            <string>Nick</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_4</cstring>
           </property>
          </widget>
         </item>
@@ -284,6 +303,9 @@
          <widget class="QLabel" name="label_6">
           <property name="text">
            <string>Titolo</string>
+          </property>
+          <property name="buddy">
+           <cstring>comboBox</cstring>
           </property>
          </widget>
         </item>
@@ -344,7 +366,7 @@
        <attribute name="title">
         <string>Ente</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout">
+       <layout class="QGridLayout" name="gridLayout_5">
         <property name="margin">
          <number>8</number>
         </property>
@@ -455,7 +477,7 @@
       </widget>
      </widget>
     </item>
-    <item row="1" column="4" rowspan="2">
+    <item row="1" column="1" rowspan="2">
      <widget class="QGroupBox" name="groupBox">
       <property name="minimumSize">
        <size>
@@ -472,18 +494,24 @@
       <property name="title">
        <string>Validità</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QGridLayout" name="gridLayout_6">
        <property name="margin">
-        <number>8</number>
+        <number>4</number>
        </property>
-       <item>
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <item row="0" column="0">
         <widget class="QLabel" name="label_10">
          <property name="text">
           <string>Nascita</string>
          </property>
+         <property name="buddy">
+          <cstring>dateEdit</cstring>
+         </property>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0">
         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
          <property name="displayFormat">
           <string>dd/MM/yyyy</string>
@@ -496,14 +524,34 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>Comune di nascita</string>
+         </property>
+         <property name="buddy">
+          <cstring>dateEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLineEdit" name="lineEdit_comunedinascita">
+         <property name="column" stdset="0">
+          <string>comunedinascita</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
         <widget class="QLabel" name="label_11">
          <property name="text">
           <string>Cessazione</string>
          </property>
+         <property name="buddy">
+          <cstring>dateEdit_2</cstring>
+         </property>
         </widget>
        </item>
-       <item>
+       <item row="5" column="0">
         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_2">
          <property name="displayFormat">
           <string>dd/MM/yyyy</string>
@@ -516,26 +564,17 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_7"/>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="6" column="0">
+        <widget class="QPlainTextEdit" name="plainTextEdit">
+         <property name="column" stdset="0">
+          <string>descrizionecessazione</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>84</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
       </layout>
      </widget>
     </item>
-    <item row="2" column="0" colspan="4">
+    <item row="2" column="0">
      <widget class="QGroupBox" name="groupBox_3">
       <property name="title">
        <string/>
@@ -545,6 +584,9 @@
         <widget class="QLabel" name="label_18">
          <property name="text">
           <string>Cod. fiscale</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_15</cstring>
          </property>
         </widget>
        </item>
@@ -566,6 +608,9 @@
          <property name="text">
           <string>Partita iva</string>
          </property>
+         <property name="buddy">
+          <cstring>lineEdit_partitaiva</cstring>
+         </property>
         </widget>
        </item>
        <item>
@@ -581,7 +626,7 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0" colspan="5">
+    <item row="3" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidgetBody">
       <property name="currentIndex">
        <number>0</number>
@@ -599,6 +644,18 @@
           <property name="columns" stdset="0">
            <string>&gt;principale&lt;,&gt;via&lt;,&gt;civico&lt;,&gt;cap&lt;,&gt;comune&lt;,&gt;provincia&lt;,&gt;stato&lt;,&lt;descrizione&gt;</string>
           </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>via,comune,provincia,descrizione</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -615,6 +672,12 @@
           </property>
           <property name="columns" stdset="0">
            <string>&gt;tipo&lt;,&gt;riferimento&lt;,&lt;descrizione&gt;</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>tipo,riferimento</string>
           </property>
          </widget>
         </item>
@@ -674,7 +737,7 @@
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
+   <header location="global">pypapitableview.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
@@ -683,15 +746,14 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>spinBox</tabstop>
   <tabstop>comboBoxTipoSoggetto</tabstop>
+  <tabstop>tabWidgetHeader</tabstop>
   <tabstop>comboBox_2</tabstop>
   <tabstop>comboBox</tabstop>
   <tabstop>lineEdit</tabstop>
   <tabstop>lineEdit_2</tabstop>
   <tabstop>lineEdit_4</tabstop>
-  <tabstop>comboBox_albo</tabstop>
-  <tabstop>lineEdit_8</tabstop>
-  <tabstop>lineEdit_9</tabstop>
   <tabstop>lineEdit_6</tabstop>
   <tabstop>lineEdit_13</tabstop>
   <tabstop>lineEdit_16</tabstop>
@@ -700,20 +762,23 @@
   <tabstop>lineEdit_19</tabstop>
   <tabstop>lineEdit_20</tabstop>
   <tabstop>lineEdit_21</tabstop>
+  <tabstop>pushButton</tabstop>
   <tabstop>lineEdit_15</tabstop>
   <tabstop>lineEdit_partitaiva</tabstop>
+  <tabstop>comboBox_albo</tabstop>
+  <tabstop>lineEdit_8</tabstop>
+  <tabstop>lineEdit_9</tabstop>
   <tabstop>dateEdit</tabstop>
+  <tabstop>lineEdit_comunedinascita</tabstop>
   <tabstop>dateEdit_2</tabstop>
-  <tabstop>lineEdit_7</tabstop>
+  <tabstop>plainTextEdit</tabstop>
   <tabstop>tableView</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>tabWidgetBody</tabstop>
+  <tabstop>lineEdit_10</tabstop>
   <tabstop>tableView_3</tabstop>
   <tabstop>tableView_2</tabstop>
   <tabstop>tableView_4</tabstop>
-  <tabstop>tabWidgetHeader</tabstop>
-  <tabstop>tabWidgetBody</tabstop>
-  <tabstop>checkBox</tabstop>
-  <tabstop>pushButton</tabstop>
-  <tabstop>lineEdit_10</tabstop>
  </tabstops>
  <resources/>
  <connections/>
