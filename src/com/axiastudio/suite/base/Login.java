@@ -76,7 +76,7 @@ public class Login extends QDialog {
         CriteriaQuery<Object> cq = cb.createQuery();
         Root from = cq.from(Utente.class);
         cq.select(from);
-        Predicate predicate = cb.equal(from.get("login"), this.username.text());
+        Predicate predicate = cb.equal(from.get("login"), this.username.text().toLowerCase());
         cq = cq.where(predicate);
         Query q = em.createQuery(cq);
         List entities = q.getResultList();
