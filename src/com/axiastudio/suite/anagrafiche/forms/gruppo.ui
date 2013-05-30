@@ -7,14 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>474</width>
-    <height>192</height>
+    <height>199</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Gestione gruppi soggetto</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>persona,azienda,ente,descrizione</string>
+   <string>descrizione,persona,azienda,ente</string>
+  </property>
+  <property name="sortcolumn" stdset="0">
+   <number>0</number>
+  </property>
+  <property name="sortorder" stdset="0">
+   <string>&lt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">

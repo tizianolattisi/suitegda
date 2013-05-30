@@ -123,7 +123,10 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Codice</string>
+            <string>Id pratica</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit</cstring>
            </property>
           </widget>
          </item>
@@ -171,7 +174,10 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Interno</string>
+            <string>Cod.interno</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_2</cstring>
            </property>
           </widget>
          </item>
@@ -201,6 +207,9 @@
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>Aggiunto</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_3</cstring>
            </property>
           </widget>
          </item>
@@ -751,7 +760,7 @@
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
+   <header location="global">pypapitableview.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
