@@ -96,6 +96,8 @@ public class Soggetto implements Serializable, ITimeStamped {
     private Collection<Riferimento> riferimentoCollection;
     @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<RelazioneSoggetto> relazioneSoggettoCollection;
+    @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<TitoloStudioSoggetto> titolostudioSoggettoCollection;
 
     /* timestamped */
     @Column(name="rec_creato")
@@ -339,6 +341,14 @@ public class Soggetto implements Serializable, ITimeStamped {
 
     public void setRiferimentoCollection(Collection<Riferimento> riferimentoCollection) {
         this.riferimentoCollection = riferimentoCollection;
+    }
+
+    public Collection<TitoloStudioSoggetto> getTitolostudioSoggettoCollection() {
+        return titolostudioSoggettoCollection;
+    }
+
+    public void setTitolostudioSoggettoCollection(Collection<TitoloStudioSoggetto> titolostudioSoggettoCollection) {
+        this.titolostudioSoggettoCollection = titolostudioSoggettoCollection;
     }
 
 /* In ricerca, ritorna l'unione delle denominazioni dei soggetti */

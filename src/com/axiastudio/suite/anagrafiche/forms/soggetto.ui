@@ -16,6 +16,12 @@
   <property name="searchcolumns" stdset="0">
    <string>id,descrizione</string>
   </property>
+  <property name="sortcolumn" stdset="0">
+   <number>1</number>
+  </property>
+  <property name="sortorder" stdset="0">
+   <string>&lt;</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_7">
     <item row="0" column="0" colspan="2">
@@ -629,7 +635,7 @@
     <item row="3" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidgetBody">
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
@@ -718,6 +724,26 @@
           </property>
           <property name="columns" stdset="0">
            <string>&lt;predicato&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_8">
+       <attribute name="title">
+        <string>Titoli studio</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_8">
+        <item row="0" column="0">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_5">
+          <property name="entity" stdset="0">
+           <string>.titolostudioSoggettoCollection</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>titolostudio</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;predicato&lt;,&lt;dettaglio&gt;,secondario</string>
           </property>
          </widget>
         </item>
