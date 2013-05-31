@@ -1,4 +1,4 @@
--- Generazione database suite
+- Generazione database suite
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -266,6 +266,17 @@ ALTER TABLE anagrafiche.titolosoggetto OWNER TO postgres;
 ALTER TABLE ONLY anagrafiche.titolosoggetto
     ADD CONSTRAINT titolosoggetto_pkey PRIMARY KEY (id);
 
+CREATE TABLE titolostudio (
+    id serial NOT NULL,
+    descrizione character varying(100),
+    titolirientranti character varying(255),
+    bonus NOT NULL DEFAULT FALSE
+);
+ALTER TABLE anagrafiche.titolostudio OWNER TO postgres;
+ALTER TABLE ONLY titolostudio
+    ADD CONSTRAINT titolostudio_pkey PRIMARY KEY (id);
+
+
 CREATE TABLE soggetto (
     id bigserial NOT NULL,
     codicefiscale character varying(16),
@@ -334,6 +345,32 @@ CREATE TRIGGER trg_ins_ts_grupposoggetto
 CREATE TRIGGER trg_upd_ts_grupposoggetto
   BEFORE UPDATE
   ON anagrafiche.grupposoggetto
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
+
+CREATE TABLE titolostudiosoggetto (
+    id bigserial NOT NULL,
+    soggetto bigint NOT NULL,
+    titolostudio int NOT NULL,
+    dettaglio character varying(255),
+    datatitolo date,
+    secondario boolean NOT NULL DEFAULT FALSE
+) INHERITS (generale.withtimestamp);
+ALTER TABLE anagrafiche.titolostudiosoggetto OWNER TO postgres;
+ALTER TABLE ONLY titolostudiosoggetto
+    ADD CONSTRAINT titolostudiosoggetto_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY titolostudiosoggetto
+    ADD CONSTRAINT fk_titolostudiosoggetto_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
+ALTER TABLE ONLY titolostudiosoggetto
+    ADD CONSTRAINT fk_titolostudiosoggetto_titolostudio FOREIGN KEY (titolostudio) REFERENCES titolostudio(id);
+CREATE TRIGGER trg_ins_ts_titolostudiosoggetto
+  BEFORE INSERT
+  ON anagrafiche.titolostudiosoggetto
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_titolostudiosoggetto
+  BEFORE UPDATE
+  ON anagrafiche.titolostudiosoggetto
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
 
@@ -779,23 +816,25 @@ ALTER TABLE ONLY fase
 
 CREATE TABLE pratica (
     id bigserial NOT NULL,
-    anno integer,
+    anno integer NOT NULL,
     datapratica date,
-    descrizione character varying(1024),
-    idpratica character varying(9),
-    codiceinterno character varying(50),
+    idpratica character varying(9) NOT NULL,
+    tipo bigint NOT NULL,
+    codiceinterno character varying(50) NOT NULL,
+    codiceaggiuntivo character varying(50),
+    descrizione character varying(1024) NOT NULL,
     note character varying(6144),
     attribuzione bigint,
     gestione bigint,
     ubicazione bigint,
     dettaglioubicazione character varying(255),
-    tipo bigint,
-    riservata boolean NOT NULL DEFAULT FALSE,
+    fase bigint,
     fascicolo bigint,
+    riservata boolean NOT NULL DEFAULT FALSE,
+    archiviata boolean NOT NULL DEFAULT FALSE,
     annoinventario integer,
     numeroinventario character varying(10),
     datachiusura date,
-    fase bigint,
     datatermineistruttoria date,
     datascadenza date,
     procedimento bigint
