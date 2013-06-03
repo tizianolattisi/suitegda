@@ -21,6 +21,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo; // XXX: brutto qui
 import java.io.Serializable;
 import java.util.Collection;
@@ -80,6 +81,11 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Boolean richiederisposta=false;
     @Column(name="spedito")
     private Boolean spedito=false;
+    @Column(name="dataspedizione")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataspedizione;
+    @Column(name="esecutorespedizione", length=40)
+    private String esecutorespedizione;
     @Column(name="riservato")
     private Boolean riservato=false;
     @Column(name="corrispostoostornato")
@@ -399,6 +405,22 @@ public class Protocollo implements Serializable, ITimeStamped {
     public void setFascicolo(Fascicolo fascicolo) {
         this.fascicolo = fascicolo;
     }
+    
+    public Date getDataspedizione() {
+        return dataspedizione;
+    }
+
+    public void setDataspedizione(Date dataspedizione) {
+        this.dataspedizione = dataspedizione;
+    }
+
+    public String getEsecutorespedizione() {
+        return esecutorespedizione;
+    }
+
+    public void setEsecutorespedizione(String esecutorespedizione) {
+        this.esecutorespedizione = esecutorespedizione;
+    }
 
     public Date getDataconvalidaattribuzioni() {
         return dataconvalidaattribuzioni;
@@ -507,7 +529,7 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     @Override
     public String toString() {
-        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + " (" + this.dataprotocollo + ") " + this.getOggettop();
+        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + " (" + SuiteUtil.DATETIME_FORMAT.format(this.dataprotocollo) + ") " + this.getOggettop();
     }
     
 }

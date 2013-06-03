@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>689</width>
-    <height>262</height>
+    <width>626</width>
+    <height>256</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>60</y>
       <width>91</width>
       <height>16</height>
@@ -28,6 +28,9 @@
     </property>
     <property name="text">
      <string>Descrizione</string>
+    </property>
+    <property name="buddy">
+     <cstring>lineEdit</cstring>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit">
@@ -43,6 +46,9 @@
      <string>Descrizione</string>
     </property>
     <property name="search" stdset="0">
+     <bool>true</bool>
+    </property>
+    <property name="export" stdset="0">
      <bool>true</bool>
     </property>
    </widget>
@@ -67,6 +73,12 @@
        <property name="column" stdset="0">
         <string>sportello</string>
        </property>
+       <property name="search" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="export" stdset="0">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -77,6 +89,12 @@
        <property name="column" stdset="0">
         <string>mittenteodestinatario</string>
        </property>
+       <property name="search" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="export" stdset="0">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -86,6 +104,12 @@
        </property>
        <property name="column" stdset="0">
         <string>attribuzione</string>
+       </property>
+       <property name="search" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="export" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -103,21 +127,30 @@
     <property name="text">
      <string>ID ufficio</string>
     </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
-    <property name="enabled">
-     <bool>false</bool>
+    <property name="buddy">
+     <cstring>spinBox</cstring>
     </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox">
     <property name="geometry">
      <rect>
       <x>120</x>
       <y>30</y>
-      <width>113</width>
+      <width>71</width>
       <height>22</height>
      </rect>
     </property>
+    <property name="maximum">
+     <number>1000</number>
+    </property>
     <property name="column" stdset="0">
      <string>id</string>
+    </property>
+    <property name="search" stdset="0">
+     <bool>true</bool>
+    </property>
+    <property name="export" stdset="0">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
