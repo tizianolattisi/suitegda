@@ -198,9 +198,11 @@ public class FormScrivania  extends QMainWindow {
                 listWidget_attribuzioni.addItem(item);
             }
             for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
-                QListWidgetItem item = new QListWidgetItem();
-                item.setText(sp.toString());
-                listWidget_soggetti.addItem(item);
+                if ( ! sp.getAnnullato() ) {
+                    QListWidgetItem item = new QListWidgetItem();
+                    item.setText(sp.toString());
+                    listWidget_soggetti.addItem(item);
+                }
             }
         } else {
             textEdit_oggetto.setText("");

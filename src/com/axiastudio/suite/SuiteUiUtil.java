@@ -36,6 +36,7 @@ public class SuiteUiUtil {
     
     public static void showInfo(Window window){
         QDialog info = new QDialog(window);
+        info.setWindowTitle("Informazioni varie");
         QVBoxLayout layout = new QVBoxLayout(info);
         QPixmap pix = new QPixmap("classpath:com/axiastudio/pypapi/ui/resources/pypapi64.png");
         QLabel pypapi = new QLabel();
@@ -46,13 +47,21 @@ public class SuiteUiUtil {
         Object currentEntity = window.getContext().getCurrentEntity();
         if( currentEntity instanceof ITimeStamped ){
             ITimeStamped timeStamped = (ITimeStamped) currentEntity;
-            Date recordcreato = timeStamped.getRecordcreato();
-            if( recordcreato != null ){
-                credits += "<br/>Creato: " + SuiteUtil.DATETIME_FORMAT.format(recordcreato);
+            String recordcreatoda = timeStamped.getRecordcreatoda();
+            if( recordcreatoda != null ){
+                credits += "<br/>Creato da: " + recordcreatoda;
+                Date recordcreato = timeStamped.getRecordcreato();
+                if( recordcreato != null ){
+                    credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordcreato);
+                }
             }
-            Date recordmodificato = timeStamped.getRecordmodificato();
-            if( recordmodificato != null ){
-                credits += "<br/>Modificato: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
+            String recordmodificatoda = timeStamped.getRecordmodificatoda();
+            if( recordmodificatoda != null ){
+                credits += "<br/>Modificato da: " + recordmodificatoda;
+                Date recordmodificato = timeStamped.getRecordmodificato();
+                if( recordmodificato != null ){
+                    credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
+                }
             }
         }   
         QTextEdit text = new QTextEdit(credits);

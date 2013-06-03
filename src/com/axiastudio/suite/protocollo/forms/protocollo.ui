@@ -16,6 +16,12 @@
   <property name="searchcolumns" stdset="0">
    <string>&gt;iddocumento&lt;,&gt;tipo&lt;,&gt;dataprotocollo&lt;,&lt;oggettop&gt;</string>
   </property>
+  <property name="sortcolumn" stdset="0">
+   <number>0</number>
+  </property>
+  <property name="sortorder" stdset="0">
+   <string>&gt;</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_5">
     <item row="0" column="0">
@@ -45,18 +51,15 @@
           <widget class="QLabel" name="label_10">
            <property name="minimumSize">
             <size>
-             <width>70</width>
+             <width>35</width>
              <height>0</height>
             </size>
            </property>
-           <property name="maximumSize">
-            <size>
-             <width>70</width>
-             <height>16777215</height>
-            </size>
-           </property>
            <property name="text">
-            <string>Protocollo</string>
+            <string>Tipo</string>
+           </property>
+           <property name="buddy">
+            <cstring>comboBox_tipo</cstring>
            </property>
           </widget>
          </item>
@@ -103,7 +106,10 @@
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>N°</string>
+            <string>Protocollo n°</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_iddocumento</cstring>
            </property>
           </widget>
          </item>
@@ -119,7 +125,7 @@
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font-weight:bold; font-size:9pt;</string>
+            <string notr="true">font-weight:bold;</string>
            </property>
            <property name="text">
             <string>200000000001</string>
@@ -176,6 +182,9 @@
            <property name="text">
             <string>Rifer. mitt.</string>
            </property>
+           <property name="buddy">
+            <cstring>comboBox_tiporiferimentomittente</cstring>
+           </property>
           </widget>
          </item>
          <item>
@@ -211,6 +220,11 @@
            <item>
             <property name="text">
              <string>PEC</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>A_MANO</string>
             </property>
            </item>
           </widget>
@@ -485,6 +499,9 @@
            <property name="text">
             <string>Sportello</string>
            </property>
+           <property name="buddy">
+            <cstring>comboBox_sportello</cstring>
+           </property>
           </widget>
          </item>
          <item>
@@ -643,7 +660,7 @@
     <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -665,7 +682,7 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab_3">
            <attribute name="title">
@@ -697,6 +714,18 @@
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>
+              </property>
+              <property name="searchfields" stdset="0">
+               <string>soggetto,titolo.descrizione</string>
+              </property>
+              <property name="search" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="sortcolumn" stdset="0">
+               <number>0</number>
+              </property>
+              <property name="sortorder" stdset="0">
+               <string>&lt;</string>
               </property>
              </widget>
             </item>
@@ -744,6 +773,9 @@
           <property name="text">
            <string>Destinatari</string>
           </property>
+          <property name="buddy">
+           <cstring>tableView_ufficiprotocollo</cstring>
+          </property>
          </widget>
         </item>
         <item row="1" column="1">
@@ -760,6 +792,18 @@
           <property name="filters" stdset="0">
            <string>mittenteodestinatario=true</string>
           </property>
+          <property name="searchfields" stdset="0">
+           <string>ufficio.descrizione</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&lt;</string>
+          </property>
          </widget>
         </item>
         <item row="2" column="0">
@@ -767,12 +811,18 @@
           <property name="text">
            <string>Pratiche contenitore</string>
           </property>
+          <property name="buddy">
+           <cstring>tableView_pratiche</cstring>
+          </property>
          </widget>
         </item>
         <item row="2" column="1">
          <widget class="QLabel" name="label_8">
           <property name="text">
            <string>Lista di attribuzione</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableView_attribuzioni</cstring>
           </property>
          </widget>
         </item>
@@ -802,6 +852,18 @@
           <property name="headers" stdset="0">
            <string>Orig,Oggetto,Pratica</string>
           </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>pratica.codiceinterno</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>2</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
          </widget>
         </item>
         <item row="3" column="1">
@@ -821,6 +883,18 @@
           <property name="headers" stdset="0">
            <string>,Ufficio</string>
           </property>
+          <property name="searchfields" stdset="0">
+           <string>ufficio.descrizione,principale</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -838,6 +912,9 @@
           <property name="text">
            <string>Riferimenti precedenti</string>
           </property>
+          <property name="buddy">
+           <cstring>tableView</cstring>
+          </property>
          </widget>
         </item>
         <item>
@@ -851,12 +928,21 @@
           <property name="columns" stdset="0">
            <string>&lt;precedente&gt;</string>
           </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="label_16">
           <property name="text">
            <string>Riferimenti successivi</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableView_riferimentisuccessivi</cstring>
           </property>
          </widget>
         </item>
@@ -870,6 +956,12 @@
           </property>
           <property name="columns" stdset="0">
            <string>&lt;protocollo&gt;</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
           </property>
          </widget>
         </item>
@@ -885,6 +977,9 @@
           <property name="text">
            <string>Richieste di annullamento</string>
           </property>
+          <property name="buddy">
+           <cstring>tableView_annullamenti</cstring>
+          </property>
          </widget>
         </item>
         <item>
@@ -897,6 +992,12 @@
           </property>
           <property name="reference" stdset="0">
            <string>motivazioneannullamento</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>1</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
           </property>
          </widget>
         </item>
@@ -916,7 +1017,7 @@
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
+   <header location="global">pypapitableview.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>

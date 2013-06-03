@@ -14,7 +14,13 @@
    <string>Motivazione annullamento</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>id,descrizione</string>
+   <string>id,&lt;descrizione&gt;</string>
+  </property>
+  <property name="sortcolumn" stdset="0">
+   <number>1</number>
+  </property>
+  <property name="sortorder" stdset="0">
+   <string>&lt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">

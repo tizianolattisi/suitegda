@@ -40,7 +40,7 @@ import javax.persistence.criteria.Root;
  */
 public class SuiteUtil {
     
-    public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy h:mm");
+    public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     
     public static String digest(String s){
