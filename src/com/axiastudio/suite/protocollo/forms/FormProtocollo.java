@@ -36,6 +36,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.generale.forms.DialogStampaEtichetta;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
@@ -340,8 +341,8 @@ public class FormProtocollo extends Window {
         }
     }
     
-    private void cercaDaBarcode() {
-        String barcode = QInputDialog.getText(this, "Read from barcode", "Barcode");
+    private void cercaDaEtichetta() {
+        String barcode = QInputDialog.getText(this, "Ricerca da etichetta", "Etichetta");
         Controller controller = (Controller) Register.queryUtility(IController.class, this.getContext().getRootClass().getName());
         Map map = new HashMap();
         Column column = new Column("iddocumento", "iddocumento", "iddocumento");
@@ -351,6 +352,14 @@ public class FormProtocollo extends Window {
         if( store.size() == 1 ){
             this.getContext().getModel().replaceRows(store);
             this.getContext().firstElement();
+        }
+    }
+    
+    private void stampaEtichetta() {
+        DialogStampaEtichetta dialog = new DialogStampaEtichetta(this);
+        int exec = dialog.exec();
+        if( exec == 1 ){
+            System.out.println("Print!");            
         }
     }
         
