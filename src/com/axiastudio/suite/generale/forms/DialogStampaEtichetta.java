@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.generale.forms;
 
+import com.axiastudio.mapformat.MessageMapFormat;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
@@ -28,6 +29,7 @@ import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QHBoxLayout;
 import com.trolltech.qt.gui.QIcon;
+import com.trolltech.qt.gui.QMessageBox;
 import com.trolltech.qt.gui.QSizePolicy;
 import com.trolltech.qt.gui.QSpacerItem;
 import com.trolltech.qt.gui.QToolButton;
@@ -35,7 +37,9 @@ import com.trolltech.qt.gui.QVBoxLayout;
 import com.trolltech.qt.gui.QWidget;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -53,13 +57,23 @@ public class DialogStampaEtichetta extends QDialog {
     private static final String COMMAND = "lp -d ";
     private QComboBox comboBox = new QComboBox();
     private String className;
+    private Map map;
     
     public DialogStampaEtichetta(){
-        this(null);
+        this(null, new HashMap());
     }
-        
+
     public DialogStampaEtichetta(QWidget parent){
+        this(parent, new HashMap());
+    }
+
+    public DialogStampaEtichetta(Map map){
+        this(null, map);
+    }
+
+    public DialogStampaEtichetta(QWidget parent, Map map){
         super(parent);
+        this.map = map;
         className = ((Window) parent).getContext().getRootClass().getName();
         QVBoxLayout layout = new QVBoxLayout();
         layout.addWidget(comboBox);
@@ -106,15 +120,18 @@ public class DialogStampaEtichetta extends QDialog {
         try {
             Process proc = runtime.exec(COMMAND + " " + device);
             OutputStream outputStream = proc.getOutputStream();
-            outputStream.write(etichetta.getDefinizione().getBytes("UTF-16LE"));
+            MessageMapFormat mmp = new MessageMapFormat(etichetta.getDefinizione());
+            String codice = mmp.format(this.map);
+            outputStream.write(codice.getBytes("UTF-16LE"));
             outputStream.flush();
-
             proc.waitFor();
             int exit = proc.exitValue();
             proc.destroy();
         } catch (InterruptedException ex) {
             Logger.getLogger(Barcode.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+            // msg
+            QMessageBox.warning(this, "Attenzione", "Impossibile contattare la stampante.");
             Logger.getLogger(Barcode.class.getName()).log(Level.SEVERE, null, ex);
         }
         super.accept();
