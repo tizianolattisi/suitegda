@@ -58,6 +58,7 @@
     <class>com.axiastudio.suite.pratiche.entities.Fase</class>
     <class>com.axiastudio.suite.anagrafiche.entities.TitoloStudio</class>
     <class>com.axiastudio.suite.anagrafiche.entities.TitoloStudioSoggetto</class>
+    <class>com.axiastudio.suite.generale.entities.Etichetta</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>

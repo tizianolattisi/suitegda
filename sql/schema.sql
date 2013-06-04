@@ -60,6 +60,22 @@ CREATE TABLE costante
     tipocostante character varying(16)
 );
 ALTER TABLE costante OWNER TO postgres;
+ALTER TABLE ONLY costante
+    ADD CONSTRAINT costante_pkey PRIMARY KEY (id);
+
+CREATE TABLE etichetta
+(
+    id bigserial NOT NULL,
+    nome character varying(255),
+    device character varying(255),
+    descrizione character varying(255),
+    definizione character varying(2048),
+    linguaggio character varying(255),
+    contesto character varying(255)
+);
+ALTER TABLE etichetta OWNER TO postgres;
+ALTER TABLE ONLY etichetta
+    ADD CONSTRAINT etichetta_pkey PRIMARY KEY (id);
 
 CREATE TABLE withtimestamp
 (

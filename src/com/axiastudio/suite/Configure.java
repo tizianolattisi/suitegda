@@ -47,6 +47,7 @@ import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.generale.entities.Costante;
+import com.axiastudio.suite.generale.entities.Etichetta;
 import com.axiastudio.suite.pratiche.PraticaAdapters;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.PraticaPrivate;
@@ -126,6 +127,11 @@ public class Configure {
                               Costante.class,
                               Window.class);
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Etichetta.class,
+                              Window.class);
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/base/forms/ufficio.ui",
                               Ufficio.class,
