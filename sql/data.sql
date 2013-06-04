@@ -7,6 +7,10 @@ INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (1, 'P
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (2, 'UFFICIO_ANNULLATI', 'Ufficio di attribuzione dei protocolli annullati', '1', 'LONG');
 SELECT setval('generale.costante_id_seq', 5, true);
 
+INSERT INTO etichetta (id, nome, device, descrizione, definizione, linguaggio, contesto) VALUES (1, 'ETICHETTA2D', 'Zebra_Technologies_ZTC_GK420t', 'Etichetta DataMatrix', '.\nS1\nb245,34,D,h6,"0123456789"\nP1\n.\n', 'ZPL', 'com.axiastudio.suite.protocollo.entities.Protocollo');
+INSERT INTO etichetta (id, nome, device, descrizione, definizione, linguaggio, contesto) VALUES (2, 'ETICHETTA2D2', 'Zebra_Technologies_ZTC_GK420t', 'Etichetta DataMatrix 2', '.\nS1\nb245,34,D,h6,"9876543210"\nP1\n.\n', 'ZPL', 'com.axiastudio.suite.protocollo.entities.Protocollo');
+SELECT setval('generale.etichetta_id_seq', 3, true);
+
 -- Base
 SET search_path = base, pg_catalog;
 
