@@ -1,4 +1,4 @@
-- Generazione database suite
+-- Generazione database suite
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -270,7 +270,7 @@ CREATE TABLE titolostudio (
     id serial NOT NULL,
     descrizione character varying(100),
     titolirientranti character varying(255),
-    bonus NOT NULL DEFAULT FALSE
+    bonus boolean NOT NULL DEFAULT FALSE
 );
 ALTER TABLE anagrafiche.titolostudio OWNER TO postgres;
 ALTER TABLE ONLY titolostudio
