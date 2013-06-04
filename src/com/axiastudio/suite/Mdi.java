@@ -103,8 +103,15 @@ public class Mdi extends QMainWindow {
         
         for( QMdiSubWindow subWindow: this.workspace.subWindowList() ){
             
-            IForm form = (IForm) subWindow.widget();
-            QAction action = menuWindows.addAction(form.windowTitle());
+            String title="";
+            if( subWindow.widget() instanceof QMainWindow ){
+                title = ((QMainWindow) subWindow.widget()).windowTitle();
+            }
+            if( subWindow.widget() instanceof QDialog ){
+                title = ((QDialog) subWindow.widget()).windowTitle();
+            }
+            
+            QAction action = menuWindows.addAction(title);
             action.setCheckable(true);
             action.setChecked(subWindow.equals(this.workspace.activeSubWindow()));
             action.triggered.connect(windowMapper, "map()");

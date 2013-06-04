@@ -107,6 +107,7 @@ public class FormScrivania  extends QMainWindow {
             this.setProperty(name.toString(), window.property(name.toString()));
         }
         this.setCentralWidget(window.centralWidget());
+        this.setWindowTitle(window.windowTitle());
     }
 
     private void popolaAttribuzioni() {
