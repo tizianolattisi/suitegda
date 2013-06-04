@@ -21,7 +21,6 @@ import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.plugins.barcode.Barcode;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.generale.entities.Etichetta;
 import com.axiastudio.suite.generale.entities.Etichetta_;
@@ -128,11 +127,10 @@ public class DialogStampaEtichetta extends QDialog {
             int exit = proc.exitValue();
             proc.destroy();
         } catch (InterruptedException ex) {
-            Logger.getLogger(Barcode.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DialogStampaEtichetta.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            // msg
             QMessageBox.warning(this, "Attenzione", "Impossibile contattare la stampante.");
-            Logger.getLogger(Barcode.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DialogStampaEtichetta.class.getName()).log(Level.SEVERE, null, ex);
         }
         super.accept();
     }

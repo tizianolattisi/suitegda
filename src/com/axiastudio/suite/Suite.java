@@ -21,7 +21,6 @@ import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.plugins.barcode.Barcode;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
@@ -109,11 +108,6 @@ public class Suite {
                 "/Pubblicazioni/${inizioconsultazione,date,yyyy}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
         
-        // Plugin Barcode per la stampa del DataMatrix
-        //Barcode barcodePlugin = new Barcode();
-        //barcodePlugin.setup("lp -d Zebra_Technologies_ZTC_GK420t", ".\nS1\nb245,34,D,h6,\"0123456789\"\nP1\n.\n");
-        //Register.registerPlugin(barcodePlugin, FormProtocollo.class);
-
         // Plugin OoopsPlugin per interazione con OpenOffice
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
         ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
