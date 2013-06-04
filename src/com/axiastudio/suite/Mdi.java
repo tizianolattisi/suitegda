@@ -303,6 +303,12 @@ public class Mdi extends QMainWindow {
         itemCostanti.setText(1, "com.axiastudio.suite.generale.entities.Costante");
         itemCostanti.setDisabled(!autenticato.getAmministratore());
 
+        QTreeWidgetItem itemEtichette = new QTreeWidgetItem(itemAmministrazione);
+        itemEtichette.setText(0, "Etichette");
+        itemEtichette.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/cog.png"));
+        itemEtichette.setText(1, "com.axiastudio.suite.generale.entities.Etichetta");
+        itemEtichette.setDisabled(!autenticato.getAmministratore());
+        
         QTreeWidgetItem itemUtenti = new QTreeWidgetItem(itemAmministrazione);
         itemUtenti.setText(0, "Utenti");
         itemUtenti.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/user.png"));
