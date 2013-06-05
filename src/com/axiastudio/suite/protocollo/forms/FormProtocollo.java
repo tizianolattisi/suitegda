@@ -82,6 +82,8 @@ public class FormProtocollo extends Window {
         labelConvalidaProtocollo.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_mail.png"));
         QLabel labelConvalidaAttribuzioni = (QLabel) this.findChild(QLabel.class, "labelConvalidaAttribuzioni");
         labelConvalidaAttribuzioni.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_group.png"));
+        QLabel labelConsolidaDocumenti = (QLabel) this.findChild(QLabel.class, "labelConsolidaDocumenti");
+        labelConsolidaDocumenti.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_folder.png"));
         
         try {
             Method storeFactory = this.getClass().getMethod("storeSportello");
@@ -194,6 +196,12 @@ public class FormProtocollo extends Window {
         protocollo.setConvalidaprotocollo(Boolean.TRUE);
         this.getContext().getDirty();
     }
+
+    private void consolidaDocumenti() {
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        protocollo.setConsolidadocumenti(Boolean.TRUE);
+        this.getContext().getDirty();
+    }
     
     private void apriTitolario() {
         FormTitolario titolario = new FormTitolario();
@@ -229,8 +237,10 @@ public class FormProtocollo extends Window {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         Boolean convAttribuzioni = protocollo.getConvalidaattribuzioni();
         Boolean convProtocollo = protocollo.getConvalidaprotocollo();
+        Boolean consDocumenti = protocollo.getConsolidadocumenti();
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
+        this.protocolloMenuBar.actionByName("consolidaDocumenti").setEnabled(!consDocumenti);
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "spedito"), protocollo.getSpedito());
 
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");

@@ -33,6 +33,9 @@ public class ProtocolloMenuBar extends PyPaPiToolBar {
         this.insertButton("convalidaProtocollo", "Convalida protocollo",
                 "classpath:com/axiastudio/suite/resources/lock_mail.png",
                 "Convalida della registrazione del protocollo", parent);
+        this.insertButton("consolidaDocumenti", "Consolida documenti",
+                "classpath:com/axiastudio/suite/resources/lock_folder.png",
+                "Consolida i documenti allegati al protocollo", parent);
         this.insertButton("apriDocumenti", "Apri documenti",
                 "classpath:com/axiastudio/menjazo/resources/menjazo.png",
                 "Apre lo spazio documenti", parent);
