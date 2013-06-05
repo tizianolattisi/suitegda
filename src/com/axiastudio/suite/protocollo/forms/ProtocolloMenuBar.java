@@ -40,7 +40,7 @@ public class ProtocolloMenuBar extends PyPaPiToolBar {
                 "classpath:com/axiastudio/menjazo/resources/menjazo.png",
                 "Apre lo spazio documenti", parent);
         this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
-                          "classpath:com/axiastudio/suite/resources/datamatrix.png",
+                          "classpath:com/axiastudio/suite/resources/datamatrix_find.png",
                           "Ricerca da etichetta", parent);
         this.insertButton("stampaEtichetta", "Stampa etichetta",
                           "classpath:com/axiastudio/suite/resources/datamatrix.png",
