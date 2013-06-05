@@ -99,7 +99,8 @@ public class Suite {
         // Plugin CmisPlugin per accedere ad Alfresco
         CmisPlugin cmisPlugin = new CmisPlugin();
         cmisPlugin.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-                "/Protocollo/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
+                "/Protocollo/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/",
+                Boolean.FALSE);
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
         Register.registerPlugin(cmisPlugin, FormScrivania.class);
 
