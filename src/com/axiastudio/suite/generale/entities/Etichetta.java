@@ -35,7 +35,7 @@ import javax.persistence.Table;
 public class Etichetta implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gencostante")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genetichetta")
     private Long id;
     @Column(name="descrizione")
     private String descrizione;
