@@ -23,7 +23,6 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.generale.entities.Etichetta;
-import com.axiastudio.suite.generale.entities.Etichetta_;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QHBoxLayout;
@@ -101,8 +100,8 @@ public class DialogStampaEtichetta extends QDialog {
         CriteriaQuery<Etichetta> cq = cb.createQuery(Etichetta.class);
         Root<Etichetta> root = cq.from(Etichetta.class);
         cq.select(root);
-        cq.where(cb.and(cb.equal(root.get(Etichetta_.contesto), className),
-                        cb.equal(root.get(Etichetta_.linguaggio), language)));
+        cq.where(cb.and(cb.equal(root.get("contesto"), className),
+                        cb.equal(root.get("linguaggio"), language)));
         TypedQuery<Etichetta> tq = em.createQuery(cq);
         List<Etichetta> etichette = tq.getResultList();
         for( Etichetta etichetta: etichette ){

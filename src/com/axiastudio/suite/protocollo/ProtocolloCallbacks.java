@@ -27,7 +27,6 @@ import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.Protocollo_;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -104,7 +103,7 @@ public class ProtocolloCallbacks {
             CriteriaQuery<Protocollo> cq = cb.createQuery(Protocollo.class);
             Root<Protocollo> root = cq.from(Protocollo.class);
             cq.select(root);
-            cq.where(cb.equal(root.get(Protocollo_.anno), year));
+            cq.where(cb.equal(root.get("anno"), year));
             cq.orderBy(cb.desc(root.get("iddocumento")));
             TypedQuery<Protocollo> tq = em.createQuery(cq).setMaxResults(1);
             Protocollo max;

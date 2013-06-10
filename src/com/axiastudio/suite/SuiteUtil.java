@@ -20,9 +20,7 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.generale.entities.Costante;
-import com.axiastudio.suite.generale.entities.Costante_;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.pratiche.entities.Pratica_;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -67,7 +65,7 @@ public class SuiteUtil {
         CriteriaQuery<Pratica> cq = cb.createQuery(Pratica.class);
         Root<Pratica> root = cq.from(Pratica.class);
         cq.select(root);
-        cq.where(cb.equal(root.get(Pratica_.idpratica), idpratica));
+        cq.where(cb.equal(root.get("idpratica"), idpratica));
         TypedQuery<Pratica> tq = em.createQuery(cq);
         Pratica pratica = tq.getSingleResult();
         return pratica;
@@ -80,7 +78,7 @@ public class SuiteUtil {
         CriteriaQuery<Costante> cq = cb.createQuery(Costante.class);
         Root<Costante> root = cq.from(Costante.class);
         cq.select(root);
-        cq.where(cb.equal(root.get(Costante_.nome), name));
+        cq.where(cb.equal(root.get("nome"), name));
         TypedQuery<Costante> tq = em.createQuery(cq);
         Costante costante = tq.getSingleResult();
         return costante;

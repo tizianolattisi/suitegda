@@ -21,7 +21,6 @@ import com.axiastudio.pypapi.db.ICriteriaFactory;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.SuiteUiUtil;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
-import com.axiastudio.suite.anagrafiche.entities.Gruppo_;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QLineEdit;
 import com.trolltech.qt.gui.QTabWidget;
@@ -81,15 +80,15 @@ public class FormSoggetto extends Window {
      * Un predicato per filtrare i gruppi sulla base della tipologia di soggetto
      */
     public static Predicate gruppoAPredicateProvider(CriteriaBuilder cb, Root from) {
-        Predicate predicate = cb.equal(from.get(Gruppo_.azienda), Boolean.TRUE);
+        Predicate predicate = cb.equal(from.get("azienda"), Boolean.TRUE);
         return predicate;
     }
     public static Predicate gruppoPPredicateProvider(CriteriaBuilder cb, Root from) {
-        Predicate predicate = cb.equal(from.get(Gruppo_.persona), Boolean.TRUE);
+        Predicate predicate = cb.equal(from.get("persona"), Boolean.TRUE);
         return predicate;
     }
     public static Predicate gruppoEPredicateProvider(CriteriaBuilder cb, Root from) {
-        Predicate predicate = cb.equal(from.get(Gruppo_.ente), Boolean.TRUE);
+        Predicate predicate = cb.equal(from.get("ente"), Boolean.TRUE);
         return predicate;
     }
     

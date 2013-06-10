@@ -28,7 +28,6 @@ import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
-import com.axiastudio.suite.procedimenti.entities.Delega_;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,26 +59,26 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         List<Predicate> predicates = new ArrayList();
 
         // la carica richiesta
-        predicates.add(cb.equal(from.get(Delega_.carica), carica));
+        predicates.add(cb.equal(from.get("carica"), carica));
         
         // servizio
-        predicates.add(cb.equal(from.get(Delega_.servizio), servizio));
+        predicates.add(cb.equal(from.get("servizio"), servizio));
 
         // procedimento
-        predicates.add(cb.equal(from.get(Delega_.procedimento), procedimento));
+        predicates.add(cb.equal(from.get("procedimento"), procedimento));
 
         // ufficio
-        predicates.add(cb.equal(from.get(Delega_.ufficio), ufficio));
+        predicates.add(cb.equal(from.get("ufficio"), ufficio));
         
         // data verifica
         if( dataVerifica == null ){
             dataVerifica = new Date();
         }
 
-        predicates.add(cb.lessThanOrEqualTo(from.get(Delega_.inizio), dataVerifica));
+        predicates.add(cb.lessThanOrEqualTo(from.get("inizio"), dataVerifica));
         predicates.add(cb.or(
-                             cb.isNull(from.get(Delega_.fine)),
-                             cb.greaterThanOrEqualTo(from.get(Delega_.fine), dataVerifica)
+                             cb.isNull(from.get("fine")),
+                             cb.greaterThanOrEqualTo(from.get("fine"), dataVerifica)
                             )
                       );
         
@@ -87,7 +86,7 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         if( utente == null ){
             utente = (Utente) Register.queryUtility(IUtente.class);
         }
-        predicates.add(cb.equal(from.get(Delega_.utente), utente));
+        predicates.add(cb.equal(from.get("utente"), utente));
         
         // where
         cq = cq.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
@@ -199,8 +198,8 @@ public class GestoreDeleghe implements IGestoreDeleghe {
      */
     public static Predicate filtroDelegheUtente(CriteriaBuilder cb, Root from) {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        Predicate cariche = cb.equal(from.get(Delega_.utente), autenticato);
-        Predicate deleghe = cb.equal(from.get(Delega_.delegante), autenticato);
+        Predicate cariche = cb.equal(from.get("utente"), autenticato);
+        Predicate deleghe = cb.equal(from.get("delegante"), autenticato);
         Predicate predicate = cb.or(cariche, deleghe);
         return predicate;
     }
