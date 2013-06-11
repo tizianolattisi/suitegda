@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
+import com.axiastudio.suite.generale.CallbackTimeStamped;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import java.io.Serializable;
@@ -27,6 +28,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@EntityListeners({CallbackTimeStamped.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genpraticaprotocollo", sequenceName="protocollo.praticaprotocollo_id_seq", initialValue=1, allocationSize=1)
 public class PraticaProtocollo implements Serializable, ITimeStamped {
@@ -47,7 +49,7 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     private Boolean originale=false;
 
     /* timestamped */
-    @Column(name="rec_creato")
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordcreato;
     @Column(name="rec_creato_da")

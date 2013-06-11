@@ -107,7 +107,7 @@ public class ProtocolloCallbacks {
             cq.orderBy(cb.desc(root.get("iddocumento")));
             TypedQuery<Protocollo> tq = em.createQuery(cq).setMaxResults(1);
             Protocollo max;
-            protocollo.setDataprotocollo(today);
+            //protocollo.setDataprotocollo(today);
             protocollo.setAnno(year);
             try {
                 max = tq.getSingleResult();

@@ -20,6 +20,7 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.generale.CallbackTimeStamped;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo; // XXX: brutto qui
@@ -34,6 +35,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@EntityListeners({CallbackTimeStamped.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genprotocollo", sequenceName="protocollo.protocollo_id_seq", initialValue=1, allocationSize=1)
 public class Protocollo implements Serializable, ITimeStamped {
@@ -43,7 +45,7 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Long id;
     @Column(name="iddocumento", length=12, unique=true)
     private String iddocumento;
-    @Column(name="dataprotocollo")
+    @Column(name="dataprotocollo", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataprotocollo;
     @Column(name="anno")
@@ -126,9 +128,12 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Date dataconsolidadocumenti;
     @Column(name="esecutoreconsolidadocumenti", length=40)
     private String esecutoreconsolidadocumenti;
-    
+
+    @Column(name="controlloreposta", length=40)
+    private String controlloreposta;
+
     /* timestamped */
-    @Column(name="rec_creato")
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordcreato;
     @Column(name="rec_creato_da")
@@ -470,13 +475,21 @@ public class Protocollo implements Serializable, ITimeStamped {
         this.numeroconvalidaprotocollo = numeroconvalidaprotocollo;
     }
 
+    public String getControlloreposta() {
+        return controlloreposta;
+    }
+
+    public void setControlloreposta(String controlloreposta) {
+        this.controlloreposta = controlloreposta;
+    }
+
     @Override
     public Date getRecordcreato() {
         return recordcreato;
     }
 
     public void setRecordcreato(Date recordcreato) {
-        
+
     }
 
     @Override
@@ -485,7 +498,7 @@ public class Protocollo implements Serializable, ITimeStamped {
     }
 
     public void setRecordmodificato(Date recordmodificato) {
-        
+
     }
     
     @Override

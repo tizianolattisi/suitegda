@@ -17,6 +17,7 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.generale.CallbackTimeStamped;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
@@ -30,6 +31,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@EntityListeners({CallbackTimeStamped.class})
 @Table(schema="PRATICHE")
 @SequenceGenerator(name="genpratica", sequenceName="pratiche.pratica_id_seq", initialValue=1, allocationSize=1)
 public class Pratica implements Serializable, ITimeStamped {
@@ -95,7 +97,7 @@ public class Pratica implements Serializable, ITimeStamped {
     private Date datascadenza;
 
     /* timestamped */
-    @Column(name="rec_creato")
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordcreato;
     @Column(name="rec_creato_da")
