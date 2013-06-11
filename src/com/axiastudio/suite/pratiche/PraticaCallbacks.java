@@ -26,7 +26,6 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.pratiche.entities.Pratica_;
 import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import java.util.Calendar;
 import java.util.Date;
@@ -95,8 +94,8 @@ public class PraticaCallbacks {
             CriteriaQuery<Pratica> cq = cb.createQuery(Pratica.class);
             Root<Pratica> root = cq.from(Pratica.class);
             cq.select(root);
-            cq.where(cb.equal(root.get(Pratica_.anno), year));
-            cq.orderBy(cb.desc(root.get(Pratica_.idpratica)));
+            cq.where(cb.equal(root.get("anno"), year));
+            cq.orderBy(cb.desc(root.get("idpratica")));
             TypedQuery<Pratica> tq = em.createQuery(cq).setMaxResults(1);
             Pratica max;
             pratica.setDatapratica(date);

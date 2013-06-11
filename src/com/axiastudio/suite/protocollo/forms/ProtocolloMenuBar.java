@@ -33,12 +33,18 @@ public class ProtocolloMenuBar extends PyPaPiToolBar {
         this.insertButton("convalidaProtocollo", "Convalida protocollo",
                 "classpath:com/axiastudio/suite/resources/lock_mail.png",
                 "Convalida della registrazione del protocollo", parent);
+        this.insertButton("consolidaDocumenti", "Consolida documenti",
+                "classpath:com/axiastudio/suite/resources/lock_folder.png",
+                "Consolida i documenti allegati al protocollo", parent);
         this.insertButton("apriDocumenti", "Apri documenti",
                 "classpath:com/axiastudio/menjazo/resources/menjazo.png",
                 "Apre lo spazio documenti", parent);
-        this.insertButton("cercaDaBarcode", "Barcode search",
-                          "classpath:com/axiastudio/pypapi/plugins/barcode/resources/datamatrix.png",
-                          "Search form barcode", parent);
+        this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
+                          "classpath:com/axiastudio/suite/resources/datamatrix_find.png",
+                          "Ricerca da etichetta", parent);
+        this.insertButton("stampaEtichetta", "Stampa etichetta",
+                          "classpath:com/axiastudio/suite/resources/datamatrix.png",
+                          "Stampa etichetta", parent);
     }
     
 }

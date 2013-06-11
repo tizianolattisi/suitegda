@@ -1,4 +1,4 @@
-- Generazione database suite
+-- Generazione database suite
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -60,41 +60,31 @@ CREATE TABLE costante
     tipocostante character varying(16)
 );
 ALTER TABLE costante OWNER TO postgres;
+ALTER TABLE ONLY costante
+    ADD CONSTRAINT costante_pkey PRIMARY KEY (id);
+
+CREATE TABLE etichetta
+(
+    id bigserial NOT NULL,
+    nome character varying(255),
+    device character varying(255),
+    descrizione character varying(255),
+    definizione character varying(2048),
+    linguaggio character varying(255),
+    contesto character varying(255)
+);
+ALTER TABLE etichetta OWNER TO postgres;
+ALTER TABLE ONLY etichetta
+    ADD CONSTRAINT etichetta_pkey PRIMARY KEY (id);
 
 CREATE TABLE withtimestamp
 (
-  rec_creato timestamp,
+  rec_creato timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   rec_creato_da character varying(40),
   rec_modificato timestamp,
   rec_modificato_da character varying(40)
 );
 ALTER TABLE withtimestamp OWNER TO postgres;
-
-CREATE OR REPLACE FUNCTION insert_timestamp()
-  RETURNS trigger AS
-$BODY$
-begin
-  if new.rec_creato is NULL then
-     new.rec_creato := 'now';
-  end if;
-  return new;
-end;
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-ALTER FUNCTION insert_timestamp() OWNER TO postgres;
-
-CREATE OR REPLACE FUNCTION update_timestamp()
-  RETURNS trigger AS
-$BODY$
-begin
-  new.rec_modificato := 'now';
-  return new;
-end;
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-ALTER FUNCTION update_timestamp() OWNER TO postgres;
 
 
 -- Base
@@ -123,17 +113,6 @@ CREATE TABLE utente (
 ALTER TABLE base.utente OWNER TO postgres;
 ALTER TABLE ONLY utente
     ADD CONSTRAINT utente_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_utente
-  BEFORE INSERT
-  ON base.utente
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_utente
-  BEFORE UPDATE
-  ON base.utente
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
-
 
 CREATE TABLE ufficio (
     id bigserial NOT NULL,
@@ -145,16 +124,6 @@ CREATE TABLE ufficio (
 ALTER TABLE base.ufficio OWNER TO postgres;
 ALTER TABLE ONLY ufficio
     ADD CONSTRAINT ufficio_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_ufficio
-  BEFORE INSERT
-  ON base.ufficio
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_ufficio
-  BEFORE UPDATE
-  ON base.ufficio
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE ufficioutente (
     id bigserial NOT NULL,
@@ -178,16 +147,6 @@ ALTER TABLE ONLY ufficioutente
     ADD CONSTRAINT fk_ufficioutente_ufficio FOREIGN KEY (ufficio) REFERENCES ufficio(id);
 ALTER TABLE ONLY ufficioutente
     ADD CONSTRAINT fk_ufficioutente_utente FOREIGN KEY (utente) REFERENCES utente(id);
-CREATE TRIGGER trg_ins_ts_ufficioutente
-  BEFORE INSERT
-  ON base.ufficioutente
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_ufficioutente
-  BEFORE UPDATE
-  ON base.ufficioutente
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 
 -- Anagrafiche
@@ -207,16 +166,6 @@ CREATE TABLE relazione (
 ALTER TABLE anagrafiche.relazione OWNER TO postgres;
 ALTER TABLE ONLY relazione
     ADD CONSTRAINT relazione_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_relazione
-  BEFORE INSERT
-  ON anagrafiche.relazione
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_relazione
-  BEFORE UPDATE
-  ON anagrafiche.relazione
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE stato (
     id bigserial NOT NULL,
@@ -247,16 +196,6 @@ CREATE TABLE gruppo (
 ALTER TABLE anagrafiche.gruppo OWNER TO postgres;
 ALTER TABLE ONLY gruppo
     ADD CONSTRAINT gruppo_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_gruppo
-  BEFORE INSERT
-  ON anagrafiche.gruppo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_gruppo
-  BEFORE UPDATE
-  ON anagrafiche.gruppo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE anagrafiche.titolosoggetto (
     id serial NOT NULL,
@@ -270,12 +209,11 @@ CREATE TABLE titolostudio (
     id serial NOT NULL,
     descrizione character varying(100),
     titolirientranti character varying(255),
-    bonus NOT NULL DEFAULT FALSE
+    bonus boolean NOT NULL DEFAULT FALSE
 );
 ALTER TABLE anagrafiche.titolostudio OWNER TO postgres;
 ALTER TABLE ONLY titolostudio
     ADD CONSTRAINT titolostudio_pkey PRIMARY KEY (id);
-
 
 CREATE TABLE soggetto (
     id bigserial NOT NULL,
@@ -311,16 +249,6 @@ ALTER TABLE ONLY soggetto
     ADD CONSTRAINT fk_soggetto_alboprofessionale FOREIGN KEY (alboprofessionale) REFERENCES alboprofessionale(id);
 ALTER TABLE ONLY soggetto
     ADD CONSTRAINT fk_soggetto_titolosoggetto FOREIGN KEY (titolosoggetto) REFERENCES titolosoggetto(id);
-CREATE TRIGGER trg_ins_ts_soggetto
-  BEFORE INSERT
-  ON anagrafiche.soggetto
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_soggetto
-  BEFORE UPDATE
-  ON anagrafiche.soggetto
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE grupposoggetto (
     id bigserial NOT NULL,
@@ -337,16 +265,6 @@ ALTER TABLE ONLY grupposoggetto
     ADD CONSTRAINT fk_grupposoggetto_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
 ALTER TABLE ONLY grupposoggetto
     ADD CONSTRAINT fk_grupposoggetto_gruppo FOREIGN KEY (gruppo) REFERENCES gruppo(id);
-CREATE TRIGGER trg_ins_ts_grupposoggetto
-  BEFORE INSERT
-  ON anagrafiche.grupposoggetto
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_grupposoggetto
-  BEFORE UPDATE
-  ON anagrafiche.grupposoggetto
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE titolostudiosoggetto (
     id bigserial NOT NULL,
@@ -363,16 +281,6 @@ ALTER TABLE ONLY titolostudiosoggetto
     ADD CONSTRAINT fk_titolostudiosoggetto_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
 ALTER TABLE ONLY titolostudiosoggetto
     ADD CONSTRAINT fk_titolostudiosoggetto_titolostudio FOREIGN KEY (titolostudio) REFERENCES titolostudio(id);
-CREATE TRIGGER trg_ins_ts_titolostudiosoggetto
-  BEFORE INSERT
-  ON anagrafiche.titolostudiosoggetto
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_titolostudiosoggetto
-  BEFORE UPDATE
-  ON anagrafiche.titolostudiosoggetto
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 -- la tabella "reale" delle relazioni soggetto contiene solo le relazioni "dritte"
 CREATE TABLE zrelazionesoggetto (
@@ -393,16 +301,6 @@ ALTER TABLE ONLY zrelazionesoggetto
     ADD CONSTRAINT fk_zrelazionesoggetto_soggettor FOREIGN KEY (relazionato) REFERENCES soggetto(id);
 ALTER TABLE ONLY zrelazionesoggetto
     ADD CONSTRAINT fk_zrelazionesoggetto_relazione FOREIGN KEY (relazione) REFERENCES relazione(id);
-CREATE TRIGGER trg_ins_ts_zrelazionesoggetto
-  BEFORE INSERT
-  ON anagrafiche.zrelazionesoggetto
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_zrelazionesoggetto
-  BEFORE UPDATE
-  ON anagrafiche.zrelazionesoggetto
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 -- la sequenza deve avere il nome senza la "z"
 CREATE SEQUENCE anagrafiche.relazionesoggetto_id_seq
@@ -468,16 +366,6 @@ ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT fk_indirizzo_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
 ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT fk_indirizzo_stato FOREIGN KEY (stato) REFERENCES stato(codice);
-CREATE TRIGGER trg_ins_ts_indirizzo
-  BEFORE INSERT
-  ON anagrafiche.indirizzo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_indirizzo
-  BEFORE UPDATE
-  ON anagrafiche.indirizzo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE riferimento (
     id bigserial NOT NULL,
@@ -491,16 +379,6 @@ ALTER TABLE ONLY riferimento
     ADD CONSTRAINT riferimento_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY riferimento
     ADD CONSTRAINT fk_riferimento_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
-CREATE TRIGGER trg_ins_ts_riferimento
-  BEFORE INSERT
-  ON anagrafiche.riferimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_riferimento
-  BEFORE UPDATE
-  ON anagrafiche.riferimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 -- Finanziaria (per ora solo i servizi per delibere e determine)
 SET search_path = finanziaria, pg_catalog;
@@ -515,16 +393,6 @@ ALTER TABLE ONLY servizio
     ADD CONSTRAINT servizio_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY servizio
     ADD CONSTRAINT fk_servizio_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
-CREATE TRIGGER trg_ins_ts_servizio
-  BEFORE INSERT
-  ON finanziaria.servizio
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_servizio
-  BEFORE UPDATE
-  ON finanziaria.servizio
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE capitolo (
     id bigserial NOT NULL,
@@ -551,16 +419,6 @@ ALTER TABLE ONLY procedimento
     ADD CONSTRAINT procedimento_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY procedimento
     ADD CONSTRAINT fk_procedimento_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
-CREATE TRIGGER trg_ins_ts_procedimento
-  BEFORE INSERT
-  ON procedimenti.procedimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_procedimento
-  BEFORE UPDATE
-  ON procedimenti.procedimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE norma (
     id bigserial NOT NULL,
@@ -571,16 +429,6 @@ CREATE TABLE norma (
 ALTER TABLE procedimenti.norma OWNER TO postgres;
 ALTER TABLE ONLY norma
     ADD CONSTRAINT norma_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_norma
-  BEFORE INSERT
-  ON procedimenti.norma
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_norma
-  BEFORE UPDATE
-  ON procedimenti.norma
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE normaprocedimento (
     id bigserial NOT NULL,
@@ -594,16 +442,6 @@ ALTER TABLE ONLY normaprocedimento
     ADD CONSTRAINT fk_normaprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
 ALTER TABLE ONLY normaprocedimento
     ADD CONSTRAINT fk_normaprocedimento_norma FOREIGN KEY (norma) REFERENCES norma(id);
-CREATE TRIGGER trg_ins_ts_normaprocedimento
-  BEFORE INSERT
-  ON procedimenti.normaprocedimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_normaprocedimento
-  BEFORE UPDATE
-  ON procedimenti.normaprocedimento
-  FOR EACH  ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE ufficioprocedimento (
     id bigserial NOT NULL,
@@ -618,16 +456,6 @@ ALTER TABLE ONLY ufficioprocedimento
     ADD CONSTRAINT fk_ufficioprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
 ALTER TABLE ONLY ufficioprocedimento
     ADD CONSTRAINT fk_ufficioprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
-CREATE TRIGGER trg_ins_ts_ufficioprocedimento
-  BEFORE INSERT
-  ON procedimenti.ufficioprocedimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_ufficioprocedimento
-  BEFORE UPDATE
-  ON procedimenti.ufficioprocedimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE utenteprocedimento (
     id bigserial NOT NULL,
@@ -647,16 +475,6 @@ ALTER TABLE ONLY utenteprocedimento
     ADD CONSTRAINT fk_utenteprocedimento_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
 ALTER TABLE ONLY ufficioprocedimento
     ADD CONSTRAINT fk_utenteprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
-CREATE TRIGGER trg_ins_ts_utenteprocedimento
-  BEFORE INSERT
-  ON procedimenti.utenteprocedimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_utenteprocedimento
-  BEFORE UPDATE
-  ON procedimenti.utenteprocedimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE protocollo.fascicolo (
     id bigserial NOT NULL,
@@ -669,16 +487,6 @@ CREATE TABLE protocollo.fascicolo (
 ALTER TABLE protocollo.fascicolo OWNER TO postgres;
 ALTER TABLE ONLY protocollo.fascicolo
     ADD CONSTRAINT fascicolo_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_fascicolo
-  BEFORE INSERT
-  ON protocollo.fascicolo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_fascicolo
-  BEFORE UPDATE
-  ON protocollo.fascicolo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE pratiche.tipopratica (
     id bigserial NOT NULL,
@@ -703,16 +511,6 @@ ALTER TABLE ONLY pratiche.tipopratica
     ADD CONSTRAINT fk_tipopratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
 ALTER TABLE ONLY pratiche.tipopratica
     ADD CONSTRAINT fk_tipopratica_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
-CREATE TRIGGER trg_ins_ts_tipopratica
-  BEFORE INSERT
-  ON pratiche.tipopratica
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_tipopratica
-  BEFORE UPDATE
-  ON pratiche.tipopratica
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE tipopraticaprocedimento (
     id bigserial NOT NULL,
@@ -726,16 +524,6 @@ ALTER TABLE ONLY tipopraticaprocedimento
     ADD CONSTRAINT fk_tipopraticaprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
 ALTER TABLE ONLY tipopraticaprocedimento
     ADD CONSTRAINT fk_tipopraticaprocedimento_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
-CREATE TRIGGER trg_ins_ts_tipopraticaprocedimento
-  BEFORE INSERT
-  ON procedimenti.tipopraticaprocedimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_tipopraticaprocedimento
-  BEFORE UPDATE
-  ON procedimenti.tipopraticaprocedimento
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE carica (
     id bigserial NOT NULL,
@@ -745,16 +533,6 @@ CREATE TABLE carica (
 ALTER TABLE procedimenti.carica OWNER TO postgres;
 ALTER TABLE ONLY carica
     ADD CONSTRAINT carica_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_carica
-  BEFORE INSERT
-  ON procedimenti.carica
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_carica
-  BEFORE UPDATE
-  ON procedimenti.carica
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE delega (
     id bigserial NOT NULL,
@@ -787,16 +565,6 @@ ALTER TABLE ONLY delega
     ADD CONSTRAINT fk_delega_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
 ALTER TABLE ONLY delega
     ADD CONSTRAINT fk_delega_utentedelegante FOREIGN KEY (delegante) REFERENCES base.utente(id);
-CREATE TRIGGER trg_ins_ts_delega
-  BEFORE INSERT
-  ON procedimenti.delega
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_delega
-  BEFORE UPDATE
-  ON procedimenti.delega
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 
 -- Pratiche
@@ -867,16 +635,6 @@ CREATE TABLE dipendenza (
 ALTER TABLE pratiche.dipendenza OWNER TO postgres;
 ALTER TABLE ONLY dipendenza
     ADD CONSTRAINT dipendenza_id_key UNIQUE (id);
-CREATE TRIGGER trg_ins_ts_dipendenza
-  BEFORE INSERT
-  ON pratiche.dipendenza
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_dipendenza
-  BEFORE UPDATE
-  ON pratiche.dipendenza
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE zdipendenzapratica (
     id bigserial NOT NULL,
@@ -893,16 +651,6 @@ ALTER TABLE ONLY zdipendenzapratica
     ADD CONSTRAINT fk_zdipendenzapratica_praticadipendente FOREIGN KEY (praticadipendente) REFERENCES pratiche.pratica(idpratica);
 ALTER TABLE ONLY zdipendenzapratica
     ADD CONSTRAINT fk_zdipendenzapratica_dipendenza FOREIGN KEY (dipendenza) REFERENCES pratiche.dipendenza(id);
-CREATE TRIGGER trg_ins_ts_zdipendenzapratica
-  BEFORE INSERT
-  ON pratiche.zdipendenzapratica
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_zdipendenzapratica
-  BEFORE UPDATE
-  ON pratiche.zdipendenzapratica
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 -- la sequenza deve avere il nome senza la "z"
 CREATE SEQUENCE pratiche.dipendenzapratica_id_seq
@@ -943,6 +691,7 @@ CREATE RULE dipendenzapratica_update AS ON UPDATE TO dipendenzapratica DO INSTEA
             dipendenza = new.dipendenza, praticadipendente = new.praticadipendente
         WHERE ((zdipendenzapratica.id)::integer = old.id);
 
+
 -- Protocollo
 SET search_path = protocollo, pg_catalog;
 
@@ -951,7 +700,7 @@ CREATE TABLE protocollo (
     tipo character varying(10) NOT NULL,
     anno integer NOT NULL,
     iddocumento character varying(12) NOT NULL,
-    dataprotocollo timestamp NOT NULL,
+    dataprotocollo timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     sportello bigint NOT NULL,
     oggetto character varying(1024) NOT NULL,
     note character varying(1024),
@@ -1018,16 +767,6 @@ CREATE TABLE oggetto (
 ALTER TABLE protocollo.oggetto OWNER TO postgres;
 ALTER TABLE ONLY oggetto
     ADD CONSTRAINT oggetto_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_oggetto
-  BEFORE INSERT
-  ON protocollo.oggetto
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_oggetto
-  BEFORE UPDATE
-  ON protocollo.oggetto
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE praticaprotocollo (
     id bigserial NOT NULL,
@@ -1045,16 +784,6 @@ ALTER TABLE ONLY praticaprotocollo
     ADD CONSTRAINT fk_praticaprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 ALTER TABLE ONLY praticaprotocollo
     ADD CONSTRAINT fk_praticaprotocollo_oggetto FOREIGN KEY (oggetto) REFERENCES oggetto(id);
-CREATE TRIGGER trg_ins_ts_praticaprotocollo
-  BEFORE INSERT
-  ON protocollo.praticaprotocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_praticaprotocollo
-  BEFORE UPDATE
-  ON protocollo.praticaprotocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE riferimentoprotocollo (
     id bigserial NOT NULL,
@@ -1068,16 +797,6 @@ ALTER TABLE ONLY riferimentoprotocollo
     ADD CONSTRAINT fk_riferimentoprotocollo_precedente FOREIGN KEY (precedente) REFERENCES protocollo(iddocumento);
 ALTER TABLE ONLY riferimentoprotocollo
     ADD CONSTRAINT fk_riferimentoprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
-CREATE TRIGGER trg_ins_ts_riferimentoprotocollo
-  BEFORE INSERT
-  ON protocollo.riferimentoprotocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_riferimentoprotocollo
-  BEFORE UPDATE
-  ON protocollo.riferimentoprotocollo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE titolo (
     id bigserial NOT NULL,
@@ -1087,16 +806,6 @@ CREATE TABLE titolo (
 ALTER TABLE protocollo.titolo OWNER TO postgres;
 ALTER TABLE ONLY titolo
     ADD CONSTRAINT titolo_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_titolo
-  BEFORE INSERT
-  ON protocollo.titolo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_titolo
-  BEFORE UPDATE
-  ON protocollo.titolo
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE soggettoprotocollo (
     id bigserial NOT NULL,
@@ -1251,16 +960,6 @@ CREATE TABLE pubblicazione (
 ALTER TABLE pubblicazioni.pubblicazione OWNER TO postgres;
 ALTER TABLE ONLY pubblicazione
     ADD CONSTRAINT pubblicazione_pkey PRIMARY KEY (id);
-CREATE TRIGGER trg_ins_ts_pubblicazione
-  BEFORE INSERT
-  ON pubblicazioni.pubblicazione
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_pubblicazione
-  BEFORE UPDATE
-  ON pubblicazioni.pubblicazione
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 
 -- Sedute
@@ -1365,16 +1064,6 @@ ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistobilancio FOREIGN KEY (utentevistobilancio) REFERENCES base.utente(id);
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistonegato FOREIGN KEY (utentevistonegato) REFERENCES base.utente(id);
-CREATE TRIGGER trg_ins_ts_determina
-  BEFORE INSERT
-  ON deliberedetermine.determina
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_determina
-  BEFORE UPDATE
-  ON deliberedetermine.determina
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE serviziodetermina (
     id bigserial NOT NULL,
@@ -1388,16 +1077,6 @@ ALTER TABLE ONLY serviziodetermina
     ADD CONSTRAINT fk_serviziodetermina_determina FOREIGN KEY (determina) REFERENCES deliberedetermine.determina(id);
 ALTER TABLE ONLY serviziodetermina
     ADD CONSTRAINT fk_serviziodetermina_servizio FOREIGN KEY (servizio) REFERENCES finanziaria.servizio(id);
-CREATE TRIGGER trg_ins_ts_serviziodetermina
-  BEFORE INSERT
-  ON deliberedetermine.serviziodetermina
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_serviziodetermina
-  BEFORE UPDATE
-  ON deliberedetermine.serviziodetermina
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE ufficiodetermina (
     id bigserial NOT NULL,
@@ -1411,16 +1090,6 @@ ALTER TABLE ONLY ufficiodetermina
     ADD CONSTRAINT fk_ufficiodetermina_determina FOREIGN KEY (determina) REFERENCES deliberedetermine.determina(id);
 ALTER TABLE ONLY ufficiodetermina
     ADD CONSTRAINT fk_ufficiodetermina_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
-CREATE TRIGGER trg_ins_ts_ufficiodetermina
-  BEFORE INSERT
-  ON deliberedetermine.ufficiodetermina
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_ufficiodetermina
-  BEFORE UPDATE
-  ON deliberedetermine.ufficiodetermina
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE movimentodetermina (
     id bigserial NOT NULL,
@@ -1443,16 +1112,6 @@ ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_determina FOREIGN KEY (determina) REFERENCES determina(id);
 ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_capitolo FOREIGN KEY (capitolo) REFERENCES finanziaria.capitolo(id);
-CREATE TRIGGER trg_ins_ts_movimentodetermina
-  BEFORE INSERT
-  ON deliberedetermine.movimentodetermina
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.insert_timestamp();
-CREATE TRIGGER trg_upd_ts_movimentodetermina
-  BEFORE UPDATE
-  ON deliberedetermine.movimentodetermina
-  FOR EACH ROW
-  EXECUTE PROCEDURE generale.update_timestamp();
 
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;

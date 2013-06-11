@@ -30,6 +30,8 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.forms.FormTipoPratica;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
+import com.trolltech.qt.core.QObject;
+import com.trolltech.qt.core.QSignalMapper;
 import com.trolltech.qt.gui.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -46,12 +48,75 @@ public class Mdi extends QMainWindow {
     private QMdiArea workspace;
     private QTreeWidget tree;
     private QSystemTrayIcon trayIcon;
+    private QMenu menuWindows;
+    private QAction actionCloseAll;
+    private QAction actionTile;
+    private QAction actionCascade;
+    private QAction actionNext;
+    private QAction actionPrevious;
+    private QAction actionSeparator;
+    private QAction actionClose;
+    private QSignalMapper windowMapper;
     
     public Mdi(){
         this.setWindowIcon(new QIcon(ICON));
         this.createWorkspace();
         this.createTree();
         //this.createSystemTray();
+        this.createMenu();
+        
+    }
+    
+    private void createMenu(){
+        menuWindows = this.menuBar().addMenu("Finestre");
+        actionClose = new QAction("Chiudi", this);
+        actionClose.triggered.connect(this.workspace, "closeActiveSubWindow()");
+        actionCloseAll = new QAction("Chiudi tutte", this);
+        actionCloseAll.triggered.connect(this.workspace, "closeAllSubWindows()");
+        actionTile = new QAction("Allinea", this);
+        actionTile.triggered.connect(this.workspace, "tileSubWindows()");
+        actionCascade = new QAction("Disponi a cascata", this);
+        actionCascade.triggered.connect(this.workspace, "cascadeSubWindows()");
+        actionNext = new QAction("Finestra successiva", this);
+        actionNext.triggered.connect(this.workspace, "activateNextSubWindow()");
+        actionPrevious = new QAction("Finestra precedente", this);
+        actionPrevious.triggered.connect(this.workspace, "activatePreviousSubWindow()");
+        actionSeparator = new QAction(this);
+        actionSeparator.setSeparator(true);
+        
+        menuWindows.aboutToShow.connect(this, "refreshMenuWindows()");     
+    }
+    
+    private void refreshMenuWindows(){
+        
+        menuWindows.clear();
+        menuWindows.addAction(actionClose);
+        menuWindows.addAction(actionCloseAll);
+        menuWindows.addAction(actionSeparator);
+        menuWindows.addAction(actionTile);
+        menuWindows.addAction(actionCascade);
+        menuWindows.addAction(actionSeparator);
+        menuWindows.addAction(actionNext);
+        menuWindows.addAction(actionPrevious);
+        menuWindows.addAction(actionSeparator);
+        menuWindows.addAction(actionCloseAll);
+        
+        for( QMdiSubWindow subWindow: this.workspace.subWindowList() ){
+            
+            String title="";
+            if( subWindow.widget() instanceof QMainWindow ){
+                title = ((QMainWindow) subWindow.widget()).windowTitle();
+            }
+            if( subWindow.widget() instanceof QDialog ){
+                title = ((QDialog) subWindow.widget()).windowTitle();
+            }
+            
+            QAction action = menuWindows.addAction(title);
+            action.setCheckable(true);
+            action.setChecked(subWindow.equals(this.workspace.activeSubWindow()));
+            action.triggered.connect(windowMapper, "map()");
+            windowMapper.setMapping(action, subWindow);
+        }
     }
     
     private void createSystemTray(){
@@ -69,6 +134,13 @@ public class Mdi extends QMainWindow {
         this.tree = new QTreeWidget(splitter);
         this.workspace = new QMdiArea(splitter);
         this.setCentralWidget(splitter);        
+        this.workspace.subWindowActivated.connect(this, "refreshMenuWindows()");
+        windowMapper = new QSignalMapper(this);
+        windowMapper.mappedQObject.connect(this, "setActiveSubWindow(QObject)");
+    }
+    
+    private void setActiveSubWindow(QObject obj){
+        this.workspace.setActiveSubWindow((QMdiSubWindow) obj);
     }
     
     private void createTree() {
@@ -238,6 +310,12 @@ public class Mdi extends QMainWindow {
         itemCostanti.setText(1, "com.axiastudio.suite.generale.entities.Costante");
         itemCostanti.setDisabled(!autenticato.getAmministratore());
 
+        QTreeWidgetItem itemEtichette = new QTreeWidgetItem(itemAmministrazione);
+        itemEtichette.setText(0, "Etichette");
+        itemEtichette.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/cog.png"));
+        itemEtichette.setText(1, "com.axiastudio.suite.generale.entities.Etichetta");
+        itemEtichette.setDisabled(!autenticato.getAmministratore());
+        
         QTreeWidgetItem itemUtenti = new QTreeWidgetItem(itemAmministrazione);
         itemUtenti.setText(0, "Utenti");
         itemUtenti.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/user.png"));
@@ -325,6 +403,7 @@ public class Mdi extends QMainWindow {
             }
             this.workspace.addSubWindow(form);
             this.showForm(form);
+            this.menuWindows.addAction(form.toString());
         }
     }
     

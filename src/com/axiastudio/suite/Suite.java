@@ -21,7 +21,6 @@ import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.plugins.barcode.Barcode;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
@@ -58,6 +57,12 @@ public class Suite {
         String jdbcPassword = System.getProperty("jdbc.password");
         String jdbcDriver = System.getProperty("jdbc.driver");
         String logLevel = System.getProperty("suite.loglevel");
+        String cmisUrl = System.getProperty("cmis.url");
+        String cmisUser = System.getProperty("cmis.user");
+        String cmisPassword = System.getProperty("cmis.password");
+        String barcodeDevice = System.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
+        String barcodeLanguage = System.getProperty("barcode.language"); // es. ZPL
+
         Map properties = new HashMap();
         properties.put("javax.persistence.jdbc.url", jdbcUrl);
         if( jdbcUser != null ){
@@ -81,8 +86,11 @@ public class Suite {
         
         Application app = new Application(args);
         // aggiungo la localizzazione di Menjazo e imposto a it
-        //app.addQmFile("classpath:com/axiastudio/menjazo/lang/menjazo_{0}.qm");
+        app.addQmFile("classpath:com/axiastudio/menjazo/lang/menjazo_{0}.qm");
         app.setLanguage("it");
+        
+        app.setConfigItem("barcode.device", barcodeDevice);
+        app.setConfigItem("barcode.language", barcodeLanguage);
 
         Configure.configure(db);
         
@@ -91,7 +99,8 @@ public class Suite {
         // Plugin CmisPlugin per accedere ad Alfresco
         CmisPlugin cmisPlugin = new CmisPlugin();
         cmisPlugin.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-                "/Protocollo/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
+                "/Protocollo/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/",
+                Boolean.FALSE);
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
         Register.registerPlugin(cmisPlugin, FormScrivania.class);
 
@@ -100,11 +109,6 @@ public class Suite {
                 "/Pubblicazioni/${inizioconsultazione,date,yyyy}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
         
-        // Plugin Barcode per la stampa del DataMatrix
-        Barcode barcodePlugin = new Barcode();
-        barcodePlugin.setup("lp -d Zebra_Technologies_ZTC_GK420t", ".\nS1\nb245,34,D,h6,\"0123456789\"\nP1\n.\n");
-        Register.registerPlugin(barcodePlugin, FormProtocollo.class);
-
         // Plugin OoopsPlugin per interazione con OpenOffice
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
         ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");

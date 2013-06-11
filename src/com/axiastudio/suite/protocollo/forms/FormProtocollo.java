@@ -36,6 +36,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.generale.forms.DialogStampaEtichetta;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
@@ -81,6 +82,8 @@ public class FormProtocollo extends Window {
         labelConvalidaProtocollo.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_mail.png"));
         QLabel labelConvalidaAttribuzioni = (QLabel) this.findChild(QLabel.class, "labelConvalidaAttribuzioni");
         labelConvalidaAttribuzioni.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_group.png"));
+        QLabel labelConsolidaDocumenti = (QLabel) this.findChild(QLabel.class, "labelConsolidaDocumenti");
+        labelConsolidaDocumenti.setPixmap(new QPixmap("classpath:com/axiastudio/suite/resources/lock_folder.png"));
         
         try {
             Method storeFactory = this.getClass().getMethod("storeSportello");
@@ -193,6 +196,12 @@ public class FormProtocollo extends Window {
         protocollo.setConvalidaprotocollo(Boolean.TRUE);
         this.getContext().getDirty();
     }
+
+    private void consolidaDocumenti() {
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        protocollo.setConsolidadocumenti(Boolean.TRUE);
+        this.getContext().getDirty();
+    }
     
     private void apriTitolario() {
         FormTitolario titolario = new FormTitolario();
@@ -228,8 +237,10 @@ public class FormProtocollo extends Window {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         Boolean convAttribuzioni = protocollo.getConvalidaattribuzioni();
         Boolean convProtocollo = protocollo.getConvalidaprotocollo();
+        Boolean consDocumenti = protocollo.getConsolidadocumenti();
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
+        this.protocolloMenuBar.actionByName("consolidaDocumenti").setEnabled(!consDocumenti);
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "spedito"), protocollo.getSpedito());
 
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
@@ -340,8 +351,8 @@ public class FormProtocollo extends Window {
         }
     }
     
-    private void cercaDaBarcode() {
-        String barcode = QInputDialog.getText(this, "Read from barcode", "Barcode");
+    private void cercaDaEtichetta() {
+        String barcode = QInputDialog.getText(this, "Ricerca da etichetta", "Etichetta");
         Controller controller = (Controller) Register.queryUtility(IController.class, this.getContext().getRootClass().getName());
         Map map = new HashMap();
         Column column = new Column("iddocumento", "iddocumento", "iddocumento");
@@ -351,6 +362,17 @@ public class FormProtocollo extends Window {
         if( store.size() == 1 ){
             this.getContext().getModel().replaceRows(store);
             this.getContext().firstElement();
+        }
+    }
+    
+    private void stampaEtichetta() {
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        Map<String, String> map = new HashMap();
+        map.put("iddocumento", protocollo.getIddocumento());
+        DialogStampaEtichetta dialog = new DialogStampaEtichetta(this, map);
+        int exec = dialog.exec();
+        if( exec == 1 ){
+            System.out.println("Print!");            
         }
     }
         

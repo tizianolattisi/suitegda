@@ -42,7 +42,6 @@
     <class>com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Gruppo</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Stato</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.RiferimentoSoggetto</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Riferimento</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Relazione</class>
     <class>com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto</class>
@@ -51,13 +50,13 @@
     <class>com.axiastudio.suite.pratiche.entities.Dipendenza</class>
     <class>com.axiastudio.suite.pratiche.entities.DipendenzaPratica</class>
     <class>com.axiastudio.suite.anagrafiche.entities.TitoloSoggetto</class>
-    <class>com.axiastudio.suite.procedimenti.entities.MotivazioneAnnullamento</class>
     <class>com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo</class>
     <class>com.axiastudio.suite.protocollo.entities.MotivazioneAnnullamento</class>
     <class>com.axiastudio.suite.generale.entities.Costante</class>
     <class>com.axiastudio.suite.pratiche.entities.Fase</class>
     <class>com.axiastudio.suite.anagrafiche.entities.TitoloStudio</class>
     <class>com.axiastudio.suite.anagrafiche.entities.TitoloStudioSoggetto</class>
+    <class>com.axiastudio.suite.generale.entities.Etichetta</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>
