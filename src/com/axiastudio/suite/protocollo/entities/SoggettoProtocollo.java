@@ -164,7 +164,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     }
 
     public void setRecordcreato(Date recordcreato) {
-        
+        this.recordcreato = recordcreato;
     }
 
     @Override
@@ -173,7 +173,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     }
 
     public void setRecordmodificato(Date recordmodificato) {
-        
+        this.recordmodificato = recordmodificato;
     }
     
     @Override

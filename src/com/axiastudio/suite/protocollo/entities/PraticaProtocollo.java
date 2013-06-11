@@ -108,7 +108,7 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     }
 
     public void setRecordcreato(Date recordcreato) {
-        
+        this.recordcreato = recordcreato;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     }
 
     public void setRecordmodificato(Date recordmodificato) {
-        
+        this.recordmodificato = recordmodificato;
     }
     
     @Override
