@@ -20,7 +20,7 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.generale.CallbackTimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo; // XXX: brutto qui
@@ -35,7 +35,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
-@EntityListeners({CallbackTimeStamped.class})
+@EntityListeners({TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genprotocollo", sequenceName="protocollo.protocollo_id_seq", initialValue=1, allocationSize=1)
 public class Protocollo implements Serializable, ITimeStamped {
