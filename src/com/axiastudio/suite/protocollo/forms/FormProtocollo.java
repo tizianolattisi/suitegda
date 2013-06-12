@@ -235,25 +235,35 @@ public class FormProtocollo extends Window {
     protected void indexChanged(int row) {
         super.indexChanged(row);
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(protocollo, autenticato);
+        Boolean nuovoInserimento = protocollo.getId() == null;
         Boolean convAttribuzioni = protocollo.getConvalidaattribuzioni();
         Boolean convProtocollo = protocollo.getConvalidaprotocollo();
         Boolean consDocumenti = protocollo.getConsolidadocumenti();
+
+        // abilitazione azioni: convalida, consolida e spedizione
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
         this.protocolloMenuBar.actionByName("consolidaDocumenti").setEnabled(!consDocumenti);
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "spedito"), protocollo.getSpedito());
 
+        // convalida attribuzioni
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
-        Util.setWidgetReadOnly(tableViewAttribuzioni, convAttribuzioni);
-        
+        Boolean modificaAttribuzioni = nuovoInserimento || autenticato.getAttributoreprotocollo() || (!protocollo.getConvalidaattribuzioni() && profilo.inSportelloOAttribuzionePrincipale());
+        Util.setWidgetReadOnly(tableViewAttribuzioni, !modificaAttribuzioni);
+
+        // sempre read-only
         Util.setWidgetReadOnly((QWidget) this.findChild(QDateEdit.class, "dateEdit_data"), true);
         Util.setWidgetReadOnly((QWidget) this.findChild(QLineEdit.class, "lineEdit_iddocumento"), true);
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "annullato"), true);
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "annullamentorichiesto"), true);
-        
-        Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_sportello"), protocollo.getId() != null);
-        Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_tipo"), protocollo.getId() != null);
-                
+
+        // solo primo inserimento
+        Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_sportello"), !nuovoInserimento);
+        Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_tipo"), !nuovoInserimento);
+
+        // alternanza mittenti-destinatari
         String labelSinistra;
         String labelDestra;
         int nrRiservati = protocollo.getSoggettoRiservatoProtocolloCollection().size();
@@ -269,7 +279,7 @@ public class FormProtocollo extends Window {
         tabWidgetSoggettiProtocollo.setTabText(0, labelSinistra);
         tabWidgetSoggettiProtocollo.setTabText(1, labelSinistra+" riservati (" + nrRiservati +")");
         
-        // gestione sportello
+        // sportello
         QComboBox comboBox_sportello = (QComboBox) this.findChild(QComboBox.class, "comboBox_sportello");
         QLineEdit lineEdit_sportello = (QLineEdit) this.findChild(QLineEdit.class, "lineEdit_sportello");
         if( protocollo.getId() == null ){
@@ -281,6 +291,7 @@ public class FormProtocollo extends Window {
             comboBox_sportello.hide();
             lineEdit_sportello.show();
         }
+
         // etichette convalida e spedizione
         QLabel labelSpedizione = (QLabel) this.findChild(QLabel.class, "label_spedizione");
         if( protocollo.getSpedito() ){
@@ -306,7 +317,33 @@ public class FormProtocollo extends Window {
         } else {
             labelConsolida.setText("-");
         }
-        
+
+        // evidenza protocollo annullato
+        if( protocollo.getAnnullato() ){
+            this.setStyleSheet("color: red;");
+        } else {
+            this.setStyleSheet("");
+        }
+
+        // protocollo convalidato: disabilitazione di tutto tranne oggetto e pratiche
+        String[] roWidgets = {"textEdit_oggetto", "tableView_soggettiprotocollo",
+                "tableView_soggettiriservatiprotocollo", "tableView_ufficiprotocollo",
+                "comboBoxTitolario", "comboBox_tiporiferimentomittente", "lineEdit_nrriferimentomittente",
+                "dateEdit_datariferimentomittente", "richiederisposta", "riservato",
+                "corrispostoostornato"};
+        for( String widgetName: roWidgets ){
+            Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, widgetName), protocollo.getConvalidaprotocollo());
+        }
+        ((QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario")).setEnabled(!protocollo.getConvalidaprotocollo());
+
+        // Visibilità dei soggetti riservati
+        PyPaPiTableView tvSoggettiRiservati =  (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_soggettiriservatiprotocollo");
+        if( !(nuovoInserimento || profilo.inSportelloOAttribuzioneR()) ){
+            tvSoggettiRiservati.hide();
+        } else {
+            tvSoggettiRiservati.show();
+        }
+
     }
     
     private void information() {

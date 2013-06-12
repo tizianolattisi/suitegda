@@ -24,6 +24,8 @@ import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo; // XXX: brutto qui
+import com.axiastudio.suite.protocollo.ProtocolloListener;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -35,7 +37,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
-@EntityListeners({TimeStampedListener.class})
+@EntityListeners({ProtocolloListener.class, TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genprotocollo", sequenceName="protocollo.protocollo_id_seq", initialValue=1, allocationSize=1)
 public class Protocollo implements Serializable, ITimeStamped {
