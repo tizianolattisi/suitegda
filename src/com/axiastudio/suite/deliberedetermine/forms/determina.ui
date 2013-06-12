@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Determine</string>
   </property>
+  <property name="searchcolumns" stdset="0">
+   <string>idpratica,codiceinterno,oggetto</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
@@ -99,7 +102,7 @@
           <bool>false</bool>
          </property>
          <property name="column" stdset="0">
-          <string>codiceInterno</string>
+          <string>codiceinterno</string>
          </property>
          <property name="search" stdset="0">
           <bool>true</bool>

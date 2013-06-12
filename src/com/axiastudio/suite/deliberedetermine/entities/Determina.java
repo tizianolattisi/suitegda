@@ -48,7 +48,7 @@ public class Determina implements Serializable {
     @Column(name="idpratica")
     private String idpratica;
     @Column(name="codiceinterno", unique=true)
-    private String codiceInterno;
+    private String codiceinterno;
     @Column(name="oggetto", length=2048)
     private String oggetto;
     @Column(name="datapratica")
@@ -146,12 +146,12 @@ public class Determina implements Serializable {
         this.idpratica = idpratica;
     }
 
-    public String getCodiceInterno() {
-        return codiceInterno;
+    public String getCodiceinterno() {
+        return codiceinterno;
     }
 
-    public void setCodiceInterno(String codiceInterno) {
-        this.codiceInterno = codiceInterno;
+    public void setCodiceinterno(String codiceinterno) {
+        this.codiceinterno = codiceinterno;
     }
 
     public String getOggetto() {
