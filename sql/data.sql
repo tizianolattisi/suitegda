@@ -76,7 +76,7 @@ SET search_path = pratiche, pg_catalog;
 
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, porzionenumeroda, porzionenumeroa) VALUES (1, 'DET', 'Determine', NULL, NULL, 0, 0);
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, porzionenumeroda, porzionenumeroa) VALUES (2, 'GES', 'Ramo GES', NULL, NULL, 0, 0);
-INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, porzionenumeroda, porzionenumeroa) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1, '${s1}${s2}${anno}${n2,number,00000000}', 9, 17);
+INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, porzionenumeroda, porzionenumeroa) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1, '${s2}${anno}${n2,number,00000}', 9, 17);
 SELECT setval('pratiche.tipopratica_id_seq', 4, true);
 
 INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipo)
