@@ -87,34 +87,7 @@ public class PraticaCallbacks {
                 msg = "Manca corrispondenza tra l'attribuzione e la tipologia di pratica.";
                 return new Validation(false, msg);
             }
-            Calendar calendar = Calendar.getInstance();
-            Integer year = calendar.get(Calendar.YEAR);
-            Date date = calendar.getTime();
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Pratica> cq = cb.createQuery(Pratica.class);
-            Root<Pratica> root = cq.from(Pratica.class);
-            cq.select(root);
-            cq.where(cb.equal(root.get("anno"), year));
-            cq.orderBy(cb.desc(root.get("idpratica")));
-            TypedQuery<Pratica> tq = em.createQuery(cq).setMaxResults(1);
-            Pratica max;
-            pratica.setDatapratica(date);
-            pratica.setAnno(year);
-            try {
-                max = tq.getSingleResult();
-            } catch (NoResultException ex) {
-                max=null;
-            }
-            String newIdpratica;
-            if( max != null ){
-                Integer i = Integer.parseInt(max.getIdpratica().substring(4));
-                i++;
-                newIdpratica = year+String.format("%05d", i);
-            } else {
-                newIdpratica = year+"00001";
-            }
-            pratica.setIdpratica(newIdpratica);
-            
+
             // se mancano gestione e ubicazione, li fisso come l'attribuzione
             if( pratica.getGestione() == null ){
                 pratica.setGestione(pratica.getAttribuzione());
