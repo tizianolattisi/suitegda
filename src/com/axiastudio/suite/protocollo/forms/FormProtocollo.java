@@ -390,15 +390,27 @@ public class FormProtocollo extends Window {
     
     private void cercaDaEtichetta() {
         String barcode = QInputDialog.getText(this, "Ricerca da etichetta", "Etichetta");
+        if( barcode == null ){
+            return;
+        }
+        if( barcode.length() < 5 ){
+            QMessageBox.warning(this, "Attenzione", "Numero di protocollo troppo breve");
+            return;
+        }
         Controller controller = (Controller) Register.queryUtility(IController.class, this.getContext().getRootClass().getName());
         Map map = new HashMap();
         Column column = new Column("iddocumento", "iddocumento", "iddocumento");
         column.setEditorType(CellEditorType.STRING);
+        String year = barcode.substring(0, 4);
+        Integer n = Integer.parseInt(barcode.substring(4));
+        barcode = year + String.format("%08d", n);
         map.put(column, barcode);
         Store store = controller.createCriteriaStore(map);
         if( store.size() == 1 ){
             this.getContext().getModel().replaceRows(store);
             this.getContext().firstElement();
+        } else {
+            QMessageBox.warning(this, "Attenzione", "Protocollo" + barcode + " non trovato");
         }
     }
     
