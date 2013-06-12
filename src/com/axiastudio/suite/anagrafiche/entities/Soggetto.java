@@ -16,8 +16,9 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
-import com.axiastudio.suite.generale.CallbackTimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.generale.ITimeStamped;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -28,7 +29,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
-@EntityListeners({CallbackTimeStamped.class})
+@EntityListeners({TimeStampedListener.class})
 @Table(schema="ANAGRAFICHE")
 @SequenceGenerator(name="gensoggetto", sequenceName="anagrafiche.soggetto_id_seq", initialValue=1, allocationSize=1)
 public class Soggetto implements Serializable, ITimeStamped {

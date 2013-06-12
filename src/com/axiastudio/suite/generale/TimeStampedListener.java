@@ -29,7 +29,7 @@ import java.util.Date;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class CallbackTimeStamped {
+public class TimeStampedListener {
 
     /*
      *  Il timestamp di creazione è impostato da:
