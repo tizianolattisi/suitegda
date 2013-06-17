@@ -203,11 +203,18 @@ public class FormProtocollo extends Window {
         for( Delega delega: deleghe ){
             items.add(delega.getUtente().getNome());
         }
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        Integer def;
+        if( items.size()>1 && autenticato.getAttributoreprotocollo() ){
+            def = 1;
+        } else {
+            def = 0;
+        }
         String choice = QInputDialog.getItem(this,
                 "Verificatore delle attribuzioni",
                 "Dichiara il verificatore delle attribuzioni",
                 items,
-                0,
+                def,
                 false);
         Integer idx = items.lastIndexOf(choice);
         if( idx > 0 ){
