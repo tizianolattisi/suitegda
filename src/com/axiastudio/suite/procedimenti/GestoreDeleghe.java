@@ -96,7 +96,7 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         return deleghe;
     }
     
-    private Carica findCarica(CodiceCarica codiceCarica){
+    public static Carica findCarica(CodiceCarica codiceCarica){
         Controller ctrlCarica = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.procedimenti.entities.Carica");
         for (Iterator it = ctrlCarica.createFullStore().iterator(); it.hasNext();) {
             Carica carica = (Carica) it.next();

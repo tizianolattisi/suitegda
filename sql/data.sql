@@ -20,12 +20,19 @@ INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuz
 INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (4, 'Ufficio edilizia', true, true, true);
 SELECT setval('base.ufficio_id_seq', 5, true);
 
-INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (1, true, false, NULL, 'admin', 'ADM', false, false, 'Utente amministrativo', false, false, false, '956b329eb8028e15ac00279623f2ef76', false, false, false, false, false);
-INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (2, false, false, NULL, 'mario', 'M.S.', true, false, 'Mario', true, true, true, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
-INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (3, false, true, NULL, 'luigi', 'L.B.', false, false, 'Luigi', true, true, true, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
-INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (4, false, false, NULL, 'sindaco', 'F.S.', false, false, 'Franco il sindaco', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
-INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo) VALUES (5, false, false, NULL, 'segretario', 'B.S.', false, false, 'Beppe il segretario', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
-SELECT setval('base.utente_id_seq', 6, true);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo)
+  VALUES (1, true, false, NULL, 'admin', 'ADM', false, false, 'Utente amministrativo', false, false, false, '956b329eb8028e15ac00279623f2ef76', false, false, false, false, false);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo)
+  VALUES (2, false, false, NULL, 'mario', 'M.S.', true, false, 'Mario', true, true, true, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo)
+  VALUES (3, false, true, NULL, 'luigi', 'L.B.', false, false, 'Luigi', true, true, true, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo)
+  VALUES (4, false, false, NULL, 'sindaco', 'F.S.', false, false, 'Franco il sindaco', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo)
+  VALUES (5, false, false, NULL, 'segretario', 'B.S.', false, false, 'Beppe il segretario', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
+INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo)
+  VALUES (6, false, false, NULL, 'vice', 'G.V.S.', false, false, 'Gina il vice segretario', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
+SELECT setval('base.utente_id_seq', 7, true);
 
 INSERT INTO ufficioutente (id, riservato, ricerca, visualizza, daiperletto, modificapratica, inseriscepratica, consolida, responsabile, procedimenti, ufficio, utente) VALUES (1, false, true, true, false, false, false, false, false, false, 1, 3);
 INSERT INTO ufficioutente (id, riservato, ricerca, visualizza, daiperletto, modificapratica, inseriscepratica, consolida, responsabile, procedimenti, ufficio, utente) VALUES (2, false, true, false, true, true, true, false, false, false, 3, 2);
@@ -149,18 +156,32 @@ SELECT setval('procedimenti.procedimento_id_seq', 2, true);
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (1, 'Sindaco', 'SINDACO');
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (2, 'Vice Sindaco', 'VICE_SINDACO');
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (3, 'Segretario', 'SEGRETARIO');
-INSERT INTO carica (id, descrizione, codicecarica) VALUES (4, 'Responsabile di servizio', 'RESPONSABILE_DI_SERVIZIO');
-INSERT INTO carica (id, descrizione, codicecarica) VALUES (5, 'Assessore attività culturali', null);
-INSERT INTO carica (id, descrizione, codicecarica) VALUES (6, 'Assessore attività sociali', null);
-SELECT setval('procedimenti.carica_id_seq', 7, true);
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (4, 'Vice segretario', 'VICE_SEGRETARIO');
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (5, 'Responsabile di servizio', 'RESPONSABILE_DI_SERVIZIO');
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (6, 'Responsabile della verifica delle attribuzioni del protocollo', 'RESPONSABILE_ATTRIBUZIONI');
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (7, 'Assessore attività culturali', null);
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (8, 'Assessore attività sociali', null);
+SELECT setval('procedimenti.carica_id_seq', 10, true);
 
+-- sindaco, segretario, vicesegretario
 INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
-  VALUES (1, 4, 4, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
+  VALUES (1, 1, 4, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
 INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
-  VALUES (2, 5, 5, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
+  VALUES (2, 3, 5, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
 INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
-  VALUES (3, 4, 2, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
-SELECT setval('procedimenti.delega_id_seq', 4, true);
+  VALUES (3, 4, 6, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
+-- responsabili di servizio
+INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
+  VALUES (4, 5, 2, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
+INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
+  VALUES (5, 5, 3, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
+-- responsabili delle attribuzioni del protocollo
+INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
+  VALUES (6, 6, 5, NULL, NULL, NULL, '2012-12-10', NULL, true, false, false, false, NULL);
+INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
+  VALUES (7, 6, 6, NULL, NULL, NULL, '2012-12-10', NULL, false, false, true, false, 5);
+
+SELECT setval('procedimenti.delega_id_seq', 8, true);
 
 -- Sedute
 SET search_path = sedute, pg_catalog;
