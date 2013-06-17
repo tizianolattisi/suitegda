@@ -21,16 +21,7 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import javax.persistence.*;
 
 /**
  *
@@ -43,6 +34,11 @@ import javax.persistence.Temporal;
 @Entity
 @Table(schema="PROCEDIMENTI")
 @SequenceGenerator(name="gendelega", sequenceName="procedimenti.delega_id_seq", initialValue=1, allocationSize=1)
+@NamedQuery(name="trovaIncaricatiODelegati",
+        query = "SELECT d FROM Delega d JOIN d.utente u "
+                + "WHERE d.carica = :carica "
+                // TODO: intervallo di validità
+                + " ORDER BY d.titolare DESC")
 public class Delega implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
