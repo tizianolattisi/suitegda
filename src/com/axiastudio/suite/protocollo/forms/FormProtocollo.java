@@ -381,7 +381,13 @@ public class FormProtocollo extends Window {
     }
     
     private void information() {
-        SuiteUiUtil.showInfo(this);
+        String extra = "";
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        String controllorePosta = protocollo.getControlloreposta();
+        if( controllorePosta != null ){
+            extra += "<br/><br/>Verificatore attribuzioni: " + protocollo.getControlloreposta();
+        }
+        SuiteUiUtil.showInfo(this, extra);
     }
     
     // XXX: codice simile a FormScrivania

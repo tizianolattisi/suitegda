@@ -33,8 +33,12 @@ import java.util.Date;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class SuiteUiUtil {
-    
+
     public static void showInfo(Window window){
+        SuiteUiUtil.showInfo(window, "");
+    }
+
+    public static void showInfo(Window window, String extra){
         QDialog info = new QDialog(window);
         info.setWindowTitle("Informazioni varie");
         QVBoxLayout layout = new QVBoxLayout(info);
@@ -63,7 +67,10 @@ public class SuiteUiUtil {
                     credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
                 }
             }
-        }   
+        }
+        if( extra != "" ){
+            credits += extra;
+        }
         QTextEdit text = new QTextEdit(credits);
         layout.addWidget(text);
         info.show();
