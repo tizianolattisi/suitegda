@@ -294,25 +294,25 @@ public class FormProtocollo extends Window {
 
         // etichette convalida e spedizione
         QLabel labelSpedizione = (QLabel) this.findChild(QLabel.class, "label_spedizione");
-        if( protocollo.getSpedito() ){
+        if( protocollo.getSpedito() && protocollo.getDataspedizione()!=null){
             labelSpedizione.setText(SuiteUtil.DATETIME_FORMAT.format(protocollo.getDataspedizione()) + " " + protocollo.getEsecutorespedizione());
         } else {
             labelSpedizione.setText("-");
         }
         QLabel labelConvalidau = (QLabel) this.findChild(QLabel.class, "label_convalidau");
-        if( protocollo.getConvalidaattribuzioni() ){
+        if( protocollo.getConvalidaattribuzioni() && protocollo.getDataconvalidaattribuzioni()!=null){
             labelConvalidau.setText(SuiteUtil.DATETIME_FORMAT.format(protocollo.getDataconvalidaattribuzioni()) + " " + protocollo.getEsecutoreconvalidaattribuzioni());
         } else {
             labelConvalidau.setText("-");
         }
         QLabel labelConvalida = (QLabel) this.findChild(QLabel.class, "label_convalida");
-        if( protocollo.getConvalidaprotocollo() ){
+        if( protocollo.getConvalidaprotocollo() && protocollo.getDataconvalidaprotocollo()!=null){
             labelConvalida.setText(SuiteUtil.DATETIME_FORMAT.format(protocollo.getDataconvalidaprotocollo()) + " " + protocollo.getEsecutoreconvalidaprotocollo());
         } else {
             labelConvalida.setText("-");
         }
         QLabel labelConsolida = (QLabel) this.findChild(QLabel.class, "label_consolida");
-        if( protocollo.getConsolidadocumenti() ){
+        if( protocollo.getConsolidadocumenti() && protocollo.getDataconsolidadocumenti()!=null){
             labelConsolida.setText(SuiteUtil.DATETIME_FORMAT.format(protocollo.getDataconsolidadocumenti()) + " " + protocollo.getEsecutoreconsolidadocumenti());
         } else {
             labelConsolida.setText("-");
