@@ -17,10 +17,7 @@
 package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.IController;
-import com.axiastudio.pypapi.db.IStoreFactory;
-import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.ui.CellEditorType;
@@ -37,6 +34,10 @@ import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.forms.DialogStampaEtichetta;
+import com.axiastudio.suite.procedimenti.GestoreDeleghe;
+import com.axiastudio.suite.procedimenti.entities.Carica;
+import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
+import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
@@ -46,6 +47,9 @@ import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -185,8 +189,31 @@ public class FormProtocollo extends Window {
     }
 
     private void convalidaAttribuzioni() {
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManagerFactory emf = db.getEntityManagerFactory();
+        EntityManager em = emf.createEntityManager();
+        Carica carica = GestoreDeleghe.findCarica(CodiceCarica.RESPONSABILE_ATTRIBUZIONI);
+        List<Delega> deleghe = em.createNamedQuery("trovaIncaricatiODelegati", Delega.class)
+                .setParameter("carica", carica)
+                .getResultList();
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         protocollo.setConvalidaattribuzioni(Boolean.TRUE);
+        List<String> items = new ArrayList();
+        items.add("nessuno");
+        for( Delega delega: deleghe ){
+            items.add(delega.getUtente().getNome());
+        }
+        String choice = QInputDialog.getItem(this,
+                "Verificatore delle attribuzioni",
+                "Dichiara il verificatore delle attribuzioni",
+                items,
+                0,
+                false);
+        Integer idx = items.lastIndexOf(choice);
+        if( idx > 0 ){
+            Delega verificatore = deleghe.get(idx-1);
+            protocollo.setControlloreposta(verificatore.getUtente().getLogin());
+        }
         this.getContext().getDirty();
     }
 
