@@ -17,10 +17,7 @@
 package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.ui.Column;
@@ -57,7 +54,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -113,9 +109,8 @@ public class FormScrivania  extends QMainWindow {
     }
 
     private void popolaAttribuzioni() {
-        Database db = (Database) Register.queryUtility(IDatabase.class);
-        EntityManagerFactory emf = db.getEntityManagerFactory();
-        EntityManager em = emf.createEntityManager();
+        Controller controller = (Controller) Register.queryUtility(IController.class, Protocollo.class.getName());
+        EntityManager em = controller.getEntityManager();
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         List<Attribuzione> attribuzioni = em.createNamedQuery("trovaAttribuzioniUtente", Attribuzione.class)
                                             .setParameter("id", autenticato.getId())
