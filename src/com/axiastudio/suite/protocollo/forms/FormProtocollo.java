@@ -279,7 +279,7 @@ public class FormProtocollo extends Window {
         // abilitazione azioni: convalida, consolida e spedizione
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
-        this.protocolloMenuBar.actionByName("consolidaDocumenti").setEnabled(!consDocumenti);
+        this.protocolloMenuBar.actionByName("consolidaDocumenti").setEnabled(!consDocumenti && profilo.inAttribuzionePrincipaleC());
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "spedito"), protocollo.getSpedito());
 
         // convalida attribuzioni
