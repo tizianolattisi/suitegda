@@ -40,15 +40,16 @@ public class FormSoggetto extends Window {
     public FormSoggetto(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
         QComboBox tipoSoggetto = (QComboBox) this.findChild(QComboBox.class, "comboBoxTipoSoggetto");
-        tipoSoggetto.currentIndexChanged.connect(this, "refresh(Integer)");
-        this.refresh(tipoSoggetto.currentIndex());
+        tipoSoggetto.currentIndexChanged.connect(this, "aggiornaTipoSoggetto(Integer)");
+        this.aggiornaTipoSoggetto(tipoSoggetto.currentIndex());
+        QTabWidget tab = (QTabWidget) this.findChild(QTabWidget.class, "tabWidgetBody");
+        tab.currentChanged.connect(this, "aggiornaFiltroGruppo(Integer)");
     }
 
     /*
      * Abilitazione del tab corretto e filtro sui gruppi
      */
-    private void refresh(Integer idx){
-        String[] gruppi = {"P", "A", "E"};
+    private void aggiornaTipoSoggetto(Integer idx){
         QTabWidget tab = (QTabWidget) this.findChild(QTabWidget.class, "tabWidgetHeader");
         tab.setCurrentIndex(idx);
         for( int i=0; i<3; i++ ){
@@ -62,6 +63,13 @@ public class FormSoggetto extends Window {
         } else {
             lineEdit_pratitaiva.setEnabled(true);
         }
+        aggiornaFiltroGruppo(idx);
+    }
+
+    private void aggiornaFiltroGruppo(Integer unused) {
+        QTabWidget tab = (QTabWidget) this.findChild(QTabWidget.class, "tabWidgetHeader");
+        Integer idx = tab.currentIndex();
+        String[] gruppi = {"P", "A", "E"};
         try {
             Method provider = FormSoggetto.class.getMethod("gruppo"+gruppi[idx]+"PredicateProvider", CriteriaBuilder.class, Root.class);
             Register.registerUtility(provider, ICriteriaFactory.class, Gruppo.class.getName());
@@ -71,7 +79,7 @@ public class FormSoggetto extends Window {
             Logger.getLogger(FormSoggetto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void information() {
         SuiteUiUtil.showInfo(this);
     }
