@@ -61,6 +61,7 @@ import javax.persistence.EntityManager;
  */
 public class FormScrivania  extends QMainWindow {
     private List<Attribuzione> selection = new ArrayList();
+    private final Integer DEFAULT_ROW_HEIGHT = 24;
     
     public FormScrivania(){
         QFile file = Util.ui2jui(new QFile("classpath:com/axiastudio/suite/protocollo/forms/scrivania.ui"));
@@ -86,6 +87,7 @@ public class FormScrivania  extends QMainWindow {
         tableView.setSortingEnabled(true);
         //tableView.installEventFilter(this);
         tableView.setItemDelegate(new DelegateScrivania(tableView));
+        tableView.verticalHeader().setDefaultSectionSize(DEFAULT_ROW_HEIGHT);
         tableView.doubleClicked.connect(this, "apriProtocollo()");
         
 
