@@ -76,7 +76,9 @@ public class Determina implements Serializable {
     private Integer anno;
     @Column(name="numero")
     private Integer numero;
-    // data determina == data protocollo
+    @Column(name="data")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date data;
     
     /* visto del responsabile del servizio */
     @Column(name="vistoresponsabile")
@@ -256,6 +258,14 @@ public class Determina implements Serializable {
 
     public void setNumero(Integer numero) {
         this.numero = numero;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
     }
 
     public Boolean getVistoResponsabile() {
