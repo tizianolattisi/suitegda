@@ -90,6 +90,17 @@ ALTER TABLE withtimestamp OWNER TO postgres;
 -- Base
 SET search_path = base, pg_catalog;
 
+CREATE TABLE giunta (
+  id bigserial NOT NULL,
+  numero integer NOT NULL,
+  datanascita date,
+  datacessazione date,
+  note character varying(255)
+);
+ALTER TABLE base.giunta OWNER TO postgres;
+ALTER TABLE ONLY giunta
+ADD CONSTRAINT giunta_pkey PRIMARY KEY (id);
+
 CREATE TABLE utente (
     id bigserial NOT NULL,
     amministratore boolean,
