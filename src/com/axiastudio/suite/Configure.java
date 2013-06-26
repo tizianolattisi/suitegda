@@ -39,6 +39,7 @@ import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormRelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
+import com.axiastudio.suite.base.entities.Giunta;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
@@ -131,7 +132,12 @@ public class Configure {
                               null,
                               Etichetta.class,
                               Window.class);
-        
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/base/forms/giunta.ui",
+                Giunta.class,
+                Window.class);
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/base/forms/ufficio.ui",
                               Ufficio.class,

@@ -19,6 +19,7 @@ package com.axiastudio.suite;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.base.entities.Giunta;
 import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import java.security.MessageDigest;
@@ -82,6 +83,19 @@ public class SuiteUtil {
         TypedQuery<Costante> tq = em.createQuery(cq);
         Costante costante = tq.getSingleResult();
         return costante;
+    }
+
+    public static Giunta trovaGiuntaCorrente(){
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Giunta> cq = cb.createQuery(Giunta.class);
+        Root<Giunta> root = cq.from(Giunta.class);
+        cq.select(root);
+        cq.where(cb.isNull(root.get("datacessazione")));
+        TypedQuery<Giunta> tq = em.createQuery(cq);
+        Giunta giunta = tq.getSingleResult();
+        return giunta;
     }
     
 }
