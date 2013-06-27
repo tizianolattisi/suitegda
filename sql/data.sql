@@ -14,6 +14,10 @@ SELECT setval('generale.etichetta_id_seq', 3, true);
 -- Base
 SET search_path = base, pg_catalog;
 
+INSERT INTO giunta (id, numero, datanascita, datacessazione, note) VALUES (1, 3, '2008-06-01', '2012-05-31', 'Nome del Sindaco');
+INSERT INTO giunta (id, numero, datanascita, datacessazione, note) VALUES (2, 4, '2012-06-01', NULL, 'Nome del Sindaco attuale');
+SELECT setval('base.giunta_id_seq', 3, true);
+
 INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (1, 'Ufficio protocollo', true, true, false);
 INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (2, 'Ufficio commercio', false, true, true);
 INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (3, 'Ufficio informativo', true, true, true);
@@ -81,9 +85,9 @@ SELECT setval('anagrafiche.relazionesoggetto_id_seq', 2, true);
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
-INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, porzionenumeroda, porzionenumeroa) VALUES (1, 'DET', 'Determine', NULL, NULL, 0, 0);
-INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, porzionenumeroda, porzionenumeroa) VALUES (2, 'GES', 'Ramo GES', NULL, NULL, 0, 0);
-INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, porzionenumeroda, porzionenumeroa) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1, '${s2}${anno}${n2,number,00000}', 9, 17);
+INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (1, 'DET', 'Determine', NULL, NULL, 0, false, false );
+INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (2, 'GES', 'Ramo GES', NULL, NULL, 0, false, false);
+INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1, '${s2}${anno}${n2,number,00000}', 5, true, false);
 SELECT setval('pratiche.tipopratica_id_seq', 4, true);
 
 INSERT INTO pratica (id, anno, datapratica, descrizione, idpratica, codiceinterno, note, attribuzione, gestione, ubicazione, dettaglioubicazione, tipo)

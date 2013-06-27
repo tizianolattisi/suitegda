@@ -54,10 +54,12 @@ public class TipoPratica implements Serializable {
     private Procedimento procedimento;
     @Column(name="formulacodifica")
     private String formulacodifica;
-    @Column(name="porzionenumeroda")
-    private Integer porzionenumeroda;
-    @Column(name="porzionenumeroa")
-    private Integer porzionenumeroa;
+    @Column(name="lunghezzaprogressivo")
+    private Integer lunghezzaprogressivo;
+    @Column(name="progressivoanno")
+    private Boolean progressivoanno=false;
+    @Column(name="progressivogiunta")
+    private Boolean progressivogiunta=false;
     @JoinColumn(name = "fascicolo", referencedColumnName = "id")
     @ManyToOne
     private Fascicolo fascicolo;
@@ -116,20 +118,28 @@ public class TipoPratica implements Serializable {
         this.formulacodifica = formulacodifica;
     }
 
-    public Integer getPorzionenumeroda() {
-        return porzionenumeroda;
+    public Integer getLunghezzaprogressivo() {
+        return lunghezzaprogressivo;
     }
 
-    public void setPorzionenumeroda(Integer porzionenumeroda) {
-        this.porzionenumeroda = porzionenumeroda;
+    public void setLunghezzaprogressivo(Integer lunghezzaprogressivo) {
+        this.lunghezzaprogressivo = lunghezzaprogressivo;
     }
 
-    public Integer getPorzionenumeroa() {
-        return porzionenumeroa;
+    public Boolean getProgressivoanno() {
+        return progressivoanno;
     }
 
-    public void setPorzionenumeroa(Integer porzionenumeroa) {
-        this.porzionenumeroa = porzionenumeroa;
+    public void setProgressivoanno(Boolean progressivoanno) {
+        this.progressivoanno = progressivoanno;
+    }
+
+    public Boolean getProgressivogiunta() {
+        return progressivogiunta;
+    }
+
+    public void setProgressivogiunta(Boolean progressivogiunta) {
+        this.progressivogiunta = progressivogiunta;
     }
 
     public Fascicolo getFascicolo() {

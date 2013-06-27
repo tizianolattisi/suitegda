@@ -328,6 +328,12 @@ public class Mdi extends QMainWindow {
         itemUffici.setText(1, "com.axiastudio.suite.base.entities.Ufficio");
         itemUffici.setDisabled(!autenticato.getAmministratore());
 
+        QTreeWidgetItem itemGiunte = new QTreeWidgetItem(itemAmministrazione);
+        itemGiunte.setText(0, "Giunte");
+        itemGiunte.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/cog.png"));
+        itemGiunte.setText(1, "com.axiastudio.suite.base.entities.Giunta");
+        itemGiunte.setDisabled(!autenticato.getAmministratore());
+
         QTreeWidgetItem itemDeleghe = new QTreeWidgetItem(itemAmministrazione);
         itemDeleghe.setText(0, "Incarichi e deleghe");
         itemDeleghe.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
