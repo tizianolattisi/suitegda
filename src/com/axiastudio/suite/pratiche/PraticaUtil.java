@@ -20,6 +20,9 @@ import com.axiastudio.mapformat.MessageMapFormat;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.base.entities.Giunta;
+import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
 
 import javax.persistence.EntityManager;
@@ -45,24 +48,39 @@ public class PraticaUtil {
         map.put("anno", year.toString());
 
         // giunta
-        map.put("giunta", "2010");
+        Giunta giuntaCorrente = SuiteUtil.trovaGiuntaCorrente();
+        map.put("giunta", giuntaCorrente.getNumero());
 
         // codici sezione e numerici
         String formulacodifica = tipoPratica.getFormulacodifica();
         List<TipoPratica> tipi = new ArrayList();
-        while( tipoPratica != null ){
-            tipi.add(0, tipoPratica);
-            tipoPratica = tipoPratica.getTipopadre();
+        TipoPratica iter = tipoPratica;
+        while( iter != null ){
+            tipi.add(0, iter);
+            iter = iter.getTipopadre();
         }
-        int i = 0;
+
+        Integer n = tipoPratica.getLunghezzaprogressivo();
+
+        // calcolo progressivi per nodo
+        Integer i = 0;
         for( TipoPratica tipo: tipi ){
             i++;
-            int n = 5; // XXX: porzione numerica nella codifica
-            Query q = em.createQuery("select max(p.codiceinterno) from Pratica p where p.anno = " + year.toString() + " and p.codiceinterno like '"+tipo.getCodice()+"%'");
+            String sql = "select max(p.codiceinterno) from Pratica p join p.tipo t";
+            sql += " where p.codiceinterno like '"+tipo.getCodice()+"%'";
+            if( tipoPratica.getProgressivoanno() ){
+                sql += " and p.anno = " + year.toString();
+            }
+            if( tipoPratica.getProgressivogiunta() ){
+                sql += " and t.progressivogiunta = TRUE";
+                sql += " and p.datapratica >= '" + SuiteUtil.DATE_FORMAT.format(giuntaCorrente.getDatanascita()) +"'";
+            }
+            Query q = em.createQuery(sql);
             String maxString = (String) q.getSingleResult();
             Integer max=1;
             if( maxString != null ){
                 max = Integer.parseInt(maxString.substring(maxString.length() - n));
+                max += 1;
             }
             map.put("s"+i, tipo.getCodice());
             map.put("n"+i, max);
