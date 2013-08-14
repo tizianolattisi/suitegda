@@ -1053,7 +1053,7 @@ CREATE TABLE determina (
     titolarevistoresponsabile boolean NOT NULL DEFAULT FALSE,
     segretariovistoresponsabile boolean NOT NULL DEFAULT FALSE,
     delegatovistoresponsabile boolean NOT NULL DEFAULT FALSE,
-    utentevistoresponsabile bigint NOT NULL DEFAULT FALSE,
+    utentevistoresponsabile bigint,
     vistobilancio boolean NOT NULL DEFAULT FALSE,
     datavistobilancio date,
     titolarevistobilancio boolean NOT NULL DEFAULT FALSE,
