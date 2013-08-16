@@ -158,8 +158,18 @@ public class FormPratica extends Window implements IDocumentFolder {
         //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormPratica.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(pratica);
-        String documentName = name + "_" + pratica.getIdpratica() + ".odt";
-        //String documentName = "out.pdf";
+
+        // extension
+        String extension = "";
+        if( mimeType.equals("application/pdf") ){
+            extension = ".pdf";
+        } else if( mimeType.equals("application/vnd.oasis.opendocument.text") ){
+            extension = ".odt";
+        } else if( mimeType.equals("application/msword") ){
+            extension = ".doc";
+        }
+
+        String documentName = name + "_" + pratica.getIdpratica() + extension;
         helper.createDocument(subpath, documentName, content, mimeType);
         cmisPlugin.showForm(pratica);
     }

@@ -121,12 +121,13 @@ public class Suite {
         
         // template da file system
         HashMap<String,String> rules = new HashMap();
-        rules.put("placeholder", "return Pratica.getDescrizione()");
+        rules.put("idpratica", "return Pratica.idpratica");
+        rules.put("oggettopratica", "return Pratica.descrizione");
         RuleSet ruleSet = new RuleSet(rules);
-        IStreamProvider streamProvider1 = new FileStreamProvider("/Users/tiziano/Projects/PyPaPi-plugins/PyPaPiOoops/template/test.ott");
-        Template template = new Template(streamProvider1, "Prova", "Template di prova", ruleSet);
+        IStreamProvider streamProvider1 = new FileStreamProvider("/Users/tiziano/Projects/Suite/demo/generico.ott");
+        Template template = new Template(streamProvider1, "Comunicazione generica", "Comunicazione generica in carta intestana (con marcatura protocollo)", ruleSet);
         ooopsPlugin.addTemplate(template);
-        
+
         // template da Cmis
         
         HashMap<String,String> rules2 = new HashMap();        
