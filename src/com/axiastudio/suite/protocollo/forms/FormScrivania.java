@@ -19,7 +19,7 @@ package com.axiastudio.suite.protocollo.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.plugins.IPlugin;
-import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.ui.Column;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.TableModel;
