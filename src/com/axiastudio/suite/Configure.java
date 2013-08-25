@@ -16,9 +16,16 @@
  */
 package com.axiastudio.suite;
 
+import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
+import com.axiastudio.pypapi.plugins.cmis.CmisStreamProvider;
+import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
+import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
+import com.axiastudio.pypapi.plugins.ooops.RuleSet;
+import com.axiastudio.pypapi.plugins.ooops.Template;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
@@ -59,6 +66,8 @@ import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.forms.FormDipendenzaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
+import com.axiastudio.suite.procedimenti.GestoreDeleghe;
+import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.procedimenti.entities.Norma;
@@ -78,6 +87,7 @@ import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Titolo;
 import com.axiastudio.suite.protocollo.forms.FormAnnullamentoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
+import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
@@ -87,14 +97,18 @@ import com.axiastudio.suite.sedute.entities.Seduta;
 import com.axiastudio.suite.sedute.entities.TipoSeduta;
 import com.axiastudio.suite.sedute.forms.FormTipoSeduta;
 
+import java.util.HashMap;
+import java.util.Properties;
+
 /**
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class Configure {
+
     private static Database db;
     
-    public static void configure(Database db){
+    public static void configure(Database db, Properties properties){
 
         db = db;
         adapters();
@@ -102,7 +116,12 @@ public class Configure {
         privates();
 
         forms(db);
-        
+        plugins(properties);
+
+        // gestore deleghe
+        GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
+        Register.registerUtility(gestoreDeleghe, IGestoreDeleghe.class);
+
     }
 
     private static void adapters() {
@@ -119,6 +138,60 @@ public class Configure {
     private static void privates() {
         Register.registerPrivates(Resolver.privatesFromClass(PraticaPrivate.class));
         Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));
+    }
+
+    private static void plugins(Properties properties) {
+
+        /* CMIS */
+
+        String cmisUrl = properties.getProperty("cmis.url");
+        String cmisUser = properties.getProperty("cmis.user");
+        String cmisPassword = properties.getProperty("cmis.password");
+
+        CmisPlugin cmisPlugin = new CmisPlugin();
+        String templateCmisProtocollo = "/Protocollo/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
+        cmisPlugin.setup(cmisUrl, cmisUser, cmisPassword,
+                templateCmisProtocollo,
+                Boolean.FALSE);
+        Register.registerPlugin(cmisPlugin, FormProtocollo.class);
+        Register.registerPlugin(cmisPlugin, FormScrivania.class);
+
+        CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
+        cmisPluginPubblicazioni.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin",
+                "/Pubblicazioni/${inizioconsultazione,date,yyyy}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
+        Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
+
+        CmisPlugin cmisPluginPratica = new CmisPlugin();
+        cmisPluginPratica.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin",
+                "/Pratiche/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/");
+        Register.registerPlugin(cmisPluginPratica, FormPratica.class);
+
+
+        /* OOOPS (OpenOffice) */
+
+        OoopsPlugin ooopsPlugin = new OoopsPlugin();
+        ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+
+        // template da file system
+        HashMap<String,String> rules = new HashMap();
+        rules.put("idpratica", "return Pratica.idpratica");
+        rules.put("oggettopratica", "return Pratica.descrizione");
+        RuleSet ruleSet = new RuleSet(rules);
+        IStreamProvider streamProvider1 = new FileStreamProvider("/Users/tiziano/Projects/Suite/demo/generico.ott");
+        Template template = new Template(streamProvider1, "Comunicazione generica", "Comunicazione generica in carta intestana (con marcatura protocollo)", ruleSet);
+        ooopsPlugin.addTemplate(template);
+
+        // template da Cmis
+        HashMap<String,String> rules2 = new HashMap();
+        rules2.put("oggetto", "return Pratica.getDescrizione()+\", da Alfresco!!\"");
+        RuleSet ruleSet2 = new RuleSet(rules2);
+        IStreamProvider streamProvider2 = new CmisStreamProvider("http://localhost:8080/alfresco/service/cmis", cmisUser, cmisPassword,
+                "workspace://SpacesStore/7b3a2895-51e7-4f2c-9e3d-cf67f7043257");
+        Template template2 = new Template(streamProvider2, "Prova 2", "(template proveniente da Alfresco)", ruleSet2);
+        ooopsPlugin.addTemplate(template2);
+
+        Register.registerPlugin(ooopsPlugin, FormPratica.class);
+
     }
 
     private static void forms(Database db) {
