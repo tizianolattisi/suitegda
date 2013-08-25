@@ -20,6 +20,9 @@ import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.suite.modelli.entities.Modello;
+import com.axiastudio.suite.modelli.entities.ProcedimentoModello;
+import com.axiastudio.suite.modelli.entities.TipoPraticaModello;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
@@ -417,6 +420,12 @@ public class Configure {
                               "classpath:com/axiastudio/suite/anagrafiche/forms/titolostudiosoggetto.ui",
                               TitoloStudioSoggetto.class,
                               Dialog.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/modelli/forms/modello.ui",
+                Modello.class,
+                Window.class);
+
     }
     
 }
