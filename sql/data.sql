@@ -154,8 +154,18 @@ SELECT setval('finanziaria.capitolo_id_seq', 2, true);
 -- Procedimenti
 SET search_path = procedimenti, pg_catalog;
 
-INSERT INTO procedimento (id, descrizione) VALUES (1, 'Unico procedimento di prova');
+INSERT INTO procedimento (id, descrizione) VALUES (1, 'Determina del responsabile di servizio');
 SELECT setval('procedimenti.procedimento_id_seq', 2, true);
+
+insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (1, 3, 1, true);
+SELECT setval('procedimenti.ufficioprocedimento_id_seq', 2, true);
+
+insert into utenteprocedimento (id, utente, ufficio, procedimento, responsabile, abilitato, abituale)
+    values (1, 2, 3, 1, true, true, true);
+SELECT setval('procedimenti.utenteprocedimento_id_seq', 2, true);
+
+insert into tipopraticaprocedimento (id, tipopratica, procedimento) values (1, 3, 1);
+SELECT setval('procedimenti.tipopraticaprocedimento_id_seq', 2, true);
 
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (1, 'Sindaco', 'SINDACO');
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (2, 'Vice Sindaco', 'VICE_SINDACO');
@@ -225,3 +235,29 @@ SELECT setval('deliberedetermine.movimentodetermina_id_seq', 3, true);
 
 INSERT INTO ufficiodetermina (id, determina, ufficio) VALUES (1, 1, 1);
 SELECT setval('deliberedetermine.ufficiodetermina_id_seq', 2, true);
+
+
+-- Modelli di documento
+SET search_path = modelli, pg_catalog;
+
+insert into modello (id, titolo, descrizione, uri)
+  values (1, 'Comunicazione generica', 'Comunicazione generica in carta intestata', '/Users/tiziano/Projects/Suite/demo/generico.ott');
+insert into modello (id, titolo, descrizione, uri)
+  values (2, 'Determina responsabile', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9');
+SELECT setval('modelli.modello_id_seq', 3, true);
+
+insert into segnalibro (id, segnalibro, codice, modello)
+    values (1, 'idpratica', 'return Pratica.idpratica', 1);
+insert into segnalibro (id, segnalibro, codice, modello)
+  values (2, 'oggettopratica', 'return Pratica.descrizione', 1);
+insert into segnalibro (id, segnalibro, codice, modello)
+  values (3, 'oggetto', 'return Pratica.descrizione', 2);
+SELECT setval('modelli.segnalibro_id_seq', 4, true);
+
+insert into procedimentomodello (id, procedimento, modello)
+    values (1, 1, 2);
+SELECT setval('modelli.procedimentomodello_id_seq', 2, true);
+
+insert into tipopraticamodello (id, tipopratica, modello)
+  values (1, 3, 2);
+SELECT setval('modelli.tipopraticamodello_id_seq', 2, true);
