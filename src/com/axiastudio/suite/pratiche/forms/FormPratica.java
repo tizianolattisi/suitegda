@@ -16,7 +16,13 @@
  */
 package com.axiastudio.suite.pratiche.forms;
 
+import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
+import com.axiastudio.pypapi.plugins.cmis.CmisStreamProvider;
+import com.axiastudio.pypapi.plugins.ooops.IDocumentFolder;
+import com.axiastudio.pypapi.plugins.ooops.Template;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
@@ -24,6 +30,7 @@ import com.axiastudio.suite.SuiteUiUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
@@ -34,11 +41,15 @@ import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QToolButton;
 import com.trolltech.qt.gui.QWidget;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class FormPratica extends Window {
+public class FormPratica extends Window implements IDocumentFolder {
     
     public FormPratica(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
@@ -117,6 +128,50 @@ public class FormPratica extends Window {
     
     private void information() {
         SuiteUiUtil.showInfo(this);
+    }
+
+
+    /*
+     *  Implementazione IDocumentFolder
+     */
+    @Override
+    public List<Template> getTemplates() {
+        List<Template> templates = new ArrayList();
+        Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+        //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
+        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormPratica.class, "CMIS");
+        AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(pratica);
+        List<HashMap> children = helper.children();
+        for( HashMap map: children ){
+            IStreamProvider streamProvider = new CmisStreamProvider("http://127.0.0.1:8080/alfresco/service/cmis", "admin", "admin",
+                    (String) map.get("objectId"));
+            //RuleSet rulesSet = new RuleSet(new HashMap()); // XXX: da pescare
+            Template template = new Template(streamProvider, (String) map.get("name"), "Documento generato", null);
+            templates.add(template);
+        }
+        return templates;
+    }
+
+    @Override
+    public void createDocument(String subpath, String name, byte[] content, String mimeType) {
+        Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+        //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
+        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormPratica.class, "CMIS");
+        AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(pratica);
+
+        // extension
+        String extension = "";
+        if( mimeType.equals("application/pdf") ){
+            extension = ".pdf";
+        } else if( mimeType.equals("application/vnd.oasis.opendocument.text") ){
+            extension = ".odt";
+        } else if( mimeType.equals("application/msword") ){
+            extension = ".doc";
+        }
+
+        String documentName = name + "_" + pratica.getIdpratica() + extension;
+        helper.createDocument(subpath, documentName, content, mimeType);
+        cmisPlugin.showForm(pratica);
     }
     
 }
