@@ -124,4 +124,9 @@ public class CmisPlugin implements IPlugin {
         return helper;
     }
 
+    public CmisStreamProvider createCmisStreamProvider(String objectId){
+        CmisStreamProvider streamProvider = new CmisStreamProvider(cmisUrl, user, password, objectId);
+        return streamProvider;
+    }
+
 }
