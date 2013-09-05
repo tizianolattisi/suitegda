@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
@@ -151,9 +152,13 @@ public class Configure {
         String cmisUrl = properties.getProperty("cmis.url");
         String cmisUser = properties.getProperty("cmis.user");
         String cmisPassword = properties.getProperty("cmis.password");
+        Application app = Application.getApplicationInstance();
+        String alfrescoPathProtocollo = (String) app.getConfigItem("alfrescopath.protocollo");
+        String alfrescoPathPratica = (String) app.getConfigItem("alfrescopath.pratica");
+        String alfrescoPathPubblicazione = (String) app.getConfigItem("alfrescopath.pubblicazione");
 
         CmisPlugin cmisPlugin = new CmisPlugin();
-        String templateCmisProtocollo = "/Protocollo/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
+        String templateCmisProtocollo = alfrescoPathProtocollo + "/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
         cmisPlugin.setup(cmisUrl, cmisUser, cmisPassword,
                 templateCmisProtocollo,
                 Boolean.FALSE);
@@ -162,12 +167,12 @@ public class Configure {
 
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
         cmisPluginPubblicazioni.setup(cmisUrl, cmisUser, cmisPassword,
-                "/Pubblicazioni/${inizioconsultazione,date,yyyy}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
+                alfrescoPathPubblicazione + "/${inizioconsultazione,date,yyyy}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
 
         CmisPlugin cmisPluginPratica = new CmisPlugin();
         cmisPluginPratica.setup(cmisUrl, cmisUser, cmisPassword,
-                "/Pratiche/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/");
+                alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/");
         Register.registerPlugin(cmisPluginPratica, FormPratica.class);
 
 

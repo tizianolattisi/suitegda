@@ -83,6 +83,7 @@ public class DemoData {
         schema.add("FINANZIARIA");
         schema.add("DELIBEREDETERMINE");
         schema.add("GENERALE");
+        schema.add("MODELLI");
         for( String name: schema){
             try {
                 Connection conn = DriverManager.getConnection("jdbc:h2:~/suite","","");
