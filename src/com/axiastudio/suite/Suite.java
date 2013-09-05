@@ -76,6 +76,11 @@ public class Suite {
         app.setConfigItem("barcode.device", barcodeDevice);
         app.setConfigItem("barcode.language", barcodeLanguage);
 
+        // percorsi Alfresco
+        app.setConfigItem("alfrescopath.protocollo", "/Protocollo");
+        app.setConfigItem("alfrescopath.pratica", "/Pratiche");
+        app.setConfigItem("alfrescopath.pubblicazione", "/Pubblicazioni");
+
         Configure.configure(db, System.getProperties());
 
         /* login */
