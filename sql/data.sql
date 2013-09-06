@@ -247,11 +247,11 @@ insert into modello (id, titolo, descrizione, uri)
 SELECT setval('modelli.modello_id_seq', 3, true);
 
 insert into segnalibro (id, segnalibro, codice, modello)
-    values (1, 'idpratica', 'return Pratica.idpratica', 1);
+    values (1, 'idpratica', '{ p -> p.idpratica }', 1);
 insert into segnalibro (id, segnalibro, codice, modello)
-  values (2, 'oggettopratica', 'return Pratica.descrizione', 1);
+  values (2, 'oggettopratica', '{ p -> p.descrizione.toUpperCase() }', 1);
 insert into segnalibro (id, segnalibro, codice, modello)
-  values (3, 'oggetto', 'return Pratica.descrizione', 2);
+  values (3, 'oggetto', '{ p -> p.oggetto }', 2);
 SELECT setval('modelli.segnalibro_id_seq', 4, true);
 
 insert into procedimentomodello (id, procedimento, modello)
