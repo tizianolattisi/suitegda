@@ -439,6 +439,11 @@ public class Configure {
                 Modello.class,
                 Window.class);
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/modelli/forms/segnalibro.ui",
+                Segnalibro.class,
+                Dialog.class);
+
     }
     
 }

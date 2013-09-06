@@ -41,7 +41,8 @@ public class Segnalibro implements Serializable {
     @JoinColumn(name = "modello", referencedColumnName = "id")
     @ManyToOne
     private Modello modello;
-
+    @Enumerated(EnumType.STRING)
+    private Layout layout=Layout.SEMPLICE;
 
     public Long getId() {
         return id;
@@ -73,5 +74,13 @@ public class Segnalibro implements Serializable {
 
     public void setModello(Modello modello) {
         this.modello = modello;
+    }
+
+    public Layout getLayout() {
+        return layout;
+    }
+
+    public void setLayout(Layout layout) {
+        this.layout = layout;
     }
 }
