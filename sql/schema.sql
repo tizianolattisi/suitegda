@@ -1168,7 +1168,8 @@ CREATE TABLE segnalibro (
   id bigserial not null,
   segnalibro character varying(255),
   codice character varying(4096),
-  modello bigint
+  modello bigint,
+  layout character varying(32)
 );
 ALTER TABLE modelli.segnalibro OWNER TO postgres;
 ALTER TABLE ONLY segnalibro
