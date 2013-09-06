@@ -34,21 +34,13 @@ public class RuleSet {
         this.rules = json;
     }
 
-    public Map<String, Object> evalJson(Object obj) {
-        HashMap<String,Object> map = new HashMap();
-        map.put(obj.getClass().getSimpleName(), obj);
-        return this.evalJson(map);
-    }
-    
-    public Map<String, Object> evalJson(Map<String, Object> map) {
+    public Map<String, Object> eval(Object entity) {
         HashMap<String,Object> mapOut = new HashMap();
         Binding binding = new Binding();
-        for( String key: map.keySet() ){
-            binding.setVariable(key, map.get(key));
-        }
+        binding.setVariable("param", entity);
         GroovyShell shell = new GroovyShell(binding);
         for( String key: this.rules.keySet() ){
-            String groovy = this.rules.get(key);
+            String groovy = this.rules.get(key) + "(param)";
             if( groovy != null && !"".equals(groovy) ){
                 Object value = shell.evaluate(groovy);
                 mapOut.put(key, value);
@@ -56,7 +48,7 @@ public class RuleSet {
                 mapOut.put(key, "[unset]");
             }
         }
-        return mapOut;        
+        return mapOut;
     }
     
 }
