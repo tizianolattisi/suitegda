@@ -170,16 +170,8 @@ public class OoopsDialog extends QDialog {
 
         
     protected void composeFromTemplate(Template template) {
-        Map<String, Object> objectsMap = new HashMap();
         Object entity = ((Window) this.parent()).getContext().getCurrentEntity();
-        objectsMap.put(entity.getClass().getSimpleName(), entity);
-        if( template.getObjectsMap() != null ){
-            for( String key: template.getObjectsMap().keySet() ){
-                Object obj = template.getObjectsMap().get(key);
-                objectsMap.put(key, obj);
-            }
-        }
-        Map<String, Object> values = template.getRuleSet().evalJson(objectsMap);
+        Map<String, Object> values = template.getRuleSet().eval(entity);
         this.helper.loadDocumentComponent(template.getStreamProvider().getInputStream());
         this.helper.composeDocument(values);
         //this.helper.close();

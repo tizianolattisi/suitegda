@@ -57,7 +57,11 @@
     <class>com.axiastudio.suite.anagrafiche.entities.TitoloStudio</class>
     <class>com.axiastudio.suite.anagrafiche.entities.TitoloStudioSoggetto</class>
     <class>com.axiastudio.suite.generale.entities.Etichetta</class>
-      <class>com.axiastudio.suite.base.entities.Giunta</class>
+    <class>com.axiastudio.suite.base.entities.Giunta</class>
+    <class>com.axiastudio.suite.modelli.entities.Modello</class>
+    <class>com.axiastudio.suite.modelli.entities.TipoPraticaModello</class>
+    <class>com.axiastudio.suite.modelli.entities.ProcedimentoModello</class>
+    <class>com.axiastudio.suite.modelli.entities.Segnalibro</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>

@@ -21,6 +21,8 @@ import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.suite.modelli.entities.Modello;
+import com.axiastudio.suite.modelli.entities.Segnalibro;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
@@ -99,6 +101,7 @@ import com.axiastudio.suite.sedute.entities.TipoSeduta;
 import com.axiastudio.suite.sedute.forms.FormTipoSeduta;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -118,6 +121,7 @@ public class Configure {
 
         forms(db);
         plugins(properties);
+        templates(properties);
 
         // gestore deleghe
         GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
@@ -176,27 +180,34 @@ public class Configure {
 
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
         ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
-
-        // template da file system
-        HashMap<String,String> rules = new HashMap();
-        rules.put("idpratica", "return Pratica.idpratica");
-        rules.put("oggettopratica", "return Pratica.descrizione");
-        RuleSet ruleSet = new RuleSet(rules);
-        IStreamProvider streamProvider1 = new FileStreamProvider("/Users/tiziano/Projects/Suite/demo/generico.ott");
-        Template template = new Template(streamProvider1, "Comunicazione generica", "Comunicazione generica in carta intestana (con marcatura protocollo)", ruleSet);
-        ooopsPlugin.addTemplate(template);
-
-        // template da Cmis
-        HashMap<String,String> rules2 = new HashMap();
-        rules2.put("oggetto", "return Pratica.getDescrizione()+\", da Alfresco!!\"");
-        RuleSet ruleSet2 = new RuleSet(rules2);
-        IStreamProvider streamProvider2 = new CmisStreamProvider("http://localhost:8080/alfresco/service/cmis", cmisUser, cmisPassword,
-                "workspace://SpacesStore/7b3a2895-51e7-4f2c-9e3d-cf67f7043257");
-        Template template2 = new Template(streamProvider2, "Prova 2", "(template proveniente da Alfresco)", ruleSet2);
-        ooopsPlugin.addTemplate(template2);
-
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
 
+    }
+
+    private static void templates(Properties properties) {
+
+        /* CMIS */
+        String cmisUrl = properties.getProperty("cmis.url");
+        String cmisUser = properties.getProperty("cmis.user");
+        String cmisPassword = properties.getProperty("cmis.password");
+
+        OoopsPlugin ooopsPlugin = (OoopsPlugin) Register.queryPlugin(FormPratica.class, "Ooops");
+        List<Modello> modelli = SuiteUtil.elencoModelli();
+        for( Modello modello: modelli ){
+            HashMap<String,String> map = new HashMap();
+            for( Segnalibro segnalibro: modello.getSegnalibroCollection() ){
+                map.put(segnalibro.getSegnalibro(), segnalibro.getCodice());
+            }
+            RuleSet ruleSet = new RuleSet(map);
+            IStreamProvider streamProvider = null;
+            if( modello.getUri().startsWith("workspace:") ){
+                streamProvider = new CmisStreamProvider(cmisUrl, cmisUser, cmisPassword, modello.getUri());
+            } else {
+                streamProvider = new FileStreamProvider(modello.getUri());
+            }
+            Template template = new Template(streamProvider, modello.getTitolo(), modello.getDescrizione(), ruleSet);
+            ooopsPlugin.addTemplate(template);
+        }
     }
 
     private static void forms(Database db) {
@@ -422,6 +433,17 @@ public class Configure {
                               "classpath:com/axiastudio/suite/anagrafiche/forms/titolostudiosoggetto.ui",
                               TitoloStudioSoggetto.class,
                               Dialog.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/modelli/forms/modello.ui",
+                Modello.class,
+                Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/modelli/forms/segnalibro.ui",
+                Segnalibro.class,
+                Dialog.class);
+
     }
     
 }

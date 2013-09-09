@@ -142,11 +142,13 @@ public class FormPratica extends Window implements IDocumentFolder {
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(pratica);
         List<HashMap> children = helper.children();
         for( HashMap map: children ){
-            IStreamProvider streamProvider = new CmisStreamProvider("http://127.0.0.1:8080/alfresco/service/cmis", "admin", "admin",
-                    (String) map.get("objectId"));
-            //RuleSet rulesSet = new RuleSet(new HashMap()); // XXX: da pescare
-            Template template = new Template(streamProvider, (String) map.get("name"), "Documento generato", null);
-            templates.add(template);
+            String name = (String) map.get("name");
+            if( name.toLowerCase().endsWith(".odt") || name.toLowerCase().endsWith(".doc") ){
+                IStreamProvider streamProvider = cmisPlugin.createCmisStreamProvider((String) map.get("objectId"));
+                //RuleSet rulesSet = new RuleSet(new HashMap()); // XXX: da pescare
+                Template template = new Template(streamProvider, name, "Documento generato", null);
+                templates.add(template);
+            }
         }
         return templates;
     }

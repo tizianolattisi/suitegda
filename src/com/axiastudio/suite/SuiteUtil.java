@@ -21,10 +21,12 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.base.entities.Giunta;
 import com.axiastudio.suite.generale.entities.Costante;
+import com.axiastudio.suite.modelli.entities.Modello;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -96,6 +98,18 @@ public class SuiteUtil {
         TypedQuery<Giunta> tq = em.createQuery(cq);
         Giunta giunta = tq.getSingleResult();
         return giunta;
+    }
+
+    public static List<Modello> elencoModelli(){
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Modello> cq = cb.createQuery(Modello.class);
+        Root<Modello> root = cq.from(Modello.class);
+        cq.select(root);
+        TypedQuery<Modello> query = em.createQuery(cq);
+        List<Modello> modelli = query.getResultList();
+        return modelli;
     }
     
 }

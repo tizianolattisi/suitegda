@@ -28,6 +28,8 @@ CREATE SCHEMA deliberedetermine;
 ALTER SCHEMA deliberedetermine OWNER TO postgres;
 CREATE SCHEMA generale;
 ALTER SCHEMA generale OWNER TO postgres;
+CREATE SCHEMA modelli;
+ALTER SCHEMA modelli OWNER TO postgres;
 
 -- Create pgplsql
 CREATE OR REPLACE FUNCTION public.create_plpgsql_language ()
@@ -1125,6 +1127,53 @@ ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_determina FOREIGN KEY (determina) REFERENCES determina(id);
 ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_capitolo FOREIGN KEY (capitolo) REFERENCES finanziaria.capitolo(id);
+
+
+-- modelli
+SET search_path = modelli, pg_catalog;
+
+CREATE TABLE modello (
+  id bigserial NOT NULL,
+  titolo character varying(255),
+  descrizione character varying(1024),
+  uri character varying(2048)
+);
+ALTER TABLE modelli.modello OWNER TO postgres;
+ALTER TABLE ONLY modello
+ADD CONSTRAINT modello_pkey PRIMARY KEY (id);
+
+CREATE TABLE tipopraticamodello (
+  id bigserial not null,
+  tipopratica bigint,
+  modello bigint
+);
+ALTER TABLE modelli.tipopraticamodello OWNER TO postgres;
+ALTER TABLE ONLY tipopraticamodello
+ADD CONSTRAINT fk_tipopraticamodello_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
+ALTER TABLE ONLY tipopraticamodello
+ADD CONSTRAINT fk_tipopraticamodello_modello FOREIGN KEY (modello) REFERENCES modelli.modello(id);
+
+CREATE TABLE procedimentomodello (
+  id bigserial not null,
+  procedimento bigint,
+  modello bigint
+);
+ALTER TABLE modelli.procedimentomodello OWNER TO postgres;
+ALTER TABLE ONLY procedimentomodello
+ADD CONSTRAINT fk_procedimentomodello_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
+ALTER TABLE ONLY procedimentomodello
+ADD CONSTRAINT fk_procedimentomodello_modello FOREIGN KEY (modello) REFERENCES modelli.modello(id);
+
+CREATE TABLE segnalibro (
+  id bigserial not null,
+  segnalibro character varying(255),
+  codice character varying(4096),
+  modello bigint,
+  layout character varying(32)
+);
+ALTER TABLE modelli.segnalibro OWNER TO postgres;
+ALTER TABLE ONLY segnalibro
+ADD CONSTRAINT fk_segnalibro_modello FOREIGN KEY (modello) REFERENCES modelli.modello(id);
 
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
