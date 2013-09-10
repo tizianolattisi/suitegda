@@ -28,6 +28,7 @@ import com.axiastudio.suite.base.entities.CambiaPassword;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.forms.FormTipoPratica;
+import com.axiastudio.suite.protocollo.forms.FormMailboxList;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.trolltech.qt.core.QObject;
@@ -182,6 +183,11 @@ public class Mdi extends QMainWindow {
         itemPubblicazioni.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemPubblicazioni.setText(1, "com.axiastudio.suite.pubblicazioni.entities.Pubblicazione");
         itemPubblicazioni.setDisabled(true);
+
+        QTreeWidgetItem itemEmail = new QTreeWidgetItem(itemProtocolloInformatico);
+        itemEmail.setText(0, "Posta elettronica");
+        itemEmail.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+        itemEmail.setText(1, "EMAIL");
         
         /* Anagrafiche */
         QTreeWidgetItem itemAnagrafiche = new QTreeWidgetItem(this.tree);
@@ -370,6 +376,10 @@ public class Mdi extends QMainWindow {
             FormTitolario titolario = new FormTitolario();
             this.workspace.addSubWindow(titolario);
             int exec = titolario.exec();
+        } else if( "EMAIL".equals(formName) ){
+            FormMailboxList mailboxes = new FormMailboxList();
+            this.workspace.addSubWindow(mailboxes);
+            int exec = mailboxes.exec();
         } else if( "TIPIPRATICA".equals(formName) ){
             FormTipoPratica tipipratica = new FormTipoPratica();
             this.workspace.addSubWindow(tipipratica);
