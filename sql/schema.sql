@@ -958,6 +958,16 @@ ALTER TABLE ONLY annullamentoprotocollo
 ALTER TABLE ONLY annullamentoprotocollo
     ADD CONSTRAINT fk_annullamentoprotocollo_motivazioneannullamento FOREIGN KEY (motivazioneannullamento) REFERENCES motivazioneannullamento(id);
 
+CREATE TABLE protocollo.mailbox (
+  id bigserial NOT NULL,
+  host character varying(255),
+  username character varying(255),
+  password character varying(255),
+  inbox character varying(255)
+);
+ALTER TABLE protocollo.mailbox OWNER TO postgres;
+ALTER TABLE ONLY mailbox
+ADD CONSTRAINT mailbox_pkey PRIMARY KEY (id);
 
 -- Pubblicazioni
 SET search_path = pubblicazioni, pg_catalog;
