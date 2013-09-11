@@ -53,7 +53,19 @@ public class FormMailboxList extends QDialog {
 
     private void initLayout(){
         tableWidget = new QTableWidget();
+        tableWidget.verticalHeader().hide();
+        tableWidget.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
+        tableWidget.horizontalHeader().setResizeMode(QHeaderView.ResizeMode.ResizeToContents);
         QVBoxLayout layout = new QVBoxLayout();
+        QHBoxLayout buttonLayout = new QHBoxLayout();
+        QPushButton refreshButton = new QPushButton("Aggiorna");
+        refreshButton.clicked.connect(this, "refreshMailboxes()");
+        buttonLayout.addWidget(refreshButton);
+        QPushButton openButton = new QPushButton("Apri");
+        openButton.clicked.connect(this, "openMailbox()");
+        buttonLayout.addWidget(openButton);
+        buttonLayout.addSpacerItem(new QSpacerItem(10, 10, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum));
+        layout.addLayout(buttonLayout);
         layout.addWidget(this.tableWidget);
         this.setLayout(layout);
     }
@@ -79,18 +91,26 @@ public class FormMailboxList extends QDialog {
         for( int i=0; i<mailboxes.size(); i++ ){
             Mailbox mailbox = mailboxes.get(i);
             tableWidget.insertRow(i);
-            System.out.println(mailbox.getHost());
-            QTableWidgetItem itemHost = new QTableWidgetItem(mailbox.getHost());
+            QTableWidgetItem itemHost = new QTableWidgetItem(mailbox.getDescrizione());
             itemHost.setData(Qt.ItemDataRole.UserRole, mailbox);
-            //itemHost.setFlags(Qt.ItemFlag.ItemIsSelectable, Qt.ItemFlag.ItemIsEnabled);
+            itemHost.setFlags(Qt.ItemFlag.ItemIsSelectable, Qt.ItemFlag.ItemIsEnabled);
             tableWidget.setItem(i, 0, itemHost);
             EmailHelper helper = new EmailHelper(mailbox);
             helper.open();
             QTableWidgetItem itemTotali = new QTableWidgetItem(helper.getMessageCount().toString());
+            itemTotali.setFlags(Qt.ItemFlag.ItemIsSelectable, Qt.ItemFlag.ItemIsEnabled);
             QTableWidgetItem itemNonLetti = new QTableWidgetItem(helper.getUnreadMessageCount().toString());
+            itemNonLetti.setFlags(Qt.ItemFlag.ItemIsSelectable, Qt.ItemFlag.ItemIsEnabled);
             helper.close();
             tableWidget.setItem(i, 1, itemNonLetti);
             tableWidget.setItem(i, 2, itemTotali);
         }
+    }
+
+    private void openMailbox() {
+        QTableWidgetItem item = tableWidget.item(tableWidget.currentRow(), 0);
+        Mailbox mailbox = (Mailbox) item.data(Qt.ItemDataRole.UserRole);
+        FormMailbox form = new FormMailbox(this, mailbox);
+        form.show();
     }
 }

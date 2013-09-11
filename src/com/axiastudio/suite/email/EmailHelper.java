@@ -93,4 +93,22 @@ public class EmailHelper {
         return -1;
     }
 
+    public Folder getFolder() {
+        if( folder != null && folder.isOpen() ){
+            return folder;
+        }
+        return null;
+    }
+
+    public Message getMessage(Integer number){
+        if( folder != null && folder.isOpen() ){
+            try {
+                return folder.getMessage(number);
+            } catch (MessagingException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+        return null;
+    }
+
 }
