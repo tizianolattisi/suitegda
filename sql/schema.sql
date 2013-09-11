@@ -960,6 +960,7 @@ ALTER TABLE ONLY annullamentoprotocollo
 
 CREATE TABLE protocollo.mailbox (
   id bigserial NOT NULL,
+  descrizione character varying(255),
   host character varying(255),
   username character varying(255),
   password character varying(255),

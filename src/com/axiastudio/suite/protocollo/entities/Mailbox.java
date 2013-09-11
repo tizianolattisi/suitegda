@@ -31,6 +31,8 @@ public class Mailbox implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genutente")
     private Long id;
+    @Column(name="descrizione")
+    private String descrizione;
     @Column(name="host")
     private String host;
     @Column(name="username")
@@ -46,6 +48,14 @@ public class Mailbox implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
     }
 
     public String getHost() {
