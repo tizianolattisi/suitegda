@@ -81,6 +81,9 @@ public class Suite {
         app.setConfigItem("alfrescopath.pratica", "/Pratiche");
         app.setConfigItem("alfrescopath.pubblicazione", "/Pubblicazioni");
 
+        // scringa di connessione per OpenOffice
+        app.setConfigItem("ooops.connection", "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+
         Configure.configure(db, System.getProperties());
 
         /* login */

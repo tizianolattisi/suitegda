@@ -156,6 +156,7 @@ public class Configure {
         String alfrescoPathProtocollo = (String) app.getConfigItem("alfrescopath.protocollo");
         String alfrescoPathPratica = (String) app.getConfigItem("alfrescopath.pratica");
         String alfrescoPathPubblicazione = (String) app.getConfigItem("alfrescopath.pubblicazione");
+        String ooopsConnString = (String) app.getConfigItem("ooops.connection");
 
         CmisPlugin cmisPlugin = new CmisPlugin();
         String templateCmisProtocollo = alfrescoPathProtocollo + "/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
@@ -179,7 +180,7 @@ public class Configure {
         /* OOOPS (OpenOffice) */
 
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
-        ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+        ooopsPlugin.setup(ooopsConnString);
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
 
     }
