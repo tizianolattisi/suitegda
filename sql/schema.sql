@@ -1117,6 +1117,7 @@ CREATE TABLE movimentodetermina (
     descrizioneimpegno character varying(255),
     annoimpegno bigint,
     importo numeric(15,2),
+    importoimpegnoaccertamento numeric(15,2),
     tipomovimento character varying(255),
     annoesercizio bigint
 ) INHERITS (generale.withtimestamp);
@@ -1149,6 +1150,8 @@ CREATE TABLE tipopraticamodello (
 );
 ALTER TABLE modelli.tipopraticamodello OWNER TO postgres;
 ALTER TABLE ONLY tipopraticamodello
+ADD CONSTRAINT tipopraticamodello_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY tipopraticamodello
 ADD CONSTRAINT fk_tipopraticamodello_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
 ALTER TABLE ONLY tipopraticamodello
 ADD CONSTRAINT fk_tipopraticamodello_modello FOREIGN KEY (modello) REFERENCES modelli.modello(id);
@@ -1159,6 +1162,8 @@ CREATE TABLE procedimentomodello (
   modello bigint
 );
 ALTER TABLE modelli.procedimentomodello OWNER TO postgres;
+ALTER TABLE ONLY procedimentomodello
+ADD CONSTRAINT procedimentomodello_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY procedimentomodello
 ADD CONSTRAINT fk_procedimentomodello_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
 ALTER TABLE ONLY procedimentomodello
@@ -1172,6 +1177,8 @@ CREATE TABLE segnalibro (
   layout character varying(32)
 );
 ALTER TABLE modelli.segnalibro OWNER TO postgres;
+ALTER TABLE ONLY segnalibro
+ADD CONSTRAINT segnalibro_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY segnalibro
 ADD CONSTRAINT fk_segnalibro_modello FOREIGN KEY (modello) REFERENCES modelli.modello(id);
 
