@@ -1074,6 +1074,8 @@ ALTER TABLE deliberedetermine.determina OWNER TO postgres;
 ALTER TABLE ONLY determina
     ADD CONSTRAINT determina_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY determina
+    ADD CONSTRAINT fk_determina_pratica FOREIGN KEY (idpratica) REFERENCES pratiche.pratica(id);
+ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistoresponsabile FOREIGN KEY (utentevistoresponsabile) REFERENCES base.utente(id);
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistobilancio FOREIGN KEY (utentevistobilancio) REFERENCES base.utente(id);

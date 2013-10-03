@@ -17,6 +17,8 @@
 package com.axiastudio.suite.deliberedetermine.entities;
 
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.pratiche.entities.Pratica;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -45,8 +47,13 @@ public class Determina implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
     private Long id;
+    /*
     @Column(name="idpratica")
     private String idpratica;
+    */
+    @JoinColumn(name = "idpratica", referencedColumnName = "idpratica")
+    @ManyToOne
+    private Pratica pratica;
     @Column(name="codiceinterno", unique=true)
     private String codiceinterno;
     @Column(name="oggetto", length=2048)
@@ -140,12 +147,21 @@ public class Determina implements Serializable {
         this.id = id;
     }
 
+
     public String getIdpratica() {
-        return idpratica;
+        return pratica.getIdpratica();
     }
 
     public void setIdpratica(String idpratica) {
-        this.idpratica = idpratica;
+        // NOP
+    }
+
+    public Pratica getPratica() {
+        return pratica;
+    }
+
+    public void setPratica(Pratica pratica) {
+        this.pratica = pratica;
     }
 
     public String getCodiceinterno() {

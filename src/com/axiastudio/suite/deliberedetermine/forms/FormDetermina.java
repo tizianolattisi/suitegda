@@ -155,7 +155,7 @@ public class FormDetermina extends Window implements IDocumentFolder {
             extension = ".doc";
         }
 
-        String documentName = name + "_" + determina.getIdpratica() + extension;
+        String documentName = name + "_" + determina.getPratica().getIdpratica() + extension;
         helper.createDocument(subpath, documentName, content, mimeType);
         cmisPlugin.showForm(determina);
     }
