@@ -149,7 +149,10 @@ public class Determina implements Serializable {
 
 
     public String getIdpratica() {
-        return pratica.getIdpratica();
+        if( pratica != null ){
+            return pratica.getIdpratica();
+        }
+        return null;
     }
 
     public void setIdpratica(String idpratica) {
