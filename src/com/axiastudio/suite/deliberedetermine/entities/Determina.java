@@ -53,7 +53,7 @@ public class Determina implements Serializable {
     private String oggetto;
     @Column(name="datapratica")
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dataPratica;
+    private Date datapratica;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<ServizioDetermina> servizioDeterminaCollection;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
@@ -61,7 +61,7 @@ public class Determina implements Serializable {
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioDetermina> ufficioDeterminaCollection;
     @Column(name="dispesa")
-    private Boolean diSpesa;
+    private Boolean dispesa;
     @Column(name="dientrata")
     private Boolean diEntrata;
     @Column(name="diregolarizzazione")
@@ -164,12 +164,12 @@ public class Determina implements Serializable {
         this.oggetto = oggetto;
     }
 
-    public Date getDataPratica() {
-        return dataPratica;
+    public Date getDatapratica() {
+        return datapratica;
     }
 
-    public void setDataPratica(Date dataPratica) {
-        this.dataPratica = dataPratica;
+    public void setDatapratica(Date datapratica) {
+        this.datapratica = datapratica;
     }
 
     public Collection<ServizioDetermina> getServizioDeterminaCollection() {
@@ -196,12 +196,12 @@ public class Determina implements Serializable {
         this.ufficioDeterminaCollection = ufficioDeterminaCollection;
     }
 
-    public Boolean getDiSpesa() {
-        return diSpesa;
+    public Boolean getDispesa() {
+        return dispesa;
     }
 
-    public void setDiSpesa(Boolean diSpesa) {
-        this.diSpesa = diSpesa;
+    public void setDispesa(Boolean dispesa) {
+        this.dispesa = dispesa;
     }
 
     public Boolean getDiEntrata() {
