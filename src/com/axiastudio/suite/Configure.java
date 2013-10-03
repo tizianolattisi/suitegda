@@ -175,13 +175,14 @@ public class Configure {
         cmisPluginPratica.setup(cmisUrl, cmisUser, cmisPassword,
                 alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/");
         Register.registerPlugin(cmisPluginPratica, FormPratica.class);
-
+        Register.registerPlugin(cmisPluginPratica, FormDetermina.class);
 
         /* OOOPS (OpenOffice) */
 
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
         ooopsPlugin.setup(ooopsConnString);
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
+        Register.registerPlugin(ooopsPlugin, FormDetermina.class);
 
     }
 
