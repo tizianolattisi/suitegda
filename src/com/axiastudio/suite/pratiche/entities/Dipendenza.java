@@ -88,7 +88,7 @@ public class Dipendenza implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.pratiche.entities.Dipendenza[ id=" + id + " ]";
+        return getDescrizionedominante() + " - " + getDescrizionedipendente();
     }
     
 }
