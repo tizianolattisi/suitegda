@@ -223,7 +223,7 @@ SELECT setval('sedute.seduta_id_seq', 2, true);
 SET search_path = deliberedetermine, pg_catalog;
 
 INSERT INTO determina (id, idpratica, codiceinterno, oggetto, datapratica, dispesa, dientrata, diregolarizzazione, referentepolitico, ufficioresponsabile, nomeresponsabile, vistoresponsabile, datavistoresponsabile, titolarevistoresponsabile, segretariovistoresponsabile, delegatovistoresponsabile, utentevistoresponsabile, vistobilancio, datavistobilancio, titolarevistobilancio, segretariovistobilancio, delegatovistobilancio, utentevistobilancio, vistonegato, datavistonegato, titolarevistonegato, segretariovistonegato, delegatovistonegato, utentevistonegato, iddocumento)
-  VALUES (1, '2012000001', 'DETRS2012000001', 'Determina di prova', '01/01/2012', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, NULL);
+  VALUES (1, '201200002', 'DETRS2012000001', 'Determina di prova', '01/01/2012', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, NULL);
 SELECT setval('deliberedetermine.determina_id_seq', 2, true);
 
 INSERT INTO serviziodetermina (id, determina, servizio) VALUES (1, 1, 1);

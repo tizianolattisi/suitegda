@@ -1074,7 +1074,7 @@ ALTER TABLE deliberedetermine.determina OWNER TO postgres;
 ALTER TABLE ONLY determina
     ADD CONSTRAINT determina_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY determina
-    ADD CONSTRAINT fk_determina_pratica FOREIGN KEY (idpratica) REFERENCES pratiche.pratica(id);
+    ADD CONSTRAINT fk_determina_pratica FOREIGN KEY (idpratica) REFERENCES pratiche.pratica(idpratica);
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistoresponsabile FOREIGN KEY (utentevistoresponsabile) REFERENCES base.utente(id);
 ALTER TABLE ONLY determina
@@ -1139,11 +1139,14 @@ CREATE TABLE modello (
   id bigserial NOT NULL,
   titolo character varying(255),
   descrizione character varying(1024),
-  uri character varying(2048)
+  uri character varying(2048),
+  modellopadre bigint
 );
 ALTER TABLE modelli.modello OWNER TO postgres;
 ALTER TABLE ONLY modello
 ADD CONSTRAINT modello_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY modello
+ADD CONSTRAINT fk_modello_modellopadre FOREIGN KEY (modellopadre) REFERENCES modelli.modello(id);
 
 CREATE TABLE tipopraticamodello (
   id bigserial not null,

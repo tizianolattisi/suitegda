@@ -38,6 +38,9 @@ public class Modello implements Serializable {
     private String descrizione;
     @Column(name="uri", length=2048)
     private String uri;
+    @JoinColumn(name = "modellopadre", referencedColumnName = "id")
+    @ManyToOne
+    private Modello modellopadre;
     @OneToMany(mappedBy = "modello", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<TipoPraticaModello> tipoPraticaModelloCollection;
     @OneToMany(mappedBy = "modello", orphanRemoval = true, cascade=CascadeType.ALL)
@@ -77,6 +80,14 @@ public class Modello implements Serializable {
         this.uri = uri;
     }
 
+    public Modello getModellopadre() {
+        return modellopadre;
+    }
+
+    public void setModellopadre(Modello modellopadre) {
+        this.modellopadre = modellopadre;
+    }
+
     public Collection<TipoPraticaModello> getTipoPraticaModelloCollection() {
         return tipoPraticaModelloCollection;
     }
@@ -100,4 +111,10 @@ public class Modello implements Serializable {
     public void setSegnalibroCollection(Collection<Segnalibro> segnalibroCollection) {
         this.segnalibroCollection = segnalibroCollection;
     }
+
+    @Override
+    public String toString() {
+        return this.descrizione;
+    }
+
 }
