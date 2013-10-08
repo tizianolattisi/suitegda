@@ -1074,6 +1074,8 @@ ALTER TABLE deliberedetermine.determina OWNER TO postgres;
 ALTER TABLE ONLY determina
     ADD CONSTRAINT determina_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY determina
+    ADD CONSTRAINT determina_idpratica_key UNIQUE (idpratica);
+ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_pratica FOREIGN KEY (idpratica) REFERENCES pratiche.pratica(idpratica);
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistoresponsabile FOREIGN KEY (utentevistoresponsabile) REFERENCES base.utente(id);
@@ -1084,27 +1086,28 @@ ALTER TABLE ONLY determina
 
 CREATE TABLE serviziodetermina (
     id bigserial NOT NULL,
-    determina bigint,
+    determina character varying(10),
     servizio bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.serviziodetermina OWNER TO postgres;
 ALTER TABLE ONLY serviziodetermina
     ADD CONSTRAINT serviziodetermina_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY serviziodetermina
-    ADD CONSTRAINT fk_serviziodetermina_determina FOREIGN KEY (determina) REFERENCES deliberedetermine.determina(id);
+    ADD CONSTRAINT fk_serviziodetermina_determina FOREIGN KEY (determina) REFERENCES deliberedetermine.determina(idpratica);
 ALTER TABLE ONLY serviziodetermina
     ADD CONSTRAINT fk_serviziodetermina_servizio FOREIGN KEY (servizio) REFERENCES finanziaria.servizio(id);
 
 CREATE TABLE ufficiodetermina (
     id bigserial NOT NULL,
-    determina bigint,
-    ufficio bigint
+    determina character varying(10),
+    ufficio bigint,
+    principale boolean NOT NULL DEFAULT false
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.ufficiodetermina OWNER TO postgres;
 ALTER TABLE ONLY ufficiodetermina
     ADD CONSTRAINT ufficiodetermina_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY ufficiodetermina
-    ADD CONSTRAINT fk_ufficiodetermina_determina FOREIGN KEY (determina) REFERENCES deliberedetermine.determina(id);
+    ADD CONSTRAINT fk_ufficiodetermina_determina FOREIGN KEY (determina) REFERENCES deliberedetermine.determina(idpratica);
 ALTER TABLE ONLY ufficiodetermina
     ADD CONSTRAINT fk_ufficiodetermina_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
