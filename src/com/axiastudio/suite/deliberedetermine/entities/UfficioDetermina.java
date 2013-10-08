@@ -36,7 +36,7 @@ public class UfficioDetermina implements Serializable {
     @JoinColumn(name = "ufficio", referencedColumnName = "id")
     @ManyToOne
     private Ufficio ufficio;
-    @JoinColumn(name = "determina", referencedColumnName = "idpratica")
+    @JoinColumn(name = "determina", referencedColumnName = "id")
     @ManyToOne
     private Determina determina;
     @Column(name="principale")
