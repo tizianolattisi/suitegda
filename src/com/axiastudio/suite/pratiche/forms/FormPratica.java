@@ -146,7 +146,7 @@ public class FormPratica extends Window implements IDocumentFolder {
             if( name.toLowerCase().endsWith(".odt") || name.toLowerCase().endsWith(".doc") ){
                 IStreamProvider streamProvider = cmisPlugin.createCmisStreamProvider((String) map.get("objectId"));
                 //RuleSet rulesSet = new RuleSet(new HashMap()); // XXX: da pescare
-                Template template = new Template(streamProvider, name, "Documento generato", null);
+                Template template = new Template(streamProvider, name, "Documento generato");
                 templates.add(template);
             }
         }
@@ -154,7 +154,7 @@ public class FormPratica extends Window implements IDocumentFolder {
     }
 
     @Override
-    public void createDocument(String subpath, String name, byte[] content, String mimeType) {
+    public void createDocument(String subpath, String name, String title, String description, byte[] content, String mimeType) {
         Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormPratica.class, "CMIS");

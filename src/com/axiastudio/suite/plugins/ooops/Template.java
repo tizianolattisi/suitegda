@@ -30,14 +30,24 @@ public class Template {
     private final IStreamProvider streamProvider;
     private RuleSet ruleSet;
     private final Map<String, Object> objectsMap;
+    private String parentTemplateName;
 
-    public Template(IStreamProvider streamProvider, String name, String description, RuleSet ruleSet) {
-        this(streamProvider, name, description, ruleSet, null);
+    public Template(IStreamProvider streamProvider, String name, String description) {
+        this(streamProvider, name, description, null, null, null);
+    }
+
+    public Template(IStreamProvider streamProvider, String name, String description, String parentTemplateName) {
+        this(streamProvider, name, description, parentTemplateName, null, null);
+    }
+
+    public Template(IStreamProvider streamProvider, String name, String description, String parentTemplateName, RuleSet ruleSet) {
+        this(streamProvider, name, description, parentTemplateName, ruleSet, null);
     }
     
-    public Template(IStreamProvider streamProvider, String name, String description, RuleSet ruleSet, Map<String, Object> objectsMap) {
+    public Template(IStreamProvider streamProvider, String name, String description, String parentTemplateName, RuleSet ruleSet, Map<String, Object> objectsMap) {
         this.name = name;
         this.description = description;
+        this.parentTemplateName = parentTemplateName;
         this.streamProvider = streamProvider;
         this.ruleSet = ruleSet;
         this.objectsMap = objectsMap;
@@ -66,5 +76,12 @@ public class Template {
     public Map<String, Object> getObjectsMap() {
         return objectsMap;
     }
-    
+
+    public String getParentTemplateName() {
+        return parentTemplateName;
+    }
+
+    public void setParentTemplateName(String parentTemplateName) {
+        this.parentTemplateName = parentTemplateName;
+    }
 }

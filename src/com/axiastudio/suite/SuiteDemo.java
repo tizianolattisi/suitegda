@@ -120,7 +120,7 @@ public class SuiteDemo {
         IStreamProvider streamProviderDetermina = new FileStreamProvider("demo/determina.ott");
         Map<String, Object> objectsMap = new HashMap();
         objectsMap.put("gestoreDeleghe", gestoreDeleghe);
-        Template template = new Template(streamProviderDetermina, "Determina", "Template determina", ruleSet, objectsMap);
+        Template template = new Template(streamProviderDetermina, "Determina", "Template determina", null, ruleSet, objectsMap);
         ooopsPlugin.addTemplate(template);
         
         Register.registerPlugin(ooopsPlugin, FormDetermina.class);

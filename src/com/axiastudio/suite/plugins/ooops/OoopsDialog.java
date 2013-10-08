@@ -109,10 +109,11 @@ public class OoopsDialog extends QDialog {
         while( qtw.rowCount() > 0 ){
             qtw.removeRow(0);
         }
-        qtw.setColumnCount(2);
+        qtw.setColumnCount(3);
         List<String> labels = new ArrayList();
         labels.add("title");
         labels.add("description");
+        labels.add("parent");
         qtw.setHorizontalHeaderLabels(labels);
         Integer i = 0;
         for( Template template: this.templates ){
@@ -124,6 +125,13 @@ public class OoopsDialog extends QDialog {
             QTableWidgetItem itemDescription = new QTableWidgetItem(template.getDescription());
             itemDescription.setFlags(Qt.ItemFlag.ItemIsSelectable, Qt.ItemFlag.ItemIsEnabled);
             qtw.setItem(i, 1, itemDescription);
+            String parentTemplateName = "";
+            if( template.getParentTemplateName() != null ){
+                parentTemplateName = template.getParentTemplateName();
+            }
+            QTableWidgetItem itemParent = new QTableWidgetItem(parentTemplateName);
+            itemParent.setFlags(Qt.ItemFlag.ItemIsSelectable, Qt.ItemFlag.ItemIsEnabled);
+            qtw.setItem(i, 2, itemParent);
             i++;
         }
     }
@@ -141,6 +149,15 @@ public class OoopsDialog extends QDialog {
         //QTableWidgetItem item = qtw.currentItem();
         Integer i = (Integer) item.data(Qt.ItemDataRole.UserRole);
         Template template = this.templates.get(i);
+        String parentTemplateName = template.getName();
+        if( template.getParentTemplateName() != null ){
+            for( Template t: this.templates ){
+                if( t.getName().equals(template.getParentTemplateName()) ){
+                    template.setRuleSet(t.getRuleSet());
+                    parentTemplateName = t.getName();
+                }
+            }
+        }
 
         // filter
         QComboBox fileType = (QComboBox) this.findChild(QComboBox.class, "comboBoxFileType");
@@ -163,7 +180,7 @@ public class OoopsDialog extends QDialog {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             helper.storeDocumentComponent(outputStream, filter);
             // XXX: maybe is better to use streams?
-            ((IDocumentFolder) this.parent()).createDocument("", template.getName(), outputStream.toByteArray(), mimeType);
+            ((IDocumentFolder) this.parent()).createDocument("", template.getName(), "Autocomposizione", parentTemplateName, outputStream.toByteArray(), mimeType);
         }
         this.close();
     }

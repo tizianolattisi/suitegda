@@ -128,9 +128,11 @@ public class FormDetermina extends Window implements IDocumentFolder {
         for( HashMap map: children ){
             String name = (String) map.get("name");
             if( name.toLowerCase().endsWith(".odt") || name.toLowerCase().endsWith(".doc") ){
+                String title = (String) map.get("title");
+                String description = (String) map.get("description");
                 IStreamProvider streamProvider = cmisPlugin.createCmisStreamProvider((String) map.get("objectId"));
                 //RuleSet rulesSet = new RuleSet(new HashMap()); // XXX: da pescare
-                Template template = new Template(streamProvider, name, "Documento generato", null);
+                Template template = new Template(streamProvider, name, title, description);
                 templates.add(template);
             }
         }
@@ -139,7 +141,7 @@ public class FormDetermina extends Window implements IDocumentFolder {
 
     /* XXX: codice simile a FormPratica */
     @Override
-    public void createDocument(String subpath, String name, byte[] content, String mimeType) {
+    public void createDocument(String subpath, String name, String title, String description, byte[] content, String mimeType) {
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
@@ -156,7 +158,7 @@ public class FormDetermina extends Window implements IDocumentFolder {
         }
 
         String documentName = name + "_" + determina.getPratica().getIdpratica() + extension;
-        helper.createDocument(subpath, documentName, content, mimeType);
+        helper.createDocument(subpath, documentName, content, mimeType, title, description);
         cmisPlugin.showForm(determina);
     }
 }

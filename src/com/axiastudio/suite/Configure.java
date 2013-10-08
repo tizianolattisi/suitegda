@@ -207,7 +207,7 @@ public class Configure {
             } else {
                 streamProvider = new FileStreamProvider(modello.getUri());
             }
-            Template template = new Template(streamProvider, modello.getTitolo(), modello.getDescrizione(), ruleSet);
+            Template template = new Template(streamProvider, modello.getTitolo(), modello.getDescrizione(), null, ruleSet);
             ooopsPlugin.addTemplate(template);
         }
     }
