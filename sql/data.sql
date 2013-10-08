@@ -226,14 +226,14 @@ INSERT INTO determina (id, idpratica, codiceinterno, oggetto, datapratica, dispe
   VALUES (1, '201200002', 'DETRS2012000001', 'Determina di prova', '01/01/2012', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, NULL);
 SELECT setval('deliberedetermine.determina_id_seq', 2, true);
 
-INSERT INTO serviziodetermina (id, determina, servizio) VALUES (1, 1, 1);
+INSERT INTO serviziodetermina (id, determina, servizio) VALUES (1, '201200002', 1);
 SELECT setval('deliberedetermine.serviziodetermina_id_seq', 2, true);
 
 INSERT INTO movimentodetermina (id, determina, importo) VALUES (1, 1, 10.00);
 INSERT INTO movimentodetermina (id, determina, importo) VALUES (2, 1, 30.50);
 SELECT setval('deliberedetermine.movimentodetermina_id_seq', 3, true);
 
-INSERT INTO ufficiodetermina (id, determina, ufficio) VALUES (1, 1, 1);
+INSERT INTO ufficiodetermina (id, determina, ufficio) VALUES (1, '201200002', 1);
 SELECT setval('deliberedetermine.ufficiodetermina_id_seq', 2, true);
 
 
