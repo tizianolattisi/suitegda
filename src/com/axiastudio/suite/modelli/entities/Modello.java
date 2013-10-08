@@ -114,7 +114,7 @@ public class Modello implements Serializable {
 
     @Override
     public String toString() {
-        return this.descrizione;
+        return this.titolo;
     }
 
 }
