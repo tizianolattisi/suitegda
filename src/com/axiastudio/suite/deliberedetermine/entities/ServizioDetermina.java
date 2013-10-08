@@ -39,7 +39,7 @@ public class ServizioDetermina implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genserviziodetermina")
     private Long id;
-    @JoinColumn(name = "determina", referencedColumnName = "id")
+    @JoinColumn(name = "determina", referencedColumnName = "idpratica")
     @ManyToOne
     private Determina determina;
     @JoinColumn(name = "servizio", referencedColumnName = "id")

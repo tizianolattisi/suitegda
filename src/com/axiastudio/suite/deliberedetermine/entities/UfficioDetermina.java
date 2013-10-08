@@ -19,14 +19,7 @@ package com.axiastudio.suite.deliberedetermine.entities;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  *
@@ -43,9 +36,12 @@ public class UfficioDetermina implements Serializable {
     @JoinColumn(name = "ufficio", referencedColumnName = "id")
     @ManyToOne
     private Ufficio ufficio;
-    @JoinColumn(name = "determina", referencedColumnName = "id")
+    @JoinColumn(name = "determina", referencedColumnName = "idpratica")
     @ManyToOne
     private Determina determina;
+    @Column(name="principale")
+    private Boolean principale;
+
 
     public Long getId() {
         return id;
@@ -69,6 +65,14 @@ public class UfficioDetermina implements Serializable {
 
     public void setDetermina(Determina determina) {
         this.determina = determina;
+    }
+
+    public Boolean getPrincipale() {
+        return principale;
+    }
+
+    public void setPrincipale(Boolean principale) {
+        this.principale = principale;
     }
 
     @Override
