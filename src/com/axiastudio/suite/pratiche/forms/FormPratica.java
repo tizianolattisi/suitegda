@@ -171,7 +171,7 @@ public class FormPratica extends Window implements IDocumentFolder {
         }
 
         String documentName = name + "_" + pratica.getIdpratica() + extension;
-        helper.createDocument(subpath, documentName, content, mimeType);
+        helper.createDocument(subpath, documentName, content, mimeType, title, description);
         cmisPlugin.showForm(pratica);
     }
     
