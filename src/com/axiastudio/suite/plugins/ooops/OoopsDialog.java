@@ -155,6 +155,7 @@ public class OoopsDialog extends QDialog {
                 if( t.getName().equals(template.getParentTemplateName()) ){
                     template.setRuleSet(t.getRuleSet());
                     parentTemplateName = t.getName();
+                    break;
                 }
             }
         }
