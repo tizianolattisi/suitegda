@@ -457,6 +457,20 @@ ALTER TABLE ONLY normaprocedimento
 ALTER TABLE ONLY normaprocedimento
     ADD CONSTRAINT fk_normaprocedimento_norma FOREIGN KEY (norma) REFERENCES norma(id);
 
+CREATE TABLE faseprocedimento (
+  id bigserial NOT NULL,
+  procedimento bigint,
+  fase bigint,
+  progressivo integer
+);
+ALTER TABLE procedimenti.faseprocedimento OWNER TO postgres;
+ALTER TABLE ONLY faseprocedimento
+ADD CONSTRAINT faseprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY faseprocedimento
+ADD CONSTRAINT fk_faseprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY faseprocedimento
+ADD CONSTRAINT fk_faseprocedimento_fase FOREIGN KEY (fase) REFERENCES pratiche.fase(id);
+
 CREATE TABLE ufficioprocedimento (
     id bigserial NOT NULL,
     procedimento bigint,
