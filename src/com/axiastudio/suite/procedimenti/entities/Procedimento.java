@@ -61,6 +61,8 @@ public class Procedimento implements Serializable {
     @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<NormaProcedimento> normaProcedimentoCollection;
     @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<FaseProcedimento> faseProcedimentoCollection;
+    @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioProcedimento> ufficioProcedimentoCollection;
     @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UtenteProcedimento> utenteProcedimentoCollection;
@@ -129,6 +131,14 @@ public class Procedimento implements Serializable {
 
     public void setNormaProcedimentoCollection(Collection<NormaProcedimento> normaProcedimentoCollection) {
         this.normaProcedimentoCollection = normaProcedimentoCollection;
+    }
+
+    public Collection<FaseProcedimento> getFaseProcedimentoCollection() {
+        return faseProcedimentoCollection;
+    }
+
+    public void setFaseProcedimentoCollection(Collection<FaseProcedimento> faseProcedimentoCollection) {
+        this.faseProcedimentoCollection = faseProcedimentoCollection;
     }
 
     public Collection<UfficioProcedimento> getUfficioProcedimentoCollection() {

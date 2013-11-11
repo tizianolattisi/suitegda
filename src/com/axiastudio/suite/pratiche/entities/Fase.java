@@ -38,7 +38,7 @@ import javax.persistence.Table;
 public class Fase implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genoggetto")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genfase")
     private Long id;
     @Column(name="descrizione")
     private String descrizione;
