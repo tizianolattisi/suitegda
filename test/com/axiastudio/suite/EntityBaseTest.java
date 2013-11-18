@@ -16,9 +16,7 @@
  */
 package com.axiastudio.suite;
 
-import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IDatabase;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -35,6 +33,7 @@ import java.util.Map;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class EntityBaseTest {
+
     private static EntityManagerFactory emf;
     protected EntityManager em;
 
