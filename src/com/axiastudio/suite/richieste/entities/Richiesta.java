@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Afffero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.axiastudio.suite.messaggi.entities;
+package com.axiastudio.suite.richieste.entities;
 
 
 import java.io.Serializable;
 
-public class Messaggio implements Serializable {
+public class Richiesta implements Serializable {
 }
