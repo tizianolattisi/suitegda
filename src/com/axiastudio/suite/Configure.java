@@ -94,6 +94,7 @@ import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
+import com.axiastudio.suite.richieste.entities.Richiesta;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
@@ -445,6 +446,12 @@ public class Configure {
                 "classpath:com/axiastudio/suite/modelli/forms/segnalibro.ui",
                 Segnalibro.class,
                 Dialog.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                null,
+                Richiesta.class,
+                Window.class);
+
 
     }
     
