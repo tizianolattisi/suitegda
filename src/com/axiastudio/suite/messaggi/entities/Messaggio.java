@@ -19,5 +19,5 @@ package com.axiastudio.suite.messaggi.entities;
 
 import java.io.Serializable;
 
-public class Messaggio extends Serializable {
+public class Messaggio implements Serializable {
 }
