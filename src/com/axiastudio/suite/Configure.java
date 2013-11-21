@@ -448,7 +448,7 @@ public class Configure {
                 Dialog.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
-                null,
+                "classpath:com/axiastudio/suite/richieste/forms/richiesta.ui",
                 Richiesta.class,
                 Window.class);
 

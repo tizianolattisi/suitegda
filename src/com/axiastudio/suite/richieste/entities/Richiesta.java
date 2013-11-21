@@ -18,10 +18,12 @@ package com.axiastudio.suite.richieste.entities;
 
 
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.protocollo.entities.UfficioProtocollo;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -48,6 +50,9 @@ public class Richiesta implements Serializable {
     private Integer relazione;
     private Boolean richiestaautomatica = Boolean.FALSE;
     private Integer fase;
+    @OneToMany(mappedBy = "richiesta", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<DestinatarioUfficio> destinatarioUfficioCollection;
+
 
     public Long getId() {
         return id;
@@ -135,5 +140,13 @@ public class Richiesta implements Serializable {
 
     public void setFase(Integer fase) {
         this.fase = fase;
+    }
+
+    public Collection<DestinatarioUfficio> getDestinatarioUfficioCollection() {
+        return destinatarioUfficioCollection;
+    }
+
+    public void setDestinatarioUfficioCollection(Collection<DestinatarioUfficio> destinatarioUfficioCollection) {
+        this.destinatarioUfficioCollection = destinatarioUfficioCollection;
     }
 }
