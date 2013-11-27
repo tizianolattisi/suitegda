@@ -1,6 +1,7 @@
 package com.axiastudio.suite.richieste.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.Utente;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -35,6 +36,7 @@ public class DestinatarioUfficio extends DestinatarioRichiesta implements Serial
     @ManyToOne
     private Richiesta richiesta;
 
+    private Boolean conoscenza=Boolean.FALSE;
     private Boolean letto=Boolean.FALSE;
 
     public Long getId() {
@@ -61,35 +63,63 @@ public class DestinatarioUfficio extends DestinatarioRichiesta implements Serial
         this.richiesta = richiesta;
     }
 
-    public Boolean getLetto() {
-        return letto;
+    public Boolean getConoscenza() {
+        return conoscenza;
     }
 
-    public void setLetto(Boolean letto) {
-        this.letto = letto;
+    public void setConoscenza(Boolean conoscenza) {
+        this.conoscenza = conoscenza;
+    }
+
+    @Override
+    public Boolean getLetto() {
+        return letto;
     }
 
     public void setData(Date date){
 
     }
 
+    public void setLetto(Boolean letto) {
+        this.letto = letto;
+    }
+
+    @Override
     public Date getData(){
         return richiesta.getData();
     }
 
-    public void setTesto(String testo){
-
-    }
-
+    @Override
     public String getTesto(){
         return richiesta.getTesto();
     }
 
-    public void setMittente(){
-
+    public void setTesto(String testo){
     }
 
+    @Override
     public String getMittente(){
         return richiesta.getMittente().getNome();
     }
+
+    public void setMittente(String mittente){
+    }
+
+    public Date getDatascadenza() {
+        return richiesta.getDatascadenza();
+    }
+
+    public void setDatascadenza(Date data) {
+
+    }
+
+    @Override
+    public String getNomedestinatario() {
+        return destinatario.getDescrizione();
+    }
+
+    public void setNomedestinatario(String nome) {
+
+    }
+
 }

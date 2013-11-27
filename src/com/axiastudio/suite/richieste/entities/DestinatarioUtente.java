@@ -35,6 +35,8 @@ public class DestinatarioUtente extends DestinatarioRichiesta implements Seriali
     private Richiesta richiesta;
 
     private Boolean letto=Boolean.FALSE;
+    private Boolean conoscenza=Boolean.FALSE;
+
 
     public Long getId() {
         return id;
@@ -70,16 +72,12 @@ public class DestinatarioUtente extends DestinatarioRichiesta implements Seriali
         this.letto = letto;
     }
 
-    public void setData(Date date){
-
-    }
-
     @Override
     public Date getData(){
         return richiesta.getData();
     }
 
-    public void setTesto(String testo){
+    public void setData(Date date){
 
     }
 
@@ -88,12 +86,42 @@ public class DestinatarioUtente extends DestinatarioRichiesta implements Seriali
         return richiesta.getTesto();
     }
 
-    public void setMittente(){
+    public void setTesto(String testo){
 
+    }
+
+    public void setMittente(String mittente){
     }
 
     @Override
     public String getMittente(){
         return richiesta.getMittente().getNome();
+    }
+
+    @Override
+    public Date getDatascadenza() {
+        return richiesta.getDatascadenza();
+    }
+
+    public void setDatascadenza(Date data) {
+
+    }
+
+    @Override
+    public Boolean getConoscenza() {
+        return conoscenza;
+    }
+
+    public void setConoscenza(Boolean conoscenza) {
+        this.conoscenza = conoscenza;
+    }
+
+    @Override
+    public String getNomedestinatario() {
+        return destinatario.getNome();
+    }
+
+    public void setNomedestinatario(String nome) {
+
     }
 }

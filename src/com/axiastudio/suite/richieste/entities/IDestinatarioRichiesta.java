@@ -16,7 +16,14 @@ public interface IDestinatarioRichiesta {
 
     Date getData();
 
+    Date getDatascadenza();
+
     String getTesto();
 
     String getMittente();
+
+    String getNomedestinatario();
+
+    Boolean getConoscenza();
+
 }

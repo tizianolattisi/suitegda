@@ -88,10 +88,10 @@ public class FormScrivania  extends QMainWindow {
         pushButtonAggiornaLista.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/arrow_refresh.png"));
         pushButtonAggiornaLista.clicked.connect(this, "aggiornaLista()");
 
-        /* table view protocoli */
+        /* table view protocolli */
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         tableView.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
-        tableView.setSortingEnabled(true);
+        //tableView.setSortingEnabled(true);  // TODO: gestire l'ordinamento sulla tabella scrivania
         //tableView.installEventFilter(this);
         tableView.setItemDelegate(new DelegateScrivania(tableView));
         tableView.verticalHeader().setDefaultSectionSize(DEFAULT_ROW_HEIGHT);
@@ -100,7 +100,7 @@ public class FormScrivania  extends QMainWindow {
         /* table view richieste */
         QTableView tableViewRichieste = (QTableView) this.findChild(QTableView.class, "richieste");
         tableViewRichieste.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
-        tableViewRichieste.setSortingEnabled(true);
+        //tableViewRichieste.setSortingEnabled(true); // TODO: gestire l'ordinamento sulla tabella scrivania
         //tableView.setItemDelegate(new DelegateScrivania(tableView));
         tableViewRichieste.verticalHeader().setDefaultSectionSize(DEFAULT_ROW_HEIGHT);
         tableViewRichieste.doubleClicked.connect(this, "apriRichiesta()");
@@ -170,9 +170,13 @@ public class FormScrivania  extends QMainWindow {
         Store store = new Store(destinatari);
         List<Column> colonne = new ArrayList();
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "richieste");
-        colonne.add(new Column("data", "Data", "Data della richiesta"));
         colonne.add(new Column("mittente", "Mittente", "Mittente della richiesta"));
+        colonne.add(new Column("datascadenza", "Data scadenza", "Data di scadenza della richiesta"));
+        colonne.add(new Column("nomedestinatario", "Inviata a", "Richiesta inviata a..."));
         colonne.add(new Column("testo", "Testo", "Testo della richiesta"));
+        colonne.add(new Column("data", "Data invio", "Data della richiesta"));
+        colonne.add(new Column("conoscenza", "cc", "Per conoscenza"));
+        colonne.add(new Column("letto", "Evasa", "Richiesta evasa/conclusa"));
         TableModel model = new TableModel(store, colonne);
         tableView.clearSelection();
         model.setEditable(false);
@@ -182,7 +186,11 @@ public class FormScrivania  extends QMainWindow {
         selectionModel.selectionChanged.connect(this, "selectRowsRichieste(QItemSelection, QItemSelection)");
         tableView.horizontalHeader().setResizeMode(0, QHeaderView.ResizeMode.ResizeToContents); // data
         tableView.horizontalHeader().setResizeMode(1, QHeaderView.ResizeMode.ResizeToContents); // data
-        tableView.horizontalHeader().setResizeMode(2, QHeaderView.ResizeMode.Stretch); // testo
+        tableView.horizontalHeader().setResizeMode(2, QHeaderView.ResizeMode.ResizeToContents); // data
+        tableView.horizontalHeader().setResizeMode(3, QHeaderView.ResizeMode.Stretch); // testo
+        tableView.horizontalHeader().setResizeMode(4, QHeaderView.ResizeMode.ResizeToContents); // data
+        tableView.horizontalHeader().setResizeMode(5, QHeaderView.ResizeMode.ResizeToContents); // data
+        tableView.horizontalHeader().setResizeMode(6, QHeaderView.ResizeMode.ResizeToContents); // data
     }
 
     private void selectRowsRichieste(QItemSelection selected, QItemSelection deselected){
