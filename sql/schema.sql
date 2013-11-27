@@ -521,7 +521,6 @@ CREATE TABLE pratiche.tipopratica (
     codice character varying(10),
     descrizione character varying(255),
     tipopadre bigint,
-    procedimento bigint,
     formulacodifica character varying(255),
     lunghezzaprogressivo integer,
     progressivoanno boolean NOT NULL DEFAULT false,
@@ -536,8 +535,6 @@ ALTER TABLE ONLY pratiche.tipopratica
     ADD CONSTRAINT tipopratica_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY pratiche.tipopratica
     ADD CONSTRAINT fk_tipopratica_tipopadre FOREIGN KEY (tipopadre) REFERENCES pratiche.tipopratica(id);
-ALTER TABLE ONLY pratiche.tipopratica
-    ADD CONSTRAINT fk_tipopratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
 ALTER TABLE ONLY pratiche.tipopratica
     ADD CONSTRAINT fk_tipopratica_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
 
