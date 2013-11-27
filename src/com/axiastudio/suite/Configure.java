@@ -94,7 +94,10 @@ import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
+import com.axiastudio.suite.richieste.RichiestaCallbacks;
+import com.axiastudio.suite.richieste.entities.DestinatarioUfficio;
 import com.axiastudio.suite.richieste.entities.Richiesta;
+import com.axiastudio.suite.richieste.forms.FormRichiesta;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
@@ -139,6 +142,7 @@ public class Configure {
     private static void callbacks() {
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(RichiestaCallbacks.class));
     }
 
     private static void privates() {
@@ -156,6 +160,7 @@ public class Configure {
         Application app = Application.getApplicationInstance();
         String alfrescoPathProtocollo = (String) app.getConfigItem("alfrescopath.protocollo");
         String alfrescoPathPratica = (String) app.getConfigItem("alfrescopath.pratica");
+        String alfrescoPathRichiesta = (String) app.getConfigItem("alfrescopath.richiesta");
         String alfrescoPathPubblicazione = (String) app.getConfigItem("alfrescopath.pubblicazione");
         String ooopsConnString = (String) app.getConfigItem("ooops.connection");
 
@@ -177,6 +182,11 @@ public class Configure {
                 alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/");
         Register.registerPlugin(cmisPluginPratica, FormPratica.class);
         Register.registerPlugin(cmisPluginPratica, FormDetermina.class);
+
+        CmisPlugin cmisPluginRichiesta = new CmisPlugin();
+        cmisPluginRichiesta.setup(cmisUrl, cmisUser, cmisPassword,
+                alfrescoPathRichiesta + "/${data,date,yyyy}/${data,date,MM}/${id}/");
+        Register.registerPlugin(cmisPluginRichiesta, FormRichiesta.class);
 
         /* OOOPS (OpenOffice) */
 
@@ -450,8 +460,12 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                 "classpath:com/axiastudio/suite/richieste/forms/richiesta.ui",
                 Richiesta.class,
-                Window.class);
+                FormRichiesta.class);
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                null,
+                DestinatarioUfficio.class,
+                Window.class);
 
     }
     

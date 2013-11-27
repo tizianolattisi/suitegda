@@ -1,6 +1,6 @@
 package com.axiastudio.suite.richieste.entities;
 
-import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.Utente;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,21 +15,20 @@ import java.util.Date;
  */
 @Entity
 @Table(schema="RICHIESTE")
-@SequenceGenerator(name="gendestinatarioufficio", sequenceName="richieste.destinatarioufficio_id_seq", initialValue=1, allocationSize=1)
-@NamedQuery(name="trovaDestinatarioUfficio",
-        query = "SELECT d FROM DestinatarioUfficio d JOIN d.destinatario u "
-                + "JOIN u.ufficioUtenteCollection uu "
-                + "WHERE d.letto = FALSE AND uu.ospite = FALSE "
-                + "AND uu.utente.id = :id ORDER BY d.richiesta.data desc ")
-public class DestinatarioUfficio extends DestinatarioRichiesta implements Serializable, IDestinatarioRichiesta {
+@SequenceGenerator(name="gendestinatarioutente", sequenceName="richieste.destinatarioutente_id_seq", initialValue=1, allocationSize=1)
+@NamedQuery(name="trovaDestinatarioUtente",
+        query = "SELECT d FROM DestinatarioUtente d JOIN d.destinatario u "
+                + "WHERE d.letto = FALSE "
+                + "AND u.id = :id ORDER BY d.richiesta.data desc ")
+public class DestinatarioUtente extends DestinatarioRichiesta implements Serializable, IDestinatarioRichiesta {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendestinatarioufficio")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendestinatarioutente")
     private Long id;
 
     @JoinColumn(name="destinatario", referencedColumnName = "id")
     @ManyToOne
-    private Ufficio destinatario;
+    private Utente destinatario;
 
     @JoinColumn(name="richiesta", referencedColumnName = "id")
     @ManyToOne
@@ -45,14 +44,15 @@ public class DestinatarioUfficio extends DestinatarioRichiesta implements Serial
         this.id = id;
     }
 
-    public Ufficio getDestinatario() {
+    public Utente getDestinatario() {
         return destinatario;
     }
 
-    public void setDestinatario(Ufficio destinatario) {
+    public void setDestinatario(Utente destinatario) {
         this.destinatario = destinatario;
     }
 
+    @Override
     public Richiesta getRichiesta() {
         return richiesta;
     }
@@ -61,6 +61,7 @@ public class DestinatarioUfficio extends DestinatarioRichiesta implements Serial
         this.richiesta = richiesta;
     }
 
+    @Override
     public Boolean getLetto() {
         return letto;
     }
@@ -73,6 +74,7 @@ public class DestinatarioUfficio extends DestinatarioRichiesta implements Serial
 
     }
 
+    @Override
     public Date getData(){
         return richiesta.getData();
     }
@@ -81,6 +83,7 @@ public class DestinatarioUfficio extends DestinatarioRichiesta implements Serial
 
     }
 
+    @Override
     public String getTesto(){
         return richiesta.getTesto();
     }
@@ -89,6 +92,7 @@ public class DestinatarioUfficio extends DestinatarioRichiesta implements Serial
 
     }
 
+    @Override
     public String getMittente(){
         return richiesta.getMittente().getNome();
     }

@@ -84,6 +84,7 @@ public class Suite {
         // percorsi Alfresco
         app.setConfigItem("alfrescopath.protocollo", "/Protocollo");
         app.setConfigItem("alfrescopath.pratica", "/Pratiche");
+        app.setConfigItem("alfrescopath.richiesta", "/Richieste");
         app.setConfigItem("alfrescopath.pubblicazione", "/Pubblicazioni");
 
         // scringa di connessione per OpenOffice
@@ -102,8 +103,8 @@ public class Suite {
             //mdi.showMaximized();
             mdi.show();
 
-            Window window = Util.formFromName(Richiesta.class.getName());
-            window.show();
+            //Window window = Util.formFromName(Richiesta.class.getName());
+            //window.show();
 
             app.setCustomApplicationName("PyPaPi Suite");
             app.setCustomApplicationCredits("Copyright AXIA Studio 2013<br/>");

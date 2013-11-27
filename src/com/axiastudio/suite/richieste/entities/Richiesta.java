@@ -18,7 +18,7 @@ package com.axiastudio.suite.richieste.entities;
 
 
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.protocollo.entities.UfficioProtocollo;
+import com.axiastudio.suite.richieste.RichiestaListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,6 +28,7 @@ import java.util.Date;
 
 @Entity
 @Table(schema="RICHIESTE")
+@EntityListeners({RichiestaListener.class})
 @SequenceGenerator(name="genrichiesta", sequenceName="richieste.richiesta_id_seq", initialValue=1, allocationSize=1)
 public class Richiesta implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -49,7 +50,8 @@ public class Richiesta implements Serializable {
     private Richiesta richiestaprecedente;
     private Integer relazione;
     private Boolean richiestaautomatica = Boolean.FALSE;
-    private Integer fase;
+    @Enumerated(EnumType.ORDINAL)
+    private StatoRichiesta statorichiesta;
     @OneToMany(mappedBy = "richiesta", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<DestinatarioUfficio> destinatarioUfficioCollection;
 
@@ -134,12 +136,12 @@ public class Richiesta implements Serializable {
         this.richiestaautomatica = richiestaautomatica;
     }
 
-    public Integer getFase() {
-        return fase;
+    public StatoRichiesta getStatorichiesta() {
+        return statorichiesta;
     }
 
-    public void setFase(Integer fase) {
-        this.fase = fase;
+    public void setStatorichiesta(StatoRichiesta fase) {
+        this.statorichiesta = fase;
     }
 
     public Collection<DestinatarioUfficio> getDestinatarioUfficioCollection() {

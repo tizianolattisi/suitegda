@@ -74,6 +74,44 @@
       <string>datascadenza</string>
      </property>
     </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>60</y>
+       <width>171</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="column" stdset="0">
+      <string>statorichiesta</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>PENDENTE</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>IN_CARICO</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>IN_ATTESA</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>RIFIUTATA</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>EVASA</string>
+      </property>
+     </item>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
