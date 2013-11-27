@@ -31,8 +31,7 @@ import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.trolltech.qt.core.QObject;
-import com.trolltech.qt.gui.QListView;
-import com.trolltech.qt.gui.QPushButton;
+import com.trolltech.qt.gui.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,15 +102,27 @@ public class FormDetermina extends Window implements IDocumentFolder {
     protected void indexChanged(int row) {
         super.indexChanged(row);
         verificaAbilitazionePulsanti();
+        popolaProcedimento();
 
-        /* test procedimento
-        QListView listView = (QListView) findChild(QListView.class, "procedimento");
+
+    }
+
+    private void popolaProcedimento() {
+        QListWidget listWidget = (QListWidget) findChild(QListWidget.class, "procedimento");
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         Pratica pratica = (Pratica) determina.getPratica();
-        Procedimento procedimento = pratica.getTipo().getProcedimento();
-        for(FaseProcedimento faseProcedimento: procedimento.getFaseProcedimentoCollection()){
-            Fase fase = faseProcedimento.getFase();
-        }*/
+        listWidget.clear();
+        if( pratica != null ){
+            Procedimento procedimento = pratica.getTipo().getProcedimento();
+            if( procedimento != null ){
+                for(FaseProcedimento faseProcedimento: procedimento.getFaseProcedimentoCollection()){
+                    Fase fase = faseProcedimento.getFase();
+                    QIcon icon = new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png");
+                    QListWidgetItem item = new QListWidgetItem(icon, fase.getDescrizione());
+                    listWidget.addItem(item);
+                }
+            }
+        }
     }
 
     protected void verificaAbilitazionePulsanti() {

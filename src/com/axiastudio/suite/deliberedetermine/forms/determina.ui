@@ -298,7 +298,7 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QListView" name="procedimento"/>
+        <widget class="QListWidget" name="procedimento"/>
        </item>
       </layout>
      </widget>
