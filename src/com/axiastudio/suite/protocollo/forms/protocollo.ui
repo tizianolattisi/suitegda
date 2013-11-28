@@ -969,19 +969,9 @@
       </widget>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
-        <string>Altro</string>
+        <string>Richieste di annullamento</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_6">
-        <item>
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>Richieste di annullamento</string>
-          </property>
-          <property name="buddy">
-           <cstring>tableView_annullamenti</cstring>
-          </property>
-         </widget>
-        </item>
         <item>
          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_annullamenti">
           <property name="entity" stdset="0">
