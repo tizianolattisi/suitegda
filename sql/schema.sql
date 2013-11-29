@@ -461,7 +461,9 @@ CREATE TABLE faseprocedimento (
   id bigserial NOT NULL,
   procedimento bigint,
   fase bigint,
-  progressivo integer
+  progressivo integer,
+  faseconfermata bigint,
+  faserifiutata bigint
 );
 ALTER TABLE procedimenti.faseprocedimento OWNER TO postgres;
 ALTER TABLE ONLY faseprocedimento
