@@ -27,6 +27,7 @@ import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.suite.pratiche.entities.Fase;
+import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
@@ -114,6 +115,15 @@ public class FormDetermina extends Window implements IDocumentFolder {
         Pratica pratica = (Pratica) determina.getPratica();
         listWidget.clear();
         if( pratica != null ){
+            for( FasePratica fp: pratica.getFasePraticaCollection() ){
+                Fase fase = fp.getFase();
+                QIcon icon;
+                icon = new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png");
+                QListWidgetItem item = new QListWidgetItem(icon, fase.getDescrizione());
+                item.setData(Qt.ItemDataRole.UserRole, fp);
+                listWidget.addItem(item);
+            }
+            /*
             Procedimento procedimento = pratica.getTipo().getProcedimento();
             if( procedimento != null ){
                 for(FaseProcedimento faseProcedimento: procedimento.getFaseProcedimentoCollection()){
@@ -125,21 +135,22 @@ public class FormDetermina extends Window implements IDocumentFolder {
                     listWidget.addItem(item);
                 }
             }
+            */
         }
     }
 
     private void completaFase(QListWidgetItem item){
-        FaseProcedimento faseDiProcedimento = (FaseProcedimento) item.data(Qt.ItemDataRole.UserRole);
+        FasePratica fasePratica = (FasePratica) item.data(Qt.ItemDataRole.UserRole);
         List<String> items = new ArrayList<String>();
-        if( faseDiProcedimento.getConfermata() != null ){
-            items.add(faseDiProcedimento.getTestoconfermata());
+        if( fasePratica.getConfermata() != null ){
+            items.add(fasePratica.getTestoconfermata());
         }
-        if( faseDiProcedimento.getRifiutata() != null ){
-            items.add(faseDiProcedimento.getTestorifiutata());
+        if( fasePratica.getRifiutata() != null ){
+            items.add(fasePratica.getTestorifiutata());
         }
         String choice = QInputDialog.getItem(this,
                 "Completamento fase",
-                faseDiProcedimento.getTesto(),
+                fasePratica.getTesto(),
                 items);
         Integer idx = items.lastIndexOf(choice);
         System.out.println(idx);

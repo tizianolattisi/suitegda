@@ -51,6 +51,7 @@
     <class>com.axiastudio.suite.protocollo.entities.Oggetto</class>
     <class>com.axiastudio.suite.pratiche.entities.Dipendenza</class>
     <class>com.axiastudio.suite.pratiche.entities.DipendenzaPratica</class>
+    <class>com.axiastudio.suite.pratiche.entities.FasePratica</class>
     <class>com.axiastudio.suite.anagrafiche.entities.TitoloSoggetto</class>
     <class>com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo</class>
     <class>com.axiastudio.suite.protocollo.entities.MotivazioneAnnullamento</class>

@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU Afffero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.axiastudio.suite.procedimenti.entities;
+package com.axiastudio.suite.pratiche.entities;
 
-import com.axiastudio.suite.pratiche.entities.Fase;
+import com.axiastudio.suite.procedimenti.entities.Procedimento;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,16 +26,16 @@ import java.io.Serializable;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 @Entity
-@Table(schema="PROCEDIMENTI")
-@SequenceGenerator(name="genfaseprocedimento", sequenceName="procedimenti.faseprocedimento_id_seq", initialValue=1, allocationSize=1)
-public class FaseProcedimento implements Serializable {
+@Table(schema="PRATICHE")
+@SequenceGenerator(name="genfasepratica", sequenceName="pratiche.fasepratica_id_seq", initialValue=1, allocationSize=1)
+public class FasePratica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genfaseprocedimento")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genfasepratica")
     private Long id;
-    @JoinColumn(name = "procedimento", referencedColumnName = "id")
+    @JoinColumn(name = "pratica", referencedColumnName = "id")
     @ManyToOne
-    private Procedimento procedimento;
+    private Pratica pratica;
     @JoinColumn(name = "fase", referencedColumnName = "id")
     @ManyToOne
     private Fase fase;
@@ -45,16 +45,18 @@ public class FaseProcedimento implements Serializable {
     private String testo;
     @JoinColumn(name = "confermata", referencedColumnName = "id")
     @ManyToOne
-    private FaseProcedimento confermata;
+    private FasePratica confermata;
     @Column(name="testoconfermata")
     private String testoconfermata;
     @JoinColumn(name = "rifiutata", referencedColumnName = "id")
     @ManyToOne
-    private FaseProcedimento rifiutata;
+    private FasePratica rifiutata;
     @Column(name="testorifiutata")
     private String testorifiutata;
     @Column(name="condizione")
     private String condizione;
+    @Column(name="completata")
+    private Boolean completata=Boolean.FALSE;
 
     public Long getId() {
         return id;
@@ -64,12 +66,12 @@ public class FaseProcedimento implements Serializable {
         this.id = id;
     }
 
-    public Procedimento getProcedimento() {
-        return procedimento;
+    public Pratica getPratica() {
+        return pratica;
     }
 
-    public void setProcedimento(Procedimento procedimento) {
-        this.procedimento = procedimento;
+    public void setPratica(Pratica pratica) {
+        this.pratica = pratica;
     }
 
     public Fase getFase() {
@@ -96,19 +98,19 @@ public class FaseProcedimento implements Serializable {
         this.condizione = condizione;
     }
 
-    public FaseProcedimento getConfermata() {
+    public FasePratica getConfermata() {
         return confermata;
     }
 
-    public void setConfermata(FaseProcedimento confermata) {
+    public void setConfermata(FasePratica confermata) {
         this.confermata = confermata;
     }
 
-    public FaseProcedimento getRifiutata() {
+    public FasePratica getRifiutata() {
         return rifiutata;
     }
 
-    public void setRifiutata(FaseProcedimento rifiutata) {
+    public void setRifiutata(FasePratica rifiutata) {
         this.rifiutata = rifiutata;
     }
 
@@ -134,5 +136,13 @@ public class FaseProcedimento implements Serializable {
 
     public void setTestorifiutata(String testorifiutata) {
         this.testorifiutata = testorifiutata;
+    }
+
+    public Boolean getCompletata() {
+        return completata;
+    }
+
+    public void setCompletata(Boolean completata) {
+        this.completata = completata;
     }
 }
