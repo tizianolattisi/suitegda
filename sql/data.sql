@@ -162,16 +162,22 @@ SET search_path = procedimenti, pg_catalog;
 INSERT INTO procedimento (id, descrizione) VALUES (1, 'Determina del responsabile di servizio');
 SELECT setval('procedimenti.procedimento_id_seq', 2, true);
 
-INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (1, 1, 1, 1); -- Istruttoria
-INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (2, 1, 2, 2); -- Visto responsabile
-INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (3, 1, 3, 3); -- Visto bilancio
-INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (4, 1, 4, 4); -- Visto bilancio
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (1, 1, 1, 1, 'Chiusura dell''istruttoria'); -- Istruttoria
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (2, 1, 2, 2, 'Visto del responsabile del servizio'); -- Visto responsabile
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (3, 1, 3, 3, 'Visto del responsabile di bilancio'); -- Visto bilancio
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (4, 1, 4, 4, 'Completata'); -- Visto bilancio
 SELECT setval('procedimenti.faseprocedimento_id_seq', 5, true);
 
 -- update di confermata e rifiutata
-UPDATE faseprocedimento SET confermata=2 WHERE id=1;
-UPDATE faseprocedimento SET confermata=3, rifiutata=1 WHERE id=2;
-UPDATE faseprocedimento SET confermata=4, rifiutata=1 WHERE id=3;
+UPDATE faseprocedimento SET confermata=2, testoconfermata='Chiudi l''istruttoria' WHERE id=1;
+UPDATE faseprocedimento SET confermata=3, testoconfermata='Dai il visto',
+  rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=2;
+UPDATE faseprocedimento SET confermata=4, testoconfermata='Dai il visto',
+  rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=3;
 
 insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (1, 3, 1, true);
 SELECT setval('procedimenti.ufficioprocedimento_id_seq', 2, true);

@@ -31,12 +31,10 @@ import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.trolltech.qt.core.QObject;
+import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -55,6 +53,9 @@ public class FormDetermina extends Window implements IDocumentFolder {
         pushButtonResponsabile.clicked.connect(this, "vistoResponsabile()");
         pushButtonBilancio.clicked.connect(this, "vistoBilancio()");
         pushButtonVistoNegato.clicked.connect(this, "vistoNegato()");
+
+        QListWidget procedimento = (QListWidget) findChild(QListWidget.class, "procedimento");
+        procedimento.itemDoubleClicked.connect(this, "completaFase(QListWidgetItem)");
         
     }
     
@@ -117,11 +118,35 @@ public class FormDetermina extends Window implements IDocumentFolder {
             if( procedimento != null ){
                 for(FaseProcedimento faseProcedimento: procedimento.getFaseProcedimentoCollection()){
                     Fase fase = faseProcedimento.getFase();
-                    QIcon icon = new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png");
+                    QIcon icon;
+                    icon = new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png");
                     QListWidgetItem item = new QListWidgetItem(icon, fase.getDescrizione());
+                    item.setData(Qt.ItemDataRole.UserRole, faseProcedimento);
                     listWidget.addItem(item);
                 }
             }
+        }
+    }
+
+    private void completaFase(QListWidgetItem item){
+        FaseProcedimento faseDiProcedimento = (FaseProcedimento) item.data(Qt.ItemDataRole.UserRole);
+        List<String> items = new ArrayList<String>();
+        if( faseDiProcedimento.getConfermata() != null ){
+            items.add(faseDiProcedimento.getTestoconfermata());
+        }
+        if( faseDiProcedimento.getRifiutata() != null ){
+            items.add(faseDiProcedimento.getTestorifiutata());
+        }
+        String choice = QInputDialog.getItem(this,
+                "Completamento fase",
+                faseDiProcedimento.getTesto(),
+                items);
+        Integer idx = items.lastIndexOf(choice);
+        System.out.println(idx);
+        if( idx == 1 ){
+            // accettata
+        } else if( idx == 2 ){
+            // rifiutata
         }
     }
 
@@ -143,7 +168,7 @@ public class FormDetermina extends Window implements IDocumentFolder {
     /* XXX: codice simile a FormPratica */
     @Override
     public List<Template> getTemplates() {
-        List<Template> templates = new ArrayList();
+        List<Template> templates = new ArrayList<Template>();
         //Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());

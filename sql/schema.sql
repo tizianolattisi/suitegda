@@ -473,11 +473,13 @@ CREATE TABLE faseprocedimento (
   id bigserial NOT NULL,
   procedimento bigint,
   fase bigint,
+  testo character varying(512),
   progressivo integer,
   confermata bigint,
+  testoconfermata character varying(512),
   rifiutata bigint,
-  condizione text,
-  completata boolean
+  testorifiutata character varying(512),
+  condizione text
 );
 ALTER TABLE procedimenti.faseprocedimento OWNER TO postgres;
 ALTER TABLE ONLY faseprocedimento
