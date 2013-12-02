@@ -127,8 +127,8 @@ public class Procedimento implements Serializable {
         return faseProcedimentoCollection;
     }
 
-    public void setFaseProcedimentoCollection(List<FaseProcedimento> faseProcedimentoCollection) {
-        this.faseProcedimentoCollection = faseProcedimentoCollection;
+    public void setFaseProcedimentoCollection(Collection<FaseProcedimento> faseProcedimentoCollection) {
+        this.faseProcedimentoCollection = (List<FaseProcedimento>) faseProcedimentoCollection;
     }
 
     public Collection<UfficioProcedimento> getUfficioProcedimentoCollection() {

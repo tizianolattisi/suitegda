@@ -43,11 +43,15 @@ public class FaseProcedimento implements Serializable {
     private Integer progressivo;
     @Column(name="testo")
     private String testo;
+    @Column(name="confermabile")
+    private Boolean confermabile=false;
     @JoinColumn(name = "confermata", referencedColumnName = "id")
     @ManyToOne
     private FaseProcedimento confermata;
     @Column(name="testoconfermata")
     private String testoconfermata;
+    @Column(name="rifiutabile")
+    private Boolean rifiutabile=false;
     @JoinColumn(name = "rifiutata", referencedColumnName = "id")
     @ManyToOne
     private FaseProcedimento rifiutata;
@@ -134,5 +138,26 @@ public class FaseProcedimento implements Serializable {
 
     public void setTestorifiutata(String testorifiutata) {
         this.testorifiutata = testorifiutata;
+    }
+
+    public Boolean getConfermabile() {
+        return confermabile;
+    }
+
+    public void setConfermabile(Boolean confermabile) {
+        this.confermabile = confermabile;
+    }
+
+    public Boolean getRifiutabile() {
+        return rifiutabile;
+    }
+
+    public void setRifiutabile(Boolean rifiutabile) {
+        this.rifiutabile = rifiutabile;
+    }
+
+    @Override
+    public String toString() {
+        return getFase().getDescrizione();
     }
 }

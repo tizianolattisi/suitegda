@@ -71,10 +71,7 @@ import com.axiastudio.suite.pratiche.forms.FormDipendenzaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.procedimenti.entities.Carica;
-import com.axiastudio.suite.procedimenti.entities.Delega;
-import com.axiastudio.suite.procedimenti.entities.Norma;
-import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.procedimenti.entities.*;
 import com.axiastudio.suite.procedimenti.forms.FormDelega;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
@@ -196,7 +193,7 @@ public class Configure {
         OoopsPlugin ooopsPlugin = (OoopsPlugin) Register.queryPlugin(FormPratica.class, "Ooops");
         List<Modello> modelli = SuiteUtil.elencoModelli();
         for( Modello modello: modelli ){
-            HashMap<String,String> map = new HashMap();
+            HashMap<String,String> map = new HashMap<String, String>();
             for( Segnalibro segnalibro: modello.getSegnalibroCollection() ){
                 map.put(segnalibro.getSegnalibro(), segnalibro.getCodice());
             }
@@ -415,6 +412,11 @@ public class Configure {
                               "classpath:com/axiastudio/suite/procedimenti/forms/procedimento.ui",
                               Procedimento.class,
                               Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/procedimenti/forms/faseprocedimento.ui",
+                FaseProcedimento.class,
+                Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
