@@ -489,9 +489,9 @@ ADD CONSTRAINT fk_faseprocedimento_procedimento FOREIGN KEY (procedimento) REFER
 ALTER TABLE ONLY faseprocedimento
 ADD CONSTRAINT fk_faseprocedimento_fase FOREIGN KEY (fase) REFERENCES pratiche.fase(id);
 ALTER TABLE ONLY faseprocedimento
-ADD CONSTRAINT fk_confermata_fase FOREIGN KEY (confermata) REFERENCES procedimenti.faseprocedimento(id);
+ADD CONSTRAINT fk_faseprocedimento_confermata FOREIGN KEY (confermata) REFERENCES procedimenti.faseprocedimento(id);
 ALTER TABLE ONLY faseprocedimento
-ADD CONSTRAINT fk_rifiutata_fase FOREIGN KEY (rifiutata) REFERENCES procedimenti.faseprocedimento(id);
+ADD CONSTRAINT fk_faseprocedimento_rifiutata FOREIGN KEY (rifiutata) REFERENCES procedimenti.faseprocedimento(id);
 
 CREATE TABLE ufficioprocedimento (
     id bigserial NOT NULL,
@@ -727,6 +727,30 @@ CREATE RULE dipendenzapratica_update AS ON UPDATE TO dipendenzapratica DO INSTEA
             dipendenza = new.dipendenza, praticadipendente = new.praticadipendente
         WHERE ((zdipendenzapratica.id)::integer = old.id);
 
+CREATE TABLE fasepratica (
+  id bigserial NOT NULL,
+  pratica bigint,
+  fase bigint,
+  testo character varying(512),
+  progressivo integer,
+  confermata bigint,
+  testoconfermata character varying(512),
+  rifiutata bigint,
+  testorifiutata character varying(512),
+  condizione text,
+  completata boolean default false
+);
+ALTER TABLE pratiche.fasepratica OWNER TO postgres;
+ALTER TABLE ONLY fasepratica
+ADD CONSTRAINT fasepratica_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY fasepratica
+ADD CONSTRAINT fk_fasepratica_pratica FOREIGN KEY (pratica) REFERENCES pratiche.pratica(id);
+ALTER TABLE ONLY fasepratica
+ADD CONSTRAINT fk_fasepratica_fase FOREIGN KEY (fase) REFERENCES pratiche.fase(id);
+ALTER TABLE ONLY fasepratica
+ADD CONSTRAINT fk_fasepratica_confermata FOREIGN KEY (confermata) REFERENCES pratiche.fasepratica(id);
+ALTER TABLE ONLY fasepratica
+ADD CONSTRAINT fk_fasepratica_rifiutata FOREIGN KEY (rifiutata) REFERENCES pratiche.fasepratica(id);
 
 -- Protocollo
 SET search_path = protocollo, pg_catalog;
