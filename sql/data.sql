@@ -173,11 +173,14 @@ INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
   VALUES (4, 1, 4, 4, 'Completata'); -- Visto bilancio
 SELECT setval('procedimenti.faseprocedimento_id_seq', 5, true);
 -- update di confermata e rifiutata
-UPDATE faseprocedimento SET confermata=2, testoconfermata='Chiudi l''istruttoria' WHERE id=1;
-UPDATE faseprocedimento SET confermata=3, testoconfermata='Dai il visto',
-  rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=2;
-UPDATE faseprocedimento SET confermata=4, testoconfermata='Dai il visto',
-  rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=3;
+UPDATE faseprocedimento SET confermabile=true, confermata=2, testoconfermata='Chiudi l''istruttoria' WHERE id=1;
+UPDATE faseprocedimento SET confermabile=true, confermata=3, testoconfermata='Dai il visto',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=2;
+UPDATE faseprocedimento SET confermabile=true, confermata=4, testoconfermata='Dai il visto',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=3;
+-- closure
+UPDATE faseprocedimento SET condizione='{ determina -> determina.oggetto == "valido" }' WHERE id=2;
+
 
 -- fasi di pratica
 INSERT INTO pratiche.fasepratica (id, pratica, fase, progressivo, testo)
@@ -190,11 +193,11 @@ INSERT INTO pratiche.fasepratica (id, pratica, fase, progressivo, testo)
   VALUES (4, 2, 4, 4, 'Completata'); -- Visto bilancio
 SELECT setval('procedimenti.faseprocedimento_id_seq', 5, true);
 -- update di confermata e rifiutata
-UPDATE pratiche.fasepratica SET confermata=2, testoconfermata='Chiudi l''istruttoria' WHERE id=1;
-UPDATE pratiche.fasepratica SET confermata=3, testoconfermata='Dai il visto',
-  rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=2;
-UPDATE pratiche.fasepratica SET confermata=4, testoconfermata='Dai il visto',
-  rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=3;
+UPDATE pratiche.fasepratica SET confermabile=true, confermata=2, testoconfermata='Chiudi l''istruttoria' WHERE id=1;
+UPDATE pratiche.fasepratica SET confermabile=true, confermata=3, testoconfermata='Dai il visto',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=2;
+UPDATE pratiche.fasepratica SET confermabile=true, confermata=4, testoconfermata='Dai il visto',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=3;
 -- fase completata
 UPDATE pratiche.fasepratica SET completata=true WHERE id=1;
 -- closure
