@@ -197,6 +197,8 @@ UPDATE pratiche.fasepratica SET confermata=4, testoconfermata='Dai il visto',
   rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=3;
 -- fase completata
 UPDATE pratiche.fasepratica SET completata=true WHERE id=1;
+-- closure
+UPDATE pratiche.fasepratica SET condizione='{ determina -> determina.oggetto == "valido" }' WHERE id=2;
 
 insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (1, 3, 1, true);
 SELECT setval('procedimenti.ufficioprocedimento_id_seq', 2, true);
