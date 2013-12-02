@@ -29,6 +29,7 @@ import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.procedimenti.SimpleWorkFlow;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.trolltech.qt.core.QObject;
@@ -112,35 +113,29 @@ public class FormDetermina extends Window implements IDocumentFolder {
     private void popolaProcedimento() {
         QListWidget listWidget = (QListWidget) findChild(QListWidget.class, "procedimento");
         Determina determina = (Determina) this.getContext().getCurrentEntity();
-        Pratica pratica = (Pratica) determina.getPratica();
+        SimpleWorkFlow wf = new SimpleWorkFlow(determina);
         listWidget.clear();
-        if( pratica != null ){
-            for( FasePratica fp: pratica.getFasePraticaCollection() ){
-                Fase fase = fp.getFase();
-                QIcon icon;
-                icon = new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png");
-                QListWidgetItem item = new QListWidgetItem(icon, fase.getDescrizione());
-                item.setData(Qt.ItemDataRole.UserRole, fp);
-                listWidget.addItem(item);
-            }
-            /*
-            Procedimento procedimento = pratica.getTipo().getProcedimento();
-            if( procedimento != null ){
-                for(FaseProcedimento faseProcedimento: procedimento.getFaseProcedimentoCollection()){
-                    Fase fase = faseProcedimento.getFase();
-                    QIcon icon;
-                    icon = new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png");
-                    QListWidgetItem item = new QListWidgetItem(icon, fase.getDescrizione());
-                    item.setData(Qt.ItemDataRole.UserRole, faseProcedimento);
-                    listWidget.addItem(item);
-                }
-            }
-            */
+        for( FasePratica fp: wf.getFasi() ){
+            Fase fase = fp.getFase();
+            QIcon icon;
+            icon = new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png");
+            QListWidgetItem item = new QListWidgetItem(icon, fase.getDescrizione());
+            item.setData(Qt.ItemDataRole.UserRole, fp);
+            listWidget.addItem(item);
         }
     }
 
     private void completaFase(QListWidgetItem item){
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        SimpleWorkFlow wf = new SimpleWorkFlow(determina);
         FasePratica fasePratica = (FasePratica) item.data(Qt.ItemDataRole.UserRole);
+
+        if( !wf.attivabile(fasePratica) ){
+            String msg = "Non hai i permessi per completare la fase";
+            QMessageBox.warning(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+            return;
+        }
+
         List<String> items = new ArrayList<String>();
         if( fasePratica.getConfermata() != null ){
             items.add(fasePratica.getTestoconfermata());
@@ -153,7 +148,6 @@ public class FormDetermina extends Window implements IDocumentFolder {
                 fasePratica.getTesto(),
                 items);
         Integer idx = items.lastIndexOf(choice);
-        System.out.println(idx);
         if( idx == 1 ){
             // accettata
         } else if( idx == 2 ){
