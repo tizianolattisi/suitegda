@@ -88,6 +88,7 @@ SET search_path = pratiche, pg_catalog;
 INSERT INTO fase (id, descrizione) VALUES (1, 'Istruttoria');
 INSERT INTO fase (id, descrizione) VALUES (2, 'Visto del responsabile');
 INSERT INTO fase (id, descrizione) VALUES (3, 'Visto di bilancio');
+INSERT INTO fase (id, descrizione) VALUES (4, 'Completata');
 
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (1, 'DET', 'Determine', NULL, NULL, 0, false, false );
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (2, 'GES', 'Ramo GES', NULL, NULL, 0, false, false);
@@ -161,9 +162,16 @@ SET search_path = procedimenti, pg_catalog;
 INSERT INTO procedimento (id, descrizione) VALUES (1, 'Determina del responsabile di servizio');
 SELECT setval('procedimenti.procedimento_id_seq', 2, true);
 
-INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (1, 1, 1, 1);
-INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (2, 1, 2, 2);
-INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (3, 1, 3, 3);
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (1, 1, 1, 1); -- Istruttoria
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (2, 1, 2, 2); -- Visto responsabile
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (3, 1, 3, 3); -- Visto bilancio
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo) VALUES (4, 1, 4, 4); -- Visto bilancio
+SELECT setval('procedimenti.faseprocedimento_id_seq', 5, true);
+
+-- update di confermata e rifiutata
+UPDATE faseprocedimento SET confermata=2 WHERE id=1;
+UPDATE faseprocedimento SET confermata=3, rifiutata=1 WHERE id=2;
+UPDATE faseprocedimento SET confermata=4, rifiutata=1 WHERE id=3;
 
 insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (1, 3, 1, true);
 SELECT setval('procedimenti.ufficioprocedimento_id_seq', 2, true);

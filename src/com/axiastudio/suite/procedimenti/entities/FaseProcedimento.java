@@ -42,6 +42,16 @@ public class FaseProcedimento implements Serializable {
     private Fase fase;
     @Column(name="progressivo")
     private Integer progressivo;
+    @JoinColumn(name = "confermata", referencedColumnName = "id")
+    @ManyToOne
+    private FaseProcedimento confermata;
+    @JoinColumn(name = "rifiutata", referencedColumnName = "id")
+    @ManyToOne
+    private FaseProcedimento rifiutata;
+    @Column(name="condizione")
+    private String condizione;
+    @Column(name="completata")
+    private Boolean completata;
 
     public Long getId() {
         return id;
@@ -75,4 +85,35 @@ public class FaseProcedimento implements Serializable {
         this.progressivo = progressivo;
     }
 
+    public String getCondizione() {
+        return condizione;
+    }
+
+    public void setCondizione(String condizione) {
+        this.condizione = condizione;
+    }
+
+    public FaseProcedimento getConfermata() {
+        return confermata;
+    }
+
+    public void setConfermata(FaseProcedimento confermata) {
+        this.confermata = confermata;
+    }
+
+    public FaseProcedimento getRifiutata() {
+        return rifiutata;
+    }
+
+    public void setRifiutata(FaseProcedimento rifiutata) {
+        this.rifiutata = rifiutata;
+    }
+
+    public Boolean getCompletata() {
+        return completata;
+    }
+
+    public void setCompletata(Boolean completata) {
+        this.completata = completata;
+    }
 }

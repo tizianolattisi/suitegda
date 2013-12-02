@@ -457,13 +457,27 @@ ALTER TABLE ONLY normaprocedimento
 ALTER TABLE ONLY normaprocedimento
     ADD CONSTRAINT fk_normaprocedimento_norma FOREIGN KEY (norma) REFERENCES norma(id);
 
+CREATE TABLE pratiche.fase (
+  id bigserial NOT NULL,
+  descrizione character varying(255) NOT NULL,
+  esclusivadaufficio bigint,
+  istruttoria boolean
+);
+ALTER TABLE pratiche.fase OWNER TO postgres;
+ALTER TABLE ONLY pratiche.fase
+ADD CONSTRAINT fase_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY pratiche.fase
+ADD CONSTRAINT fk_fase_ufficio FOREIGN KEY (esclusivadaufficio) REFERENCES base.ufficio(id);
+
 CREATE TABLE faseprocedimento (
   id bigserial NOT NULL,
   procedimento bigint,
   fase bigint,
   progressivo integer,
-  faseconfermata bigint,
-  faserifiutata bigint
+  confermata bigint,
+  rifiutata bigint,
+  condizione text,
+  completata boolean
 );
 ALTER TABLE procedimenti.faseprocedimento OWNER TO postgres;
 ALTER TABLE ONLY faseprocedimento
@@ -472,6 +486,10 @@ ALTER TABLE ONLY faseprocedimento
 ADD CONSTRAINT fk_faseprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
 ALTER TABLE ONLY faseprocedimento
 ADD CONSTRAINT fk_faseprocedimento_fase FOREIGN KEY (fase) REFERENCES pratiche.fase(id);
+ALTER TABLE ONLY faseprocedimento
+ADD CONSTRAINT fk_confermata_fase FOREIGN KEY (confermata) REFERENCES procedimenti.faseprocedimento(id);
+ALTER TABLE ONLY faseprocedimento
+ADD CONSTRAINT fk_rifiutata_fase FOREIGN KEY (rifiutata) REFERENCES procedimenti.faseprocedimento(id);
 
 CREATE TABLE ufficioprocedimento (
     id bigserial NOT NULL,
@@ -597,18 +615,6 @@ ALTER TABLE ONLY delega
 
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
-
-CREATE TABLE fase (
-    id bigserial NOT NULL,
-    descrizione character varying(255) NOT NULL,
-    esclusivadaufficio bigint,
-    istruttoria boolean
-);
-ALTER TABLE pratiche.fase OWNER TO postgres;
-ALTER TABLE ONLY fase
-    ADD CONSTRAINT fase_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY fase
-    ADD CONSTRAINT fk_fase_ufficio FOREIGN KEY (esclusivadaufficio) REFERENCES base.ufficio(id);
 
 CREATE TABLE pratica (
     id bigserial NOT NULL,
@@ -1197,7 +1203,7 @@ ADD CONSTRAINT fk_procedimentomodello_modello FOREIGN KEY (modello) REFERENCES m
 CREATE TABLE segnalibro (
   id bigserial not null,
   segnalibro character varying(255),
-  codice character varying(4096),
+  codice text,
   modello bigint,
   layout character varying(32)
 );
