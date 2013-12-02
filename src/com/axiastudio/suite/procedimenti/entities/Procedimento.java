@@ -123,7 +123,7 @@ public class Procedimento implements Serializable {
         this.normaProcedimentoCollection = normaProcedimentoCollection;
     }
 
-    public Collection<FaseProcedimento> getFaseProcedimentoCollection() {
+    public List<FaseProcedimento> getFaseProcedimentoCollection() {
         return faseProcedimentoCollection;
     }
 
