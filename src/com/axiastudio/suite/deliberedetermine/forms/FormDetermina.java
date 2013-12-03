@@ -145,24 +145,10 @@ public class FormDetermina extends Window implements IDocumentFolder {
     private void completaFase(QListWidgetItem item){
         Integer i = (Integer) item.data(Qt.ItemDataRole.UserRole);
 
-        // se ci sono eventuali modifiche nelle condizioni
+        // XXX: se ci sono eventuali modifiche nelle condizioni?
         Determina determina = (Determina) this.getContext().getCurrentEntity();
-        Pratica pratica = determina.getPratica();
-        System.out.println(pratica.getDescrizione());
-        Controller controller = (Controller) Register.queryUtility(IController.class, Pratica.class.getName());
-        controller.refresh(pratica);
-        determina.setPratica(pratica);
-        //Controller controller2 = (Controller) Register.queryUtility(IController.class, Determina.class.getName());
-        //controller2.refresh(determina);
-
-        //this.getContext().refreshElement();
-        popolaProcedimento();
-
-        System.out.println(pratica.getDescrizione());
-
         SimpleWorkFlow wf = new SimpleWorkFlow(determina);
         FasePratica fasePratica = wf.getFase(i);
-        //FasePratica fasePratica = (FasePratica) item.data(Qt.ItemDataRole.UserRole);
 
         // posso completare solo la fase attiva (la prima non competata disponibile)
         if( !wf.getFaseAttiva().equals(fasePratica) ){
