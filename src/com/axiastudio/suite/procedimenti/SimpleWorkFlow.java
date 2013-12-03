@@ -72,4 +72,44 @@ public class SimpleWorkFlow {
     public Boolean attivabile(Integer i){
         return attivabile(fasi.get(i));
     }
+
+    public FasePratica getFaseAttiva(){
+        for( FasePratica fp: getFasi() ){
+            if( !fp.getCompletata() ){
+                return fp;
+            }
+        }
+        return null;
+    }
+
+    public void completaFase(FasePratica fp){
+        completaFase(fp, Boolean.TRUE);
+    }
+
+    public void completaFase(FasePratica fp, Boolean confermata){
+        //fp.setCompletata(confermata);
+        if( confermata ){
+            setFaseAttiva(fp.getConfermata());
+        } else {
+            setFaseAttiva(fp.getRifiutata());
+        }
+
+    }
+
+    public void setFaseAttiva(FasePratica faseAttiva){
+        Boolean trovata = Boolean.FALSE;
+        for( FasePratica fp: getFasi() ){
+            if( !trovata ){
+                if( !fp.equals(faseAttiva) ){
+                    fp.setCompletata(Boolean.TRUE);
+                } else {
+                    fp.setCompletata(Boolean.FALSE);
+                    trovata = Boolean.TRUE;
+                }
+            } else {
+                fp.setCompletata(Boolean.FALSE);
+            }
+        }
+    }
+
 }

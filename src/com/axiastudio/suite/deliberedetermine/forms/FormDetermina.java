@@ -117,8 +117,12 @@ public class FormDetermina extends Window implements IDocumentFolder {
         listWidget.clear();
         for( FasePratica fp: wf.getFasi() ){
             Fase fase = fp.getFase();
-            QIcon icon;
-            icon = new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png");
+            QIcon icon=null;
+            if( fp.getCompletata() ){
+                icon = new QIcon("classpath:com/axiastudio/suite/resources/tick.png");
+            } else if ( fp.equals(wf.getFaseAttiva()) ){
+                icon = new QIcon("classpath:com/axiastudio/suite/resources/star.png");
+            }
             QListWidgetItem item = new QListWidgetItem(icon, fase.getDescrizione());
             item.setData(Qt.ItemDataRole.UserRole, fp);
             listWidget.addItem(item);
@@ -130,6 +134,12 @@ public class FormDetermina extends Window implements IDocumentFolder {
         SimpleWorkFlow wf = new SimpleWorkFlow(determina);
         FasePratica fasePratica = (FasePratica) item.data(Qt.ItemDataRole.UserRole);
 
+        // posso completare solo la fase attiva (la prima non competata disponibile)
+        if( !wf.getFaseAttiva().equals(fasePratica) ){
+            return;
+        }
+
+        // devo verificare se sussistono delle condizioni per poter attivare la fase
         if( !wf.attivabile(fasePratica) ){
             String msg = "Non hai i permessi per completare la fase";
             QMessageBox.warning(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
@@ -148,11 +158,12 @@ public class FormDetermina extends Window implements IDocumentFolder {
                 fasePratica.getTesto(),
                 items);
         Integer idx = items.lastIndexOf(choice);
-        if( idx == 1 ){
-            // accettata
-        } else if( idx == 2 ){
-            // rifiutata
+        if( idx == 0 ){
+            wf.completaFase(fasePratica);
+        } else if( idx == 1 ){
+            wf.completaFase(fasePratica, Boolean.FALSE);
         }
+        popolaProcedimento();
     }
 
     protected void verificaAbilitazionePulsanti() {
