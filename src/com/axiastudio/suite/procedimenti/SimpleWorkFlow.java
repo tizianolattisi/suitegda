@@ -13,6 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: tiziano
@@ -22,6 +23,7 @@ import java.util.List;
 public class SimpleWorkFlow {
 
     List<FasePratica> fasi = new ArrayList<FasePratica>();
+    Map<String, Object> map = null;
     Object obj;
 
     public SimpleWorkFlow(Object object) {
@@ -54,6 +56,10 @@ public class SimpleWorkFlow {
         return fasi.get(i);
     }
 
+    public void bind(Map<String, Object> map){
+        this.map = map;
+    }
+
     public Boolean attivabile(FasePratica fp){
         String groovyClosure = fp.getCondizione();
         if( groovyClosure== null ){
@@ -63,6 +69,12 @@ public class SimpleWorkFlow {
         binding.setVariable("obj", obj);
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         binding.setVariable("utente", utente);
+
+        // extra bindings
+        for( String key: map.keySet() ){
+            binding.setVariable(key, map.get(key));
+        }
+
         GroovyShell shell = new GroovyShell(binding);
         String groovy = groovyClosure + "(obj)";
         Boolean value = (Boolean) shell.evaluate(groovy);
