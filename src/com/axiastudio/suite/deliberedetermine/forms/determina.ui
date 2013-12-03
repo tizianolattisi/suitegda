@@ -18,67 +18,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
-    <property name="leftMargin">
-     <number>8</number>
-    </property>
-    <property name="topMargin">
-     <number>8</number>
-    </property>
-    <property name="rightMargin">
-     <number>8</number>
-    </property>
-    <item row="0" column="0">
-     <widget class="QGroupBox" name="groupBox_4">
-      <property name="title">
-       <string>Tipo di determina</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
-       <property name="leftMargin">
-        <number>8</number>
-       </property>
-       <property name="topMargin">
-        <number>8</number>
-       </property>
-       <property name="rightMargin">
-        <number>8</number>
-       </property>
-       <property name="bottomMargin">
-        <number>8</number>
-       </property>
-       <item>
-        <widget class="QCheckBox" name="checkBox_4">
-         <property name="text">
-          <string>di spesa</string>
-         </property>
-         <property name="column" stdset="0">
-          <string>dispesa</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_5">
-         <property name="text">
-          <string>di entrata</string>
-         </property>
-         <property name="column" stdset="0">
-          <string>diEntrata</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_6">
-         <property name="text">
-          <string>di regolarizzazione</string>
-         </property>
-         <property name="column" stdset="0">
-          <string>diRegolarizzazione</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="1">
+    <item row="0" column="0" colspan="2">
      <widget class="QGroupBox" name="groupBox_6">
       <property name="title">
        <string>Pratica</string>
@@ -165,11 +105,11 @@
      </widget>
     </item>
     <item row="1" column="0" rowspan="2">
-     <widget class="QGroupBox" name="groupBox_7">
+     <widget class="QGroupBox" name="groupBox_4">
       <property name="title">
-       <string>Registro</string>
+       <string>Tipo di determina</string>
       </property>
-      <layout class="QGridLayout" name="gridLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
        <property name="leftMargin">
         <number>8</number>
        </property>
@@ -182,49 +122,33 @@
        <property name="bottomMargin">
         <number>8</number>
        </property>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_4">
+       <item>
+        <widget class="QCheckBox" name="checkBox_4">
          <property name="text">
-          <string>Anno</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="spinBox">
-         <property name="frame">
-          <bool>true</bool>
-         </property>
-         <property name="keyboardTracking">
-          <bool>true</bool>
-         </property>
-         <property name="minimum">
-          <number>2000</number>
-         </property>
-         <property name="maximum">
-          <number>2040</number>
-         </property>
-         <property name="value">
-          <number>2013</number>
+          <string>di spesa</string>
          </property>
          <property name="column" stdset="0">
-          <string>anno</string>
+          <string>dispesa</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_5">
+       <item>
+        <widget class="QCheckBox" name="checkBox_5">
          <property name="text">
-          <string>Numero</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_5">
-         <property name="enabled">
-          <bool>false</bool>
+          <string>di entrata</string>
          </property>
          <property name="column" stdset="0">
-          <string>numero</string>
+          <string>diEntrata</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_6">
+         <property name="text">
+          <string>di regolarizzazione</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>diRegolarizzazione</string>
          </property>
         </widget>
        </item>
@@ -304,41 +228,66 @@
      </widget>
     </item>
     <item row="3" column="0">
-     <widget class="QGroupBox" name="groupBox_2">
+     <widget class="QGroupBox" name="groupBox_7">
       <property name="title">
-       <string>Visti</string>
+       <string>Registro</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QGridLayout" name="gridLayout_2">
        <property name="leftMargin">
-        <number>4</number>
+        <number>8</number>
        </property>
        <property name="topMargin">
-        <number>4</number>
+        <number>8</number>
        </property>
        <property name="rightMargin">
-        <number>4</number>
+        <number>8</number>
        </property>
        <property name="bottomMargin">
-        <number>4</number>
+        <number>8</number>
        </property>
-       <item>
-        <widget class="QPushButton" name="pushButtonResponsabile">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>del responsabile</string>
+          <string>Anno</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="pushButtonBilancio">
-         <property name="text">
-          <string>di bilancio</string>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="spinBox">
+         <property name="frame">
+          <bool>true</bool>
+         </property>
+         <property name="keyboardTracking">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>2000</number>
+         </property>
+         <property name="maximum">
+          <number>2040</number>
+         </property>
+         <property name="value">
+          <number>2013</number>
+         </property>
+         <property name="column" stdset="0">
+          <string>anno</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="pushButtonVistoNegato">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>visto negato</string>
+          <string>Numero</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_5">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>numero</string>
          </property>
         </widget>
        </item>
