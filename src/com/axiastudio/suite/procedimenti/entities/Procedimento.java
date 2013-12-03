@@ -19,19 +19,8 @@ package com.axiastudio.suite.procedimenti.entities;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.util.List;
+import javax.persistence.*;
 
 /**
  *
@@ -60,6 +49,9 @@ public class Procedimento implements Serializable {
     private Boolean attivo=true;
     @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<NormaProcedimento> normaProcedimentoCollection;
+    @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
+    @OrderColumn(name="progressivo")
+    private List<FaseProcedimento> faseProcedimentoCollection;
     @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioProcedimento> ufficioProcedimentoCollection;
     @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
@@ -129,6 +121,14 @@ public class Procedimento implements Serializable {
 
     public void setNormaProcedimentoCollection(Collection<NormaProcedimento> normaProcedimentoCollection) {
         this.normaProcedimentoCollection = normaProcedimentoCollection;
+    }
+
+    public List<FaseProcedimento> getFaseProcedimentoCollection() {
+        return faseProcedimentoCollection;
+    }
+
+    public void setFaseProcedimentoCollection(Collection<FaseProcedimento> faseProcedimentoCollection) {
+        this.faseProcedimentoCollection = (List<FaseProcedimento>) faseProcedimentoCollection;
     }
 
     public Collection<UfficioProcedimento> getUfficioProcedimentoCollection() {

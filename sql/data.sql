@@ -85,6 +85,11 @@ SELECT setval('anagrafiche.relazionesoggetto_id_seq', 2, true);
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
+INSERT INTO fase (id, descrizione) VALUES (1, 'Istruttoria');
+INSERT INTO fase (id, descrizione) VALUES (2, 'Visto del responsabile');
+INSERT INTO fase (id, descrizione) VALUES (3, 'Visto di bilancio');
+INSERT INTO fase (id, descrizione) VALUES (4, 'Completata');
+
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (1, 'DET', 'Determine', NULL, NULL, 0, false, false );
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (2, 'GES', 'Ramo GES', NULL, NULL, 0, false, false);
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1, '${s2}${anno}${n2,number,00000}', 5, true, false);
@@ -156,6 +161,47 @@ SET search_path = procedimenti, pg_catalog;
 
 INSERT INTO procedimento (id, descrizione) VALUES (1, 'Determina del responsabile di servizio');
 SELECT setval('procedimenti.procedimento_id_seq', 2, true);
+
+-- fasi di procedimento
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (1, 1, 1, 1, 'Chiusura dell''istruttoria'); -- Istruttoria
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (2, 1, 2, 2, 'Visto del responsabile del servizio'); -- Visto responsabile
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (3, 1, 3, 3, 'Visto del responsabile di bilancio'); -- Visto bilancio
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (4, 1, 4, 4, 'Completata'); -- Visto bilancio
+SELECT setval('procedimenti.faseprocedimento_id_seq', 5, true);
+-- update di confermata e rifiutata
+UPDATE faseprocedimento SET confermabile=true, confermata=2, testoconfermata='Chiudi l''istruttoria' WHERE id=1;
+UPDATE faseprocedimento SET confermabile=true, confermata=3, testoconfermata='Dai il visto',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=2;
+UPDATE faseprocedimento SET confermabile=true, confermata=4, testoconfermata='Dai il visto',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=3;
+-- closure
+UPDATE faseprocedimento SET condizione='{ determina -> determina.oggetto == "valido" }' WHERE id=2;
+
+
+-- fasi di pratica
+INSERT INTO pratiche.fasepratica (id, pratica, fase, progressivo, testo)
+  VALUES (1, 2, 1, 1, 'Chiusura dell''istruttoria'); -- Istruttoria
+INSERT INTO pratiche.fasepratica (id, pratica, fase, progressivo, testo)
+  VALUES (2, 2, 2, 2, 'Visto del responsabile del servizio'); -- Visto responsabile
+INSERT INTO pratiche.fasepratica (id, pratica, fase, progressivo, testo)
+  VALUES (3, 2, 3, 3, 'Visto del responsabile di bilancio'); -- Visto bilancio
+INSERT INTO pratiche.fasepratica (id, pratica, fase, progressivo, testo)
+  VALUES (4, 2, 4, 4, 'Completata'); -- Visto bilancio
+SELECT setval('procedimenti.faseprocedimento_id_seq', 5, true);
+-- update di confermata e rifiutata
+UPDATE pratiche.fasepratica SET confermabile=true, confermata=2, testoconfermata='Chiudi l''istruttoria' WHERE id=1;
+UPDATE pratiche.fasepratica SET confermabile=true, confermata=3, testoconfermata='Dai il visto',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=2;
+UPDATE pratiche.fasepratica SET confermabile=true, confermata=4, testoconfermata='Dai il visto',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=3;
+-- fase completata
+UPDATE pratiche.fasepratica SET completata=true WHERE id=1;
+-- closure
+UPDATE pratiche.fasepratica SET condizione='{ determina -> determina.oggetto == "valido" }' WHERE id=2;
 
 insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (1, 3, 1, true);
 SELECT setval('procedimenti.ufficioprocedimento_id_seq', 2, true);

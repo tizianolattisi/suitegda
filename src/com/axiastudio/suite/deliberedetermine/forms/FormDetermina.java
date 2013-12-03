@@ -19,20 +19,30 @@ package com.axiastudio.suite.deliberedetermine.forms;
 import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
+import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
+import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.Template;
+import com.axiastudio.suite.pratiche.entities.Fase;
+import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.trolltech.qt.gui.QPushButton;
+import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
+import com.axiastudio.suite.procedimenti.SimpleWorkFlow;
+import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
+import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
+import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.trolltech.qt.core.QObject;
+import com.trolltech.qt.core.Qt;
+import com.trolltech.qt.gui.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -45,15 +55,22 @@ public class FormDetermina extends Window implements IDocumentFolder {
     
     public FormDetermina(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
+
+        /*
         pushButtonResponsabile = (QPushButton) this.findChild(QPushButton.class, "pushButtonResponsabile");
         pushButtonBilancio = (QPushButton) this.findChild(QPushButton.class, "pushButtonBilancio");
         pushButtonVistoNegato = (QPushButton) this.findChild(QPushButton.class, "pushButtonVistoNegato");
         pushButtonResponsabile.clicked.connect(this, "vistoResponsabile()");
         pushButtonBilancio.clicked.connect(this, "vistoBilancio()");
         pushButtonVistoNegato.clicked.connect(this, "vistoNegato()");
+        */
+
+        QListWidget procedimento = (QListWidget) findChild(QListWidget.class, "procedimento");
+        procedimento.itemDoubleClicked.connect(this, "completaFase(QListWidgetItem)");
         
     }
-    
+
+    /*
     protected Boolean vistoResponsabile() {
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
@@ -61,8 +78,9 @@ public class FormDetermina extends Window implements IDocumentFolder {
         determina.setDataVistoResponsabile(new Date());
         determina.setUtenteVistoResponsabile(utente);
         return true;
-    }
+    }*/
 
+    /*
     protected Boolean vistoBilancio() {
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
@@ -70,8 +88,9 @@ public class FormDetermina extends Window implements IDocumentFolder {
         determina.setDataVistoBilancio(new Date());
         determina.setUtenteVistoBilancio(utente);
         return true;
-    }
+    }*/
 
+    /*
     protected Boolean vistoNegato() {
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
@@ -79,27 +98,101 @@ public class FormDetermina extends Window implements IDocumentFolder {
         determina.setDataVistoNegato(new Date());
         determina.setUtenteVistoNegato(utente);
         return true;
-        
-    }
+    }*/
     
     /*
      * Verifica delle condizioni di abilitazione alla firma del responsabile
      * del servizio.
      */
+    /*
     protected Boolean checkResponsabile() {
         return false;
     }
 
     protected Boolean checkBilancio() {
         return true;
-    }
+    }*/
 
     @Override
     protected void indexChanged(int row) {
         super.indexChanged(row);
-        verificaAbilitazionePulsanti();
+        //verificaAbilitazionePulsanti();
+        popolaProcedimento();
+
     }
 
+    private void popolaProcedimento() {
+        QListWidget listWidget = (QListWidget) findChild(QListWidget.class, "procedimento");
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        SimpleWorkFlow wf = new SimpleWorkFlow(determina);
+        listWidget.clear();
+        Integer i=0;
+        for( FasePratica fp: wf.getFasi() ){
+            Fase fase = fp.getFase();
+            QIcon icon=null;
+            if( fp.getCompletata() ){
+                icon = new QIcon("classpath:com/axiastudio/suite/resources/tick.png");
+            } else if ( fp.equals(wf.getFaseAttiva()) ){
+                icon = new QIcon("classpath:com/axiastudio/suite/resources/star.png");
+            }
+            QListWidgetItem item = new QListWidgetItem(icon, fase.getDescrizione());
+            item.setData(Qt.ItemDataRole.UserRole, i);
+            listWidget.addItem(item);
+            i++;
+        }
+    }
+
+    private void completaFase(QListWidgetItem item){
+        Integer i = (Integer) item.data(Qt.ItemDataRole.UserRole);
+
+        // XXX: se ci sono eventuali modifiche nelle condizioni?
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        SimpleWorkFlow wf = new SimpleWorkFlow(determina);
+        FasePratica fasePratica = wf.getFase(i);
+
+        // posso completare solo la fase attiva (la prima non competata disponibile)
+        if( !wf.getFaseAttiva().equals(fasePratica) ){
+            return;
+        }
+
+        // devo verificare se sussistono delle condizioni per poter attivare la fase
+        Map<String, Object> bindings = new HashMap<String, Object>();
+        IGestoreDeleghe gestoreDeleghe = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
+        IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
+        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(this.getClass(), "CMIS");
+        AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(determina);
+        bindings.put("gestoreDeleghe", gestoreDeleghe);
+        bindings.put("finanziariaUtil", finanziariaUtil);
+        bindings.put("alfrescoHelper", alfrescoHelper);
+        bindings.put("CodiceCarica", CodiceCarica.class);
+        wf.bind(bindings);
+        if( !wf.attivabile(fasePratica) ){
+            String msg = "Non hai i permessi per completare la fase";
+            QMessageBox.warning(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+            return;
+        }
+
+        List<String> items = new ArrayList<String>();
+        if( fasePratica.getConfermata() != null ){
+            items.add(fasePratica.getTestoconfermata());
+        }
+        if( fasePratica.getRifiutata() != null ){
+            items.add(fasePratica.getTestorifiutata());
+        }
+        String choice = QInputDialog.getItem(this,
+                "Completamento fase",
+                fasePratica.getTesto(),
+                items);
+        Integer idx = items.lastIndexOf(choice);
+        if( idx == 0 ){
+            wf.completaFase(fasePratica);
+        } else if( idx == 1 ){
+            wf.completaFase(fasePratica, Boolean.FALSE);
+        }
+        popolaProcedimento();
+    }
+
+    /*
     protected void verificaAbilitazionePulsanti() {
         Determina d = (Determina) this.getContext().getCurrentEntity();
         Boolean vResp = false;
@@ -113,12 +206,12 @@ public class FormDetermina extends Window implements IDocumentFolder {
         this.pushButtonResponsabile.setEnabled(vResp);
         this.pushButtonBilancio.setEnabled(vBil);
         this.pushButtonVistoNegato.setEnabled(vNeg);
-    }
+    }*/
 
     /* XXX: codice simile a FormPratica */
     @Override
     public List<Template> getTemplates() {
-        List<Template> templates = new ArrayList();
+        List<Template> templates = new ArrayList<Template>();
         //Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
