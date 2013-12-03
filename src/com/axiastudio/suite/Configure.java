@@ -416,7 +416,7 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                 "classpath:com/axiastudio/suite/procedimenti/forms/faseprocedimento.ui",
                 FaseProcedimento.class,
-                Window.class);
+                Dialog.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
