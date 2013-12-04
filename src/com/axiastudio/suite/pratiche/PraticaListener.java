@@ -81,15 +81,14 @@ public class PraticaListener {
             pratica.setUbicazione(pratica.getAttribuzione());
         }
 
-        // creazione del dettaglio
-
     }
 
     @PostPersist
     void postPersist(Pratica pratica){
+        // creazione del dettaglio
         Database db = (Database) Register.queryUtility(IDatabase.class);
         String className = pratica.getTipo().getProcedimento().getTipodettaglio();
-        if( className != null ){
+        if( className != null && !className.equals("") ){
             try {
                 Class<?> klass = Class.forName(className);
                 IDettaglio dettaglio = (IDettaglio) klass.newInstance();
