@@ -17,18 +17,11 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.FetchType;
+import java.util.Collection;
+import javax.persistence.*;
 
 /**
  *
@@ -50,8 +43,6 @@ public class TipoPratica implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private TipoPratica tipopadre;
     @JoinColumn(name="procedimento", referencedColumnName = "id")
-    @ManyToOne
-    private Procedimento procedimento;
     @Column(name="formulacodifica")
     private String formulacodifica;
     @Column(name="lunghezzaprogressivo")
@@ -69,6 +60,9 @@ public class TipoPratica implements Serializable {
     private Boolean approvata=false;
     @Column(name="obsoleta")
     private Boolean obsoleta=false;
+    @OneToMany(mappedBy = "tipopratica", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<TipoPraticaProcedimento> tipopraticaProcedimentoCollection;
+
 
     public Long getId() {
         return id;
@@ -103,11 +97,10 @@ public class TipoPratica implements Serializable {
     }
 
     public Procedimento getProcedimento() {
-        return procedimento;
-    }
-
-    public void setProcedimento(Procedimento procedimento) {
-        this.procedimento = procedimento;
+        // TODO: univocità?
+        Collection<TipoPraticaProcedimento> c = getTipopraticaProcedimentoCollection();
+        TipoPraticaProcedimento tpp = (TipoPraticaProcedimento) c.toArray()[0];
+        return tpp.getProcedimento();
     }
 
     public String getFormulacodifica() {
@@ -172,6 +165,14 @@ public class TipoPratica implements Serializable {
 
     public void setObsoleta(Boolean obsoleta) {
         this.obsoleta = obsoleta;
+    }
+
+    public Collection<TipoPraticaProcedimento> getTipopraticaProcedimentoCollection() {
+        return tipopraticaProcedimentoCollection;
+    }
+
+    public void setTipopraticaProcedimentoCollection(Collection<TipoPraticaProcedimento> tipopraticaProcedimentoCollection) {
+        this.tipopraticaProcedimentoCollection = tipopraticaProcedimentoCollection;
     }
 
     @Override

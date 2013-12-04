@@ -52,7 +52,7 @@ public class Determina implements Serializable {
     private String idpratica;
     */
     @JoinColumn(name = "idpratica", referencedColumnName = "idpratica")
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.REFRESH)
     private Pratica pratica;
     @Column(name="codiceinterno", unique=true)
     private String codiceinterno;

@@ -25,6 +25,7 @@ import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 /**
@@ -96,6 +97,9 @@ public class Pratica implements Serializable, ITimeStamped {
     @Column(name="datascadenza")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datascadenza;
+    @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @OrderColumn(name="progressivo")
+    private List<FasePratica> fasePraticaCollection;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -312,10 +316,17 @@ public class Pratica implements Serializable, ITimeStamped {
         this.fase = fase;
     }
 
-    
+    public List<FasePratica> getFasePraticaCollection() {
+        return fasePraticaCollection;
+    }
+
+    public void setFasePraticaCollection(List<FasePratica> fasePraticaCollection) {
+        this.fasePraticaCollection = fasePraticaCollection;
+    }
+
     /*
-     * timestamped
-     */
+         * timestamped
+         */
     @Override
     public Date getRecordcreato() {
         return recordcreato;
