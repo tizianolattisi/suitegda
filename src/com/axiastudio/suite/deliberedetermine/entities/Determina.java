@@ -17,6 +17,7 @@
 package com.axiastudio.suite.deliberedetermine.entities;
 
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 
 import java.io.Serializable;
@@ -42,7 +43,7 @@ import javax.persistence.Temporal;
 @Entity
 @Table(schema="deliberedetermine")
 @SequenceGenerator(name="gendetermina", sequenceName="deliberedetermine.determina_id_seq", initialValue=1, allocationSize=1)
-public class Determina implements Serializable {
+public class Determina implements Serializable, IDettaglio {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
@@ -148,6 +149,7 @@ public class Determina implements Serializable {
     }
 
 
+    @Override
     public String getIdpratica() {
         if( pratica != null ){
             return pratica.getIdpratica();
@@ -155,14 +157,17 @@ public class Determina implements Serializable {
         return null;
     }
 
+    @Override
     public void setIdpratica(String idpratica) {
         // NOP
     }
 
+    @Override
     public Pratica getPratica() {
         return pratica;
     }
 
+    @Override
     public void setPratica(Pratica pratica) {
         this.pratica = pratica;
     }
