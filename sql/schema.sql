@@ -426,7 +426,8 @@ CREATE TABLE procedimento (
     maxgiorniistruttoria integer,
     iniziativa character varying(20),
     soggetto bigint,
-    attivo boolean
+    attivo boolean,
+    tipodettaglio character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE procedimenti.procedimento OWNER TO postgres;
 ALTER TABLE ONLY procedimento

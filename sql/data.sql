@@ -159,7 +159,7 @@ SELECT setval('finanziaria.capitolo_id_seq', 2, true);
 -- Procedimenti
 SET search_path = procedimenti, pg_catalog;
 
-INSERT INTO procedimento (id, descrizione) VALUES (1, 'Determina del responsabile di servizio');
+INSERT INTO procedimento (id, descrizione, tipodettaglio) VALUES (1, 'Determina del responsabile di servizio', 'com.axiastudio.suite.deliberedetermine.entities.Determina');
 SELECT setval('procedimenti.procedimento_id_seq', 2, true);
 
 -- fasi di procedimento
