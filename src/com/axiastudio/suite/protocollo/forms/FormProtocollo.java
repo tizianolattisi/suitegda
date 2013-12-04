@@ -370,6 +370,9 @@ public class FormProtocollo extends Window {
         }
         ((QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario")).setEnabled(!protocollo.getConvalidaprotocollo());
 
+        // protocollo annullato: non possibile inserire o eliminare richieste di annullamento
+        Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, "tableView_annullamenti"), protocollo.getAnnullato());
+
         // Visibilità dei soggetti riservati
         PyPaPiTableView tvSoggettiRiservati =  (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_soggettiriservatiprotocollo");
         if( !(nuovoInserimento || profilo.inSportelloOAttribuzioneR()) ){
