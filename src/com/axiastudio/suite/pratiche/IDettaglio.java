@@ -13,4 +13,7 @@ public interface IDettaglio {
 
     Pratica getPratica();
     void setPratica(Pratica pratica);
+
+    public String getCodiceinterno();
+    public void setCodiceinterno(String codiceinterno);
 }

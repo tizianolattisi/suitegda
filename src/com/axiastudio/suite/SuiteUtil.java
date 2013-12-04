@@ -22,6 +22,7 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.base.entities.Giunta;
 import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.modelli.entities.Modello;
+import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

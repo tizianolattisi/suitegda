@@ -410,7 +410,7 @@ public class DemoData {
         servizioDetermina.setServizio(servizioAffariGenerali);
         servizioDeterminaCollection.add(servizioDetermina);
         determina.setServizioDeterminaCollection(servizioDeterminaCollection);
-        determina.setPratica(pratica);
+        //determina.setPratica(pratica);
         determina.setCodiceinterno("DETRS201300001");
         
         em.getTransaction().begin();

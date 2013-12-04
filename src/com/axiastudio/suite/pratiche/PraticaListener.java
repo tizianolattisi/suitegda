@@ -81,10 +81,31 @@ public class PraticaListener {
             pratica.setUbicazione(pratica.getAttribuzione());
         }
 
+        // creazione del dettaglio
+
     }
 
     @PostPersist
     void postPersist(Pratica pratica){
-
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        String className = pratica.getTipo().getProcedimento().getTipodettaglio();
+        if( className != null ){
+            try {
+                Class<?> klass = Class.forName(className);
+                IDettaglio dettaglio = (IDettaglio) klass.newInstance();
+                dettaglio.setIdpratica(pratica.getIdpratica());
+                dettaglio.setCodiceinterno(pratica.getCodiceinterno());
+                EntityManager em = db.getEntityManagerFactory().createEntityManager();
+                em.getTransaction().begin();
+                em.persist(dettaglio);
+                em.getTransaction().commit();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (InstantiationException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
     }
 }
