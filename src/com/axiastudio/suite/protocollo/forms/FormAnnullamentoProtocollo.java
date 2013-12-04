@@ -23,6 +23,7 @@ import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.pratiche.entities.Pratica;
@@ -50,10 +51,19 @@ public class FormAnnullamentoProtocollo extends Dialog {
     private void updatePermission() {
         /* permesso di confermare o respingere */
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        Costante costanteUfficioAnnullati = SuiteUtil.trovaCostante("UFFICIO_ANNULLATI");
+        Long idUfficioAnnullati = Long.parseLong(costanteUfficioAnnullati.getValore());
+        Boolean inUfficioAnnullati = Boolean.FALSE;     // TODO: conferma annullamento da rifare tramite finestra 'scollegata' da form Protocollo (e dalla logica della callback)
+        for( UfficioUtente ufficio: autenticato.getUfficioUtenteCollection()) {
+            if (ufficio.getUfficio().getId().equals(idUfficioAnnullati) && ufficio.getRicerca()) {
+                inUfficioAnnullati = Boolean.TRUE;
+            }
+        }
         AnnullamentoProtocollo annullamento = (AnnullamentoProtocollo) this.getContext().getCurrentEntity();
         QCheckBox checkBox_autorizzato = (QCheckBox) this.findChild(QCheckBox.class, "checkBox_autorizzato");
         QCheckBox checkBox_respinto = (QCheckBox) this.findChild(QCheckBox.class, "checkBox_respinto");
-        Boolean modifica = !annullamento.getRespinto() && !annullamento.getAutorizzato() && autenticato.getAttributoreprotocollo();
+        Boolean modifica = annullamento.getId()!=null && !annullamento.getRespinto() && !annullamento.getAutorizzato()
+                            && autenticato.getAttributoreprotocollo() && autenticato.getSupervisorepratiche() && inUfficioAnnullati;
         checkBox_autorizzato.setEnabled( modifica );
         checkBox_respinto.setEnabled( modifica );
     }
@@ -61,7 +71,8 @@ public class FormAnnullamentoProtocollo extends Dialog {
     @Override
     public void accept() {
         AnnullamentoProtocollo annullamento = (AnnullamentoProtocollo) this.getContext().getCurrentEntity();
-        if( annullamento.getId() != null && (annullamento.getAutorizzato() || annullamento.getRespinto()) ){
+        if( annullamento.getEsecutoreautorizzazione() == null && annullamento.getId() != null &&
+                                    (annullamento.getAutorizzato() || annullamento.getRespinto()) ){
             
             /* devo registrare indipendentemente dal protocollo */
             Calendar calendar = Calendar.getInstance();
@@ -71,24 +82,31 @@ public class FormAnnullamentoProtocollo extends Dialog {
             annullamento.setDataautorizzazione(today);
             
             /* se è un annullamento:
-             *  - aggiungo l'ufficio protocollo come unica attribuzione
+             *  - aggiungo l'ufficio protocollo come attribuzione in via principale
              *  - inserisco nella pratica (unica) dei protocolli annullati
              *  - consolido il protocollo
              *  - marco il protocollo come annullato
              */
             if( annullamento.getAutorizzato() ){
                 Costante costantePraticaAnnullati = SuiteUtil.trovaCostante("PRATICA_ANNULLATI");
-                Long idPraticaAnnullati = Long.parseLong(costantePraticaAnnullati.getValore());
-                Controller controllerPratica = (Controller) Register.queryUtility(IController.class, Pratica.class.getName());
-                Pratica praticaAnnullati = (Pratica) controllerPratica.get(idPraticaAnnullati);
+                //Long idPraticaAnnullati = Long.parseLong(costantePraticaAnnullati.getValore());
+                //Controller controllerPratica = (Controller) Register.queryUtility(IController.class, Pratica.class.getName());
+                Pratica praticaAnnullati = SuiteUtil.trovaPratica(costantePraticaAnnullati.getValore());
                 Costante costanteUfficioAnnullati = SuiteUtil.trovaCostante("UFFICIO_ANNULLATI");
                 Long idUfficioAnnullati = Long.parseLong(costanteUfficioAnnullati.getValore());
                 Controller controllerUfficio = (Controller) Register.queryUtility(IController.class, Ufficio.class.getName());
                 Ufficio ufficioAnnullati = (Ufficio) controllerUfficio.get(idUfficioAnnullati);
                 Protocollo protocollo = annullamento.getProtocollo();
-                protocollo.setAttribuzioneCollection(null);
+                // protocollo.setAttribuzioneCollection(null);
                 protocollo.setPraticaProtocolloCollection(null);
-                List<Attribuzione> attribuzioni = new ArrayList();
+                List<Attribuzione> attribuzioni = (List<Attribuzione>) protocollo.getAttribuzioneCollection();
+                for( Attribuzione attrib: protocollo.getAttribuzioneCollection()) {
+                    if (attrib.getUfficio() == ufficioAnnullati) {
+                        attribuzioni.remove(attrib);
+                    } else {
+                    attrib.setPrincipale(Boolean.FALSE);
+                    }
+                }
                 Attribuzione attribuzione = new Attribuzione();
                 attribuzione.setUfficio(ufficioAnnullati);
                 attribuzione.setPrincipale(Boolean.TRUE);
@@ -103,6 +121,7 @@ public class FormAnnullamentoProtocollo extends Dialog {
                 protocollo.setConvalidaattribuzioni(Boolean.TRUE);
                 protocollo.setConvalidaprotocollo(Boolean.TRUE);
                 protocollo.setConsolidadocumenti(Boolean.TRUE);
+                protocollo.setAnnullato(Boolean.TRUE);  // Possibile che mancasse??
                 Controller controllerProtocollo = (Controller) Register.queryUtility(IController.class, Protocollo.class.getName());
                 controllerProtocollo.commit(protocollo);
             } else {
