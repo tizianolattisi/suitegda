@@ -21,10 +21,7 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PrePersist;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -37,9 +34,11 @@ import java.util.Date;
  */
 public class PraticaListener {
 
+    /*
+     *  Generazione del corretto identificativo di pratica, codifica, e uffici
+     */
     @PrePersist
-    void prePersist(Object object) {
-        Pratica pratica = (Pratica) object;
+    void prePersist(Pratica pratica) {
         Calendar calendar = Calendar.getInstance();
         Integer year = calendar.get(Calendar.YEAR);
         Date date = calendar.getTime();
@@ -69,5 +68,23 @@ public class PraticaListener {
             newIdpratica = year+"00001";
         }
         pratica.setIdpratica(newIdpratica);
+
+        // Codifica interna
+        String codifica = PraticaUtil.creaCodificaInterna(pratica.getTipo());
+        pratica.setCodiceinterno(codifica);
+
+        // se mancano gestione e ubicazione, li fisso come l'attribuzione
+        if( pratica.getGestione() == null ){
+            pratica.setGestione(pratica.getAttribuzione());
+        }
+        if( pratica.getUbicazione() == null ){
+            pratica.setUbicazione(pratica.getAttribuzione());
+        }
+
+    }
+
+    @PostPersist
+    void postPersist(Pratica pratica){
+
     }
 }

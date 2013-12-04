@@ -88,16 +88,6 @@ public class PraticaCallbacks {
                 return new Validation(false, msg);
             }
 
-            String codifica = PraticaUtil.creaCodificaInterna(pratica.getTipo());
-            pratica.setCodiceinterno(codifica);
-
-            // se mancano gestione e ubicazione, li fisso come l'attribuzione
-            if( pratica.getGestione() == null ){
-                pratica.setGestione(pratica.getAttribuzione());
-            }
-            if( pratica.getUbicazione() == null ){
-                pratica.setUbicazione(pratica.getAttribuzione());
-            }
         } else {
             // l'amministratore pratiche modifica anche se non appartenente all'ufficio gestore e
             // anche se la pratica è archiviata.
