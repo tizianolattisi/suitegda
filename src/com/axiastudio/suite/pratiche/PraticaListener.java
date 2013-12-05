@@ -19,17 +19,17 @@ package com.axiastudio.suite.pratiche;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.ui.IForm;
+import com.axiastudio.pypapi.ui.Util;
+import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PrePersist;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  *
@@ -37,9 +37,11 @@ import java.util.Date;
  */
 public class PraticaListener {
 
+    /*
+     *  Generazione del corretto identificativo di pratica, codifica, e uffici
+     */
     @PrePersist
-    void prePersist(Object object) {
-        Pratica pratica = (Pratica) object;
+    void prePersist(Pratica pratica) {
         Calendar calendar = Calendar.getInstance();
         Integer year = calendar.get(Calendar.YEAR);
         Date date = calendar.getTime();
@@ -69,5 +71,64 @@ public class PraticaListener {
             newIdpratica = year+"00001";
         }
         pratica.setIdpratica(newIdpratica);
+
+        // Codifica interna
+        String codifica = PraticaUtil.creaCodificaInterna(pratica.getTipo());
+        pratica.setCodiceinterno(codifica);
+
+        // se mancano gestione e ubicazione, li fisso come l'attribuzione
+        if( pratica.getGestione() == null ){
+            pratica.setGestione(pratica.getAttribuzione());
+        }
+        if( pratica.getUbicazione() == null ){
+            pratica.setUbicazione(pratica.getAttribuzione());
+        }
+
+        // mi copio nella pratica le fasi di procedimento
+        List<FaseProcedimento> fasiProcedimento = pratica.getTipo().getProcedimento().getFaseProcedimentoCollection();
+        List<FasePratica> fasiPratica = new ArrayList<FasePratica>();
+        for( Integer i=0; i<fasiProcedimento.size(); i++ ){
+            FaseProcedimento faseProcedimento = fasiProcedimento.get(i);
+            FasePratica fasePratica = new FasePratica();
+            fasePratica.setPratica(pratica);
+            fasePratica.setFase(faseProcedimento.getFase());
+            fasePratica.setTesto(faseProcedimento.getTesto());
+            fasePratica.setCondizione(faseProcedimento.getCondizione());
+            fasePratica.setConfermabile(faseProcedimento.getConfermabile());
+            fasePratica.setTestoconfermata(faseProcedimento.getTestoconfermata());
+            fasePratica.setRifiutabile(faseProcedimento.getRifiutabile());
+            fasePratica.setTestorifiutata(faseProcedimento.getTestorifiutata());
+            fasiPratica.add(fasePratica);
+        }
+        for( Integer i=0; i<fasiPratica.size(); i++ ){
+            if( fasiProcedimento.get(i).getConfermata() != null ){
+                fasiPratica.get(i).setConfermata(fasiPratica.get(fasiProcedimento.get(i).getConfermata().getProgressivo()));
+            }
+            if( fasiProcedimento.get(i).getRifiutata() != null ){
+                fasiPratica.get(i).setRifiutata(fasiPratica.get(fasiProcedimento.get(i).getRifiutata().getProgressivo()));
+            }
+        }
+        pratica.setFasePraticaCollection(fasiPratica);
+
+        // creazione del dettaglio
+        String className = pratica.getTipo().getProcedimento().getTipodettaglio();
+        if( className != null && !className.equals("") ){
+            try {
+                Class<?> klass = Class.forName(className);
+                IDettaglio dettaglio = (IDettaglio) klass.newInstance();
+                dettaglio.setPratica(pratica);  // XXX: non va in persistenza...
+                dettaglio.setCodiceinterno(pratica.getCodiceinterno());
+                IForm form = Util.formFromEntity(dettaglio);
+                form.show();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (InstantiationException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+
     }
+
 }
