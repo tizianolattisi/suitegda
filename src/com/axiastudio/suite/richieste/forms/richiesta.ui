@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>733</width>
+    <height>593</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dettaglio richiesta</string>
+  </property>
+  <property name="searchcolumns" stdset="0">
+   <string>testo</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Richiesta</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>Cancellabile</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>cancellabile</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="4">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>576</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Stato</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="4">
+        <widget class="QComboBox" name="comboBox">
+         <property name="column" stdset="0">
+          <string>statorichiesta</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>PENDENTE</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>IN_CARICO</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>IN_ATTESA</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>RIFIUTATA</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>EVASA</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Oggetto della richiesta</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="4">
+        <widget class="QTextEdit" name="textEdit">
+         <property name="column" stdset="0">
+          <string>testo</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Da completare entro</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>datascadenza</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Giorni di preavviso</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QSpinBox" name="spinBox">
+         <property name="column" stdset="0">
+          <string>giornipreavviso</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>337</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Destinatari</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView">
+         <property name="entity" stdset="0">
+          <string>.destinatarioUfficioCollection</string>
+         </property>
+         <property name="columns" stdset="0">
+          <string>&gt;id&lt;,&lt;destinatario&gt;,&gt;conoscenza&lt;,&gt;letto&lt;</string>
+         </property>
+         <property name="reference" stdset="0">
+          <string>destinatario</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
+   <extends>QTableView</extends>
+   <header location="global">pypapitableview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>pypapidateedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

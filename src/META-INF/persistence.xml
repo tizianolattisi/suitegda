@@ -65,6 +65,9 @@
     <class>com.axiastudio.suite.modelli.entities.TipoPraticaModello</class>
     <class>com.axiastudio.suite.modelli.entities.ProcedimentoModello</class>
     <class>com.axiastudio.suite.modelli.entities.Segnalibro</class>
+    <class>com.axiastudio.suite.richieste.entities.Richiesta</class>
+    <class>com.axiastudio.suite.richieste.entities.DestinatarioUfficio</class>
+    <class>com.axiastudio.suite.richieste.entities.DestinatarioUtente</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>
