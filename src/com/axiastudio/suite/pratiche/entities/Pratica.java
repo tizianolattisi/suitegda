@@ -97,7 +97,7 @@ public class Pratica implements Serializable, ITimeStamped {
     @Column(name="datascadenza")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datascadenza;
-    @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     @OrderColumn(name="progressivo")
     private List<FasePratica> fasePraticaCollection;
 

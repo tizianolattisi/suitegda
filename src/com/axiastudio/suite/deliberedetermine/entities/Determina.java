@@ -40,10 +40,8 @@ public class Determina implements Serializable, IDettaglio {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
     private Long id;
     @JoinColumn(name = "idpratica", referencedColumnName = "idpratica")
-    @ManyToOne(cascade=CascadeType.PERSIST)
+    @ManyToOne(cascade=CascadeType.REFRESH)
     private Pratica pratica;
-    @Column(name="idpratica", insertable=false, updatable=false)
-    private String idpratica;
     @Column(name="codiceinterno", unique=true)
     private String codiceinterno;
     @Column(name="oggetto", length=2048)
@@ -144,17 +142,20 @@ public class Determina implements Serializable, IDettaglio {
 
     @Override
     public void setPratica(Pratica pratica) {
-        // NOP
+        this.pratica = pratica;
     }
 
     @Override
     public String getIdpratica() {
-        return idpratica;
+        if( this.pratica != null ){
+            return pratica.getIdpratica();
+        }
+        return null;
     }
 
     @Override
     public void setIdpratica(String idpratica) {
-        this.idpratica = idpratica;
+        // NOP
     }
 
     @Override
