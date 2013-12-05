@@ -43,11 +43,15 @@ public class FasePratica implements Serializable {
     private Integer progressivo;
     @Column(name="testo")
     private String testo;
+    @Column(name="confermabile")
+    private Boolean confermabile=false;
     @JoinColumn(name = "confermata", referencedColumnName = "id")
     @ManyToOne
     private FasePratica confermata;
     @Column(name="testoconfermata")
     private String testoconfermata;
+    @Column(name="rifiutabile")
+    private Boolean rifiutabile=false;
     @JoinColumn(name = "rifiutata", referencedColumnName = "id")
     @ManyToOne
     private FasePratica rifiutata;
@@ -144,5 +148,21 @@ public class FasePratica implements Serializable {
 
     public void setCompletata(Boolean completata) {
         this.completata = completata;
+    }
+
+    public Boolean getConfermabile() {
+        return confermabile;
+    }
+
+    public void setConfermabile(Boolean confermabile) {
+        this.confermabile = confermabile;
+    }
+
+    public Boolean getRifiutabile() {
+        return rifiutabile;
+    }
+
+    public void setRifiutabile(Boolean rifiutabile) {
+        this.rifiutabile = rifiutabile;
     }
 }
