@@ -67,8 +67,6 @@ public class SimpleWorkFlow {
         }
         Binding binding = new Binding();
         binding.setVariable("obj", obj);
-        Utente utente = (Utente) Register.queryUtility(IUtente.class);
-        binding.setVariable("utente", utente);
 
         // extra bindings
         for( String key: map.keySet() ){
