@@ -77,7 +77,11 @@ class PathTemplate{
                 Object[] args = {value};
                 s = mf.format(args);
             } else {
-                s = value.toString();
+                if( value == null ){
+                    s = "null";
+                } else {
+                    s = value.toString();
+                }
             }
             this.matcher.appendReplacement(stringBuffer, Matcher.quoteReplacement(s));
         }
