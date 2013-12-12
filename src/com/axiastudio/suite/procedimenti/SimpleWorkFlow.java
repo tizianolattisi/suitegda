@@ -73,11 +73,12 @@ public class SimpleWorkFlow {
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(formClass, "CMIS");
         AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(obj);
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
+        binding.setVariable("utente", utente);
         binding.setVariable("gestoreDeleghe", gestoreDeleghe);
         binding.setVariable("finanziariaUtil", finanziariaUtil);
         binding.setVariable("alfrescoHelper", alfrescoHelper);
+        binding.setVariable("cmisPlugin", cmisPlugin);
         binding.setVariable("CodiceCarica", CodiceCarica.class);
-        binding.setVariable("utente", utente);
         return binding;
     }
 
