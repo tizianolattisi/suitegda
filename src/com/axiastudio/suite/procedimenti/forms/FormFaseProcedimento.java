@@ -7,13 +7,18 @@ import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IStoreFactory;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Dialog;
+import com.axiastudio.suite.AdminConsole;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.pratiche.IDettaglio;
+import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
+import com.axiastudio.suite.procedimenti.SimpleWorkFlow;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
+import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.trolltech.qt.gui.QLineEdit;
 import com.trolltech.qt.gui.QPushButton;
 import groovy.lang.Binding;
@@ -49,24 +54,12 @@ public class FormFaseProcedimento extends Dialog {
         Long id = Long.parseLong(entityId);
         Controller controller = (Controller) Register.queryUtility(IController.class, entityName);
         Object obj = controller.get(id);
+        FaseProcedimento faseProcedimento = (FaseProcedimento) this.getContext().getCurrentEntity();
+        Procedimento procedimento = faseProcedimento.getProcedimento();
 
-        // preparazione dei bindings per il test
-        Map<String, Object> bindings = new HashMap<String, Object>();
-        IGestoreDeleghe gestoreDeleghe = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
-        IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(this.getClass(), "CMIS");
-        AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(obj);
-        Utente utente = (Utente) Register.queryUtility(IUtente.class);
-        bindings.put("gestoreDeleghe", gestoreDeleghe);
-        bindings.put("finanziariaUtil", finanziariaUtil);
-        bindings.put("alfrescoHelper", alfrescoHelper);
-        bindings.put("CodiceCarica", CodiceCarica.class);
-        bindings.put("utente", utente);
-        Binding binding = new Binding();
-        binding.setVariable("obj", obj);
-        for( String key: bindings.keySet() ){
-            binding.setVariable(key, bindings.get(key));
-        }
+        // Apertura della console
+        AdminConsole console = new AdminConsole(this, obj);
+        console.show();
 
     }
 

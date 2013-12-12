@@ -83,15 +83,15 @@ public class SimpleWorkFlow {
 
     public Boolean attivabile(FasePratica fp){
         String groovyClosure = fp.getCondizione();
-        return eseguiClosure(groovyClosure);
+        return (Boolean) eseguiClosure(groovyClosure);
     }
 
     public Boolean attivabile(FaseProcedimento fp){
         String groovyClosure = fp.getCondizione();
-        return eseguiClosure(groovyClosure);
+        return (Boolean) eseguiClosure(groovyClosure);
     }
 
-    private Boolean eseguiClosure(String groovyClosure) {
+    public Object eseguiClosure(String groovyClosure) {
         if( groovyClosure== null ){
             return true;
         }
@@ -99,7 +99,7 @@ public class SimpleWorkFlow {
 
         GroovyShell shell = new GroovyShell(binding);
         String groovy = groovyClosure + "(obj)";
-        Boolean value = (Boolean) shell.evaluate(groovy);
+        Object value = shell.evaluate(groovy);
         return value;
     }
 
