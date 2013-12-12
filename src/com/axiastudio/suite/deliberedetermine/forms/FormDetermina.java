@@ -22,6 +22,7 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.suite.AdminConsole;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
@@ -52,7 +53,7 @@ public class FormDetermina extends Window implements IDocumentFolder {
     private QPushButton pushButtonResponsabile;
     private QPushButton pushButtonBilancio;
     private QPushButton pushButtonVistoNegato;
-    
+
     public FormDetermina(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
 
@@ -67,7 +68,7 @@ public class FormDetermina extends Window implements IDocumentFolder {
 
         QListWidget procedimento = (QListWidget) findChild(QListWidget.class, "procedimento");
         procedimento.itemDoubleClicked.connect(this, "completaFase(QListWidgetItem)");
-        
+
     }
 
     /*
@@ -118,7 +119,6 @@ public class FormDetermina extends Window implements IDocumentFolder {
         super.indexChanged(row);
         //verificaAbilitazionePulsanti();
         popolaProcedimento();
-
     }
 
     private void popolaProcedimento() {
@@ -156,16 +156,6 @@ public class FormDetermina extends Window implements IDocumentFolder {
         }
 
         // devo verificare se sussistono delle condizioni per poter attivare la fase
-        Map<String, Object> bindings = new HashMap<String, Object>();
-        IGestoreDeleghe gestoreDeleghe = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
-        IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(this.getClass(), "CMIS");
-        AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(determina);
-        bindings.put("gestoreDeleghe", gestoreDeleghe);
-        bindings.put("finanziariaUtil", finanziariaUtil);
-        bindings.put("alfrescoHelper", alfrescoHelper);
-        bindings.put("CodiceCarica", CodiceCarica.class);
-        wf.bind(bindings);
         if( !wf.attivabile(fasePratica) ){
             String msg = "Non hai i permessi per completare la fase";
             QMessageBox.warning(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
