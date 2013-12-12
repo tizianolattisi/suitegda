@@ -73,6 +73,7 @@ import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.*;
 import com.axiastudio.suite.procedimenti.forms.FormDelega;
+import com.axiastudio.suite.procedimenti.forms.FormFaseProcedimento;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.ProtocolloPrivate;
@@ -427,7 +428,7 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                 "classpath:com/axiastudio/suite/procedimenti/forms/faseprocedimento.ui",
                 FaseProcedimento.class,
-                Dialog.class);
+                FormFaseProcedimento.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
