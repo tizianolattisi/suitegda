@@ -19,27 +19,14 @@ package com.axiastudio.suite.deliberedetermine.forms;
 import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.IController;
-import com.axiastudio.pypapi.ui.Window;
-import com.axiastudio.suite.AdminConsole;
-import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
-import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
-import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
-import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
+import com.axiastudio.suite.pratiche.forms.FormDettaglio;
 import com.axiastudio.suite.procedimenti.SimpleWorkFlow;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
-import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
-import com.axiastudio.suite.procedimenti.entities.Procedimento;
-import com.trolltech.qt.core.QObject;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 
@@ -49,7 +36,7 @@ import java.util.*;
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
-public class FormDetermina extends Window implements IDocumentFolder {
+public class FormDetermina extends FormDettaglio implements IDocumentFolder {
     private QPushButton pushButtonResponsabile;
     private QPushButton pushButtonBilancio;
     private QPushButton pushButtonVistoNegato;
