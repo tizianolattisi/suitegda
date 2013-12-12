@@ -124,6 +124,9 @@ public class FormDetermina extends Window implements IDocumentFolder {
     private void popolaProcedimento() {
         QListWidget listWidget = (QListWidget) findChild(QListWidget.class, "procedimento");
         Determina determina = (Determina) this.getContext().getCurrentEntity();
+        if( determina.getId() == null ){
+            return;
+        }
         SimpleWorkFlow wf = new SimpleWorkFlow(determina);
         listWidget.clear();
         Integer i=0;
