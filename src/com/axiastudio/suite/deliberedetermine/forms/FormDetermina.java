@@ -172,7 +172,9 @@ public class FormDetermina extends Window implements IDocumentFolder {
         String choice = QInputDialog.getItem(this,
                 "Completamento fase",
                 fasePratica.getTesto(),
-                items);
+                items,
+                0,
+                false);
         Integer idx = items.lastIndexOf(choice);
         if( idx == 0 ){
             wf.completaFase(fasePratica);
