@@ -17,7 +17,9 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: tiziano
@@ -72,11 +74,18 @@ public class SimpleWorkFlow {
         Class formClass = (Class) Register.queryUtility(IForm.class, obj.getClass().getName());
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(formClass, "CMIS");
         AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(obj);
+        List<HashMap> children = alfrescoHelper.children();
+        List<String> documenti = new ArrayList<String>();
+        for( Map child: children ){
+            String fileName = (String) child.get("contentStreamFileName");
+            documenti.add(fileName);
+        }
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         binding.setVariable("utente", utente);
         binding.setVariable("gestoreDeleghe", gestoreDeleghe);
         binding.setVariable("finanziariaUtil", finanziariaUtil);
         binding.setVariable("alfrescoHelper", alfrescoHelper);
+        binding.setVariable("documenti", documenti);
         binding.setVariable("cmisPlugin", cmisPlugin);
         binding.setVariable("CodiceCarica", CodiceCarica.class);
         return binding;
