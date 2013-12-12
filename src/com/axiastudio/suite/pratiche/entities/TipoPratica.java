@@ -21,6 +21,7 @@ import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Comparator;
 import javax.persistence.*;
 
 /**
@@ -30,7 +31,7 @@ import javax.persistence.*;
 @Entity
 @Table(schema="PRATICHE")
 @SequenceGenerator(name="gentipopratica", sequenceName="pratiche.tipopratica_id_seq", initialValue=1, allocationSize=1)
-public class TipoPratica implements Serializable {
+public class TipoPratica implements Serializable, Comparable<TipoPratica> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentipopratica")
@@ -199,5 +200,20 @@ public class TipoPratica implements Serializable {
     public String toString() {
         return " "+this.getCodice()+" - "+this.getDescrizione();
     }
+
+    @Override
+    public int compareTo(TipoPratica o) {
+        return Comparators.CODICE.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static Comparator<TipoPratica> CODICE = new Comparator<TipoPratica>() {
+            @Override
+            public int compare(TipoPratica o1, TipoPratica o2) {
+                return o1.codice.compareTo(o2.codice);
+            }
+        };
+    }
+
     
 }

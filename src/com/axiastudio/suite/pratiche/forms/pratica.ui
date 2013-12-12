@@ -14,7 +14,7 @@
    <string>Pratiche</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>&gt;idpratica&lt;,&gt;codiceinterno&lt;,&lt;descrizioner&gt;,fase</string>
+   <string>&gt;idpratica&lt;,&gt;codiceinterno&lt;,fase,&lt;descrizione&gt;,&gt;attribuzione&lt;</string>
   </property>
   <property name="sortcolumn" stdset="0">
    <number>0</number>
@@ -85,6 +85,9 @@
         <widget class="QTextEdit" name="textEdit_2">
          <property name="column" stdset="0">
           <string>note</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -525,7 +528,7 @@
     <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -564,16 +567,19 @@
            <string>.praticaProtocolloCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;originale&lt;,&lt;protocollo&gt;</string>
+           <string>&gt;originale&lt;,oggetto,&lt;protocollo&gt;</string>
           </property>
           <property name="reference" stdset="0">
            <string>protocollo</string>
           </property>
           <property name="sortcolumn" stdset="0">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="sortorder" stdset="0">
            <string>&gt;</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>Orig,Oggetto,Protocollo</string>
           </property>
          </widget>
         </item>

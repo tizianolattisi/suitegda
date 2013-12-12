@@ -84,6 +84,11 @@ public class PraticaListener {
             pratica.setUbicazione(pratica.getAttribuzione());
         }
 
+        // eredito classificazione dalla codifica interna
+        if (pratica.getFascicolo() == null) {
+            pratica.setFascicolo(pratica.getTipo().getFascicolo());
+        }
+
         // mi copio nella pratica le fasi di procedimento
         List<FaseProcedimento> fasiProcedimento = pratica.getTipo().getProcedimento().getFaseProcedimentoCollection();
         List<FasePratica> fasiPratica = new ArrayList<FasePratica>();

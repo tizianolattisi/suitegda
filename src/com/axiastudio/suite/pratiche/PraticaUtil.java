@@ -66,9 +66,12 @@ public class PraticaUtil {
         Integer i = 0;
         for( TipoPratica tipo: tipi ){
             i++;
-            String sql = "select max(p.codiceinterno) from Pratica p join p.tipo t";
+            if (n>0) {
+            String sql = "select max(substring(p.codiceinterno, length(p.codiceinterno) - " + tipoPratica.getLunghezzaprogressivo().toString() + " + 1)) " +
+                                "from Pratica p join p.tipo t";
             sql += " where p.codiceinterno like '"+tipo.getCodice()+"%'";
             if( tipoPratica.getProgressivoanno() ){
+                sql += " and t.progressivoanno = TRUE";
                 sql += " and p.anno = " + year.toString();
             }
             if( tipoPratica.getProgressivogiunta() ){
@@ -82,8 +85,9 @@ public class PraticaUtil {
                 max = Integer.parseInt(maxString.substring(maxString.length() - n));
                 max += 1;
             }
-            map.put("s"+i, tipo.getCodice());
             map.put("n"+i, max);
+            }
+            map.put("s"+i, tipo.getCodice());
         }
 
         // composizione codifica
@@ -92,4 +96,19 @@ public class PraticaUtil {
         return codifica;
     }
 
-}
+    // Verifica se esiste già una pratica con il codice specificato, x tipologie senza progressivo
+    public static Boolean codificaInternaUnivoca(TipoPratica tipoPratica){
+        if (tipoPratica.getLunghezzaprogressivo() > 0) {
+            return Boolean.TRUE;
+        }
+
+        String codifica=creaCodificaInterna(tipoPratica);
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+//        String sql = "select count(p.codiceinterno) from Pratica p where p.codiceinterno = '" + codifica + "'";
+        Query q = em.createQuery("select count(p.codiceinterno) from Pratica p where p.codiceinterno = '" + codifica + "'");
+        Long i = (Long) q.getSingleResult();
+        return (i == 0);
+    }
+
+    }

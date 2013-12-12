@@ -19,6 +19,12 @@ package com.axiastudio.suite.pratiche.forms;
 import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.IController;
+import com.axiastudio.pypapi.db.IStoreFactory;
+import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.ui.Column;
+import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
@@ -30,6 +36,8 @@ import com.axiastudio.suite.SuiteUiUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.pratiche.entities.Fase;
+import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
@@ -40,9 +48,13 @@ import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QToolButton;
 import com.trolltech.qt.gui.QWidget;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -55,13 +67,24 @@ public class FormPratica extends Window implements IDocumentFolder {
         
         /* tipo */
         QToolButton toolButtonTipo = (QToolButton) this.findChild(QToolButton.class, "toolButtonTipo");
-        toolButtonTipo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
+        toolButtonTipo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/book_open.png"));
         toolButtonTipo.clicked.connect(this, "apriTipo()");
         
         /* fascicolazione */
         QToolButton toolButtonTitolario = (QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario");
-        toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email_go.png"));
-        toolButtonTitolario.clicked.connect(this, "apriTitolario()");       
+        toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/book_open.png"));
+        toolButtonTitolario.clicked.connect(this, "apriTitolario()");
+
+        try {
+            Method storeFactory = this.getClass().getMethod("storeAttribuzione");
+            Register.registerUtility(storeFactory, IStoreFactory.class, "Attribuzione");
+            storeFactory = this.getClass().getMethod("storeTipo");
+            Register.registerUtility(storeFactory, IStoreFactory.class, "Tipo");
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(FormPratica.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(FormPratica.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /*
@@ -97,7 +120,67 @@ public class FormPratica extends Window implements IDocumentFolder {
             this.getContext().getDirty();
         }
     }
-    
+
+    /*
+     * Uno store contenente solo gli uffici dell'utente
+     */
+    public Store storeAttribuzione(){
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        List<Ufficio> uffici = new ArrayList<Ufficio>();
+        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
+            if( uu.getInseriscepratica() ){
+                uffici.add(uu.getUfficio());
+            }
+        }
+        return new Store(uffici);
+    }
+
+    /*
+     * Uno store contenente gli oggetti ordinati x descrizione
+     */
+    public Store storeTipo(){
+        Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.pratiche.entities.TipoPratica");
+        Store storeTipo = controller.createFullStore();
+        List<TipoPratica> oggetti = new ArrayList<TipoPratica>();
+        for(Object ogg: storeTipo){
+            oggetti.add((TipoPratica) ogg);
+        }
+        Collections.sort(oggetti, TipoPratica.Comparators.CODICE);
+        return new Store(oggetti);
+    }
+
+    /*
+     * Uno store contenente gli oggetti ordinati x descrizione
+     */
+    public Store storeFase(){
+        List<Fase> fasiprat = new ArrayList<Fase>();
+
+        if (this.getContext() == null || this.getContext().getCurrentEntity() == null) {
+            return new Store(fasiprat);
+        }
+
+        Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+        if (pratica.getId() == null) {
+            return new Store(fasiprat);
+        }
+
+        if (pratica.getFasePraticaCollection().isEmpty()) {
+            Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.pratiche.entities.Fase");
+            Store storeFase = controller.createFullStore();
+            for(Object ogg: storeFase){
+                fasiprat.add((Fase) ogg);
+            }
+            Collections.sort(fasiprat, Fase.Comparators.DESCRIZIONE);
+        } else {
+            Fase fase = new Fase();
+            for(FasePratica ogg: pratica.getFasePraticaCollection()){
+                fasiprat.add((Fase) ogg.getFase());
+            }
+        }
+        return new Store(fasiprat);
+    }
+
+
     @Override
     protected void indexChanged(int row) {
         super.indexChanged(row);
@@ -123,6 +206,9 @@ public class FormPratica extends Window implements IDocumentFolder {
         ((QComboBox) this.findChild(QComboBox.class, "comboBox_attribuzione")).setEnabled(nuovoInserimento);
         ((QComboBox) this.findChild(QComboBox.class, "comboBox_gestione")).setEnabled(nuovoInserimento || inUfficioGestore);
         ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_riservata")).setEnabled(nuovoInserimento || inUfficioGestore);
+
+//        Store store = storeFase();
+//        ((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_fase")).setLookupStore(store);
     }
     
     private void information() {
