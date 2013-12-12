@@ -31,7 +31,6 @@
     <class>com.axiastudio.suite.procedimenti.entities.TipoNorma</class>
     <class>com.axiastudio.suite.procedimenti.entities.Norma</class>
     <class>com.axiastudio.suite.procedimenti.entities.NormaProcedimento</class>
-    <class>com.axiastudio.suite.procedimenti.entities.Fase</class>
     <class>com.axiastudio.suite.procedimenti.entities.FaseProcedimento</class>
     <class>com.axiastudio.suite.procedimenti.entities.UfficioProcedimento</class>
     <class>com.axiastudio.suite.procedimenti.entities.UtenteProcedimento</class>
