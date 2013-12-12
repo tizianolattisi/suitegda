@@ -88,6 +88,18 @@ public class PraticaCallbacks {
                 return new Validation(false, msg);
             }
 
+            // se codifica pratica non ha progressivo, si controlla se la pratica non esiste già
+            if (!PraticaUtil.codificaInternaUnivoca(pratica.getTipo())) {
+                msg = "Esiste già una pratica con la codifica specificata.";
+                return new Validation(false, msg);
+            }
+
+            // TODO: da eliminare quando si inserirà il controllo in nella finestra di inserimento/modifica delle codifiche
+            String codifica = PraticaUtil.creaCodificaInterna(pratica.getTipo());
+            if (codifica == null) {
+                msg = "Errore nella creazione della codifica della pratica.";
+                return new Validation(false, msg);
+            }
         } else {
             // l'amministratore pratiche modifica anche se non appartenente all'ufficio gestore e
             // anche se la pratica è archiviata.

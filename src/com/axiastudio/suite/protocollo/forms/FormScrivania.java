@@ -81,7 +81,7 @@ public class FormScrivania  extends QMainWindow {
         pushButtonApriProtocollo.clicked.connect(this, "apriProtocollo()");
         pushButtonApriProtocollo.setEnabled(false);
         QPushButton pushButtonApriDocumenti = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriDocumenti");
-        pushButtonApriDocumenti.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/cmis.png"));
+        pushButtonApriDocumenti.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/menjazo.png"));
         pushButtonApriDocumenti.clicked.connect(this, "apriDocumenti()");
         pushButtonApriDocumenti.setEnabled(false);
         QPushButton pushButtonAggiornaLista = (QPushButton) this.findChild(QPushButton.class, "pushButtonAggiornaLista");

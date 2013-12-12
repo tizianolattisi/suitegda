@@ -38,10 +38,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.*;
 
 /**
  *
@@ -106,6 +103,10 @@ public class FormTipoPratica extends QDialog {
         }
         // where
         cq = cq.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+
+        //order by
+        Order ord = cb.asc(root.get("codice"));
+        cq=cq.orderBy(ord);
 
         Query q = em.createQuery(cq);
         return q.getResultList();
