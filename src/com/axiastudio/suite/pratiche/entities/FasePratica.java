@@ -59,6 +59,8 @@ public class FasePratica implements Serializable {
     private String testorifiutata;
     @Column(name="condizione")
     private String condizione;
+    @Column(name="azione")
+    private String azione;
     @Column(name="completata")
     private Boolean completata=Boolean.FALSE;
 
@@ -100,6 +102,14 @@ public class FasePratica implements Serializable {
 
     public void setCondizione(String condizione) {
         this.condizione = condizione;
+    }
+
+    public String getAzione() {
+        return azione;
+    }
+
+    public void setAzione(String azione) {
+        this.azione = azione;
     }
 
     public FasePratica getConfermata() {

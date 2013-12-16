@@ -59,6 +59,8 @@ public class FaseProcedimento implements Serializable {
     private String testorifiutata;
     @Column(name="condizione")
     private String condizione;
+    @Column(name="azione")
+    private String azione;
 
     public Long getId() {
         return id;
@@ -98,6 +100,14 @@ public class FaseProcedimento implements Serializable {
 
     public void setCondizione(String condizione) {
         this.condizione = condizione;
+    }
+
+    public String getAzione() {
+        return azione;
+    }
+
+    public void setAzione(String azione) {
+        this.azione = azione;
     }
 
     public FaseProcedimento getConfermata() {
