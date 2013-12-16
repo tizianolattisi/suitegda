@@ -147,7 +147,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
 
         // devo verificare se sussistono delle condizioni per poter attivare la fase
         if( !wf.attivabile(fasePratica) ){
-            String msg = "Non hai i permessi per completare la fase";
+            String msg = wf.getResult().toString();
             QMessageBox.warning(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
             return;
         }
@@ -167,10 +167,18 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
                 false);
         Integer idx = items.lastIndexOf(choice);
         if( idx == 0 ){
-            wf.completaFase(fasePratica);
+            Boolean res = wf.azione(fasePratica);
+            if( res ){
+                wf.completaFase(fasePratica);
+            } else {
+                String msg = wf.getResult().toString();
+                QMessageBox.critical(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+                return;
+            }
         } else if( idx == 1 ){
             wf.completaFase(fasePratica, Boolean.FALSE);
         }
+        // TODO: refresh?
         popolaProcedimento();
     }
 
