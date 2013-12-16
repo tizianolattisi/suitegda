@@ -86,7 +86,6 @@ public class SimpleWorkFlow {
         binding.setVariable("finanziariaUtil", finanziariaUtil);
         binding.setVariable("alfrescoHelper", alfrescoHelper);
         binding.setVariable("documenti", documenti);
-        binding.setVariable("cmisPlugin", cmisPlugin);
         binding.setVariable("CodiceCarica", CodiceCarica.class);
         return binding;
     }
