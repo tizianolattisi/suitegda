@@ -100,6 +100,16 @@ public class SimpleWorkFlow {
         return (Boolean) eseguiClosure(groovyClosure);
     }
 
+    public Boolean azione(FasePratica fp){
+        String groovyClosure = fp.getAzione();
+        return (Boolean) eseguiClosure(groovyClosure);
+    }
+
+    public Boolean azione(FaseProcedimento fp){
+        String groovyClosure = fp.getAzione();
+        return (Boolean) eseguiClosure(groovyClosure);
+    }
+
     public Object eseguiClosure(String groovyClosure) {
         if( groovyClosure== null ){
             return true;

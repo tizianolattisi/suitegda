@@ -167,10 +167,18 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
                 false);
         Integer idx = items.lastIndexOf(choice);
         if( idx == 0 ){
-            wf.completaFase(fasePratica);
+            Boolean res = wf.azione(fasePratica);
+            if( res ){
+                wf.completaFase(fasePratica);
+            } else {
+                String msg = "Non è stato possibile completare la fase a causa di un errore";
+                QMessageBox.critical(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+                return;
+            }
         } else if( idx == 1 ){
             wf.completaFase(fasePratica, Boolean.FALSE);
         }
+        // TODO: refresh?
         popolaProcedimento();
     }
 
