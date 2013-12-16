@@ -28,9 +28,10 @@ import java.util.Map;
  */
 public class SimpleWorkFlow {
 
-    List<FasePratica> fasi = new ArrayList<FasePratica>();
-    Object obj=null;
-    Procedimento procedimento=null;
+    private List<FasePratica> fasi = new ArrayList<FasePratica>();
+    private Object obj=null;
+    private Procedimento procedimento=null;
+    private Object result = null;
 
     /*
      *  L'entità da cui reperire un procedimento può essere di due tipi:
@@ -92,25 +93,26 @@ public class SimpleWorkFlow {
 
     public Boolean attivabile(FasePratica fp){
         String groovyClosure = fp.getCondizione();
-        return (Boolean) eseguiClosure(groovyClosure);
+        return eseguiClosure(groovyClosure);
     }
 
     public Boolean attivabile(FaseProcedimento fp){
         String groovyClosure = fp.getCondizione();
-        return (Boolean) eseguiClosure(groovyClosure);
+        return eseguiClosure(groovyClosure);
     }
 
     public Boolean azione(FasePratica fp){
         String groovyClosure = fp.getAzione();
-        return (Boolean) eseguiClosure(groovyClosure);
+        return eseguiClosure(groovyClosure);
     }
 
     public Boolean azione(FaseProcedimento fp){
         String groovyClosure = fp.getAzione();
-        return (Boolean) eseguiClosure(groovyClosure);
+        return eseguiClosure(groovyClosure);
     }
 
-    public Object eseguiClosure(String groovyClosure) {
+    public Boolean eseguiClosure(String groovyClosure) {
+        result = null;
         if( groovyClosure== null ){
             return true;
         }
@@ -119,11 +121,18 @@ public class SimpleWorkFlow {
         GroovyShell shell = new GroovyShell(binding);
         String groovy = groovyClosure + "(obj)";
         Object value = shell.evaluate(groovy);
-        return value;
+        if( value instanceof Boolean ){
+            return (Boolean) value;
+        } else {
+            result = value;
+            return false;
+        }
     }
 
-
-    /*
+    public Object getResult() {
+        return result;
+    }
+/*
      *   GESTIONE FASI DEL PROCEDIMENTO
      */
 
