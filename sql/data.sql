@@ -5,7 +5,8 @@ SET search_path = generale, pg_catalog;
 
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (1, 'PRATICA_ANNULLATI', 'Pratica contenente i protocolli annullati', '1', 'LONG');
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (2, 'UFFICIO_ANNULLATI', 'Ufficio di attribuzione dei protocolli annullati', '1', 'LONG');
-SELECT setval('generale.costante_id_seq', 5, true);
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (3, 'SOGGETTO_INTERNI', 'Il soggetto a cui collegare i protocolli interni, se non specificato diversamente.', '3', 'LONG');
+SELECT setval('generale.costante_id_seq', 4, true);
 
 INSERT INTO etichetta (id, nome, device, descrizione, definizione, linguaggio, contesto) VALUES (1, 'ETICHETTA2D', 'Zebra_Technologies_ZTC_GK420t', 'Etichetta DataMatrix', '.\nS1\nb245,34,D,h6,"${iddocumento}"\nP1\n.\n', 'ZPL', 'com.axiastudio.suite.protocollo.entities.Protocollo');
 INSERT INTO etichetta (id, nome, device, descrizione, definizione, linguaggio, contesto) VALUES (2, 'ETICHETTA2D2', 'Zebra_Technologies_ZTC_GK420t', 'Etichetta DataMatrix 2', '.\nS1\nb245,34,D,h6,"${iddocumento}"\nP1\n.\n', 'ZPL', 'com.axiastudio.suite.protocollo.entities.Protocollo');
@@ -22,7 +23,8 @@ INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuz
 INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (2, 'Ufficio commercio', false, true, true);
 INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (3, 'Ufficio informativo', true, true, true);
 INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (4, 'Ufficio edilizia', true, true, true);
-SELECT setval('base.ufficio_id_seq', 5, true);
+INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (5, 'Ufficio ragioneria e contabilità', true, true, true);
+SELECT setval('base.ufficio_id_seq', 6, true);
 
 INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo)
   VALUES (1, true, false, NULL, 'admin', 'ADM', false, false, 'Utente amministrativo', false, false, false, '956b329eb8028e15ac00279623f2ef76', false, false, false, false, false);
@@ -124,7 +126,8 @@ SELECT setval('protocollo.motivazioneannullamento_id_seq', 3, true);
 
 INSERT INTO oggetto (id, descrizione) VALUES (1, 'ATTI RICEVUTI');
 INSERT INTO oggetto (id, descrizione) VALUES (2, 'RICHIESTA GENERICA');
-SELECT setval('protocollo.oggetto_id_seq', 3, true);
+INSERT INTO oggetto (id, descrizione) VALUES (3, 'DETERMINAZIONE');
+SELECT setval('protocollo.oggetto_id_seq', 4, true);
 
 INSERT INTO protocollo (id, convalidaattribuzioni, convalidaprotocollo, anno, annullamentorichiesto, annullato, corrispostoostornato, dataprotocollo, datariferimentomittente, iddocumento, note, oggetto, richiederisposta, riferimentomittente, riservato, spedito, tipo, tiporiferimentomittente, sportello) VALUES (1, false, false, 2012, false, false, false, '2012-12-10', NULL, '201200000001', 'Note del protocollo', 'Oggetto del protocollo', true, NULL, false, false, 'ENTRATA', NULL, 3);
 INSERT INTO protocollo (id, convalidaattribuzioni, convalidaprotocollo, anno, annullamentorichiesto, annullato, corrispostoostornato, dataprotocollo, datariferimentomittente, iddocumento, note, oggetto, richiederisposta, riferimentomittente, riservato, spedito, tipo, tiporiferimentomittente, sportello) VALUES (2, false, false, 2012, false, false, false, '2012-12-10', NULL, '201200000002', 'Note del protocollo2', 'Oggetto del protocollo2', false, NULL, false, false, 'USCITA', NULL, 3);
@@ -149,7 +152,7 @@ SELECT setval('protocollo.ufficioprotocollo_id_seq', 3, true);
 -- Finanziaria
 SET search_path = finanziaria, pg_catalog;
 
-INSERT INTO servizio (id, descrizione, ufficio) VALUES (1, 'Segreteria generale, personale e organizzazione', 1);
+INSERT INTO servizio (id, descrizione, ufficio) VALUES (1, 'Segreteria generale, personale e organizzazione', 5);
 SELECT setval('finanziaria.servizio_id_seq', 2, true);
 
 INSERT INTO capitolo (id, descrizione) VALUES (1, 'Descrizione del capitolo');
@@ -289,8 +292,10 @@ SET search_path = modelli, pg_catalog;
 insert into modello (id, titolo, descrizione, uri)
   values (1, 'Comunicazione generica', 'Comunicazione generica in carta intestata', '/Users/tiziano/Projects/Suite/demo/generico.ott');
 insert into modello (id, titolo, descrizione, uri)
-  values (2, 'Determina responsabile', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9');
-SELECT setval('modelli.modello_id_seq', 3, true);
+  values (2, 'Determina', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9');
+insert into modello (id, titolo, descrizione, uri)
+  values (3, 'Impegni', 'Impegni determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9');
+SELECT setval('modelli.modello_id_seq', 4, true);
 
 insert into segnalibro (id, segnalibro, codice, modello)
     values (1, 'idpratica', '{ p -> p.idpratica }', 1);
