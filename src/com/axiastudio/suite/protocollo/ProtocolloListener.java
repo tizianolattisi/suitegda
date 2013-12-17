@@ -78,8 +78,10 @@ public class ProtocolloListener {
         protocollo.setIddocumento(newIddocumento);
 
         // Soggetti di primo inserimento
-        for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
-            sp.setPrimoinserimento(Boolean.TRUE);
+        if( protocollo.getSoggettoProtocolloCollection() != null ){
+            for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
+                sp.setPrimoinserimento(Boolean.TRUE);
+            }
         }
 
         /* convalide */
