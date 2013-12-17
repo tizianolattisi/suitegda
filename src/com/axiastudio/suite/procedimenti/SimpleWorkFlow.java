@@ -8,6 +8,7 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.pratiche.IDettaglio;
+import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
@@ -88,6 +89,7 @@ public class SimpleWorkFlow {
         binding.setVariable("alfrescoHelper", alfrescoHelper);
         binding.setVariable("documenti", documenti);
         binding.setVariable("CodiceCarica", CodiceCarica.class);
+        binding.setVariable("PraticaUtil", PraticaUtil.class);
         return binding;
     }
 

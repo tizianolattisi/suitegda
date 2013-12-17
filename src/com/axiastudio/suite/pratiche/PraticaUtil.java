@@ -18,12 +18,17 @@ package com.axiastudio.suite.pratiche;
 
 import com.axiastudio.mapformat.MessageMapFormat;
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.entities.Giunta;
-import com.axiastudio.suite.generale.entities.Costante;
+import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
+import com.axiastudio.suite.protocollo.entities.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -111,4 +116,56 @@ public class PraticaUtil {
         return (i == 0);
     }
 
+    // protocollazione della pratica
+    public static Boolean protocollaPratica(Pratica pratica, Ufficio sportello,
+                                           String oggettoProtocollo, List<Ufficio> attribuzioni){
+        Oggetto oggetto = null;
+        return protocollaPratica(pratica, sportello, oggettoProtocollo, attribuzioni, oggetto, TipoProtocollo.INTERNO, null, null);
     }
+    public static Boolean protocollaPratica(Pratica pratica, Ufficio sportello,
+                                           String oggettoProtocollo, List<Ufficio> attribuzioni, Oggetto oggetto,
+                                           TipoProtocollo tipo, List<Soggetto> soggetti, List<Ufficio> uffici){
+        Protocollo protocollo = new Protocollo();
+        protocollo.setOggetto(oggettoProtocollo);
+        protocollo.setSportello(sportello);
+        protocollo.setTipo(tipo);
+        // attribuzioni
+        List<Attribuzione> attribuzioniList = new ArrayList<Attribuzione>();
+        for( Ufficio ufficio: attribuzioni ){
+            Attribuzione attribuzione = new Attribuzione();
+            attribuzione.setUfficio(ufficio);
+            attribuzione.setUfficio(ufficio);
+        }
+        protocollo.setAttribuzioneCollection(attribuzioniList);
+        // uffici mittenti o destinatari
+        if( uffici != null ){
+            List<UfficioProtocollo> ufficioProtocolloList = new ArrayList<UfficioProtocollo>();
+            for( Ufficio attribuzione: uffici ){
+                UfficioProtocollo ufficioProtocollo = new UfficioProtocollo();
+                ufficioProtocollo.setUfficio(attribuzione);
+            }
+            protocollo.setUfficioProtocolloCollection(ufficioProtocolloList);
+        }
+        // soggetti
+        if( soggetti != null ){
+            List<SoggettoProtocollo> soggettiProtocollo = new ArrayList<SoggettoProtocollo>();
+            for( Soggetto soggetto: soggetti ){
+                SoggettoProtocollo soggettoProtocollo = new SoggettoProtocollo();
+                soggettoProtocollo.setSoggetto(soggetto);
+            }
+            protocollo.setSoggettoProtocolloCollection(soggettiProtocollo);
+        }
+        // inserimento protocollo nella pratica
+        Collection<PraticaProtocollo> pratiche = new ArrayList<PraticaProtocollo>();
+        PraticaProtocollo pp = new PraticaProtocollo();
+        pp.setPratica(pratica);
+        pp.setOggetto(oggetto);
+        pratiche.add(pp);
+        protocollo.setPraticaProtocolloCollection(pratiche);
+        // commit
+        Controller controller = (Controller) Register.queryUtility(IController.class, Protocollo.class.getName());
+        controller.commit(protocollo);
+        return true;
+    }
+
+}
