@@ -27,6 +27,7 @@ import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.forms.FormDettaglio;
 import com.axiastudio.suite.procedimenti.SimpleWorkFlow;
+import com.axiastudio.suite.procedimenti.SimpleWorkflowDialog;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 
@@ -37,74 +38,19 @@ import java.util.*;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class FormDetermina extends FormDettaglio implements IDocumentFolder {
-    private QPushButton pushButtonResponsabile;
-    private QPushButton pushButtonBilancio;
-    private QPushButton pushButtonVistoNegato;
 
     public FormDetermina(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
-
-        /*
-        pushButtonResponsabile = (QPushButton) this.findChild(QPushButton.class, "pushButtonResponsabile");
-        pushButtonBilancio = (QPushButton) this.findChild(QPushButton.class, "pushButtonBilancio");
-        pushButtonVistoNegato = (QPushButton) this.findChild(QPushButton.class, "pushButtonVistoNegato");
-        pushButtonResponsabile.clicked.connect(this, "vistoResponsabile()");
-        pushButtonBilancio.clicked.connect(this, "vistoBilancio()");
-        pushButtonVistoNegato.clicked.connect(this, "vistoNegato()");
-        */
 
         QListWidget procedimento = (QListWidget) findChild(QListWidget.class, "procedimento");
         procedimento.itemDoubleClicked.connect(this, "completaFase(QListWidgetItem)");
 
     }
 
-    /*
-    protected Boolean vistoResponsabile() {
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-        Utente utente = (Utente) Register.queryUtility(IUtente.class);
-        determina.setVistoResponsabile(Boolean.TRUE);
-        determina.setDataVistoResponsabile(new Date());
-        determina.setUtenteVistoResponsabile(utente);
-        return true;
-    }*/
-
-    /*
-    protected Boolean vistoBilancio() {
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-        Utente utente = (Utente) Register.queryUtility(IUtente.class);
-        determina.setVistoBilancio(Boolean.TRUE);
-        determina.setDataVistoBilancio(new Date());
-        determina.setUtenteVistoBilancio(utente);
-        return true;
-    }*/
-
-    /*
-    protected Boolean vistoNegato() {
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-        Utente utente = (Utente) Register.queryUtility(IUtente.class);
-        determina.setVistoNegato(Boolean.TRUE);
-        determina.setDataVistoNegato(new Date());
-        determina.setUtenteVistoNegato(utente);
-        return true;
-    }*/
-    
-    /*
-     * Verifica delle condizioni di abilitazione alla firma del responsabile
-     * del servizio.
-     */
-    /*
-    protected Boolean checkResponsabile() {
-        return false;
-    }
-
-    protected Boolean checkBilancio() {
-        return true;
-    }*/
 
     @Override
     protected void indexChanged(int row) {
         super.indexChanged(row);
-        //verificaAbilitazionePulsanti();
         popolaProcedimento();
     }
 
@@ -152,51 +98,15 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
             return;
         }
 
-        List<String> items = new ArrayList<String>();
-        if( fasePratica.getConfermata() != null ){
-            items.add(fasePratica.getTestoconfermata());
+        SimpleWorkflowDialog swd = new SimpleWorkflowDialog(this, wf , fasePratica);
+        int res = swd.exec();
+
+        if( res == 1 ){
+            // TODO: commit?
+            popolaProcedimento();
         }
-        if( fasePratica.getRifiutata() != null ){
-            items.add(fasePratica.getTestorifiutata());
-        }
-        String choice = QInputDialog.getItem(this,
-                "Completamento fase",
-                fasePratica.getTesto(),
-                items,
-                0,
-                false);
-        Integer idx = items.lastIndexOf(choice);
-        if( idx == 0 ){
-            Boolean res = wf.azione(fasePratica);
-            if( res ){
-                wf.completaFase(fasePratica);
-            } else {
-                String msg = wf.getResult().toString();
-                QMessageBox.critical(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
-                return;
-            }
-        } else if( idx == 1 ){
-            wf.completaFase(fasePratica, Boolean.FALSE);
-        }
-        // TODO: refresh?
-        popolaProcedimento();
     }
 
-    /*
-    protected void verificaAbilitazionePulsanti() {
-        Determina d = (Determina) this.getContext().getCurrentEntity();
-        Boolean vResp = false;
-        Boolean vBil = false;
-        Boolean vNeg = false;
-        if( d != null ){
-            vResp = !d.getVistoResponsabile() && this.checkResponsabile();
-            vBil = d.getVistoResponsabile() && !d.getVistoBilancio() && this.checkBilancio();
-            vNeg = vBil;
-        }
-        this.pushButtonResponsabile.setEnabled(vResp);
-        this.pushButtonBilancio.setEnabled(vBil);
-        this.pushButtonVistoNegato.setEnabled(vNeg);
-    }*/
 
     /* XXX: codice simile a FormPratica */
     @Override
