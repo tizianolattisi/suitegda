@@ -88,9 +88,10 @@ SELECT setval('anagrafiche.relazionesoggetto_id_seq', 2, true);
 SET search_path = pratiche, pg_catalog;
 
 INSERT INTO fase (id, descrizione) VALUES (1, 'Istruttoria');
-INSERT INTO fase (id, descrizione) VALUES (2, 'Visto del responsabile');
-INSERT INTO fase (id, descrizione) VALUES (3, 'Visto di bilancio');
-INSERT INTO fase (id, descrizione) VALUES (4, 'Completata');
+INSERT INTO fase (id, descrizione) VALUES (2, 'Approvazione del responsabile');
+INSERT INTO fase (id, descrizione) VALUES (3, 'Preparazione e firma');
+INSERT INTO fase (id, descrizione) VALUES (4, 'Visto di bilancio');
+INSERT INTO fase (id, descrizione) VALUES (5, 'Completata');
 
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (1, 'DET', 'Determine', NULL, NULL, 0, false, false );
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (2, 'GES', 'Ramo GES', NULL, NULL, 0, false, false);
@@ -169,42 +170,24 @@ SELECT setval('procedimenti.procedimento_id_seq', 2, true);
 INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
   VALUES (1, 1, 1, 0, 'Chiusura dell''istruttoria'); -- Istruttoria
 INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
-  VALUES (2, 1, 2, 1, 'Visto del responsabile del servizio'); -- Visto responsabile
+  VALUES (2, 1, 2, 1, 'Approvazione del responsabile del servizio: verrà generato un protocollo e inserito nella pratica.'); -- Approvazione responsabile
 INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
-  VALUES (3, 1, 3, 2, 'Visto del responsabile di bilancio'); -- Visto bilancio
+  VALUES (3, 1, 3, 2, 'Preparazione dei documenti e firma: i documenti preparati verranno allegati al protocollo.'); -- Preparazione documenti e firma
 INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
-  VALUES (4, 1, 4, 3, 'Completata'); -- Visto bilancio
-SELECT setval('procedimenti.faseprocedimento_id_seq', 5, true);
+  VALUES (4, 1, 4, 3, 'Visto del responsabile di bilancio'); -- Visto bilancio
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (5, 1, 5, 4, 'Completata'); -- Visto bilancio
+SELECT setval('procedimenti.faseprocedimento_id_seq', 6, true);
 -- update di confermata e rifiutata
 UPDATE faseprocedimento SET confermabile=true, confermata=2, testoconfermata='Chiudi l''istruttoria' WHERE id=1;
-UPDATE faseprocedimento SET confermabile=true, confermata=3, testoconfermata='Dai il visto',
-  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=2;
-UPDATE faseprocedimento SET confermabile=true, confermata=4, testoconfermata='Dai il visto',
-  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=3;
+UPDATE faseprocedimento SET confermabile=true, confermata=3, testoconfermata='Approva la determina',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta l''approvazione' WHERE id=2;
+UPDATE faseprocedimento SET confermabile=true, confermata=4, testoconfermata='Conferma preparazione',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta la conferma' WHERE id=3;
+UPDATE faseprocedimento SET confermabile=true, confermata=5, testoconfermata='Visto di bilancio',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=4;
 -- closure
-UPDATE faseprocedimento SET condizione='{ determina -> determina.oggetto == "valido" }' WHERE id=2;
-
-
--- fasi di pratica
-INSERT INTO pratiche.fasepratica (id, pratica, fase, progressivo, testo)
-  VALUES (1, 2, 1, 0, 'Chiusura dell''istruttoria'); -- Istruttoria
-INSERT INTO pratiche.fasepratica (id, pratica, fase, progressivo, testo)
-  VALUES (2, 2, 2, 1, 'Visto del responsabile del servizio'); -- Visto responsabile
-INSERT INTO pratiche.fasepratica (id, pratica, fase, progressivo, testo)
-  VALUES (3, 2, 3, 2, 'Visto del responsabile di bilancio'); -- Visto bilancio
-INSERT INTO pratiche.fasepratica (id, pratica, fase, progressivo, testo)
-  VALUES (4, 2, 4, 3, 'Completata'); -- Visto bilancio
-SELECT setval('pratiche.fasepratica_id_seq', 5, true);
--- update di confermata e rifiutata
-UPDATE pratiche.fasepratica SET confermabile=true, confermata=2, testoconfermata='Chiudi l''istruttoria' WHERE id=1;
-UPDATE pratiche.fasepratica SET confermabile=true, confermata=3, testoconfermata='Dai il visto',
-  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=2;
-UPDATE pratiche.fasepratica SET confermabile=true, confermata=4, testoconfermata='Dai il visto',
-  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=3;
--- fase completata
-UPDATE pratiche.fasepratica SET completata=true WHERE id=1;
--- closure
-UPDATE pratiche.fasepratica SET condizione='{ determina -> determina.oggetto == "valido" }' WHERE id=2;
+UPDATE faseprocedimento SET condizione='{ determina -> return "Attenzione, procedimento non configurato" }' WHERE id=1;
 
 insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (1, 3, 1, true);
 SELECT setval('procedimenti.ufficioprocedimento_id_seq', 2, true);
