@@ -273,19 +273,21 @@ SELECT setval('deliberedetermine.ufficiodetermina_id_seq', 2, true);
 SET search_path = modelli, pg_catalog;
 
 insert into modello (id, titolo, descrizione, uri)
-  values (1, 'Comunicazione generica', 'Comunicazione generica in carta intestata', '/Users/tiziano/Projects/Suite/demo/generico.ott');
+  values (1, 'Comunicazione generica', 'Comunicazione generica in carta intestata', 'workspace://SpacesStore/5ea14f3c-dad1-400d-b3e2-b10e0dc390d8');
 insert into modello (id, titolo, descrizione, uri)
-  values (2, 'Determina', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9');
+  values (2, 'Numero di protocollo', 'Modello con dati di protocollazione', '');
 insert into modello (id, titolo, descrizione, uri)
-  values (3, 'Impegni', 'Impegni determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9');
-SELECT setval('modelli.modello_id_seq', 4, true);
+  values (3, 'Determina', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9');
+insert into modello (id, titolo, descrizione, uri)
+  values (4, 'Impegni', 'Impegni determina del responsabile di servizio', 'workspace://SpacesStore/f9a1f6ca-62d3-4f6e-a0c5-9ae347241dde');
+SELECT setval('modelli.modello_id_seq', 5, true);
 
 insert into segnalibro (id, segnalibro, codice, modello)
-    values (1, 'idpratica', '{ p -> p.idpratica }', 1);
+  values (1, 'idpratica', '{ determina -> determina.pratica.idpratica }', 3);
 insert into segnalibro (id, segnalibro, codice, modello)
-  values (2, 'oggettopratica', '{ p -> p.descrizione.toUpperCase() }', 1);
+  values (2, 'codiceinterno', '{ determina -> determina.pratica.codiceinterno }', 3);
 insert into segnalibro (id, segnalibro, codice, modello)
-  values (3, 'oggetto', '{ p -> p.oggetto }', 2);
+  values (3, 'oggetto', '{ determina -> determina.oggetto }', 3);
 SELECT setval('modelli.segnalibro_id_seq', 4, true);
 
 insert into procedimentomodello (id, procedimento, modello)
