@@ -483,7 +483,8 @@ CREATE TABLE faseprocedimento (
   rifiutata bigint,
   testorifiutata character varying(512),
   condizione text,
-  azione text
+  azione text,
+  usoresponsabile boolean default false
 );
 ALTER TABLE procedimenti.faseprocedimento OWNER TO postgres;
 ALTER TABLE ONLY faseprocedimento
@@ -745,7 +746,9 @@ CREATE TABLE fasepratica (
   testorifiutata character varying(512),
   condizione text,
   azione text,
-  completata boolean default false
+  completata boolean default false,
+  usoresponsabile boolean default false
+
 );
 ALTER TABLE pratiche.fasepratica OWNER TO postgres;
 ALTER TABLE ONLY fasepratica
