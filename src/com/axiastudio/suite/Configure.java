@@ -212,7 +212,7 @@ public class Configure {
             }
             RuleSet ruleSet = new RuleSet(map);
             IStreamProvider streamProvider = null;
-            if( modello.getUri().startsWith("workspace:") ){
+            if( modello.getUri() != null && modello.getUri().startsWith("workspace:") ){
                 streamProvider = new CmisStreamProvider(cmisUrl, cmisUser, cmisPassword, modello.getUri());
             } else {
                 streamProvider = new FileStreamProvider(modello.getUri());
