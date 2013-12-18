@@ -104,6 +104,7 @@ public class PraticaListener {
             fasePratica.setTestoconfermata(faseProcedimento.getTestoconfermata());
             fasePratica.setRifiutabile(faseProcedimento.getRifiutabile());
             fasePratica.setTestorifiutata(faseProcedimento.getTestorifiutata());
+            fasePratica.setUsoresponsabile(faseProcedimento.getUsoresponsabile());
             fasiPratica.add(fasePratica);
         }
         for( Integer i=0; i<fasiPratica.size(); i++ ){

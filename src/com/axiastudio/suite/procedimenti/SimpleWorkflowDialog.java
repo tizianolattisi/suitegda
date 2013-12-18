@@ -25,13 +25,12 @@ public class SimpleWorkflowDialog extends QDialog {
     }
 
     private void init(){
-        Boolean responsabilita = true;
         QVBoxLayout vBox = new QVBoxLayout();
         this.setLayout(vBox);
         vBox.addWidget(new QLabel(fasePratica.getFase().getDescrizione()));
         vBox.addWidget(new QLabel(fasePratica.getTesto()));
         QCheckBox checkBox = new QCheckBox("ho letto e compreso");
-        if( responsabilita ){
+        if( fasePratica.getUsoresponsabile() ){
             vBox.addWidget(checkBox);
         }
 
@@ -56,7 +55,7 @@ public class SimpleWorkflowDialog extends QDialog {
         buttonAccept.clicked.connect(this, "accept()");
         hBox.addWidget(buttonAccept);
 
-        if( responsabilita ){
+        if( fasePratica.getUsoresponsabile() ){
             buttonAccept.setEnabled(false);
             checkBox.toggled.connect(buttonAccept, "setEnabled(boolean)");
         }

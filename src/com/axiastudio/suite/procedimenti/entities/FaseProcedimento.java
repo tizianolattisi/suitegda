@@ -61,6 +61,8 @@ public class FaseProcedimento implements Serializable {
     private String condizione;
     @Column(name="azione")
     private String azione;
+    @Column(name="usoresponsabile")
+    private Boolean usoresponsabile=false;
 
     public Long getId() {
         return id;
@@ -164,6 +166,14 @@ public class FaseProcedimento implements Serializable {
 
     public void setRifiutabile(Boolean rifiutabile) {
         this.rifiutabile = rifiutabile;
+    }
+
+    public Boolean getUsoresponsabile() {
+        return usoresponsabile;
+    }
+
+    public void setUsoresponsabile(Boolean usoresponsabile) {
+        this.usoresponsabile = usoresponsabile;
     }
 
     @Override
