@@ -1096,7 +1096,6 @@ CREATE TABLE determina (
     idpratica character varying(10),
     codiceinterno character varying(50),
     oggetto character varying(1024),
-    datapratica date,
     dientrata boolean NOT NULL DEFAULT FALSE,
     dispesa boolean NOT NULL DEFAULT FALSE,
     diregolarizzazione boolean NOT NULL DEFAULT FALSE,

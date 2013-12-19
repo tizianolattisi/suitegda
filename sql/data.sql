@@ -254,8 +254,8 @@ SELECT setval('sedute.seduta_id_seq', 2, true);
 -- Delibere e determine
 SET search_path = deliberedetermine, pg_catalog;
 
-INSERT INTO determina (id, idpratica, codiceinterno, oggetto, datapratica, dispesa, dientrata, diregolarizzazione, referentepolitico, ufficioresponsabile, nomeresponsabile, vistoresponsabile, datavistoresponsabile, titolarevistoresponsabile, segretariovistoresponsabile, delegatovistoresponsabile, utentevistoresponsabile, vistobilancio, datavistobilancio, titolarevistobilancio, segretariovistobilancio, delegatovistobilancio, utentevistobilancio, vistonegato, datavistonegato, titolarevistonegato, segretariovistonegato, delegatovistonegato, utentevistonegato, protocollo)
-  VALUES (1, '201200002', 'DETRS201200001', 'Determina di prova', '01/01/2012', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, NULL);
+INSERT INTO determina (id, idpratica, codiceinterno, oggetto, dispesa, dientrata, diregolarizzazione, referentepolitico, ufficioresponsabile, nomeresponsabile, vistoresponsabile, datavistoresponsabile, titolarevistoresponsabile, segretariovistoresponsabile, delegatovistoresponsabile, utentevistoresponsabile, vistobilancio, datavistobilancio, titolarevistobilancio, segretariovistobilancio, delegatovistobilancio, utentevistobilancio, vistonegato, datavistonegato, titolarevistonegato, segretariovistonegato, delegatovistonegato, utentevistonegato, protocollo)
+  VALUES (1, '201200002', 'DETRS201200001', 'Determina di prova', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, NULL);
 SELECT setval('deliberedetermine.determina_id_seq', 2, true);
 
 INSERT INTO serviziodetermina (id, determina, servizio) VALUES (1, 1, 1);
@@ -284,9 +284,9 @@ SELECT setval('modelli.modello_id_seq', 5, true);
 
 -- modello protocollo
 insert into segnalibro (id, segnalibro, codice, modello)
-  values (1, 'numeroprotocollo', '{ determina -> determina.protocollo.iddocumento }', 2);
+  values (1, 'numeroprotocollo', '{ determina -> determina.protocollo ? determina.protocollo.iddocumento : "YYYYNNNNNNNN" }', 2);
 insert into segnalibro (id, segnalibro, codice, modello)
-  values (2, 'dataprotocollo', '{ determina -> determina.protocollo.dataprotocollo }', 2);
+  values (2, 'dataprotocollo', '{ determina -> determina.protocollo ? determina.protocollo.dataprotocollo : "GG/MM/YYY"}', 2);
 -- modello determina
 insert into segnalibro (id, segnalibro, codice, modello)
   values (3, 'codiceinterno', '{ determina -> determina.pratica.codiceinterno }', 3);
