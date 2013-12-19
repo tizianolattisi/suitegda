@@ -207,6 +207,12 @@ public class Configure {
         List<Modello> modelli = SuiteUtil.elencoModelli();
         for( Modello modello: modelli ){
             HashMap<String,String> map = new HashMap<String, String>();
+            Modello modellopadre = modello.getModellopadre();
+            if( modellopadre != null ){
+                for( Segnalibro segnalibro: modellopadre.getSegnalibroCollection() ){
+                    map.put(segnalibro.getSegnalibro(), segnalibro.getCodice());
+                }
+            }
             for( Segnalibro segnalibro: modello.getSegnalibroCollection() ){
                 map.put(segnalibro.getSegnalibro(), segnalibro.getCodice());
             }
