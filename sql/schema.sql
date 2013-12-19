@@ -1124,7 +1124,7 @@ CREATE TABLE determina (
     segretariovistonegato boolean NOT NULL DEFAULT FALSE,
     delegatovistonegato boolean NOT NULL DEFAULT FALSE,
     utentevistonegato bigint,
-    iddocumento character varying(12)
+    protocollo character varying(12)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.determina OWNER TO postgres;
 ALTER TABLE ONLY determina
@@ -1139,6 +1139,9 @@ ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistobilancio FOREIGN KEY (utentevistobilancio) REFERENCES base.utente(id);
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistonegato FOREIGN KEY (utentevistonegato) REFERENCES base.utente(id);
+ALTER TABLE ONLY determina
+ADD CONSTRAINT fk_determina_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
+
 
 CREATE TABLE serviziodetermina (
     id bigserial NOT NULL,

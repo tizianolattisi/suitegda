@@ -254,8 +254,8 @@ SELECT setval('sedute.seduta_id_seq', 2, true);
 -- Delibere e determine
 SET search_path = deliberedetermine, pg_catalog;
 
-INSERT INTO determina (id, idpratica, codiceinterno, oggetto, datapratica, dispesa, dientrata, diregolarizzazione, referentepolitico, ufficioresponsabile, nomeresponsabile, vistoresponsabile, datavistoresponsabile, titolarevistoresponsabile, segretariovistoresponsabile, delegatovistoresponsabile, utentevistoresponsabile, vistobilancio, datavistobilancio, titolarevistobilancio, segretariovistobilancio, delegatovistobilancio, utentevistobilancio, vistonegato, datavistonegato, titolarevistonegato, segretariovistonegato, delegatovistonegato, utentevistonegato, iddocumento)
-  VALUES (1, '201200002', 'DETRS2012000001', 'Determina di prova', '01/01/2012', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, NULL);
+INSERT INTO determina (id, idpratica, codiceinterno, oggetto, datapratica, dispesa, dientrata, diregolarizzazione, referentepolitico, ufficioresponsabile, nomeresponsabile, vistoresponsabile, datavistoresponsabile, titolarevistoresponsabile, segretariovistoresponsabile, delegatovistoresponsabile, utentevistoresponsabile, vistobilancio, datavistobilancio, titolarevistobilancio, segretariovistobilancio, delegatovistobilancio, utentevistobilancio, vistonegato, datavistonegato, titolarevistonegato, segretariovistonegato, delegatovistonegato, utentevistonegato, protocollo)
+  VALUES (1, '201200002', 'DETRS201200001', 'Determina di prova', '01/01/2012', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, NULL);
 SELECT setval('deliberedetermine.determina_id_seq', 2, true);
 
 INSERT INTO serviziodetermina (id, determina, servizio) VALUES (1, 1, 1);
@@ -276,19 +276,23 @@ insert into modello (id, titolo, descrizione, uri)
   values (1, 'Comunicazione generica', 'Comunicazione generica in carta intestata', 'workspace://SpacesStore/5ea14f3c-dad1-400d-b3e2-b10e0dc390d8');
 insert into modello (id, titolo, descrizione, uri)
   values (2, 'Numero di protocollo', 'Modello con dati di protocollazione', '');
-insert into modello (id, titolo, descrizione, uri)
-  values (3, 'Determina', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9');
+insert into modello (id, titolo, descrizione, uri, modellopadre)
+  values (3, 'Determina', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9', 2);
 insert into modello (id, titolo, descrizione, uri)
   values (4, 'Impegni', 'Impegni determina del responsabile di servizio', 'workspace://SpacesStore/f9a1f6ca-62d3-4f6e-a0c5-9ae347241dde');
 SELECT setval('modelli.modello_id_seq', 5, true);
 
+-- modello protocollo
 insert into segnalibro (id, segnalibro, codice, modello)
-  values (1, 'idpratica', '{ determina -> determina.pratica.idpratica }', 3);
+  values (1, 'numeroprotocollo', '{ determina -> determina.protocollo.iddocumento }', 2);
 insert into segnalibro (id, segnalibro, codice, modello)
-  values (2, 'codiceinterno', '{ determina -> determina.pratica.codiceinterno }', 3);
+  values (2, 'dataprotocollo', '{ determina -> determina.protocollo.dataprotocollo }', 2);
+-- modello determina
 insert into segnalibro (id, segnalibro, codice, modello)
-  values (3, 'oggetto', '{ determina -> determina.oggetto }', 3);
-SELECT setval('modelli.segnalibro_id_seq', 4, true);
+  values (3, 'codiceinterno', '{ determina -> determina.pratica.codiceinterno }', 3);
+insert into segnalibro (id, segnalibro, codice, modello)
+  values (4, 'oggetto', '{ determina -> determina.oggetto }', 3);
+SELECT setval('modelli.segnalibro_id_seq', 5, true);
 
 insert into procedimentomodello (id, procedimento, modello)
     values (1, 1, 2);
