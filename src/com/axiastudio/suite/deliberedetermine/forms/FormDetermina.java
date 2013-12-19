@@ -95,8 +95,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         int res = swd.exec();
 
         if( res == 1 ){
-            // TODO: commit?
-            popolaProcedimento();
+            this.getContext().commitChanges();
         }
     }
 
