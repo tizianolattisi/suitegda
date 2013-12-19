@@ -18,10 +18,7 @@ package com.axiastudio.suite.pratiche;
 
 import com.axiastudio.mapformat.MessageMapFormat;
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IController;
-import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.*;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.entities.Giunta;
@@ -117,12 +114,12 @@ public class PraticaUtil {
     }
 
     // protocollazione della pratica
-    public static Boolean protocollaPratica(Pratica pratica, Ufficio sportello,
+    public static Protocollo protocollaPratica(Pratica pratica, Ufficio sportello,
                                            String oggettoProtocollo, List<Ufficio> attribuzioni){
         Oggetto oggetto = null;
         return protocollaPratica(pratica, sportello, oggettoProtocollo, attribuzioni, oggetto, TipoProtocollo.INTERNO, null, null);
     }
-    public static Boolean protocollaPratica(Pratica pratica, Ufficio sportello,
+    public static Protocollo protocollaPratica(Pratica pratica, Ufficio sportello,
                                            String oggettoProtocollo, List<Ufficio> attribuzioni, Oggetto oggetto,
                                            TipoProtocollo tipo, List<Soggetto> soggetti, List<Ufficio> uffici){
         Protocollo protocollo = new Protocollo();
@@ -164,8 +161,11 @@ public class PraticaUtil {
         protocollo.setPraticaProtocolloCollection(pratiche);
         // commit
         Controller controller = (Controller) Register.queryUtility(IController.class, Protocollo.class.getName());
-        controller.commit(protocollo);
-        return true;
+        Validation validation = controller.commit(protocollo);
+        if( !validation.getResponse() ){
+            return null;
+        }
+        return protocollo;
     }
 
 }
