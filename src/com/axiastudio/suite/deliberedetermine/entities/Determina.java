@@ -47,9 +47,6 @@ public class Determina implements Serializable, IDettaglio {
     private String codiceinterno;
     @Column(name="oggetto", length=2048)
     private String oggetto;
-    @Column(name="datapratica")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date datapratica;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<ServizioDetermina> servizioDeterminaCollection;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
@@ -179,11 +176,14 @@ public class Determina implements Serializable, IDettaglio {
     }
 
     public Date getDatapratica() {
-        return datapratica;
+        if( this.pratica != null ){
+            return pratica.getDatapratica();
+        }
+        return null;
     }
 
     public void setDatapratica(Date datapratica) {
-        this.datapratica = datapratica;
+        // NOP
     }
 
     public Collection<ServizioDetermina> getServizioDeterminaCollection() {

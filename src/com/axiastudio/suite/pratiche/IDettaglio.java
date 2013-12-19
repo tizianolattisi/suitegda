@@ -8,12 +8,13 @@ import com.axiastudio.suite.pratiche.entities.Pratica;
  * Time: 09:02
  */
 public interface IDettaglio {
-    String getIdpratica();
-    void setIdpratica(String idpratica);
 
     Pratica getPratica();
     void setPratica(Pratica pratica);
 
+    // campi proxy (setter in NOP)
+    String getIdpratica();
+    void setIdpratica(String idpratica);
     public String getCodiceinterno();
     public void setCodiceinterno(String codiceinterno);
 }
