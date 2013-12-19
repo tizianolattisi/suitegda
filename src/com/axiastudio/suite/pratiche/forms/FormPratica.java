@@ -19,14 +19,10 @@ package com.axiastudio.suite.pratiche.forms;
 import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.IController;
-import com.axiastudio.pypapi.db.IStoreFactory;
-import com.axiastudio.pypapi.db.Store;
-import com.axiastudio.pypapi.ui.Column;
+import com.axiastudio.pypapi.db.*;
+import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
-import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.pypapi.ui.Util;
@@ -36,18 +32,22 @@ import com.axiastudio.suite.SuiteUiUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.pratiche.IDettaglio;
+import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
-import com.trolltech.qt.gui.QCheckBox;
-import com.trolltech.qt.gui.QComboBox;
-import com.trolltech.qt.gui.QIcon;
-import com.trolltech.qt.gui.QToolButton;
-import com.trolltech.qt.gui.QWidget;
+import com.trolltech.qt.gui.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,9 +61,13 @@ import java.util.logging.Logger;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class FormPratica extends Window implements IDocumentFolder {
+
+    private PraticaToolbar praticaToolbar;
     
     public FormPratica(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
+        praticaToolbar = new PraticaToolbar("Dettaglio", this);
+        addToolBar(praticaToolbar);
         
         /* tipo */
         QToolButton toolButtonTipo = (QToolButton) this.findChild(QToolButton.class, "toolButtonTipo");
@@ -86,7 +90,25 @@ public class FormPratica extends Window implements IDocumentFolder {
             Logger.getLogger(FormPratica.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    private void apriDettaglio(){
+        Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+        IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(pratica);
+        if( dettaglio == null ){
+            String msg = "La pratica non ha nessun dettaglio collegato.";
+            Util.warningBox(this, "Attenzione", msg);
+            return;
+        }
+        IForm form = Util.formFromEntity(dettaglio);
+        QMdiArea workspace = Util.findParentMdiArea(this);
+        if( workspace != null ){
+            workspace.addSubWindow((QMainWindow) form);
+        }
+        form.show();
+    }
+
+
+
     /*
      * XXX: copia e incolla in FormTipoSeduta
      */
@@ -94,7 +116,7 @@ public class FormPratica extends Window implements IDocumentFolder {
         Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         if( pratica.getAttribuzione() == null ){
             String msg = "Per poter selezionare una tipologia devi prima attribuire un ufficio";
-            Util.warningBox((QWidget) this, "Error", msg);
+            Util.warningBox(this, "Error", msg);
             return;
         }
         FormTipoPratica tipi = new FormTipoPratica(this, pratica);

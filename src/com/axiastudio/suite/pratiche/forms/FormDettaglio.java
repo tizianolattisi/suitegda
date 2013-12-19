@@ -15,7 +15,7 @@ import com.trolltech.qt.gui.QMdiArea;
  */
 public class FormDettaglio extends Window {
 
-    public DettaglioToolbar dettaglioToolbar;
+    private DettaglioToolbar dettaglioToolbar;
 
     public FormDettaglio(String uiFile, Class entityClass, String title) {
         super(uiFile, entityClass, title);

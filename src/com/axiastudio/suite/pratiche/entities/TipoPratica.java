@@ -98,8 +98,10 @@ public class TipoPratica implements Serializable, Comparable<TipoPratica> {
     }
 
     public Procedimento getProcedimento() {
-        // TODO: univocità?
         Collection<TipoPraticaProcedimento> c = getTipopraticaProcedimentoCollection();
+        if( c.size() != 1 ){
+            return null;
+        }
         TipoPraticaProcedimento tpp = (TipoPraticaProcedimento) c.toArray()[0];
         return tpp.getProcedimento();
     }

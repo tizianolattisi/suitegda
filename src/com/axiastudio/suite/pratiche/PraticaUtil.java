@@ -19,16 +19,23 @@ package com.axiastudio.suite.pratiche;
 import com.axiastudio.mapformat.MessageMapFormat;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
+import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.entities.Giunta;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
+import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.protocollo.entities.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.*;
 
 /**
@@ -166,6 +173,35 @@ public class PraticaUtil {
             return null;
         }
         return protocollo;
+    }
+
+    public static IDettaglio trovaDettaglioDaPratica(Pratica pratica) {
+        Procedimento procedimento = pratica.getTipo().getProcedimento();
+        if( procedimento == null ){
+            return null;
+        }
+        String className = procedimento.getTipodettaglio();
+        if( className == null || className.length()==0 ){
+            return null;
+        }
+        try {
+            Class<?> klass = Class.forName(className);
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            EntityManager em = db.getEntityManagerFactory().createEntityManager();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Object> cq = cb.createQuery();
+            Class<?> returnType = klass;
+            Root from = cq.from(returnType);
+            Predicate predicate = cb.equal(from.get("pratica"), pratica);
+            cq.select(from);
+            cq.where(predicate);
+            TypedQuery<Object> tq = em.createQuery(cq);
+            IDettaglio dettaglio = (IDettaglio) tq.getSingleResult();
+            return dettaglio;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
