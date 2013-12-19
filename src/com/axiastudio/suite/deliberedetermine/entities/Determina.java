@@ -20,6 +20,7 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaListener;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -124,8 +125,9 @@ public class Determina implements Serializable, IDettaglio {
     private Boolean delegatoVistoNegato=Boolean.FALSE;
     
     /* protocollo */
-    @Column(name="iddocumento", length=12)
-    private String idDocumento;
+    @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
+    @ManyToOne
+    private Protocollo protocollo;
     
     public Long getId() {
         return id;
@@ -424,12 +426,12 @@ public class Determina implements Serializable, IDettaglio {
         this.delegatoVistoNegato = delegatoVistoNegato;
     }
 
-    public String getIdDocumento() {
-        return idDocumento;
+    public Protocollo getProtocollo() {
+        return protocollo;
     }
 
-    public void setIdDocumento(String iddocumento) {
-        this.idDocumento = iddocumento;
+    public void setProtocollo(Protocollo protocollo) {
+        this.protocollo = protocollo;
     }
 
     @Override
