@@ -115,7 +115,7 @@ public class SimpleWorkFlow {
 
     public Boolean eseguiClosure(String groovyClosure) {
         result = null;
-        if( groovyClosure == null || groovyClosure.length()>0 ){
+        if( groovyClosure == null || groovyClosure.length()==0 ){
             return true;
         }
         Binding binding = createBindings();
