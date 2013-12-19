@@ -17,13 +17,19 @@
 package com.axiastudio.suite.pratiche;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.pratiche.forms.DettaglioDialog;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
+import com.trolltech.qt.gui.QMainWindow;
+import com.trolltech.qt.gui.QMdiArea;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -125,8 +131,11 @@ public class PraticaListener {
                 IDettaglio dettaglio = (IDettaglio) klass.newInstance();
                 dettaglio.setPratica(pratica);  // XXX: non va in persistenza...
                 dettaglio.setCodiceinterno(pratica.getCodiceinterno());
+                // utilizzo una dialog con il context per poter salvare il dettaglio in maniera asincrona
                 IForm form = Util.formFromEntity(dettaglio);
-                form.show();
+                Context context = form.getContext();
+                DettaglioDialog dialog = new DettaglioDialog(context);
+                dialog.show();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             } catch (InstantiationException e) {
