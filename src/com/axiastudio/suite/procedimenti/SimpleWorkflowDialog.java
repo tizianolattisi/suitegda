@@ -3,9 +3,6 @@ package com.axiastudio.suite.procedimenti;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.trolltech.qt.gui.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * User: tiziano
  * Date: 18/12/13
@@ -21,10 +18,25 @@ public class SimpleWorkflowDialog extends QDialog {
         super(parent);
         this.fasePratica = fasePratica;
         this.simpleWorkFlow = simpleWorkFlow;
-        init();
+        if( !simpleWorkFlow.attivabile(fasePratica) ){
+            // inizializza la dialog per l'avvertimento
+            String msg = simpleWorkFlow.getResult().toString();
+            initNo(msg);
+        } else {
+            // inizializza la dialog per il passaggio di fase
+            initOk();
+        }
     }
 
-    private void init(){
+    private void initNo(String msg){
+        QVBoxLayout vBox = new QVBoxLayout();
+        this.setLayout(vBox);
+        vBox.addWidget(new QLabel("Attenzione"));
+        vBox.addWidget(new QLabel(msg));
+    }
+
+
+    private void initOk(){
         QVBoxLayout vBox = new QVBoxLayout();
         this.setLayout(vBox);
         vBox.addWidget(new QLabel(fasePratica.getFase().getDescrizione()));
