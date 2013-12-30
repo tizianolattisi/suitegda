@@ -19,6 +19,9 @@ package com.axiastudio.suite.protocollo.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.plugins.IPlugin;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
+import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.ui.Column;
 import com.axiastudio.pypapi.ui.IForm;
@@ -41,18 +44,9 @@ import com.trolltech.qt.core.QFile;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.designer.QUiLoader;
 import com.trolltech.qt.designer.QUiLoaderException;
-import com.trolltech.qt.gui.QAbstractItemView;
-import com.trolltech.qt.gui.QHeaderView;
-import com.trolltech.qt.gui.QIcon;
-import com.trolltech.qt.gui.QItemSelection;
-import com.trolltech.qt.gui.QItemSelectionModel;
-import com.trolltech.qt.gui.QListWidget;
-import com.trolltech.qt.gui.QListWidgetItem;
-import com.trolltech.qt.gui.QMainWindow;
-import com.trolltech.qt.gui.QMdiArea;
-import com.trolltech.qt.gui.QPushButton;
-import com.trolltech.qt.gui.QTableView;
-import com.trolltech.qt.gui.QTextEdit;
+import com.trolltech.qt.gui.*;
+
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -65,28 +59,34 @@ import javax.persistence.EntityManager;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class FormScrivania  extends QMainWindow {
-    private List<Attribuzione> selectionProtocollo = new ArrayList();
-    private List<DestinatarioUfficio> selectionRichiesta = new ArrayList();
+    private Store<Attribuzione> attribuzioneStoreGenerale = new Store<Attribuzione>(null);
+    private List<Attribuzione> selectionProtocollo = new ArrayList<Attribuzione>();
+    private List<DestinatarioUfficio> selectionRichiesta = new ArrayList<DestinatarioUfficio>();
     private final Integer DEFAULT_ROW_HEIGHT = 24;
-    
+    public ScrivaniaMenuBar scrivaniaMenuBar;
+
     public FormScrivania(){
         QFile file = Util.ui2jui(new QFile("classpath:com/axiastudio/suite/protocollo/forms/scrivania.ui"));
         this.loadUi(file);
-        QPushButton pushButtonDaiPerLetto = (QPushButton) this.findChild(QPushButton.class, "pushButtonDaiPerLetto");
-        pushButtonDaiPerLetto.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/tick.png"));
-        pushButtonDaiPerLetto.clicked.connect(this, "daiPerLetto()");
-        pushButtonDaiPerLetto.setEnabled(false);
-        QPushButton pushButtonApriProtocollo = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriProtocollo");
-        pushButtonApriProtocollo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
-        pushButtonApriProtocollo.clicked.connect(this, "apriProtocollo()");
-        pushButtonApriProtocollo.setEnabled(false);
-        QPushButton pushButtonApriDocumenti = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriDocumenti");
-        pushButtonApriDocumenti.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/menjazo.png"));
-        pushButtonApriDocumenti.clicked.connect(this, "apriDocumenti()");
-        pushButtonApriDocumenti.setEnabled(false);
-        QPushButton pushButtonAggiornaLista = (QPushButton) this.findChild(QPushButton.class, "pushButtonAggiornaLista");
-        pushButtonAggiornaLista.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/arrow_refresh.png"));
-        pushButtonAggiornaLista.clicked.connect(this, "aggiornaLista()");
+
+//        QPushButton pushButtonDaiPerLetto = (QPushButton) this.findChild(QPushButton.class, "pushButtonDaiPerLetto");
+//        pushButtonDaiPerLetto.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/tick.png"));
+//        pushButtonDaiPerLetto.clicked.connect(this, "daiPerLetto()");
+//        pushButtonDaiPerLetto.setEnabled(false);
+//        QPushButton pushButtonApriProtocollo = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriProtocollo");
+//        pushButtonApriProtocollo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+//        pushButtonApriProtocollo.clicked.connect(this, "apriProtocollo()");
+//        pushButtonApriProtocollo.setEnabled(false);
+//        QPushButton pushButtonApriDocumenti = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriDocumenti");
+//        pushButtonApriDocumenti.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/menjazo.png"));
+//        pushButtonApriDocumenti.clicked.connect(this, "apriDocumenti()");
+//        pushButtonApriDocumenti.setEnabled(false);
+//        QPushButton pushButtonAggiornaLista = (QPushButton) this.findChild(QPushButton.class, "pushButtonAggiornaLista");
+//        pushButtonAggiornaLista.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/arrow_refresh.png"));
+//        pushButtonAggiornaLista.clicked.connect(this, "aggiornaLista()");
+
+        this.scrivaniaMenuBar = new ScrivaniaMenuBar("Scrivania", this);
+        this.addToolBar(scrivaniaMenuBar);
 
         /* table view protocolli */
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
@@ -96,7 +96,16 @@ public class FormScrivania  extends QMainWindow {
         tableView.setItemDelegate(new DelegateScrivania(tableView));
         tableView.verticalHeader().setDefaultSectionSize(DEFAULT_ROW_HEIGHT);
         tableView.doubleClicked.connect(this, "apriProtocollo()");
-        
+
+        PyPaPiComboBox ufficio = (PyPaPiComboBox) this.findChild(QComboBox.class, "comboBoxUfficio");
+        Store storeUffici = storeUfficioFiltro();
+        ufficio.setLookupStore(storeUffici);
+        ufficio.setCurrentIndex(storeUffici.size()-1);
+
+        QPushButton pushButtonFiltra = (QPushButton) this.findChild(QPushButton.class, "pushButtonFiltra");
+        pushButtonFiltra.clicked.connect(this, "filtraPerUfficio()");
+
+
         /* table view richieste */
         QTableView tableViewRichieste = (QTableView) this.findChild(QTableView.class, "richieste");
         tableViewRichieste.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
@@ -130,7 +139,10 @@ public class FormScrivania  extends QMainWindow {
         List<Attribuzione> attribuzioni = em.createNamedQuery("trovaAttribuzioniUtente", Attribuzione.class)
                                             .setParameter("id", autenticato.getId())
                                             .getResultList();
-        Store store = new Store(attribuzioni);
+//        Store store = new Store(attribuzioni);
+        attribuzioneStoreGenerale.clear();
+        attribuzioneStoreGenerale.addAll(attribuzioni);
+
         List<Column> colonne = new ArrayList();
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         colonne.add(new Column("evidenza", "Ev.", "Attribuzione in evidenza"));
@@ -140,7 +152,7 @@ public class FormScrivania  extends QMainWindow {
         colonne.add(new Column("ufficio", "Ufficio", "Ufficio di attribuzione"));
         colonne.add(new Column("principale", "Pr.", "Attribuzione in via principale"));
         colonne.add(new Column("oggetto", "Oggetto", "Oggetto del protocollo"));
-        TableModel model = new TableModel(store, colonne);
+        TableModel model = new TableModel(attribuzioneStoreGenerale, colonne);
         tableView.clearSelection();
         model.setEditable(false);
         tableView.setModel(model);
@@ -218,9 +230,10 @@ public class FormScrivania  extends QMainWindow {
 
 
     private void selectRows(QItemSelection selected, QItemSelection deselected){
-        QPushButton pushButtonDaiPerLetto = (QPushButton) this.findChild(QPushButton.class, "pushButtonDaiPerLetto");
-        QPushButton pushButtonApriProtocollo = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriProtocollo");
-        QPushButton pushButtonApriDocumenti = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriDocumenti");
+//        QPushButton pushButtonDaiPerLetto = (QPushButton) this.findChild(QPushButton.class, "pushButtonDaiPerLetto");
+//        QPushButton pushButtonApriProtocollo = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriProtocollo");
+//        QPushButton pushButtonApriDocumenti = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriDocumenti");
+
 
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         TableModel model = (TableModel) tableView.model();
@@ -242,10 +255,7 @@ public class FormScrivania  extends QMainWindow {
         for (Integer idx: deselectedIndexes){
             boolean res = this.selectionProtocollo.remove((Attribuzione) model.getEntityByRow(idx));
         }
-        pushButtonDaiPerLetto.setEnabled(this.selectionProtocollo.size()>0);
-        pushButtonApriProtocollo.setEnabled(this.selectionProtocollo.size()==1);
-        pushButtonApriDocumenti.setEnabled(this.selectionProtocollo.size()==1);
-        
+
         // oggetto, uffici, soggetti
         QTextEdit textEdit_oggetto = (QTextEdit) this.findChild(QTextEdit.class, "textEdit_oggetto");
         QListWidget listWidget_uffici = (QListWidget) this.findChild(QListWidget.class, "listWidget_uffici");
@@ -356,6 +366,45 @@ public class FormScrivania  extends QMainWindow {
     
     private void aggiornaLista(){
         this.popolaAttribuzioni();
+    }
+
+    private void filtraPerUfficio(){
+/*        QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
+        TableModel model = (TableModel) tableView.model();
+        Store store = model.getStore();
+*/
+        Store<Attribuzione> store = new Store<Attribuzione>(null);
+        PyPaPiComboBox comboUfficio = (PyPaPiComboBox) this.findChild(QComboBox.class, "comboBoxUfficio");
+        int idx = comboUfficio.currentIndex();
+        Ufficio ufficio = (Ufficio) comboUfficio.itemData(idx);
+        if (ufficio == null) {
+            store = attribuzioneStoreGenerale;
+        } else {
+            for (Object obj: attribuzioneStoreGenerale) {
+                Attribuzione attribuzione=(Attribuzione) obj;
+                if (attribuzione.getUfficio().equals(ufficio)) {
+                    store.add(attribuzione);
+                }
+            }
+        }
+        QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
+        TableModel model = (TableModel) tableView.model();
+        model.setStore(store);
+        this.selectionProtocollo.clear();
+    }
+
+    /*
+ * Uno store contenente solo gli uffici dell'utente
+ */
+    public Store storeUfficioFiltro(){
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        List<Ufficio> uffici = new ArrayList();
+        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
+            if( uu.getRicerca() ){
+                uffici.add(uu.getUfficio());
+            }
+        }
+        return new Store(uffici);
     }
 
 }

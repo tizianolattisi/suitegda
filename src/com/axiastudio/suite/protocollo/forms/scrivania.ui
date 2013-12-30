@@ -27,7 +27,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabProtocolli">
        <property name="minimumSize">
@@ -43,30 +43,19 @@
         <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QPushButton" name="pushButtonDaiPerLetto">
-            <property name="text">
-             <string>dai per letto</string>
+           <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxUfficio">
+            <property name="minimumSize">
+             <size>
+              <width>500</width>
+              <height>0</height>
+             </size>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButtonApriProtocollo">
+           <widget class="QPushButton" name="pushButtonFiltra">
             <property name="text">
-             <string>apri protocollo</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButtonApriDocumenti">
-            <property name="text">
-             <string>apri documenti</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButtonAggiornaLista">
-            <property name="text">
-             <string>aggiorna lista</string>
+             <string>filtra per ufficio</string>
             </property>
            </widget>
           </item>
@@ -172,6 +161,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
