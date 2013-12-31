@@ -370,6 +370,10 @@ public class Mdi extends QMainWindow {
     
     private void runTask() {
         String formName = this.tree.currentItem().text(1);
+        if (formName == null || formName.equals("")) {
+            return;  // item di raggruppamento
+        }
+
         String mode = this.tree.currentItem().text(2);
         /* cambio password */
         if( "NEW".equals(formName) ){
