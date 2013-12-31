@@ -69,22 +69,6 @@ public class FormScrivania  extends QMainWindow {
         QFile file = Util.ui2jui(new QFile("classpath:com/axiastudio/suite/protocollo/forms/scrivania.ui"));
         this.loadUi(file);
 
-//        QPushButton pushButtonDaiPerLetto = (QPushButton) this.findChild(QPushButton.class, "pushButtonDaiPerLetto");
-//        pushButtonDaiPerLetto.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/tick.png"));
-//        pushButtonDaiPerLetto.clicked.connect(this, "daiPerLetto()");
-//        pushButtonDaiPerLetto.setEnabled(false);
-//        QPushButton pushButtonApriProtocollo = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriProtocollo");
-//        pushButtonApriProtocollo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
-//        pushButtonApriProtocollo.clicked.connect(this, "apriProtocollo()");
-//        pushButtonApriProtocollo.setEnabled(false);
-//        QPushButton pushButtonApriDocumenti = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriDocumenti");
-//        pushButtonApriDocumenti.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/menjazo.png"));
-//        pushButtonApriDocumenti.clicked.connect(this, "apriDocumenti()");
-//        pushButtonApriDocumenti.setEnabled(false);
-//        QPushButton pushButtonAggiornaLista = (QPushButton) this.findChild(QPushButton.class, "pushButtonAggiornaLista");
-//        pushButtonAggiornaLista.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/arrow_refresh.png"));
-//        pushButtonAggiornaLista.clicked.connect(this, "aggiornaLista()");
-
         this.scrivaniaMenuBar = new ScrivaniaMenuBar("Scrivania", this);
         this.addToolBar(scrivaniaMenuBar);
 
@@ -230,10 +214,6 @@ public class FormScrivania  extends QMainWindow {
 
 
     private void selectRows(QItemSelection selected, QItemSelection deselected){
-//        QPushButton pushButtonDaiPerLetto = (QPushButton) this.findChild(QPushButton.class, "pushButtonDaiPerLetto");
-//        QPushButton pushButtonApriProtocollo = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriProtocollo");
-//        QPushButton pushButtonApriDocumenti = (QPushButton) this.findChild(QPushButton.class, "pushButtonApriDocumenti");
-
 
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         TableModel model = (TableModel) tableView.model();
@@ -255,6 +235,14 @@ public class FormScrivania  extends QMainWindow {
         for (Integer idx: deselectedIndexes){
             boolean res = this.selectionProtocollo.remove((Attribuzione) model.getEntityByRow(idx));
         }
+
+        refreshInfo();
+    }
+
+    private void refreshInfo() {
+        this.scrivaniaMenuBar.actionByName("daiPerLetto").setEnabled(this.selectionProtocollo.size()>0);
+        this.scrivaniaMenuBar.actionByName("apriProtocollo").setEnabled(this.selectionProtocollo.size()==1);
+        this.scrivaniaMenuBar.actionByName("apriDocumenti").setEnabled(this.selectionProtocollo.size() == 1);
 
         // oggetto, uffici, soggetti
         QTextEdit textEdit_oggetto = (QTextEdit) this.findChild(QTextEdit.class, "textEdit_oggetto");
@@ -293,7 +281,7 @@ public class FormScrivania  extends QMainWindow {
             textEdit_oggetto.setText("");
         }
     }
-    
+
     private void daiPerLetto(){
         Database db = (Database) Register.queryUtility(IDatabase.class);
         Controller controller = new Controller(db.getEntityManagerFactory(), Attribuzione.class);
@@ -301,7 +289,16 @@ public class FormScrivania  extends QMainWindow {
             attribuzione.setLetto(Boolean.TRUE);
             controller.commit(attribuzione);
         }
-        this.popolaAttribuzioni();
+//        this.popolaAttribuzioni();
+        attribuzioneStoreGenerale.removeAll(this.selectionProtocollo);
+        QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
+        TableModel model = (TableModel) tableView.model();
+        Store store=model.getStore();
+        store.removeAll(this.selectionProtocollo);
+        model.setStore(store);
+
+        this.selectionProtocollo.clear();
+        this.refreshInfo();
     }
 
     private void apriProtocollo(){
@@ -391,6 +388,7 @@ public class FormScrivania  extends QMainWindow {
         TableModel model = (TableModel) tableView.model();
         model.setStore(store);
         this.selectionProtocollo.clear();
+        this.refreshInfo();
     }
 
     /*

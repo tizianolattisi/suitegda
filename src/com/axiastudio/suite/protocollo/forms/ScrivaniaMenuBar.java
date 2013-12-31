@@ -47,6 +47,9 @@ public class ScrivaniaMenuBar extends QToolBar {
                 "classpath:com/axiastudio/suite/resources/arrow_refresh.png",
                 "Aggiorna la lista visualizzata", parent);
 
+        actionByName("daiPerLetto").setEnabled(false);
+        actionByName("apriProtocollo").setEnabled(false);
+        actionByName("apriDocumenti").setEnabled(false);
     }
 
     protected QAction insertButton(String actionName, String text, String iconName,
