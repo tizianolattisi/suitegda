@@ -401,7 +401,7 @@ CREATE TABLE servizio (
     descrizione character varying(1024),
     ufficio bigint,
     referentepolitico character varying(100)
-) INHERITS (generale.withtimestamp);
+);
 ALTER TABLE finanziaria.servizio OWNER TO postgres;
 ALTER TABLE ONLY servizio
     ADD CONSTRAINT servizio_pkey PRIMARY KEY (id);
@@ -415,6 +415,7 @@ CREATE TABLE capitolo (
 ALTER TABLE finanziaria.capitolo OWNER TO postgres;
 ALTER TABLE ONLY capitolo
     ADD CONSTRAINT capitolo_pkey PRIMARY KEY (id);
+
 
 -- Procedimenti
 SET search_path = procedimenti, pg_catalog;
@@ -440,7 +441,7 @@ CREATE TABLE norma (
     tipo character varying(255),
     descrizione character varying(255),
     idobject character varying(255)
-) INHERITS (generale.withtimestamp);
+);
 ALTER TABLE procedimenti.norma OWNER TO postgres;
 ALTER TABLE ONLY norma
     ADD CONSTRAINT norma_pkey PRIMARY KEY (id);
@@ -582,7 +583,7 @@ CREATE TABLE carica (
     id bigserial NOT NULL,
     descrizione character varying(1024),
     codicecarica character varying(255)
-) INHERITS (generale.withtimestamp);
+);
 ALTER TABLE procedimenti.carica OWNER TO postgres;
 ALTER TABLE ONLY carica
     ADD CONSTRAINT carica_pkey PRIMARY KEY (id);
@@ -601,7 +602,6 @@ CREATE TABLE delega (
     delegato boolean NOT NULL DEFAULT FALSE,
     suassenza boolean NOT NULL DEFAULT FALSE,
     delegante bigint
-
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE procedimenti.delega OWNER TO postgres;
 ALTER TABLE ONLY delega
@@ -761,6 +761,7 @@ ALTER TABLE ONLY fasepratica
 ADD CONSTRAINT fk_fasepratica_confermata FOREIGN KEY (confermata) REFERENCES pratiche.fasepratica(id);
 ALTER TABLE ONLY fasepratica
 ADD CONSTRAINT fk_fasepratica_rifiutata FOREIGN KEY (rifiutata) REFERENCES pratiche.fasepratica(id);
+
 
 -- Protocollo
 SET search_path = protocollo, pg_catalog;
