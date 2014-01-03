@@ -486,7 +486,7 @@ CREATE TABLE faseprocedimento (
   condizione text,
   azione text,
   usoresponsabile boolean default false
-);
+) INHERITS (generale.withtimestamp);
 ALTER TABLE procedimenti.faseprocedimento OWNER TO postgres;
 ALTER TABLE ONLY faseprocedimento
 ADD CONSTRAINT faseprocedimento_pkey PRIMARY KEY (id);
@@ -748,8 +748,7 @@ CREATE TABLE fasepratica (
   azione text,
   completata boolean default false,
   usoresponsabile boolean default false
-
-);
+) INHERITS (generale.withtimestamp);
 ALTER TABLE pratiche.fasepratica OWNER TO postgres;
 ALTER TABLE ONLY fasepratica
 ADD CONSTRAINT fasepratica_pkey PRIMARY KEY (id);
