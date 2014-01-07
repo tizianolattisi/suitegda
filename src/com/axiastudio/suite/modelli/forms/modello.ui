@@ -185,6 +185,16 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>campi di protocollazione</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>protocollabile</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>

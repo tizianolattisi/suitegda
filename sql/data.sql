@@ -275,18 +275,18 @@ SET search_path = modelli, pg_catalog;
 insert into modello (id, titolo, descrizione, uri)
   values (1, 'Comunicazione generica', 'Comunicazione generica in carta intestata', 'workspace://SpacesStore/5ea14f3c-dad1-400d-b3e2-b10e0dc390d8');
 insert into modello (id, titolo, descrizione, uri)
-  values (2, 'Numero di protocollo', 'Modello con dati di protocollazione', '');
-insert into modello (id, titolo, descrizione, uri, modellopadre)
-  values (3, 'Determina', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9', 2);
-insert into modello (id, titolo, descrizione, uri)
-  values (4, 'Impegni', 'Impegni determina del responsabile di servizio', 'workspace://SpacesStore/f9a1f6ca-62d3-4f6e-a0c5-9ae347241dde');
+  values (2, 'Modello pratica', 'Modello con dati generici di pratica', '');
+insert into modello (id, titolo, descrizione, uri, modellopadre, protocollabile)
+  values (3, 'Determina', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9', 2, true);
+insert into modello (id, titolo, descrizione, uri, modellopadre, protocollabile)
+  values (4, 'Impegni', 'Impegni determina del responsabile di servizio', 'workspace://SpacesStore/f9a1f6ca-62d3-4f6e-a0c5-9ae347241dde', null, true);
 SELECT setval('modelli.modello_id_seq', 5, true);
 
 -- modello protocollo
-insert into segnalibro (id, segnalibro, codice, modello)
-  values (1, 'numeroprotocollo', '{ determina -> determina.protocollo ? determina.protocollo.iddocumento : "YYYYNNNNNNNN" }', 2);
-insert into segnalibro (id, segnalibro, codice, modello)
-  values (2, 'dataprotocollo', '{ determina -> determina.protocollo ? determina.protocollo.dataprotocollo : "GG/MM/YYY"}', 2);
+--insert into segnalibro (id, segnalibro, codice, modello)
+--  values (1, 'numeroprotocollo', '{ determina -> determina.protocollo ? determina.protocollo.iddocumento : "YYYYNNNNNNNN" }', 2);
+--insert into segnalibro (id, segnalibro, codice, modello)
+--  values (2, 'dataprotocollo', '{ determina -> determina.protocollo ? determina.protocollo.dataprotocollo : "GG/MM/YYY"}', 2);
 -- modello determina
 insert into segnalibro (id, segnalibro, codice, modello)
   values (3, 'codiceinterno', '{ determina -> determina.pratica.codiceinterno }', 3);

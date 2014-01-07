@@ -41,6 +41,8 @@ public class Modello implements Serializable {
     @JoinColumn(name = "modellopadre", referencedColumnName = "id")
     @ManyToOne
     private Modello modellopadre;
+    @Column(name="protocollabile")
+    private Boolean protocollabile=false;
     @OneToMany(mappedBy = "modello", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<TipoPraticaModello> tipoPraticaModelloCollection;
     @OneToMany(mappedBy = "modello", orphanRemoval = true, cascade=CascadeType.ALL)
@@ -90,6 +92,14 @@ public class Modello implements Serializable {
 
     public Collection<TipoPraticaModello> getTipoPraticaModelloCollection() {
         return tipoPraticaModelloCollection;
+    }
+
+    public Boolean getProtocollabile() {
+        return protocollabile;
+    }
+
+    public void setProtocollabile(Boolean protocollabile) {
+        this.protocollabile = protocollabile;
     }
 
     public void setTipoPraticaModelloCollection(Collection<TipoPraticaModello> tipoPraticaModelloCollection) {

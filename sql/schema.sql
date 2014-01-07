@@ -1204,7 +1204,8 @@ CREATE TABLE modello (
   titolo character varying(255),
   descrizione character varying(1024),
   uri character varying(2048),
-  modellopadre bigint
+  modellopadre bigint,
+  protocollabile boolean NOT NULL DEFAULT false
 );
 ALTER TABLE modelli.modello OWNER TO postgres;
 ALTER TABLE ONLY modello
