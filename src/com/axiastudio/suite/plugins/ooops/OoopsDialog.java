@@ -94,12 +94,12 @@ public class OoopsDialog extends QDialog {
 
         // file type
         QComboBox fileType = (QComboBox) this.findChild(QComboBox.class, "comboBoxFileType");
-        fileType.addItem(new QIcon("classpath:com/axiastudio/suite/resources/page_pdf.png"),
-                "Acrobat PDF (pdf)", "writer_pdf_Export");
         fileType.addItem(new QIcon("classpath:com/axiastudio/suite/resources/page_odt.png"),
                 "Open Document (odt)", "writer8");
         fileType.addItem(new QIcon("classpath:com/axiastudio/suite/resources/page_doc.png"),
                 "Microsoft Word (doc)", "writer_MS_Word_97");
+        fileType.addItem(new QIcon("classpath:com/axiastudio/suite/resources/page_pdf.png"),
+                "Acrobat PDF (pdf)", "writer_pdf_Export");
 
     }
 
