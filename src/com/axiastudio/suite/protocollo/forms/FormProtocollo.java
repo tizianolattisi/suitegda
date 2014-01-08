@@ -426,7 +426,12 @@ public class FormProtocollo extends Window {
                     delete = upload;
                     version = upload;
                 }
-                ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);
+                if( view ){
+                    ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);
+                } else {
+                    QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
+                    return;
+                }
             }
         }
     }
