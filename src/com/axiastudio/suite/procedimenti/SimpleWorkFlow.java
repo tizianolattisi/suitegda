@@ -80,7 +80,9 @@ public class SimpleWorkFlow {
         List<String> documenti = new ArrayList<String>();
         for( Map child: children ){
             String fileName = (String) child.get("contentStreamFileName");
-            documenti.add(fileName);
+            if( fileName != null ){ // XXX: per saltare le cartelle
+                documenti.add(fileName);
+            }
         }
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         binding.setVariable("utente", utente);

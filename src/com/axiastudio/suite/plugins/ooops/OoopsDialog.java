@@ -67,6 +67,10 @@ public class OoopsDialog extends QDialog {
         toolButtonCompose.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/page_white_add.png"));
         toolButtonCompose.clicked.connect(this, "compose()");
 
+        QToolButton toolButtonPreparaProtocollo = (QToolButton) this.findChild(QToolButton.class, "toolButtonPreparaProtocollo");
+        toolButtonPreparaProtocollo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+        toolButtonPreparaProtocollo.clicked.connect(this, "preparaProtocollo()");
+
         QToolButton uploadModel = (QToolButton) this.findChild(QToolButton.class, "toolButtonUploadModel");
         uploadModel.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/upload.png"));
         //uploadModel.clicked.connect(this, "upload()");
@@ -186,7 +190,57 @@ public class OoopsDialog extends QDialog {
         this.close();
     }
 
-        
+
+    /*
+     *  Elabora i documenti per l'inserimento nel protocollo
+     */
+    private void preparaProtocollo(){
+
+        // i documenti da allegare al protocollo sono convertiti in pdf
+        String mimeType = "application/pdf";
+        String filter = "writer_pdf_Export";
+
+        QTableWidget qtw = (QTableWidget) this.findChild(QTableWidget.class, "tableWidget");
+        for( int y=0; y<qtw.rowCount(); y++ ){
+            QTableWidgetItem item = qtw.item(y, 0);
+            Integer i = (Integer) item.data(Qt.ItemDataRole.UserRole);
+            Template template = this.templates.get(i);
+            Boolean protocollabile=false;
+            String parentTemplateName = template.getName();
+            if( template.getName().endsWith(".odt") ){
+                if( template.getParentTemplateName() != null ){
+                    for( Template t: this.templates ){
+                        if( t.getName().equals(template.getParentTemplateName()) ){
+                            //template.setRuleSet(t.getRuleSet());
+                            parentTemplateName = t.getName();
+                            protocollabile=true;
+                            break;
+                        }
+                    }
+                }
+                // se protocollabile aggiungo le regole
+                if( protocollabile ){
+                    HashMap<String, String> rules = new HashMap<String, String>();
+                    rules.put("numeroprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.iddocumento : \"YYYYNNNNNNNN\" }");
+                    rules.put("dataprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.dataprotocollo : \"GG/MM/YYY\"}");
+                    RuleSet ruleSetProtocollo = new RuleSet(rules);
+                    template.setRuleSet(ruleSetProtocollo);
+                }
+                composeFromTemplate(template);
+                if( IDocumentFolder.class.isInstance(this.parent()) ){
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    helper.storeDocumentComponent(outputStream, filter);
+                    // XXX: maybe is better to use streams?
+                    ((IDocumentFolder) this.parent()).createDocument("protocollo", template.getName(), "Protocollo", parentTemplateName, outputStream.toByteArray(), mimeType);
+                }
+
+            }
+        }
+        this.close();
+
+    }
+
+
     protected void composeFromTemplate(Template template) {
         Object entity = ((Window) this.parent()).getContext().getCurrentEntity();
         Map<String, Object> values = template.getRuleSet().eval(entity);

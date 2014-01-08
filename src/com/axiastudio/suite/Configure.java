@@ -224,6 +224,8 @@ public class Configure {
                 streamProvider = new FileStreamProvider(modello.getUri());
             }
             Template template = new Template(streamProvider, modello.getTitolo(), modello.getDescrizione(), null, ruleSet);
+            // Uso UserData per indicare se un modello è protocollabile
+            template.setUserData(modello.getProtocollabile());
             ooopsPlugin.addTemplate(template);
         }
     }
