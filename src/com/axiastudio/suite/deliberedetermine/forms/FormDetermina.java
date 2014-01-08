@@ -109,6 +109,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
+        helper.children("protocollo"); // XXX: per creare il subpath "protocollo"
         List<HashMap> children = helper.children();
         for( HashMap map: children ){
             String name = (String) map.get("name");
@@ -141,8 +142,12 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         } else if( mimeType.equals("application/msword") ){
             extension = ".doc";
         }
-
-        String documentName = name + "_" + determina.getPratica().getIdpratica() + extension;
+        String documentName;
+        if( name.endsWith(".odt") || name.endsWith(".doc") ){
+            documentName = name.substring(0, name.length()-4).concat(extension);
+        } else {
+            documentName = name.concat("_").concat(determina.getPratica().getIdpratica()).concat(extension);
+        }
         helper.createDocument(subpath, documentName, content, mimeType, title, description);
         cmisPlugin.showForm(determina);
     }

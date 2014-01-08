@@ -41,7 +41,7 @@ public class CmisStreamProvider implements IStreamProvider {
     @Override
     public InputStream getInputStream() {
         AlfrescoHelper helper = new AlfrescoHelper(this.cmisUrl, this.user, this.password);
-        return helper.getDocument(this.idObject);
+        return helper.getDocumentStream(this.idObject);
     }
     
 }

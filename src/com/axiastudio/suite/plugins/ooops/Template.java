@@ -31,6 +31,7 @@ public class Template {
     private RuleSet ruleSet;
     private final Map<String, Object> objectsMap;
     private String parentTemplateName;
+    private Object userData=null;
 
     public Template(IStreamProvider streamProvider, String name, String description) {
         this(streamProvider, name, description, null, null, null);
@@ -83,5 +84,13 @@ public class Template {
 
     public void setParentTemplateName(String parentTemplateName) {
         this.parentTemplateName = parentTemplateName;
+    }
+
+    public Object getUserData() {
+        return userData;
+    }
+
+    public void setUserData(Object userData) {
+        this.userData = userData;
     }
 }
