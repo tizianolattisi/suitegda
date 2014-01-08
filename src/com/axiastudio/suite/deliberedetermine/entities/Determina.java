@@ -20,6 +20,7 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaListener;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.protocollo.IProtocollabile;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 
 import java.io.Serializable;
@@ -35,7 +36,7 @@ import javax.persistence.*;
 @EntityListeners({DeterminaListener.class})
 @Table(schema="deliberedetermine")
 @SequenceGenerator(name="gendetermina", sequenceName="deliberedetermine.determina_id_seq", initialValue=1, allocationSize=1)
-public class Determina implements Serializable, IDettaglio {
+public class Determina implements Serializable, IDettaglio, IProtocollabile {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
