@@ -205,9 +205,8 @@ INSERT INTO carica (id, descrizione, codicecarica) VALUES (3, 'Segretario', 'SEG
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (4, 'Vice segretario', 'VICE_SEGRETARIO');
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (5, 'Responsabile di servizio', 'RESPONSABILE_DI_SERVIZIO');
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (6, 'Responsabile della verifica delle attribuzioni del protocollo', 'RESPONSABILE_ATTRIBUZIONI');
-INSERT INTO carica (id, descrizione, codicecarica) VALUES (7, 'Assessore attività culturali', null);
-INSERT INTO carica (id, descrizione, codicecarica) VALUES (8, 'Assessore attività sociali', null);
-SELECT setval('procedimenti.carica_id_seq', 10, true);
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (7, 'Responsabile di bilancio', 'RESPONSABILE_DI_BILANCIO');
+SELECT setval('procedimenti.carica_id_seq', 8, true);
 
 -- sindaco, segretario, vicesegretario
 INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
