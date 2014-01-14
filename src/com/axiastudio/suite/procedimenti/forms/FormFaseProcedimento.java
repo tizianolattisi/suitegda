@@ -7,6 +7,7 @@ import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IStoreFactory;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Dialog;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.AdminConsole;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
@@ -24,6 +25,7 @@ import com.trolltech.qt.gui.QPushButton;
 import groovy.lang.Binding;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +48,28 @@ public class FormFaseProcedimento extends Dialog {
 
         QPushButton test = (QPushButton) this.findChild(QPushButton.class, "pushButton_console");
         test.clicked.connect(this, "openConsole()");
+        this.storeInitialized.connect(this, "storeConfermataRifiutata()");
+
     }
+
+
+
+    /*
+     * Uno store contenente solo le fasi del procedimento
+     */
+    public void storeConfermataRifiutata(){
+        FaseProcedimento fp = (FaseProcedimento) this.getContext().getCurrentEntity();
+        Store store = new Store(fp.getProcedimento().getFaseProcedimentoCollection());
+        PyPaPiComboBox confermata = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_confermata");
+        confermata.setLookupStore(store);
+        this.getColumn("Confermata").setLookupStore(store);
+        confermata.select(fp.getConfermata());
+        PyPaPiComboBox rifiutata = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_rifiutata");
+        rifiutata.setLookupStore(store);
+        this.getColumn("Rifiutata").setLookupStore(store);
+        rifiutata.select(fp.getRifiutata());
+    }
+
 
     private void openConsole(){
         String entityName = ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_entita")).text();

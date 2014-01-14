@@ -178,7 +178,7 @@ public class FaseProcedimento implements Serializable {
 
     @Override
     public String toString() {
-        return getFase().getDescrizione();
+        return getId() + " - " + getFase().getDescrizione();
     }
 
     @Override
