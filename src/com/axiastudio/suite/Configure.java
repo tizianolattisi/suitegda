@@ -21,6 +21,7 @@ import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.suite.deliberedetermine.DeterminaCallbacks;
 import com.axiastudio.suite.modelli.entities.Modello;
 import com.axiastudio.suite.modelli.entities.Segnalibro;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
@@ -141,6 +142,7 @@ public class Configure {
     private static void callbacks() {
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacks.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(RichiestaCallbacks.class));
     }
 
