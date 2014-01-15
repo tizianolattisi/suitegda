@@ -30,6 +30,7 @@ import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.protocollo.entities.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -121,12 +122,12 @@ public class PraticaUtil {
     }
 
     // protocollazione della pratica
-    public static Protocollo protocollaPratica(Pratica pratica, Ufficio sportello,
+    public static Validation protocollaPratica(Pratica pratica, Ufficio sportello,
                                            String oggettoProtocollo, List<Ufficio> attribuzioni){
         Oggetto oggetto = null;
         return protocollaPratica(pratica, sportello, oggettoProtocollo, attribuzioni, oggetto, TipoProtocollo.INTERNO, null, null);
     }
-    public static Protocollo protocollaPratica(Pratica pratica, Ufficio sportello,
+    public static Validation protocollaPratica(Pratica pratica, Ufficio sportello,
                                            String oggettoProtocollo, List<Ufficio> attribuzioni, Oggetto oggetto,
                                            TipoProtocollo tipo, List<Soggetto> soggetti, List<Ufficio> uffici){
         Protocollo protocollo = new Protocollo();
@@ -169,10 +170,7 @@ public class PraticaUtil {
         // commit
         Controller controller = (Controller) Register.queryUtility(IController.class, Protocollo.class.getName());
         Validation validation = controller.commit(protocollo);
-        if( !validation.getResponse() ){
-            return null;
-        }
-        return protocollo;
+        return validation;
     }
 
     public static IDettaglio trovaDettaglioDaPratica(Pratica pratica) {
