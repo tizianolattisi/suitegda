@@ -27,6 +27,10 @@ import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
+import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
+import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -117,6 +121,29 @@ public class PraticaCallbacks {
                 // Se la pratica è archiviata, non posso modificarla, ma ciò viene implementato con il cambio di ufficio gestore
             }
         }
+
+        /*
+         * Verifica inserimento protocollo in pratica: permesso solo all'ufficio gestore (già sopra),
+         * e solo se l'utente ha piena visibilità del protocollo (sportello o attribuzione)
+         */
+        for( PraticaProtocollo praticaProtocollo: pratica.getPraticaProtocolloCollection() ){
+            // nuovo inserimento
+            if( praticaProtocollo.getPratica() == null ){
+                // il supervisore inserisce pratiche non riservate
+                if( !(!pratica.getRiservata() && autenticato.getSupervisorepratiche()) ){
+                    Protocollo protocollo = praticaProtocollo.getProtocollo();
+                    ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(protocollo, autenticato);
+                    if( !pratica.getRiservata() && !profilo.inSportelloOAttribuzione() ){
+                        msg = "Devi avere completa visibilità del protocollo per poterlo inserire nella pratica.";
+                        return new Validation(false, msg);
+                    } else if( pratica.getRiservata() && !profilo.inSportelloOAttribuzioneR() ){
+                        msg = "Devi avere completa visibilità del protocollo e permesso sui dati riservati per poterlo inserire nella pratica riservata.";
+                        return new Validation(false, msg);
+                    }
+                }
+            }
+        }
+
         return new Validation(true);
     }
 }
