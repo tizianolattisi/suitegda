@@ -135,6 +135,7 @@ public class PraticaListener {
                 IForm form = Util.formFromEntity(dettaglio);
                 Context context = form.getContext();
                 DettaglioDialog dialog = new DettaglioDialog(context);
+                dialog.setModal(true);
                 dialog.show();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

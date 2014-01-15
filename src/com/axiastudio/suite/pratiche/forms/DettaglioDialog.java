@@ -32,13 +32,28 @@ public class DettaglioDialog extends QDialog {
 
     @Override
     public void accept() {
-        this.context.commitChanges();
-        super.accept();
+        if( tryToCommit() ){
+            super.accept();
+        } else {
+            System.out.println("problemi - accept");
+        }
     }
 
     @Override
     public void reject() {
-        this.context.commitChanges();
-        super.reject();
+        if( tryToCommit() ){
+            super.reject();
+        } else {
+            System.out.println("problemi - reject");
+        }
+    }
+
+    private Boolean tryToCommit() {
+        try{
+            this.context.commitChanges();
+        } catch (IllegalStateException e){
+            return false;
+        }
+        return true;
     }
 }
