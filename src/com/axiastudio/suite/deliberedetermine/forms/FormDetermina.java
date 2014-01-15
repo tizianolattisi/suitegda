@@ -19,7 +19,10 @@ package com.axiastudio.suite.deliberedetermine.forms;
 import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.ui.ITableModel;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
+import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.Template;
@@ -45,8 +48,10 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         QListWidget procedimento = (QListWidget) findChild(QListWidget.class, "procedimento");
         procedimento.itemDoubleClicked.connect(this, "completaFase(QListWidgetItem)");
 
+        PyPaPiTableView tableViewServizi = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_servizi");
+        tableViewServizi.entityInserted.connect(this, "servizioInserito(Object)");
+        tableViewServizi.entityRemoved.connect(this, "servizioRimosso(Object)");
     }
-
 
     @Override
     protected void indexChanged(int row) {
@@ -96,6 +101,26 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
 
         if( res == 1 ){
             this.getContext().commitChanges();
+        }
+    }
+
+ /*
+ * Il primo servizio diventa principale, e non può più essere rimosso
+ */
+    private void servizioInserito(Object obj){
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        ServizioDetermina inserita = (ServizioDetermina) obj;
+        if( determina.getServizioDeterminaCollection().size() == 1 ){
+            inserita.setPrincipale(Boolean.TRUE);
+        }
+    }
+    private void servizioRimosso(Object obj){
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        ServizioDetermina rimossa = (ServizioDetermina) obj;
+        if( rimossa.getPrincipale() ){
+            QMessageBox.warning(this, "Attenzione", "Il servizio principale non può venir rimosso.");
+            PyPaPiTableView tableViewServizio = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_servizi");
+            ((ITableModel) tableViewServizio.model()).getContextHandle().insertElement(rimossa);
         }
     }
 
