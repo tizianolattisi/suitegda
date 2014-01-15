@@ -83,7 +83,10 @@ public class SimpleWorkflowDialog extends QDialog {
             if( res ){
                 simpleWorkFlow.completaFase(fasePratica);
             } else {
-                String msg = simpleWorkFlow.getResult().toString();
+                String msg = "Non è stato possibile concludere la fase.";
+                if( simpleWorkFlow.getResult() != null ){
+                    msg = simpleWorkFlow.getResult().toString();
+                }
                 QMessageBox.critical(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
                 return;
             }
