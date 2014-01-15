@@ -8,6 +8,9 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
+import com.axiastudio.suite.procedimenti.GestoreDeleghe;
+import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
+import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 
 /**
  * User: tiziano
@@ -38,8 +41,9 @@ public class DeterminaCallbacks {
             }
         }
         // se l'utente non è inserito nell'ufficio gestore con flag modificapratiche non può modificare
-        if( !inUfficioGestore ){
-            msg = "Per modificare la determina devi appartenere all'ufficio gestore della pratica con i permessi di modifica.";
+        GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
+        if( !inUfficioGestore && !gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_BILANCIO) ){
+            msg = "Per modificare la determina devi appartenere all'ufficio gestore della pratica con i permessi di modifica, o essere responsabile di bilancio.";
             return new Validation(false, msg);
         }
 
