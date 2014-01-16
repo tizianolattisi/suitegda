@@ -122,14 +122,23 @@ public class PraticaUtil {
     }
 
     // protocollazione della pratica
-    public static Validation protocollaPratica(Pratica pratica, Ufficio sportello,
-                                           String oggettoProtocollo, List<Ufficio> attribuzioni){
-        Oggetto oggetto = null;
-        return protocollaPratica(pratica, sportello, oggettoProtocollo, attribuzioni, oggetto, TipoProtocollo.INTERNO, null, null);
+    public static Validation protocollaPratica(Pratica pratica, Ufficio sportello, String oggettoProtocollo, List<Ufficio> attribuzioni){
+        return protocollaPratica(pratica, sportello, oggettoProtocollo, attribuzioni, null, null, null, TipoProtocollo.INTERNO);
     }
-    public static Validation protocollaPratica(Pratica pratica, Ufficio sportello,
-                                           String oggettoProtocollo, List<Ufficio> attribuzioni, Oggetto oggetto,
-                                           TipoProtocollo tipo, List<Soggetto> soggetti, List<Ufficio> uffici){
+    public static Validation protocollaPratica(Pratica pratica, Ufficio sportello, String oggettoProtocollo, List<Ufficio> attribuzioni,
+                                               Oggetto oggetto){
+        return protocollaPratica(pratica, sportello, oggettoProtocollo, attribuzioni, oggetto, null, null, TipoProtocollo.INTERNO);
+    }
+    public static Validation protocollaPratica(Pratica pratica, Ufficio sportello, String oggettoProtocollo, List<Ufficio> attribuzioni,
+                                               Oggetto oggetto, List<Soggetto> soggetti){
+        return protocollaPratica(pratica, sportello, oggettoProtocollo, attribuzioni, oggetto, soggetti, null, TipoProtocollo.INTERNO);
+    }
+    public static Validation protocollaPratica(Pratica pratica, Ufficio sportello, String oggettoProtocollo, List<Ufficio> attribuzioni,
+                                               Oggetto oggetto, List<Soggetto> soggetti, List<Ufficio> uffici){
+        return protocollaPratica(pratica, sportello, oggettoProtocollo, attribuzioni, oggetto, soggetti, uffici, TipoProtocollo.INTERNO);
+    }
+    public static Validation protocollaPratica(Pratica pratica, Ufficio sportello, String oggettoProtocollo, List<Ufficio> attribuzioni,
+                                               Oggetto oggetto, List<Soggetto> soggetti, List<Ufficio> uffici, TipoProtocollo tipo){
         Protocollo protocollo = new Protocollo();
         protocollo.setOggetto(oggettoProtocollo);
         protocollo.setSportello(sportello);
