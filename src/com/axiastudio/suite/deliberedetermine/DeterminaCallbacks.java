@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2012 AXIA Studio (http://www.axiastudio.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.axiastudio.suite.deliberedetermine;
 
 import com.axiastudio.pypapi.Register;
@@ -11,6 +28,7 @@ import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
+import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 
 /**
  * User: tiziano
@@ -47,7 +65,23 @@ public class DeterminaCallbacks {
             return new Validation(false, msg);
         }
 
+        /* almeno e massimo un servizio principale */
+        if( determina.getServizioDeterminaCollection() == null || determina.getServizioDeterminaCollection().isEmpty() ){
+            msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
+            return new Validation(false, msg);
+        }
+        ServizioDetermina servizioPrincipale = null;
+        int nrServiziPrincipali = 0;
+        for( ServizioDetermina servizio: determina.getServizioDeterminaCollection() ){
+            if( servizio.getPrincipale() ){
+                nrServiziPrincipali += 1;
+            }
+        }
+        if( nrServiziPrincipali != 1 ){
+            msg += "E' possibile e necessario impostare un solo servizio principale.\n";
+            return new Validation(false, msg);
+        }
+
         return new Validation(true);
     }
-
 }
