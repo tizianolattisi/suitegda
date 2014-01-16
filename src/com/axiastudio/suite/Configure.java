@@ -93,6 +93,7 @@ import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormPraticaProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
+import com.axiastudio.suite.pubblicazioni.entities.TipoAttoPubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 import com.axiastudio.suite.richieste.RichiestaCallbacks;
 import com.axiastudio.suite.richieste.entities.DestinatarioUfficio;
@@ -380,6 +381,11 @@ public class Configure {
                               "classpath:com/axiastudio/suite/pubblicazioni/forms/pubblicazione.ui",
                               Pubblicazione.class,
                               FormPubblicazione.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                null,
+                TipoAttoPubblicazione.class,
+                Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
