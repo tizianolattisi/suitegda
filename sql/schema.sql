@@ -1025,11 +1025,23 @@ CREATE TABLE pubblicazione (
     richiedente character varying(255),
     inizioconsultazione date,
     fineconsultazione date,
+    durataconsultazione integer,
+    tipoattopubblicazione bigint NOT NULL,
     pubblicato boolean
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE pubblicazioni.pubblicazione OWNER TO postgres;
 ALTER TABLE ONLY pubblicazione
     ADD CONSTRAINT pubblicazione_pkey PRIMARY KEY (id);
+
+
+CREATE TABLE tipoattopubblicazione (
+  id bigserial NOT NULL,
+  chiave character varying(255),
+  descrizione character varying(255)
+);
+ALTER TABLE pubblicazioni.tipoattopubblicazione OWNER TO postgres;
+ALTER TABLE ONLY tipoattopubblicazione
+ADD CONSTRAINT tipoattopubblicazione_pkey PRIMARY KEY (id);
 
 
 -- Sedute
