@@ -76,8 +76,13 @@ public class SimpleWorkFlow {
         Class formClass = (Class) Register.queryUtility(IForm.class, obj.getClass().getName());
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(formClass, "CMIS");
         AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(obj);
-        List<HashMap> children = alfrescoHelper.children();
         List<String> documenti = new ArrayList<String>();
+        List<HashMap> children=null;
+        try {
+            children = alfrescoHelper.children();
+        } catch (Exception e){
+            // log?
+        }
         for( Map child: children ){
             String fileName = (String) child.get("contentStreamFileName");
             if( fileName != null ){ // XXX: per saltare le cartelle
