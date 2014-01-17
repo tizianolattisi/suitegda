@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION insert_timestamp()
+CREATE OR REPLACE FUNCTION generale.insert_timestamp()
   RETURNS trigger AS
 $BODY$
 begin
@@ -10,9 +10,9 @@ end;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION insert_timestamp() OWNER TO postgres;
+ALTER FUNCTION generale.insert_timestamp() OWNER TO postgres;
 
-CREATE OR REPLACE FUNCTION update_timestamp()
+CREATE OR REPLACE FUNCTION generale.update_timestamp()
   RETURNS trigger AS
 $BODY$
 begin
@@ -22,7 +22,7 @@ end;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION update_timestamp() OWNER TO postgres;
+ALTER FUNCTION generale.update_timestamp() OWNER TO postgres;
 
 -- Base						------------
 CREATE TRIGGER trg_ins_ts_utente
