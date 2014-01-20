@@ -36,7 +36,6 @@ import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import com.axiastudio.suite.protocollo.entities.UfficioProtocollo;
 import com.axiastudio.suite.richieste.entities.DestinatarioUfficio;
-import com.axiastudio.suite.richieste.entities.DestinatarioUtente;
 import com.axiastudio.suite.richieste.entities.IDestinatarioRichiesta;
 import com.axiastudio.suite.richieste.entities.Richiesta;
 import com.trolltech.qt.core.QByteArray;
@@ -46,9 +45,7 @@ import com.trolltech.qt.designer.QUiLoader;
 import com.trolltech.qt.designer.QUiLoaderException;
 import com.trolltech.qt.gui.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
