@@ -64,22 +64,23 @@ public class DeterminaCallbacks {
             msg = "Per modificare la determina devi appartenere all'ufficio gestore della pratica con i permessi di modifica, o essere responsabile di bilancio.";
             return new Validation(false, msg);
         }
-
-        /* almeno e massimo un servizio principale */
-        if( determina.getServizioDeterminaCollection() == null || determina.getServizioDeterminaCollection().isEmpty() ){
-            msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
-            return new Validation(false, msg);
-        }
-        ServizioDetermina servizioPrincipale = null;
-        int nrServiziPrincipali = 0;
-        for( ServizioDetermina servizio: determina.getServizioDeterminaCollection() ){
-            if( servizio.getPrincipale() ){
-                nrServiziPrincipali += 1;
+        if( determina.getId() != null ){
+            /* almeno e massimo un servizio principale */
+            if( determina.getServizioDeterminaCollection() == null || determina.getServizioDeterminaCollection().isEmpty() ){
+                msg += "Deve essere dichiarato almeno servizio.";
+                return new Validation(false, msg);
             }
-        }
-        if( nrServiziPrincipali != 1 ){
-            msg += "E' possibile e necessario impostare un solo servizio principale.\n";
-            return new Validation(false, msg);
+            ServizioDetermina servizioPrincipale = null;
+            int nrServiziPrincipali = 0;
+            for( ServizioDetermina servizio: determina.getServizioDeterminaCollection() ){
+                if( servizio.getPrincipale() ){
+                    nrServiziPrincipali += 1;
+                }
+            }
+            if( nrServiziPrincipali != 1 ){
+                msg += "E' possibile e necessario impostare un solo servizio principale.\n";
+                return new Validation(false, msg);
+            }
         }
 
         return new Validation(true);
