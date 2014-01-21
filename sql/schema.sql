@@ -343,20 +343,28 @@ CREATE VIEW relazionesoggetto AS
 
 CREATE RULE relazionesoggetto_delete AS ON DELETE TO relazionesoggetto DO INSTEAD
 	DELETE FROM zrelazionesoggetto
-	WHERE ((zrelazionesoggetto.id)::integer = old.id);
+	WHERE zrelazionesoggetto.id::integer = abs(old.id);
 
 CREATE RULE relazionesoggetto_insert AS ON INSERT TO relazionesoggetto DO INSTEAD
-	INSERT INTO zrelazionesoggetto (id, soggetto, relazione, relazionato, datanascita, datacessazione, abilitatoweb)
-            VALUES (new.id, new.soggetto, new.relazione, new.relazionato, new.datanascita, new.datacessazione, new.abilitatoweb)
+	INSERT INTO zrelazionesoggetto (soggetto, relazione, relazionato, datanascita, datacessazione, abilitatoweb)
+            VALUES (new.soggetto, new.relazione, new.relazionato, new.datanascita, new.datacessazione, new.abilitatoweb)
         RETURNING zrelazionesoggetto.id, zrelazionesoggetto.soggetto,
             zrelazionesoggetto.relazione, zrelazionesoggetto.relazionato,
             zrelazionesoggetto.datanascita, zrelazionesoggetto.datacessazione, zrelazionesoggetto.abilitatoweb, FALSE;
 
-CREATE RULE relazionesoggetto_update AS ON UPDATE TO relazionesoggetto DO INSTEAD
-	UPDATE zrelazionesoggetto SET id = new.id, soggetto = new.soggetto,
-            relazione = new.relazione, relazionato = new.relazionato,
-            datanascita = new.datanascita, datacessazione = new.datacessazione, abilitatoweb = new.abilitatoweb 
-        WHERE ((zrelazionesoggetto.id)::integer = old.id);
+CREATE OR REPLACE RULE relazionesoggetto_update AS
+    ON UPDATE TO anagrafiche.relazionesoggetto DO INSTEAD nothing; 
+
+CREATE OR REPLACE RULE relazionesoggetto_update_dritta AS
+    ON UPDATE TO anagrafiche.relazionesoggetto WHERE new.invertita=false DO 
+    UPDATE anagrafiche.zrelazionesoggetto SET soggetto=new.soggetto, relazione=new.relazione, relazionato=new.relazionato, datanascita=new.datanascita, 	datacessazione=new.datacessazione, abilitatoweb=new.abilitatoweb
+    WHERE zrelazionesoggetto.id::integer = abs(old.id);
+
+CREATE OR REPLACE RULE relazionesoggetto_update_invertita AS
+    ON UPDATE TO anagrafiche.relazionesoggetto WHERE new.invertita DO 
+    UPDATE anagrafiche.zrelazionesoggetto SET soggetto=new.relazionato, relazione=new.relazione, relazionato=new.soggetto, datanascita=new.datanascita, 	datacessazione=new.datacessazione, abilitatoweb=new.abilitatoweb
+    WHERE zrelazionesoggetto.id::integer = abs(old.id);
+
 
 CREATE TABLE indirizzo (
     id bigserial NOT NULL,
@@ -721,18 +729,27 @@ CREATE VIEW dipendenzapratica AS
 
 CREATE RULE dipendenzapratica_delete AS ON DELETE TO dipendenzapratica DO INSTEAD
 	DELETE FROM zdipendenzapratica
-	WHERE ((zdipendenzapratica.id)::integer = old.id);
+	WHERE zdipendenzapratica.id::integer = abs(old.id);
 
 CREATE RULE dipendenzapratica_insert AS ON INSERT TO dipendenzapratica DO INSTEAD
-	INSERT INTO zdipendenzapratica (id, praticadominante, dipendenza, praticadipendente)
-            VALUES (new.id, new.praticadominante, new.dipendenza, new.praticadipendente)
+	INSERT INTO zdipendenzapratica (praticadominante, dipendenza, praticadipendente)
+            VALUES (new.praticadominante, new.dipendenza, new.praticadipendente)
         RETURNING zdipendenzapratica.id, zdipendenzapratica.praticadominante,
             zdipendenzapratica.dipendenza, zdipendenzapratica.praticadipendente, FALSE;
 
-CREATE RULE dipendenzapratica_update AS ON UPDATE TO dipendenzapratica DO INSTEAD
-	UPDATE zdipendenzapratica SET id = new.id, praticadominante = new.praticadominante,
-            dipendenza = new.dipendenza, praticadipendente = new.praticadipendente
-        WHERE ((zdipendenzapratica.id)::integer = old.id);
+CREATE OR REPLACE RULE dipendenzapratica_update AS
+    ON UPDATE TO pratiche.dipendenzapratica DO INSTEAD nothing;
+
+CREATE OR REPLACE RULE dipendenzapratica_update_dritta AS
+    ON UPDATE TO pratiche.dipendenzapratica WHERE new.invertita=false DO 
+    UPDATE pratiche.zdipendenzapratica SET praticadominante = new.praticadominante, dipendenza = new.dipendenza, praticadipendente = new.praticadipendente
+	WHERE zdipendenzapratica.id::integer = abs(old.id);
+
+CREATE OR REPLACE RULE dipendenzapratica_update_invertita AS
+    ON UPDATE TO pratiche.dipendenzapratica WHERE new.invertita DO 
+    UPDATE pratiche.zdipendenzapratica SET praticadominante = new.praticadipendente, dipendenza = new.dipendenza, praticadipendente = new.praticadominante
+	WHERE zdipendenzapratica.id::integer = abs(old.id);
+
 
 CREATE TABLE fasepratica (
   id bigserial NOT NULL,
