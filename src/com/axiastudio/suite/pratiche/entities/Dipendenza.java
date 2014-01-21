@@ -17,6 +17,7 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +33,7 @@ import javax.persistence.Table;
 @Entity
 @Table(schema="PRATICHE")
 @SequenceGenerator(name="gendipendenza", sequenceName="pratiche.dipendenza_id_seq", initialValue=1, allocationSize=1)
-public class Dipendenza implements Serializable {
+public class Dipendenza implements Serializable, Comparable<Dipendenza> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genrelazione")
@@ -90,5 +91,18 @@ public class Dipendenza implements Serializable {
     public String toString() {
         return getDescrizionedominante() + " - " + getDescrizionedipendente();
     }
-    
+
+    @Override
+    public int compareTo(Dipendenza o) {
+        return Comparators.DESCRIZIONE.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static Comparator<Dipendenza> DESCRIZIONE = new Comparator<Dipendenza>() {
+            @Override
+            public int compare(Dipendenza o1, Dipendenza o2) {
+                return o1.descrizionedominante.compareTo(o2.descrizionedominante);
+            }
+        };
+    }
 }

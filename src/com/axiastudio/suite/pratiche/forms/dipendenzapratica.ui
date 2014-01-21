@@ -35,6 +35,9 @@
        <property name="text">
         <string>inverti</string>
        </property>
+       <property name="column" stdset="0">
+        <string>invertita</string>
+       </property>
       </widget>
      </item>
     </layout>
