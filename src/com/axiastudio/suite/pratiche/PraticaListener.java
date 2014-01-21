@@ -125,7 +125,7 @@ public class PraticaListener {
 
         // creazione del dettaglio
         String className = pratica.getTipo().getProcedimento().getTipodettaglio();
-        if( className != null && !className.equals("") ){
+        if( className != null && !className.equals("") && !className.startsWith("exec ") ){
             try {
                 Class<?> klass = Class.forName(className);
                 IDettaglio dettaglio = (IDettaglio) klass.newInstance();
