@@ -232,6 +232,7 @@ public class Mdi extends QMainWindow {
         QTreeWidgetItem itemRichiesteRoot = new QTreeWidgetItem(this.tree);
         itemRichiesteRoot.setText(0, "Richieste...");
         this.tree.addTopLevelItem(itemRichiesteRoot);
+        itemRichiesteRoot.setDisabled(true);
         //itemRichiesteRoot.setDisabled(!autenticato.getOperatorepratiche());
 
         QTreeWidgetItem itemRichieste = new QTreeWidgetItem(itemRichiesteRoot);

@@ -96,7 +96,10 @@ public class FormScrivania  extends QMainWindow {
         tableViewRichieste.doubleClicked.connect(this, "apriRichiesta()");
 
         this.popolaAttribuzioni();
-        this.popolaRichieste();
+
+        // disabilito le richieste
+        ((QTabWidget) this.findChild(QTabWidget.class, "tabWidget")).setTabEnabled(1, false);
+        //this.popolaRichieste();
     }
     
     private void loadUi(QFile uiFile){
