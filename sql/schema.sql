@@ -30,6 +30,8 @@ CREATE SCHEMA generale;
 ALTER SCHEMA generale OWNER TO postgres;
 CREATE SCHEMA modelli;
 ALTER SCHEMA modelli OWNER TO postgres;
+CREATE SCHEMA richieste;
+ALTER SCHEMA richieste OWNER TO postgres;
 
 -- Create pgplsql
 CREATE OR REPLACE FUNCTION public.create_plpgsql_language ()
@@ -1263,6 +1265,107 @@ ALTER TABLE ONLY segnalibro
 ADD CONSTRAINT segnalibro_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY segnalibro
 ADD CONSTRAINT fk_segnalibro_modello FOREIGN KEY (modello) REFERENCES modelli.modello(id);
+
+
+-- messaggi
+SET search_path = richieste, pg_catalog;
+
+CREATE TABLE richieste.richiesta
+(
+  id bigserial NOT NULL,
+  data timestamp NOT NULL DEFAULT now(),
+  testo character varying NOT NULL,
+  mittente bigint NOT NULL,
+  cancellabile boolean NOT NULL DEFAULT true,
+  datascadenza timestamp,
+  giornipreavviso int,
+  richiestaprecedente bigint,
+  relazione integer,
+  richiestaautomatica boolean NOT NULL DEFAULT true,
+  fase integer,
+  CONSTRAINT richiesta_pkey PRIMARY KEY (id)
+) INHERITS (generale.withtimestamp);
+ALTER TABLE richieste.richiesta
+  OWNER TO postgres;
+ALTER TABLE ONLY richieste.richiesta
+    ADD CONSTRAINT fk_richiesta_richiestaprecedente FOREIGN KEY (richiestaprecedente) REFERENCES richieste.richiesta(id);
+ALTER TABLE ONLY richieste.richiesta
+    ADD CONSTRAINT fk_richiesta_mittente FOREIGN KEY (mittente) REFERENCES base.utente(id);
+
+CREATE TABLE richieste.destinatarioutente
+(
+  id bigserial NOT NULL,
+  richiesta bigint NOT NULL,
+  destinatario bigint NOT NULL,
+  conoscenza boolean NOT NULL DEFAULT false,
+  letto boolean NOT NULL DEFAULT false,
+  dataletto timestamp without time zone,
+  esecutoreletto character varying(40),
+  richiestacancellabile boolean NOT NULL,
+  CONSTRAINT destinatarioutente_pkey PRIMARY KEY (id)
+);
+ALTER TABLE richieste.destinatarioutente
+  OWNER TO postgres;
+ALTER TABLE ONLY richieste.destinatarioutente
+    ADD CONSTRAINT fk_destinatarioutente_richiesta FOREIGN KEY (richiesta) REFERENCES richieste.richiesta(id);
+ALTER TABLE ONLY richieste.destinatarioutente
+    ADD CONSTRAINT fk_destinatarioutente_destinatario FOREIGN KEY (destinatario) REFERENCES base.utente(id);
+
+CREATE TABLE richieste.destinatarioufficio
+(
+  id bigserial NOT NULL,
+  richiesta bigint NOT NULL,
+  destinatario bigint NOT NULL,
+  assegnatario bigint NOT NULL,
+  conoscenza boolean NOT NULL DEFAULT false,
+  letto boolean NOT NULL DEFAULT false,
+  dataletto timestamp without time zone,
+  esecutoreletto character varying(40),
+  richiestacancellabile boolean NOT NULL,
+  CONSTRAINT destinatarioufficio_pkey PRIMARY KEY (id)
+);
+ALTER TABLE richieste.destinatarioufficio
+  OWNER TO postgres;
+ALTER TABLE ONLY richieste.destinatarioufficio
+    ADD CONSTRAINT fk_destinatarioufficio_richiesta FOREIGN KEY (richiesta) REFERENCES richieste.richiesta(id);
+ALTER TABLE ONLY richieste.destinatarioufficio
+    ADD CONSTRAINT fk_destinatarioufficio_destinatario FOREIGN KEY (destinatario) REFERENCES base.ufficio(id);
+ALTER TABLE ONLY richieste.destinatarioufficio
+    ADD CONSTRAINT fk_destinatarioufficio_assegnatario FOREIGN KEY (assegnatario) REFERENCES base.utente(id);
+
+/*
+CREATE TABLE messaggi.allegato
+(
+  id bigserial NOT NULL,
+  messaggio bigint NOT NULL,
+  titolo character varying NOT NULL,
+  percorso character varying NOT NULL,
+  estensione character varying(10) NOT NULL,
+  CONSTRAINT allegato_pkey PRIMARY KEY (id)
+);
+ALTER TABLE messaggi.allegato
+  OWNER TO postgres;
+ALTER TABLE ONLY messaggi.allegato
+    ADD CONSTRAINT fk_allegato_messaggio FOREIGN KEY (messaggio) REFERENCES messaggi.messaggio(id);
+*/
+
+CREATE TABLE richieste.richiestaprotocollo
+(
+  id bigserial NOT NULL,
+  richiesta bigint NOT NULL,
+  protocollo character varying(12) NOT NULL,
+  oggetto bigint,
+  CONSTRAINT richiestaprotocollo_pkey PRIMARY KEY (id)
+);
+ALTER TABLE richieste.richiestaprotocollo
+  OWNER TO postgres;
+ALTER TABLE ONLY richieste.richiestaprotocollo
+    ADD CONSTRAINT fk_richiestaprotocollo_richiesta FOREIGN KEY (richiesta) REFERENCES richieste.richiesta(id);
+ALTER TABLE ONLY richieste.richiestaprotocollo
+    ADD CONSTRAINT fk_richiestaprotocollo_oggetto FOREIGN KEY (oggetto) REFERENCES protocollo.oggetto(id);
+ALTER TABLE ONLY richieste.richiestaprotocollo
+    ADD CONSTRAINT fk_richiestaprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
+
 
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
