@@ -94,7 +94,7 @@ INSERT INTO fase (id, descrizione) VALUES (4, 'Visto di bilancio');
 INSERT INTO fase (id, descrizione) VALUES (5, 'Completata');
 
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (1, 'DET', 'Determine', NULL, NULL, 0, false, false );
-INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (2, 'GES', 'Ramo GES', NULL, NULL, 0, false, false);
+INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (2, 'GES', 'Ramo GES', NULL, '${s1}${anno}${n1,number,00000}', 5, false, false);
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1, '${s2}${anno}${n2,number,00000}', 5, true, false);
 SELECT setval('pratiche.tipopratica_id_seq', 4, true);
 
@@ -164,7 +164,8 @@ SELECT setval('finanziaria.capitolo_id_seq', 2, true);
 SET search_path = procedimenti, pg_catalog;
 
 INSERT INTO procedimento (id, descrizione, tipodettaglio) VALUES (1, 'Determina del responsabile di servizio', 'com.axiastudio.suite.deliberedetermine.entities.Determina');
-SELECT setval('procedimenti.procedimento_id_seq', 2, true);
+INSERT INTO procedimento (id, descrizione, tipodettaglio) VALUES (2, 'Procedimento di gestione generico', 'exec open /Applications/TextEdit.app /Users/tiziano/Projects/Suite/${idpratica}.txt');
+SELECT setval('procedimenti.procedimento_id_seq', 3, true);
 
 -- fasi di procedimento
 INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
@@ -191,14 +192,16 @@ UPDATE faseprocedimento SET azione='{ determina -> determina.vistoResponsabile =
 UPDATE faseprocedimento SET azione='{ determina -> determina.vistoBilancio = true; determina.utenteVistoBilancio = utente; return true }' WHERE id=4;
 
 insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (1, 3, 1, true);
-SELECT setval('procedimenti.ufficioprocedimento_id_seq', 2, true);
+insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (2, 3, 2, true);
+SELECT setval('procedimenti.ufficioprocedimento_id_seq', 3, true);
 
 insert into utenteprocedimento (id, utente, ufficio, procedimento, responsabile, abilitato, abituale)
     values (1, 2, 3, 1, true, true, true);
 SELECT setval('procedimenti.utenteprocedimento_id_seq', 2, true);
 
 insert into tipopraticaprocedimento (id, tipopratica, procedimento) values (1, 3, 1);
-SELECT setval('procedimenti.tipopraticaprocedimento_id_seq', 2, true);
+insert into tipopraticaprocedimento (id, tipopratica, procedimento) values (2, 2, 2);
+SELECT setval('procedimenti.tipopraticaprocedimento_id_seq', 3, true);
 
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (1, 'Sindaco', 'SINDACO');
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (2, 'Vice Sindaco', 'VICE_SINDACO');
