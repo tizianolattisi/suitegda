@@ -19,18 +19,19 @@ package com.axiastudio.suite.pratiche;
 import com.axiastudio.mapformat.MessageMapFormat;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
-import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.entities.Giunta;
+import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.protocollo.entities.*;
+import com.trolltech.qt.core.QProcess;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -206,9 +207,27 @@ public class PraticaUtil {
             IDettaglio dettaglio = (IDettaglio) tq.getSingleResult();
             return dettaglio;
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
+    }
+
+    public static Boolean eseguiDettaglioEsterno(Pratica pratica){
+        Procedimento procedimento = pratica.getTipo().getProcedimento();
+        if( procedimento == null ){
+            return false;
+        }
+        String dettaglio = procedimento.getTipodettaglio();
+        if( dettaglio.startsWith("exec ") ){
+            dettaglio = dettaglio.substring(5);
+        }
+        Map<String, String> map = new HashMap<String, String>();
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        map.put("idpratica", pratica.getIdpratica());
+        map.put("idutente", autenticato.getId().toString());
+        MessageMapFormat mmp = new MessageMapFormat(dettaglio);
+        String comando = mmp.format(map);
+        int execute = QProcess.execute(comando);
+        return execute == 0;
     }
 
 }

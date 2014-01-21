@@ -94,17 +94,22 @@ public class FormPratica extends Window implements IDocumentFolder {
     private void apriDettaglio(){
         Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(pratica);
-        if( dettaglio == null ){
-            String msg = "La pratica non ha nessun dettaglio collegato.";
-            Util.warningBox(this, "Attenzione", msg);
-            return;
+        if( dettaglio != null ){
+            IForm form = Util.formFromEntity(dettaglio);
+            QMdiArea workspace = Util.findParentMdiArea(this);
+            if( workspace != null ){
+                workspace.addSubWindow((QMainWindow) form);
+            }
+            form.show();
+
+        } else {
+            Boolean b = PraticaUtil.eseguiDettaglioEsterno(pratica);
+            if( !b ){
+                String msg = "Non è stato possibile trovare un dettaglio per la pratica.";
+                Util.warningBox(this, "Attenzione", msg);
+                return;
+            }
         }
-        IForm form = Util.formFromEntity(dettaglio);
-        QMdiArea workspace = Util.findParentMdiArea(this);
-        if( workspace != null ){
-            workspace.addSubWindow((QMainWindow) form);
-        }
-        form.show();
     }
 
 
