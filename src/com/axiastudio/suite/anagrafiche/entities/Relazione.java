@@ -17,13 +17,8 @@
 package com.axiastudio.suite.anagrafiche.entities;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.util.Comparator;
+import javax.persistence.*;
 
 /**
  *
@@ -32,7 +27,7 @@ import javax.persistence.Table;
 @Entity
 @Table(schema="ANAGRAFICHE")
 @SequenceGenerator(name="genrelazione", sequenceName="anagrafiche.relazione_id_seq", initialValue=1, allocationSize=1)
-public class Relazione implements Serializable {
+public class Relazione implements Serializable, Comparable<Relazione> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genrelazione")
@@ -148,7 +143,20 @@ public class Relazione implements Serializable {
 
     @Override
     public String toString() {
-        return descrizione;
+        return descrizione + " / " + inversa;
     }
-    
+
+    @Override
+    public int compareTo(Relazione o) {
+        return Comparators.DESCRIZIONE.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static Comparator<Relazione> DESCRIZIONE = new Comparator<Relazione>() {
+            @Override
+            public int compare(Relazione o1, Relazione o2) {
+                return o1.descrizione.compareTo(o2.descrizione);
+            }
+        };
+    }
 }
