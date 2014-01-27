@@ -19,12 +19,8 @@ package com.axiastudio.suite.protocollo.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.plugins.IPlugin;
+import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
-import com.axiastudio.pypapi.ui.CellEditorType;
-import com.axiastudio.pypapi.ui.Column;
-import com.axiastudio.pypapi.ui.ITableModel;
-import com.axiastudio.pypapi.ui.Util;
-import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.SuiteUiUtil;
@@ -45,6 +41,8 @@ import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
+import com.axiastudio.suite.pubblicazioni.PubblicazioneUtil;
+import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
 
@@ -471,6 +469,17 @@ public class FormProtocollo extends Window {
         if( exec == 1 ){
             System.out.println("Print!");            
         }
+    }
+
+    private void pubblicaProtocollo() {
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        Pubblicazione pubblicazione = PubblicazioneUtil.pubblicaProtocollo(protocollo);
+        IForm form = Util.formFromEntity(pubblicazione);
+        QMdiArea workspace = Util.findParentMdiArea(this);
+        if( workspace != null ){
+            workspace.addSubWindow((QMainWindow) form);
+        }
+        form.show();
     }
         
 }

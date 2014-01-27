@@ -172,12 +172,14 @@ public class Configure {
                 templateCmisProtocollo,
                 Boolean.FALSE);
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
+        Register.registerPlugin(cmisPlugin, Protocollo.class);
         Register.registerPlugin(cmisPlugin, FormScrivania.class);
 
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
         cmisPluginPubblicazioni.setup(cmisUrl, cmisUser, cmisPassword,
                 alfrescoPathPubblicazione + "/${inizioconsultazione,date,yyyy}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
+        Register.registerPlugin(cmisPluginPubblicazioni, Pubblicazione.class);
 
         CmisPlugin cmisPluginPratica = new CmisPlugin();
         cmisPluginPratica.setup(cmisUrl, cmisUser, cmisPassword,
