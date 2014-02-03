@@ -230,7 +230,7 @@
           <string>.faseProcedimentoCollection</string>
          </property>
          <property name="columns" stdset="0">
-          <string>&gt;progressivo&lt;,&lt;fase&gt;</string>
+          <string>&gt;fase&lt;,&lt;testo&gt;</string>
          </property>
          <property name="reference" stdset="0">
           <string>fase</string>
