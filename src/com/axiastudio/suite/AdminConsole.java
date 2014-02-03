@@ -61,6 +61,7 @@ public class AdminConsole extends QMainWindow {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         String groovyOutput = newOut.toString();
+        groovyOutput += "\n\nresult: " + wf.getResult();
         groovyOutput += "\n\nreturn: " + res;
         textOut.setText(groovyOutput);
 

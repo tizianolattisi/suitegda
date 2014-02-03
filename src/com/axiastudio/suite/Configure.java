@@ -24,6 +24,7 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.suite.deliberedetermine.DeterminaCallbacks;
 import com.axiastudio.suite.modelli.entities.Modello;
 import com.axiastudio.suite.modelli.entities.Segnalibro;
+import com.axiastudio.suite.modelli.forms.FormModello;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
@@ -472,7 +473,7 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                 "classpath:com/axiastudio/suite/modelli/forms/modello.ui",
                 Modello.class,
-                Window.class);
+                FormModello.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                 "classpath:com/axiastudio/suite/modelli/forms/segnalibro.ui",
