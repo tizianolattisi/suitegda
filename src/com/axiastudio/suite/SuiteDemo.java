@@ -157,8 +157,8 @@ public class SuiteDemo {
         
             Mdi mdi = new Mdi();
             mdi.setWindowTitle("PyPaPi Suite PA (demo)");
-            mdi.showMaximized();
-            //mdi.show();
+            //mdi.showMaximized();
+            mdi.show();
             
             app.setCustomApplicationName("PyPaPi SuitePA - modalità dimostrazione");
             app.setCustomApplicationCredits("Copyright AXIA Studio 2013<br/>");
