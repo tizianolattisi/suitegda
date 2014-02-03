@@ -27,7 +27,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(schema="deliberedetermine")
-@SequenceGenerator(name="genufficiodetermina", sequenceName="protocollo.ufficiodetermina_id_seq", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="genufficiodetermina", sequenceName="deliberedetermine.ufficiodetermina_id_seq", initialValue=1, allocationSize=1)
 public class UfficioDetermina implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,7 +40,7 @@ public class UfficioDetermina implements Serializable {
     @ManyToOne
     private Determina determina;
     @Column(name="principale")
-    private Boolean principale;
+    private Boolean principale=false;
 
 
     public Long getId() {
