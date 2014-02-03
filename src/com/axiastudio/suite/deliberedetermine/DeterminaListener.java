@@ -47,6 +47,8 @@ public class DeterminaListener {
                 numero = tq.getSingleResult().getNumero()+1;
             } catch (NoResultException ex) {
                 numero = 1;
+            } catch (NullPointerException ex) {
+                numero = 1;
             }
             determina.setNumero(numero);
         }
