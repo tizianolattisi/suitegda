@@ -48,6 +48,12 @@ public class ProtocolloMenuBar extends PyPaPiToolBar {
         this.insertButton("stampaEtichetta", "Stampa etichetta",
                           "classpath:com/axiastudio/suite/resources/datamatrix.png",
                           "Stampa etichetta", parent);
+        // XXX: in attesa di pubblicare gli altri componenti
+        /*
+        this.insertButton("segnaturaXml", "Crea Segnatura.xml",
+                "classpath:com/axiastudio/suite/resources/page_white_code.png",
+                "Crea e allega il file di segnatura xml.", parent);
+                */
     }
     
 }
