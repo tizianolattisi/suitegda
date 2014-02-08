@@ -14,7 +14,7 @@
    <string>Soggetti</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>id,descrizione</string>
+   <string>&gt;id&lt;,&lt;descrizione&gt;,indirizzo,comune</string>
   </property>
   <property name="sortcolumn" stdset="0">
    <number>1</number>
@@ -635,7 +635,7 @@
     <item row="3" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidgetBody">
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">

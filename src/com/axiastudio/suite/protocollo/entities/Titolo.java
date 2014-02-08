@@ -17,6 +17,7 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -34,7 +35,7 @@ import javax.persistence.Table;
 @Entity
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="gentitolo", sequenceName="protocollo.titolo_id_seq", initialValue=1, allocationSize=1)
-public class Titolo implements Serializable {
+public class Titolo implements Serializable, Comparable<Titolo> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentitolo")
@@ -94,5 +95,20 @@ public class Titolo implements Serializable {
     public String toString() {
         return this.getDescrizione();
     }
-    
+
+
+    @Override
+    public int compareTo(Titolo o) {
+        return Comparators.DESCRIZIONE.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static Comparator<Titolo> DESCRIZIONE = new Comparator<Titolo>() {
+            @Override
+            public int compare(Titolo o1, Titolo o2) {
+                return o1.descrizione.compareTo(o2.descrizione);
+            }
+        };
+    }
+
 }

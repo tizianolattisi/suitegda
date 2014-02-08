@@ -49,7 +49,7 @@ public class DipendenzaPratica implements Serializable {
     @ManyToOne
     private Dipendenza dipendenza;
     @Column(name="invertita")
-    private Boolean invertita=false;
+    private Boolean invertita;
 
 
     public Long getId() {
@@ -97,12 +97,17 @@ public class DipendenzaPratica implements Serializable {
      * Il predicato esprime la relazione nel corretto verso
      */
     public String getPredicato(){
+        return getPredicato(this.getDipendenza(), this.getInvertita());
+    }
+
+    public String getPredicato(Dipendenza currentDipendenza, Boolean currentInvertita){
         String out = "";
-        if( this.getDipendenza() != null ){
-            if( invertita ){
-                out += " " + this.getDipendenza().getDescrizionedipendente() + " ";
+
+        if( currentDipendenza != null ){
+            if( currentInvertita==null || ! currentInvertita ){
+                out += " " + currentDipendenza.getDescrizionedominante() + " ";
             } else {
-                out += " " + this.getDipendenza().getDescrizionedominante() + " ";
+                out += " " + currentDipendenza.getDescrizionedipendente() + " ";
             }
         } else {
             out += " è in relazione con ";
@@ -110,7 +115,8 @@ public class DipendenzaPratica implements Serializable {
         out += " " + this.getPraticadipendente().getCodiceinterno() + " (" + this.getPraticadipendente().getDescrizioner() + ")";
         return out;
     }
-    
+
+
     public void setPredicato(String predicato){
         // non deve fare nulla
     }
@@ -118,7 +124,7 @@ public class DipendenzaPratica implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (id != null ? (id > 0 ? id.hashCode() : ((Long)((-1*id)+1000000)).hashCode()) : 0);
         return hash;
     }
 
@@ -139,5 +145,5 @@ public class DipendenzaPratica implements Serializable {
     public String toString() {
         return "com.axiastudio.suite.pratiche.entities.DipendenzaPratica[ id=" + id + " ]";
     }
-    
+
 }

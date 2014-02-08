@@ -5,7 +5,19 @@ SET search_path = generale, pg_catalog;
 
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (1, 'PRATICA_ANNULLATI', 'Pratica contenente i protocolli annullati', '1', 'LONG');
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (2, 'UFFICIO_ANNULLATI', 'Ufficio di attribuzione dei protocolli annullati', '1', 'LONG');
-SELECT setval('generale.costante_id_seq', 5, true);
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (3, 'SOGGETTO_INTERNI', 'Il soggetto a cui collegare i protocolli interni, se non specificato diversamente.', '3', 'LONG');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (4, 'CODICE_AMMINISTRAZIONE', 'Codice amministrazione.', 'r_h330', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (5, 'CODICE_AOO', 'Codice area organizzativa omogenea.', 'RSERVIZI', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (6, 'DENOMINAZIONE', 'Denominazione dell''amministrazione.', 'Comune di Riva del Garda', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (7, 'TOPONIMO', 'Toponimo dell''indirizzo dell''amministrazione (es. via, piazza, etc).', 'piazza', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (8, 'INDIRIZZO_POSTALE', 'Indirizzo postale.', 'III Novembre', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (9, 'CIVICO', 'Numero civico.', '5', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (10, 'CAP', 'Codice avviamento postale.', '38066', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (11, 'COMUNE', 'Comune in cui risiede l''amministrazione.', 'Riva del Garda', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (12, 'PROVINCIA', 'Sigla della provincia.', 'TN', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (13, 'TELEFONO', 'Numero di telefono generale.', '0464 573888', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (14, 'FAX', 'Numero di fax generale.', '0464 552410', 'STRING');
+SELECT setval('generale.costante_id_seq', 15, true);
 
 INSERT INTO etichetta (id, nome, device, descrizione, definizione, linguaggio, contesto) VALUES (1, 'ETICHETTA2D', 'Zebra_Technologies_ZTC_GK420t', 'Etichetta DataMatrix', '.\nS1\nb245,34,D,h6,"${iddocumento}"\nP1\n.\n', 'ZPL', 'com.axiastudio.suite.protocollo.entities.Protocollo');
 INSERT INTO etichetta (id, nome, device, descrizione, definizione, linguaggio, contesto) VALUES (2, 'ETICHETTA2D2', 'Zebra_Technologies_ZTC_GK420t', 'Etichetta DataMatrix 2', '.\nS1\nb245,34,D,h6,"${iddocumento}"\nP1\n.\n', 'ZPL', 'com.axiastudio.suite.protocollo.entities.Protocollo');
@@ -22,7 +34,8 @@ INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuz
 INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (2, 'Ufficio commercio', false, true, true);
 INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (3, 'Ufficio informativo', true, true, true);
 INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (4, 'Ufficio edilizia', true, true, true);
-SELECT setval('base.ufficio_id_seq', 5, true);
+INSERT INTO ufficio (id, descrizione, sportello, mittenteodestinatario, attribuzione) VALUES (5, 'Ufficio ragioneria e contabilità', true, true, true);
+SELECT setval('base.ufficio_id_seq', 6, true);
 
 INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sigla, istruttorepratiche, modellatorepratiche, nome, operatoreanagrafiche, operatorepratiche, operatoreprotocollo, password, superutente, supervisoreanagrafiche, supervisorepratiche, supervisoreprotocollo, ricercatoreprotocollo)
   VALUES (1, true, false, NULL, 'admin', 'ADM', false, false, 'Utente amministrativo', false, false, false, '956b329eb8028e15ac00279623f2ef76', false, false, false, false, false);
@@ -85,8 +98,14 @@ SELECT setval('anagrafiche.relazionesoggetto_id_seq', 2, true);
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
 
+INSERT INTO fase (id, descrizione) VALUES (1, 'Istruttoria');
+INSERT INTO fase (id, descrizione) VALUES (2, 'Approvazione del responsabile');
+INSERT INTO fase (id, descrizione) VALUES (3, 'Preparazione e firma');
+INSERT INTO fase (id, descrizione) VALUES (4, 'Visto di bilancio');
+INSERT INTO fase (id, descrizione) VALUES (5, 'Completata');
+
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (1, 'DET', 'Determine', NULL, NULL, 0, false, false );
-INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (2, 'GES', 'Ramo GES', NULL, NULL, 0, false, false);
+INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (2, 'GES', 'Ramo GES', NULL, '${s1}${anno}${n1,number,00000}', 5, false, false);
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (3, 'DETRS', 'Determina del responsabile del servizio', 1, '${s2}${anno}${n2,number,00000}', 5, true, false);
 SELECT setval('pratiche.tipopratica_id_seq', 4, true);
 
@@ -119,7 +138,8 @@ SELECT setval('protocollo.motivazioneannullamento_id_seq', 3, true);
 
 INSERT INTO oggetto (id, descrizione) VALUES (1, 'ATTI RICEVUTI');
 INSERT INTO oggetto (id, descrizione) VALUES (2, 'RICHIESTA GENERICA');
-SELECT setval('protocollo.oggetto_id_seq', 3, true);
+INSERT INTO oggetto (id, descrizione) VALUES (3, 'DETERMINAZIONE');
+SELECT setval('protocollo.oggetto_id_seq', 4, true);
 
 INSERT INTO protocollo (id, convalidaattribuzioni, convalidaprotocollo, anno, annullamentorichiesto, annullato, corrispostoostornato, dataprotocollo, datariferimentomittente, iddocumento, note, oggetto, richiederisposta, riferimentomittente, riservato, spedito, tipo, tiporiferimentomittente, sportello) VALUES (1, false, false, 2012, false, false, false, '2012-12-10', NULL, '201200000001', 'Note del protocollo', 'Oggetto del protocollo', true, NULL, false, false, 'ENTRATA', NULL, 3);
 INSERT INTO protocollo (id, convalidaattribuzioni, convalidaprotocollo, anno, annullamentorichiesto, annullato, corrispostoostornato, dataprotocollo, datariferimentomittente, iddocumento, note, oggetto, richiederisposta, riferimentomittente, riservato, spedito, tipo, tiporiferimentomittente, sportello) VALUES (2, false, false, 2012, false, false, false, '2012-12-10', NULL, '201200000002', 'Note del protocollo2', 'Oggetto del protocollo2', false, NULL, false, false, 'USCITA', NULL, 3);
@@ -144,7 +164,7 @@ SELECT setval('protocollo.ufficioprotocollo_id_seq', 3, true);
 -- Finanziaria
 SET search_path = finanziaria, pg_catalog;
 
-INSERT INTO servizio (id, descrizione, ufficio) VALUES (1, 'Segreteria generale, personale e organizzazione', 1);
+INSERT INTO servizio (id, descrizione, ufficio) VALUES (1, 'Segreteria generale, personale e organizzazione', 5);
 SELECT setval('finanziaria.servizio_id_seq', 2, true);
 
 INSERT INTO capitolo (id, descrizione) VALUES (1, 'Descrizione del capitolo');
@@ -154,18 +174,45 @@ SELECT setval('finanziaria.capitolo_id_seq', 2, true);
 -- Procedimenti
 SET search_path = procedimenti, pg_catalog;
 
-INSERT INTO procedimento (id, descrizione) VALUES (1, 'Determina del responsabile di servizio');
-SELECT setval('procedimenti.procedimento_id_seq', 2, true);
+INSERT INTO procedimento (id, descrizione, tipodettaglio) VALUES (1, 'Determina del responsabile di servizio', 'com.axiastudio.suite.deliberedetermine.entities.Determina');
+INSERT INTO procedimento (id, descrizione, tipodettaglio) VALUES (2, 'Procedimento di gestione generico', 'exec open /Applications/TextEdit.app /Users/tiziano/Projects/Suite/${idpratica}.txt');
+SELECT setval('procedimenti.procedimento_id_seq', 3, true);
+
+-- fasi di procedimento
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (1, 1, 1, 0, 'Chiusura dell''istruttoria'); -- Istruttoria
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (2, 1, 2, 1, 'Approvazione del responsabile del servizio: verrà generato un protocollo e inserito nella pratica.'); -- Approvazione responsabile
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (3, 1, 3, 2, 'Preparazione dei documenti e firma: i documenti preparati verranno allegati al protocollo.'); -- Preparazione documenti e firma
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (4, 1, 4, 3, 'Visto del responsabile di bilancio'); -- Visto bilancio
+INSERT INTO faseprocedimento (id, procedimento, fase, progressivo, testo)
+  VALUES (5, 1, 5, 4, 'Completata'); -- Visto bilancio
+SELECT setval('procedimenti.faseprocedimento_id_seq', 6, true);
+-- update di confermata e rifiutata
+UPDATE faseprocedimento SET confermabile=true, confermata=2, testoconfermata='Chiudi l''istruttoria' WHERE id=1;
+UPDATE faseprocedimento SET confermabile=true, confermata=3, testoconfermata='Approva la determina',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta l''approvazione' WHERE id=2;
+UPDATE faseprocedimento SET confermabile=true, confermata=4, testoconfermata='Conferma preparazione',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta la conferma' WHERE id=3;
+UPDATE faseprocedimento SET confermabile=true, confermata=5, testoconfermata='Visto di bilancio',
+  rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=4;
+-- closure
+UPDATE faseprocedimento SET azione='{ determina -> determina.vistoResponsabile = true; determina.utenteVistoResponsabile = utente; return true }' WHERE id=2;
+UPDATE faseprocedimento SET azione='{ determina -> determina.vistoBilancio = true; determina.utenteVistoBilancio = utente; return true }' WHERE id=4;
 
 insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (1, 3, 1, true);
-SELECT setval('procedimenti.ufficioprocedimento_id_seq', 2, true);
+insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (2, 3, 2, true);
+SELECT setval('procedimenti.ufficioprocedimento_id_seq', 3, true);
 
 insert into utenteprocedimento (id, utente, ufficio, procedimento, responsabile, abilitato, abituale)
     values (1, 2, 3, 1, true, true, true);
 SELECT setval('procedimenti.utenteprocedimento_id_seq', 2, true);
 
 insert into tipopraticaprocedimento (id, tipopratica, procedimento) values (1, 3, 1);
-SELECT setval('procedimenti.tipopraticaprocedimento_id_seq', 2, true);
+insert into tipopraticaprocedimento (id, tipopratica, procedimento) values (2, 2, 2);
+SELECT setval('procedimenti.tipopraticaprocedimento_id_seq', 3, true);
 
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (1, 'Sindaco', 'SINDACO');
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (2, 'Vice Sindaco', 'VICE_SINDACO');
@@ -173,9 +220,8 @@ INSERT INTO carica (id, descrizione, codicecarica) VALUES (3, 'Segretario', 'SEG
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (4, 'Vice segretario', 'VICE_SEGRETARIO');
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (5, 'Responsabile di servizio', 'RESPONSABILE_DI_SERVIZIO');
 INSERT INTO carica (id, descrizione, codicecarica) VALUES (6, 'Responsabile della verifica delle attribuzioni del protocollo', 'RESPONSABILE_ATTRIBUZIONI');
-INSERT INTO carica (id, descrizione, codicecarica) VALUES (7, 'Assessore attività culturali', null);
-INSERT INTO carica (id, descrizione, codicecarica) VALUES (8, 'Assessore attività sociali', null);
-SELECT setval('procedimenti.carica_id_seq', 10, true);
+INSERT INTO carica (id, descrizione, codicecarica) VALUES (7, 'Responsabile di bilancio', 'RESPONSABILE_DI_BILANCIO');
+SELECT setval('procedimenti.carica_id_seq', 8, true);
 
 -- sindaco, segretario, vicesegretario
 INSERT INTO delega (id, carica, utente, ufficio, servizio, procedimento, inizio, fine, titolare, segretario, delegato, suassenza, delegante)
@@ -222,8 +268,8 @@ SELECT setval('sedute.seduta_id_seq', 2, true);
 -- Delibere e determine
 SET search_path = deliberedetermine, pg_catalog;
 
-INSERT INTO determina (id, idpratica, codiceinterno, oggetto, datapratica, dispesa, dientrata, diregolarizzazione, referentepolitico, ufficioresponsabile, nomeresponsabile, vistoresponsabile, datavistoresponsabile, titolarevistoresponsabile, segretariovistoresponsabile, delegatovistoresponsabile, utentevistoresponsabile, vistobilancio, datavistobilancio, titolarevistobilancio, segretariovistobilancio, delegatovistobilancio, utentevistobilancio, vistonegato, datavistonegato, titolarevistonegato, segretariovistonegato, delegatovistonegato, utentevistonegato, iddocumento)
-  VALUES (1, '2012000001', 'DETRS2012000001', 'Determina di prova', '01/01/2012', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, NULL);
+INSERT INTO determina (id, idpratica, codiceinterno, oggetto, dispesa, dientrata, diregolarizzazione, referentepolitico, ufficioresponsabile, nomeresponsabile, vistoresponsabile, datavistoresponsabile, titolarevistoresponsabile, segretariovistoresponsabile, delegatovistoresponsabile, utentevistoresponsabile, vistobilancio, datavistobilancio, titolarevistobilancio, segretariovistobilancio, delegatovistobilancio, utentevistobilancio, vistonegato, datavistonegato, titolarevistonegato, segretariovistonegato, delegatovistonegato, utentevistonegato, protocollo)
+  VALUES (1, '201200002', 'DETRS201200001', 'Determina di prova', false, false, false, NULL, NULL, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, false, NULL, false, false, false, NULL, NULL);
 SELECT setval('deliberedetermine.determina_id_seq', 2, true);
 
 INSERT INTO serviziodetermina (id, determina, servizio) VALUES (1, 1, 1);
@@ -241,18 +287,26 @@ SELECT setval('deliberedetermine.ufficiodetermina_id_seq', 2, true);
 SET search_path = modelli, pg_catalog;
 
 insert into modello (id, titolo, descrizione, uri)
-  values (1, 'Comunicazione generica', 'Comunicazione generica in carta intestata', '/Users/tiziano/Projects/Suite/demo/generico.ott');
+  values (1, 'Comunicazione generica', 'Comunicazione generica in carta intestata', 'workspace://SpacesStore/5ea14f3c-dad1-400d-b3e2-b10e0dc390d8');
 insert into modello (id, titolo, descrizione, uri)
-  values (2, 'Determina responsabile', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9');
-SELECT setval('modelli.modello_id_seq', 3, true);
+  values (2, 'Modello pratica', 'Modello con dati generici di pratica', '');
+insert into modello (id, titolo, descrizione, uri, modellopadre, protocollabile)
+  values (3, 'Determina', 'Determina del responsabile di servizio', 'workspace://SpacesStore/9dee22bf-e194-42d0-943f-1d85c998f3c9', 2, true);
+insert into modello (id, titolo, descrizione, uri, modellopadre, protocollabile)
+  values (4, 'Impegni', 'Impegni determina del responsabile di servizio', 'workspace://SpacesStore/f9a1f6ca-62d3-4f6e-a0c5-9ae347241dde', null, true);
+SELECT setval('modelli.modello_id_seq', 5, true);
 
+-- modello protocollo
+--insert into segnalibro (id, segnalibro, codice, modello)
+--  values (1, 'numeroprotocollo', '{ determina -> determina.protocollo ? determina.protocollo.iddocumento : "YYYYNNNNNNNN" }', 2);
+--insert into segnalibro (id, segnalibro, codice, modello)
+--  values (2, 'dataprotocollo', '{ determina -> determina.protocollo ? determina.protocollo.dataprotocollo : "GG/MM/YYY"}', 2);
+-- modello determina
 insert into segnalibro (id, segnalibro, codice, modello)
-    values (1, 'idpratica', '{ p -> p.idpratica }', 1);
+  values (3, 'codiceinterno', '{ determina -> determina.pratica.codiceinterno }', 3);
 insert into segnalibro (id, segnalibro, codice, modello)
-  values (2, 'oggettopratica', '{ p -> p.descrizione.toUpperCase() }', 1);
-insert into segnalibro (id, segnalibro, codice, modello)
-  values (3, 'oggetto', '{ p -> p.oggetto }', 2);
-SELECT setval('modelli.segnalibro_id_seq', 4, true);
+  values (4, 'oggetto', '{ determina -> determina.oggetto }', 3);
+SELECT setval('modelli.segnalibro_id_seq', 5, true);
 
 insert into procedimentomodello (id, procedimento, modello)
     values (1, 1, 2);

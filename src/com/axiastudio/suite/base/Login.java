@@ -83,10 +83,19 @@ public class Login extends QDialog {
         if( entities.size() == 1 ){
             utente = (Utente) entities.get(0);
             String pwd = this.password.text();
-            if( SuiteUtil.digest(pwd).equals(utente.getPassword()) ){
-                Register.registerUtility(utente, IUtente.class);
-                super.accept();
-                return;
+            ICheckLogin checkLogin = (ICheckLogin) Register.queryUtility(ICheckLogin.class);
+            if( checkLogin != null ){
+                if( checkLogin.check(this.username.text(), this.password.text()) ){
+                    Register.registerUtility(utente, IUtente.class);
+                    super.accept();
+                    return;
+                }
+            } else {
+                if( SuiteUtil.digest(pwd).equals(utente.getPassword()) ){
+                    Register.registerUtility(utente, IUtente.class);
+                    super.accept();
+                    return;
+                }
             }
         }
         QMessageBox.critical(this, "Utente o password errati", "Il nome utente o la password risultano errati.");

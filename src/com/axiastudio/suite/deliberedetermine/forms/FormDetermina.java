@@ -16,94 +16,164 @@
  */
 package com.axiastudio.suite.deliberedetermine.forms;
 
+import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.ui.Window;
-import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.pypapi.ui.ITableModel;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
-import com.trolltech.qt.gui.QPushButton;
-import java.util.Date;
+import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
+import com.axiastudio.suite.plugins.ooops.Template;
+import com.axiastudio.suite.pratiche.entities.Fase;
+import com.axiastudio.suite.pratiche.entities.FasePratica;
+import com.axiastudio.suite.pratiche.forms.FormDettaglio;
+import com.axiastudio.suite.procedimenti.SimpleWorkFlow;
+import com.axiastudio.suite.procedimenti.SimpleWorkflowDialog;
+import com.trolltech.qt.core.Qt;
+import com.trolltech.qt.gui.*;
+
+import java.util.*;
 
 /**
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
-public class FormDetermina extends Window {
-    private QPushButton pushButtonResponsabile;
-    private QPushButton pushButtonBilancio;
-    private QPushButton pushButtonVistoNegato;
-    
+public class FormDetermina extends FormDettaglio implements IDocumentFolder {
+
     public FormDetermina(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
-        pushButtonResponsabile = (QPushButton) this.findChild(QPushButton.class, "pushButtonResponsabile");
-        pushButtonBilancio = (QPushButton) this.findChild(QPushButton.class, "pushButtonBilancio");
-        pushButtonVistoNegato = (QPushButton) this.findChild(QPushButton.class, "pushButtonVistoNegato");
-        pushButtonResponsabile.clicked.connect(this, "vistoResponsabile()");
-        pushButtonBilancio.clicked.connect(this, "vistoBilancio()");
-        pushButtonVistoNegato.clicked.connect(this, "vistoNegato()");
-        
-    }
-    
-    protected Boolean vistoResponsabile() {
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-        Utente utente = (Utente) Register.queryUtility(IUtente.class);
-        determina.setVistoResponsabile(Boolean.TRUE);
-        determina.setDataVistoResponsabile(new Date());
-        determina.setUtenteVistoResponsabile(utente);
-        return true;
-    }
 
-    protected Boolean vistoBilancio() {
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-        Utente utente = (Utente) Register.queryUtility(IUtente.class);
-        determina.setVistoBilancio(Boolean.TRUE);
-        determina.setDataVistoBilancio(new Date());
-        determina.setUtenteVistoBilancio(utente);
-        return true;
-    }
+        QListWidget procedimento = (QListWidget) findChild(QListWidget.class, "procedimento");
+        procedimento.itemDoubleClicked.connect(this, "completaFase(QListWidgetItem)");
 
-    protected Boolean vistoNegato() {
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-        Utente utente = (Utente) Register.queryUtility(IUtente.class);
-        determina.setVistoNegato(Boolean.TRUE);
-        determina.setDataVistoNegato(new Date());
-        determina.setUtenteVistoNegato(utente);
-        return true;
-        
-    }
-    
-    /*
-     * Verifica delle condizioni di abilitazione alla firma del responsabile
-     * del servizio.
-     */
-    protected Boolean checkResponsabile() {
-        return false;
-    }
-
-    protected Boolean checkBilancio() {
-        return true;
+        PyPaPiTableView tableViewServizi = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_servizi");
+        tableViewServizi.entityInserted.connect(this, "servizioInserito(Object)");
+        tableViewServizi.entityRemoved.connect(this, "servizioRimosso(Object)");
     }
 
     @Override
     protected void indexChanged(int row) {
         super.indexChanged(row);
-        verificaAbilitazionePulsanti();
+        popolaProcedimento();
     }
 
-    protected void verificaAbilitazionePulsanti() {
-        Determina d = (Determina) this.getContext().getCurrentEntity();
-        Boolean vResp = false;
-        Boolean vBil = false;
-        Boolean vNeg = false;
-        if( d != null ){
-            vResp = !d.getVistoResponsabile() && this.checkResponsabile();
-            vBil = d.getVistoResponsabile() && !d.getVistoBilancio() && this.checkBilancio();
-            vNeg = vBil;
+    private void popolaProcedimento() {
+        QListWidget listWidget = (QListWidget) findChild(QListWidget.class, "procedimento");
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        if( determina.getId() == null ){
+            return;
         }
-        this.pushButtonResponsabile.setEnabled(vResp);
-        this.pushButtonBilancio.setEnabled(vBil);
-        this.pushButtonVistoNegato.setEnabled(vNeg);
+        SimpleWorkFlow wf = new SimpleWorkFlow(determina);
+        listWidget.clear();
+        Integer i=0;
+        for( FasePratica fp: wf.getFasi() ){
+            Fase fase = fp.getFase();
+            QIcon icon=null;
+            if( fp.getCompletata() ){
+                icon = new QIcon("classpath:com/axiastudio/suite/resources/tick.png");
+            } else if ( fp.equals(wf.getFaseAttiva()) ){
+                icon = new QIcon("classpath:com/axiastudio/suite/resources/star.png");
+            }
+            QListWidgetItem item = new QListWidgetItem(icon, fase.getDescrizione());
+            item.setData(Qt.ItemDataRole.UserRole, i);
+            listWidget.addItem(item);
+            i++;
+        }
+    }
+
+    private void completaFase(QListWidgetItem item){
+        Integer i = (Integer) item.data(Qt.ItemDataRole.UserRole);
+
+        // XXX: se ci sono eventuali modifiche nelle condizioni?
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        SimpleWorkFlow wf = new SimpleWorkFlow(determina);
+        FasePratica fasePratica = wf.getFase(i);
+
+        // posso completare solo la fase attiva (la prima non competata disponibile)
+        if( !wf.getFaseAttiva().equals(fasePratica) ){
+            return;
+        }
+
+        SimpleWorkflowDialog swd = new SimpleWorkflowDialog(this, wf , fasePratica);
+        int res = swd.exec();
+
+        if( res == 1 ){
+            this.getContext().commitChanges();
+        }
+    }
+
+ /*
+ * Il primo servizio diventa principale, e non può più essere rimosso
+ */
+    private void servizioInserito(Object obj){
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        ServizioDetermina inserita = (ServizioDetermina) obj;
+        if( determina.getServizioDeterminaCollection().size() == 1 ){
+            inserita.setPrincipale(Boolean.TRUE);
+        }
+    }
+    private void servizioRimosso(Object obj){
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        ServizioDetermina rimossa = (ServizioDetermina) obj;
+        if( rimossa.getPrincipale() ){
+            QMessageBox.warning(this, "Attenzione", "Il servizio principale non può venir rimosso.");
+            PyPaPiTableView tableViewServizio = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_servizi");
+            ((ITableModel) tableViewServizio.model()).getContextHandle().insertElement(rimossa);
+        }
     }
 
 
+    /* XXX: codice simile a FormPratica */
+    @Override
+    public List<Template> getTemplates() {
+        List<Template> templates = new ArrayList<Template>();
+        //Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
+        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
+        AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
+        helper.children("protocollo"); // XXX: per creare il subpath "protocollo"
+        List<HashMap> children = helper.children();
+        for( HashMap map: children ){
+            String name = (String) map.get("name");
+            if( name.toLowerCase().endsWith(".odt") || name.toLowerCase().endsWith(".doc") ){
+                String title = (String) map.get("title");
+                String description = (String) map.get("description");
+                IStreamProvider streamProvider = cmisPlugin.createCmisStreamProvider((String) map.get("objectId"));
+                //RuleSet rulesSet = new RuleSet(new HashMap()); // XXX: da pescare
+                Template template = new Template(streamProvider, name, title, description);
+                templates.add(template);
+            }
+        }
+        return templates;
+    }
+
+    /* XXX: codice simile a FormPratica */
+    @Override
+    public void createDocument(String subpath, String name, String title, String description, byte[] content, String mimeType) {
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
+        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
+        AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
+
+        // extension
+        String extension = "";
+        if( mimeType.equals("application/pdf") ){
+            extension = ".pdf";
+        } else if( mimeType.equals("application/vnd.oasis.opendocument.text") ){
+            extension = ".odt";
+        } else if( mimeType.equals("application/msword") ){
+            extension = ".doc";
+        }
+        String documentName;
+        if( name.endsWith(".odt") || name.endsWith(".doc") ){
+            documentName = name.substring(0, name.length()-4).concat(extension);
+        } else {
+            documentName = name.concat("_").concat(determina.getPratica().getIdpratica()).concat(extension);
+        }
+        helper.createDocument(subpath, documentName, content, mimeType, title, description);
+        cmisPlugin.showForm(determina);
+    }
 }

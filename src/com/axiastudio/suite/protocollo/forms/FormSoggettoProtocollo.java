@@ -16,7 +16,19 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.IController;
+import com.axiastudio.pypapi.db.IStoreFactory;
+import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Dialog;
+import com.axiastudio.suite.protocollo.entities.Titolo;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,6 +38,30 @@ public class FormSoggettoProtocollo extends Dialog {
     
     public FormSoggettoProtocollo(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
+        try {
+            Method storeFactory = this.getClass().getMethod("storeTitolo");
+            Register.registerUtility(storeFactory, IStoreFactory.class, "Titolo");
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(FormSoggettoProtocollo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(FormSoggettoProtocollo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
-    
+
+/*
+ * Uno store contenente gli oggetti ordinati x descrizione
+ */
+    public Store storeTitolo(){
+        Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.protocollo.entities.Titolo");
+        Store storeTitolo = controller.createFullStore();
+        List<Titolo> titoli = new ArrayList<Titolo>();
+        for(Object ogg: storeTitolo){
+            titoli.add((Titolo) ogg);
+        }
+        Collections.sort(titoli, Titolo.Comparators.DESCRIZIONE);
+        return new Store(titoli);
+    }
+
+
 }

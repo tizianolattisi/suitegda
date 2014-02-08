@@ -16,15 +16,19 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.plugins.IPlugin;
+import com.axiastudio.pypapi.ui.*;
+import com.axiastudio.suite.anagrafiche.entities.Riferimento;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.anagrafiche.entities.TipoRiferimento;
+import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
+import com.axiastudio.suite.interoperabilita.Destinatario;
+import com.axiastudio.suite.interoperabilita.Documento;
+import com.axiastudio.suite.interoperabilita.Segnatura;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
-import com.axiastudio.pypapi.ui.CellEditorType;
-import com.axiastudio.pypapi.ui.Column;
-import com.axiastudio.pypapi.ui.ITableModel;
-import com.axiastudio.pypapi.ui.Util;
-import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.SuiteUiUtil;
@@ -39,12 +43,9 @@ import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
-import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
-import com.axiastudio.suite.protocollo.entities.Attribuzione;
-import com.axiastudio.suite.protocollo.entities.Fascicolo;
-import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
+import com.axiastudio.suite.protocollo.entities.*;
+import com.axiastudio.suite.pubblicazioni.PubblicazioneUtil;
+import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
 
@@ -370,6 +371,9 @@ public class FormProtocollo extends Window {
         }
         ((QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario")).setEnabled(!protocollo.getConvalidaprotocollo());
 
+        // protocollo annullato: non possibile inserire o eliminare richieste di annullamento
+        Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, "tableView_annullamenti"), protocollo.getAnnullato());
+
         // Visibilità dei soggetti riservati
         PyPaPiTableView tvSoggettiRiservati =  (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_soggettiriservatiprotocollo");
         if( !(nuovoInserimento || profilo.inSportelloOAttribuzioneR()) ){
@@ -423,7 +427,12 @@ public class FormProtocollo extends Window {
                     delete = upload;
                     version = upload;
                 }
-                ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);
+                if( view ){
+                    ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);
+                } else {
+                    QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
+                    return;
+                }
             }
         }
     }
@@ -463,6 +472,105 @@ public class FormProtocollo extends Window {
         if( exec == 1 ){
             System.out.println("Print!");            
         }
+    }
+
+    private void pubblicaProtocollo() {
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        Pubblicazione pubblicazione = PubblicazioneUtil.pubblicaProtocollo(protocollo);
+        IForm form = Util.formFromEntity(pubblicazione);
+        QMdiArea workspace = Util.findParentMdiArea(this);
+        if( workspace != null ){
+            workspace.addSubWindow((QMainWindow) form);
+        }
+        form.show();
+    }
+
+    private void segnaturaXml() {
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        if( protocollo.getId() == null ){
+            QMessageBox.warning(this, "Attenzione", "E' necessario registrare il protocollo per poter generare la segntura.");
+            return;
+        }
+        if( !protocollo.getTipo().equals(TipoProtocollo.USCITA) ){
+            QMessageBox.warning(this, "Attenzione", "E' possibile generare la segnatura solo per i protocolli in uscita.");
+            return;
+        }
+        CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
+        AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
+        if( helper.children().size() == 0 ){
+            QMessageBox.warning(this, "Attenzione", "Deve essere presente almeno un documento.");
+            return;
+        }
+
+        Segnatura segnatura = new Segnatura();
+        segnatura.setCodiceAmministrazione(SuiteUtil.trovaCostante("CODICE_AMMINISTRAZIONE").getValore());
+        segnatura.setCodiceAOO(SuiteUtil.trovaCostante("CODICE_AOO").getValore());
+        segnatura.setDenominazione(SuiteUtil.trovaCostante("DENOMINAZIONE").getValore());
+        segnatura.setToponimo(SuiteUtil.trovaCostante("TOPONIMO").getValore());
+        segnatura.setIndirizzoPostale(SuiteUtil.trovaCostante("INDIRIZZO_POSTALE").getValore());
+        segnatura.setCivico(SuiteUtil.trovaCostante("CIVICO").getValore());
+        segnatura.setCap(SuiteUtil.trovaCostante("CAP").getValore());
+        segnatura.setComune(SuiteUtil.trovaCostante("COMUNE").getValore());
+        segnatura.setProvincia(SuiteUtil.trovaCostante("PROVINCIA").getValore());
+        segnatura.setTelefono(SuiteUtil.trovaCostante("TELEFONO").getValore());
+        segnatura.setFax(SuiteUtil.trovaCostante("FAX").getValore());
+
+        segnatura.setNumeroRegistrazione(protocollo.getIddocumento());
+        segnatura.setDataRegistrazione(protocollo.getDataprotocollo().toString());
+        segnatura.setIndirizzoTelematico("info@comune.rivadelgarda.tn.it");
+        segnatura.setOggetto(protocollo.getOggetto());
+
+        // destinatari
+        String pec=null;
+        for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
+            Soggetto soggetto = sp.getSoggetto();
+            // solo enti
+            if( !soggetto.getTipo().equals(TipoSoggetto.ENTE) ){
+                continue;
+            }
+            // solo pec
+            for( Riferimento riferimento: soggetto.getRiferimentoCollection() ){
+                if( riferimento.getTipo().equals(TipoRiferimento.PEC) ){
+                    pec = riferimento.getRiferimento();
+                    break;
+                }
+            }
+            if( pec==null ){
+                continue;
+            }
+            Destinatario destinatario = new Destinatario();
+            destinatario.setIndirizzoTelematico(pec);
+            destinatario.setConfermaRicezione(false);
+            destinatario.setDenominazione(soggetto.getDenominazione());
+            destinatario.setDenominazioneUnitaOrganizzativa(soggetto.getDenominazione2());
+            if( sp.getConoscenza() ){
+                destinatario.setPerConoscenza(true);
+            }
+            segnatura.addDestinatario(destinatario);
+
+        }
+
+        // documento e allegati
+        Boolean documentoOk = false;
+        for( Map child: helper.children() ){
+            Documento documento = new Documento();
+            documento.setNome(child.get("name").toString());
+            String oggetto = child.get("title").toString() + " - "  + child.get("description").toString();
+            documento.setOggetto(oggetto);
+            if( !documentoOk ){
+                segnatura.setDocumento(documento);
+                documentoOk = true;
+            } else {
+                segnatura.addAllegato(documento);
+            }
+        }
+
+        String xml = segnatura.toXml();
+
+        helper.createDocument("", "Segnatura.xml", xml.getBytes());
+
+
+
     }
         
 }

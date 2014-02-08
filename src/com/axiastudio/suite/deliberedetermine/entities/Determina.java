@@ -17,43 +17,37 @@
 package com.axiastudio.suite.deliberedetermine.entities;
 
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.deliberedetermine.DeterminaListener;
+import com.axiastudio.suite.pratiche.IDettaglio;
+import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.protocollo.IProtocollabile;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import javax.persistence.*;
 
 /**
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 @Entity
+@EntityListeners({DeterminaListener.class})
 @Table(schema="deliberedetermine")
 @SequenceGenerator(name="gendetermina", sequenceName="deliberedetermine.determina_id_seq", initialValue=1, allocationSize=1)
-public class Determina implements Serializable {
+public class Determina implements Serializable, IDettaglio, IProtocollabile {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
     private Long id;
-    @Column(name="idpratica")
-    private String idpratica;
+    @JoinColumn(name = "idpratica", referencedColumnName = "idpratica")
+    @ManyToOne(cascade=CascadeType.REFRESH)
+    private Pratica pratica;
     @Column(name="codiceinterno", unique=true)
     private String codiceinterno;
     @Column(name="oggetto", length=2048)
     private String oggetto;
-    @Column(name="datapratica")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dataPratica;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<ServizioDetermina> servizioDeterminaCollection;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
@@ -61,11 +55,11 @@ public class Determina implements Serializable {
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioDetermina> ufficioDeterminaCollection;
     @Column(name="dispesa")
-    private Boolean diSpesa;
+    private Boolean dispesa=Boolean.FALSE;
     @Column(name="dientrata")
-    private Boolean diEntrata;
+    private Boolean diEntrata=Boolean.FALSE;
     @Column(name="diregolarizzazione")
-    private Boolean diRegolarizzazione;
+    private Boolean diRegolarizzazione=Boolean.FALSE;
     @Column(name="referentepolitico")
     private String referentePolitico;
     @Column(name="ufficioresponsabile")
@@ -82,7 +76,7 @@ public class Determina implements Serializable {
     
     /* visto del responsabile del servizio */
     @Column(name="vistoresponsabile")
-    private Boolean vistoResponsabile = false;
+    private Boolean vistoResponsabile=Boolean.FALSE;
     @Column(name="datavistoresponsabile")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataVistoResponsabile;
@@ -90,15 +84,15 @@ public class Determina implements Serializable {
     @ManyToOne
     private Utente utenteVistoResponsabile;
     @Column(name="titolarevistoresponsabile")
-    private Boolean titolareVistoResponsabile;
+    private Boolean titolareVistoResponsabile=Boolean.FALSE;
     @Column(name="segretariovistoresponsabile")
-    private Boolean segretarioVistoResponsabile;
+    private Boolean segretarioVistoResponsabile=Boolean.FALSE;
     @Column(name="delegatovistoresponsabile")
-    private Boolean delegatoVistoResponsabile;
+    private Boolean delegatoVistoResponsabile=Boolean.FALSE;
 
     /* visto del responsabile di bilancio */
     @Column(name="vistobilancio")
-    private Boolean vistoBilancio = false;
+    private Boolean vistoBilancio=Boolean.FALSE;
     @Column(name="datavistobilancio")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataVistoBilancio;
@@ -106,15 +100,15 @@ public class Determina implements Serializable {
     @ManyToOne
     private Utente utenteVistoBilancio;
     @Column(name="titolarevistobilancio")
-    private Boolean titolareVistoBilancio;
+    private Boolean titolareVistoBilancio=Boolean.FALSE;
     @Column(name="segretariovistobilancio")
-    private Boolean segretarioVistoBilancio;
+    private Boolean segretarioVistoBilancio=Boolean.FALSE;
     @Column(name="delegatovistobilancio")
-    private Boolean delegatoVistoBilancio;
+    private Boolean delegatoVistoBilancio=Boolean.FALSE;
 
     /* visto del responsabile di bilancio */
     @Column(name="vistonegato")
-    private Boolean vistoNegato = false;
+    private Boolean vistoNegato=Boolean.FALSE;
     @Column(name="datavistonegato")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataVistoNegato;
@@ -122,15 +116,16 @@ public class Determina implements Serializable {
     @ManyToOne
     private Utente utenteVistoNegato;
     @Column(name="titolarevistonegato")
-    private Boolean titolareVistoNegato;
+    private Boolean titolareVistoNegato=Boolean.FALSE;
     @Column(name="segretariovistonegato")
-    private Boolean segretarioVistoNegato;
+    private Boolean segretarioVistoNegato=Boolean.FALSE;
     @Column(name="delegatovistonegato")
-    private Boolean delegatoVistoNegato;
+    private Boolean delegatoVistoNegato=Boolean.FALSE;
     
     /* protocollo */
-    @Column(name="iddocumento", length=12)
-    private String idDocumento;
+    @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
+    @ManyToOne
+    private Protocollo protocollo;
     
     public Long getId() {
         return id;
@@ -140,18 +135,35 @@ public class Determina implements Serializable {
         this.id = id;
     }
 
+    @Override
+    public Pratica getPratica() {
+        return pratica;
+    }
+
+    @Override
+    public void setPratica(Pratica pratica) {
+        this.pratica = pratica;
+    }
+
+    @Override
     public String getIdpratica() {
-        return idpratica;
+        if( this.pratica != null ){
+            return pratica.getIdpratica();
+        }
+        return null;
     }
 
+    @Override
     public void setIdpratica(String idpratica) {
-        this.idpratica = idpratica;
+        // NOP
     }
 
+    @Override
     public String getCodiceinterno() {
         return codiceinterno;
     }
 
+    @Override
     public void setCodiceinterno(String codiceinterno) {
         this.codiceinterno = codiceinterno;
     }
@@ -164,12 +176,15 @@ public class Determina implements Serializable {
         this.oggetto = oggetto;
     }
 
-    public Date getDataPratica() {
-        return dataPratica;
+    public Date getDatapratica() {
+        if( this.pratica != null ){
+            return pratica.getDatapratica();
+        }
+        return null;
     }
 
-    public void setDataPratica(Date dataPratica) {
-        this.dataPratica = dataPratica;
+    public void setDatapratica(Date datapratica) {
+        // NOP
     }
 
     public Collection<ServizioDetermina> getServizioDeterminaCollection() {
@@ -196,12 +211,12 @@ public class Determina implements Serializable {
         this.ufficioDeterminaCollection = ufficioDeterminaCollection;
     }
 
-    public Boolean getDiSpesa() {
-        return diSpesa;
+    public Boolean getDispesa() {
+        return dispesa;
     }
 
-    public void setDiSpesa(Boolean diSpesa) {
-        this.diSpesa = diSpesa;
+    public void setDispesa(Boolean dispesa) {
+        this.dispesa = dispesa;
     }
 
     public Boolean getDiEntrata() {
@@ -412,12 +427,12 @@ public class Determina implements Serializable {
         this.delegatoVistoNegato = delegatoVistoNegato;
     }
 
-    public String getIdDocumento() {
-        return idDocumento;
+    public Protocollo getProtocollo() {
+        return protocollo;
     }
 
-    public void setIdDocumento(String iddocumento) {
-        this.idDocumento = iddocumento;
+    public void setProtocollo(Protocollo protocollo) {
+        this.protocollo = protocollo;
     }
 
     @Override

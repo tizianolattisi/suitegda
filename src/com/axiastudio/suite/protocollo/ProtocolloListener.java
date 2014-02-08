@@ -78,8 +78,10 @@ public class ProtocolloListener {
         protocollo.setIddocumento(newIddocumento);
 
         // Soggetti di primo inserimento
-        for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
-            sp.setPrimoinserimento(Boolean.TRUE);
+        if( protocollo.getSoggettoProtocolloCollection() != null ){
+            for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
+                sp.setPrimoinserimento(Boolean.TRUE);
+            }
         }
 
         /* convalide */
@@ -99,18 +101,26 @@ public class ProtocolloListener {
     }
 
     private void convalide(Protocollo protocollo, Utente autenticato, Date today){
-        if( protocollo.getConvalidaattribuzioni() && protocollo.getEsecutoreconvalidaattribuzioni() == null ){
+        if( protocollo.getConvalidaattribuzioni() &&
+                (protocollo.getEsecutoreconvalidaattribuzioni() == null || protocollo.getEsecutoreconvalidaattribuzioni().length() == 0)){
             protocollo.setEsecutoreconvalidaattribuzioni(autenticato.getLogin());
             protocollo.setDataconvalidaattribuzioni(today);
         }
-        if( protocollo.getConvalidaprotocollo()&& protocollo.getEsecutoreconvalidaprotocollo() == null ){
+        if( protocollo.getConvalidaprotocollo()&&
+                (protocollo.getEsecutoreconvalidaprotocollo() == null || protocollo.getEsecutoreconvalidaprotocollo().length() == 0)){
             protocollo.setEsecutoreconvalidaprotocollo(autenticato.getLogin());
             protocollo.setDataconvalidaprotocollo(today);
             // numero protocollo
         }
-        if( protocollo.getConsolidadocumenti()&& protocollo.getEsecutoreconsolidadocumenti() == null ){
+        if( protocollo.getConsolidadocumenti()&&
+                (protocollo.getEsecutoreconsolidadocumenti() == null || protocollo.getEsecutoreconsolidadocumenti().length() == 0)){
             protocollo.setEsecutoreconsolidadocumenti(autenticato.getLogin());
             protocollo.setDataconsolidadocumenti(today);
+        }
+        if( protocollo.getSpedito() &&
+                (protocollo.getEsecutorespedizione() == null || protocollo.getEsecutorespedizione().length() == 0)){
+            protocollo.setEsecutorespedizione(autenticato.getLogin());
+            protocollo.setDataspedizione(today);
         }
     }
 

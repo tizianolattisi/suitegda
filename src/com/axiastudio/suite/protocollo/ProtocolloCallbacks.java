@@ -19,15 +19,18 @@ package com.axiastudio.suite.protocollo;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.annotations.Callback;
 import com.axiastudio.pypapi.annotations.CallbackType;
-import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.db.Validation;
+import com.axiastudio.pypapi.db.*;
+import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
+import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -69,9 +72,21 @@ public class ProtocolloCallbacks {
         }
                 
         /* almeno un soggetto */
-        if( protocollo.getSoggettoProtocolloCollection().isEmpty() ){
-            msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
-            res = false;
+        if( protocollo.getSoggettoProtocolloCollection() == null || protocollo.getSoggettoProtocolloCollection().isEmpty() ){
+            if( TipoProtocollo.INTERNO.equals(protocollo.getTipo()) ){
+                Costante costante = SuiteUtil.trovaCostante("SOGGETTO_INTERNI");
+                Long id = Long.parseLong(costante.getValore());
+                Controller controller = (Controller) Register.queryUtility(IController.class, Soggetto.class.getName());
+                Soggetto soggetto = (Soggetto) controller.get(id);
+                SoggettoProtocollo sp = new SoggettoProtocollo();
+                sp.setSoggetto(soggetto);
+                List<SoggettoProtocollo> spList = new ArrayList<SoggettoProtocollo>();
+                spList.add(sp);
+                protocollo.setSoggettoProtocolloCollection(spList);
+            } else {
+                msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
+                res = false;
+            }
         }
         if( res == false ){
             return new Validation(false, msg);

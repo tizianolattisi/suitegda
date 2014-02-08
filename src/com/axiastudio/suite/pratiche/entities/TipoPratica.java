@@ -17,18 +17,12 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.FetchType;
+import java.util.Collection;
+import java.util.Comparator;
+import javax.persistence.*;
 
 /**
  *
@@ -37,7 +31,7 @@ import javax.persistence.FetchType;
 @Entity
 @Table(schema="PRATICHE")
 @SequenceGenerator(name="gentipopratica", sequenceName="pratiche.tipopratica_id_seq", initialValue=1, allocationSize=1)
-public class TipoPratica implements Serializable {
+public class TipoPratica implements Serializable, Comparable<TipoPratica> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentipopratica")
@@ -50,8 +44,6 @@ public class TipoPratica implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private TipoPratica tipopadre;
     @JoinColumn(name="procedimento", referencedColumnName = "id")
-    @ManyToOne
-    private Procedimento procedimento;
     @Column(name="formulacodifica")
     private String formulacodifica;
     @Column(name="lunghezzaprogressivo")
@@ -69,6 +61,9 @@ public class TipoPratica implements Serializable {
     private Boolean approvata=false;
     @Column(name="obsoleta")
     private Boolean obsoleta=false;
+    @OneToMany(mappedBy = "tipopratica", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<TipoPraticaProcedimento> tipopraticaProcedimentoCollection;
+
 
     public Long getId() {
         return id;
@@ -103,11 +98,12 @@ public class TipoPratica implements Serializable {
     }
 
     public Procedimento getProcedimento() {
-        return procedimento;
-    }
-
-    public void setProcedimento(Procedimento procedimento) {
-        this.procedimento = procedimento;
+        Collection<TipoPraticaProcedimento> c = getTipopraticaProcedimentoCollection();
+        if( c.size() != 1 ){
+            return null;
+        }
+        TipoPraticaProcedimento tpp = (TipoPraticaProcedimento) c.toArray()[0];
+        return tpp.getProcedimento();
     }
 
     public String getFormulacodifica() {
@@ -174,6 +170,14 @@ public class TipoPratica implements Serializable {
         this.obsoleta = obsoleta;
     }
 
+    public Collection<TipoPraticaProcedimento> getTipopraticaProcedimentoCollection() {
+        return tipopraticaProcedimentoCollection;
+    }
+
+    public void setTipopraticaProcedimentoCollection(Collection<TipoPraticaProcedimento> tipopraticaProcedimentoCollection) {
+        this.tipopraticaProcedimentoCollection = tipopraticaProcedimentoCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -198,5 +202,20 @@ public class TipoPratica implements Serializable {
     public String toString() {
         return " "+this.getCodice()+" - "+this.getDescrizione();
     }
+
+    @Override
+    public int compareTo(TipoPratica o) {
+        return Comparators.CODICE.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static Comparator<TipoPratica> CODICE = new Comparator<TipoPratica>() {
+            @Override
+            public int compare(TipoPratica o1, TipoPratica o2) {
+                return o1.codice.compareTo(o2.codice);
+            }
+        };
+    }
+
     
 }

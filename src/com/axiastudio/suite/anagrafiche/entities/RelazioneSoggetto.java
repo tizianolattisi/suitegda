@@ -19,16 +19,7 @@ package com.axiastudio.suite.anagrafiche.entities;
 import com.axiastudio.suite.SuiteUtil;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import javax.persistence.*;
 
 /**
  *
@@ -119,13 +110,19 @@ public class RelazioneSoggetto implements Serializable {
     /*
      * Il predicato esprime la relazione nel corretto verso
      */
+
     public String getPredicato(){
+         return getPredicato(this.getRelazione(), this.getInvertita());
+    }
+
+    public String getPredicato(Relazione currentRelazione, Boolean currentInvertita){
         String out = "";
-        if( this.getRelazione() != null ){
-            if( invertita ){
-                out += " " + this.getRelazione().getInversa() + " ";
+
+        if( currentRelazione != null ){
+            if( currentInvertita==null || ! currentInvertita ){
+                out += " " + currentRelazione.getDescrizione() + " ";
             } else {
-                out += " " + this.getRelazione().getDescrizione() + " ";
+                out += " " + currentRelazione.getInversa() + " ";
             }
         } else {
             out += " è in relazione con ";
@@ -139,7 +136,7 @@ public class RelazioneSoggetto implements Serializable {
         }
         return out;
     }
-    
+
     public void setPredicato(String predicato){
         // non deve fare nulla
     }
@@ -147,7 +144,7 @@ public class RelazioneSoggetto implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (id != null ? (id > 0 ? id.hashCode() : ((Long)((-1*id)+1000000)).hashCode()) : 0);
         return hash;
     }
 

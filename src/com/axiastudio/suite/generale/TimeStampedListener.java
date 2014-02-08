@@ -54,7 +54,7 @@ public class TimeStampedListener {
         timeStamped.setRecordmodificatoda(autenticato.getLogin());
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
-        if( today.after(timeStamped.getRecordcreato()) ){
+        if( timeStamped.getRecordcreato() == null || today.after(timeStamped.getRecordcreato()) ){
             timeStamped.setRecordmodificato(today);
         } else {
             throw new RuntimeException();

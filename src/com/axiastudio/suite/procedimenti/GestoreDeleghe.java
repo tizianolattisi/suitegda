@@ -155,6 +155,41 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         
         // Cerchiamo tutti i titoli e le deleghe più ampi della richiesta
         List<Delega> titoliEDelegheAmpie = new ArrayList();
+        titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, ufficio, utente, dataVerifica));
+        if( ufficio != null && procedimento != null && servizio != null ){
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, ufficio, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, ufficio, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+        } else if( ufficio == null && procedimento != null && servizio != null ) {
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+        } else if( ufficio != null && procedimento == null && servizio != null ) {
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, ufficio, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+        } else if( ufficio != null && procedimento != null && servizio == null) {
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, ufficio, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+        } else if( ufficio != null && procedimento == null && servizio == null){
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+        } else if( ufficio == null && procedimento != null && servizio == null ){
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+        } else if( ufficio == null && procedimento == null && servizio != null ){
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+        }
+        /*
         if( ufficio != null ){
             titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, null, utente, dataVerifica));
             if( procedimento != null ){
@@ -173,6 +208,7 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         if( servizio != null ){
             titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, ufficio, utente, dataVerifica));
         }
+        */
         // Prima andiamo alla ricerca delle titolarità
         for( Delega titoloODelega: titoliEDelegheAmpie ){
             if( titoloODelega.getTitolare() ){

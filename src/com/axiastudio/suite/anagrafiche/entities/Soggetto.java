@@ -383,6 +383,36 @@ public class Soggetto implements Serializable, ITimeStamped {
         // non deve fare nulla
     }
 
+    public String getIndirizzo() {
+        String out ="";
+        for (Indirizzo indirizzo: indirizzoCollection) {
+            if (indirizzo.getPrincipale() == Boolean.TRUE) {
+                out=String.format("%s %s", indirizzo.getVia(), indirizzo.getCivico());
+            }
+        }
+        return out.trim();
+    }
+
+    public void setIndirizzo(String indirizzo){
+        // non deve fare nulla
+    }
+
+    public String getComune() {
+        String out ="";
+        for (Indirizzo indirizzo: indirizzoCollection) {
+            if (indirizzo.getPrincipale() == Boolean.TRUE) {
+                out=String.format("%s", indirizzo.getComune());
+                if (indirizzo.getProvincia() != null) {
+                    out+=" (" + indirizzo.getProvincia() + ")";
+                }
+            }
+        }
+        return out.trim();
+    }
+
+    public void setComune(String comune){
+        // non deve fare nulla
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

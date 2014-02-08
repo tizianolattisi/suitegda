@@ -16,31 +16,101 @@
  */
 package com.axiastudio.suite.anagrafiche.forms;
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.IController;
+import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.Dialog;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
+import com.axiastudio.suite.anagrafiche.entities.Relazione;
 import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
 import com.trolltech.qt.core.Qt.CheckState;
 import com.trolltech.qt.gui.QCheckBox;
-import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QLabel;
+import com.trolltech.qt.gui.QShowEvent;
+
+import javax.persistence.EntityManager;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class FormRelazioneSoggetto extends Dialog {
-    
+    private String abilitataSx="";
+    private String abilitataDx="";
+    private Boolean checkboxAttivabile=Boolean.FALSE;
+    private Controller controller;
+    private EntityManager em;
+    private QCheckBox cbInverti;
+    private PyPaPiComboBox cmbRelazione;
+
     public FormRelazioneSoggetto(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
-        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_inverti")).stateChanged.connect(this, "aggiornaPredicato()");
-        ((QComboBox) this.findChild(QComboBox.class, "comboBox_relazione")).currentStringChanged.connect(this, "aggiornaPredicato()");
-        //this.aggiornaPredicato();
+        cbInverti = (QCheckBox) this.findChild(QCheckBox.class, "checkBox_inverti");
+        cbInverti.stateChanged.connect(this, "aggiornaInvertita()");
+        cmbRelazione = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_relazione");
+        cmbRelazione.currentIndexChanged.connect(this, "aggiornaRelazione()");
+        controller = (Controller) Register.queryUtility(IController.class, Relazione.class.getName());
+        em = controller.getEntityManager();
     }
-    
+
+    @Override
+    protected void showEvent(QShowEvent arg__1) {
+        storeInizializza();
+        super.showEvent(arg__1);
+    }
+
+    private void aggiornaRelazione(){
+
+        if ( cmbRelazione.currentIndex()<0 ) {
+            return;
+        }
+
+        aggiornaPredicato();
+
+        if ( checkboxAttivabile ) {
+            if ( cmbRelazione.getCurrentText().equals(cmbRelazione.ND) ) {
+                cbInverti.setEnabled(true);
+            } else {
+                cbInverti.setEnabled(false);
+                if ( abilitataSx!="" ) {
+                    Relazione rel = (Relazione) cmbRelazione.getCurrentEntity();
+                    String query = "SELECT r FROM Relazione r ";
+                    if ( cbInverti.checkState().equals(CheckState.Unchecked) ) {
+                        query = query + "WHERE r." + abilitataDx + "sx = TRUE AND r." + abilitataSx + "dx = TRUE ";
+                    } else {
+                        query = query + "WHERE r." + abilitataSx + "sx = TRUE AND r." + abilitataDx + "dx = TRUE ";
+                    }
+                    query = query + "AND r.id = " + rel.getId().toString();
+                    if ( em.createQuery(query, Relazione.class).getResultList().size()> 0 ) {
+                        cbInverti.setEnabled(true);
+                    }
+                }
+            }
+        }
+    }
+
+    private void aggiornaInvertita(){
+
+        aggiornaPredicato();
+
+        Relazione rel = (Relazione) cmbRelazione.getCurrentEntity();
+        Store store = storeRelazione();
+        cmbRelazione.setLookupStore(store);
+        this.getColumn("Relazione").setLookupStore(store);
+        cmbRelazione.select(rel);
+    }
+
+
     private void aggiornaPredicato(){
-        String out="";
+
         QLabel predicato = (QLabel) this.findChild(QLabel.class, "label_predicato");
-        Boolean inverti = ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_inverti")).checkState().equals(CheckState.Checked);
+        Boolean inverti = cbInverti.checkState().equals(CheckState.Checked);
         Context context = this.getContext();
         if( context == null ){
             return;
@@ -49,8 +119,67 @@ public class FormRelazioneSoggetto extends Dialog {
         if( rs == null ){
             return;
         }
-        rs.setInvertita(inverti);
-        predicato.setText(rs.getPredicato());
+        Relazione rel = (Relazione) cmbRelazione.getCurrentEntity();
+        predicato.setText(rs.getPredicato(rel, inverti));
     }
+
+    public void storeInizializza() {
+
+        RelazioneSoggetto rs = (RelazioneSoggetto) this.getContext().getModel().getStore().get(0); // XXX: perché non currentEntity??
+        if( rs == null || rs.getId()==null ) {
+            cbInverti.setEnabled(false);
+        } else {
+            checkboxAttivabile = Boolean.TRUE;
+        }
+
+        Store store = storeRelazione();
+        cmbRelazione.setLookupStore(store);
+        this.getColumn("Relazione").setLookupStore(store);
+        cmbRelazione.select(rs.getRelazione());
+    }
+
+/*
+ * Uno store contenente gli oggetti ordinati x descrizione
+ */
+    public Store storeRelazione() {
+        Store storeRelazione = controller.createFullStore();
+        RelazioneSoggetto rs = (RelazioneSoggetto) this.getContext().getModel().getStore().get(0); // XXX: perché non currentEntity??
+        if( rs == null ){
+            return storeRelazione;
+        }
+
+        Soggetto soggetto = new Soggetto();
+        if ( rs.getSoggetto() == null ) {
+            soggetto = (Soggetto) this.getParentForm().getContext().getCurrentEntity();
+        } else {
+            soggetto = rs.getSoggetto();
+        }
+
+        if (soggetto.getTipo().equals((TipoSoggetto.PERSONA))) {
+            abilitataSx="p";
+        } else if (soggetto.getTipo().equals((TipoSoggetto.AZIENDA))) {
+            abilitataSx="a";
+        } else if (soggetto.getTipo().equals((TipoSoggetto.ENTE))) {
+            abilitataSx="e";
+        }
+        if (rs.getRelazionato().getTipo().equals((TipoSoggetto.PERSONA))) {
+            abilitataDx="p";
+        } else if (rs.getRelazionato().getTipo().equals((TipoSoggetto.AZIENDA))) {
+            abilitataDx="a";
+        } else if (rs.getRelazionato().getTipo().equals((TipoSoggetto.ENTE))) {
+            abilitataDx="e";
+        }
+
+        String query = "SELECT r FROM Relazione r ";
+        if ( cbInverti.checkState().equals(CheckState.Unchecked) ) {
+            query = query + "WHERE r." + abilitataSx + "sx = TRUE AND r." + abilitataDx + "dx = TRUE ";
+        } else {
+            query = query + "WHERE r." + abilitataDx + "sx = TRUE AND r." + abilitataSx + "dx = TRUE ";
+        }
+        List<Relazione> relazioni = em.createQuery(query, Relazione.class).getResultList();
+
+        Collections.sort(relazioni, Relazione.Comparators.DESCRIZIONE);
+        return new Store(relazioni);
+     }
 
 }

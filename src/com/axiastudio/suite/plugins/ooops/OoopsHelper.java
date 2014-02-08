@@ -89,10 +89,9 @@ public class OoopsHelper {
             XTextRange anchor = this.getAnchor(key, component);
             if( anchor != null ){
                 Object value = values.get(key);
-                if( value == null ){
-                    value = "--";
+                if( value != null ){
+                    anchor.setString(value.toString());
                 }
-                anchor.setString(value.toString());
             }
         }
     }
@@ -119,9 +118,9 @@ public class OoopsHelper {
             XTextRange range = content.getAnchor();
             return range;
         } catch (NoSuchElementException ex) {
-            Logger.getLogger(OoopsHelper.class.getName()).log(Level.SEVERE, "unable to find "+anchorName+" anchor", ex);
+            Logger.getLogger(OoopsHelper.class.getName()).log(Level.WARNING, "unable to find "+anchorName+" anchor", ex);
         } catch (WrappedTargetException ex) {
-            Logger.getLogger(OoopsHelper.class.getName()).log(Level.SEVERE, "unable to find "+anchorName+" anchor", ex);
+            Logger.getLogger(OoopsHelper.class.getName()).log(Level.WARNING, "unable to find "+anchorName+" anchor", ex);
         }     
         return null;
     }

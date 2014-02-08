@@ -18,6 +18,7 @@ package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
 import java.io.Serializable;
+import java.util.Comparator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,10 +36,10 @@ import javax.persistence.Table;
 @Entity
 @Table(schema="PRATICHE")
 @SequenceGenerator(name="genfase", sequenceName="pratiche.fase_id_seq", initialValue=1, allocationSize=1)
-public class Fase implements Serializable {
+public class Fase implements Serializable, Comparable<Fase> {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genoggetto")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genfase")
     private Long id;
     @Column(name="descrizione")
     private String descrizione;
@@ -106,5 +107,20 @@ public class Fase implements Serializable {
     public String toString() {
         return this.getDescrizione();
     }
-    
+
+    @Override
+    public int compareTo(Fase o) {
+        return Comparators.DESCRIZIONE.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static Comparator<Fase> DESCRIZIONE = new Comparator<Fase>() {
+            @Override
+            public int compare(Fase o1, Fase o2) {
+                return o1.descrizione.compareTo(o2.descrizione);
+            }
+        };
+    }
+
+
 }

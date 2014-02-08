@@ -16,6 +16,9 @@
  */
 package com.axiastudio.suite.plugins.ooops;
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
@@ -38,6 +41,8 @@ public class RuleSet {
         HashMap<String,Object> mapOut = new HashMap();
         Binding binding = new Binding();
         binding.setVariable("param", entity);
+        Utente utente = (Utente) Register.queryUtility(IUtente.class);
+        binding.setVariable("utente", utente);
         GroovyShell shell = new GroovyShell(binding);
         for( String key: this.rules.keySet() ){
             String groovy = this.rules.get(key) + "(param)";

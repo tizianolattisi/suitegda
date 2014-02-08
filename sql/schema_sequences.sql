@@ -6,11 +6,12 @@ select setval('anagrafiche.relazione_id_seq', coalesce((select max(id)+1 from an
 select setval('anagrafiche.relazionesoggetto_id_seq', coalesce((select max(id)+1 from anagrafiche.zrelazionesoggetto), 1), false);
 select setval('anagrafiche.titolosoggetto_id_seq', coalesce((select max(id)+1 from anagrafiche.titolosoggetto), 1), false);
 select setval('anagrafiche.riferimento_id_seq', coalesce((select max(id)+1 from anagrafiche.riferimento), 1), false);
-select setval('anagrafiche.soggetto_id_seq', coalesce((select max(id)+1 from anagrafiche.soggetto), 1), false);
+select setval('anagrafiche.soggetto_id_seq', 300000, false);
 select setval('anagrafiche.stato_id_seq', coalesce((select max(id)+1 from anagrafiche.stato), 1), false);
 select setval('anagrafiche.titolostudio_id_seq', coalesce((select max(id)+1 from anagrafiche.titolostudio), 1), false);
 select setval('anagrafiche.titolostudiosoggetto_id_seq', coalesce((select max(id)+1 from anagrafiche.titolostudiosoggetto), 1), false);
 
+select setval('base.giunta_id_seq', coalesce((select max(id)+1 from base.giunta), 1), false);
 select setval('base.ufficio_id_seq', coalesce((select max(id)+1 from base.ufficio), 1), false);
 select setval('base.ufficioutente_id_seq', coalesce((select max(id)+1 from base.ufficioutente), 1), false);
 select setval('base.utente_id_seq', coalesce((select max(id)+1 from base.utente), 1), false);
@@ -28,6 +29,7 @@ select setval('pratiche.fase_id_seq', coalesce((select max(id)+1 from pratiche.f
 
 select setval('procedimenti.carica_id_seq', coalesce((select max(id)+1 from procedimenti.carica), 1), false);
 select setval('procedimenti.delega_id_seq', coalesce((select max(id)+1 from procedimenti.delega), 1), false);
+select setval('procedimenti.faseprocedimento_id_seq', coalesce((select max(id)+1 from procedimenti.faseprocedimento), 1), false);
 select setval('procedimenti.norma_id_seq', coalesce((select max(id)+1 from procedimenti.norma), 1), false);
 select setval('procedimenti.normaprocedimento_id_seq', coalesce((select max(id)+1 from procedimenti.normaprocedimento), 1), false);
 select setval('procedimenti.procedimento_id_seq', coalesce((select max(id)+1 from procedimenti.procedimento), 1), false);
@@ -47,6 +49,11 @@ select setval('protocollo.titolo_id_seq', coalesce((select max(id)+1 from protoc
 select setval('protocollo.ufficioprotocollo_id_seq', coalesce((select max(id)+1 from protocollo.ufficioprotocollo), 1), false);
 select setval('protocollo.motivazioneannullamento_id_seq', coalesce((select max(id)+1 from protocollo.motivazioneannullamento), 1), false);
 select setval('protocollo.annullamentoprotocollo_id_seq', coalesce((select max(id)+1 from protocollo.annullamentoprotocollo), 1), false);
+
+select setval('richieste.destinatarioufficio_id_seq', coalesce((select max(id)+1 from richieste.destinatarioufficio), 1), false);
+select setval('richieste.destinatarioutente_id_seq', coalesce((select max(id)+1 from richieste.destinatarioutente), 1), false);
+select setval('richieste.richiesta_id_seq', coalesce((select max(id)+1 from richieste.richiesta), 1), false);
+select setval('richieste.richiestaprotocollo_id_seq', coalesce((select max(id)+1 from richieste.richiestaprotocollo), 1), false);
 
 select setval('sedute.caricacommissione_id_seq', coalesce((select max(id)+1 from sedute.caricacommissione), 1), false);
 select setval('sedute.commissione_id_seq', coalesce((select max(id)+1 from sedute.commissione), 1), false);

@@ -30,6 +30,8 @@ CREATE SCHEMA generale;
 ALTER SCHEMA generale OWNER TO postgres;
 CREATE SCHEMA modelli;
 ALTER SCHEMA modelli OWNER TO postgres;
+CREATE SCHEMA richieste;
+ALTER SCHEMA richieste OWNER TO postgres;
 
 -- Create pgplsql
 CREATE OR REPLACE FUNCTION public.create_plpgsql_language ()
@@ -341,20 +343,28 @@ CREATE VIEW relazionesoggetto AS
 
 CREATE RULE relazionesoggetto_delete AS ON DELETE TO relazionesoggetto DO INSTEAD
 	DELETE FROM zrelazionesoggetto
-	WHERE ((zrelazionesoggetto.id)::integer = old.id);
+	WHERE zrelazionesoggetto.id::integer = abs(old.id);
 
 CREATE RULE relazionesoggetto_insert AS ON INSERT TO relazionesoggetto DO INSTEAD
-	INSERT INTO zrelazionesoggetto (id, soggetto, relazione, relazionato, datanascita, datacessazione, abilitatoweb)
-            VALUES (new.id, new.soggetto, new.relazione, new.relazionato, new.datanascita, new.datacessazione, new.abilitatoweb)
+	INSERT INTO zrelazionesoggetto (soggetto, relazione, relazionato, datanascita, datacessazione, abilitatoweb)
+            VALUES (new.soggetto, new.relazione, new.relazionato, new.datanascita, new.datacessazione, new.abilitatoweb)
         RETURNING zrelazionesoggetto.id, zrelazionesoggetto.soggetto,
             zrelazionesoggetto.relazione, zrelazionesoggetto.relazionato,
             zrelazionesoggetto.datanascita, zrelazionesoggetto.datacessazione, zrelazionesoggetto.abilitatoweb, FALSE;
 
-CREATE RULE relazionesoggetto_update AS ON UPDATE TO relazionesoggetto DO INSTEAD
-	UPDATE zrelazionesoggetto SET id = new.id, soggetto = new.soggetto,
-            relazione = new.relazione, relazionato = new.relazionato,
-            datanascita = new.datanascita, datacessazione = new.datacessazione, abilitatoweb = new.abilitatoweb 
-        WHERE ((zrelazionesoggetto.id)::integer = old.id);
+CREATE OR REPLACE RULE relazionesoggetto_update AS
+    ON UPDATE TO anagrafiche.relazionesoggetto DO INSTEAD nothing; 
+
+CREATE OR REPLACE RULE relazionesoggetto_update_dritta AS
+    ON UPDATE TO anagrafiche.relazionesoggetto WHERE new.invertita=false DO 
+    UPDATE anagrafiche.zrelazionesoggetto SET soggetto=new.soggetto, relazione=new.relazione, relazionato=new.relazionato, datanascita=new.datanascita, 	datacessazione=new.datacessazione, abilitatoweb=new.abilitatoweb
+    WHERE zrelazionesoggetto.id::integer = abs(old.id);
+
+CREATE OR REPLACE RULE relazionesoggetto_update_invertita AS
+    ON UPDATE TO anagrafiche.relazionesoggetto WHERE new.invertita DO 
+    UPDATE anagrafiche.zrelazionesoggetto SET soggetto=new.relazionato, relazione=new.relazione, relazionato=new.soggetto, datanascita=new.datanascita, 	datacessazione=new.datacessazione, abilitatoweb=new.abilitatoweb
+    WHERE zrelazionesoggetto.id::integer = abs(old.id);
+
 
 CREATE TABLE indirizzo (
     id bigserial NOT NULL,
@@ -399,8 +409,9 @@ SET search_path = finanziaria, pg_catalog;
 CREATE TABLE servizio (
     id bigserial NOT NULL,
     descrizione character varying(1024),
-    ufficio bigint
-) INHERITS (generale.withtimestamp);
+    ufficio bigint,
+    referentepolitico character varying(100)
+);
 ALTER TABLE finanziaria.servizio OWNER TO postgres;
 ALTER TABLE ONLY servizio
     ADD CONSTRAINT servizio_pkey PRIMARY KEY (id);
@@ -415,6 +426,7 @@ ALTER TABLE finanziaria.capitolo OWNER TO postgres;
 ALTER TABLE ONLY capitolo
     ADD CONSTRAINT capitolo_pkey PRIMARY KEY (id);
 
+
 -- Procedimenti
 SET search_path = procedimenti, pg_catalog;
 
@@ -425,7 +437,8 @@ CREATE TABLE procedimento (
     maxgiorniistruttoria integer,
     iniziativa character varying(20),
     soggetto bigint,
-    attivo boolean
+    attivo boolean,
+    tipodettaglio character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE procedimenti.procedimento OWNER TO postgres;
 ALTER TABLE ONLY procedimento
@@ -438,7 +451,7 @@ CREATE TABLE norma (
     tipo character varying(255),
     descrizione character varying(255),
     idobject character varying(255)
-) INHERITS (generale.withtimestamp);
+);
 ALTER TABLE procedimenti.norma OWNER TO postgres;
 ALTER TABLE ONLY norma
     ADD CONSTRAINT norma_pkey PRIMARY KEY (id);
@@ -455,6 +468,46 @@ ALTER TABLE ONLY normaprocedimento
     ADD CONSTRAINT fk_normaprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
 ALTER TABLE ONLY normaprocedimento
     ADD CONSTRAINT fk_normaprocedimento_norma FOREIGN KEY (norma) REFERENCES norma(id);
+
+CREATE TABLE pratiche.fase (
+  id bigserial NOT NULL,
+  descrizione character varying(255) NOT NULL,
+  esclusivadaufficio bigint,
+  istruttoria boolean
+);
+ALTER TABLE pratiche.fase OWNER TO postgres;
+ALTER TABLE ONLY pratiche.fase
+ADD CONSTRAINT fase_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY pratiche.fase
+ADD CONSTRAINT fk_fase_ufficio FOREIGN KEY (esclusivadaufficio) REFERENCES base.ufficio(id);
+
+CREATE TABLE faseprocedimento (
+  id bigserial NOT NULL,
+  procedimento bigint,
+  fase bigint,
+  testo character varying(512),
+  progressivo integer,
+  confermabile boolean default false,
+  confermata bigint,
+  testoconfermata character varying(512),
+  rifiutabile boolean default false,
+  rifiutata bigint,
+  testorifiutata character varying(512),
+  condizione text,
+  azione text,
+  usoresponsabile boolean default false
+) INHERITS (generale.withtimestamp);
+ALTER TABLE procedimenti.faseprocedimento OWNER TO postgres;
+ALTER TABLE ONLY faseprocedimento
+ADD CONSTRAINT faseprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY faseprocedimento
+ADD CONSTRAINT fk_faseprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY faseprocedimento
+ADD CONSTRAINT fk_faseprocedimento_fase FOREIGN KEY (fase) REFERENCES pratiche.fase(id);
+ALTER TABLE ONLY faseprocedimento
+ADD CONSTRAINT fk_faseprocedimento_confermata FOREIGN KEY (confermata) REFERENCES procedimenti.faseprocedimento(id);
+ALTER TABLE ONLY faseprocedimento
+ADD CONSTRAINT fk_faseprocedimento_rifiutata FOREIGN KEY (rifiutata) REFERENCES procedimenti.faseprocedimento(id);
 
 CREATE TABLE ufficioprocedimento (
     id bigserial NOT NULL,
@@ -506,7 +559,6 @@ CREATE TABLE pratiche.tipopratica (
     codice character varying(10),
     descrizione character varying(255),
     tipopadre bigint,
-    procedimento bigint,
     formulacodifica character varying(255),
     lunghezzaprogressivo integer,
     progressivoanno boolean NOT NULL DEFAULT false,
@@ -521,8 +573,6 @@ ALTER TABLE ONLY pratiche.tipopratica
     ADD CONSTRAINT tipopratica_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY pratiche.tipopratica
     ADD CONSTRAINT fk_tipopratica_tipopadre FOREIGN KEY (tipopadre) REFERENCES pratiche.tipopratica(id);
-ALTER TABLE ONLY pratiche.tipopratica
-    ADD CONSTRAINT fk_tipopratica_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
 ALTER TABLE ONLY pratiche.tipopratica
     ADD CONSTRAINT fk_tipopratica_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
 
@@ -543,7 +593,7 @@ CREATE TABLE carica (
     id bigserial NOT NULL,
     descrizione character varying(1024),
     codicecarica character varying(255)
-) INHERITS (generale.withtimestamp);
+);
 ALTER TABLE procedimenti.carica OWNER TO postgres;
 ALTER TABLE ONLY carica
     ADD CONSTRAINT carica_pkey PRIMARY KEY (id);
@@ -562,7 +612,6 @@ CREATE TABLE delega (
     delegato boolean NOT NULL DEFAULT FALSE,
     suassenza boolean NOT NULL DEFAULT FALSE,
     delegante bigint
-
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE procedimenti.delega OWNER TO postgres;
 ALTER TABLE ONLY delega
@@ -583,18 +632,6 @@ ALTER TABLE ONLY delega
 
 -- Pratiche
 SET search_path = pratiche, pg_catalog;
-
-CREATE TABLE fase (
-    id bigserial NOT NULL,
-    descrizione character varying(255) NOT NULL,
-    esclusivadaufficio bigint,
-    istruttoria boolean
-);
-ALTER TABLE pratiche.fase OWNER TO postgres;
-ALTER TABLE ONLY fase
-    ADD CONSTRAINT fase_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY fase
-    ADD CONSTRAINT fk_fase_ufficio FOREIGN KEY (esclusivadaufficio) REFERENCES base.ufficio(id);
 
 CREATE TABLE pratica (
     id bigserial NOT NULL,
@@ -692,18 +729,56 @@ CREATE VIEW dipendenzapratica AS
 
 CREATE RULE dipendenzapratica_delete AS ON DELETE TO dipendenzapratica DO INSTEAD
 	DELETE FROM zdipendenzapratica
-	WHERE ((zdipendenzapratica.id)::integer = old.id);
+	WHERE zdipendenzapratica.id::integer = abs(old.id);
 
 CREATE RULE dipendenzapratica_insert AS ON INSERT TO dipendenzapratica DO INSTEAD
-	INSERT INTO zdipendenzapratica (id, praticadominante, dipendenza, praticadipendente)
-            VALUES (new.id, new.praticadominante, new.dipendenza, new.praticadipendente)
+	INSERT INTO zdipendenzapratica (praticadominante, dipendenza, praticadipendente)
+            VALUES (new.praticadominante, new.dipendenza, new.praticadipendente)
         RETURNING zdipendenzapratica.id, zdipendenzapratica.praticadominante,
             zdipendenzapratica.dipendenza, zdipendenzapratica.praticadipendente, FALSE;
 
-CREATE RULE dipendenzapratica_update AS ON UPDATE TO dipendenzapratica DO INSTEAD
-	UPDATE zdipendenzapratica SET id = new.id, praticadominante = new.praticadominante,
-            dipendenza = new.dipendenza, praticadipendente = new.praticadipendente
-        WHERE ((zdipendenzapratica.id)::integer = old.id);
+CREATE OR REPLACE RULE dipendenzapratica_update AS
+    ON UPDATE TO pratiche.dipendenzapratica DO INSTEAD nothing;
+
+CREATE OR REPLACE RULE dipendenzapratica_update_dritta AS
+    ON UPDATE TO pratiche.dipendenzapratica WHERE new.invertita=false DO 
+    UPDATE pratiche.zdipendenzapratica SET praticadominante = new.praticadominante, dipendenza = new.dipendenza, praticadipendente = new.praticadipendente
+	WHERE zdipendenzapratica.id::integer = abs(old.id);
+
+CREATE OR REPLACE RULE dipendenzapratica_update_invertita AS
+    ON UPDATE TO pratiche.dipendenzapratica WHERE new.invertita DO 
+    UPDATE pratiche.zdipendenzapratica SET praticadominante = new.praticadipendente, dipendenza = new.dipendenza, praticadipendente = new.praticadominante
+	WHERE zdipendenzapratica.id::integer = abs(old.id);
+
+
+CREATE TABLE fasepratica (
+  id bigserial NOT NULL,
+  pratica bigint,
+  fase bigint,
+  testo character varying(512),
+  progressivo integer,
+  confermabile boolean default false,
+  confermata bigint,
+  testoconfermata character varying(512),
+  rifiutabile boolean default false,
+  rifiutata bigint,
+  testorifiutata character varying(512),
+  condizione text,
+  azione text,
+  completata boolean default false,
+  usoresponsabile boolean default false
+) INHERITS (generale.withtimestamp);
+ALTER TABLE pratiche.fasepratica OWNER TO postgres;
+ALTER TABLE ONLY fasepratica
+ADD CONSTRAINT fasepratica_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY fasepratica
+ADD CONSTRAINT fk_fasepratica_pratica FOREIGN KEY (pratica) REFERENCES pratiche.pratica(id);
+ALTER TABLE ONLY fasepratica
+ADD CONSTRAINT fk_fasepratica_fase FOREIGN KEY (fase) REFERENCES pratiche.fase(id);
+ALTER TABLE ONLY fasepratica
+ADD CONSTRAINT fk_fasepratica_confermata FOREIGN KEY (confermata) REFERENCES pratiche.fasepratica(id);
+ALTER TABLE ONLY fasepratica
+ADD CONSTRAINT fk_fasepratica_rifiutata FOREIGN KEY (rifiutata) REFERENCES pratiche.fasepratica(id);
 
 
 -- Protocollo
@@ -980,11 +1055,23 @@ CREATE TABLE pubblicazione (
     richiedente character varying(255),
     inizioconsultazione date,
     fineconsultazione date,
+    durataconsultazione integer,
+    tipoattopubblicazione bigint NOT NULL,
     pubblicato boolean
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE pubblicazioni.pubblicazione OWNER TO postgres;
 ALTER TABLE ONLY pubblicazione
     ADD CONSTRAINT pubblicazione_pkey PRIMARY KEY (id);
+
+
+CREATE TABLE tipoattopubblicazione (
+  id bigserial NOT NULL,
+  chiave character varying(255),
+  descrizione character varying(255)
+);
+ALTER TABLE pubblicazioni.tipoattopubblicazione OWNER TO postgres;
+ALTER TABLE ONLY tipoattopubblicazione
+ADD CONSTRAINT tipoattopubblicazione_pkey PRIMARY KEY (id);
 
 
 -- Sedute
@@ -1051,7 +1138,6 @@ CREATE TABLE determina (
     idpratica character varying(10),
     codiceinterno character varying(50),
     oggetto character varying(1024),
-    datapratica date,
     dientrata boolean NOT NULL DEFAULT FALSE,
     dispesa boolean NOT NULL DEFAULT FALSE,
     diregolarizzazione boolean NOT NULL DEFAULT FALSE,
@@ -1079,22 +1165,31 @@ CREATE TABLE determina (
     segretariovistonegato boolean NOT NULL DEFAULT FALSE,
     delegatovistonegato boolean NOT NULL DEFAULT FALSE,
     utentevistonegato bigint,
-    iddocumento character varying(12)
+    protocollo character varying(12)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.determina OWNER TO postgres;
 ALTER TABLE ONLY determina
     ADD CONSTRAINT determina_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY determina
+    ADD CONSTRAINT determina_idpratica_key UNIQUE (idpratica);
+ALTER TABLE ONLY determina
+    ADD CONSTRAINT fk_determina_pratica FOREIGN KEY (idpratica) REFERENCES pratiche.pratica(idpratica);
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistoresponsabile FOREIGN KEY (utentevistoresponsabile) REFERENCES base.utente(id);
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistobilancio FOREIGN KEY (utentevistobilancio) REFERENCES base.utente(id);
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_utentevistonegato FOREIGN KEY (utentevistonegato) REFERENCES base.utente(id);
+ALTER TABLE ONLY determina
+ADD CONSTRAINT fk_determina_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
+
 
 CREATE TABLE serviziodetermina (
     id bigserial NOT NULL,
     determina bigint,
-    servizio bigint
+    idpratica character varying(10),
+    servizio bigint NOT NULL,
+    principale boolean NOT NULL DEFAULT false
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.serviziodetermina OWNER TO postgres;
 ALTER TABLE ONLY serviziodetermina
@@ -1107,7 +1202,9 @@ ALTER TABLE ONLY serviziodetermina
 CREATE TABLE ufficiodetermina (
     id bigserial NOT NULL,
     determina bigint,
-    ufficio bigint
+    idpratica character varying(10),
+    ufficio bigint NOT NULL,
+    principale boolean NOT NULL DEFAULT false
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.ufficiodetermina OWNER TO postgres;
 ALTER TABLE ONLY ufficiodetermina
@@ -1128,6 +1225,7 @@ CREATE TABLE movimentodetermina (
     descrizioneimpegno character varying(255),
     annoimpegno bigint,
     importo numeric(15,2),
+    importoimpegnoaccertamento numeric(15,2),
     tipomovimento character varying(255),
     annoesercizio bigint
 ) INHERITS (generale.withtimestamp);
@@ -1147,11 +1245,15 @@ CREATE TABLE modello (
   id bigserial NOT NULL,
   titolo character varying(255),
   descrizione character varying(1024),
-  uri character varying(2048)
+  uri character varying(2048),
+  modellopadre bigint,
+  protocollabile boolean NOT NULL DEFAULT false
 );
 ALTER TABLE modelli.modello OWNER TO postgres;
 ALTER TABLE ONLY modello
 ADD CONSTRAINT modello_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY modello
+ADD CONSTRAINT fk_modello_modellopadre FOREIGN KEY (modellopadre) REFERENCES modelli.modello(id);
 
 CREATE TABLE tipopraticamodello (
   id bigserial not null,
@@ -1159,6 +1261,8 @@ CREATE TABLE tipopraticamodello (
   modello bigint
 );
 ALTER TABLE modelli.tipopraticamodello OWNER TO postgres;
+ALTER TABLE ONLY tipopraticamodello
+ADD CONSTRAINT tipopraticamodello_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY tipopraticamodello
 ADD CONSTRAINT fk_tipopraticamodello_tipopratica FOREIGN KEY (tipopratica) REFERENCES pratiche.tipopratica(id);
 ALTER TABLE ONLY tipopraticamodello
@@ -1171,6 +1275,8 @@ CREATE TABLE procedimentomodello (
 );
 ALTER TABLE modelli.procedimentomodello OWNER TO postgres;
 ALTER TABLE ONLY procedimentomodello
+ADD CONSTRAINT procedimentomodello_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY procedimentomodello
 ADD CONSTRAINT fk_procedimentomodello_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
 ALTER TABLE ONLY procedimentomodello
 ADD CONSTRAINT fk_procedimentomodello_modello FOREIGN KEY (modello) REFERENCES modelli.modello(id);
@@ -1178,13 +1284,116 @@ ADD CONSTRAINT fk_procedimentomodello_modello FOREIGN KEY (modello) REFERENCES m
 CREATE TABLE segnalibro (
   id bigserial not null,
   segnalibro character varying(255),
-  codice character varying(4096),
+  codice text,
   modello bigint,
   layout character varying(32)
 );
 ALTER TABLE modelli.segnalibro OWNER TO postgres;
 ALTER TABLE ONLY segnalibro
+ADD CONSTRAINT segnalibro_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY segnalibro
 ADD CONSTRAINT fk_segnalibro_modello FOREIGN KEY (modello) REFERENCES modelli.modello(id);
+
+
+-- messaggi
+SET search_path = richieste, pg_catalog;
+
+CREATE TABLE richieste.richiesta
+(
+  id bigserial NOT NULL,
+  data timestamp NOT NULL DEFAULT now(),
+  testo character varying NOT NULL,
+  mittente bigint NOT NULL,
+  cancellabile boolean NOT NULL DEFAULT true,
+  datascadenza timestamp,
+  giornipreavviso int,
+  richiestaprecedente bigint,
+  relazione integer,
+  richiestaautomatica boolean NOT NULL DEFAULT true,
+  fase integer,
+  CONSTRAINT richiesta_pkey PRIMARY KEY (id)
+) INHERITS (generale.withtimestamp);
+ALTER TABLE richieste.richiesta
+  OWNER TO postgres;
+ALTER TABLE ONLY richieste.richiesta
+    ADD CONSTRAINT fk_richiesta_richiestaprecedente FOREIGN KEY (richiestaprecedente) REFERENCES richieste.richiesta(id);
+ALTER TABLE ONLY richieste.richiesta
+    ADD CONSTRAINT fk_richiesta_mittente FOREIGN KEY (mittente) REFERENCES base.utente(id);
+
+CREATE TABLE richieste.destinatarioutente
+(
+  id bigserial NOT NULL,
+  richiesta bigint NOT NULL,
+  destinatario bigint NOT NULL,
+  conoscenza boolean NOT NULL DEFAULT false,
+  letto boolean NOT NULL DEFAULT false,
+  dataletto timestamp without time zone,
+  esecutoreletto character varying(40),
+  richiestacancellabile boolean NOT NULL,
+  CONSTRAINT destinatarioutente_pkey PRIMARY KEY (id)
+);
+ALTER TABLE richieste.destinatarioutente
+  OWNER TO postgres;
+ALTER TABLE ONLY richieste.destinatarioutente
+    ADD CONSTRAINT fk_destinatarioutente_richiesta FOREIGN KEY (richiesta) REFERENCES richieste.richiesta(id);
+ALTER TABLE ONLY richieste.destinatarioutente
+    ADD CONSTRAINT fk_destinatarioutente_destinatario FOREIGN KEY (destinatario) REFERENCES base.utente(id);
+
+CREATE TABLE richieste.destinatarioufficio
+(
+  id bigserial NOT NULL,
+  richiesta bigint NOT NULL,
+  destinatario bigint NOT NULL,
+  assegnatario bigint NOT NULL,
+  conoscenza boolean NOT NULL DEFAULT false,
+  letto boolean NOT NULL DEFAULT false,
+  dataletto timestamp without time zone,
+  esecutoreletto character varying(40),
+  richiestacancellabile boolean NOT NULL,
+  CONSTRAINT destinatarioufficio_pkey PRIMARY KEY (id)
+);
+ALTER TABLE richieste.destinatarioufficio
+  OWNER TO postgres;
+ALTER TABLE ONLY richieste.destinatarioufficio
+    ADD CONSTRAINT fk_destinatarioufficio_richiesta FOREIGN KEY (richiesta) REFERENCES richieste.richiesta(id);
+ALTER TABLE ONLY richieste.destinatarioufficio
+    ADD CONSTRAINT fk_destinatarioufficio_destinatario FOREIGN KEY (destinatario) REFERENCES base.ufficio(id);
+ALTER TABLE ONLY richieste.destinatarioufficio
+    ADD CONSTRAINT fk_destinatarioufficio_assegnatario FOREIGN KEY (assegnatario) REFERENCES base.utente(id);
+
+/*
+CREATE TABLE messaggi.allegato
+(
+  id bigserial NOT NULL,
+  messaggio bigint NOT NULL,
+  titolo character varying NOT NULL,
+  percorso character varying NOT NULL,
+  estensione character varying(10) NOT NULL,
+  CONSTRAINT allegato_pkey PRIMARY KEY (id)
+);
+ALTER TABLE messaggi.allegato
+  OWNER TO postgres;
+ALTER TABLE ONLY messaggi.allegato
+    ADD CONSTRAINT fk_allegato_messaggio FOREIGN KEY (messaggio) REFERENCES messaggi.messaggio(id);
+*/
+
+CREATE TABLE richieste.richiestaprotocollo
+(
+  id bigserial NOT NULL,
+  richiesta bigint NOT NULL,
+  protocollo character varying(12) NOT NULL,
+  oggetto bigint,
+  CONSTRAINT richiestaprotocollo_pkey PRIMARY KEY (id)
+);
+ALTER TABLE richieste.richiestaprotocollo
+  OWNER TO postgres;
+ALTER TABLE ONLY richieste.richiestaprotocollo
+    ADD CONSTRAINT fk_richiestaprotocollo_richiesta FOREIGN KEY (richiesta) REFERENCES richieste.richiesta(id);
+ALTER TABLE ONLY richieste.richiestaprotocollo
+    ADD CONSTRAINT fk_richiestaprotocollo_oggetto FOREIGN KEY (oggetto) REFERENCES protocollo.oggetto(id);
+ALTER TABLE ONLY richieste.richiestaprotocollo
+    ADD CONSTRAINT fk_richiestaprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
+
 
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;

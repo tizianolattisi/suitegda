@@ -20,7 +20,12 @@ import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.ui.IForm;
+import com.axiastudio.pypapi.ui.Util;
+import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.base.Login;
+import com.axiastudio.suite.richieste.entities.Richiesta;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,7 +84,11 @@ public class Suite {
         // percorsi Alfresco
         app.setConfigItem("alfrescopath.protocollo", "/Protocollo");
         app.setConfigItem("alfrescopath.pratica", "/Pratiche");
+        app.setConfigItem("alfrescopath.richiesta", "/Richieste");
         app.setConfigItem("alfrescopath.pubblicazione", "/Pubblicazioni");
+
+        // stringa di connessione per OpenOffice (./soffice "-accept=socket,host=localhost,port=8100;urp;")
+        app.setConfigItem("ooops.connection", "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
 
         Configure.configure(db, System.getProperties());
 
@@ -93,10 +102,13 @@ public class Suite {
             mdi.setWindowTitle("PyPaPi Suite PA");
             //mdi.showMaximized();
             mdi.show();
-            
+
+            //Window window = Util.formFromName(Richiesta.class.getName());
+            //window.show();
+
             app.setCustomApplicationName("PyPaPi Suite");
             app.setCustomApplicationCredits("Copyright AXIA Studio 2013<br/>");
-            app.exec();
+            res = app.exec();
         }
         
         System.exit(res);

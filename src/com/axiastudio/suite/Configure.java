@@ -21,8 +21,10 @@ import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.suite.deliberedetermine.DeterminaCallbacks;
 import com.axiastudio.suite.modelli.entities.Modello;
 import com.axiastudio.suite.modelli.entities.Segnalibro;
+import com.axiastudio.suite.modelli.forms.FormModello;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
@@ -71,11 +73,9 @@ import com.axiastudio.suite.pratiche.forms.FormDipendenzaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.procedimenti.entities.Carica;
-import com.axiastudio.suite.procedimenti.entities.Delega;
-import com.axiastudio.suite.procedimenti.entities.Norma;
-import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.procedimenti.entities.*;
 import com.axiastudio.suite.procedimenti.forms.FormDelega;
+import com.axiastudio.suite.procedimenti.forms.FormFaseProcedimento;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.ProtocolloPrivate;
@@ -92,8 +92,14 @@ import com.axiastudio.suite.protocollo.forms.FormAnnullamentoProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
+import com.axiastudio.suite.protocollo.forms.FormPraticaProtocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
+import com.axiastudio.suite.pubblicazioni.entities.TipoAttoPubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
+import com.axiastudio.suite.richieste.RichiestaCallbacks;
+import com.axiastudio.suite.richieste.entities.DestinatarioUfficio;
+import com.axiastudio.suite.richieste.entities.Richiesta;
+import com.axiastudio.suite.richieste.forms.FormRichiesta;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
@@ -138,6 +144,8 @@ public class Configure {
     private static void callbacks() {
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacks.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(RichiestaCallbacks.class));
     }
 
     private static void privates() {
@@ -155,7 +163,9 @@ public class Configure {
         Application app = Application.getApplicationInstance();
         String alfrescoPathProtocollo = (String) app.getConfigItem("alfrescopath.protocollo");
         String alfrescoPathPratica = (String) app.getConfigItem("alfrescopath.pratica");
+        String alfrescoPathRichiesta = (String) app.getConfigItem("alfrescopath.richiesta");
         String alfrescoPathPubblicazione = (String) app.getConfigItem("alfrescopath.pubblicazione");
+        String ooopsConnString = (String) app.getConfigItem("ooops.connection");
 
         CmisPlugin cmisPlugin = new CmisPlugin();
         String templateCmisProtocollo = alfrescoPathProtocollo + "/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
@@ -163,24 +173,32 @@ public class Configure {
                 templateCmisProtocollo,
                 Boolean.FALSE);
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
+        Register.registerPlugin(cmisPlugin, Protocollo.class);
         Register.registerPlugin(cmisPlugin, FormScrivania.class);
 
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
         cmisPluginPubblicazioni.setup(cmisUrl, cmisUser, cmisPassword,
                 alfrescoPathPubblicazione + "/${inizioconsultazione,date,yyyy}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
+        Register.registerPlugin(cmisPluginPubblicazioni, Pubblicazione.class);
 
         CmisPlugin cmisPluginPratica = new CmisPlugin();
         cmisPluginPratica.setup(cmisUrl, cmisUser, cmisPassword,
                 alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/");
         Register.registerPlugin(cmisPluginPratica, FormPratica.class);
+        Register.registerPlugin(cmisPluginPratica, FormDetermina.class);
 
+        CmisPlugin cmisPluginRichiesta = new CmisPlugin();
+        cmisPluginRichiesta.setup(cmisUrl, cmisUser, cmisPassword,
+                alfrescoPathRichiesta + "/${data,date,yyyy}/${data,date,MM}/${id}/");
+        Register.registerPlugin(cmisPluginRichiesta, FormRichiesta.class);
 
         /* OOOPS (OpenOffice) */
 
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
-        ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+        ooopsPlugin.setup(ooopsConnString);
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
+        Register.registerPlugin(ooopsPlugin, FormDetermina.class);
 
     }
 
@@ -194,18 +212,26 @@ public class Configure {
         OoopsPlugin ooopsPlugin = (OoopsPlugin) Register.queryPlugin(FormPratica.class, "Ooops");
         List<Modello> modelli = SuiteUtil.elencoModelli();
         for( Modello modello: modelli ){
-            HashMap<String,String> map = new HashMap();
+            HashMap<String,String> map = new HashMap<String, String>();
+            Modello modellopadre = modello.getModellopadre();
+            if( modellopadre != null ){
+                for( Segnalibro segnalibro: modellopadre.getSegnalibroCollection() ){
+                    map.put(segnalibro.getSegnalibro(), segnalibro.getCodice());
+                }
+            }
             for( Segnalibro segnalibro: modello.getSegnalibroCollection() ){
                 map.put(segnalibro.getSegnalibro(), segnalibro.getCodice());
             }
             RuleSet ruleSet = new RuleSet(map);
             IStreamProvider streamProvider = null;
-            if( modello.getUri().startsWith("workspace:") ){
+            if( modello.getUri() != null && modello.getUri().startsWith("workspace:") ){
                 streamProvider = new CmisStreamProvider(cmisUrl, cmisUser, cmisPassword, modello.getUri());
             } else {
                 streamProvider = new FileStreamProvider(modello.getUri());
             }
-            Template template = new Template(streamProvider, modello.getTitolo(), modello.getDescrizione(), ruleSet);
+            Template template = new Template(streamProvider, modello.getTitolo(), modello.getDescrizione(), null, ruleSet);
+            // Uso UserData per indicare se un modello è protocollabile
+            template.setUserData(modello.getProtocollabile());
             ooopsPlugin.addTemplate(template);
         }
     }
@@ -342,7 +368,7 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/praticaprotocollo.ui",
                               PraticaProtocollo.class,
-                              Dialog.class);
+                              FormPraticaProtocollo.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/protocollo.ui",
@@ -358,6 +384,11 @@ public class Configure {
                               "classpath:com/axiastudio/suite/pubblicazioni/forms/pubblicazione.ui",
                               Pubblicazione.class,
                               FormPubblicazione.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                null,
+                TipoAttoPubblicazione.class,
+                Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
@@ -415,6 +446,11 @@ public class Configure {
                               Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/procedimenti/forms/faseprocedimento.ui",
+                FaseProcedimento.class,
+                FormFaseProcedimento.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
                               Delega.class,
                               FormDelega.class);
@@ -437,12 +473,22 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                 "classpath:com/axiastudio/suite/modelli/forms/modello.ui",
                 Modello.class,
-                Window.class);
+                FormModello.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                 "classpath:com/axiastudio/suite/modelli/forms/segnalibro.ui",
                 Segnalibro.class,
                 Dialog.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/richieste/forms/richiesta.ui",
+                Richiesta.class,
+                FormRichiesta.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                null,
+                DestinatarioUfficio.class,
+                Window.class);
 
     }
     

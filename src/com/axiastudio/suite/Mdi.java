@@ -188,7 +188,8 @@ public class Mdi extends QMainWindow {
         itemEmail.setText(0, "Posta elettronica");
         itemEmail.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemEmail.setText(1, "EMAIL");
-        
+        itemEmail.setDisabled(true);
+
         /* Anagrafiche */
         QTreeWidgetItem itemAnagrafiche = new QTreeWidgetItem(this.tree);
         itemAnagrafiche.setText(0, "Anagrafiche");
@@ -233,6 +234,19 @@ public class Mdi extends QMainWindow {
         itemTipiPratica.setText(0, "Struttura tipi di pratica");
         itemTipiPratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemTipiPratica.setText(1, "TIPIPRATICA");
+
+        /* Richieste */
+        QTreeWidgetItem itemRichiesteRoot = new QTreeWidgetItem(this.tree);
+        itemRichiesteRoot.setText(0, "Richieste...");
+        this.tree.addTopLevelItem(itemRichiesteRoot);
+        itemRichiesteRoot.setDisabled(true);
+        //itemRichiesteRoot.setDisabled(!autenticato.getOperatorepratiche());
+
+        QTreeWidgetItem itemRichieste = new QTreeWidgetItem(itemRichiesteRoot);
+        itemRichieste.setText(0, "Richieste");
+        itemRichieste.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+        itemRichieste.setText(1, "com.axiastudio.suite.richieste.entities.Richiesta");
+        itemRichieste.setText(2, "NEW");
 
         /* Delibere e determine */
         QTreeWidgetItem itemDelibereDetermineRoot = new QTreeWidgetItem(this.tree);
@@ -364,6 +378,10 @@ public class Mdi extends QMainWindow {
     
     private void runTask() {
         String formName = this.tree.currentItem().text(1);
+        if (formName == null || formName.equals("")) {
+            return;  // item di raggruppamento
+        }
+
         String mode = this.tree.currentItem().text(2);
         /* cambio password */
         if( "NEW".equals(formName) ){

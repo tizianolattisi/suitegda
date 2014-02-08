@@ -16,6 +16,7 @@
     <class>com.axiastudio.suite.base.entities.Utente</class>
     <class>com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo</class>
     <class>com.axiastudio.suite.procedimenti.entities.Procedimento</class>
+    <class>com.axiastudio.suite.pubblicazioni.entities.TipoAttoPubblicazione</class>
     <class>com.axiastudio.suite.pubblicazioni.entities.Pubblicazione</class>
     <class>com.axiastudio.suite.sedute.entities.Seduta</class>
     <class>com.axiastudio.suite.sedute.entities.CaricaCommissione</class>
@@ -31,6 +32,7 @@
     <class>com.axiastudio.suite.procedimenti.entities.TipoNorma</class>
     <class>com.axiastudio.suite.procedimenti.entities.Norma</class>
     <class>com.axiastudio.suite.procedimenti.entities.NormaProcedimento</class>
+    <class>com.axiastudio.suite.procedimenti.entities.FaseProcedimento</class>
     <class>com.axiastudio.suite.procedimenti.entities.UfficioProcedimento</class>
     <class>com.axiastudio.suite.procedimenti.entities.UtenteProcedimento</class>
     <class>com.axiastudio.suite.pratiche.entities.TipoPratica</class>
@@ -49,6 +51,7 @@
     <class>com.axiastudio.suite.protocollo.entities.Oggetto</class>
     <class>com.axiastudio.suite.pratiche.entities.Dipendenza</class>
     <class>com.axiastudio.suite.pratiche.entities.DipendenzaPratica</class>
+    <class>com.axiastudio.suite.pratiche.entities.FasePratica</class>
     <class>com.axiastudio.suite.anagrafiche.entities.TitoloSoggetto</class>
     <class>com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo</class>
     <class>com.axiastudio.suite.protocollo.entities.MotivazioneAnnullamento</class>
@@ -63,6 +66,9 @@
     <class>com.axiastudio.suite.modelli.entities.ProcedimentoModello</class>
     <class>com.axiastudio.suite.modelli.entities.Segnalibro</class>
     <class>com.axiastudio.suite.protocollo.entities.Mailbox</class>
+    <class>com.axiastudio.suite.richieste.entities.Richiesta</class>
+    <class>com.axiastudio.suite.richieste.entities.DestinatarioUfficio</class>
+    <class>com.axiastudio.suite.richieste.entities.DestinatarioUtente</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>
