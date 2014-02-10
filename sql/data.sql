@@ -88,7 +88,12 @@ SELECT setval('anagrafiche.titolosoggetto_id_seq', 5, true);
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (1, NULL, 'Lattisi', NULL, NULL, 'Tiziano', NULL, 'M', 'PERSONA', NULL);
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (2, NULL, NULL, NULL, NULL, NULL, 'AXIA STUDIO', NULL, 'AZIENDA', NULL);
 INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (3, NULL, NULL, 'COMUNE DI RIVA DEL GARDA', NULL, NULL, NULL, NULL, 'ENTE', NULL);
-SELECT setval('anagrafiche.soggetto_id_seq', 4, true);
+INSERT INTO soggetto (id, codicefiscale, cognome, denominazione, denominazione2, denominazione3, nick, nome, ragionesociale, sessosoggetto, tipo, titolosoggetto) VALUES (4, NULL, NULL, 'Provincia Autonoma di Trento', 'Direzione Generale della Provincia', 'Servizio supporto amministrativo e informatica', NULL, NULL, NULL, NULL, 'ENTE', NULL);
+SELECT setval('anagrafiche.soggetto_id_seq', 5, true);
+
+-- Riferimenti
+INSERT INTO riferimento (id, descrizione, riferimento, soggetto, tipo) VALUES (1, 'Posta certificata', 'serv.supportoeinformatica@pec.provincia.tn.it', 4, 'PEC');
+SELECT setval('anagrafiche.riferimento_id_seq', 2, true);
 
 -- Le relazioni "demo" vengono inserite direttamente nella tabella reale
 INSERT INTO relazionesoggetto (id, soggetto, relazione, relazionato) VALUES (1, 1, 1, 2);
