@@ -20,6 +20,9 @@ import com.axiastudio.suite.protocollo.entities.Mailbox;
 import com.sun.mail.imap.IMAPFolder;
 
 import javax.mail.*;
+import javax.mail.internet.MimeMultipart;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -98,6 +101,43 @@ public class EmailHelper {
             return folder;
         }
         return null;
+    }
+
+    public EMail getEmail(Integer number){
+        EMail email=null;
+        Message msg = getMessage(number);
+        if( msg != null ){
+            email = new EMail();
+        }
+        try {
+            Object content = msg.getContent();
+            if( content instanceof Multipart ){
+                Multipart mp = (Multipart) content;
+                for( int i=0; i<mp.getCount(); i++ ) {
+                    BodyPart part = mp.getBodyPart(i);
+                    if( part.getContent() instanceof MimeMultipart){
+                        // attachments
+                        MimeMultipart mmp = (MimeMultipart) part.getContent();
+                        for( int j=0; j<mmp.getCount(); j++ ){
+                            BodyPart bodyPart = mmp.getBodyPart(j);
+                            if( bodyPart.getFileName() != null ){
+                                InputStream stream = (InputStream) bodyPart.getContent();
+                                email.putStream(bodyPart.getFileName(), stream);
+                            }
+                        }
+
+                    } else {
+                        // body
+                        email.setBody(part.getContent().toString());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return email;
     }
 
     public Message getMessage(Integer number){
