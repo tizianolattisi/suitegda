@@ -126,6 +126,8 @@ public class FormMailbox extends QDialog {
                         }
                     }
                 }
+            } else if( content instanceof String){
+                // TODO: non c'è multipart
             }
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
