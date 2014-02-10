@@ -1,17 +1,15 @@
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.suite.email.EMail;
 import com.axiastudio.suite.email.EmailHelper;
+import com.axiastudio.suite.interoperabilita.Segnatura;
 import com.axiastudio.suite.protocollo.entities.Mailbox;
-import com.sun.mail.util.BASE64DecoderStream;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
+import org.apache.bsf.util.IOUtils;
 
 import javax.mail.*;
-import javax.mail.internet.MimeMultipart;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +66,9 @@ public class FormMailbox extends QDialog {
         Folder folder = helper.getFolder();
         Integer i = 0;
         try {
-            Message[] messages = folder.getMessages(1, 7);
+            int messageCount = folder.getMessageCount();
+
+            Message[] messages = folder.getMessages(messageCount-8, messageCount);
             for( Message msg: messages ){
                 tableWidget.insertRow(i);
                 QTableWidgetItem itemDate = new QTableWidgetItem(msg.getReceivedDate().toString());
@@ -96,46 +96,27 @@ public class FormMailbox extends QDialog {
         QTableWidgetItem item = tableWidget.item(tableWidget.currentRow(), 0);
         Integer number = (Integer) item.data(Qt.ItemDataRole.UserRole);
         EmailHelper helper = new EmailHelper(this.mailbox);
+
+        helper.open();
+        EMail email = helper.getEmail(number);
+
+        System.out.println(email.getBody());
+        InputStream stream = email.getStream("Segnatura.xml");
+        BufferedReader reader = new BufferedReader(new InputStreamReader( stream ));
+        String line = "";
+        String xml = "";
         try {
-            helper.open();
-            Message msg = helper.getMessage(number);
-            Object content = msg.getContent();
-            if( content instanceof Multipart ){
-                Multipart mp = (Multipart) content;
-                for( int i=0; i<mp.getCount(); i++ ) {
-                    BodyPart part = mp.getBodyPart(i);
-                    String contentType = part.getContentType();
-                    String fileName = part.getFileName();
-                    System.out.println("\n\n" + fileName + " - " + contentType);
-                    System.out.println(part.getContent());
-                    if( part.getContent() instanceof MimeMultipart ){
-                        MimeMultipart mmp = (MimeMultipart) part.getContent();
-                        for( int j=0; j<mmp.getCount(); j++ ){
-                            BodyPart bodyPart = mmp.getBodyPart(j);
-                            System.out.println(bodyPart);
-                            System.out.println(bodyPart.getFileName());
-                            System.out.println(bodyPart.getContent());
-                            if( bodyPart.getFileName() != null && bodyPart.getFileName().equals("daticert.xml") ){
-                                BASE64DecoderStream stream = (BASE64DecoderStream) bodyPart.getContent();
-                                BufferedReader reader = new BufferedReader(new InputStreamReader( stream ));
-                                String line = "";
-                                while ( (line = reader.readLine()) != null ){
-                                    System.out.println(line);
-                                }
-                            }
-                        }
-                    }
-                }
-            } else if( content instanceof String){
-                // TODO: non c'è multipart
-            }
+            xml = IOUtils.getStringFromReader(reader);
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (MessagingException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } finally {
-            helper.close();
+            e.printStackTrace();
         }
+
+        helper.close();
+
+        Segnatura segnatura = new Segnatura(xml);
+
+        System.out.println(segnatura.getIndirizzoTelematico());
+
     }
 
 }

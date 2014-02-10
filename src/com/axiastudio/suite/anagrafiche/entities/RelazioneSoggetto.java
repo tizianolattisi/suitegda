@@ -28,6 +28,12 @@ import javax.persistence.*;
 @Entity
 @Table(schema="ANAGRAFICHE")
 @SequenceGenerator(name="genrelazionesoggetto", sequenceName="anagrafiche.relazionesoggetto_id_seq", initialValue=1, allocationSize=1)
+@NamedQuery(name="trovaReferenteSoggetto",
+        query = "SELECT rs FROM RelazioneSoggetto rs  "
+                + "WHERE rs.soggetto.id = :id AND " +
+                    "rs.soggetto.tipo!=:tipo AND rs.relazionato.tipo=:tipo AND " +
+                    "(rs.datanascita IS NULL OR rs.datanascita<=:data) AND "+
+                    "(rs.datacessazione IS NULL OR rs.datacessazione>=:data)")
 public class RelazioneSoggetto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

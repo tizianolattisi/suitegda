@@ -20,6 +20,8 @@ import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.generale.ITimeStamped;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.*;
@@ -414,6 +416,21 @@ public class Soggetto implements Serializable, ITimeStamped {
         // non deve fare nulla
     }
 
+    public String getCessazione() {
+
+        if ( this.getDatacessazione() == null ) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.applyPattern("dd/MM/yyyy");
+        return sdf.format(this.getDatacessazione());
+    }
+
+    public void setCessazione(String cessazione){
+        // non deve fare nulla
+    }
+
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -475,7 +492,7 @@ public class Soggetto implements Serializable, ITimeStamped {
         if( this.tipo == null ){
             return "-";
         }
-        String out = "(" + this.id + ") ";
+        String out = "(" + this.getTipo().toString().substring(0, 1) + "-" + this.id + ") ";
         if( this.tipo.equals(TipoSoggetto.PERSONA) ){
             return out + this.nome+" "+this.cognome;
         } else if( this.tipo.equals(TipoSoggetto.AZIENDA) ){

@@ -234,8 +234,10 @@ public class FormPratica extends Window implements IDocumentFolder {
         ((QComboBox) this.findChild(QComboBox.class, "comboBox_gestione")).setEnabled(nuovoInserimento || inUfficioGestore);
         ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_riservata")).setEnabled(nuovoInserimento || inUfficioGestore);
 
-//        Store store = storeFase();
-//        ((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_fase")).setLookupStore(store);
+        Store store = storeFase();
+        ((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_fase")).setLookupStore(store);
+        this.getColumn("Fase").setLookupStore(store);
+        ((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_fase")).select(pratica.getFase());
     }
     
     private void information() {

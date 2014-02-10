@@ -305,7 +305,7 @@ CREATE TABLE zrelazionesoggetto (
     relazionato bigint,
     datanascita date,
     datacessazione date,
-    abilitatoweb boolean
+    abilitatoweb boolean DEFAULT FALSE
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.zrelazionesoggetto OWNER TO postgres;
 ALTER TABLE ONLY zrelazionesoggetto
@@ -920,6 +920,8 @@ ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+ALTER TABLE ONLY soggettoprotocollo
+    ADD CONSTRAINT fk_soggettoprotocollo_referente FOREIGN KEY (soggettoreferente) REFERENCES anagrafiche.soggetto(id);
 ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_titolo FOREIGN KEY (titolo) REFERENCES titolo(id);
 

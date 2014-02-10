@@ -2,6 +2,8 @@ package com.axiastudio.suite.interoperabilita;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -72,8 +74,11 @@ public class Segnatura {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Element documentElement = document.getDocumentElement();
-        System.out.println(documentElement);
+        Element segnatura = document.getDocumentElement();
+        Element intestazione = getChildNodeByName(segnatura, "Intestazione");
+        Element origine = getChildNodeByName(intestazione, "Origine");
+
+        indirizzoTelematico = getChildNodeByName(origine, "IndirizzoTelematico").getTextContent();
 
     }
 
@@ -374,6 +379,15 @@ public class Segnatura {
 
         String xmlString = result.getWriter().toString();
         return xmlString;
+    }
+
+    public static Element getChildNodeByName(Element parent, String name)
+    {
+        for(Node child = parent.getFirstChild(); child != null; child = child.getNextSibling())
+        {
+            if(child instanceof Element && name.equals(child.getNodeName())) return (Element) child;
+        }
+        return null;
     }
 
     /* accessori e mutatori */

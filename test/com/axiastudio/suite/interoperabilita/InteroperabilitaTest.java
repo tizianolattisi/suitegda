@@ -136,6 +136,8 @@ public class InteroperabilitaTest {
 
         Segnatura segnatura = new Segnatura(xml);
 
+        System.out.println(segnatura.getIndirizzoTelematico());
+
 
     }
 
