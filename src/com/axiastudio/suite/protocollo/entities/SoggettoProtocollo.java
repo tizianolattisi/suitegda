@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
+import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.generale.ITimeStamped;
@@ -38,6 +39,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gensoggettoprotocollo")
     private Long id;
     @JoinColumn(name = "soggetto", referencedColumnName = "id")
+    @ManyToOne
     private Soggetto soggetto;
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
@@ -55,6 +57,18 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     private Boolean notifica=false;
     @Column(name="corrispondenza")
     private Boolean corrispondenza=false;
+    @Column(name="datainizio", columnDefinition="DATE DEFAULT CURRENT_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date datainizio;
+    @Column(name="datafine")
+    @Temporal(TemporalType.DATE)
+    private Date datafine;
+    @Column(name="principale")
+    private Boolean principale=false;
+
+    @JoinColumn(name = "soggettoreferente", referencedColumnName = "id")
+    @ManyToOne
+    private Soggetto soggettoReferente;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -159,10 +173,67 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.corrispondenza = corrispondenza;
     }
 
+    public Date getDatainizio() {
+        return datainizio;
+    }
+
+    public void setDatainizio(Date datainizio) {
+        this.datainizio = datainizio;
+    }
+
+    public Date getDatafine() {
+        return datafine;
+    }
+
+    public void setDatafine(Date datafine) {
+        this.datafine = datafine;
+    }
+
+    public Boolean getPrincipale() {
+        return principale;
+    }
+
+    public void setPrincipale(Boolean principale) {
+        this.principale = principale;
+    }
+
+    public Soggetto getSoggettoReferente() {
+        return soggettoReferente;
+    }
+
+    public void setSoggettoReferente(Soggetto soggettoReferente) {
+        this.soggettoReferente = soggettoReferente;
+    }
+
+    public RelazioneSoggetto getReferenteRelazione() {
+        return null;
+    }
+
+    public void setReferenteRelazione(RelazioneSoggetto referenteRelazione) {
+        if (referenteRelazione ==  null ) {
+            this.soggettoReferente = null;
+        } else {
+            this.soggettoReferente = referenteRelazione.getRelazionato();
+        }
+    }
+
+    public String getPredicato(){
+        if ( this.getSoggettoReferente()==null ) {
+            return "-";
+        }
+        return this.getSoggettoReferente().toString();
+    }
+
+    public void setPredicato(String predicato){
+        // non deve fare nulla
+    }
+
+
     @Override
     public Date getRecordcreato() {
         return recordcreato;
     }
+
 
     public void setRecordcreato(Date recordcreato) {
         this.recordcreato = recordcreato;

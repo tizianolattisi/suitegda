@@ -14,7 +14,7 @@
    <string>Soggetti</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>&gt;id&lt;,&lt;descrizione&gt;,indirizzo,comune</string>
+   <string>&gt;id&lt;,&lt;descrizione&gt;,indirizzo,comune,cessazione</string>
   </property>
   <property name="sortcolumn" stdset="0">
    <number>1</number>
