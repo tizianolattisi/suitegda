@@ -305,7 +305,7 @@ CREATE TABLE zrelazionesoggetto (
     relazionato bigint,
     datanascita date,
     datacessazione date,
-    abilitatoweb boolean DEFAULT FALSE,
+    abilitatoweb boolean DEFAULT FALSE
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.zrelazionesoggetto OWNER TO postgres;
 ALTER TABLE ONLY zrelazionesoggetto
