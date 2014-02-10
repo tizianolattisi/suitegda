@@ -10,8 +10,8 @@ import org.xml.sax.SAXParseException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import javax.xml.transform.stream.StreamResult;
+import java.io.*;
 
 /**
  * User: tiziano
@@ -110,7 +110,32 @@ public class InteroperabilitaTest {
 
         System.out.println(xml);
 
-        //validatore(xml);
+        validatore(xml);
+
+    }
+
+    @Test
+    public void leggiSegnatura() throws IOException {
+
+        String xml = null;
+
+        BufferedReader br = new BufferedReader(new FileReader("testSegnatura.xml"));
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            xml = sb.toString();
+        } finally {
+            br.close();
+        }
+
+        Segnatura segnatura = new Segnatura(xml);
+
 
     }
 

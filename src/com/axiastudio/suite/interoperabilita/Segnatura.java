@@ -3,6 +3,7 @@ package com.axiastudio.suite.interoperabilita;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -12,6 +13,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,7 @@ public class Segnatura {
 
     private String codiceAmministrazione;
     private String CodiceAOO;
+    private String codiceRegistro;
     private String numeroRegistrazione;
     private String dataRegistrazione;
     private String indirizzoTelematico;
@@ -52,6 +56,24 @@ public class Segnatura {
     }
 
     private void parse(String xml) {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = null;
+        try {
+            docBuilder = docFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        InputSource is = new InputSource(new StringReader(xml));
+        Document document = null;
+        try {
+            document = docBuilder.parse(is);
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Element documentElement = document.getDocumentElement();
+        System.out.println(documentElement);
 
     }
 
@@ -111,6 +133,11 @@ public class Segnatura {
         identificatore.appendChild(codiceAOO);
         codiceAOO.appendChild(doc.createTextNode(getCodiceAOO()));
 
+        // CodiceRegistro
+        Element codiceRegistro = doc.createElement("CodiceRegistro");
+        identificatore.appendChild(codiceRegistro);
+        codiceRegistro.appendChild(doc.createTextNode("--"));
+
         // NumeroRegistrazione
         Element numeroRegistrazione = doc.createElement("NumeroRegistrazione");
         identificatore.appendChild(numeroRegistrazione);
@@ -146,10 +173,12 @@ public class Segnatura {
         denominazione.appendChild(doc.createTextNode(getDenominazione()));
         amministrazione.appendChild(denominazione);
 
+
         // CodiceAmministrazione
+        /*
         Element codiceAmministrazione2 = doc.createElement("CodiceAmministrazione");
         codiceAmministrazione2.appendChild(doc.createTextNode(getCodiceAmministrazione()));
-        amministrazione.appendChild(codiceAmministrazione2);
+        amministrazione.appendChild(codiceAmministrazione2);*/
 
         // UnitaOrganizzativa
         Element unitaOrganizzativa = doc.createElement("UnitaOrganizzativa");
@@ -212,6 +241,16 @@ public class Segnatura {
 
         // </Amministrazione>
 
+        // AOO
+        Element AOO = doc.createElement("AOO");
+        mittente.appendChild(AOO);
+
+        // Denominazione
+        Element denominazione3 = doc.createElement("Denominazione");
+        denominazione3.appendChild(doc.createTextNode(getCodiceAOO()));
+        AOO.appendChild(denominazione3);
+
+
         // </Mittente>
 
         // </Origine>
@@ -244,17 +283,22 @@ public class Segnatura {
                     Element amministrazioneDestinatario = doc.createElement("Amministrazione");
                     Element denominazioneDestinatario = doc.createElement("Denominazione");
                     denominazioneDestinatario.appendChild(doc.createTextNode(destinatarioObj.getDenominazione()));
+                    amministrazioneDestinatario.appendChild(denominazioneDestinatario);
 
                     if( destinatarioObj.getDenominazioneUnitaOrganizzativa() != null ){
                         Element unitaOrganizzativaDestinatario = doc.createElement("UnitaOrganizzativa");
                         Element denominazioneUnitaOrganizzativaDestinatario = doc.createElement("Denominazione");
                         denominazioneUnitaOrganizzativaDestinatario.appendChild(doc.createTextNode(destinatarioObj.getDenominazioneUnitaOrganizzativa()));
+                        Element indirizzoPostaleUnitaOrganizzativaDestinatario = doc.createElement("IndirizzoPostale");
+                        Element denominazioneIndirizzoPostaleUnitaOrganizzativaDestinatario = doc.createElement("Denominazione");
+                        //denominazioneIndirizzoPostaleUnitaOrganizzativaDestinatario.appendChild(doc.createTextNode("")); // TODO: completare, anche se formalmente corretto.
+                        indirizzoPostaleUnitaOrganizzativaDestinatario.appendChild(denominazioneIndirizzoPostaleUnitaOrganizzativaDestinatario);
 
                         unitaOrganizzativaDestinatario.appendChild(denominazioneUnitaOrganizzativaDestinatario);
+                        unitaOrganizzativaDestinatario.appendChild(indirizzoPostaleUnitaOrganizzativaDestinatario);
                         amministrazioneDestinatario.appendChild(unitaOrganizzativaDestinatario);
                     }
 
-                    amministrazioneDestinatario.appendChild(denominazioneDestinatario);
                     destinatario.appendChild(amministrazioneDestinatario);
                     destinazione.appendChild(destinatario);
                 }
@@ -285,6 +329,7 @@ public class Segnatura {
         Element oggettoDocumento = doc.createElement("Oggetto");
         oggettoDocumento.appendChild(doc.createTextNode(getDocumento().getOggetto()));
         documento.appendChild(oggettoDocumento);
+        descrizione.appendChild(documento);
 
         if( getAllegati().size()>0 ){
             Element allegati = doc.createElement("Allegati");
@@ -301,7 +346,6 @@ public class Segnatura {
             descrizione.appendChild(allegati);
         }
 
-        descrizione.appendChild(documento);
         segnatura.appendChild(descrizione);
 
         // </Descrizione>
@@ -316,6 +360,7 @@ public class Segnatura {
             e.printStackTrace();
         }
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.STANDALONE, "no");
         transformer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
         transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "Segnatura.dtd");
         DOMSource source = new DOMSource(doc);
@@ -347,6 +392,14 @@ public class Segnatura {
 
     public void setCodiceAOO(String codiceAOO) {
         CodiceAOO = codiceAOO;
+    }
+
+    public String getCodiceRegistro() {
+        return codiceRegistro;
+    }
+
+    public void setCodiceRegistro(String codiceRegistro) {
+        this.codiceRegistro = codiceRegistro;
     }
 
     public String getNumeroRegistrazione() {
