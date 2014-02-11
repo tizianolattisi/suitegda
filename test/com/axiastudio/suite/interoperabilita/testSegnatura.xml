@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE Segnatura SYSTEM
+        "Segnatura.dtd">
+<Segnatura>
+  <Intestazione>
+    <Identificatore>
+      <CodiceAmministrazione>PAT</CodiceAmministrazione>
+      <CodiceAOO>PAT</CodiceAOO>
+      <CodiceRegistro>--</CodiceRegistro>
+      <NumeroRegistrazione>36416</NumeroRegistrazione>
+      <DataRegistrazione>2014-01-22</DataRegistrazione>
+    </Identificatore>
+    <Origine>
+      <IndirizzoTelematico>serv.supportoeinformatica@pec.provincia.tn.it</IndirizzoTelematico>
+      <Mittente>
+        <Amministrazione>
+          <Denominazione>Provincia Autonoma di Trento</Denominazione>
+          <UnitaOrganizzativa>
+            <Denominazione>Provincia Autonoma di Trento</Denominazione>
+            <UnitaOrganizzativa>
+              <Denominazione>Direzione Generale della Provincia</Denominazione>
+              <UnitaOrganizzativa>
+                <Denominazione>Servizio supporto amministrativo e informatica</Denominazione>
+                <IndirizzoPostale>
+                  <Denominazione>
+                  </Denominazione>
+                </IndirizzoPostale>
+              </UnitaOrganizzativa>
+            </UnitaOrganizzativa>
+          </UnitaOrganizzativa>
+        </Amministrazione>
+        <AOO>
+          <Denominazione>PAT</Denominazione>
+        </AOO>
+      </Mittente>
+    </Origine>
+    <Destinazione confermaRicezione="si">
+      <IndirizzoTelematico>comune.rivadelgarda.tn.it@cert.legalmail.it</IndirizzoTelematico>
+      <Destinatario>
+        <Amministrazione>
+          <Denominazione>Comune di Riva del Garda</Denominazione>
+          <UnitaOrganizzativa>
+            <Denominazione>Comune di Riva del Garda</Denominazione>
+            <IndirizzoPostale>
+              <Denominazione>
+              </Denominazione>
+            </IndirizzoPostale>
+          </UnitaOrganizzativa>
+        </Amministrazione>
+      </Destinatario>
+    </Destinazione>
+    <Oggetto>"Protocollo federato trentino". Richiesta di incontro per l'integrazione con il sistema di gestione documentale attualmente in uso presso i Comuni di Riva del Garda e di Mori.
+(Rif. Vs. comunicazione del 18/09/2013 e riunione 7 novembre 2013 presso sede Ufficio Informatica)
+</Oggetto>
+  </Intestazione>
+  <Riferimenti>
+    <ContestoProcedurale>
+      <CodiceAmministrazione>PAT</CodiceAmministrazione>
+      <CodiceAOO>PAT</CodiceAOO>
+      <Identificativo>
+      </Identificativo>
+      <TipoContestoProcedurale>Protocollo Arma</TipoContestoProcedurale>
+      <Oggetto>Pratica nuova</Oggetto>
+    </ContestoProcedurale>
+    <ContestoProcedurale>
+      <CodiceAmministrazione>PAT</CodiceAmministrazione>
+      <CodiceAOO>PAT</CodiceAOO>
+      <Identificativo>
+      </Identificativo>
+      <TipoContestoProcedurale>Codice Classifica</TipoContestoProcedurale>
+      <Oggetto>Classificazione</Oggetto>
+    </ContestoProcedurale>
+  </Riferimenti>
+  <Descrizione>
+    <Documento nome="Documento_Principale_PAT_RFS172-2014-0036416.pdf" tipoRiferimento="MIME">
+      <Oggetto>"Protocollo federato trentino". Richiesta di incontro per l'integrazione con il sistema di gestione documentale attualmente in uso presso i Comuni di Riva del Garda e di Mori.
+(Rif. Vs. comunicazione del 18/09/2013 e riunione 7 novembre 2013 presso sede Ufficio Informatica)
+</Oggetto>
+    </Documento>
+  </Descrizione>
+</Segnatura>
