@@ -98,6 +98,8 @@ public class FormProtocollo extends Window {
         } catch (SecurityException ex) {
             Logger.getLogger(FormProtocollo.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo")).currentIndexChanged.connect(this, "aggiornaLabelSoggetti()");
         
         /* fascicolazione */
         QToolButton toolButtonTitolario = (QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario");
@@ -297,23 +299,9 @@ public class FormProtocollo extends Window {
         // solo primo inserimento
         Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_sportello"), !nuovoInserimento);
         Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_tipo"), !nuovoInserimento);
+        aggiornaLabelSoggetti(protocollo);
 
-        // alternanza mittenti-destinatari
-        String labelSinistra;
-        String labelDestra;
-        int nrRiservati = protocollo.getSoggettoRiservatoProtocolloCollection().size();
-        if( protocollo.getTipo().equals(TipoProtocollo.USCITA) ){
-            labelDestra = "Mittenti";
-            labelSinistra = "Destinatari";
-        } else {
-            labelSinistra = "Mittenti";
-            labelDestra = "Destinatari";            
-        }
-        ((QLabel) this.findChild(QLabel.class, "label_destra")).setText(labelDestra);
-        QTabWidget tabWidgetSoggettiProtocollo = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget_sinistra");
-        tabWidgetSoggettiProtocollo.setTabText(0, labelSinistra);
-        tabWidgetSoggettiProtocollo.setTabText(1, labelSinistra+" riservati (" + nrRiservati +")");
-        
+
         // sportello
         QComboBox comboBox_sportello = (QComboBox) this.findChild(QComboBox.class, "comboBox_sportello");
         QLineEdit lineEdit_sportello = (QLineEdit) this.findChild(QLineEdit.class, "lineEdit_sportello");
@@ -383,7 +371,38 @@ public class FormProtocollo extends Window {
         }
 
     }
-    
+
+    private void aggiornaLabelSoggetti() {
+        aggiornaLabelSoggetti((Protocollo) this.getContext().getCurrentEntity());
+    }
+
+    private void aggiornaLabelSoggetti(Protocollo protocollo) {
+        // alternanza mittenti-destinatari
+        String labelSinistra;
+        String labelDestra;
+        int nrRiservati = 0;
+        TipoProtocollo tipoProtocollo = TipoProtocollo.ENTRATA;
+        if ( protocollo == null || protocollo.getId() == null ) {
+            QComboBox cmbTipo = ((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo"));
+            tipoProtocollo = TipoProtocollo.values()[cmbTipo.currentIndex()];
+        } else {
+            nrRiservati = protocollo.getSoggettoRiservatoProtocolloCollection().size();
+            tipoProtocollo = protocollo.getTipo();
+        }
+
+        if( tipoProtocollo.equals(TipoProtocollo.USCITA) ){
+            labelDestra = "Mittenti";
+            labelSinistra = "Destinatari";
+        } else {
+            labelSinistra = "Mittenti";
+            labelDestra = "Destinatari";
+        }
+        ((QLabel) this.findChild(QLabel.class, "label_destra")).setText(labelDestra);
+        QTabWidget tabWidgetSoggettiProtocollo = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget_sinistra");
+        tabWidgetSoggettiProtocollo.setTabText(0, labelSinistra);
+        tabWidgetSoggettiProtocollo.setTabText(1, labelSinistra+" riservati (" + nrRiservati +")");
+    }
+
     private void information() {
         String extra = "";
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
