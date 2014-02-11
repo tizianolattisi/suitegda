@@ -65,28 +65,6 @@ public class jaxbTest {
 
         System.out.println(segnatura.getIntestazione().getOggetto());
 
-        /*
-        Unmarshaller unmarshaller=null;
-        JAXBContext jaxbContext=null;
-        Segnatura segnatura=null;
-
-        try {
-            jaxbContext = JAXBContext.newInstance(context);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            unmarshaller = jaxbContext.createUnmarshaller ();
-            segnatura = (Segnatura) unmarshaller.unmarshal( new FileInputStream(filePath));
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(segnatura);*/
-
     }
 
     @Test
