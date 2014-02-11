@@ -9,7 +9,6 @@ import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
-import org.apache.bsf.util.IOUtils;
 
 import javax.mail.*;
 import java.io.*;
