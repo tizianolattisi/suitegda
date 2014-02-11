@@ -25,9 +25,8 @@ import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipoRiferimento;
 import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
-import com.axiastudio.suite.interoperabilita.Destinatario;
-import com.axiastudio.suite.interoperabilita.Documento;
-import com.axiastudio.suite.interoperabilita.Segnatura;
+import com.axiastudio.suite.interoperabilita.entities.Segnatura;
+import com.axiastudio.suite.interoperabilita.utilities.JAXBHelper;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
@@ -502,7 +501,12 @@ public class FormProtocollo extends Window {
             return;
         }
 
-        Segnatura segnatura = new Segnatura();
+        Segnatura segnatura = JAXBHelper.segnaturaDaProtocollo(protocollo);
+        String xml = JAXBHelper.scriviSegnatura(segnatura);
+        helper.createDocument("", "Segnatura.xml", xml.getBytes());
+
+        /*
+        SegnaturaOld segnatura = new SegnaturaOld();
         segnatura.setCodiceAmministrazione(SuiteUtil.trovaCostante("CODICE_AMMINISTRAZIONE").getValore());
         segnatura.setCodiceAOO(SuiteUtil.trovaCostante("CODICE_AOO").getValore());
         segnatura.setDenominazione(SuiteUtil.trovaCostante("DENOMINAZIONE").getValore());
@@ -568,7 +572,7 @@ public class FormProtocollo extends Window {
         String xml = segnatura.toXml();
 
         helper.createDocument("", "Segnatura.xml", xml.getBytes());
-
+        */
 
 
     }
