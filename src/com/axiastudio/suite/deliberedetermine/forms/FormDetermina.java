@@ -91,7 +91,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         SimpleWorkFlow wf = new SimpleWorkFlow(determina);
         FasePratica fasePratica = wf.getFase(i);
 
-        // posso completare solo la fase attiva (la prima non competata disponibile)
+        // posso completare solo la fase attiva
         if( !wf.getFaseAttiva().equals(fasePratica) ){
             return;
         }
