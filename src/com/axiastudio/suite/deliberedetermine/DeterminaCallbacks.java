@@ -65,11 +65,7 @@ public class DeterminaCallbacks {
             return new Validation(false, msg);
         }
         if( determina.getId() != null ){
-            /* almeno e massimo un servizio principale */
-            if( determina.getServizioDeterminaCollection() == null || determina.getServizioDeterminaCollection().isEmpty() ){
-                msg += "Deve essere dichiarato almeno servizio.";
-                return new Validation(false, msg);
-            }
+            /* massimo un servizio principale */
             ServizioDetermina servizioPrincipale = null;
             int nrServiziPrincipali = 0;
             for( ServizioDetermina servizio: determina.getServizioDeterminaCollection() ){
@@ -77,7 +73,7 @@ public class DeterminaCallbacks {
                     nrServiziPrincipali += 1;
                 }
             }
-            if( nrServiziPrincipali != 1 ){
+            if( nrServiziPrincipali > 1 ){
                 msg += "E' possibile e necessario impostare un solo servizio principale.\n";
                 return new Validation(false, msg);
             }

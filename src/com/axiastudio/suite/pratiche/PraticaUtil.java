@@ -146,10 +146,15 @@ public class PraticaUtil {
         protocollo.setTipo(tipo);
         // attribuzioni
         List<Attribuzione> attribuzioniList = new ArrayList<Attribuzione>();
+        Boolean isFirst=true;
         for( Ufficio ufficio: attribuzioni ){
             Attribuzione attribuzione = new Attribuzione();
             attribuzione.setUfficio(ufficio);
-            attribuzione.setUfficio(ufficio);
+            attribuzione.setPrincipale(isFirst);
+            if( isFirst){
+                isFirst = false;
+            }
+            attribuzioniList.add(attribuzione);
         }
         protocollo.setAttribuzioneCollection(attribuzioniList);
         // uffici mittenti o destinatari
@@ -158,6 +163,7 @@ public class PraticaUtil {
             for( Ufficio attribuzione: uffici ){
                 UfficioProtocollo ufficioProtocollo = new UfficioProtocollo();
                 ufficioProtocollo.setUfficio(attribuzione);
+                ufficioProtocolloList.add(ufficioProtocollo);
             }
             protocollo.setUfficioProtocolloCollection(ufficioProtocolloList);
         }
@@ -175,6 +181,7 @@ public class PraticaUtil {
         PraticaProtocollo pp = new PraticaProtocollo();
         pp.setPratica(pratica);
         pp.setOggetto(oggetto);
+        pp.setOriginale(true);
         pratiche.add(pp);
         protocollo.setPraticaProtocolloCollection(pratiche);
         // commit
