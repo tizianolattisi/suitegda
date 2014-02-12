@@ -766,6 +766,7 @@ CREATE TABLE fasepratica (
   condizione text,
   azione text,
   completata boolean default false,
+  attiva boolean default false,
   usoresponsabile boolean default false
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE pratiche.fasepratica OWNER TO postgres;

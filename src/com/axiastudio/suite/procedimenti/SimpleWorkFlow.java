@@ -154,8 +154,9 @@ public class SimpleWorkFlow {
     }
 
     public FasePratica getFaseAttiva(){
+        // per ora restituisco la prima attiva che trovo (è unica)
         for( FasePratica fp: getFasi() ){
-            if( !fp.getCompletata() ){
+            if( fp.getAttiva() ){
                 return fp;
             }
         }
@@ -167,8 +168,8 @@ public class SimpleWorkFlow {
     }
 
     public void completaFase(FasePratica fp, Boolean confermata){
-        //fp.setCompletata(confermata);
         if( confermata ){
+            fp.setCompletata(true);
             setFaseAttiva(fp.getConfermata());
         } else {
             setFaseAttiva(fp.getRifiutata());
@@ -177,18 +178,8 @@ public class SimpleWorkFlow {
     }
 
     public void setFaseAttiva(FasePratica faseAttiva){
-        Boolean trovata = Boolean.FALSE;
         for( FasePratica fp: getFasi() ){
-            if( !trovata ){
-                if( !fp.equals(faseAttiva) ){
-                    fp.setCompletata(Boolean.TRUE);
-                } else {
-                    fp.setCompletata(Boolean.FALSE);
-                    trovata = Boolean.TRUE;
-                }
-            } else {
-                fp.setCompletata(Boolean.FALSE);
-            }
+            fp.setAttiva(fp.equals(faseAttiva));
         }
     }
 

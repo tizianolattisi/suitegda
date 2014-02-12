@@ -42,7 +42,7 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
     private Long id;
     @JoinColumn(name = "idpratica", referencedColumnName = "idpratica")
-    @ManyToOne(cascade=CascadeType.REFRESH)
+    @ManyToOne(cascade=CascadeType.MERGE)
     private Pratica pratica;
     @Column(name="codiceinterno", unique=true)
     private String codiceinterno;
