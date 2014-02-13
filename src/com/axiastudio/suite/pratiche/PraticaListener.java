@@ -131,6 +131,7 @@ public class PraticaListener {
                 IDettaglio dettaglio = (IDettaglio) klass.newInstance();
                 dettaglio.setPratica(pratica);  // XXX: non va in persistenza...
                 dettaglio.setCodiceinterno(pratica.getCodiceinterno());
+                dettaglio.setOggetto(pratica.getDescrizione());
                 // utilizzo una dialog con il context per poter salvare il dettaglio in maniera asincrona
                 IForm form = Util.formFromEntity(dettaglio);
                 Context context = form.getContext();

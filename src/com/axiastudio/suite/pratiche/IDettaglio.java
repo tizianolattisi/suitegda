@@ -11,6 +11,8 @@ public interface IDettaglio {
 
     Pratica getPratica();
     void setPratica(Pratica pratica);
+    String getOggetto();
+    void setOggetto(String oggetto);
 
     // campi proxy (setter in NOP)
     String getIdpratica();
