@@ -17,6 +17,7 @@
 package com.axiastudio.suite.pratiche;
 
 import com.axiastudio.mapformat.MessageMapFormat;
+import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.suite.SuiteUtil;
@@ -25,6 +26,7 @@ import com.axiastudio.suite.base.entities.Giunta;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
@@ -187,6 +189,12 @@ public class PraticaUtil {
         // commit
         Controller controller = (Controller) Register.queryUtility(IController.class, Protocollo.class.getName());
         Validation validation = controller.commit(protocollo);
+        if( validation.getResponse() ){
+            // creo la cartella
+            CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
+            AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
+            helper.createFolder();
+        }
         return validation;
     }
 
