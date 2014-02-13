@@ -43,6 +43,7 @@ public class Login extends QDialog {
 
     public Login() {
         super();
+        this.setWindowIcon(new QIcon("classpath:com/axiastudio/suite/resources/pypapi128.png"));
         QVBoxLayout layout = new QVBoxLayout();
         QGridLayout gridLayout = new QGridLayout();
         QLabel labelUsername = new QLabel("Utente");
