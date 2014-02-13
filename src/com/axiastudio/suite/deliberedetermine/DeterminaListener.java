@@ -19,6 +19,15 @@ import java.util.Date;
  */
 public class DeterminaListener {
 
+    @PrePersist
+    void prePersist(Determina determina) {
+        // determina con anno corrente
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        int year = calendar.get(Calendar.YEAR);
+        determina.setAnno(year);
+    }
+
     @PreUpdate
     void preUpdate(Determina determina) {
         Database db = (Database) Register.queryUtility(IDatabase.class);
