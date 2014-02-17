@@ -483,8 +483,10 @@ public class FormProtocollo extends Window {
     
     private void stampaEtichetta() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        Map<String, String> map = new HashMap();
+        Map<String, Object> map = new HashMap();
         map.put("iddocumento", protocollo.getIddocumento());
+        map.put("dataprotocollo", protocollo.getDataprotocollo());
+        map.put("hash", "1234567890");
         DialogStampaEtichetta dialog = new DialogStampaEtichetta(this, map);
         int exec = dialog.exec();
         if( exec == 1 ){
