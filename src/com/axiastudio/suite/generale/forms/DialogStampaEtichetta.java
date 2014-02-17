@@ -122,6 +122,7 @@ public class DialogStampaEtichetta extends QDialog {
             String codice = mmp.format(this.map);
             outputStream.write(codice.getBytes("UTF-16LE"));
             outputStream.flush();
+            outputStream.close();
             proc.waitFor();
             int exit = proc.exitValue();
             proc.destroy();
