@@ -782,6 +782,27 @@ ALTER TABLE ONLY fasepratica
 ADD CONSTRAINT fk_fasepratica_rifiutata FOREIGN KEY (rifiutata) REFERENCES pratiche.fasepratica(id);
 
 
+CREATE TABLE visto (
+  id bigserial NOT NULL,
+  tipo character varying(255),
+  pratica bigint,
+  fase bigint,
+  utente bigint,
+  responsabile bigint,
+  data date,
+  numero int
+);
+ALTER TABLE pratiche.visto OWNER TO postgres;
+ALTER TABLE ONLY visto
+ADD CONSTRAINT fk_visto_pratica FOREIGN KEY (pratica) REFERENCES pratiche.fase(id);
+ALTER TABLE ONLY visto
+ADD CONSTRAINT fk_visto_fase FOREIGN KEY (fase) REFERENCES pratiche.fase(id);
+ALTER TABLE ONLY visto
+ADD CONSTRAINT fk_visto_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
+ALTER TABLE ONLY visto
+ADD CONSTRAINT fk_visto_responsabile FOREIGN KEY (responsabile) REFERENCES base.utente(id);
+
+
 -- Protocollo
 SET search_path = protocollo, pg_catalog;
 
