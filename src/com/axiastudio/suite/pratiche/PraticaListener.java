@@ -98,6 +98,7 @@ public class PraticaListener {
         // mi copio nella pratica le fasi di procedimento
         List<FaseProcedimento> fasiProcedimento = pratica.getTipo().getProcedimento().getFaseProcedimentoCollection();
         List<FasePratica> fasiPratica = new ArrayList<FasePratica>();
+        Boolean prima=true;
         for( Integer i=0; i<fasiProcedimento.size(); i++ ){
             FaseProcedimento faseProcedimento = fasiProcedimento.get(i);
             FasePratica fasePratica = new FasePratica();
@@ -111,6 +112,10 @@ public class PraticaListener {
             fasePratica.setRifiutabile(faseProcedimento.getRifiutabile());
             fasePratica.setTestorifiutata(faseProcedimento.getTestorifiutata());
             fasePratica.setUsoresponsabile(faseProcedimento.getUsoresponsabile());
+            if( prima ){
+                fasePratica.setAttiva(true);
+                prima=false;
+            }
             fasiPratica.add(fasePratica);
         }
         for( Integer i=0; i<fasiPratica.size(); i++ ){
