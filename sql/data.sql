@@ -204,8 +204,8 @@ UPDATE faseprocedimento SET confermabile=true, confermata=4, testoconfermata='Co
 UPDATE faseprocedimento SET confermabile=true, confermata=5, testoconfermata='Visto di bilancio',
   rifiutabile=true, rifiutata=1, testorifiutata='Rifiuta il visto' WHERE id=4;
 -- closure
-UPDATE faseprocedimento SET azione='{ determina -> determina.vistoResponsabile = true; determina.utenteVistoResponsabile = utente; return true }' WHERE id=2;
-UPDATE faseprocedimento SET azione='{ determina -> determina.vistoBilancio = true; determina.utenteVistoBilancio = utente; return true }' WHERE id=4;
+-- UPDATE faseprocedimento SET azione='{ determina -> determina.vistoResponsabile = true; determina.utenteVistoResponsabile = utente; return true }' WHERE id=2;
+-- UPDATE faseprocedimento SET azione='{ determina -> determina.vistoBilancio = true; determina.utenteVistoBilancio = utente; return true }' WHERE id=4;
 
 insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (1, 3, 1, true);
 insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (2, 3, 2, true);
