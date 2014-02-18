@@ -100,6 +100,8 @@ public class Pratica implements Serializable, ITimeStamped {
     @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     @OrderColumn(name="progressivo")
     private List<FasePratica> fasePraticaCollection;
+    @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<Visto> vistoCollection;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -324,9 +326,17 @@ public class Pratica implements Serializable, ITimeStamped {
         this.fasePraticaCollection = fasePraticaCollection;
     }
 
+    public Collection<Visto> getVistoCollection() {
+        return vistoCollection;
+    }
+
+    public void setVistoCollection(Collection<Visto> vistoCollection) {
+        this.vistoCollection = vistoCollection;
+    }
+
     /*
-         * timestamped
-         */
+             * timestamped
+             */
     @Override
     public Date getRecordcreato() {
         return recordcreato;
