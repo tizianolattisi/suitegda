@@ -11,16 +11,14 @@ import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.pratiche.entities.Visto;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: tiziano
@@ -171,9 +169,37 @@ public class SimpleWorkFlow {
         if( confermata ){
             fp.setCompletata(true);
             setFaseAttiva(fp.getConfermata());
+            creaVisto(fp);
         } else {
             setFaseAttiva(fp.getRifiutata());
         }
+
+    }
+
+    private void creaVisto(FasePratica fasePratica) {
+        Pratica pratica = fasePratica.getPratica();
+        Integer numero = 0;
+        Collection<Visto> vistoCollection = pratica.getVistoCollection();
+        for( Visto visto: vistoCollection){
+            if( visto.getFase().equals(fasePratica.getFase()) ){
+                if( numero < visto.getNumero() ){
+                    numero = visto.getNumero();
+                }
+            }
+        }
+        numero += 1;
+        Visto visto = new Visto();
+        visto.setFase(fasePratica.getFase());
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        visto.setData(date);
+        visto.setNumero(numero);
+        Utente utente = (Utente) Register.queryUtility(IUtente.class);
+        visto.setUtente(utente);
+        vistoCollection.add(visto);
+        pratica.setVistoCollection(vistoCollection);
+        // TODO: da inserire il responsabile e la titolarità, ma prima strutturare il permesso sulla
+        // fase del procedimento
 
     }
 

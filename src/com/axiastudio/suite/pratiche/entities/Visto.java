@@ -78,6 +78,14 @@ public class Visto implements Serializable {
         this.pratica = pratica;
     }
 
+    public Fase getFase() {
+        return fase;
+    }
+
+    public void setFase(Fase fase) {
+        this.fase = fase;
+    }
+
     public Utente getUtente() {
         return utente;
     }
