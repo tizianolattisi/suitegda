@@ -63,6 +63,8 @@ public class FaseProcedimento implements Serializable {
     private String azione;
     @Column(name="usoresponsabile")
     private Boolean usoresponsabile=false;
+    @Column(name="cariche")
+    private String cariche;
 
     public Long getId() {
         return id;
@@ -174,6 +176,14 @@ public class FaseProcedimento implements Serializable {
 
     public void setUsoresponsabile(Boolean usoresponsabile) {
         this.usoresponsabile = usoresponsabile;
+    }
+
+    public String getCariche() {
+        return cariche;
+    }
+
+    public void setCariche(String cariche) {
+        this.cariche = cariche;
     }
 
     @Override

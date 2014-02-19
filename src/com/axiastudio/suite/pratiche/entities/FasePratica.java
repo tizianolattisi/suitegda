@@ -67,6 +67,8 @@ public class FasePratica implements Serializable {
     private Boolean attiva=Boolean.FALSE;
     @Column(name="usoresponsabile")
     private Boolean usoresponsabile=false;
+    @Column(name="cariche")
+    private String cariche;
 
     public Long getId() {
         return id;
@@ -194,5 +196,13 @@ public class FasePratica implements Serializable {
 
     public void setUsoresponsabile(Boolean usoresponsabile) {
         this.usoresponsabile = usoresponsabile;
+    }
+
+    public String getCariche() {
+        return cariche;
+    }
+
+    public void setCariche(String cariche) {
+        this.cariche = cariche;
     }
 }
