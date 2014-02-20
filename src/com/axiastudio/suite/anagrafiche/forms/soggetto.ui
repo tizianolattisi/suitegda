@@ -14,7 +14,7 @@
    <string>Soggetti</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>&gt;id&lt;,&lt;descrizione&gt;,indirizzo,comune,cessazione</string>
+   <string>&gt;id&lt;,descrizione,indirizzo,comune,cessazione,codicefiscale,partitaiva</string>
   </property>
   <property name="sortcolumn" stdset="0">
    <number>1</number>
@@ -237,6 +237,9 @@
           <property name="search" stdset="0">
            <bool>true</bool>
           </property>
+          <property name="export" stdset="0">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item row="2" column="0">
@@ -255,6 +258,9 @@
            <string>nome</string>
           </property>
           <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="export" stdset="0">
            <bool>true</bool>
           </property>
          </widget>
@@ -337,6 +343,9 @@
           <property name="search" stdset="0">
            <bool>true</bool>
           </property>
+          <property name="export" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="1" column="0">
@@ -391,6 +400,9 @@
           <property name="search" stdset="0">
            <bool>true</bool>
           </property>
+          <property name="export" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="1" column="0">
@@ -408,6 +420,9 @@
           <property name="search" stdset="0">
            <bool>true</bool>
           </property>
+          <property name="export" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="2" column="0">
@@ -423,6 +438,9 @@
            <string>denominazione3</string>
           </property>
           <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="export" stdset="0">
            <bool>true</bool>
           </property>
          </widget>
@@ -528,6 +546,9 @@
          <property name="column" stdset="0">
           <string>datanascita</string>
          </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item row="2" column="0">
@@ -536,7 +557,7 @@
           <string>Comune di nascita</string>
          </property>
          <property name="buddy">
-          <cstring>dateEdit</cstring>
+          <cstring>lineEdit_comunedinascita</cstring>
          </property>
         </widget>
        </item>
@@ -567,6 +588,9 @@
          </property>
          <property name="column" stdset="0">
           <string>datacessazione</string>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -607,6 +631,9 @@
          <property name="search" stdset="0">
           <bool>true</bool>
          </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -625,6 +652,9 @@
           <string>partitaiva</string>
          </property>
          <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
           <bool>true</bool>
          </property>
         </widget>
@@ -661,6 +691,9 @@
           </property>
           <property name="search" stdset="0">
            <bool>true</bool>
+          </property>
+          <property name="export" stdset="0">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
