@@ -796,7 +796,7 @@ CREATE TABLE visto (
 );
 ALTER TABLE pratiche.visto OWNER TO postgres;
 ALTER TABLE ONLY visto
-ADD CONSTRAINT fk_visto_pratica FOREIGN KEY (pratica) REFERENCES pratiche.fase(id);
+ADD CONSTRAINT fk_visto_pratica FOREIGN KEY (pratica) REFERENCES pratiche.pratica(id);
 ALTER TABLE ONLY visto
 ADD CONSTRAINT fk_visto_fase FOREIGN KEY (fase) REFERENCES pratiche.fase(id);
 ALTER TABLE ONLY visto
