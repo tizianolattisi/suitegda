@@ -16,8 +16,10 @@
  */
 package com.axiastudio.suite.deliberedetermine.entities;
 
+import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaListener;
+import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.IProtocollabile;
@@ -168,10 +170,32 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
         this.codiceinterno = codiceinterno;
     }
 
+    @Override
+    public Servizio getServizio() {
+        Collection<ServizioDetermina> serviziDetermina = getServizioDeterminaCollection();
+        for( ServizioDetermina servizioDetermina: getServizioDeterminaCollection() ){
+            if( servizioDetermina.getPrincipale() ){
+                return servizioDetermina.getServizio();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Ufficio getUfficio() {
+        Servizio servizio = getServizio();
+        if( servizio != null ){
+            return servizio.getUfficio();
+        }
+        return null;
+    }
+
+    @Override
     public String getOggetto() {
         return oggetto;
     }
 
+    @Override
     public void setOggetto(String oggetto) {
         this.oggetto = oggetto;
     }

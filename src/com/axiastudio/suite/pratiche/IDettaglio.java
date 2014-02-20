@@ -1,5 +1,7 @@
 package com.axiastudio.suite.pratiche;
 
+import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 
 /**
@@ -19,4 +21,9 @@ public interface IDettaglio {
     void setIdpratica(String idpratica);
     public String getCodiceinterno();
     public void setCodiceinterno(String codiceinterno);
+
+    // per la gestione delle deleghe nei procedimenti
+    public Servizio getServizio();
+    public Ufficio getUfficio();
+
 }

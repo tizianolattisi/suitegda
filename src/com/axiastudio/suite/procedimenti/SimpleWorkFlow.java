@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2013 AXIA Studio (http://www.axiastudio.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Afffero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.axiastudio.suite.procedimenti;
 
 import com.axiastudio.menjazo.AlfrescoHelper;
@@ -13,7 +29,6 @@ import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Visto;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
-import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -21,9 +36,8 @@ import groovy.lang.GroovyShell;
 import java.util.*;
 
 /**
- * User: tiziano
- * Date: 02/12/13
- * Time: 15:00
+ *
+ * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class SimpleWorkFlow {
 
@@ -100,6 +114,7 @@ public class SimpleWorkFlow {
     }
 
     public Boolean permesso(FasePratica fp){
+        IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(fp.getPratica());
         String cariche = fp.getCariche();
         if( cariche == null || cariche.equals("")){
             return true;
@@ -107,7 +122,7 @@ public class SimpleWorkFlow {
         GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         for( String carica: cariche.split(",") ){
             CodiceCarica codiceCarica = CodiceCarica.valueOf(carica);
-            Boolean check = gestoreDeleghe.checkTitoloODelega(codiceCarica);// XXX: da introddurre gli altri vincoli
+            Boolean check = gestoreDeleghe.checkTitoloODelega(codiceCarica, dettaglio.getServizio(), procedimento, dettaglio.getUfficio());
             if( check ){
                 return true;
             }
