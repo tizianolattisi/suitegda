@@ -18,7 +18,7 @@ public class SimpleWorkflowDialog extends QDialog {
         super(parent);
         this.fasePratica = fasePratica;
         this.simpleWorkFlow = simpleWorkFlow;
-        if( !simpleWorkFlow.attivabile(fasePratica) ){
+        if( !simpleWorkFlow.permesso(fasePratica) || !simpleWorkFlow.condizione(fasePratica) ){
             // inizializza la dialog per l'avvertimento
             String msg = simpleWorkFlow.getResult().toString();
             initNo(msg);

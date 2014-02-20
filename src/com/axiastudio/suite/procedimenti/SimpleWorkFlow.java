@@ -81,6 +81,7 @@ public class SimpleWorkFlow {
         } catch (Exception e){
             // log?
         }
+        // XXX: e se Alfresco non è disponibile?
         for( Map child: children ){
             String fileName = (String) child.get("contentStreamFileName");
             if( fileName != null ){ // XXX: per saltare le cartelle
@@ -98,22 +99,29 @@ public class SimpleWorkFlow {
         return binding;
     }
 
-    public Boolean attivabile(FasePratica fp){
-        String groovyClosure = fp.getCondizione();
-        return eseguiClosure(groovyClosure);
+    public Boolean permesso(FasePratica fp){
+        String cariche = fp.getCariche();
+        if( cariche == null || cariche.equals("")){
+            return true;
+        }
+        GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
+        for( String carica: cariche.split(",") ){
+            CodiceCarica codiceCarica = CodiceCarica.valueOf(carica);
+            Boolean check = gestoreDeleghe.checkTitoloODelega(codiceCarica);// XXX: da introddurre gli altri vincoli
+            if( check ){
+                return true;
+            }
+        }
+        result = "Non disponi dei permessi"; // TODO: magari descrivere meglio.
+        return false;
     }
 
-    public Boolean attivabile(FaseProcedimento fp){
+    public Boolean condizione(FasePratica fp){
         String groovyClosure = fp.getCondizione();
         return eseguiClosure(groovyClosure);
     }
 
     public Boolean azione(FasePratica fp){
-        String groovyClosure = fp.getAzione();
-        return eseguiClosure(groovyClosure);
-    }
-
-    public Boolean azione(FaseProcedimento fp){
         String groovyClosure = fp.getAzione();
         return eseguiClosure(groovyClosure);
     }
