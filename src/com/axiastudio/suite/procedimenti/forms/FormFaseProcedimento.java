@@ -1,43 +1,47 @@
+/*
+ * Copyright (C) 2013 AXIA Studio (http://www.axiastudio.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Afffero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.axiastudio.suite.procedimenti.forms;
 
-import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.IController;
-import com.axiastudio.pypapi.db.IStoreFactory;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.AdminConsole;
-import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
-import com.axiastudio.suite.pratiche.IDettaglio;
-import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.procedimenti.SimpleWorkFlow;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
-import com.trolltech.qt.gui.QLineEdit;
-import com.trolltech.qt.gui.QPushButton;
-import groovy.lang.Binding;
+import com.sun.deploy.util.StringUtils;
+import com.trolltech.qt.core.QModelIndex;
+import com.trolltech.qt.gui.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * User: tiziano
- * Date: 10/12/13
- * Time: 17:53
+ *
+ * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class FormFaseProcedimento extends Dialog {
+
+    private QListWidget caricheAbilitate;
+    private QListWidget caricheDisponibili;
 
     public FormFaseProcedimento(String uiFile, Class entityClass) {
         this(uiFile, entityClass, "");
@@ -50,8 +54,38 @@ public class FormFaseProcedimento extends Dialog {
         test.clicked.connect(this, "openConsole()");
         this.storeInitialized.connect(this, "storeConfermataRifiutata()");
 
+        QToolButton aggiungiCarica = (QToolButton) this.findChild(QToolButton.class, "aggiungiCarica");
+        aggiungiCarica.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui//resources/toolbar/resultset_previous.png"));
+        aggiungiCarica.clicked.connect(this, "aggiungiCarica()");
+        QToolButton rimuoviCarica = (QToolButton) this.findChild(QToolButton.class, "rimuoviCarica");
+        rimuoviCarica.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/resultset_next.png"));
+        rimuoviCarica.clicked.connect(this, "rimuoviCarica()");
+
+        caricheDisponibili = (QListWidget) this.findChild(QListWidget.class, "caricheDisponibili");
+        caricheAbilitate = (QListWidget) this.findChild(QListWidget.class, "caricheAbilitate");
+
+        this.storeInitialized.connect(this, "inizializzaCariche()");
+
     }
 
+    private void inizializzaCariche() {
+        FaseProcedimento faseProcedimento = (FaseProcedimento) this.getContext().getCurrentEntity();
+
+        for( CodiceCarica codiceCarica: CodiceCarica.values() ){
+            QListWidgetItem item = new QListWidgetItem();
+            item.setText(codiceCarica.name());
+            caricheDisponibili.addItem(item);
+        }
+
+        if( faseProcedimento.getCariche() != null ){
+            for( String token: faseProcedimento.getCariche().split(",") ){
+                CodiceCarica codiceCarica = CodiceCarica.valueOf(token);
+                QListWidgetItem item = new QListWidgetItem();
+                item.setText(codiceCarica.name());
+                caricheAbilitate.addItem(item);
+            }
+        }
+    }
 
 
     /*
@@ -86,5 +120,37 @@ public class FormFaseProcedimento extends Dialog {
 
     }
 
+    private void aggiungiCarica(){
+        FaseProcedimento faseProcedimento = (FaseProcedimento) this.getContext().getCurrentEntity();
+        String cariche = faseProcedimento.getCariche();
+        QModelIndex index = caricheDisponibili.currentIndex();
+        QListWidgetItem item = caricheDisponibili.item(index.row());
+        String testoCarica = item.text();
+        if( !Arrays.asList(cariche.split(",")).contains(testoCarica) ){
+            QListWidgetItem newItem = new QListWidgetItem();
+            newItem.setText(testoCarica);
+            caricheAbilitate.addItem(newItem);
+        }
+        aggiornaCariche();
+    }
+
+    private void rimuoviCarica(){
+        QModelIndex index = caricheAbilitate.currentIndex();
+        QListWidgetItem item = caricheAbilitate.takeItem(index.row());
+        caricheAbilitate.removeItemWidget(item);
+        aggiornaCariche();
+    }
+
+    private void aggiornaCariche(){
+        List<String> listCariche = new ArrayList<String>();
+        for( Integer i=0; i<caricheAbilitate.count(); i++ ){
+            QListWidgetItem item = caricheAbilitate.item(i);
+            listCariche.add(item.text());
+        }
+        String cariche = StringUtils.join(listCariche, ",");
+        FaseProcedimento faseProcedimento = (FaseProcedimento) this.getContext().getCurrentEntity();
+        faseProcedimento.setCariche(cariche);
+        this.getContext().getDirty();
+    }
 
 }

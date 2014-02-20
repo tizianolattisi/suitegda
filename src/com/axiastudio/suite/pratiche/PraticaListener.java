@@ -112,6 +112,7 @@ public class PraticaListener {
             fasePratica.setRifiutabile(faseProcedimento.getRifiutabile());
             fasePratica.setTestorifiutata(faseProcedimento.getTestorifiutata());
             fasePratica.setUsoresponsabile(faseProcedimento.getUsoresponsabile());
+            fasePratica.setCariche(faseProcedimento.getCariche());
             if( prima ){
                 fasePratica.setAttiva(true);
                 prima=false;
