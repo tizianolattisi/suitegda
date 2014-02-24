@@ -98,10 +98,12 @@ public class SimpleWorkFlow {
             // log?
         }
         // XXX: e se Alfresco non è disponibile?
-        for( Map child: children ){
-            String fileName = (String) child.get("contentStreamFileName");
-            if( fileName != null ){ // XXX: per saltare le cartelle
-                documenti.add(fileName);
+        if( children != null ){
+            for( Map child: children ){
+                String fileName = (String) child.get("contentStreamFileName");
+                if( fileName != null ){ // XXX: per saltare le cartelle
+                    documenti.add(fileName);
+                }
             }
         }
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
