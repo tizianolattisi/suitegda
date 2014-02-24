@@ -29,7 +29,6 @@ import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.pratiche.entities.TipoVisto;
 import com.axiastudio.suite.pratiche.entities.Visto;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
@@ -117,21 +116,29 @@ public class SimpleWorkFlow {
     }
 
     public Boolean permesso(FasePratica fp){
+        if ( checkTitoloDelega(fp) != null ){
+            return true;
+        }
+        result = "Non disponi dei permessi"; // TODO: magari descrivere meglio.
+        return false;
+    }
+
+    private TitoloDelega checkTitoloDelega(FasePratica fp) {
         IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(fp.getPratica());
         String cariche = fp.getCariche();
         if( cariche == null || cariche.equals("")){
-            return true;
+            Utente utente = (Utente) Register.queryUtility(IUtente.class);
+            return new TitoloDelega(true, false, null, utente, null);
         }
         GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         for( String carica: cariche.split(",") ){
             CodiceCarica codiceCarica = CodiceCarica.valueOf(carica);
             TitoloDelega check = gestoreDeleghe.checkTitoloODelega(codiceCarica, dettaglio.getServizio(), procedimento, dettaglio.getUfficio());
             if( check != null ){
-                return true;
+                return check;
             }
         }
-        result = "Non disponi dei permessi"; // TODO: magari descrivere meglio.
-        return false;
+        return null;
     }
 
     public Boolean condizione(FasePratica fp){
@@ -202,12 +209,12 @@ public class SimpleWorkFlow {
 
     }
 
-    private void creaVisto(FasePratica fasePratica) {
-        Pratica pratica = fasePratica.getPratica();
+    private void creaVisto(FasePratica fp) {
+        Pratica pratica = fp.getPratica();
         Integer numero = 0;
         Collection<Visto> vistoCollection = pratica.getVistoCollection();
         for( Visto visto: vistoCollection){
-            if( visto.getFase().equals(fasePratica.getFase()) ){
+            if( visto.getFase().equals(fp.getFase()) ){
                 if( numero < visto.getNumero() ){
                     numero = visto.getNumero();
                 }
@@ -215,14 +222,32 @@ public class SimpleWorkFlow {
         }
         numero += 1;
         Visto visto = new Visto();
-        visto.setFase(fasePratica.getFase());
+        visto.setFase(fp.getFase());
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
         visto.setData(date);
         visto.setNumero(numero);
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         visto.setUtente(utente);
-        // TODO: da inserire il responsabile e la titolarità, ma prima strutturare il permesso sulla
+        // TODO: da inserire il responsabile e la titolarità
+        IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(fp.getPratica());
+        String cariche = fp.getCariche();
+        if( cariche != null && !cariche.equals("")){
+            // ci sono dele cariche da verificare
+            GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
+            for( String carica: cariche.split(",") ){
+                CodiceCarica codiceCarica = CodiceCarica.valueOf(carica);
+                TitoloDelega titoloDelega = gestoreDeleghe.checkTitoloODelega(codiceCarica, dettaglio.getServizio(), procedimento, dettaglio.getUfficio());
+                if( titoloDelega != null ){
+                    visto.setCodiceCarica(codiceCarica);
+                    if( titoloDelega.getTitolo() ){
+                        visto.setResponsabile(utente);
+                    } else if( titoloDelega.getDelega() ){
+                        visto.setResponsabile(titoloDelega.getDelegante());
+                    }
+                }
+            }
+        }
         vistoCollection.add(visto);
         pratica.setVistoCollection(vistoCollection);
         Controller controller = (Controller) Register.queryUtility(IController.class, pratica.getClass().getName());

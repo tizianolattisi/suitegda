@@ -146,10 +146,10 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         // se è una delega verifico che il delegante abbia titolo per delegare
         for( Delega titoloODelega: titoliEDeleghe ){
             if( titoloODelega.getTitolare() ){
-                return TitoloDelega.TITOLO;
+                return new TitoloDelega(true, false, titoloODelega.getCarica(), utente, null);
             }
             if( this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, titoloODelega.getDelegante(), dataVerifica) != null ){
-                return TitoloDelega.DELEGA;
+                return new TitoloDelega(false, true, titoloODelega.getCarica(), utente, titoloODelega.getDelegante());
             }
         }
         
@@ -193,7 +193,7 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         for( Delega titoloODelega: titoliEDelegheAmpie ){
             if( titoloODelega.getTitolare() ){
                 // L'utente ha una titolarità più ampia del richiesto
-                return TitoloDelega.TITOLO;
+                return new TitoloDelega(true, false, titoloODelega.getCarica(), utente, null);
             }
         }
         // Poi cerchiamo tra le deleghe
@@ -201,7 +201,7 @@ public class GestoreDeleghe implements IGestoreDeleghe {
             if( titoloODelega.getDelegato() ){
                 // L'utente è delegato, quindi devo verificare se il delegante ha titolo per delegare
                 if( this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, titoloODelega.getDelegante(), dataVerifica) != null ){
-                    return TitoloDelega.DELEGA;
+                    return new TitoloDelega(false, true, titoloODelega.getCarica(), utente, titoloODelega.getDelegante());
                 }
             }
         }        
