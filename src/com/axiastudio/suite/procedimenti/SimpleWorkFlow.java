@@ -18,6 +18,8 @@ package com.axiastudio.suite.procedimenti;
 
 import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
@@ -27,6 +29,7 @@ import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.pratiche.entities.TipoVisto;
 import com.axiastudio.suite.pratiche.entities.Visto;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
@@ -122,8 +125,8 @@ public class SimpleWorkFlow {
         GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         for( String carica: cariche.split(",") ){
             CodiceCarica codiceCarica = CodiceCarica.valueOf(carica);
-            Boolean check = gestoreDeleghe.checkTitoloODelega(codiceCarica, dettaglio.getServizio(), procedimento, dettaglio.getUfficio());
-            if( check ){
+            TitoloDelega check = gestoreDeleghe.checkTitoloODelega(codiceCarica, dettaglio.getServizio(), procedimento, dettaglio.getUfficio());
+            if( check != null ){
                 return true;
             }
         }
@@ -219,11 +222,11 @@ public class SimpleWorkFlow {
         visto.setNumero(numero);
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         visto.setUtente(utente);
+        // TODO: da inserire il responsabile e la titolarità, ma prima strutturare il permesso sulla
         vistoCollection.add(visto);
         pratica.setVistoCollection(vistoCollection);
-        // TODO: da inserire il responsabile e la titolarità, ma prima strutturare il permesso sulla
-        // fase del procedimento
-
+        Controller controller = (Controller) Register.queryUtility(IController.class, pratica.getClass().getName());
+        controller.commit(pratica);
     }
 
     public void setFaseAttiva(FasePratica faseAttiva){

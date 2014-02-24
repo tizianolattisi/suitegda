@@ -111,7 +111,7 @@ public class GestoreDeleghe implements IGestoreDeleghe {
      * Ricerca secca della carica, non esiste una delega più ampia
      */
     @Override
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica) {
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica) {
         return this.checkTitoloODelega(codiceCarica, null, null, null, null, null);
     }
 
@@ -119,37 +119,37 @@ public class GestoreDeleghe implements IGestoreDeleghe {
     /*
      * Ricerca per servizio, da verificare il caso più ampio "tutti i servizi"
      */
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio) {
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio) {
         return this.checkTitoloODelega(codiceCarica, servizio, null, null, null, null);
     }
 
     @Override
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento) {
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento) {
         return this.checkTitoloODelega(codiceCarica, servizio, procedimento, null, null, null);
     }
 
     @Override
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio) {
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio) {
         return this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, null, null);
     }
 
     @Override
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente) {
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente) {
         return this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, utente, null);
     }
 
     @Override
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
 
         // prima cerchiamo un titolo o una delega esatta
         List<Delega> titoliEDeleghe = this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, ufficio, utente, dataVerifica);
         // se è una delega verifico che il delegante abbia titolo per delegare
         for( Delega titoloODelega: titoliEDeleghe ){
             if( titoloODelega.getTitolare() ){
-                return true;
+                return TitoloDelega.TITOLO;
             }
-            if( this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, titoloODelega.getDelegante(), dataVerifica) ){
-                return true;
+            if( this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, titoloODelega.getDelegante(), dataVerifica) != null ){
+                return TitoloDelega.DELEGA;
             }
         }
         
@@ -189,43 +189,23 @@ public class GestoreDeleghe implements IGestoreDeleghe {
             titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
             titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
         }
-        /*
-        if( ufficio != null ){
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, null, utente, dataVerifica));
-            if( procedimento != null ){
-                titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
-            }
-            if( servizio != null ){
-                titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica));
-            }
-        }
-        if( procedimento != null ){
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, ufficio, utente, dataVerifica));
-            if( servizio != null ){
-                titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica));
-            }
-        }
-        if( servizio != null ){
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, ufficio, utente, dataVerifica));
-        }
-        */
         // Prima andiamo alla ricerca delle titolarità
         for( Delega titoloODelega: titoliEDelegheAmpie ){
             if( titoloODelega.getTitolare() ){
                 // L'utente ha una titolarità più ampia del richiesto
-                return true;
+                return TitoloDelega.TITOLO;
             }
         }
         // Poi cerchiamo tra le deleghe
         for( Delega titoloODelega: titoliEDelegheAmpie ){
             if( titoloODelega.getDelegato() ){
                 // L'utente è delegato, quindi devo verificare se il delegante ha titolo per delegare
-                if( this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, titoloODelega.getDelegante(), dataVerifica) ){
-                    return true;
+                if( this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, titoloODelega.getDelegante(), dataVerifica) != null ){
+                    return TitoloDelega.DELEGA;
                 }
             }
         }        
-        return false;
+        return null;
     }
     
     /*
