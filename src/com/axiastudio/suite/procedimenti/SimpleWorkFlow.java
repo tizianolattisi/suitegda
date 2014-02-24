@@ -64,6 +64,7 @@ public class SimpleWorkFlow {
             fasi.add(fp);
         }
         obj = pratica;
+        procedimento = pratica.getTipo().getProcedimento();
     }
     public SimpleWorkFlow(IDettaglio dettaglio){
         this(dettaglio.getPratica());
@@ -135,7 +136,9 @@ public class SimpleWorkFlow {
         GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         for( String carica: cariche.split(",") ){
             CodiceCarica codiceCarica = CodiceCarica.valueOf(carica);
-            TitoloDelega check = gestoreDeleghe.checkTitoloODelega(codiceCarica, dettaglio.getServizio(), procedimento, dettaglio.getUfficio());
+            Utente utente = (Utente) Register.queryUtility(IUtente.class);
+            TitoloDelega check = gestoreDeleghe.checkTitoloODelega(codiceCarica, dettaglio.getServizio(), procedimento,
+                    dettaglio.getUfficio(), utente);
             if( check != null ){
                 return check;
             }
