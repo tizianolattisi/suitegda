@@ -39,6 +39,14 @@ public class SimpleWorkflowDialog extends QDialog {
     private void initOk(){
         QVBoxLayout vBox = new QVBoxLayout();
         this.setLayout(vBox);
+        TitoloDelega titoloDelega = simpleWorkFlow.checkTitoloDelega(fasePratica);
+        if( titoloDelega != null && titoloDelega.getCarica() != null ){
+            String descrizioneTitoloODelega = "Agisci come " + titoloDelega.getCarica().toString();
+            if( titoloDelega.getDelega() ){
+                descrizioneTitoloODelega += " delegato da " + titoloDelega.getDelegante().toString();
+            }
+            vBox.addWidget(new QLabel(descrizioneTitoloODelega));
+        }
         vBox.addWidget(new QLabel(fasePratica.getFase().getDescrizione()));
         vBox.addWidget(new QLabel(fasePratica.getTesto()));
         QCheckBox checkBox = new QCheckBox("ho letto e compreso");
