@@ -225,13 +225,9 @@ public class SimpleWorkFlow {
         numero += 1;
         Visto visto = new Visto();
         visto.setFase(fp.getFase());
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        visto.setData(date);
         visto.setNumero(numero);
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         visto.setUtente(utente);
-        // TODO: da inserire il responsabile e la titolarità
         IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(fp.getPratica());
         String cariche = fp.getCariche();
         if( cariche != null && !cariche.equals("")){

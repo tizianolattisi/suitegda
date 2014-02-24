@@ -49,8 +49,8 @@ public class Visto implements Serializable {
     @JoinColumn(name = "responsabile", referencedColumnName = "id")
     @ManyToOne
     private Utente responsabile;
-    @Column(name="data")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name="data", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date data;
     @Column(name="numero")
     private Integer numero;
