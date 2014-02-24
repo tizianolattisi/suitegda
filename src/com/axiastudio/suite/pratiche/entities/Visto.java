@@ -52,8 +52,6 @@ public class Visto implements Serializable {
     @Column(name="data", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date data;
-    @Column(name="numero")
-    private Integer numero;
 
     public Long getId() {
         return id;
@@ -111,11 +109,4 @@ public class Visto implements Serializable {
         this.data = data;
     }
 
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
 }

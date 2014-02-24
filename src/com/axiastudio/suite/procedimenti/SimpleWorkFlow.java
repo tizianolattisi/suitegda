@@ -213,19 +213,8 @@ public class SimpleWorkFlow {
 
     private void creaVisto(FasePratica fp) {
         Pratica pratica = fp.getPratica();
-        Integer numero = 0;
-        Collection<Visto> vistoCollection = pratica.getVistoCollection();
-        for( Visto visto: vistoCollection){
-            if( visto.getFase().equals(fp.getFase()) ){
-                if( numero < visto.getNumero() ){
-                    numero = visto.getNumero();
-                }
-            }
-        }
-        numero += 1;
         Visto visto = new Visto();
         visto.setFase(fp.getFase());
-        visto.setNumero(numero);
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         visto.setUtente(utente);
         IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(fp.getPratica());
@@ -253,7 +242,12 @@ public class SimpleWorkFlow {
 
     public void setFaseAttiva(FasePratica faseAttiva){
         for( FasePratica fp: getFasi() ){
-            fp.setAttiva(fp.equals(faseAttiva));
+            if( fp.equals(faseAttiva) ){
+                fp.setCompletata(false);
+                fp.setAttiva(true);
+            } else {
+                fp.setAttiva(false);
+            }
         }
     }
 
