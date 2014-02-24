@@ -1174,24 +1174,6 @@ CREATE TABLE determina (
     anno integer,
     numero integer,
     data date,
-    vistoresponsabile boolean NOT NULL DEFAULT FALSE,
-    datavistoresponsabile date,
-    titolarevistoresponsabile boolean NOT NULL DEFAULT FALSE,
-    segretariovistoresponsabile boolean NOT NULL DEFAULT FALSE,
-    delegatovistoresponsabile boolean NOT NULL DEFAULT FALSE,
-    utentevistoresponsabile bigint,
-    vistobilancio boolean NOT NULL DEFAULT FALSE,
-    datavistobilancio date,
-    titolarevistobilancio boolean NOT NULL DEFAULT FALSE,
-    segretariovistobilancio boolean NOT NULL DEFAULT FALSE,
-    delegatovistobilancio boolean NOT NULL DEFAULT FALSE,
-    utentevistobilancio bigint,
-    vistonegato boolean NOT NULL DEFAULT FALSE,
-    datavistonegato date,
-    titolarevistonegato boolean NOT NULL DEFAULT FALSE,
-    segretariovistonegato boolean NOT NULL DEFAULT FALSE,
-    delegatovistonegato boolean NOT NULL DEFAULT FALSE,
-    utentevistonegato bigint,
     protocollo character varying(12)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.determina OWNER TO postgres;
@@ -1201,12 +1183,6 @@ ALTER TABLE ONLY determina
     ADD CONSTRAINT determina_idpratica_key UNIQUE (idpratica);
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_pratica FOREIGN KEY (idpratica) REFERENCES pratiche.pratica(idpratica);
-ALTER TABLE ONLY determina
-    ADD CONSTRAINT fk_determina_utentevistoresponsabile FOREIGN KEY (utentevistoresponsabile) REFERENCES base.utente(id);
-ALTER TABLE ONLY determina
-    ADD CONSTRAINT fk_determina_utentevistobilancio FOREIGN KEY (utentevistobilancio) REFERENCES base.utente(id);
-ALTER TABLE ONLY determina
-    ADD CONSTRAINT fk_determina_utentevistonegato FOREIGN KEY (utentevistonegato) REFERENCES base.utente(id);
 ALTER TABLE ONLY determina
 ADD CONSTRAINT fk_determina_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
 
