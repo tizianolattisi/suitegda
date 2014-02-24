@@ -33,12 +33,8 @@ public class DeterminaListener {
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
         Calendar calendar = Calendar.getInstance();
-        Date today = calendar.getTime();
-        if( determina.getVistoBilancio() && determina.getDataVistoBilancio() == null ){
-            determina.setDataVistoBilancio(today);
-        }
-        if( determina.getVistoResponsabile() && determina.getDataVistoResponsabile() == null ){
-            determina.setDataVistoResponsabile(today);
+        Boolean acquisisciNUmero=false;
+        if( acquisisciNUmero && determina.getNumero() == null ){
             int year = calendar.get(Calendar.YEAR);
             determina.setAnno(year);
 
@@ -60,9 +56,6 @@ public class DeterminaListener {
                 numero = 1;
             }
             determina.setNumero(numero);
-        }
-        if( determina.getVistoNegato() && determina.getDataVistoNegato() == null ){
-            determina.setDataVistoNegato(today);
         }
     }
 
