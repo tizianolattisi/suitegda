@@ -791,7 +791,7 @@ CREATE TABLE visto (
   fase bigint,
   utente bigint,
   responsabile bigint,
-  data date,
+  data  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   numero int
 );
 ALTER TABLE pratiche.visto OWNER TO postgres;
