@@ -125,7 +125,7 @@ public class SimpleWorkFlow {
         return false;
     }
 
-    private TitoloDelega checkTitoloDelega(FasePratica fp) {
+    public TitoloDelega checkTitoloDelega(FasePratica fp) {
         IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(fp.getPratica());
         String cariche = fp.getCariche();
         if( cariche == null || cariche.equals("")){
@@ -250,10 +250,9 @@ public class SimpleWorkFlow {
                 }
             }
         }
-        vistoCollection.add(visto);
-        pratica.setVistoCollection(vistoCollection);
-        Controller controller = (Controller) Register.queryUtility(IController.class, pratica.getClass().getName());
-        controller.commit(pratica);
+        visto.setPratica(pratica);
+        Controller controller = (Controller) Register.queryUtility(IController.class, visto.getClass().getName());
+        controller.commit(visto);
     }
 
     public void setFaseAttiva(FasePratica faseAttiva){

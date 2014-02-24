@@ -20,7 +20,9 @@ import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
+import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.suite.deliberedetermine.DeterminaCallbacks;
 import com.axiastudio.suite.modelli.entities.Modello;
 import com.axiastudio.suite.modelli.entities.Segnalibro;
@@ -64,11 +66,7 @@ import com.axiastudio.suite.generale.entities.Etichetta;
 import com.axiastudio.suite.pratiche.PraticaAdapters;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.PraticaPrivate;
-import com.axiastudio.suite.pratiche.entities.Dipendenza;
-import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
-import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.pratiche.entities.TipoPratica;
-import com.axiastudio.suite.pratiche.entities.Fase;
+import com.axiastudio.suite.pratiche.entities.*;
 import com.axiastudio.suite.pratiche.forms.FormDipendenzaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
@@ -126,6 +124,7 @@ public class Configure {
         privates();
 
         forms(db);
+        controllers(db);
         plugins(properties);
         templates(properties);
 
@@ -234,6 +233,13 @@ public class Configure {
             template.setUserData(modello.getProtocollabile());
             ooopsPlugin.addTemplate(template);
         }
+    }
+
+    private static void controllers(Database db) {
+
+        Controller controller = new Controller(db.getEntityManagerFactory(), Visto.class);
+        Register.registerUtility(controller, IController.class, Visto.class.getName());
+
     }
 
     private static void forms(Database db) {
