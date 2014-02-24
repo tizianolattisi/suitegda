@@ -787,7 +787,7 @@ ADD CONSTRAINT fk_fasepratica_rifiutata FOREIGN KEY (rifiutata) REFERENCES prati
 CREATE TABLE visto (
   id bigserial NOT NULL,
   tipo character varying(255),
-  pratica bigint,
+  pratica character varying(9),
   fase bigint,
   utente bigint,
   responsabile bigint,
@@ -796,7 +796,9 @@ CREATE TABLE visto (
 );
 ALTER TABLE pratiche.visto OWNER TO postgres;
 ALTER TABLE ONLY visto
-ADD CONSTRAINT fk_visto_pratica FOREIGN KEY (pratica) REFERENCES pratiche.pratica(id);
+ADD CONSTRAINT visto_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY visto
+ADD CONSTRAINT fk_visto_pratica FOREIGN KEY (pratica) REFERENCES pratiche.pratica(idpratica);
 ALTER TABLE ONLY visto
 ADD CONSTRAINT fk_visto_fase FOREIGN KEY (fase) REFERENCES pratiche.fase(id);
 ALTER TABLE ONLY visto

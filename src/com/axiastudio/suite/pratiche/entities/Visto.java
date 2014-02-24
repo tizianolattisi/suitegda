@@ -36,7 +36,7 @@ public class Visto implements Serializable {
     private Long id;
     @Enumerated(EnumType.STRING)
     private TipoVisto tipo;
-    @JoinColumn(name = "pratica", referencedColumnName = "id")
+    @JoinColumn(name = "pratica", referencedColumnName = "idpratica")
     @ManyToOne
     private Pratica pratica;
     @JoinColumn(name = "fase", referencedColumnName = "id")
