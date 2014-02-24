@@ -786,7 +786,7 @@ ADD CONSTRAINT fk_fasepratica_rifiutata FOREIGN KEY (rifiutata) REFERENCES prati
 
 CREATE TABLE visto (
   id bigserial NOT NULL,
-  tipo character varying(255),
+  codicecarica character varying(255),
   pratica character varying(9),
   fase bigint,
   utente bigint,

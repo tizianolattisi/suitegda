@@ -17,6 +17,7 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -35,7 +36,7 @@ public class Visto implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genvisto")
     private Long id;
     @Enumerated(EnumType.STRING)
-    private TipoVisto tipo;
+    private CodiceCarica codiceCarica;
     @JoinColumn(name = "pratica", referencedColumnName = "idpratica")
     @ManyToOne
     private Pratica pratica;
@@ -62,12 +63,12 @@ public class Visto implements Serializable {
         this.id = id;
     }
 
-    public TipoVisto getTipo() {
-        return tipo;
+    public CodiceCarica getCodiceCarica() {
+        return codiceCarica;
     }
 
-    public void setTipo(TipoVisto tipo) {
-        this.tipo = tipo;
+    public void setCodiceCarica(CodiceCarica codiceCarica) {
+        this.codiceCarica = codiceCarica;
     }
 
     public Pratica getPratica() {
