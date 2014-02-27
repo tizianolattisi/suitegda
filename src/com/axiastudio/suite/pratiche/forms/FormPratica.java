@@ -21,6 +21,8 @@ import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.IForm;
+import com.axiastudio.pypapi.ui.TableModel;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
@@ -89,6 +91,10 @@ public class FormPratica extends Window implements IDocumentFolder {
         } catch (SecurityException ex) {
             Logger.getLogger(FormPratica.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        // visti non editabili
+        PyPaPiTableView tableView_visti = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_visti");
+        Util.setWidgetReadOnly(tableView_visti, true);
     }
 
     private void apriDettaglio(){
