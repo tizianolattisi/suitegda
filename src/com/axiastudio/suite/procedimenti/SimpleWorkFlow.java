@@ -210,16 +210,22 @@ public class SimpleWorkFlow {
             creaVisto(fp);
         } else {
             setFaseAttiva(fp.getRifiutata());
+            creaVisto(fp, true);
         }
 
     }
 
     private void creaVisto(FasePratica fp) {
+        creaVisto(fp, false);
+    }
+
+    private void creaVisto(FasePratica fp, Boolean negato) {
         Pratica pratica = fp.getPratica();
         Visto visto = new Visto();
         visto.setFase(fp.getFase());
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         visto.setUtente(utente);
+        visto.setNegato(negato);
         IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(fp.getPratica());
         String cariche = fp.getCariche();
         if( cariche != null && !cariche.equals("")){

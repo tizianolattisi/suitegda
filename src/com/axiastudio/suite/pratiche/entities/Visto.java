@@ -52,6 +52,8 @@ public class Visto implements Serializable {
     @Column(name="data", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date data;
+    @Column(name="negato")
+    Boolean negato=false;
 
     public Long getId() {
         return id;
@@ -109,4 +111,11 @@ public class Visto implements Serializable {
         this.data = data;
     }
 
+    public Boolean getNegato() {
+        return negato;
+    }
+
+    public void setNegato(Boolean negato) {
+        this.negato = negato;
+    }
 }

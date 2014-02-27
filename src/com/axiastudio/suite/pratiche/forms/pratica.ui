@@ -95,7 +95,7 @@
            <string>.vistoCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;data&lt;,&gt;fase&lt;,&gt;codiceCarica&lt;,&gt;utente&lt;,&gt;responsabile&lt;</string>
+           <string>&gt;data&lt;,&gt;fase&lt;,&gt;negato&lt;,&gt;codiceCarica&lt;,&gt;utente&lt;,&gt;responsabile&lt;</string>
           </property>
           <property name="sortcolumn" stdset="0">
            <number>0</number>
