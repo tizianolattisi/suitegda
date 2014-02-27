@@ -90,7 +90,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_4">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_visti">
           <property name="entity" stdset="0">
            <string>.vistoCollection</string>
           </property>
@@ -833,14 +833,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
-   <extends>QComboBox</extends>
-   <header>pypapicombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
    <header location="global">pypapitableview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
