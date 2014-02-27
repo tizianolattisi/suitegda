@@ -19,6 +19,7 @@ package com.axiastudio.suite.deliberedetermine.entities;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaListener;
+import com.axiastudio.suite.finanziaria.entities.Progetto;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
@@ -64,10 +65,9 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     private Boolean diRegolarizzazione=Boolean.FALSE;
     @Column(name="referentepolitico")
     private String referentePolitico;
-    @Column(name="ufficioresponsabile")
-    private String ufficioResponsabile;
-    @Column(name="nomeresponsabile")
-    private String nomeResponsabile;
+    @JoinColumn(name = "responsabile", referencedColumnName = "id")
+    @ManyToOne
+    private Utente Responsabile;
     @Column(name="anno")
     private Integer anno;
     @Column(name="numero")
@@ -75,12 +75,33 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     @Column(name="data")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date data;
-
     /* protocollo */
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
-    
+    @Enumerated(EnumType.STRING)
+    private TipoPubblicazione pubblicabile=TipoPubblicazione.PUBBLICABILE;
+    @Column(name="pluriennale")
+    private Boolean pluriennale=Boolean.FALSE;
+    @Column(name="finoadanno")
+    private Integer finoAdAnno;
+    @JoinColumn(name = "progetto", referencedColumnName = "id")
+    @ManyToOne
+    private Progetto progetto;
+
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
+
+
     public Long getId() {
         return id;
     }
@@ -219,22 +240,6 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
         this.referentePolitico = referentePolitico;
     }
 
-    public String getUfficioResponsabile() {
-        return ufficioResponsabile;
-    }
-
-    public void setUfficioResponsabile(String ufficioResponsabile) {
-        this.ufficioResponsabile = ufficioResponsabile;
-    }
-
-    public String getNomeResponsabile() {
-        return nomeResponsabile;
-    }
-
-    public void setNomeResponsabile(String nomeResponsabile) {
-        this.nomeResponsabile = nomeResponsabile;
-    }
-
     public Integer getAnno() {
         return anno;
     }
@@ -265,6 +270,89 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
 
     public void setProtocollo(Protocollo protocollo) {
         this.protocollo = protocollo;
+    }
+
+    public Utente getResponsabile() {
+        return Responsabile;
+    }
+
+    public void setResponsabile(Utente responsabile) {
+        Responsabile = responsabile;
+    }
+
+    public TipoPubblicazione getPubblicabile() {
+        return pubblicabile;
+    }
+
+    public void setPubblicabile(TipoPubblicazione pubblicabile) {
+        this.pubblicabile = pubblicabile;
+    }
+
+    public Boolean getPluriennale() {
+        return pluriennale;
+    }
+
+    public void setPluriennale(Boolean pluriennale) {
+        this.pluriennale = pluriennale;
+    }
+
+    public Integer getFinoAdAnno() {
+        return finoAdAnno;
+    }
+
+    public void setFinoAdAnno(Integer finoAdAnno) {
+        this.finoAdAnno = finoAdAnno;
+    }
+
+    public Progetto getProgetto() {
+        return progetto;
+    }
+
+    public void setProgetto(Progetto progetto) {
+        this.progetto = progetto;
+    }
+
+    public String getServizioPrincipale() {
+        if (getServizio() != null) {
+            return getServizio().getDescrizione();
+        }
+        return null;
+    }
+
+    public void setServizioPrincipale(String servizioPrincipale) {
+        // NOP
+    }
+
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
+    }
+
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
+    }
+
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
 
     @Override

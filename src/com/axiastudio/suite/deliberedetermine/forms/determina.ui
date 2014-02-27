@@ -14,7 +14,13 @@
    <string>Determine</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>idpratica,codiceinterno,oggetto</string>
+   <string>&gt;codiceinterno&lt;,oggetto,&gt;anno&lt;,&gt;numero&lt;,&gt;dispesa&lt;,&gt;diEntrata&lt;,&gt;diRegolarizzazione&lt;,servizioPrincipale</string>
+  </property>
+  <property name="sortcolumn" stdset="0">
+   <number>0</number>
+  </property>
+  <property name="sortorder" stdset="0">
+   <string>&lt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,1,1,1,5">
@@ -50,6 +56,9 @@
          </property>
          <property name="column" stdset="0">
           <string>idpratica</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -99,6 +108,9 @@
          <property name="column" stdset="0">
           <string>oggetto</string>
          </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -130,6 +142,9 @@
          <property name="column" stdset="0">
           <string>dispesa</string>
          </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -140,6 +155,9 @@
          <property name="column" stdset="0">
           <string>diEntrata</string>
          </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -149,6 +167,9 @@
          </property>
          <property name="column" stdset="0">
           <string>diRegolarizzazione</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -186,6 +207,12 @@
          </property>
          <property name="headers" stdset="0">
           <string>,Servizio</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="searchfields" stdset="0">
+          <string>servizio.descrizione</string>
          </property>
         </widget>
        </item>
@@ -275,6 +302,9 @@
          <property name="column" stdset="0">
           <string>anno</string>
          </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item row="1" column="0">
@@ -291,6 +321,9 @@
          </property>
          <property name="column" stdset="0">
           <string>numero</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

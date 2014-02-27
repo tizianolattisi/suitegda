@@ -427,6 +427,28 @@ ALTER TABLE ONLY capitolo
     ADD CONSTRAINT capitolo_pkey PRIMARY KEY (id);
 
 
+	
+CREATE TABLE progetto (
+    id bigserial NOT NULL,
+    anno int NOT NULL ,
+    codiceprogetto character varying (5) NULL ,
+    progetto character varying (250) NULL ,
+    ufficioresponsabile bigint NULL ,
+    investimento character varying NULL ,
+    servizio character varying NULL ,
+    motivazione character varying NULL ,
+    descrizione character varying NULL ,
+    referentepolitico character varying (255) NULL ,
+    approvazioneconsiglio boolean NULL ,
+    dataconsiglio date NULL 
+) INHERITS (generale.withtimestamp);
+ALTER TABLE finanziaria.progetto OWNER TO postgres;
+ALTER TABLE ONLY progetto
+    ADD CONSTRAINT progetto_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY progetto
+    ADD CONSTRAINT fk_progetto_ufficio FOREIGN KEY (ufficioresponsabile) REFERENCES base.ufficio(id);
+
+
 -- Procedimenti
 SET search_path = procedimenti, pg_catalog;
 
@@ -1169,13 +1191,16 @@ CREATE TABLE determina (
     dientrata boolean NOT NULL DEFAULT FALSE,
     dispesa boolean NOT NULL DEFAULT FALSE,
     diregolarizzazione boolean NOT NULL DEFAULT FALSE,
-    referentepolitico character varying(255),
-    ufficioresponsabile character varying(255),
-    nomeresponsabile character varying(255),
     anno integer,
     numero integer,
     data date,
-    protocollo character varying(12)
+    referentepolitico character varying(255),
+    responsabile bigint,
+    protocollo character varying(12),
+    pubblicabile int,
+    pluriennale boolean,
+    finoadanno int,
+    progetto bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.determina OWNER TO postgres;
 ALTER TABLE ONLY determina
@@ -1185,8 +1210,11 @@ ALTER TABLE ONLY determina
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_pratica FOREIGN KEY (idpratica) REFERENCES pratiche.pratica(idpratica);
 ALTER TABLE ONLY determina
-ADD CONSTRAINT fk_determina_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
-
+    ADD CONSTRAINT fk_determina_responsabile FOREIGN KEY (responsabile) REFERENCES base.utente(id);
+ALTER TABLE ONLY determina
+      ADD CONSTRAINT fk_determina_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
+ALTER TABLE ONLY determina
+      ADD CONSTRAINT fk_determina_progetto FOREIGN KEY (progetto) REFERENCES finanziaria.progetto(id);
 
 CREATE TABLE serviziodetermina (
     id bigserial NOT NULL,
