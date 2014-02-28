@@ -326,7 +326,7 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     }
 
     public Visto getVistoResponsabile() {
-        Long idFaseVisto = Long.getLong(SuiteUtil.trovaCostante("FASE_VISTO_RESPONSABILE").getValore());
+        Long idFaseVisto = Long.parseLong(SuiteUtil.trovaCostante("FASE_VISTO_RESPONSABILE").getValore());
         for( Visto visto: this.getPratica().getVistoCollection() ){
 
             if( visto.getFase().getId() == idFaseVisto && !visto.getNegato() ){
