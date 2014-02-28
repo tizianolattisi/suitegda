@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.deliberedetermine.entities;
 
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaListener;
@@ -23,6 +24,7 @@ import com.axiastudio.suite.finanziaria.entities.Progetto;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.pratiche.entities.Visto;
 import com.axiastudio.suite.protocollo.IProtocollabile;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 
@@ -320,6 +322,21 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     }
 
     public void setServizioPrincipale(String servizioPrincipale) {
+        // NOP
+    }
+
+    public Visto getVistoResponsabile() {
+        Long idFaseVisto = Long.getLong(SuiteUtil.trovaCostante("FASE_VISTO_RESPONSABILE").getValore());
+        for( Visto visto: this.getPratica().getVistoCollection() ){
+
+            if( visto.getFase().getId() == idFaseVisto && !visto.getNegato() ){
+                return visto;
+            }
+        }
+        return null;
+    }
+
+    public void setVistoResponsabile(Visto vistoResponsabile){
         // NOP
     }
 
