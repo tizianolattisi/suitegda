@@ -325,8 +325,10 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
         // NOP
     }
 
-    public Visto getVistoResponsabile() {
-        Long idFaseVisto = Long.parseLong(SuiteUtil.trovaCostante("FASE_VISTO_RESPONSABILE").getValore());
+
+
+    private Visto getVisto(String tipoVisto) {
+        Long idFaseVisto = Long.parseLong(SuiteUtil.trovaCostante(tipoVisto).getValore());
         for( Visto visto: this.getPratica().getVistoCollection() ){
 
             if( visto.getFase().getId() == idFaseVisto && !visto.getNegato() ){
@@ -336,9 +338,20 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
         return null;
     }
 
-    public void setVistoResponsabile(Visto vistoResponsabile){
-        // NOP
+    public Visto getVistoResponsabile() {
+        return getVisto("FASE_VISTO_RESPONSABILE");
     }
+    public void setVistoResponsabile(Visto visto){  }
+
+    public Visto getVistoBilancio() {
+        return getVisto("FASE_VISTO_BILANCIO");
+    }
+    public void setVistoBilancio(Visto visto){  }
+
+    public Visto getVistoBilancioNegato() {
+        return getVisto("FASE_VISTO_BILANCIO_NEGATO");
+    }
+    public void setVistoBilancioNegato(Visto visto){  }
 
     public Date getRecordcreato() {
         return recordcreato;
