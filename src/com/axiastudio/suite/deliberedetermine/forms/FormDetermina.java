@@ -21,6 +21,7 @@ import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.ITableModel;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
@@ -28,6 +29,7 @@ import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
+import com.axiastudio.suite.pratiche.entities.Visto;
 import com.axiastudio.suite.pratiche.forms.FormDettaglio;
 import com.axiastudio.suite.procedimenti.SimpleWorkFlow;
 import com.axiastudio.suite.procedimenti.SimpleWorkflowDialog;
@@ -57,6 +59,45 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
     protected void indexChanged(int row) {
         super.indexChanged(row);
         popolaProcedimento();
+        popolaVisti();
+    }
+
+    private void popolaVisti() {
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+
+        Visto vistoResponsabile = determina.getVistoResponsabile();
+        String testoResponsabile = "-";
+        if( vistoResponsabile != null ){
+            testoResponsabile = SuiteUtil.DATE_FORMAT.format(vistoResponsabile.getData()) + ", " + vistoResponsabile.getUtente();
+            if( vistoResponsabile.getResponsabile() != null && !vistoResponsabile.getResponsabile().equals(vistoResponsabile.getUtente()) ){
+                testoResponsabile += " (res. " + vistoResponsabile.getResponsabile() + ")";
+            }
+        }
+        QLabel responsabile = (QLabel) findChild(QLabel.class, "label_vistoResponsabile");
+        responsabile.setText(testoResponsabile);
+
+        Visto vistoBilancio = determina.getVistoBilancio();
+        String testoBilancio = "-";
+        if( vistoBilancio != null ){
+            testoBilancio = SuiteUtil.DATE_FORMAT.format(vistoBilancio.getData()) + ", " + vistoBilancio.getUtente();
+            if( vistoBilancio.getResponsabile() != null && !vistoBilancio.getResponsabile().equals(vistoBilancio.getUtente()) ){
+                testoBilancio += " (res. " + vistoBilancio.getResponsabile() + ")";
+            }
+        }
+        QLabel bilancio = (QLabel) findChild(QLabel.class, "label_vistoBilancio");
+        bilancio.setText(testoBilancio);
+
+        Visto vistoBilancioNegato = determina.getVistoBilancioNegato();
+        String testoBilancioNegato = "-";
+        if( vistoBilancioNegato != null ){
+            testoBilancioNegato = SuiteUtil.DATE_FORMAT.format(vistoBilancioNegato.getData()) + ", " + vistoBilancioNegato.getUtente();
+            if( vistoBilancioNegato.getResponsabile() != null && !vistoBilancioNegato.getResponsabile().equals(vistoBilancioNegato.getUtente()) ){
+                testoBilancioNegato += " (res. " + vistoBilancioNegato.getResponsabile() + ")";
+            }
+        }
+        QLabel bilancioNegato = (QLabel) findChild(QLabel.class, "label_vistoBilancioNegato");
+        bilancioNegato.setText(testoBilancioNegato);
+
     }
 
     private void popolaProcedimento() {
