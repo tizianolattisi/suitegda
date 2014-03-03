@@ -36,6 +36,8 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -165,7 +167,14 @@ public class SimpleWorkFlow {
 
         GroovyShell shell = new GroovyShell(binding);
         String groovy = groovyClosure + "(obj)";
-        Object value = shell.evaluate(groovy);
+        Object value=null;
+        try{
+            value = shell.evaluate(groovy);
+        } catch (Exception ex){
+            String msg = "Errore eseguendo il codice di workflow:\n" + groovyClosure;
+            Logger.getLogger(SimpleWorkFlow.class.getName()).log(Level.WARNING, msg, ex);
+            return false;
+        }
         if( value instanceof Boolean ){
             return (Boolean) value;
         } else {
