@@ -222,7 +222,7 @@ public class OoopsDialog extends QDialog {
                 if( protocollabile ){
                     HashMap<String, String> rules = new HashMap<String, String>();
                     rules.put("numeroprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.iddocumento : \"YYYYNNNNNNNN\" }");
-                    rules.put("dataprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.dataprotocollo : \"GG/MM/YYY\"}");
+                    rules.put("dataprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.dataprotocollo : \"GG/MM/YYYY\"}");
                     RuleSet ruleSetProtocollo = new RuleSet(rules);
                     template.setRuleSet(ruleSetProtocollo);
                 }
