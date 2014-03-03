@@ -118,9 +118,9 @@ public class OoopsHelper {
             XTextRange range = content.getAnchor();
             return range;
         } catch (NoSuchElementException ex) {
-            Logger.getLogger(OoopsHelper.class.getName()).log(Level.WARNING, "unable to find "+anchorName+" anchor", ex);
+            //Logger.getLogger(OoopsHelper.class.getName()).log(Level.WARNING, "unable to find "+anchorName+" anchor", ex);
         } catch (WrappedTargetException ex) {
-            Logger.getLogger(OoopsHelper.class.getName()).log(Level.WARNING, "unable to find "+anchorName+" anchor", ex);
+            //Logger.getLogger(OoopsHelper.class.getName()).log(Level.WARNING, "unable to find "+anchorName+" anchor", ex);
         }     
         return null;
     }
