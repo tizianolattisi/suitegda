@@ -215,7 +215,12 @@ public class SimpleWorkFlow {
     public void completaFase(FasePratica fp, Boolean confermata){
         if( confermata ){
             fp.setCompletata(true);
-            setFaseAttiva(fp.getConfermata());
+            FasePratica successiva = fp.getConfermata();
+            while( successiva.getDascartare()!=null && successiva.getDascartare() != "" &&
+                    eseguiClosure(successiva.getDascartare()) ){
+                successiva = successiva.getConfermata();
+            }
+            setFaseAttiva(successiva);
             creaVisto(fp);
         } else {
             setFaseAttiva(fp.getRifiutata());

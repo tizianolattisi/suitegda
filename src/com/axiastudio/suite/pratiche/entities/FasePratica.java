@@ -43,6 +43,8 @@ public class FasePratica implements Serializable {
     private Integer progressivo;
     @Column(name="testo")
     private String testo;
+    @Column(name="dascartare")
+    private String dascartare;
     @Column(name="confermabile")
     private Boolean confermabile=false;
     @JoinColumn(name = "confermata", referencedColumnName = "id")
@@ -140,6 +142,14 @@ public class FasePratica implements Serializable {
 
     public void setTesto(String testo) {
         this.testo = testo;
+    }
+
+    public String getDascartare() {
+        return dascartare;
+    }
+
+    public void setDascartare(String dascartare) {
+        this.dascartare = dascartare;
     }
 
     public String getTestoconfermata() {

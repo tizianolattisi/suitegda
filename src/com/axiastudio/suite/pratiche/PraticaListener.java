@@ -105,6 +105,7 @@ public class PraticaListener {
             fasePratica.setPratica(pratica);
             fasePratica.setFase(faseProcedimento.getFase());
             fasePratica.setTesto(faseProcedimento.getTesto());
+            fasePratica.setDascartare(faseProcedimento.getDascartare());
             fasePratica.setCondizione(faseProcedimento.getCondizione());
             fasePratica.setAzione(faseProcedimento.getAzione());
             fasePratica.setConfermabile(faseProcedimento.getConfermabile());

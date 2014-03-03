@@ -62,54 +62,54 @@
       <attribute name="title">
        <string>Condizione</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,1,0,4">
+      <layout class="QGridLayout" name="gridLayout">
        <property name="leftMargin">
-        <number>4</number>
+        <number>6</number>
        </property>
        <property name="topMargin">
-        <number>4</number>
+        <number>6</number>
        </property>
        <property name="rightMargin">
-        <number>4</number>
+        <number>6</number>
        </property>
        <property name="bottomMargin">
-        <number>4</number>
+        <number>6</number>
        </property>
-       <item row="0" column="0">
+       <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="label_10">
          <property name="text">
           <string>Cariche abilitate alla fase</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
+       <item row="0" column="3">
         <widget class="QLabel" name="label_11">
          <property name="text">
           <string>Cariche disponibili</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" rowspan="3">
+       <item row="1" column="0" rowspan="3" colspan="2">
         <widget class="QListWidget" name="caricheAbilitate"/>
        </item>
-       <item row="1" column="1">
+       <item row="1" column="2">
         <widget class="QToolButton" name="aggiungiCarica">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2" rowspan="3">
+       <item row="1" column="3" rowspan="3">
         <widget class="QListWidget" name="caricheDisponibili"/>
        </item>
-       <item row="2" column="1">
+       <item row="2" column="2">
         <widget class="QToolButton" name="rimuoviCarica">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="3" column="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -122,17 +122,31 @@
          </property>
         </spacer>
        </item>
-       <item row="4" column="0" colspan="3">
+       <item row="4" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Codice</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="3">
+       <item row="5" column="0" colspan="4">
         <widget class="QTextEdit" name="textEdit_2">
          <property name="column" stdset="0">
           <string>condizione</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Da scartare se</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1" colspan="3">
+        <widget class="QLineEdit" name="lineEdit_4">
+         <property name="column" stdset="0">
+          <string>dascartare</string>
          </property>
         </widget>
        </item>
