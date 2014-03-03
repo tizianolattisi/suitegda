@@ -123,6 +123,9 @@ public class FormFaseProcedimento extends Dialog {
     private void aggiungiCarica(){
         FaseProcedimento faseProcedimento = (FaseProcedimento) this.getContext().getCurrentEntity();
         String cariche = faseProcedimento.getCariche();
+        if( cariche == null ){
+            cariche = "";
+        }
         QModelIndex index = caricheDisponibili.currentIndex();
         QListWidgetItem item = caricheDisponibili.item(index.row());
         String testoCarica = item.text();
