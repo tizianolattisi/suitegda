@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>625</width>
-    <height>384</height>
+    <width>515</width>
+    <height>145</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,63 +17,84 @@
    <string>descrizione</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>30</y>
-      <width>62</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Id</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>60</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Descrizione</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>30</y>
-      <width>113</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="column" stdset="0">
-     <string>id</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>60</y>
-      <width>311</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="column" stdset="0">
-     <string>descrizione</string>
-    </property>
-   </widget>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Servizio</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Ufficio</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="2">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
+         <property name="column" stdset="0">
+          <string>ufficio</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Descrizione</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>188</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QLineEdit" name="lineEdit_2">
+         <property name="column" stdset="0">
+          <string>descrizione</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
