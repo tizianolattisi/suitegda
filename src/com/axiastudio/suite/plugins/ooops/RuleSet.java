@@ -24,6 +24,8 @@ import groovy.lang.GroovyShell;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -47,7 +49,13 @@ public class RuleSet {
         for( String key: this.rules.keySet() ){
             String groovy = this.rules.get(key) + "(param)";
             if( groovy != null && !"".equals(groovy) ){
-                Object value = shell.evaluate(groovy);
+                Object value=null;
+                try {
+                    value = shell.evaluate(groovy);
+                } catch (Exception ex){
+                    String msg = "Errore leggendo la regola per il campo " + key + ": \n" + this.rules.get(key);
+                    Logger.getLogger(RuleSet.class.getName()).log(Level.WARNING, msg, ex);
+                }
                 mapOut.put(key, value);
             } else {
                 mapOut.put(key, "[unset]");
