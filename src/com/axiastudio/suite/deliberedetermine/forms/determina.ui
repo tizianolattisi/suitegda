@@ -450,7 +450,7 @@
            <string>.ufficioDeterminaCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&lt;ufficio&gt;</string>
+           <string>&gt;principale&lt;,&lt;ufficio&gt;</string>
           </property>
           <property name="reference" stdset="0">
            <string>ufficio</string>
