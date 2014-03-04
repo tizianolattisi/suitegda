@@ -26,6 +26,9 @@ import com.axiastudio.suite.base.entities.Giunta;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.deliberedetermine.entities.Determina;
+import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
+import com.axiastudio.suite.deliberedetermine.entities.UfficioDetermina;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
@@ -122,6 +125,51 @@ public class PraticaUtil {
         Query q = em.createQuery("select count(p.codiceinterno) from Pratica p where p.codiceinterno = '" + codifica + "'");
         Long i = (Long) q.getSingleResult();
         return (i == 0);
+    }
+
+    public static Validation protocollaDetermina(Determina determina){
+        Pratica pratica = determina.getPratica();
+
+        Long idOggettoDeterminazione = Long.parseLong(SuiteUtil.trovaCostante("OGGETTO_DETERMINAZIONE").getValore());
+        Controller controllerOggetto = (Controller) Register.queryUtility(IController.class, Oggetto.class.getName());
+        Oggetto oggetto = (Oggetto) controllerOggetto.get(idOggettoDeterminazione);
+        Long idUfficioRagioneria = Long.parseLong(SuiteUtil.trovaCostante("UFFICIO_RAGIONERIA_E_CONTABILITA").getValore());
+        Controller controllerUfficio = (Controller) Register.queryUtility(IController.class, Ufficio.class.getName());
+        Ufficio ragioneria = (Ufficio) controllerUfficio.get(idUfficioRagioneria);
+
+        // come sportello l'ufficio del servizio principale
+        Ufficio sportello = null;
+        for( ServizioDetermina servizioDetermina: determina.getServizioDeterminaCollection() ){
+            if( servizioDetermina.getPrincipale() ){
+                sportello = servizioDetermina.getServizio().getUfficio();
+                break;
+            }
+        }
+
+        // di spesa: come attribuzione principale l'ufficio ragioneria, e poi la principale della attribuzioni della determina
+        // non di spesa: come attribuzioni le attribuzioni della determina (per prima la principale)
+        List<Ufficio> attribuzioni = new ArrayList<Ufficio>();
+        if( determina.getDispesa() ){
+            attribuzioni.add(ragioneria);
+        }
+        for(UfficioDetermina ufficioDetermina: determina.getUfficioDeterminaCollection() ){
+            if( ufficioDetermina.getPrincipale() ){
+                attribuzioni.add(ufficioDetermina.getUfficio());
+            }
+        }
+        if( !determina.getDispesa() ){
+            for(UfficioDetermina ufficioDetermina: determina.getUfficioDeterminaCollection() ){
+                if( !ufficioDetermina.getPrincipale() ){
+                    attribuzioni.add(ufficioDetermina.getUfficio());
+                }
+            }
+
+        }
+
+        List<Ufficio> uffici = new ArrayList<Ufficio>();
+        uffici.add(sportello);
+
+        return protocollaPratica(pratica, sportello, determina.getOggetto(), attribuzioni, oggetto, null, uffici, TipoProtocollo.INTERNO);
     }
 
     // protocollazione della pratica
