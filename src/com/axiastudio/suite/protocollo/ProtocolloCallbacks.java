@@ -27,20 +27,11 @@ import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.entities.Costante;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
-import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
+import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.protocollo.entities.*;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -53,46 +44,166 @@ public class ProtocolloCallbacks {
      */
     @Callback(type=CallbackType.BEFORECOMMIT)
     public static Validation beforeCommit(Protocollo protocollo){
-        String msg = "";
         Boolean res = true;
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(protocollo, autenticato);
-        
-        // La modifica di un protocollo è permessa solo a sportello e attribuzione principale
-        if( protocollo.getId() != null && !profilo.inSportelloOAttribuzionePrincipale() ){
-            msg += "Devi appartenere allo sportello o all'attribuzione principale\n";
-            msg += "per poter modificare il protocollo.";
-            return new Validation(false, msg);
+        Boolean eNuovo = protocollo.getId() == null;
+        List<Ufficio> uffici = new ArrayList();
+        List<Ufficio> ufficiRicerca = new ArrayList();
+        List<Ufficio> ufficiPrivato = new ArrayList();
+        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
+            uffici.add(uu.getUfficio());
+            if( uu.getRicerca() ){
+                ufficiRicerca.add(uu.getUfficio());
+            }
+            if( uu.getRiservato() ){
+                ufficiPrivato.add(uu.getUfficio());
+            }
         }
-        
-        /* sportello obbligatorio */
-        if( protocollo.getSportello() == null ){
-            msg += "Deve essere dichiarato uno sportello ricevente";
-            res = false;
+        Ufficio attribuzionePrincipale = null;
+        int nrAttribuzioniPrincipali = 0;
+        for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
+            if( attribuzione.getPrincipale() ){
+                nrAttribuzioniPrincipali += 1;
+                attribuzionePrincipale = attribuzione.getUfficio();
+            }
         }
-                
-        /* almeno un soggetto */
-        if( protocollo.getSoggettoProtocolloCollection() == null || protocollo.getSoggettoProtocolloCollection().isEmpty() ){
-            if( TipoProtocollo.INTERNO.equals(protocollo.getTipo()) ){
-                Costante costante = SuiteUtil.trovaCostante("SOGGETTO_INTERNI");
-                Long id = Long.parseLong(costante.getValore());
-                Controller controller = (Controller) Register.queryUtility(IController.class, Soggetto.class.getName());
-                Soggetto soggetto = (Soggetto) controller.get(id);
-                SoggettoProtocollo sp = new SoggettoProtocollo();
-                sp.setSoggetto(soggetto);
-                List<SoggettoProtocollo> spList = new ArrayList<SoggettoProtocollo>();
-                spList.add(sp);
-                protocollo.setSoggettoProtocolloCollection(spList);
-            } else {
-                msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
+        int nrPraticheOriginali = 0;
+        for( PraticaProtocollo praticaProtocollo: protocollo.getPraticaProtocolloCollection()){
+            if( praticaProtocollo.getOriginale()){
+                nrPraticheOriginali += 1;
+            }
+        }
+        Ufficio sportello = protocollo.getSportello();
+
+        String msg = "";
+
+        if( !eNuovo ){
+            /*
+             * Modifica permessa solo allo sportello e all'attribuzione principale
+             * con flag ricerca
+             */
+            if( !(uffici.contains(sportello) || ufficiRicerca.contains(attribuzionePrincipale)) ){
+                msg += "Devi appartenere allo sportello o all'attribuzione principale\n";
+                msg += "con diritti di ricerca, per poter modificare il protocollo.\n";
+                res = false;
+            }
+
+        } else {
+            /*
+             * Nuovo inserimento
+             */
+
+
+            /* sportello obbligatorio */
+            if( protocollo.getSportello() == null ){
+                msg += "Deve essere dichiarato uno sportello ricevente.\n";
+                res = false;
+            }
+
+            /* sportello tra quelli dell'utente */
+            if( !uffici.contains(protocollo.getSportello()) ){
+                msg += "Lo sportello deve essere scelto tra gli uffici dell'utente.\n";
+                res = false;
+            }
+
+            /* almeno un soggetto */
+            if( protocollo.getSoggettoProtocolloCollection() == null || protocollo.getSoggettoProtocolloCollection().isEmpty() ){
+                if( TipoProtocollo.INTERNO.equals(protocollo.getTipo()) ){
+                    Costante costante = SuiteUtil.trovaCostante("SOGGETTO_INTERNI");
+                    Long id = Long.parseLong(costante.getValore());
+                    Controller controller = (Controller) Register.queryUtility(IController.class, Soggetto.class.getName());
+                    Soggetto soggetto = (Soggetto) controller.get(id);
+                    SoggettoProtocollo sp = new SoggettoProtocollo();
+                    sp.setSoggetto(soggetto);
+                    List<SoggettoProtocollo> spList = new ArrayList<SoggettoProtocollo>();
+                    spList.add(sp);
+                    protocollo.setSoggettoProtocolloCollection(spList);
+                } else {
+                    msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
+                    res = false;
+                }
+            }
+            if( res == false ){
+                return new Validation(false, msg);
+            }
+            /* almeno un ufficio */
+            if( protocollo.getUfficioProtocolloCollection() == null || protocollo.getUfficioProtocolloCollection().isEmpty() ){
+                msg += "Deve essere dichiarato almeno un ufficio (mittente o destinatario).";
+                res = false;
+            }
+
+            /* Oggetto non nullo */
+            if( protocollo.getOggetto() == null || protocollo.getOggetto().isEmpty() ){
+                msg += "Devi compilare l'oggetto.";
                 res = false;
             }
         }
-        if( res == false ){
-            return new Validation(false, msg);
+
+        /*
+         * Verifica inserimento pratiche: permesso solo se ufficio gestore, eventualmente
+         * con flag riservato.
+         */
+        for( PraticaProtocollo praticaProtocollo: protocollo.getPraticaProtocolloCollection() ){
+            if( praticaProtocollo.getProtocollo() == null ){
+                /* Nuovo inserimento */
+                Pratica pratica = praticaProtocollo.getPratica();
+                Ufficio ufficioGestore = pratica.getGestione();
+                if( false ){
+                    /* TODO: riservato */
+                    if( !ufficiPrivato.contains(ufficioGestore) && !autenticato.getSupervisorepratiche() ){
+                        msg += "Per poter inserire pratiche riservate è necessario appartenere al loro ufficio gestore\n";
+                        msg += "con flag riservato, o essere un amministratore delle pratiche.\n";
+                        res = false;
+                    }
+                } else {
+                    if( !uffici.contains(ufficioGestore) && !autenticato.getSupervisorepratiche() ){
+                        msg += "Per poter inserire pratiche è necessario appartenere al loro ufficio gestore,\n";
+                        msg += "o essere un amministratore delle pratiche.\n";
+                        res = false;
+                    }
+                }
+            }
         }
 
-        return new Validation(true);
+        /*
+         * Una sola attribuzione in via principale
+         */
+        if( nrAttribuzioniPrincipali != 1 ){
+            msg += "E' possibile e necessario impostare una sola attribuzione principale.\n";
+            res = false;
+        }
+
+        /*
+         * Una sola pratica in originale
+         */
+        if( protocollo.getPraticaProtocolloCollection().size() > 0 ){
+            if( nrPraticheOriginali != 1 ){
+                msg += "Il protocollo può essere inserito come originale in una sola pratica.\n";
+                res = false;
+            }
+        }
+
+        /*
+         * I riferimenti precedenti devono essere realmente precedenti
+         */
+        if( protocollo.getRiferimentoProtocolloCollection() != null ){
+            for( RiferimentoProtocollo rp: protocollo.getRiferimentoProtocolloCollection() ){
+                if( rp.getPrecedente().getDataprotocollo().after(protocollo.getDataprotocollo()) ){
+                    msg += "I protocolli precedenti riferiti non possono avere data successiva al protocollo.\n";
+                    res = false;
+                    break;
+                }
+            }
+        }
+
+        /*
+         * Restituzione della validazione
+         */
+        if( res == false ){
+            return new Validation(false, msg);
+        } else {
+            return new Validation(true);
+        }
     }
 
 }
