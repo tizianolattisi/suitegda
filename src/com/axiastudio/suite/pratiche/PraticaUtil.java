@@ -243,6 +243,9 @@ public class PraticaUtil {
             AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
             helper.createFolder();
         }
+        // convalida
+        protocollo.setConvalidaattribuzioni(Boolean.TRUE);
+        protocollo.setConvalidaprotocollo(Boolean.TRUE);
         return validation;
     }
 
