@@ -172,7 +172,8 @@ public class FormPratica extends Window implements IDocumentFolder {
      * Uno store contenente gli oggetti ordinati x descrizione
      */
     public Store storeTipo(){
-        Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.pratiche.entities.TipoPratica");
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(TipoPratica.class);
         Store storeTipo = controller.createFullStore();
         List<TipoPratica> oggetti = new ArrayList<TipoPratica>();
         for(Object ogg: storeTipo){
@@ -198,7 +199,8 @@ public class FormPratica extends Window implements IDocumentFolder {
         }
 
         if (pratica.getFasePraticaCollection().isEmpty()) {
-            Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.pratiche.entities.Fase");
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            Controller controller = db.createController(Fase.class);
             Store storeFase = controller.createFullStore();
             for(Object ogg: storeFase){
                 fasiprat.add((Fase) ogg);

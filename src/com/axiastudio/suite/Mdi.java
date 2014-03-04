@@ -36,6 +36,8 @@ import com.trolltech.qt.core.QSignalMapper;
 import com.trolltech.qt.gui.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -169,9 +171,6 @@ public class Mdi extends QMainWindow {
         itemProtocollo.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemProtocollo.setText(1, "com.axiastudio.suite.protocollo.entities.Protocollo");
         itemProtocollo.setText(2, "NEW");
-        Controller controllerProtocollo = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.protocollo.entities.Protocollo");
-        //Store storeProtocollo = controllerProtocollo.createStore(10);
-        //itemProtocollo.setData(1, Qt.ItemDataRole.UserRole, storeProtocollo);
 
         QTreeWidgetItem itemTitolario = new QTreeWidgetItem(itemProtocolloInformatico);
         itemTitolario.setText(0, "Titolario");
@@ -201,9 +200,6 @@ public class Mdi extends QMainWindow {
         itemSoggetti.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemSoggetti.setText(1, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
         itemSoggetti.setText(2, "NEW");
-        //Controller controllerSoggetto = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
-        //Store storeSoggetto = controllerSoggetto.createStore(10);
-        //itemSoggetti.setData(1, Qt.ItemDataRole.UserRole, storeSoggetto);
         QTreeWidgetItem itemGruppi = new QTreeWidgetItem(itemAnagrafiche);
         itemGruppi.setText(0, "Gruppi");
         itemGruppi.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
@@ -384,9 +380,6 @@ public class Mdi extends QMainWindow {
 
         String mode = this.tree.currentItem().text(2);
         /* cambio password */
-        if( "NEW".equals(formName) ){
-            
-        }
         if( "PASSWORD".equals(formName) ){
             CambiaPassword passDlg = new CambiaPassword(this);
             int exec = passDlg.exec();
@@ -432,10 +425,24 @@ public class Mdi extends QMainWindow {
             }
             // A store with a new element
             Store store = null;
+
             if( "NEW".equals(mode) ){
-                Controller controller = (Controller) Register.queryUtility(IController.class, factory.getName());
-                store = controller.createNewStore();
+                store = new Store(new ArrayList<Object>());
+                try {
+                    Constructor<? extends Window> entityConstructor = factory.getConstructor(new Class[]{});
+                    Object entity = entityConstructor.newInstance(new Object[]{});
+                    store.add(entity);
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
+
             if( store != null ){
                 form.init(store);
             } else {

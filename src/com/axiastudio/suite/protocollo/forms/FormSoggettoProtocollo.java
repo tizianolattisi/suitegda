@@ -113,7 +113,8 @@ public class FormSoggettoProtocollo extends Dialog {
  * Uno store contenente gli oggetti ordinati x descrizione
  */
     public Store storeTitolo(){
-        Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.protocollo.entities.Titolo");
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Titolo.class);
         Store storeTitolo = controller.createFullStore();
         List<Titolo> titoli = new ArrayList<Titolo>();
         for(Object ogg: storeTitolo){

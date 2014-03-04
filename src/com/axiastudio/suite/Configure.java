@@ -114,17 +114,13 @@ import java.util.Properties;
  */
 public class Configure {
 
-    private static Database db;
-    
     public static void configure(Database db, Properties properties){
 
-        db = db;
         adapters();
         callbacks();
         privates();
 
         forms(db);
-        controllers(db);
         plugins(properties);
         templates(properties);
 
@@ -233,13 +229,6 @@ public class Configure {
             template.setUserData(modello.getProtocollabile());
             ooopsPlugin.addTemplate(template);
         }
-    }
-
-    private static void controllers(Database db) {
-
-        Controller controller = new Controller(db.getEntityManagerFactory(), Visto.class);
-        Register.registerUtility(controller, IController.class, Visto.class.getName());
-
     }
 
     private static void forms(Database db) {

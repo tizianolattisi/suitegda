@@ -17,9 +17,7 @@
 package com.axiastudio.suite.procedimenti.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.IController;
-import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.AdminConsole;
@@ -109,7 +107,14 @@ public class FormFaseProcedimento extends Dialog {
         String entityName = ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_entita")).text();
         String entityId = ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_id")).text();
         Long id = Long.parseLong(entityId);
-        Controller controller = (Controller) Register.queryUtility(IController.class, entityName);
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Class<?> klass=null;
+        try {
+            klass = Class.forName(entityName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Controller controller = db.createController(klass);
         Object obj = controller.get(id);
         FaseProcedimento faseProcedimento = (FaseProcedimento) this.getContext().getCurrentEntity();
         Procedimento procedimento = faseProcedimento.getProcedimento();

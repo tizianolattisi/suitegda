@@ -117,8 +117,8 @@ public class FormScrivania  extends QMainWindow {
     }
 
     private void popolaAttribuzioni() {
-        Controller controller = (Controller) Register.queryUtility(IController.class, Protocollo.class.getName());
-        EntityManager em = controller.getEntityManager();
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         List<Attribuzione> attribuzioni = em.createNamedQuery("trovaAttribuzioniUtente", Attribuzione.class)
                                             .setParameter("id", autenticato.getId())
@@ -153,8 +153,8 @@ public class FormScrivania  extends QMainWindow {
     }
 
     private void popolaRichieste() {
-        Controller controller = (Controller) Register.queryUtility(IController.class, DestinatarioUfficio.class.getName());
-        EntityManager em = controller.getEntityManager();
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         List<IDestinatarioRichiesta> destinatariUtente = em.createNamedQuery("trovaDestinatarioUtente", IDestinatarioRichiesta.class)
                 .setParameter("id", autenticato.getId())
@@ -284,7 +284,7 @@ public class FormScrivania  extends QMainWindow {
 
     private void daiPerLetto(){
         Database db = (Database) Register.queryUtility(IDatabase.class);
-        Controller controller = new Controller(db.getEntityManagerFactory(), Attribuzione.class);
+        Controller controller = db.createController(Attribuzione.class);
         for(Attribuzione attribuzione: this.selectionProtocollo){
             attribuzione.setLetto(Boolean.TRUE);
             controller.commit(attribuzione);

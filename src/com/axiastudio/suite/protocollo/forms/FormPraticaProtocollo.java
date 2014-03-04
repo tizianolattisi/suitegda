@@ -52,7 +52,8 @@ public class FormPraticaProtocollo extends Dialog {
      * Uno store contenente gli oggetti ordinati x descrizione
      */
     public Store storeOggetto(){
-        Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.protocollo.entities.Oggetto");
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Oggetto.class);
         Store storeOggetto = controller.createFullStore();
         List<Oggetto> oggetti = new ArrayList();
         for(Object ogg: storeOggetto){

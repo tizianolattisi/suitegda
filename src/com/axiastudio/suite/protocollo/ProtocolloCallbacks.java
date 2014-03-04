@@ -111,7 +111,8 @@ public class ProtocolloCallbacks {
                 if( TipoProtocollo.INTERNO.equals(protocollo.getTipo()) ){
                     Costante costante = SuiteUtil.trovaCostante("SOGGETTO_INTERNI");
                     Long id = Long.parseLong(costante.getValore());
-                    Controller controller = (Controller) Register.queryUtility(IController.class, Soggetto.class.getName());
+                    Database db = (Database) Register.queryUtility(IDatabase.class);
+                    Controller controller = db.createController(Soggetto.class);
                     Soggetto soggetto = (Soggetto) controller.get(id);
                     SoggettoProtocollo sp = new SoggettoProtocollo();
                     sp.setSoggetto(soggetto);

@@ -21,10 +21,6 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.*;
-import com.axiastudio.suite.anagrafiche.entities.Riferimento;
-import com.axiastudio.suite.anagrafiche.entities.Soggetto;
-import com.axiastudio.suite.anagrafiche.entities.TipoRiferimento;
-import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
 import com.axiastudio.suite.interoperabilita.entities.Segnatura;
 import com.axiastudio.suite.interoperabilita.utilities.JAXBHelper;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
@@ -464,7 +460,7 @@ public class FormProtocollo extends Window {
             QMessageBox.warning(this, "Attenzione", "Numero di protocollo troppo breve");
             return;
         }
-        Controller controller = (Controller) Register.queryUtility(IController.class, this.getContext().getRootClass().getName());
+        Controller controller = this.getContext().getController();
         Map map = new HashMap();
         Column column = new Column("iddocumento", "iddocumento", "iddocumento");
         column.setEditorType(CellEditorType.STRING);

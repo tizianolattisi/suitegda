@@ -17,10 +17,7 @@
 package com.axiastudio.suite.pratiche.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.IController;
-import com.axiastudio.pypapi.db.IStoreFactory;
-import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
@@ -88,7 +85,8 @@ public class FormDipendenzaPratica extends Dialog {
      * Uno store contenente gli oggetti ordinati x descrizione
      */
     public Store storeDipendenza(){
-        Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.pratiche.entities.Dipendenza");
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Dipendenza.class);
         Store storeDipendenza = controller.createFullStore();
         List<Dipendenza> dipendenze = new ArrayList<Dipendenza>();
         for(Object ogg: storeDipendenza){

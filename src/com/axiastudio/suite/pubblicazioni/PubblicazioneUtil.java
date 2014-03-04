@@ -3,7 +3,9 @@ package com.axiastudio.suite.pubblicazioni;
 import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IController;
+import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
@@ -22,8 +24,9 @@ public class PubblicazioneUtil {
 
     public static Pubblicazione pubblicaProtocollo(Protocollo protocollo) {
 
-        Controller controllerPubblicazione = (Controller) Register.queryUtility(IController.class, Pubblicazione.class.getName());
-        Controller controllerTAP = (Controller) Register.queryUtility(IController.class, TipoAttoPubblicazione.class.getName());
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controllerPubblicazione = db.createController(Pubblicazione.class);
+        Controller controllerTAP = db.createController(TipoAttoPubblicazione.class);
 
         TipoAttoPubblicazione delibere = (TipoAttoPubblicazione) controllerTAP.get(1L);
 

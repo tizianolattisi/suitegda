@@ -19,7 +19,9 @@ package com.axiastudio.suite.procedimenti;
 import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IController;
+import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
@@ -259,7 +261,8 @@ public class SimpleWorkFlow {
             }
         }
         visto.setPratica(pratica);
-        Controller controller = (Controller) Register.queryUtility(IController.class, visto.getClass().getName());
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(visto.getClass());
         controller.commit(visto);
     }
 

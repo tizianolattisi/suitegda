@@ -129,12 +129,13 @@ public class PraticaUtil {
 
     public static Validation protocollaDetermina(Determina determina){
         Pratica pratica = determina.getPratica();
+        Database db = (Database) Register.queryUtility(IDatabase.class);
 
         Long idOggettoDeterminazione = Long.parseLong(SuiteUtil.trovaCostante("OGGETTO_DETERMINAZIONE").getValore());
-        Controller controllerOggetto = (Controller) Register.queryUtility(IController.class, Oggetto.class.getName());
+        Controller controllerOggetto = db.createController(Oggetto.class);
         Oggetto oggetto = (Oggetto) controllerOggetto.get(idOggettoDeterminazione);
         Long idUfficioRagioneria = Long.parseLong(SuiteUtil.trovaCostante("UFFICIO_RAGIONERIA_E_CONTABILITA").getValore());
-        Controller controllerUfficio = (Controller) Register.queryUtility(IController.class, Ufficio.class.getName());
+        Controller controllerUfficio = db.createController(Ufficio.class);
         Ufficio ragioneria = (Ufficio) controllerUfficio.get(idUfficioRagioneria);
 
         // come sportello l'ufficio del servizio principale
@@ -235,7 +236,8 @@ public class PraticaUtil {
         pratiche.add(pp);
         protocollo.setPraticaProtocolloCollection(pratiche);
         // commit
-        Controller controller = (Controller) Register.queryUtility(IController.class, Protocollo.class.getName());
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Protocollo.class);
         Validation validation = controller.commit(protocollo);
         if( validation.getResponse() ){
             // creo la cartella

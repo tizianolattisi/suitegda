@@ -18,7 +18,9 @@ package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IController;
+import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
@@ -87,17 +89,15 @@ public class FormAnnullamentoProtocollo extends Dialog {
              *  - consolido il protocollo
              *  - marco il protocollo come annullato
              */
+            Database db = (Database) Register.queryUtility(IDatabase.class);
             if( annullamento.getAutorizzato() ){
                 Costante costantePraticaAnnullati = SuiteUtil.trovaCostante("PRATICA_ANNULLATI");
-                //Long idPraticaAnnullati = Long.parseLong(costantePraticaAnnullati.getValore());
-                //Controller controllerPratica = (Controller) Register.queryUtility(IController.class, Pratica.class.getName());
                 Pratica praticaAnnullati = SuiteUtil.trovaPratica(costantePraticaAnnullati.getValore());
                 Costante costanteUfficioAnnullati = SuiteUtil.trovaCostante("UFFICIO_ANNULLATI");
                 Long idUfficioAnnullati = Long.parseLong(costanteUfficioAnnullati.getValore());
-                Controller controllerUfficio = (Controller) Register.queryUtility(IController.class, Ufficio.class.getName());
+                Controller controllerUfficio = db.createController(Ufficio.class);
                 Ufficio ufficioAnnullati = (Ufficio) controllerUfficio.get(idUfficioAnnullati);
                 Protocollo protocollo = annullamento.getProtocollo();
-                // protocollo.setAttribuzioneCollection(null);
                 protocollo.setPraticaProtocolloCollection(null);
                 List<Attribuzione> attribuzioni = (List<Attribuzione>) protocollo.getAttribuzioneCollection();
                 for( Attribuzione attrib: protocollo.getAttribuzioneCollection()) {
@@ -122,10 +122,10 @@ public class FormAnnullamentoProtocollo extends Dialog {
                 protocollo.setConvalidaprotocollo(Boolean.TRUE);
                 protocollo.setConsolidadocumenti(Boolean.TRUE);
                 protocollo.setAnnullato(Boolean.TRUE);  // Possibile che mancasse??
-                Controller controllerProtocollo = (Controller) Register.queryUtility(IController.class, Protocollo.class.getName());
+                Controller controllerProtocollo = db.createController(Protocollo.class);
                 controllerProtocollo.commit(protocollo);
             } else {
-                Controller controllerAnnullamento = (Controller) Register.queryUtility(IController.class, annullamento.getClass().getName());
+                Controller controllerAnnullamento = db.createController(annullamento.getClass());
                 controllerAnnullamento.commit(annullamento);
             }
         }

@@ -19,7 +19,6 @@ package com.axiastudio.suite.procedimenti;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
@@ -97,8 +96,9 @@ public class GestoreDeleghe implements IGestoreDeleghe {
     }
     
     public static Carica findCarica(CodiceCarica codiceCarica){
-        Controller ctrlCarica = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.procedimenti.entities.Carica");
-        for (Iterator it = ctrlCarica.createFullStore().iterator(); it.hasNext();) {
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Carica.class);
+        for (Iterator it = controller.createFullStore().iterator(); it.hasNext();) {
             Carica carica = (Carica) it.next();
             if( codiceCarica.equals(carica.getCodiceCarica()) ){
                 return carica;

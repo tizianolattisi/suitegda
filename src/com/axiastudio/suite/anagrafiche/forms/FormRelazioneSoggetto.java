@@ -17,9 +17,7 @@
 package com.axiastudio.suite.anagrafiche.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.IController;
-import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
@@ -55,7 +53,8 @@ public class FormRelazioneSoggetto extends Dialog {
         cbInverti.stateChanged.connect(this, "aggiornaInvertita()");
         cmbRelazione = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_relazione");
         cmbRelazione.currentIndexChanged.connect(this, "aggiornaRelazione()");
-        controller = (Controller) Register.queryUtility(IController.class, Relazione.class.getName());
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        controller = db.createController(Relazione.class);
         em = controller.getEntityManager();
     }
 

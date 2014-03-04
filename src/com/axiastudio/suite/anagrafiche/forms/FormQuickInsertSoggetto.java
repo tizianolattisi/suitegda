@@ -17,9 +17,7 @@
 package com.axiastudio.suite.anagrafiche.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.IController;
-import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
@@ -98,7 +96,8 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
         }
         
         // stato
-        Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.anagrafiche.entities.Stato");
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Stato.class);
         QComboBox comboBoxStato = (QComboBox) this.findChild(QComboBox.class, "comboBox_stato");
         comboBoxStato.clear();
         storeStato = controller.createFullStore();
@@ -148,7 +147,8 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
         indirizzo.setPrincipale(Boolean.TRUE);
         indirizzi.add(indirizzo);
         s.setIndirizzoCollection(indirizzi);
-        Controller controller = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.anagrafiche.entities.Soggetto");
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Soggetto.class);
         controller.commit(s);
         this.entity = s;
         this.accept();
