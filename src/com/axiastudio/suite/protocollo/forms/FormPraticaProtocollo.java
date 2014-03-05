@@ -18,10 +18,13 @@ package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
-import com.axiastudio.pypapi.ui.*;
-import com.axiastudio.suite.protocollo.entities.*;
+import com.axiastudio.pypapi.ui.Dialog;
+import com.axiastudio.suite.protocollo.entities.Oggetto;
+
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

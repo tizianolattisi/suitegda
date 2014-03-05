@@ -22,19 +22,19 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.base.entities.Giunta;
 import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.modelli.entities.Modello;
-import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *

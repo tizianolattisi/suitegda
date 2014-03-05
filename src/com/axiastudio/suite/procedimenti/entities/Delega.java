@@ -19,9 +19,10 @@ package com.axiastudio.suite.procedimenti.entities;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *

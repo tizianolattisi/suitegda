@@ -20,7 +20,6 @@ import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.IUtente;
@@ -37,7 +36,10 @@ import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

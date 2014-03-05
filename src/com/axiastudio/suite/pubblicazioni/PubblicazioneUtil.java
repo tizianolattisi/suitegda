@@ -4,7 +4,6 @@ import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.protocollo.entities.Protocollo;

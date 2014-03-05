@@ -16,15 +16,14 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
-import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *

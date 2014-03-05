@@ -24,12 +24,13 @@ import com.axiastudio.suite.anagrafiche.entities.Gruppo;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QLineEdit;
 import com.trolltech.qt.gui.QTabWidget;
-import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *

@@ -24,13 +24,14 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
-import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  *

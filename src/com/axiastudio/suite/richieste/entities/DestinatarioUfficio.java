@@ -1,7 +1,6 @@
 package com.axiastudio.suite.richieste.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.base.entities.Utente;
 
 import javax.persistence.*;
 import java.io.Serializable;

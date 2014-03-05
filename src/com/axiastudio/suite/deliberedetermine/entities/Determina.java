@@ -28,10 +28,10 @@ import com.axiastudio.suite.pratiche.entities.Visto;
 import com.axiastudio.suite.protocollo.IProtocollabile;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *

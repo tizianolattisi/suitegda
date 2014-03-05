@@ -17,8 +17,9 @@
 package com.axiastudio.suite.deliberedetermine.entities;
 
 import com.axiastudio.suite.finanziaria.entities.Servizio;
-import java.io.Serializable;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *

@@ -17,19 +17,18 @@
 package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.*;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.plugins.IPlugin;
+import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
+import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
-import com.axiastudio.pypapi.ui.Column;
-import com.axiastudio.pypapi.ui.IForm;
-import com.axiastudio.pypapi.ui.TableModel;
-import com.axiastudio.pypapi.ui.Util;
-import com.axiastudio.pypapi.ui.Window;
-import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
@@ -45,11 +44,11 @@ import com.trolltech.qt.designer.QUiLoader;
 import com.trolltech.qt.designer.QUiLoaderException;
 import com.trolltech.qt.gui.*;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
 
 /**
  *

@@ -17,9 +17,10 @@
 package com.axiastudio.suite.base.entities;
 
 import com.axiastudio.suite.procedimenti.entities.Delega;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.*;
 
 /**
  *

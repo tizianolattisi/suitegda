@@ -19,10 +19,11 @@ package com.axiastudio.suite.pratiche.entities;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
-import javax.persistence.*;
 
 /**
  *

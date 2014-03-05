@@ -17,9 +17,10 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *

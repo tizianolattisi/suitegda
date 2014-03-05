@@ -1,7 +1,6 @@
 package com.axiastudio.suite.interoperabilita;
 
 import com.axiastudio.suite.interoperabilita.entities.*;
-import com.axiastudio.suite.interoperabilita.entities.UnitaOrganizzativa;
 import com.axiastudio.suite.interoperabilita.utilities.StringMarshalling;
 import com.axiastudio.suite.interoperabilita.utilities.StringUnmarshalling;
 import com.axiastudio.suite.protocollo.entities.Oggetto;

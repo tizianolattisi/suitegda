@@ -25,10 +25,10 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
+import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
-import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 
 /**
  * User: tiziano

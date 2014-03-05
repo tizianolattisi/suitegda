@@ -17,16 +17,17 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.pratiche.PraticaListener;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
 
 /**
  *

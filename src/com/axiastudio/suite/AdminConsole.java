@@ -4,14 +4,10 @@ import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.SimpleWorkFlow;
 import com.trolltech.qt.gui.*;
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * User: tiziano

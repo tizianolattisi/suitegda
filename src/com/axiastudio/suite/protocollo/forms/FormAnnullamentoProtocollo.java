@@ -19,7 +19,6 @@ package com.axiastudio.suite.protocollo.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.suite.SuiteUtil;
@@ -34,6 +33,7 @@ import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.trolltech.qt.gui.QCheckBox;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;

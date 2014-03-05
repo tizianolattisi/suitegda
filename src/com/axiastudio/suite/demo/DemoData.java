@@ -35,6 +35,9 @@ import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.procedimenti.entities.*;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.entities.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -45,8 +48,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *

@@ -17,19 +17,19 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.generale.ITimeStamped;
-import com.axiastudio.suite.SuiteUtil;
-import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo; // XXX: brutto qui
+import com.axiastudio.suite.generale.TimeStampedListener;
+import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.ProtocolloListener;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import javax.persistence.*;
 
 
 /**

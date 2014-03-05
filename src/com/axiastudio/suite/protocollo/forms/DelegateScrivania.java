@@ -21,7 +21,6 @@ import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.core.QPoint;
 import com.trolltech.qt.core.QRect;
 import com.trolltech.qt.core.QSize;
-import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.core.Qt.CheckState;
 import com.trolltech.qt.core.Qt.ItemDataRole;
 import com.trolltech.qt.gui.QImage;

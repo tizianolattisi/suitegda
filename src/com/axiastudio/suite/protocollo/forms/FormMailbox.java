@@ -10,8 +10,13 @@ import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 
-import javax.mail.*;
-import java.io.*;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 

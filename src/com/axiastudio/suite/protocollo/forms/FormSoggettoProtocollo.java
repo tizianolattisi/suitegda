@@ -19,7 +19,6 @@ package com.axiastudio.suite.protocollo.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.Dialog;
-import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit;
 import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;

@@ -16,7 +16,6 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
-import com.axiastudio.pypapi.ui.Window;
 import com.trolltech.qt.core.QObject;
 import com.trolltech.qt.gui.*;
 

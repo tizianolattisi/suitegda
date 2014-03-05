@@ -16,17 +16,9 @@
  */
 package com.axiastudio.suite.base.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 /**
  *

@@ -2,15 +2,8 @@ package com.axiastudio.suite.interoperabilita.utilities;
 
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.interoperabilita.entities.*;
-import com.axiastudio.suite.interoperabilita.utilities.StringMarshalling;
-import com.axiastudio.suite.interoperabilita.utilities.StringUnmarshalling;
 import com.axiastudio.suite.protocollo.entities.Oggetto;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.StringWriter;
 
 /**
  * User: tiziano

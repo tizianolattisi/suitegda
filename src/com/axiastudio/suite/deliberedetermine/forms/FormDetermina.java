@@ -36,7 +36,9 @@ import com.axiastudio.suite.procedimenti.SimpleWorkflowDialog;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *

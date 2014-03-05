@@ -16,7 +16,6 @@
  */
 package com.axiastudio.suite.modelli.entities;
 
-import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 
 import javax.persistence.*;

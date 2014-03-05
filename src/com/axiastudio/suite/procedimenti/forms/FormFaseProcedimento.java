@@ -17,7 +17,10 @@
 package com.axiastudio.suite.procedimenti.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.*;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.AdminConsole;

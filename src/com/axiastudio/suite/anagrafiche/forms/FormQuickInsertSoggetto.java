@@ -17,28 +17,20 @@
 package com.axiastudio.suite.anagrafiche.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.*;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
-import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
-import com.axiastudio.suite.anagrafiche.entities.Provincia;
-import com.axiastudio.suite.anagrafiche.entities.SessoSoggetto;
-import com.axiastudio.suite.anagrafiche.entities.Soggetto;
-import com.axiastudio.suite.anagrafiche.entities.Stato;
-import com.axiastudio.suite.anagrafiche.entities.TipoIndirizzo;
-import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
+import com.axiastudio.suite.anagrafiche.entities.*;
 import com.trolltech.qt.core.QByteArray;
 import com.trolltech.qt.core.QFile;
 import com.trolltech.qt.designer.QUiLoader;
 import com.trolltech.qt.designer.QUiLoaderException;
-import com.trolltech.qt.gui.QComboBox;
-import com.trolltech.qt.gui.QDialog;
-import com.trolltech.qt.gui.QIcon;
-import com.trolltech.qt.gui.QLineEdit;
-import com.trolltech.qt.gui.QTabWidget;
-import com.trolltech.qt.gui.QToolButton;
-import com.trolltech.qt.gui.QWidget;
+import com.trolltech.qt.gui.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -17,10 +17,11 @@
 package com.axiastudio.suite.procedimenti.entities;
 
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import javax.persistence.*;
 
 /**
  *

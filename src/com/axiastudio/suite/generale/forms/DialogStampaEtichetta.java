@@ -23,16 +23,13 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.generale.entities.Etichetta;
-import com.trolltech.qt.gui.QComboBox;
-import com.trolltech.qt.gui.QDialog;
-import com.trolltech.qt.gui.QHBoxLayout;
-import com.trolltech.qt.gui.QIcon;
-import com.trolltech.qt.gui.QMessageBox;
-import com.trolltech.qt.gui.QSizePolicy;
-import com.trolltech.qt.gui.QSpacerItem;
-import com.trolltech.qt.gui.QToolButton;
-import com.trolltech.qt.gui.QVBoxLayout;
-import com.trolltech.qt.gui.QWidget;
+import com.trolltech.qt.gui.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -40,11 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *

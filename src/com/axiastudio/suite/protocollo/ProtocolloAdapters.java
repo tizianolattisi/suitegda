@@ -22,13 +22,8 @@ import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
-import com.axiastudio.suite.protocollo.entities.Attribuzione;
-import com.axiastudio.suite.protocollo.entities.MotivazioneAnnullamento;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo;
-import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
-import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
+import com.axiastudio.suite.protocollo.entities.*;
+
 import java.util.Calendar;
 import java.util.Date;
 

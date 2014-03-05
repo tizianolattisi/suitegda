@@ -17,9 +17,7 @@
 package com.axiastudio.suite.pratiche;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.IForm;
@@ -28,14 +26,18 @@ import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.forms.DettaglioDialog;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
-import com.trolltech.qt.gui.QMainWindow;
-import com.trolltech.qt.gui.QMdiArea;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PrePersist;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  *

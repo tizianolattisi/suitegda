@@ -17,9 +17,9 @@
 package com.axiastudio.suite.deliberedetermine.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
-import java.io.Serializable;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *

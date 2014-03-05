@@ -16,12 +16,13 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
-import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *

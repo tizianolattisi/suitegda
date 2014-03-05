@@ -16,8 +16,8 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
-import java.io.Serializable;
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *

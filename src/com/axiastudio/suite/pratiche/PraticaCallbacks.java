@@ -31,15 +31,8 @@ import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  *

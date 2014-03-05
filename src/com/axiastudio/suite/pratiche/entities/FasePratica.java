@@ -16,8 +16,6 @@
  */
 package com.axiastudio.suite.pratiche.entities;
 
-import com.axiastudio.suite.procedimenti.entities.Procedimento;
-
 import javax.persistence.*;
 import java.io.Serializable;
 

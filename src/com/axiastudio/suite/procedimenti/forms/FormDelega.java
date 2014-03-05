@@ -17,8 +17,6 @@
 package com.axiastudio.suite.procedimenti.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
@@ -27,6 +25,7 @@ import com.trolltech.qt.gui.QCheckBox;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QDateEdit;
 import com.trolltech.qt.gui.QPushButton;
+
 import java.util.Date;
 
 /**

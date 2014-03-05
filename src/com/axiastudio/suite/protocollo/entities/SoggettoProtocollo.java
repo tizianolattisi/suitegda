@@ -18,12 +18,12 @@ package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
-import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *

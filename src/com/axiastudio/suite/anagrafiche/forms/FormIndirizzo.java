@@ -19,6 +19,7 @@ package com.axiastudio.suite.anagrafiche.forms;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.suite.anagrafiche.entities.Provincia;
 import com.trolltech.qt.gui.QComboBox;
+
 import java.util.Arrays;
 import java.util.List;
 

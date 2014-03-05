@@ -17,13 +17,11 @@
 package com.axiastudio.suite;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.IController;
 import com.axiastudio.pypapi.db.IFactory;
 import com.axiastudio.pypapi.db.Store;
-import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.IUIFile;
+import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.base.entities.CambiaPassword;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
@@ -34,10 +32,10 @@ import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.trolltech.qt.core.QObject;
 import com.trolltech.qt.core.QSignalMapper;
 import com.trolltech.qt.gui.*;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

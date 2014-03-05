@@ -22,26 +22,27 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.ICriteriaFactory;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.base.Login;
+import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
+import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.plugins.ooops.RuleSet;
 import com.axiastudio.suite.plugins.ooops.Template;
-import com.axiastudio.suite.base.Login;
-import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
-import com.axiastudio.suite.demo.DemoData;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.trolltech.qt.gui.QFileDialog;
 import com.trolltech.qt.gui.QMessageBox;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Root;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Root;
 
 /**
  *

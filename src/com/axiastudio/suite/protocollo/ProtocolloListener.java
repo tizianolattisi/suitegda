@@ -20,8 +20,6 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
@@ -30,10 +28,8 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  *

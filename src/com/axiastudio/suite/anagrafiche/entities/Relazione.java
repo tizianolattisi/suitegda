@@ -16,9 +16,9 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Comparator;
-import javax.persistence.*;
 
 /**
  *

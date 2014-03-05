@@ -16,16 +16,11 @@
  */
 package com.axiastudio.suite;
 
-import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.ui.Window;
-import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.trolltech.qt.core.Qt;
-import com.trolltech.qt.gui.QDialog;
-import com.trolltech.qt.gui.QLabel;
-import com.trolltech.qt.gui.QPixmap;
-import com.trolltech.qt.gui.QTextEdit;
-import com.trolltech.qt.gui.QVBoxLayout;
+import com.trolltech.qt.gui.*;
+
 import java.util.Date;
 
 /**

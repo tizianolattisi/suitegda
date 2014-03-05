@@ -2,16 +2,11 @@ package com.axiastudio.suite.richieste.entities;
 
 import com.axiastudio.suite.EntityBaseTest;
 import com.axiastudio.suite.base.entities.Utente;
-import org.junit.*;
+import org.junit.Test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.

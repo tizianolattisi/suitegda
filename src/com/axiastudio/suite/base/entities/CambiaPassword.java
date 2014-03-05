@@ -17,7 +17,10 @@
 package com.axiastudio.suite.base.entities;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.*;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.SuiteUtil;
 import com.trolltech.qt.gui.*;
 
