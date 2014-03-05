@@ -176,7 +176,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Publica ora</string>
+     <string>Pubblica ora</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBox">
