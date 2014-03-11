@@ -123,7 +123,8 @@ CREATE TABLE utente (
     supervisorepratiche boolean NOT NULL DEFAULT FALSE,
     supervisoreprotocollo boolean NOT NULL DEFAULT FALSE,
     ricercatoreprotocollo boolean NOT NULL DEFAULT FALSE,
-    istruttorepratiche boolean NOT NULL DEFAULT FALSE
+    istruttorepratiche boolean NOT NULL DEFAULT FALSE,
+    disabilitato boolean NOT NULL DEFAULT FALSE
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE base.utente OWNER TO postgres;
 ALTER TABLE ONLY utente
@@ -1199,7 +1200,7 @@ CREATE TABLE determina (
     referentepolitico character varying(255),
     responsabile bigint,
     protocollo character varying(12),
-    pubblicabile int,
+    pubblicabile character varying,
     pluriennale boolean,
     finoadanno int,
     progetto bigint
