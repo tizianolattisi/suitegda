@@ -291,6 +291,9 @@ public class PraticaUtil {
         pp.setOriginale(true);
         pratiche.add(pp);
         protocollo.setPraticaProtocolloCollection(pratiche);
+        // convalida
+        protocollo.setConvalidaattribuzioni(Boolean.TRUE);
+        protocollo.setConvalidaprotocollo(Boolean.TRUE);
         // commit
         Database db = (Database) Register.queryUtility(IDatabase.class);
         Controller controller = db.createController(Protocollo.class);
@@ -301,9 +304,6 @@ public class PraticaUtil {
             AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
             helper.createFolder();
         }
-        // convalida
-        protocollo.setConvalidaattribuzioni(Boolean.TRUE);
-        protocollo.setConvalidaprotocollo(Boolean.TRUE);
         return validation;
     }
 
