@@ -37,6 +37,7 @@ import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.protocollo.entities.*;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.trolltech.qt.core.QProcess;
 
 import javax.persistence.EntityManager;
@@ -174,6 +175,58 @@ public class PraticaUtil {
         uffici.add(sportello);
 
         return protocollaPratica(pratica, sportello, determina.getOggetto(), attribuzioni, oggetto, null, uffici, TipoProtocollo.INTERNO);
+    }
+
+    public static Validation inserisciAttribuzioniProtocolloDetermina(Determina determina) {
+
+        Protocollo protocollo = determina.getProtocollo();
+
+        // la lista degli uffici della determina (il primo è il principale)
+        Collection<UfficioDetermina> ufficioDeterminaCollection = determina.getUfficioDeterminaCollection();
+        List<Ufficio> ufficiDetermina = new ArrayList<Ufficio>();
+        for( UfficioDetermina ufficioDetermina: ufficioDeterminaCollection ){
+            if( ufficioDetermina.getPrincipale() ){
+                ufficiDetermina.add(0, ufficioDetermina.getUfficio());
+            } else {
+                ufficiDetermina.add(ufficioDetermina.getUfficio());
+            }
+        }
+
+        // la lista degli uffici attribuzioni già presenti sul protocollo (non mi interessa il principale)
+        Collection<Attribuzione> attribuzioneCollection = protocollo.getAttribuzioneCollection();
+        List<Ufficio> ufficiProtocollo = new ArrayList<Ufficio>();
+        for( Attribuzione attribuzione: attribuzioneCollection ){
+            ufficiProtocollo.add(attribuzione.getUfficio());
+        }
+
+        // la lista degli uffici attribuzione nuovi
+        List<Attribuzione> attribuzioni = new ArrayList<Attribuzione>();
+        Boolean principale = Boolean.TRUE;
+        for( Ufficio ufficio: ufficiDetermina ){
+            Attribuzione attribuzione = new Attribuzione();
+            attribuzione.setUfficio(ufficio);
+            if( principale ){
+                attribuzione.setPrincipale(Boolean.TRUE);
+                principale = Boolean.FALSE;
+            }
+            attribuzioni.add(attribuzione);
+        }
+        for( Ufficio ufficio: ufficiProtocollo ){
+            if( !ufficiDetermina.contains(ufficio) ){
+                Attribuzione attribuzione = new Attribuzione();
+                attribuzione.setUfficio(ufficio);
+                attribuzione.setPrincipale(Boolean.FALSE);
+                attribuzioni.add(attribuzione);
+            }
+        }
+
+        protocollo.setAttribuzioneCollection(attribuzioni);
+
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Protocollo.class);
+        Validation validation = controller.commit(protocollo);
+
+        return validation;
     }
 
     // protocollazione della pratica
