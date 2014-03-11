@@ -16,6 +16,10 @@
  */
 package com.axiastudio.suite.deliberedetermine.entities;
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
@@ -23,15 +27,20 @@ import com.axiastudio.suite.deliberedetermine.DeterminaListener;
 import com.axiastudio.suite.finanziaria.entities.Progetto;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.IDettaglio;
+import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Visto;
 import com.axiastudio.suite.protocollo.IProtocollabile;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -328,10 +337,24 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
 
 
     private Visto getVisto(String tipoVisto) {
-        Long idFaseVisto = Long.parseLong(SuiteUtil.trovaCostante(tipoVisto).getValore());
-        for( Visto visto: this.getPratica().getVistoCollection() ){
-            if( visto.getFase().getId().equals(idFaseVisto) && !visto.getNegato() ){
-                return visto;
+        if( this.getPratica() != null ){
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            Long idFaseVisto = Long.parseLong(SuiteUtil.trovaCostante(tipoVisto).getValore());
+            Controller controller = db.createController(Fase.class);
+            Fase fase = (Fase)controller.get(idFaseVisto);
+            EntityManager em = db.getEntityManagerFactory().createEntityManager();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Visto> cq = cb.createQuery(Visto.class);
+            Root<Visto> root = cq.from(Visto.class);
+            cq.select(root);
+            cq.where(cb.and(cb.equal(root.get("pratica"), this.getPratica()),
+                    cb.equal(root.get("fase"), fase),
+                    cb.equal(root.get("negato"), false)));
+            cq.orderBy(cb.desc(root.get("data")));
+            TypedQuery<Visto> tq = em.createQuery(cq);
+            List<Visto> resultList = tq.getResultList();
+            if( resultList.size()>0 ){
+                return resultList.get(0);
             }
         }
         return null;
