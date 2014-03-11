@@ -43,7 +43,7 @@ public class DeterminaListener {
             CriteriaQuery<Determina> cq = cb.createQuery(Determina.class);
             Root<Determina> root = cq.from(Determina.class);
             cq.select(root);
-            cq.where(cb.equal(root.get("anno"), year));
+            cq.where(cb.and(cb.equal(root.get("anno"), year), cb.isNotNull(root.get("numero"))));
             cq.orderBy(cb.desc(root.get("numero")));
             TypedQuery<Determina> tq = em.createQuery(cq).setMaxResults(1);
             Determina max;
