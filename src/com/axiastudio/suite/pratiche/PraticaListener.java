@@ -27,6 +27,7 @@ import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.forms.DettaglioDialog;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
+import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QMainWindow;
 import com.trolltech.qt.gui.QMdiArea;
 
@@ -134,36 +135,6 @@ public class PraticaListener {
             }
         }
         pratica.setFasePraticaCollection(fasiPratica);
-
-        // creazione del dettaglio
-        String className = pratica.getTipo().getProcedimento().getTipodettaglio();
-        if( className != null && !className.equals("") && !className.startsWith("exec ") ){
-            try {
-                Class<?> klass = Class.forName(className);
-                IDettaglio dettaglio = (IDettaglio) klass.newInstance();
-                dettaglio.setPratica(pratica);  // XXX: non va in persistenza...
-                dettaglio.setCodiceinterno(pratica.getCodiceinterno());
-                dettaglio.setOggetto(pratica.getDescrizione());
-                // utilizzo una dialog con il context per poter salvare il dettaglio in maniera asincrona
-                IForm form = Util.formFromEntity(dettaglio);
-                Context context = form.getContext();
-                DettaglioDialog dialog = new DettaglioDialog(context);
-                IMdi mdi = (IMdi) Register.queryUtility(IMdi.class);
-                QMdiArea workspace = mdi.getWorkspace();
-                if( workspace != null ){
-                    workspace.addSubWindow((QMainWindow) form);
-                }
-                dialog.setModal(true);
-                dialog.show();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (InstantiationException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-        }
-
     }
 
 }

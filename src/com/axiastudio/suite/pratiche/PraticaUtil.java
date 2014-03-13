@@ -41,6 +41,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.trolltech.qt.core.QProcess;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -316,23 +317,43 @@ public class PraticaUtil {
         if( className == null || className.length()==0 ){
             return null;
         }
+        Class<?> klass;
         try {
-            Class<?> klass = Class.forName(className);
-            Database db = (Database) Register.queryUtility(IDatabase.class);
-            EntityManager em = db.getEntityManagerFactory().createEntityManager();
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Object> cq = cb.createQuery();
-            Class<?> returnType = klass;
-            Root from = cq.from(returnType);
-            Predicate predicate = cb.equal(from.get("pratica"), pratica);
-            cq.select(from);
-            cq.where(predicate);
-            TypedQuery<Object> tq = em.createQuery(cq);
-            IDettaglio dettaglio = (IDettaglio) tq.getSingleResult();
-            return dettaglio;
+            klass = Class.forName(className);
         } catch (ClassNotFoundException e) {
             return null;
         }
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Object> cq = cb.createQuery();
+        Class<?> returnType = klass;
+        Root from = cq.from(returnType);
+        Predicate predicate = cb.equal(from.get("pratica"), pratica);
+        cq.select(from);
+        cq.where(predicate);
+        TypedQuery<Object> tq = em.createQuery(cq);
+        IDettaglio dettaglio=null;
+        try {
+            dettaglio = (IDettaglio) tq.getSingleResult();
+        } catch (NoResultException e) {
+            // non esiste ancora, lo creo
+            try {
+                dettaglio = (IDettaglio) klass.newInstance();
+                dettaglio.setPratica(pratica);  // XXX: non va in persistenza...
+                dettaglio.setCodiceinterno(pratica.getCodiceinterno());
+                dettaglio.setOggetto(pratica.getDescrizione());
+            } catch (InstantiationException e1) {
+                e1.printStackTrace();
+            } catch (IllegalAccessException e1) {
+                e1.printStackTrace();
+            }
+            if( dettaglio != null ){
+                Controller controller = db.createController(klass);
+                controller.commit(dettaglio);
+            }
+        }
+        return dettaglio;
     }
 
     public static Boolean eseguiDettaglioEsterno(Pratica pratica){
