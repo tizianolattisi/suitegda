@@ -15,6 +15,12 @@ public class PraticaToolbar extends PyPaPiToolBar {
         this.insertButton("apriDettaglio", "Apri il dettaglio collegato",
                 "classpath:com/axiastudio/suite/resources/arrow_turn_right.png",
                 "Apri il dettaglio collegato", parent);
+        this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
+                "classpath:com/axiastudio/suite/resources/datamatrix_find.png",
+                "Ricerca da etichetta", parent);
+        this.insertButton("stampaEtichetta", "Stampa etichetta",
+                "classpath:com/axiastudio/suite/resources/datamatrix.png",
+                "Stampa etichetta", parent);
     }
-
 }
+
