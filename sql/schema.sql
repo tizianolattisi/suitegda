@@ -1194,6 +1194,8 @@ CREATE TABLE determina (
     dientrata boolean NOT NULL DEFAULT FALSE,
     dispesa boolean NOT NULL DEFAULT FALSE,
     diregolarizzazione boolean NOT NULL DEFAULT FALSE,
+    diliquidazione boolean NOT NULL DEFAULT FALSE,
+    diincarico boolean NOT NULL DEFAULT FALSE,
     anno integer,
     numero integer,
     data date,
