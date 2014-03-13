@@ -19,17 +19,9 @@ package com.axiastudio.suite.pratiche;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.ui.Context;
-import com.axiastudio.pypapi.ui.IForm;
-import com.axiastudio.pypapi.ui.Util;
-import com.axiastudio.suite.IMdi;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.pratiche.forms.DettaglioDialog;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
-import com.trolltech.qt.gui.QDialog;
-import com.trolltech.qt.gui.QMainWindow;
-import com.trolltech.qt.gui.QMdiArea;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
