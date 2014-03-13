@@ -43,7 +43,7 @@ import java.util.logging.Logger;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class Mdi extends QMainWindow {
+public class Mdi extends QMainWindow implements IMdi {
     
     private static String ICON = "classpath:com/axiastudio/pypapi/ui/resources/pypapi32.png";
     private QMdiArea workspace;
@@ -65,7 +65,9 @@ public class Mdi extends QMainWindow {
         this.createTree();
         //this.createSystemTray();
         this.createMenu();
-        
+
+        Register.registerUtility(this, IMdi.class);
+
     }
     
     private void createMenu(){
@@ -460,6 +462,7 @@ public class Mdi extends QMainWindow {
         }
     }
 
+    @Override
     public QMdiArea getWorkspace() {
         return workspace;
     }

@@ -22,10 +22,13 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.Util;
+import com.axiastudio.suite.IMdi;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.forms.DettaglioDialog;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
+import com.trolltech.qt.gui.QMainWindow;
+import com.trolltech.qt.gui.QMdiArea;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -145,6 +148,11 @@ public class PraticaListener {
                 IForm form = Util.formFromEntity(dettaglio);
                 Context context = form.getContext();
                 DettaglioDialog dialog = new DettaglioDialog(context);
+                IMdi mdi = (IMdi) Register.queryUtility(IMdi.class);
+                QMdiArea workspace = mdi.getWorkspace();
+                if( workspace != null ){
+                    workspace.addSubWindow((QMainWindow) form);
+                }
                 dialog.setModal(true);
                 dialog.show();
             } catch (ClassNotFoundException e) {
