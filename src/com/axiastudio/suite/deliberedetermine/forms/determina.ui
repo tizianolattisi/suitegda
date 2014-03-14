@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>795</width>
-    <height>680</height>
+    <width>925</width>
+    <height>668</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,23 +23,20 @@
    <string>&lt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_3">
+   <layout class="QGridLayout" name="gridLayout_4">
+    <property name="margin">
+     <number>4</number>
+    </property>
+    <property name="spacing">
+     <number>4</number>
+    </property>
     <item row="0" column="0" colspan="2">
      <widget class="QGroupBox" name="groupBox_6">
       <property name="title">
        <string>Pratica</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <property name="leftMargin">
-        <number>8</number>
-       </property>
-       <property name="topMargin">
-        <number>8</number>
-       </property>
-       <property name="rightMargin">
-        <number>8</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>8</number>
        </property>
        <item row="0" column="0">
@@ -91,16 +88,7 @@
        <string>Registro</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <property name="leftMargin">
-        <number>8</number>
-       </property>
-       <property name="topMargin">
-        <number>8</number>
-       </property>
-       <property name="rightMargin">
-        <number>8</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>8</number>
        </property>
        <item row="0" column="0">
@@ -164,16 +152,7 @@
        <string>Oggetto</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
-       <property name="leftMargin">
-        <number>8</number>
-       </property>
-       <property name="topMargin">
-        <number>8</number>
-       </property>
-       <property name="rightMargin">
-        <number>8</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>8</number>
        </property>
        <item>
@@ -194,19 +173,7 @@
       <property name="title">
        <string>Tipo di determina</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
-       <property name="leftMargin">
-        <number>8</number>
-       </property>
-       <property name="topMargin">
-        <number>8</number>
-       </property>
-       <property name="rightMargin">
-        <number>8</number>
-       </property>
-       <property name="bottomMargin">
-        <number>8</number>
-       </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <widget class="QCheckBox" name="checkBox_4">
          <property name="text">
@@ -246,25 +213,42 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_7">
+         <property name="text">
+          <string>di liquidazione</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>diLiquidazione</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_8">
+         <property name="text">
+          <string>di incarico</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>diIncarico</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
-    <item row="1" column="1" rowspan="5" colspan="2">
+    <item row="1" column="1" rowspan="2" colspan="2">
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
        <string>Servizi</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="leftMargin">
-        <number>8</number>
-       </property>
-       <property name="topMargin">
-        <number>8</number>
-       </property>
-       <property name="rightMargin">
-        <number>8</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>8</number>
        </property>
        <item>
@@ -312,16 +296,7 @@
        <string>Procedimento</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_10">
-       <property name="leftMargin">
-        <number>8</number>
-       </property>
-       <property name="topMargin">
-        <number>8</number>
-       </property>
-       <property name="rightMargin">
-        <number>8</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>8</number>
        </property>
        <item>
@@ -330,23 +305,83 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="3" column="0" rowspan="3">
+     <widget class="QGroupBox" name="groupBox_10">
+      <property name="title">
+       <string>Entrata/spesa</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <property name="margin">
+        <number>8</number>
+       </property>
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="spinBox_2">
+         <property name="frame">
+          <bool>true</bool>
+         </property>
+         <property name="keyboardTracking">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>2000</number>
+         </property>
+         <property name="maximum">
+          <number>2040</number>
+         </property>
+         <property name="value">
+          <number>2013</number>
+         </property>
+         <property name="column" stdset="0">
+          <string>finoAdAnno</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Fino al</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QCheckBox" name="checkBox_9">
+         <property name="text">
+          <string>pluriennale</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>pluriennale</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="1" colspan="2">
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
        <string>Visto responsabile</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>4</number>
+       </property>
        <property name="leftMargin">
         <number>4</number>
        </property>
        <property name="topMargin">
-        <number>4</number>
+        <number>2</number>
        </property>
        <property name="rightMargin">
         <number>4</number>
        </property>
        <property name="bottomMargin">
-        <number>4</number>
+        <number>3</number>
        </property>
        <item>
         <widget class="QLabel" name="label_vistoResponsabile">
@@ -358,23 +393,26 @@
       </layout>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="4" column="1" colspan="2">
      <widget class="QGroupBox" name="groupBox_3">
       <property name="title">
        <string>Visto di bilancio</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>4</number>
+       </property>
        <property name="leftMargin">
         <number>4</number>
        </property>
        <property name="topMargin">
-        <number>4</number>
+        <number>2</number>
        </property>
        <property name="rightMargin">
         <number>4</number>
        </property>
        <property name="bottomMargin">
-        <number>4</number>
+        <number>2</number>
        </property>
        <item>
         <widget class="QLabel" name="label_vistoBilancio">
@@ -386,23 +424,26 @@
       </layout>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="5" column="1" colspan="2">
      <widget class="QGroupBox" name="groupBox_9">
       <property name="title">
        <string>Visto di bilancio negato</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="spacing">
+        <number>4</number>
+       </property>
        <property name="leftMargin">
         <number>4</number>
        </property>
        <property name="topMargin">
-        <number>4</number>
+        <number>2</number>
        </property>
        <property name="rightMargin">
         <number>4</number>
        </property>
        <property name="bottomMargin">
-        <number>4</number>
+        <number>2</number>
        </property>
        <item>
         <widget class="QLabel" name="label_vistoBilancioNegato">
@@ -417,7 +458,7 @@
     <item row="6" column="0" colspan="4">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -454,6 +495,9 @@
           </property>
           <property name="reference" stdset="0">
            <string>ufficio</string>
+          </property>
+          <property name="filters" stdset="0">
+           <string>attribuzione=true</string>
           </property>
          </widget>
         </item>

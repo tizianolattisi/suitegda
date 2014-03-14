@@ -20,9 +20,7 @@ import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
-import com.axiastudio.pypapi.ui.IForm;
-import com.axiastudio.pypapi.ui.Util;
-import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.SuiteUiUtil;
@@ -30,6 +28,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.generale.forms.DialogStampaEtichetta;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.Template;
@@ -44,10 +43,7 @@ import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.trolltech.qt.gui.*;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -110,6 +106,44 @@ public class FormPratica extends Window implements IDocumentFolder {
             }
         }
     }
+
+    private void cercaDaEtichetta() {
+        String barcode = QInputDialog.getText(this, "Ricerca da etichetta", "Etichetta");
+        if( barcode == null ){
+            return;
+        }
+        if( barcode.length() < 5 ){
+            QMessageBox.warning(this, "Attenzione", "Numero di pratica troppo breve");
+            return;
+        }
+        Controller controller = this.getContext().getController();
+        Map map = new HashMap();
+        Column column = new Column("idpratica", "idpratica", "idpratica");
+        column.setEditorType(CellEditorType.STRING);
+        map.put(column, barcode);
+        Store store = controller.createCriteriaStore(map);
+        if( store.size() == 1 ){
+            this.getContext().getModel().replaceRows(store);
+            this.getContext().firstElement();
+        } else {
+            QMessageBox.warning(this, "Attenzione", "Pratica" + barcode + " non trovata");
+        }
+    }
+
+    private void stampaEtichetta() {
+        Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+        Map<String, Object> map = new HashMap();
+        map.put("idpratica", pratica.getIdpratica());
+        map.put("codiceinterno", pratica.getCodiceinterno());
+        map.put("tipopratica", pratica.getCodiceinterno().substring(0, 3));
+        map.put("hash", "1234567890");
+        DialogStampaEtichetta dialog = new DialogStampaEtichetta(this, map);
+        int exec = dialog.exec();
+        if( exec == 1 ){
+            System.out.println("Print!");
+        }
+    }
+
 
 
 

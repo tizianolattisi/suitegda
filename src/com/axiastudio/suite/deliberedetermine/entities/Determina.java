@@ -74,6 +74,10 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     private Boolean diEntrata=Boolean.FALSE;
     @Column(name="diregolarizzazione")
     private Boolean diRegolarizzazione=Boolean.FALSE;
+    @Column(name="diliquidazione")
+    private Boolean diLiquidazione=Boolean.FALSE;
+    @Column(name="diincarico")
+    private Boolean diIncarico=Boolean.FALSE;
     @Column(name="referentepolitico")
     private String referentePolitico;
     @JoinColumn(name = "responsabile", referencedColumnName = "id")
@@ -241,6 +245,22 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
 
     public void setDiRegolarizzazione(Boolean diRegolarizzazione) {
         this.diRegolarizzazione = diRegolarizzazione;
+    }
+
+    public Boolean getDiLiquidazione() {
+        return diLiquidazione;
+    }
+
+    public void setDiLiquidazione(Boolean diLiquidazione) {
+        this.diLiquidazione = diLiquidazione;
+    }
+
+    public Boolean getDiIncarico() {
+        return diIncarico;
+    }
+
+    public void setDiIncarico(Boolean diIncarico) {
+        this.diIncarico = diIncarico;
     }
 
     public String getReferentePolitico() {
