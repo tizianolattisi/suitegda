@@ -20,9 +20,11 @@ import com.axiastudio.suite.protocollo.entities.Mailbox;
 import com.sun.mail.imap.IMAPFolder;
 
 import javax.mail.*;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -109,7 +111,28 @@ public class EmailHelper {
         if( msg != null ){
             email = new EMail();
         }
+
         try {
+
+            // froms
+            Address[] from = msg.getFrom();
+            for( Integer i=0; i<from.length; i++ ){
+                Address address = from[i];
+                InternetAddress internetAddress = new InternetAddress(address.toString());
+                String emailAddress = internetAddress.getAddress();
+                email.addFrom(emailAddress);
+            }
+
+            // tos
+            Address[] allRecipients = msg.getAllRecipients();
+            for( Integer i=0; i<allRecipients.length; i++ ){
+                Address address = allRecipients[i];
+                InternetAddress internetAddress = new InternetAddress(address.toString());
+                String emailAddress = internetAddress.getAddress();
+                email.addTo(emailAddress);
+            }
+
+            // body
             Object content = msg.getContent();
             if( content instanceof Multipart ){
                 Multipart mp = (Multipart) content;
@@ -132,9 +155,10 @@ public class EmailHelper {
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
         } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return email;
