@@ -17,6 +17,9 @@ INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (11, '
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (12, 'PROVINCIA', 'Sigla della provincia.', 'TN', 'STRING');
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (13, 'TELEFONO', 'Numero di telefono generale.', '0464 573888', 'STRING');
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (14, 'FAX', 'Numero di fax generale.', '0464 552410', 'STRING');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (15, 'FASE_VISTO_RESPONSABILE', 'La fase visto del responsabile del servizio', '2', 'LONG');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (16, 'FASE_VISTO_BILANCIO', 'La fase visto del responsabile di bilancio', '4', 'LONG');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (17, 'FASE_VISTO_BILANCIO_NEGATO', 'La fase visto negato del responsabile del servizio', '5', 'LONG');
 SELECT setval('generale.costante_id_seq', 15, true);
 
 INSERT INTO etichetta (id, nome, device, descrizione, definizione, linguaggio, contesto) VALUES (1, 'ETICHETTA2D', 'Zebra_Technologies_ZTC_GK420t', 'Etichetta DataMatrix', '.\nS1\nb245,34,D,h6,"${iddocumento}"\nP1\n.\n', 'ZPL', 'com.axiastudio.suite.protocollo.entities.Protocollo');
@@ -108,6 +111,9 @@ INSERT INTO fase (id, descrizione) VALUES (2, 'Approvazione del responsabile');
 INSERT INTO fase (id, descrizione) VALUES (3, 'Preparazione e firma');
 INSERT INTO fase (id, descrizione) VALUES (4, 'Visto di bilancio');
 INSERT INTO fase (id, descrizione) VALUES (5, 'Completata');
+INSERT INTO fase (id, descrizione) VALUES (6, 'Visto di bilancio negato');
+SELECT setval('pratiche.fase_id_seq', 7, true);
+
 
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (1, 'DET', 'Determine', NULL, NULL, 0, false, false );
 INSERT INTO tipopratica (id, codice, descrizione, tipopadre, formulacodifica, lunghezzaprogressivo, progressivoanno, progressivogiunta) VALUES (2, 'GES', 'Ramo GES', NULL, '${s1}${anno}${n1,number,00000}', 5, false, false);
