@@ -96,7 +96,8 @@ SELECT setval('anagrafiche.soggetto_id_seq', 5, true);
 
 -- Riferimenti
 INSERT INTO riferimento (id, descrizione, riferimento, soggetto, tipo) VALUES (1, 'Posta certificata', 'serv.supportoeinformatica@pec.provincia.tn.it', 4, 'PEC');
-SELECT setval('anagrafiche.riferimento_id_seq', 2, true);
+INSERT INTO riferimento (id, descrizione, riferimento, soggetto, tipo) VALUES (2, 'Email', 'axiastudio@pec.it', 2, 'PEC');
+SELECT setval('anagrafiche.riferimento_id_seq', 3, true);
 
 -- Le relazioni "demo" vengono inserite direttamente nella tabella reale
 INSERT INTO relazionesoggetto (id, soggetto, relazione, relazionato) VALUES (1, 1, 1, 2);
