@@ -14,6 +14,7 @@ import java.util.Map;
 public class EMail {
 
     String body;
+    String subject;
     List<String> froms = new ArrayList<String>();
     List<String> tos = new ArrayList<String>();
     List<String> fileNames = new ArrayList<String>();
@@ -25,6 +26,14 @@ public class EMail {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public void putStream(String name, InputStream stream){
@@ -50,7 +59,7 @@ public class EMail {
         tos.add(emailAddress);
     }
 
-    public List<String> getToss() {
+    public List<String> getTos() {
         return tos;
     }
 }

@@ -18,13 +18,13 @@ package com.axiastudio.suite.email;
 
 import com.axiastudio.suite.protocollo.entities.Mailbox;
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPNestedMessage;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -114,8 +114,11 @@ public class EmailHelper {
 
         try {
 
+            // subject
+            email.setSubject(msg.getSubject());
+
             // froms
-            Address[] from = msg.getFrom();
+            Address[] from = msg.getReplyTo();
             for( Integer i=0; i<from.length; i++ ){
                 Address address = from[i];
                 InternetAddress internetAddress = new InternetAddress(address.toString());
@@ -144,8 +147,12 @@ public class EmailHelper {
                         for( int j=0; j<mmp.getCount(); j++ ){
                             BodyPart bodyPart = mmp.getBodyPart(j);
                             if( bodyPart.getFileName() != null ){
-                                InputStream stream = (InputStream) bodyPart.getContent();
-                                email.putStream(bodyPart.getFileName(), stream);
+                                if( bodyPart.getContent() instanceof IMAPNestedMessage ){
+
+                                } else {
+                                    InputStream stream = (InputStream) bodyPart.getContent();
+                                    email.putStream(bodyPart.getFileName(), stream);
+                                }
                             }
                         }
 
