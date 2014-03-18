@@ -19,6 +19,7 @@ public class EMail {
     List<String> tos = new ArrayList<String>();
     List<String> fileNames = new ArrayList<String>();
     Map<String, InputStream> streams = new HashMap<String, InputStream>();
+    byte[] bytes;
 
     public String getBody() {
         return body;
@@ -61,5 +62,13 @@ public class EMail {
 
     public List<String> getTos() {
         return tos;
+    }
+
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
     }
 }

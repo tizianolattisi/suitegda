@@ -1,5 +1,6 @@
 package com.axiastudio.suite.protocollo;
 
+import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
@@ -10,6 +11,7 @@ import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.BaseUtil;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.email.EMail;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.protocollo.entities.*;
 
 import java.util.ArrayList;
@@ -69,14 +71,19 @@ public class ProtocolloUtil {
         // pratiche
         protocollo.setPraticaProtocolloCollection(new ArrayList<PraticaProtocollo>());
 
-
         Database db = (Database) Register.queryUtility(IDatabase.class);
         Controller controller = db.createController(Protocollo.class);
         Validation validation = controller.commit(protocollo);
-        if( validation.getResponse() ){
-            return protocollo;
+        if( !validation.getResponse() ){
+            return null;
         }
 
-        return null;
+        // allegato
+        CmisPlugin cmisPluginProtocollo = (CmisPlugin) Register.queryPlugin(Protocollo.class, "CMIS");
+        AlfrescoHelper helper = cmisPluginProtocollo.createAlfrescoHelper(protocollo);
+        helper.createFolder();
+        helper.createDocument("", "test.eml", email.getBytes());
+
+        return protocollo;
     }
 }

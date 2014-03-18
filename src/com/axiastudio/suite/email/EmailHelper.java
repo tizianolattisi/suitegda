@@ -23,8 +23,7 @@ import com.sun.mail.imap.IMAPNestedMessage;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 /**
@@ -148,7 +147,7 @@ public class EmailHelper {
                             BodyPart bodyPart = mmp.getBodyPart(j);
                             if( bodyPart.getFileName() != null ){
                                 if( bodyPart.getContent() instanceof IMAPNestedMessage ){
-
+                                    // TODO: nested messages
                                 } else {
                                     InputStream stream = (InputStream) bodyPart.getContent();
                                     email.putStream(bodyPart.getFileName(), stream);
@@ -168,6 +167,32 @@ public class EmailHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            msg.writeTo(out);
+            email.setBytes(out.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            InputStream is = msg.getInputStream();
+            int reads = is.read();
+            while(reads != -1){
+                baos.write(reads);
+                reads = is.read();
+            }
+            baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        email.setBytes(baos.toByteArray());*/
         return email;
     }
 
