@@ -18,11 +18,12 @@ package com.axiastudio.suite.email;
 
 import com.axiastudio.suite.protocollo.entities.Mailbox;
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPNestedMessage;
 
 import javax.mail.*;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 /**
@@ -109,7 +110,31 @@ public class EmailHelper {
         if( msg != null ){
             email = new EMail();
         }
+
         try {
+
+            // subject
+            email.setSubject(msg.getSubject());
+
+            // froms
+            Address[] from = msg.getReplyTo();
+            for( Integer i=0; i<from.length; i++ ){
+                Address address = from[i];
+                InternetAddress internetAddress = new InternetAddress(address.toString());
+                String emailAddress = internetAddress.getAddress();
+                email.addFrom(emailAddress);
+            }
+
+            // tos
+            Address[] allRecipients = msg.getAllRecipients();
+            for( Integer i=0; i<allRecipients.length; i++ ){
+                Address address = allRecipients[i];
+                InternetAddress internetAddress = new InternetAddress(address.toString());
+                String emailAddress = internetAddress.getAddress();
+                email.addTo(emailAddress);
+            }
+
+            // body
             Object content = msg.getContent();
             if( content instanceof Multipart ){
                 Multipart mp = (Multipart) content;
@@ -121,8 +146,12 @@ public class EmailHelper {
                         for( int j=0; j<mmp.getCount(); j++ ){
                             BodyPart bodyPart = mmp.getBodyPart(j);
                             if( bodyPart.getFileName() != null ){
-                                InputStream stream = (InputStream) bodyPart.getContent();
-                                email.putStream(bodyPart.getFileName(), stream);
+                                if( bodyPart.getContent() instanceof IMAPNestedMessage ){
+                                    // TODO: nested messages
+                                } else {
+                                    InputStream stream = (InputStream) bodyPart.getContent();
+                                    email.putStream(bodyPart.getFileName(), stream);
+                                }
                             }
                         }
 
@@ -132,11 +161,38 @@ public class EmailHelper {
                     }
                 }
             }
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            msg.writeTo(out);
+            email.setBytes(out.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+
+        /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            InputStream is = msg.getInputStream();
+            int reads = is.read();
+            while(reads != -1){
+                baos.write(reads);
+                reads = is.read();
+            }
+            baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        email.setBytes(baos.toByteArray());*/
         return email;
     }
 

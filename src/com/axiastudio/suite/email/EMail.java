@@ -14,8 +14,12 @@ import java.util.Map;
 public class EMail {
 
     String body;
+    String subject;
+    List<String> froms = new ArrayList<String>();
+    List<String> tos = new ArrayList<String>();
     List<String> fileNames = new ArrayList<String>();
     Map<String, InputStream> streams = new HashMap<String, InputStream>();
+    byte[] bytes;
 
     public String getBody() {
         return body;
@@ -25,12 +29,46 @@ public class EMail {
         this.body = body;
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
     public void putStream(String name, InputStream stream){
         streams.put(name, stream);
     }
 
     public InputStream getStream(String name){
-        return streams.get(name);
+        if( streams.containsKey(name) ){
+            return streams.get(name);
+        }
+        return null;
     }
 
+    public void addFrom(String emailAddress){
+        froms.add(emailAddress);
+    }
+
+    public List<String> getFroms() {
+        return froms;
+    }
+
+    public void addTo(String emailAddress){
+        tos.add(emailAddress);
+    }
+
+    public List<String> getTos() {
+        return tos;
+    }
+
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
+    }
 }

@@ -184,10 +184,10 @@ public class Mdi extends QMainWindow implements IMdi {
         itemPubblicazioni.setDisabled(true);
 
         QTreeWidgetItem itemEmail = new QTreeWidgetItem(itemProtocolloInformatico);
-        itemEmail.setText(0, "Posta elettronica");
+        itemEmail.setText(0, "PEC");
         itemEmail.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemEmail.setText(1, "EMAIL");
-        itemEmail.setDisabled(true);
+        //itemEmail.setDisabled(true);
 
         /* Anagrafiche */
         QTreeWidgetItem itemAnagrafiche = new QTreeWidgetItem(this.tree);

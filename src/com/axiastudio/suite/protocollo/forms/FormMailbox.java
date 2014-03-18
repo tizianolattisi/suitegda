@@ -1,22 +1,22 @@
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.pypapi.ui.IForm;
+import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.email.EMail;
 import com.axiastudio.suite.email.EmailHelper;
 import com.axiastudio.suite.interoperabilita.entities.Segnatura;
 import com.axiastudio.suite.interoperabilita.utilities.JAXBHelper;
+import com.axiastudio.suite.protocollo.ProtocolloUtil;
 import com.axiastudio.suite.protocollo.entities.Mailbox;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,64 +107,49 @@ public class FormMailbox extends QDialog {
         helper.open();
         EMail email = helper.getEmail(number);
 
-        System.out.println(email.getBody());
-        InputStream stream = email.getStream("Segnatura.xml");
-        BufferedReader reader = new BufferedReader(new InputStreamReader( stream ));
-        /*
-        String line = "";
-        String xml = "";
-        try {
-            xml = IOUtils.getStringFromReader(reader);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
-        //FileInputStream fileInputStream = new FileInputStream(filePath);
-        StringBuilder builder = new StringBuilder();
-        int ch;
-        try {
-            while((ch = stream.read()) != -1){
-                builder.append((char)ch);
+        // Lettura dell'eventuale segnatura
+        if( false ){
+            InputStream stream = email.getStream("Segnatura.xml");
+            if( stream != null ){
+                StringBuilder builder = new StringBuilder();
+                int ch;
+                try {
+                    while((ch = stream.read()) != -1){
+                        builder.append((char)ch);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String xml = builder.toString();
+                leggiSegnatura(xml);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
-        String xml = builder.toString();
 
         helper.close();
 
-        Segnatura segnatura = JAXBHelper.leggiSegnatura(xml);
-
-        System.out.println(segnatura.getIntestazione().getOggetto());
-
-
-        /*
-        SegnaturaOld segnatura = new SegnaturaOld(xml);
-
-        String pec = segnatura.getIndirizzoTelematico();
-        List<Soggetto> soggetti = AnagraficaUtil.trovaSoggettoDaEmail(pec);
-
-        if( soggetti.size() == 0 ){
-            String msg = "Non è stato trovato in anagrafica un soggetto con email \"" + pec + "\"";
-            Util.warningBox(this, "Attenzione", msg);
-            // TODO: proponiamo di crearlo al volo o di aggiungere l'email a un soggetto esistente?
-            return;
-        }
-
-        if( soggetti.size() > 1 ){
-            String msg = "Più soggetti sono registrati con email \"" + pec + "\".";
-            // TODO: li mostriamo e invitiamo a sceglierne uno o a sanare la situazione?
-            Util.warningBox(this, "Attenzione", msg);
-            return;
-        }
-        */
-
         // creo il nuovo protocollo
-        Protocollo protocollo = new Protocollo();
-        //protocollo.setOggetto(segnatura.getOggetto());
-        protocollo.setTipo(TipoProtocollo.ENTRATA);
+        Protocollo protocollo = ProtocolloUtil.protocollaEmail(email);
+        if( protocollo == null ){
+            // TODO: msgbox
+            return;
+        }
+        IForm form = Util.formFromEntity(protocollo);
+        QMdiArea workspace = Util.findParentMdiArea(this);
+        if( workspace != null ){
+            workspace.addSubWindow((QMainWindow) form);
+        }
+        form.show();
 
+    }
+
+    /*
+     *
+     */
+    private void leggiSegnatura(String xml){
+        Segnatura segnatura = JAXBHelper.leggiSegnatura(xml);
+        //System.out.println(segnatura.getIntestazione().getOggetto());
     }
 
 }

@@ -42,6 +42,8 @@ public class Ufficio implements Serializable {
     private Boolean attribuzione=false;
     @OneToMany(mappedBy = "ufficio", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioUtente> ufficioUtenteCollection;
+    @Column(name="pec")
+    private String pec;
 
 
     public Long getId() {
@@ -90,6 +92,14 @@ public class Ufficio implements Serializable {
 
     public void setUfficioUtenteCollection(Collection<UfficioUtente> ufficioUtenteCollection) {
         this.ufficioUtenteCollection = ufficioUtenteCollection;
+    }
+
+    public String getPec() {
+        return pec;
+    }
+
+    public void setPec(String pec) {
+        this.pec = pec;
     }
 
     @Override

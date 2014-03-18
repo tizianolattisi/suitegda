@@ -135,7 +135,8 @@ CREATE TABLE ufficio (
     descrizione character varying(255),
     sportello boolean NOT NULL DEFAULT FALSE,
     mittenteodestinatario boolean NOT NULL DEFAULT FALSE,
-    attribuzione boolean NOT NULL DEFAULT FALSE
+    attribuzione boolean NOT NULL DEFAULT FALSE,
+    pec character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE base.ufficio OWNER TO postgres;
 ALTER TABLE ONLY ufficio
@@ -153,6 +154,7 @@ CREATE TABLE ufficioutente (
     consolida boolean NOT NULL DEFAULT FALSE,
     responsabile boolean NOT NULL DEFAULT FALSE,
     procedimenti boolean NOT NULL DEFAULT FALSE,
+    leggepec boolean NOT NULL DEFAULT FALSE,
     ufficio bigint,
     utente bigint
 ) INHERITS (generale.withtimestamp);
