@@ -54,9 +54,9 @@ INSERT INTO utente (id, amministratore, attributoreprotocollo, email, login, sig
   VALUES (6, false, false, NULL, 'vice', 'G.V.S.', false, false, 'Gina il vice segretario', false, false, false, '1b3231655cebb7a1f783eddf27d254ca', false, false, false, false, false);
 SELECT setval('base.utente_id_seq', 7, true);
 
-INSERT INTO ufficioutente (id, riservato, ricerca, visualizza, daiperletto, modificapratica, inseriscepratica, consolida, responsabile, procedimenti, ufficio, utente) VALUES (1, false, true, true, false, false, false, false, false, false, 1, 3);
-INSERT INTO ufficioutente (id, riservato, ricerca, visualizza, daiperletto, modificapratica, inseriscepratica, consolida, responsabile, procedimenti, ufficio, utente) VALUES (2, false, true, false, true, true, true, false, false, false, 3, 2);
-INSERT INTO ufficioutente (id, riservato, ricerca, visualizza, daiperletto, modificapratica, inseriscepratica, consolida, responsabile, procedimenti, ufficio, utente) VALUES (3, false, true, false, false, false, false, false, false, false, 4, 2);
+INSERT INTO ufficioutente (id, riservato, ricerca, visualizza, daiperletto, modificapratica, inseriscepratica, consolida, responsabile, procedimenti, leggepec, ufficio, utente) VALUES (1, false, true, true, false, false, false, false, false, false, false, 1, 3);
+INSERT INTO ufficioutente (id, riservato, ricerca, visualizza, daiperletto, modificapratica, inseriscepratica, consolida, responsabile, procedimenti, leggepec, ufficio, utente) VALUES (2, false, true, false, true, true, true, false, false, false, true, 3, 2);
+INSERT INTO ufficioutente (id, riservato, ricerca, visualizza, daiperletto, modificapratica, inseriscepratica, consolida, responsabile, procedimenti, leggepec, ufficio, utente) VALUES (3, false, true, false, false, false, false, false, false, false, false, 4, 2);
 SELECT setval('base.ufficioutente_id_seq', 4, true);
 
 -- Anagrafiche

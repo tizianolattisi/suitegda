@@ -154,6 +154,7 @@ CREATE TABLE ufficioutente (
     consolida boolean NOT NULL DEFAULT FALSE,
     responsabile boolean NOT NULL DEFAULT FALSE,
     procedimenti boolean NOT NULL DEFAULT FALSE,
+    leggepec boolean NOT NULL DEFAULT FALSE,
     ufficio bigint,
     utente bigint
 ) INHERITS (generale.withtimestamp);

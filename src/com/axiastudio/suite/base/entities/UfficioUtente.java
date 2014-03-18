@@ -57,6 +57,8 @@ public class UfficioUtente implements Serializable {
     private Boolean responsabile=false;
     @Column(name="procedimenti")
     private Boolean procedimenti=false;
+    @Column(name="leggepec")
+    private Boolean leggepec=false;
 
     public Long getId() {
         return id;
@@ -160,6 +162,14 @@ public class UfficioUtente implements Serializable {
 
     public void setProcedimenti(Boolean procedimenti) {
         this.procedimenti = procedimenti;
+    }
+
+    public Boolean getLeggepec() {
+        return leggepec;
+    }
+
+    public void setLeggepec(Boolean leggepec) {
+        this.leggepec = leggepec;
     }
 
     @Override

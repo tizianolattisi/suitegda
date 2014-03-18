@@ -24,7 +24,16 @@
        <string>Utente</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>4</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
         <number>4</number>
        </property>
        <item row="0" column="0">
@@ -160,7 +169,16 @@
        <string>Permessi</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>4</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
         <number>4</number>
        </property>
        <item row="0" column="0">
@@ -169,7 +187,16 @@
           <string>Generici</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>8</number>
+          </property>
+          <property name="topMargin">
+           <number>8</number>
+          </property>
+          <property name="rightMargin">
+           <number>8</number>
+          </property>
+          <property name="bottomMargin">
            <number>8</number>
           </property>
           <item>
@@ -201,7 +228,16 @@
           <string>Protocollo</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
            <number>6</number>
           </property>
           <item>
@@ -266,7 +302,16 @@
           <string>Pratiche</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
            <number>6</number>
           </property>
           <item>
@@ -373,7 +418,7 @@
            <string>.ufficioUtenteCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;ufficio&lt;,ospite,ricerca,visualizza,riservato,daiperletto,inseriscepratica,modificapratica,consolida,responsabile,procedimenti</string>
+           <string>&gt;ufficio&lt;,ospite,ricerca,visualizza,riservato,daiperletto,inseriscepratica,modificapratica,consolida,responsabile,procedimenti,leggepec</string>
           </property>
           <property name="reference" stdset="0">
            <string>ufficio</string>
