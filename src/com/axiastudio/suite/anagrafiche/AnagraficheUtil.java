@@ -21,10 +21,10 @@ import java.util.List;
  * Date: 11/02/14
  * Time: 09:43
  */
-public class AnagraficaUtil {
+public class AnagraficheUtil {
 
-    public static List<Soggetto> trovaSoggettoDaEmail(String email){
-        return trovaSoggettoDaEmail(email, null);
+    public static List<Soggetto> trovaSoggettoDaPec(String email){
+        return trovaSoggettoDaEmail(email, TipoRiferimento.PEC);
     }
 
     public static List<Soggetto> trovaSoggettoDaEmail(String email, TipoRiferimento tipo){
