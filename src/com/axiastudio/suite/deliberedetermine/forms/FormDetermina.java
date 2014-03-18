@@ -19,9 +19,13 @@ package com.axiastudio.suite.deliberedetermine.forms;
 import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.ITableModel;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.deliberedetermine.DeterminaUtil;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
@@ -143,6 +147,12 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         int res = swd.exec();
 
         if( res == 1 ){
+            if( determina.getVistoResponsabile() != null && determina.getNumero() == null ){
+                DeterminaUtil.numeroDiDetermina(determina);
+                Database db = (Database) Register.queryUtility(IDatabase.class);
+                Controller controller = db.createController(Determina.class);
+                controller.commit(determina);
+            }
             this.getContext().commitChanges();
         }
     }
