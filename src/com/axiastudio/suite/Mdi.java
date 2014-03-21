@@ -273,7 +273,8 @@ public class Mdi extends QMainWindow implements IMdi {
         itemDetermineVistoBilancio.setText(0, "Determine in attesa visto bilancio");
         itemDetermineVistoBilancio.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemDetermineVistoBilancio.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
-        itemDetermineVistoBilancio.setText(2, "NAMEDQUERY:inAttesaDiVistoDiBilancio:idfase,Integer,49");
+        String faseVistoBilancio = SuiteUtil.trovaCostante("FASE_VISTO_BILANCIO").getValore();
+        itemDetermineVistoBilancio.setText(2, "NAMEDQUERY:inAttesaDiVistoDiBilancio:idfase,Integer,"+faseVistoBilancio);
 
         QTreeWidgetItem itemSedute = new QTreeWidgetItem(itemDelibereDetermineRoot);
         itemSedute.setText(0, "Sedute");
