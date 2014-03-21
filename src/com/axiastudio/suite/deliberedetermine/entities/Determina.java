@@ -50,6 +50,9 @@ import java.util.List;
 @EntityListeners({DeterminaListener.class})
 @Table(schema="deliberedetermine")
 @SequenceGenerator(name="gendetermina", sequenceName="deliberedetermine.determina_id_seq", initialValue=1, allocationSize=1)
+@NamedQuery(name="inAttesaDiVistoDiBilancio",
+        query = "SELECT d FROM Determina d JOIN d.pratica p JOIN p.fasePraticaCollection fp " +
+                "WHERE fp.attiva = true AND fp.fase.id = :idfase")
 public class Determina implements Serializable, IDettaglio, IProtocollabile {
     private static final long serialVersionUID = 1L;
     @Id

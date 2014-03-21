@@ -17,6 +17,8 @@
 package com.axiastudio.suite;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.IFactory;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.IForm;
@@ -33,9 +35,13 @@ import com.trolltech.qt.core.QObject;
 import com.trolltech.qt.core.QSignalMapper;
 import com.trolltech.qt.gui.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -263,6 +269,12 @@ public class Mdi extends QMainWindow implements IMdi {
         itemDetermine.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
         itemDetermine.setText(2, "NEW");
 
+        QTreeWidgetItem itemDetermineVistoBilancio = new QTreeWidgetItem(itemDelibereDetermineRoot);
+        itemDetermineVistoBilancio.setText(0, "Determine in attesa visto bilancio");
+        itemDetermineVistoBilancio.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemDetermineVistoBilancio.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
+        itemDetermineVistoBilancio.setText(2, "NAMEDQUERY:inAttesaDiVistoDiBilancio:idfase,Integer,49");
+
         QTreeWidgetItem itemSedute = new QTreeWidgetItem(itemDelibereDetermineRoot);
         itemSedute.setText(0, "Sedute");
         itemSedute.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
@@ -441,6 +453,31 @@ public class Mdi extends QMainWindow implements IMdi {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
+            } else if( mode.startsWith("NAMEDQUERY") ){
+                Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+                String[] split = mode.split(":");
+                String namedQueryName = split[1];
+
+                Database db = (Database) Register.queryUtility(IDatabase.class);
+                EntityManagerFactory emf = db.getEntityManagerFactory();
+                EntityManager em = emf.createEntityManager();
+                TypedQuery namedQuery = em.createNamedQuery(namedQueryName, factory);
+
+                // TODO: aggiungere qualche controllo?
+                for( Integer i=2; i<split.length; i++){
+                    String parameters = split[i];
+                    String[] split1 = parameters.split(",");
+                    String fieldName = split1[0];
+                    String typeName = split1[1];
+                    String stringValue = split1[2];
+                    if( "Integer".equals(typeName) ){
+                        Object value = Integer.parseInt(stringValue);
+                        namedQuery = namedQuery.setParameter(fieldName, value);
+                    }
+                }
+
+                List<?> resultList = namedQuery.getResultList();
+                store = new Store(resultList);
             }
 
             if( store != null ){
