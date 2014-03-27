@@ -21,6 +21,7 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
+
 import java.util.Date;
 
 /**
@@ -29,16 +30,16 @@ import java.util.Date;
  */
 public interface IGestoreDeleghe {
     
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica);
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica);
 
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio);
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio);
     
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento);
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento);
 
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio);
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio);
 
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente);
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente);
 
-    public Boolean checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica);
+    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica);
 
 }

@@ -16,17 +16,21 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
+import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@EntityListeners({TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="gensoggettoprotocollo", sequenceName="protocollo.soggettoprotocollo_id_seq", initialValue=1, allocationSize=1)
 public class SoggettoProtocollo implements Serializable, ITimeStamped {
@@ -40,22 +44,43 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
-    @Enumerated(EnumType.STRING)
-    private TitoloSoggettoProtocollo titolo;
+    @JoinColumn(name = "titolo", referencedColumnName = "id")
+    @ManyToOne
+    private Titolo titolo;
+    @Column(name="primoinserimento")
+    private Boolean primoinserimento=false;
+    @Column(name="annullato")
+    private Boolean annullato=false;
     @Column(name="conoscenza")
     private Boolean conoscenza=false;
     @Column(name="notifica")
     private Boolean notifica=false;
     @Column(name="corrispondenza")
     private Boolean corrispondenza=false;
+    @Column(name="datainizio", columnDefinition="DATE DEFAULT CURRENT_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date datainizio;
+    @Column(name="datafine")
+    @Temporal(TemporalType.DATE)
+    private Date datafine;
+    @Column(name="principale")
+    private Boolean principale=false;
+
+    @JoinColumn(name = "soggettoreferente", referencedColumnName = "id")
+    @ManyToOne
+    private Soggetto soggettoReferente;
 
     /* timestamped */
-    @Column(name="rec_creato")
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
     @Column(name="rec_modificato")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
     
     public Long getId() {
         return id;
@@ -81,12 +106,47 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.soggetto = soggetto;
     }
 
-    public TitoloSoggettoProtocollo getTitolo() {
+    /*
+     * SoggettoFormattato mette in bold i soggetti di primo inserimento
+     */
+    public String getSoggettoformattato() {
+        String pre = "";
+        String post = "";
+        if( this.getAnnullato() ){
+            pre = "<del>";
+            post = "</del>";
+        } else if( this.getPrimoinserimento() ){
+            pre = "'''";
+            post = "'''";
+        }
+        return pre+soggetto.toString()+post;
+    }
+    public void setSoggettoformattato( String s ) {
+        
+    }
+    
+    public Titolo getTitolo() {
         return titolo;
     }
 
-    public void setTitolo(TitoloSoggettoProtocollo titolo) {
+    public void setTitolo(Titolo titolo) {
         this.titolo = titolo;
+    }
+
+    public Boolean getPrimoinserimento() {
+        return primoinserimento;
+    }
+
+    public void setPrimoinserimento(Boolean primoinserimento) {
+        this.primoinserimento = primoinserimento;
+    }
+
+    public Boolean getAnnullato() {
+        return annullato;
+    }
+
+    public void setAnnullato(Boolean annullato) {
+        this.annullato = annullato;
     }
 
     public Boolean getConoscenza() {
@@ -113,13 +173,70 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.corrispondenza = corrispondenza;
     }
 
+    public Date getDatainizio() {
+        return datainizio;
+    }
+
+    public void setDatainizio(Date datainizio) {
+        this.datainizio = datainizio;
+    }
+
+    public Date getDatafine() {
+        return datafine;
+    }
+
+    public void setDatafine(Date datafine) {
+        this.datafine = datafine;
+    }
+
+    public Boolean getPrincipale() {
+        return principale;
+    }
+
+    public void setPrincipale(Boolean principale) {
+        this.principale = principale;
+    }
+
+    public Soggetto getSoggettoReferente() {
+        return soggettoReferente;
+    }
+
+    public void setSoggettoReferente(Soggetto soggettoReferente) {
+        this.soggettoReferente = soggettoReferente;
+    }
+
+    public RelazioneSoggetto getReferenteRelazione() {
+        return null;
+    }
+
+    public void setReferenteRelazione(RelazioneSoggetto referenteRelazione) {
+        if (referenteRelazione ==  null ) {
+            this.soggettoReferente = null;
+        } else {
+            this.soggettoReferente = referenteRelazione.getRelazionato();
+        }
+    }
+
+    public String getPredicato(){
+        if ( this.getSoggettoReferente()==null ) {
+            return "-";
+        }
+        return this.getSoggettoReferente().toString();
+    }
+
+    public void setPredicato(String predicato){
+        // non deve fare nulla
+    }
+
+
     @Override
     public Date getRecordcreato() {
         return recordcreato;
     }
 
+
     public void setRecordcreato(Date recordcreato) {
-        
+        this.recordcreato = recordcreato;
     }
 
     @Override
@@ -128,7 +245,25 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     }
 
     public void setRecordmodificato(Date recordmodificato) {
-        
+        this.recordmodificato = recordmodificato;
+    }
+    
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+   @Override
+   public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
     
     @Override

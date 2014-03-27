@@ -16,11 +16,16 @@
  */
 package com.axiastudio.suite.protocollo;
 
+import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.annotations.Adapter;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.protocollo.entities.Attribuzione;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo;
+import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.protocollo.entities.*;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -32,7 +37,7 @@ public class ProtocolloAdapters {
     public static Attribuzione adaptUfficioToAttribuzione(Ufficio ufficio){
         Attribuzione ap = new Attribuzione();
         ap.setUfficio(ufficio);
-        ap.setPrincipale(Boolean.TRUE);
+        ap.setPrincipale(Boolean.FALSE);
         return ap;
     }
     
@@ -43,4 +48,31 @@ public class ProtocolloAdapters {
         return rp;
     }
     
+    @Adapter
+    public static SoggettoProtocollo adaptSoggettoToSoggettoProtocollo(Soggetto soggetto){
+        SoggettoProtocollo sp = new SoggettoProtocollo();
+        sp.setSoggetto(soggetto);
+        return sp;
+    }
+
+    @Adapter
+    public static SoggettoRiservatoProtocollo adaptSoggettoToSoggettoRiservatoProtocollo(Soggetto soggetto){
+        SoggettoRiservatoProtocollo srp = new SoggettoRiservatoProtocollo();
+        srp.setSoggetto(soggetto);
+        return srp;
+    }
+    
+    @Adapter
+    public static AnnullamentoProtocollo adaptMotivazioneAnnullamentoToAnnullamentoProtocollo(MotivazioneAnnullamento motivazione){
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        AnnullamentoProtocollo ap = new AnnullamentoProtocollo();
+        ap.setMotivazioneannullamento(motivazione);
+        ap.setEsecutorerichiesta(autenticato.getLogin());
+        ap.setDatarichiesta(today);
+        return ap;
+        
+    }
+
 }

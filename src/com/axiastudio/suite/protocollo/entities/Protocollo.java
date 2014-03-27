@@ -17,15 +17,19 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
+import com.axiastudio.suite.protocollo.ProtocolloListener;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import javax.persistence.*;
 
 
 /**
@@ -33,6 +37,7 @@ import javax.persistence.*;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@EntityListeners({ProtocolloListener.class, TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genprotocollo", sequenceName="protocollo.protocollo_id_seq", initialValue=1, allocationSize=1)
 public class Protocollo implements Serializable, ITimeStamped {
@@ -42,8 +47,8 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Long id;
     @Column(name="iddocumento", length=12, unique=true)
     private String iddocumento;
-    @Column(name="dataprotocollo")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name="dataprotocollo", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataprotocollo;
     @Column(name="anno")
     private Integer anno;
@@ -70,6 +75,8 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Collection<RiferimentoProtocollo> riferimentoProtocolloCollection;
     @OneToMany(mappedBy = "precedente", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<RiferimentoProtocollo> riferimentoProtocolloSuccessivoCollection;
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<AnnullamentoProtocollo> annullamentoProtocolloCollection;
     @Column(name="annullato")
     private Boolean annullato=false;
     @Column(name="annullamentorichiesto")
@@ -78,6 +85,11 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Boolean richiederisposta=false;
     @Column(name="spedito")
     private Boolean spedito=false;
+    @Column(name="dataspedizione")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataspedizione;
+    @Column(name="esecutorespedizione", length=40)
+    private String esecutorespedizione;
     @Column(name="riservato")
     private Boolean riservato=false;
     @Column(name="corrispostoostornato")
@@ -89,21 +101,50 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Column(name="datariferimentomittente")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datariferimentomittente;
-    @Column(name="convalidaattribuzioni")
-    private Boolean ConvalidaAttribuzioni=false;
-    @Column(name="convalidaprotocollo")
-    private Boolean ConvalidaProtocollo=false;
     @JoinColumn(name = "fascicolo", referencedColumnName = "id")
     @ManyToOne
     private Fascicolo fascicolo;
+    
+    @Column(name="convalidaattribuzioni")
+    private Boolean convalidaattribuzioni=false;
+    @Column(name="dataconvalidaattribuzioni")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataconvalidaattribuzioni;
+    @Column(name="esecutoreconvalidaattribuzioni", length=40)
+    private String esecutoreconvalidaattribuzioni;
+
+    @Column(name="convalidaprotocollo")
+    private Boolean convalidaprotocollo=false;
+    @Column(name="dataconvalidaprotocollo")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataconvalidaprotocollo;
+    @Column(name="esecutoreconvalidaprotocollo", length=40)
+    private String esecutoreconvalidaprotocollo;
+    @Column(name="numeroconvalidaprotocollo", length=10)
+    private String numeroconvalidaprotocollo;
+    
+    @Column(name="consolidadocumenti")
+    private Boolean consolidadocumenti=false;
+    @Column(name="dataconsolidadocumenti")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataconsolidadocumenti;
+    @Column(name="esecutoreconsolidadocumenti", length=40)
+    private String esecutoreconsolidadocumenti;
+
+    @Column(name="controlloreposta", length=40)
+    private String controlloreposta;
 
     /* timestamped */
-    @Column(name="rec_creato")
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
     @Column(name="rec_modificato")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
 
 
     public Long getId() {
@@ -308,6 +349,14 @@ public class Protocollo implements Serializable, ITimeStamped {
         this.riferimentoProtocolloSuccessivoCollection = riferimentoProtocolloSuccessivoCollection;
     }
 
+    public Collection<AnnullamentoProtocollo> getAnnullamentoProtocolloCollection() {
+        return annullamentoProtocolloCollection;
+    }
+
+    public void setAnnullamentoProtocolloCollection(Collection<AnnullamentoProtocollo> annullamentoProtocolloCollection) {
+        this.annullamentoProtocolloCollection = annullamentoProtocolloCollection;
+    }
+
     public Date getDatariferimentomittente() {
         return datariferimentomittente;
     }
@@ -324,20 +373,36 @@ public class Protocollo implements Serializable, ITimeStamped {
         this.riferimentomittente = riferimentomittente;
     }
 
-    public Boolean getConvalidaAttribuzioni() {
-        return ConvalidaAttribuzioni;
+    public Boolean getConvalidaattribuzioni() {
+        return convalidaattribuzioni;
     }
 
-    public void setConvalidaAttribuzioni(Boolean ConvalidaAttribuzioni) {
-        this.ConvalidaAttribuzioni = ConvalidaAttribuzioni;
+    public void setConvalidaattribuzioni(Boolean convalidaattribuzioni) {
+        this.convalidaattribuzioni = convalidaattribuzioni;
     }
 
-    public Boolean getConvalidaProtocollo() {
-        return ConvalidaProtocollo;
+    public Boolean getConvalidaprotocollo() {
+        return convalidaprotocollo;
     }
 
-    public void setConvalidaProtocollo(Boolean ConvalidaProtocollo) {
-        this.ConvalidaProtocollo = ConvalidaProtocollo;
+    public void setConvalidaprotocollo(Boolean convalidaprotocollo) {
+        this.convalidaprotocollo = convalidaprotocollo;
+    }
+
+    public Date getDataconvalidaprotocollo() {
+        return dataconvalidaprotocollo;
+    }
+
+    public void setDataconvalidaprotocollo(Date dataconvalida) {
+        this.dataconvalidaprotocollo = dataconvalida;
+    }
+
+    public Boolean getConsolidadocumenti() {
+        return consolidadocumenti;
+    }
+
+    public void setConsolidadocumenti(Boolean consolidadocumenti) {
+        this.consolidadocumenti = consolidadocumenti;
     }
 
     public Fascicolo getFascicolo() {
@@ -347,6 +412,78 @@ public class Protocollo implements Serializable, ITimeStamped {
     public void setFascicolo(Fascicolo fascicolo) {
         this.fascicolo = fascicolo;
     }
+    
+    public Date getDataspedizione() {
+        return dataspedizione;
+    }
+
+    public void setDataspedizione(Date dataspedizione) {
+        this.dataspedizione = dataspedizione;
+    }
+
+    public String getEsecutorespedizione() {
+        return esecutorespedizione;
+    }
+
+    public void setEsecutorespedizione(String esecutorespedizione) {
+        this.esecutorespedizione = esecutorespedizione;
+    }
+
+    public Date getDataconvalidaattribuzioni() {
+        return dataconvalidaattribuzioni;
+    }
+
+    public void setDataconvalidaattribuzioni(Date dataconvalidaattribuzioni) {
+        this.dataconvalidaattribuzioni = dataconvalidaattribuzioni;
+    }
+
+    public String getEsecutoreconvalidaattribuzioni() {
+        return esecutoreconvalidaattribuzioni;
+    }
+
+    public void setEsecutoreconvalidaattribuzioni(String esecutoreconvalidaattribuzioni) {
+        this.esecutoreconvalidaattribuzioni = esecutoreconvalidaattribuzioni;
+    }
+
+    public String getEsecutoreconvalidaprotocollo() {
+        return esecutoreconvalidaprotocollo;
+    }
+
+    public void setEsecutoreconvalidaprotocollo(String esecutoreconvalidaprotocollo) {
+        this.esecutoreconvalidaprotocollo = esecutoreconvalidaprotocollo;
+    }
+
+    public Date getDataconsolidadocumenti() {
+        return dataconsolidadocumenti;
+    }
+
+    public void setDataconsolidadocumenti(Date dataconsolidadocumenti) {
+        this.dataconsolidadocumenti = dataconsolidadocumenti;
+    }
+
+    public String getEsecutoreconsolidadocumenti() {
+        return esecutoreconsolidadocumenti;
+    }
+
+    public void setEsecutoreconsolidadocumenti(String esecutoreconsolidadocumenti) {
+        this.esecutoreconsolidadocumenti = esecutoreconsolidadocumenti;
+    }
+
+    public String getNumeroconvalidaprotocollo() {
+        return numeroconvalidaprotocollo;
+    }
+
+    public void setNumeroconvalidaprotocollo(String numeroconvalidaprotocollo) {
+        this.numeroconvalidaprotocollo = numeroconvalidaprotocollo;
+    }
+
+    public String getControlloreposta() {
+        return controlloreposta;
+    }
+
+    public void setControlloreposta(String controlloreposta) {
+        this.controlloreposta = controlloreposta;
+    }
 
     @Override
     public Date getRecordcreato() {
@@ -354,7 +491,7 @@ public class Protocollo implements Serializable, ITimeStamped {
     }
 
     public void setRecordcreato(Date recordcreato) {
-        
+        this.recordcreato = recordcreato;
     }
 
     @Override
@@ -363,8 +500,27 @@ public class Protocollo implements Serializable, ITimeStamped {
     }
 
     public void setRecordmodificato(Date recordmodificato) {
-        
+        this.recordmodificato = recordmodificato;
     }
+    
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+   @Override
+   public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
+    }
+  
 
     @Override
     public int hashCode() {
@@ -388,7 +544,7 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     @Override
     public String toString() {
-        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + " (" + this.dataprotocollo + ") " + this.getOggettop();
+        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + " (" + SuiteUtil.DATETIME_FORMAT.format(this.dataprotocollo) + ") " + this.getOggettop();
     }
     
 }

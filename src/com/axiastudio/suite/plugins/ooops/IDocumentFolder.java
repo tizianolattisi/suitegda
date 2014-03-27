@@ -14,12 +14,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.axiastudio.suite.protocollo.entities;
+package com.axiastudio.suite.plugins.ooops;
+
+import java.util.List;
 
 /**
  *
- * @author Tiziano Lattisi <tiziano at axiastudio.it>
+ * @author AXIA Studio (http://www.axiastudio.com)
+ * 
+ * The form that is implementing IDocumentFolder should return a List of
+ * Template, depending on the current entity.
+ * 
  */
-public enum TitoloPraticaProtocollo {
-    ISTANZA, INTEGRAZIONE, DETERMINA, DELIBERA;
+public interface IDocumentFolder {
+    
+    public List<Template> getTemplates();
+    public void createDocument(String subpath, String name, String title, String description, byte[] content, String mimeType);
+    
 }

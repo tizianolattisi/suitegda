@@ -33,6 +33,27 @@ public class ProtocolloMenuBar extends PyPaPiToolBar {
         this.insertButton("convalidaProtocollo", "Convalida protocollo",
                 "classpath:com/axiastudio/suite/resources/lock_mail.png",
                 "Convalida della registrazione del protocollo", parent);
+        this.insertButton("consolidaDocumenti", "Consolida documenti",
+                "classpath:com/axiastudio/suite/resources/lock_folder.png",
+                "Consolida i documenti allegati al protocollo", parent);
+        this.insertButton("apriDocumenti", "Apri documenti",
+                "classpath:com/axiastudio/menjazo/resources/menjazo.png",
+                "Apre lo spazio documenti", parent);
+        this.insertButton("pubblicaProtocollo", "Crea una pubblicazione dal protocollo",
+                "classpath:com/axiastudio/suite/resources/newspaper.png",
+                "Crea una nuova pubblicazione a partire dal protocollo selezionato", parent);
+        this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
+                          "classpath:com/axiastudio/suite/resources/datamatrix_find.png",
+                          "Ricerca da etichetta", parent);
+        this.insertButton("stampaEtichetta", "Stampa etichetta",
+                          "classpath:com/axiastudio/suite/resources/datamatrix.png",
+                          "Stampa etichetta", parent);
+        // XXX: in attesa di pubblicare gli altri componenti
+        /*
+        this.insertButton("segnaturaXml", "Crea Segnatura.xml",
+                "classpath:com/axiastudio/suite/resources/page_white_code.png",
+                "Crea e allega il file di segnatura xml.", parent);
+                */
     }
     
 }

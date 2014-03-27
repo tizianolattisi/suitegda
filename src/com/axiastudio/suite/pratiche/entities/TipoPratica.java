@@ -17,16 +17,13 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
+import com.axiastudio.suite.protocollo.entities.Fascicolo;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.util.Collection;
+import java.util.Comparator;
 
 /**
  *
@@ -35,7 +32,7 @@ import javax.persistence.Table;
 @Entity
 @Table(schema="PRATICHE")
 @SequenceGenerator(name="gentipopratica", sequenceName="pratiche.tipopratica_id_seq", initialValue=1, allocationSize=1)
-public class TipoPratica implements Serializable {
+public class TipoPratica implements Serializable, Comparable<TipoPratica> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentipopratica")
@@ -45,17 +42,29 @@ public class TipoPratica implements Serializable {
     @Column(name="descrizione")
     private String descrizione;
     @JoinColumn(name = "tipopadre", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private TipoPratica tipopadre;
     @JoinColumn(name="procedimento", referencedColumnName = "id")
-    @ManyToOne
-    private Procedimento procedimento;
     @Column(name="formulacodifica")
     private String formulacodifica;
-    @Column(name="porzionenumeroda")
-    private Integer porzionenumeroda;
-    @Column(name="porzionenumeroa")
-    private Integer porzionenumeroa;
+    @Column(name="lunghezzaprogressivo")
+    private Integer lunghezzaprogressivo;
+    @Column(name="progressivoanno")
+    private Boolean progressivoanno=false;
+    @Column(name="progressivogiunta")
+    private Boolean progressivogiunta=false;
+    @JoinColumn(name = "fascicolo", referencedColumnName = "id")
+    @ManyToOne
+    private Fascicolo fascicolo;
+    @Column(name="foglia")
+    private Boolean foglia=false;
+    @Column(name="approvata")
+    private Boolean approvata=false;
+    @Column(name="obsoleta")
+    private Boolean obsoleta=false;
+    @OneToMany(mappedBy = "tipopratica", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<TipoPraticaProcedimento> tipopraticaProcedimentoCollection;
+
 
     public Long getId() {
         return id;
@@ -90,11 +99,12 @@ public class TipoPratica implements Serializable {
     }
 
     public Procedimento getProcedimento() {
-        return procedimento;
-    }
-
-    public void setProcedimento(Procedimento procedimento) {
-        this.procedimento = procedimento;
+        Collection<TipoPraticaProcedimento> c = getTipopraticaProcedimentoCollection();
+        if( c.size() != 1 ){
+            return null;
+        }
+        TipoPraticaProcedimento tpp = (TipoPraticaProcedimento) c.toArray()[0];
+        return tpp.getProcedimento();
     }
 
     public String getFormulacodifica() {
@@ -105,20 +115,68 @@ public class TipoPratica implements Serializable {
         this.formulacodifica = formulacodifica;
     }
 
-    public Integer getPorzionenumeroda() {
-        return porzionenumeroda;
+    public Integer getLunghezzaprogressivo() {
+        return lunghezzaprogressivo;
     }
 
-    public void setPorzionenumeroda(Integer porzionenumeroda) {
-        this.porzionenumeroda = porzionenumeroda;
+    public void setLunghezzaprogressivo(Integer lunghezzaprogressivo) {
+        this.lunghezzaprogressivo = lunghezzaprogressivo;
     }
 
-    public Integer getPorzionenumeroa() {
-        return porzionenumeroa;
+    public Boolean getProgressivoanno() {
+        return progressivoanno;
     }
 
-    public void setPorzionenumeroa(Integer porzionenumeroa) {
-        this.porzionenumeroa = porzionenumeroa;
+    public void setProgressivoanno(Boolean progressivoanno) {
+        this.progressivoanno = progressivoanno;
+    }
+
+    public Boolean getProgressivogiunta() {
+        return progressivogiunta;
+    }
+
+    public void setProgressivogiunta(Boolean progressivogiunta) {
+        this.progressivogiunta = progressivogiunta;
+    }
+
+    public Fascicolo getFascicolo() {
+        return fascicolo;
+    }
+
+    public void setFascicolo(Fascicolo fascicolo) {
+        this.fascicolo = fascicolo;
+    }
+
+    public Boolean getFoglia() {
+        return foglia;
+    }
+
+    public void setFoglia(Boolean foglia) {
+        this.foglia = foglia;
+    }
+
+    public Boolean getApprovata() {
+        return approvata;
+    }
+
+    public void setApprovata(Boolean approvata) {
+        this.approvata = approvata;
+    }
+
+    public Boolean getObsoleta() {
+        return obsoleta;
+    }
+
+    public void setObsoleta(Boolean obsoleta) {
+        this.obsoleta = obsoleta;
+    }
+
+    public Collection<TipoPraticaProcedimento> getTipopraticaProcedimentoCollection() {
+        return tipopraticaProcedimentoCollection;
+    }
+
+    public void setTipopraticaProcedimentoCollection(Collection<TipoPraticaProcedimento> tipopraticaProcedimentoCollection) {
+        this.tipopraticaProcedimentoCollection = tipopraticaProcedimentoCollection;
     }
 
     @Override
@@ -143,7 +201,22 @@ public class TipoPratica implements Serializable {
 
     @Override
     public String toString() {
-        return this.getCodice()+" - "+this.getDescrizione();
+        return " "+this.getCodice()+" - "+this.getDescrizione();
     }
+
+    @Override
+    public int compareTo(TipoPratica o) {
+        return Comparators.CODICE.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static Comparator<TipoPratica> CODICE = new Comparator<TipoPratica>() {
+            @Override
+            public int compare(TipoPratica o1, TipoPratica o2) {
+                return o1.codice.compareTo(o2.codice);
+            }
+        };
+    }
+
     
 }

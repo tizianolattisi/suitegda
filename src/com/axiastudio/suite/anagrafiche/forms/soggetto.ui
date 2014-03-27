@@ -6,132 +6,108 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>783</width>
-    <height>606</height>
+    <width>807</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Soggetti</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>cognome,nome,ragionesociale,denominazione,denominazione2,denominazione3</string>
+   <string>&gt;id&lt;,descrizione,indirizzo,comune,cessazione,codicefiscale,partitaiva</string>
+  </property>
+  <property name="sortcolumn" stdset="0">
+   <number>1</number>
+  </property>
+  <property name="sortorder" stdset="0">
+   <string>&lt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit_3">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="column" stdset="0">
-       <string>id</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="3" colspan="2">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>401</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Identificativo</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="4">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="minimumSize">
-       <size>
-        <width>150</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>150</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="title">
-       <string>Validità</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="margin">
-        <number>8</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label_10">
+   <layout class="QGridLayout" name="gridLayout_7">
+    <item row="0" column="0" colspan="2">
+     <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,1">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Identificativo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spinBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="maximum">
+         <number>1000000</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="column" stdset="0">
+         <string>id</string>
+        </property>
+        <property name="search" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="export" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QComboBox" name="comboBoxTipoSoggetto">
+        <property name="column" stdset="0">
+         <string>Tipo</string>
+        </property>
+        <property name="search" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="export" stdset="0">
+         <bool>true</bool>
+        </property>
+        <item>
          <property name="text">
-          <string>Nascita</string>
+          <string>PERSONA</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
-         <property name="displayFormat">
-          <string>dd/MM/yyyy</string>
-         </property>
-         <property name="calendarPopup">
-          <bool>true</bool>
-         </property>
-         <property name="column" stdset="0">
-          <string>datanascita</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_11">
+        </item>
+        <item>
          <property name="text">
-          <string>Cessazione</string>
+          <string>AZIENDA</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_2">
-         <property name="displayFormat">
-          <string>dd/MM/yyyy</string>
+        </item>
+        <item>
+         <property name="text">
+          <string>ENTE</string>
          </property>
-         <property name="calendarPopup">
-          <bool>true</bool>
-         </property>
-         <property name="column" stdset="0">
-          <string>datacessazione</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_7"/>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>84</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>478</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
-    <item row="1" column="0" colspan="4">
+    <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidgetHeader">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>200</height>
+       </size>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -144,83 +120,7 @@
         <property name="margin">
          <number>8</number>
         </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Sesso</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QComboBox" name="comboBox_2">
-          <property name="column" stdset="0">
-           <string>sessoSoggetto</string>
-          </property>
-          <item>
-           <property name="text">
-            <string>ND</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>M</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>F</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Titolo</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QComboBox" name="comboBox">
-          <property name="editable">
-           <bool>false</bool>
-          </property>
-          <property name="column" stdset="0">
-           <string>titoloSoggetto</string>
-          </property>
-          <item>
-           <property name="text">
-            <string>ND</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>SIG</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>SIG_RA</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>DOTT</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>DOTT_SA</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>ING</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="0" column="4" rowspan="4" colspan="2">
+        <item row="0" column="6" rowspan="3">
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
            <string>Albo professionale</string>
@@ -230,7 +130,7 @@
             <number>8</number>
            </property>
            <item row="0" column="0" colspan="2">
-            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_3">
+            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_albo">
              <property name="column" stdset="0">
               <string>alboprofessionale</string>
              </property>
@@ -267,14 +167,69 @@
           </layout>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label">
+        <item row="6" column="5">
+         <widget class="QLabel" name="label_14">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="text">
-           <string>Cognome</string>
+           <string>Cod. anagrafe</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="3">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Cognome</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Sesso</string>
+          </property>
+          <property name="buddy">
+           <cstring>comboBox_2</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="comboBox_2">
+          <property name="column" stdset="0">
+           <string>sessosoggetto</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>ND</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>M</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>F</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="0" column="3" colspan="3">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
+          <property name="editable">
+           <bool>false</bool>
+          </property>
+          <property name="column" stdset="0">
+           <string>titolosoggetto</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="5">
          <widget class="QLineEdit" name="lineEdit">
           <property name="column" stdset="0">
            <string>cognome</string>
@@ -282,16 +237,22 @@
           <property name="search" stdset="0">
            <bool>true</bool>
           </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Nome</string>
+          <property name="export" stdset="0">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
-        <item row="2" column="1" colspan="3">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Nome</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_2</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="5">
          <widget class="QLineEdit" name="lineEdit_2">
           <property name="column" stdset="0">
            <string>nome</string>
@@ -299,30 +260,22 @@
           <property name="search" stdset="0">
            <bool>true</bool>
           </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>C.Fiscale</string>
+          <property name="export" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="3" column="1" colspan="3">
-         <widget class="QLineEdit" name="lineEdit_5">
-          <property name="column" stdset="0">
-           <string>codicefiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
+        <item row="6" column="0">
          <widget class="QLabel" name="label_5">
           <property name="text">
            <string>Nick</string>
           </property>
+          <property name="buddy">
+           <cstring>lineEdit_4</cstring>
+          </property>
          </widget>
         </item>
-        <item row="4" column="1" colspan="2">
+        <item row="6" column="1">
          <widget class="QLineEdit" name="lineEdit_4">
           <property name="enabled">
            <bool>true</bool>
@@ -330,29 +283,41 @@
           <property name="column" stdset="0">
            <string>nick</string>
           </property>
-         </widget>
-        </item>
-        <item row="4" column="3">
-         <widget class="QCheckBox" name="checkBox">
-          <property name="text">
-           <string>residente</string>
-          </property>
-          <property name="column" stdset="0">
-           <string>residente</string>
+          <property name="search" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="4" column="4">
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>Cod. anagrafe</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="5">
+        <item row="6" column="6">
          <widget class="QLineEdit" name="lineEdit_10">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="column" stdset="0">
            <string>codiceanagrafe</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="4">
+         <widget class="QCheckBox" name="checkBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>residente</string>
+          </property>
+          <property name="column" stdset="0">
+           <string>residente</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Titolo</string>
+          </property>
+          <property name="buddy">
+           <cstring>comboBox</cstring>
           </property>
          </widget>
         </item>
@@ -363,9 +328,6 @@
         <string>Azienda</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
-        <property name="margin">
-         <number>8</number>
-        </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label_8">
           <property name="text">
@@ -373,59 +335,34 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1" colspan="3">
+        <item row="0" column="1">
          <widget class="QLineEdit" name="lineEdit_6">
           <property name="column" stdset="0">
            <string>ragionesociale</string>
           </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="export" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_15">
-          <property name="text">
-           <string>Partita iva</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_11">
-          <property name="column" stdset="0">
-           <string>partitaiva</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_16">
-          <property name="text">
-           <string>Cod. fiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QLineEdit" name="lineEdit_12">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="column" stdset="0">
-           <string>codicefiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
          <widget class="QLabel" name="label_17">
           <property name="text">
            <string>Referente</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1" colspan="3">
+        <item row="1" column="1">
          <widget class="QLineEdit" name="lineEdit_13">
           <property name="column" stdset="0">
            <string>referente</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="2" column="1">
          <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -455,10 +392,16 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1" colspan="6">
+        <item row="0" column="1" colspan="4">
          <widget class="QLineEdit" name="lineEdit_16">
           <property name="column" stdset="0">
            <string>denominazione</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="export" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -469,10 +412,16 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="6">
+        <item row="1" column="1" colspan="4">
          <widget class="QLineEdit" name="lineEdit_17">
           <property name="column" stdset="0">
            <string>denominazione2</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="export" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -483,59 +432,62 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1" colspan="6">
+        <item row="2" column="1" colspan="4">
          <widget class="QLineEdit" name="lineEdit_18">
           <property name="column" stdset="0">
            <string>denominazione3</string>
           </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="export" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QLabel" name="label_19">
-          <property name="text">
-           <string>Partita iva</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1" colspan="2">
-         <widget class="QLineEdit" name="lineEdit_14">
-          <property name="column" stdset="0">
-           <string>partitaiva</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3" colspan="2">
-         <widget class="QLabel" name="label_18">
-          <property name="text">
-           <string>Cod. fiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="5" colspan="2">
-         <widget class="QLineEdit" name="lineEdit_15">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="column" stdset="0">
-           <string>codicefiscale</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0" rowspan="2">
          <widget class="QLabel" name="label_22">
           <property name="text">
            <string>Referente</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="1" rowspan="2" colspan="6">
+        <item row="3" column="1" colspan="4">
          <widget class="QLineEdit" name="lineEdit_19">
           <property name="column" stdset="0">
            <string>referente</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="6" rowspan="2">
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_23">
+          <property name="text">
+           <string>Codice PA</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="lineEdit_20">
+          <property name="column" stdset="0">
+           <string>indicepao</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QLabel" name="label_24">
+          <property name="text">
+           <string>Codice AOO</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="3">
+         <widget class="QLineEdit" name="lineEdit_21">
+          <property name="column" stdset="0">
+           <string>indicepaaoo</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4">
          <widget class="QPushButton" name="pushButton">
           <property name="enabled">
            <bool>false</bool>
@@ -545,39 +497,172 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="label_23">
-          <property name="text">
-           <string>Codice PA</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="1">
-         <widget class="QLineEdit" name="lineEdit_20">
-          <property name="column" stdset="0">
-           <string>indicepao</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="2" colspan="2">
-         <widget class="QLabel" name="label_24">
-          <property name="text">
-           <string>Codice AOO</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="4" colspan="2">
-         <widget class="QLineEdit" name="lineEdit_21">
-          <property name="column" stdset="0">
-           <string>indicepaaoo</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
      </widget>
     </item>
-    <item row="2" column="0" colspan="5">
+    <item row="1" column="1" rowspan="2">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>150</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Validità</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_6">
+       <property name="margin">
+        <number>4</number>
+       </property>
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Nascita</string>
+         </property>
+         <property name="buddy">
+          <cstring>dateEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit">
+         <property name="displayFormat">
+          <string>dd/MM/yyyy</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>datanascita</string>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>Comune di nascita</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_comunedinascita</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLineEdit" name="lineEdit_comunedinascita">
+         <property name="column" stdset="0">
+          <string>comunedinascita</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Cessazione</string>
+         </property>
+         <property name="buddy">
+          <cstring>dateEdit_2</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_2">
+         <property name="displayFormat">
+          <string>dd/MM/yyyy</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>datacessazione</string>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QPlainTextEdit" name="plainTextEdit">
+         <property name="column" stdset="0">
+          <string>descrizionecessazione</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>Cod. fiscale</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_15</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_15">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="column" stdset="0">
+          <string>codicefiscale</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>Partita iva</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_partitaiva</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_partitaiva">
+         <property name="column" stdset="0">
+          <string>partitaiva</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidgetBody">
       <property name="currentIndex">
        <number>0</number>
@@ -593,7 +678,22 @@
            <string>.indirizzoCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;principale&lt;,&gt;via&lt;,&gt;civico&lt;,&gt;cap&lt;,&gt;localita&lt;,&gt;provincia&lt;,&gt;stato&lt;,&lt;descrizione&gt;</string>
+           <string>&gt;principale&lt;,&gt;via&lt;,&gt;civico&lt;,&gt;cap&lt;,&gt;comune&lt;,&gt;provincia&lt;,&gt;stato&lt;,&lt;descrizione&gt;</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>via,comune,provincia,descrizione</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="export" stdset="0">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -611,6 +711,12 @@
           </property>
           <property name="columns" stdset="0">
            <string>&gt;tipo&lt;,&gt;riferimento&lt;,&lt;descrizione&gt;</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>tipo,riferimento</string>
           </property>
          </widget>
         </item>
@@ -630,7 +736,7 @@
            <string>gruppo</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&lt;gruppo&gt;</string>
+           <string>&gt;predicato&lt;,&lt;note&gt;</string>
           </property>
          </widget>
         </item>
@@ -650,40 +756,32 @@
            <string>relazionato</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;soggetto&lt;,&gt;relazione&lt;,&gt;relazionato&lt;</string>
+           <string>&lt;predicato&gt;</string>
           </property>
          </widget>
         </item>
        </layout>
       </widget>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QComboBox" name="comboBoxTipoSoggetto">
-      <property name="column" stdset="0">
-       <string>Tipo</string>
-      </property>
-      <property name="search" stdset="0">
-       <bool>true</bool>
-      </property>
-      <property name="export" stdset="0">
-       <bool>true</bool>
-      </property>
-      <item>
-       <property name="text">
-        <string>PERSONA</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>AZIENDA</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>ENTE</string>
-       </property>
-      </item>
+      <widget class="QWidget" name="tab_8">
+       <attribute name="title">
+        <string>Titoli studio</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_8">
+        <item row="0" column="0">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_5">
+          <property name="entity" stdset="0">
+           <string>.titolostudioSoggettoCollection</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>titolostudio</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;predicato&lt;,&lt;dettaglio&gt;,secondario</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -698,7 +796,7 @@
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
+   <header location="global">pypapitableview.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
@@ -706,6 +804,41 @@
    <header>pypapidateedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>spinBox</tabstop>
+  <tabstop>comboBoxTipoSoggetto</tabstop>
+  <tabstop>tabWidgetHeader</tabstop>
+  <tabstop>comboBox_2</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>lineEdit_4</tabstop>
+  <tabstop>lineEdit_6</tabstop>
+  <tabstop>lineEdit_13</tabstop>
+  <tabstop>lineEdit_16</tabstop>
+  <tabstop>lineEdit_17</tabstop>
+  <tabstop>lineEdit_18</tabstop>
+  <tabstop>lineEdit_19</tabstop>
+  <tabstop>lineEdit_20</tabstop>
+  <tabstop>lineEdit_21</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>lineEdit_15</tabstop>
+  <tabstop>lineEdit_partitaiva</tabstop>
+  <tabstop>comboBox_albo</tabstop>
+  <tabstop>lineEdit_8</tabstop>
+  <tabstop>lineEdit_9</tabstop>
+  <tabstop>dateEdit</tabstop>
+  <tabstop>lineEdit_comunedinascita</tabstop>
+  <tabstop>dateEdit_2</tabstop>
+  <tabstop>plainTextEdit</tabstop>
+  <tabstop>tableView</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>tabWidgetBody</tabstop>
+  <tabstop>lineEdit_10</tabstop>
+  <tabstop>tableView_3</tabstop>
+  <tabstop>tableView_2</tabstop>
+  <tabstop>tableView_4</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

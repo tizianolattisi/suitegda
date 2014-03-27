@@ -16,18 +16,11 @@
  */
 package com.axiastudio.suite;
 
-import com.axiastudio.pypapi.Application;
-import com.axiastudio.pypapi.Consts;
-import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.generale.ITimeStamped;
-import com.trolltech.qt.core.QDateTime;
 import com.trolltech.qt.core.Qt;
-import com.trolltech.qt.gui.QDialog;
-import com.trolltech.qt.gui.QLabel;
-import com.trolltech.qt.gui.QPixmap;
-import com.trolltech.qt.gui.QTextEdit;
-import com.trolltech.qt.gui.QVBoxLayout;
+import com.trolltech.qt.gui.*;
+
 import java.util.Date;
 
 /**
@@ -35,9 +28,14 @@ import java.util.Date;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class SuiteUiUtil {
-    
+
     public static void showInfo(Window window){
+        SuiteUiUtil.showInfo(window, "");
+    }
+
+    public static void showInfo(Window window, String extra){
         QDialog info = new QDialog(window);
+        info.setWindowTitle("Informazioni varie");
         QVBoxLayout layout = new QVBoxLayout(info);
         QPixmap pix = new QPixmap("classpath:com/axiastudio/pypapi/ui/resources/pypapi64.png");
         QLabel pypapi = new QLabel();
@@ -47,15 +45,27 @@ public class SuiteUiUtil {
         String credits = "";
         Object currentEntity = window.getContext().getCurrentEntity();
         if( currentEntity instanceof ITimeStamped ){
-            Date recordcreato = (Date) Resolver.valueFromFieldName(currentEntity, "recordcreato");
-            if( recordcreato != null ){
-                credits += "<br/>Creato: " + SuiteUtil.DATE_FORMAT.format(recordcreato);
+            ITimeStamped timeStamped = (ITimeStamped) currentEntity;
+            String recordcreatoda = timeStamped.getRecordcreatoda();
+            if( recordcreatoda != null ){
+                credits += "<br/>Creato da: " + recordcreatoda;
+                Date recordcreato = timeStamped.getRecordcreato();
+                if( recordcreato != null ){
+                    credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordcreato);
+                }
             }
-            Date recordmodificato = (Date) Resolver.valueFromFieldName(currentEntity, "recordmodificato");
-            if( recordmodificato != null ){
-                credits += "<br/>Modificato: " + SuiteUtil.DATE_FORMAT.format(recordmodificato);
+            String recordmodificatoda = timeStamped.getRecordmodificatoda();
+            if( recordmodificatoda != null ){
+                credits += "<br/>Modificato da: " + recordmodificatoda;
+                Date recordmodificato = timeStamped.getRecordmodificato();
+                if( recordmodificato != null ){
+                    credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
+                }
             }
-        }   
+        }
+        if( extra != "" ){
+            credits += extra;
+        }
         QTextEdit text = new QTextEdit(credits);
         layout.addWidget(text);
         info.show();

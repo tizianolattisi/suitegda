@@ -17,6 +17,7 @@
 package com.axiastudio.suite.pubblicazioni.forms;
 
 import com.axiastudio.pypapi.ui.Window;
+import com.trolltech.qt.gui.QPushButton;
 
 /**
  *
@@ -26,5 +27,13 @@ public class FormPubblicazione extends Window {
     
     public FormPubblicazione(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
+
+        QPushButton pubblica = (QPushButton) findChild(QPushButton.class, "pushButton_pubblica");
+        pubblica.clicked.connect(this, "pubblicaOra()");
+
+    }
+
+    public void pubblicaOra(){
+        // da implementare per personalizzazione
     }
 }

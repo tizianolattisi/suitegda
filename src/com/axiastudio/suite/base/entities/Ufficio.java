@@ -16,14 +16,9 @@
  */
 package com.axiastudio.suite.base.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.util.Collection;
 
 /**
  *
@@ -45,6 +40,10 @@ public class Ufficio implements Serializable {
     private Boolean mittenteodestinatario=false;
     @Column(name="attribuzione")
     private Boolean attribuzione=false;
+    @OneToMany(mappedBy = "ufficio", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<UfficioUtente> ufficioUtenteCollection;
+    @Column(name="pec")
+    private String pec;
 
 
     public Long getId() {
@@ -87,6 +86,22 @@ public class Ufficio implements Serializable {
         this.attribuzione = attribuzione;
     }
 
+    public Collection<UfficioUtente> getUfficioUtenteCollection() {
+        return ufficioUtenteCollection;
+    }
+
+    public void setUfficioUtenteCollection(Collection<UfficioUtente> ufficioUtenteCollection) {
+        this.ufficioUtenteCollection = ufficioUtenteCollection;
+    }
+
+    public String getPec() {
+        return pec;
+    }
+
+    public void setPec(String pec) {
+        this.pec = pec;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -109,7 +124,7 @@ public class Ufficio implements Serializable {
 
     @Override
     public String toString() {
-        return "(" + id + ") " + this.getDescrizione();
+        return " (" + id + ") " + this.getDescrizione();
     }
     
 }

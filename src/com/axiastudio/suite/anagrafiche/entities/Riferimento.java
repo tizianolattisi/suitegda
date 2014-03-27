@@ -16,18 +16,8 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 /**
  *
@@ -46,7 +36,7 @@ public class Riferimento implements Serializable {
     private Soggetto soggetto;
     @Column(name="tipo")
     @Enumerated(EnumType.STRING)
-    private TipoRiferimento tipo;
+    private TipoRiferimento tipo=TipoRiferimento.TELEFONO;
     @Column(name="riferimento")
     private String riferimento;
     @Column(name="descrizione")

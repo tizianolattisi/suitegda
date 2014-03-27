@@ -18,18 +18,23 @@ package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
+import com.axiastudio.suite.pratiche.PraticaListener;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import javax.persistence.*;
+import java.util.List;
 
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@EntityListeners({PraticaListener.class, TimeStampedListener.class})
 @Table(schema="PRATICHE")
 @SequenceGenerator(name="genpratica", sequenceName="pratiche.pratica_id_seq", initialValue=1, allocationSize=1)
 public class Pratica implements Serializable, ITimeStamped {
@@ -41,6 +46,8 @@ public class Pratica implements Serializable, ITimeStamped {
     private String idpratica;
     @Column(name="codiceinterno", unique=true)
     private String codiceinterno;
+    @Column(name="codiceaggiuntivo")
+    private String codiceaggiuntivo;
     @Column(name="datapratica")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datapratica;
@@ -68,17 +75,46 @@ public class Pratica implements Serializable, ITimeStamped {
     private TipoPratica tipo;
     @Column(name="riservata")
     private Boolean riservata=false;
+    @Column(name="archiviata")
+    private Boolean archiviata=false;
     @JoinColumn(name = "fascicolo", referencedColumnName = "id")
     @ManyToOne
     private Fascicolo fascicolo;
+    @OneToMany(mappedBy = "praticadominante", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<DipendenzaPratica> dipendenzaPraticaCollection;
+    @Column(name="annoinventario")
+    private Integer annoinventario;
+    @Column(name="numeroinventario")
+    private String numeroinventario;
+    @Column(name="datachiusura")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datachiusura;
+    @JoinColumn(name = "fase", referencedColumnName = "id")
+    @ManyToOne
+    private Fase fase;
+    @Column(name="datatermineistruttoria")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datatermineistruttoria;
+    @Column(name="datascadenza")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datascadenza;
+    @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
+    @OrderColumn(name="progressivo")
+    private List<FasePratica> fasePraticaCollection;
+    @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<Visto> vistoCollection;
 
     /* timestamped */
-    @Column(name="rec_creato")
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
     @Column(name="rec_modificato")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
 
     public Long getId() {
         return id;
@@ -118,6 +154,14 @@ public class Pratica implements Serializable, ITimeStamped {
 
     public void setCodiceinterno(String codiceInterno) {
         this.codiceinterno = codiceInterno;
+    }
+
+    public String getCodiceaggiuntivo() {
+        return codiceaggiuntivo;
+    }
+
+    public void setCodiceaggiuntivo(String codiceaggiuntivo) {
+        this.codiceaggiuntivo = codiceaggiuntivo;
     }
 
     public String getNote() {
@@ -203,6 +247,14 @@ public class Pratica implements Serializable, ITimeStamped {
         this.riservata = riservata;
     }
 
+    public Boolean getArchiviata() {
+        return archiviata;
+    }
+
+    public void setArchiviata(Boolean archiviata) {
+        this.archiviata = archiviata;
+    }
+
     public Fascicolo getFascicolo() {
         return fascicolo;
     }
@@ -211,13 +263,88 @@ public class Pratica implements Serializable, ITimeStamped {
         this.fascicolo = fascicolo;
     }
 
+    public Collection<DipendenzaPratica> getDipendenzaPraticaCollection() {
+        return dipendenzaPraticaCollection;
+    }
+
+    public void setDipendenzaPraticaCollection(Collection<DipendenzaPratica> dipendenzaPraticaCollection) {
+        this.dipendenzaPraticaCollection = dipendenzaPraticaCollection;
+    }
+
+    public Integer getAnnoinventario() {
+        return annoinventario;
+    }
+
+    public void setAnnoinventario(Integer annoinventario) {
+        this.annoinventario = annoinventario;
+    }
+
+    public String getNumeroinventario() {
+        return numeroinventario;
+    }
+
+    public void setNumeroinventario(String numeroinventario) {
+        this.numeroinventario = numeroinventario;
+    }
+
+    public Date getDatachiusura() {
+        return datachiusura;
+    }
+
+    public void setDatachiusura(Date datachiusura) {
+        this.datachiusura = datachiusura;
+    }
+
+    public Date getDatatermineistruttoria() {
+        return datatermineistruttoria;
+    }
+
+    public void setDatatermineistruttoria(Date datatermineistruttoria) {
+        this.datatermineistruttoria = datatermineistruttoria;
+    }
+
+    public Date getDatascadenza() {
+        return datascadenza;
+    }
+
+    public void setDatascadenza(Date datascadenza) {
+        this.datascadenza = datascadenza;
+    }
+
+    public Fase getFase() {
+        return fase;
+    }
+
+    public void setFase(Fase fase) {
+        this.fase = fase;
+    }
+
+    public List<FasePratica> getFasePraticaCollection() {
+        return fasePraticaCollection;
+    }
+
+    public void setFasePraticaCollection(List<FasePratica> fasePraticaCollection) {
+        this.fasePraticaCollection = fasePraticaCollection;
+    }
+
+    public Collection<Visto> getVistoCollection() {
+        return vistoCollection;
+    }
+
+    public void setVistoCollection(Collection<Visto> vistoCollection) {
+        this.vistoCollection = vistoCollection;
+    }
+
+    /*
+             * timestamped
+             */
     @Override
     public Date getRecordcreato() {
         return recordcreato;
     }
 
     public void setRecordcreato(Date recordcreato) {
-        
+        this.recordcreato = recordcreato;
     }
 
     @Override
@@ -226,7 +353,25 @@ public class Pratica implements Serializable, ITimeStamped {
     }
 
     public void setRecordmodificato(Date recordmodificato) {
-        
+        this.recordmodificato = recordmodificato;
+    }
+    
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+   @Override
+   public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
     
     @Override
@@ -254,7 +399,7 @@ public class Pratica implements Serializable, ITimeStamped {
      */
     @Override
     public String toString() {
-        String out = this.getIdpratica() + " - " + this.getDescrizioner();
+        String out = this.getCodiceinterno() + " - " + this.getDescrizioner();
         return out;
     }
     

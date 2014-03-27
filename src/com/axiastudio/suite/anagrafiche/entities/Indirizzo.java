@@ -16,9 +16,9 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *
@@ -48,8 +48,10 @@ public class Indirizzo implements Serializable {
     private String civico;
     @Column(name="cap", length=5)
     private String cap;
-    @Column(name="localita")
-    private String localita;
+    @Column(name="frazione")
+    private String frazione;
+    @Column(name="comune")
+    private String comune;
     @Column(name="provincia")
     @Enumerated(EnumType.STRING)
     private Provincia provincia;
@@ -136,12 +138,20 @@ public class Indirizzo implements Serializable {
         this.cap = cap;
     }
 
-    public String getLocalita() {
-        return localita;
+    public String getFrazione() {
+        return frazione;
     }
 
-    public void setLocalita(String localita) {
-        this.localita = localita;
+    public void setFrazione(String frazione) {
+        this.frazione = frazione;
+    }  
+
+    public String getComune() {
+        return comune;
+    }
+
+    public void setComune(String comune) {
+        this.comune = comune;
     }
 
     public Stato getStato() {

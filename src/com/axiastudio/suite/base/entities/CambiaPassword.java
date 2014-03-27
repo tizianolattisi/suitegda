@@ -18,7 +18,8 @@ package com.axiastudio.suite.base.entities;
 
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.IController;
+import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.SuiteUtil;
 import com.trolltech.qt.gui.*;
@@ -70,8 +71,9 @@ public class CambiaPassword extends QDialog {
         }
         if( this.newPassword1.text().equals(this.newPassword2.text()) ){
             autenticato.setPassword(SuiteUtil.digest(this.newPassword1.text()));
-            Controller ctrl = (Controller) Register.queryUtility(IController.class, "com.axiastudio.suite.base.entities.Utente");
-            Validation res = ctrl.commit(autenticato);
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            Controller controller = db.createController(Utente.class);
+            Validation res = controller.commit(autenticato);
             if( res.getResponse() ){
                 QMessageBox.information(this, "Password modificata", "La password è stata modificata con successo");
                 super.accept();

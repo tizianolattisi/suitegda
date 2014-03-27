@@ -16,16 +16,9 @@
  */
 package com.axiastudio.suite.pubblicazioni.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
 
 /**
  *
@@ -51,8 +44,14 @@ public class Pubblicazione implements Serializable {
     @Column(name="fineconsultazione")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fineconsultazione;
+    @Column(name="durataconsultazione")
+    private Integer durataconsultazione;
     @Column(name="pubblicato")
     private Boolean pubblicato=false;
+    @JoinColumn(name = "tipoattopubblicazione", referencedColumnName = "id")
+    @ManyToOne
+    private TipoAttoPubblicazione tipoattopubblicazione;
+
 
 
     public Long getId() {
@@ -103,12 +102,28 @@ public class Pubblicazione implements Serializable {
         this.fineconsultazione = fineconsultazione;
     }
 
+    public Integer getDurataconsultazione() {
+        return durataconsultazione;
+    }
+
+    public void setDurataconsultazione(Integer durataconsultazione) {
+        this.durataconsultazione = durataconsultazione;
+    }
+
     public Boolean getPubblicato() {
         return pubblicato;
     }
 
     public void setPubblicato(Boolean pubblicato) {
         this.pubblicato = pubblicato;
+    }
+
+    public TipoAttoPubblicazione getTipoattopubblicazione() {
+        return tipoattopubblicazione;
+    }
+
+    public void setTipoattopubblicazione(TipoAttoPubblicazione tipoAttoPubblicazione) {
+        this.tipoattopubblicazione = tipoAttoPubblicazione;
     }
 
     @Override

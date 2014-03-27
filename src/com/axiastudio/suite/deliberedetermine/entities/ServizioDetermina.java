@@ -17,15 +17,9 @@
 package com.axiastudio.suite.deliberedetermine.entities;
 
 import com.axiastudio.suite.finanziaria.entities.Servizio;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 /**
  *
@@ -45,6 +39,8 @@ public class ServizioDetermina implements Serializable {
     @JoinColumn(name = "servizio", referencedColumnName = "id")
     @ManyToOne
     private Servizio servizio;
+    @Column(name="principale")
+    private Boolean principale=false;
 
     public Long getId() {
         return id;
@@ -68,6 +64,14 @@ public class ServizioDetermina implements Serializable {
 
     public void setServizio(Servizio servizio) {
         this.servizio = servizio;
+    }
+
+    public Boolean getPrincipale() {
+        return principale;
+    }
+
+    public void setPrincipale(Boolean principale) {
+        this.principale = principale;
     }
 
     @Override

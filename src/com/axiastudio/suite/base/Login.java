@@ -24,13 +24,14 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
-import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  *
@@ -43,6 +44,7 @@ public class Login extends QDialog {
 
     public Login() {
         super();
+        this.setWindowIcon(new QIcon("classpath:com/axiastudio/suite/resources/pypapi128.png"));
         QVBoxLayout layout = new QVBoxLayout();
         QGridLayout gridLayout = new QGridLayout();
         QLabel labelUsername = new QLabel("Utente");
@@ -76,17 +78,26 @@ public class Login extends QDialog {
         CriteriaQuery<Object> cq = cb.createQuery();
         Root from = cq.from(Utente.class);
         cq.select(from);
-        Predicate predicate = cb.equal(from.get("login"), this.username.text());
+        Predicate predicate = cb.equal(from.get("login"), this.username.text().toLowerCase());
         cq = cq.where(predicate);
         Query q = em.createQuery(cq);
         List entities = q.getResultList();
         if( entities.size() == 1 ){
             utente = (Utente) entities.get(0);
             String pwd = this.password.text();
-            if( SuiteUtil.digest(pwd).equals(utente.getPassword()) ){
-                Register.registerUtility(utente, IUtente.class);
-                super.accept();
-                return;
+            ICheckLogin checkLogin = (ICheckLogin) Register.queryUtility(ICheckLogin.class);
+            if( checkLogin != null ){
+                if( checkLogin.check(this.username.text(), this.password.text()) ){
+                    Register.registerUtility(utente, IUtente.class);
+                    super.accept();
+                    return;
+                }
+            } else {
+                if( SuiteUtil.digest(pwd).equals(utente.getPassword()) ){
+                    Register.registerUtility(utente, IUtente.class);
+                    super.accept();
+                    return;
+                }
             }
         }
         QMessageBox.critical(this, "Utente o password errati", "Il nome utente o la password risultano errati.");

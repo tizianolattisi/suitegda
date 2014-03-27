@@ -26,15 +26,13 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.pratiche.entities.Pratica_;
-import java.util.Calendar;
-import java.util.Date;
+import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
+import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
+import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
+
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  *
@@ -76,42 +74,28 @@ public class PraticaCallbacks {
 
         
         if( pratica.getId() == null ){
-            Calendar calendar = Calendar.getInstance();
-            Integer year = calendar.get(Calendar.YEAR);
-            Date date = calendar.getTime();
             Database db = (Database) Register.queryUtility(IDatabase.class);
             EntityManager em = db.getEntityManagerFactory().createEntityManager();
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Pratica> cq = cb.createQuery(Pratica.class);
-            Root<Pratica> root = cq.from(Pratica.class);
-            cq.select(root);
-            cq.where(cb.equal(root.get(Pratica_.anno), year));
-            cq.orderBy(cb.desc(root.get(Pratica_.idpratica)));
-            TypedQuery<Pratica> tq = em.createQuery(cq).setMaxResults(1);
-            Pratica max;
-            pratica.setDatapratica(date);
-            pratica.setAnno(year);
-            try {
-                max = tq.getSingleResult();
-            } catch (NoResultException ex) {
-                max=null;
+            /* controllo attribuzione - tipo pratica */
+            List ids = em.createNamedQuery("trovaTipiPraticaPermessiDaAttribuzioni", TipoPraticaProcedimento.class)
+                                      .setParameter("id", pratica.getAttribuzione().getId())
+                                      .getResultList();
+            if( !ids.contains(pratica.getTipo().getId()) ){
+                msg = "Manca corrispondenza tra l'attribuzione e la tipologia di pratica.";
+                return new Validation(false, msg);
             }
-            String newIdpratica;
-            if( max != null ){
-                Integer i = Integer.parseInt(max.getIdpratica().substring(4));
-                i++;
-                newIdpratica = year+String.format("%08d", i);
-            } else {
-                newIdpratica = year+"00000001";
+
+            // se codifica pratica non ha progressivo, si controlla se la pratica non esiste già
+            if (!PraticaUtil.codificaInternaUnivoca(pratica.getTipo())) {
+                msg = "Esiste già una pratica con la codifica specificata.";
+                return new Validation(false, msg);
             }
-            pratica.setIdpratica(newIdpratica);
-            
-            // se mancano gestione e ubicazione, li fisso come l'attribuzione
-            if( pratica.getGestione() == null ){
-                pratica.setGestione(pratica.getAttribuzione());
-            }
-            if( pratica.getUbicazione() == null ){
-                pratica.setUbicazione(pratica.getAttribuzione());
+
+            // TODO: da eliminare quando si inserirà il controllo in nella finestra di inserimento/modifica delle codifiche
+            String codifica = PraticaUtil.creaCodificaInterna(pratica.getTipo());
+            if (codifica == null) {
+                msg = "Errore nella creazione della codifica della pratica.";
+                return new Validation(false, msg);
             }
         } else {
             // l'amministratore pratiche modifica anche se non appartenente all'ufficio gestore e
@@ -130,6 +114,29 @@ public class PraticaCallbacks {
                 // Se la pratica è archiviata, non posso modificarla, ma ciò viene implementato con il cambio di ufficio gestore
             }
         }
+
+        /*
+         * Verifica inserimento protocollo in pratica: permesso solo all'ufficio gestore (già sopra),
+         * e solo se l'utente ha piena visibilità del protocollo (sportello o attribuzione)
+         */
+        for( PraticaProtocollo praticaProtocollo: pratica.getPraticaProtocolloCollection() ){
+            // nuovo inserimento
+            if( praticaProtocollo.getPratica() == null ){
+                // il supervisore inserisce pratiche non riservate
+                if( !(!pratica.getRiservata() && autenticato.getSupervisorepratiche()) ){
+                    Protocollo protocollo = praticaProtocollo.getProtocollo();
+                    ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(protocollo, autenticato);
+                    if( !pratica.getRiservata() && !profilo.inSportelloOAttribuzione() ){
+                        msg = "Devi avere completa visibilità del protocollo per poterlo inserire nella pratica.";
+                        return new Validation(false, msg);
+                    } else if( pratica.getRiservata() && !profilo.inSportelloOAttribuzioneR() ){
+                        msg = "Devi avere completa visibilità del protocollo e permesso sui dati riservati per poterlo inserire nella pratica riservata.";
+                        return new Validation(false, msg);
+                    }
+                }
+            }
+        }
+
         return new Validation(true);
     }
 }

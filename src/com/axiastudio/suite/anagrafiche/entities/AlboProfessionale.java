@@ -16,14 +16,8 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 /**
  *
@@ -79,7 +73,7 @@ public class AlboProfessionale implements Serializable {
 
     @Override
     public String toString() {
-        return descrizione;
+        return " "+this.getDescrizione();
     }
     
 }

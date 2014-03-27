@@ -18,6 +18,7 @@ package com.axiastudio.suite.finanziaria.entities;
 
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
+
 import java.util.List;
 
 /**

@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU Afffero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.axiastudio.suite.anagrafiche.entities;
+package com.axiastudio.suite.anagrafiche;
 
 import com.axiastudio.pypapi.annotations.Adapter;
+import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 
 /**
  *

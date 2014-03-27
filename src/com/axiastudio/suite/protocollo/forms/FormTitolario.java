@@ -21,23 +21,15 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.trolltech.qt.core.Qt;
-import com.trolltech.qt.gui.QDialog;
-import com.trolltech.qt.gui.QHBoxLayout;
-import com.trolltech.qt.gui.QIcon;
-import com.trolltech.qt.gui.QSizePolicy;
-import com.trolltech.qt.gui.QSpacerItem;
-import com.trolltech.qt.gui.QToolButton;
-import com.trolltech.qt.gui.QTreeWidget;
-import com.trolltech.qt.gui.QTreeWidgetItem;
-import com.trolltech.qt.gui.QVBoxLayout;
-import com.trolltech.qt.gui.QWidget;
-import java.util.List;
+import com.trolltech.qt.gui.*;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  *

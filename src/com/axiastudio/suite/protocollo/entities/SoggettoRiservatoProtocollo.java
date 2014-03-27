@@ -17,8 +17,9 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
-import java.io.Serializable;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *
@@ -38,8 +39,13 @@ public class SoggettoRiservatoProtocollo implements Serializable {
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
-    @Enumerated(EnumType.STRING)
-    private TitoloSoggettoProtocollo titolo;
+    @JoinColumn(name = "titolo", referencedColumnName = "id")
+    @ManyToOne
+    private Titolo titolo;
+    @Column(name="primoinserimento")
+    private Boolean primoinserimento=false;
+    @Column(name="annullato")
+    private Boolean annullato=false;
     @Column(name="conoscenza")
     private Boolean conoscenza=false;
     @Column(name="notifica")
@@ -71,12 +77,47 @@ public class SoggettoRiservatoProtocollo implements Serializable {
         this.soggetto = soggetto;
     }
 
-    public TitoloSoggettoProtocollo getTitolo() {
+    /*
+     * SoggettoFormattato mette in bold i soggetti di primo inserimento
+     */
+    public String getSoggettoformattato() {
+        String pre = "";
+        String post = "";
+        if( this.getAnnullato() ){
+            pre = "<del>";
+            post = "</del>";
+        } else if( this.getPrimoinserimento() ){
+            pre = "'''";
+            post = "'''";
+        }
+        return pre+soggetto.toString()+post;
+    }
+    public void setSoggettoformattato( String s ) {
+        
+    }
+    
+    public Titolo getTitolo() {
         return titolo;
     }
 
-    public void setTitolo(TitoloSoggettoProtocollo titolo) {
+    public void setTitolo(Titolo titolo) {
         this.titolo = titolo;
+    }
+
+    public Boolean getPrimoinserimento() {
+        return primoinserimento;
+    }
+
+    public void setPrimoinserimento(Boolean primoinserimento) {
+        this.primoinserimento = primoinserimento;
+    }
+
+    public Boolean getAnnullato() {
+        return annullato;
+    }
+
+    public void setAnnullato(Boolean annullato) {
+        this.annullato = annullato;
     }
 
     public Boolean getConoscenza() {

@@ -25,7 +25,19 @@ import java.util.Date;
 public interface ITimeStamped {
 
     public Date getRecordcreato();
-    
+
+    public void setRecordcreato(Date date);
+
+    public String getRecordcreatoda();
+
+    public void setRecordcreatoda(String login);
+
     public Date getRecordmodificato();
-    
+
+    public void setRecordmodificato(Date date);
+
+    public String getRecordmodificatoda();
+
+    public void setRecordmodificatoda(String login);
+
 }

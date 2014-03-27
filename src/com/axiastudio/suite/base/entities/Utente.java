@@ -17,9 +17,10 @@
 package com.axiastudio.suite.base.entities;
 
 import com.axiastudio.suite.procedimenti.entities.Delega;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.*;
 
 /**
  *
@@ -69,6 +70,8 @@ public class Utente implements Serializable, IUtente {
     private Boolean modellatorepratiche=false;
     @Column(name="istruttorepratiche")
     private Boolean istruttorepratiche=false;
+    @Column(name="disabilitato")
+    private Boolean disabilitato=false;
     @OneToMany(mappedBy = "utente", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Delega> delegaCollection;
 
@@ -230,6 +233,14 @@ public class Utente implements Serializable, IUtente {
 
     public void setIstruttorepratiche(Boolean istruttorepratiche) {
         this.istruttorepratiche = istruttorepratiche;
+    }
+
+    public Boolean getDisabilitato() {
+        return disabilitato;
+    }
+
+    public void setDisabilitato(Boolean disabilitato) {
+        this.disabilitato = disabilitato;
     }
 
     @Override

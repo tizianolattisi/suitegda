@@ -16,26 +16,26 @@
  */
 package com.axiastudio.suite.anagrafiche.forms;
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
-import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
-import com.axiastudio.suite.anagrafiche.entities.SessoSoggetto;
-import com.axiastudio.suite.anagrafiche.entities.Soggetto;
-import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
-import com.trolltech.qt.gui.QComboBox;
-import com.trolltech.qt.gui.QDialog;
-import com.trolltech.qt.gui.QGridLayout;
-import com.trolltech.qt.gui.QGroupBox;
-import com.trolltech.qt.gui.QHBoxLayout;
-import com.trolltech.qt.gui.QIcon;
-import com.trolltech.qt.gui.QLabel;
-import com.trolltech.qt.gui.QLineEdit;
-import com.trolltech.qt.gui.QTabWidget;
-import com.trolltech.qt.gui.QToolButton;
-import com.trolltech.qt.gui.QVBoxLayout;
-import com.trolltech.qt.gui.QWidget;
+import com.axiastudio.pypapi.ui.Util;
+import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.suite.anagrafiche.entities.*;
+import com.trolltech.qt.core.QByteArray;
+import com.trolltech.qt.core.QFile;
+import com.trolltech.qt.designer.QUiLoader;
+import com.trolltech.qt.designer.QUiLoaderException;
+import com.trolltech.qt.gui.*;
+
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -44,23 +44,7 @@ import java.util.List;
 public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDialog {
 
     private Object entity=null;
-    private QTabWidget tabs;
-    private QLineEdit lineEditNome;
-    private QLineEdit lineEditCognome;
-    private QComboBox comboBoxSesso;
-    private QLineEdit lineEditCodicefiscale;
-    private QLineEdit lineEditRagionesociale;
-    private QLineEdit lineEditCodicefiscale2;
-    private QLineEdit lineEditPartitaiva;
-    private QLineEdit lineEditDenominazione;
-    private QLineEdit lineEditDenominazione2;
-    private QLineEdit lineEditDenominazione3;
-    private QLineEdit lineEditCodicefiscale3;
-    private QLineEdit lineEditIndirizzo;
-    private QLineEdit lineEditCap;
-    private QLineEdit lineEditLocalita;
-    private QLineEdit lineEditProvincia;
-    private QLineEdit lineEditStato;
+    private Store storeStato;
     
     public FormQuickInsertSoggetto(QWidget parent) {
         super(parent);
@@ -72,124 +56,52 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
     }
     
     private void initLayout(){
-        QVBoxLayout layout = new QVBoxLayout(this);
-        layout.setSpacing(4);
-        layout.setObjectName("layout");
-        QHBoxLayout buttonLayout = new QHBoxLayout();
-        buttonLayout.setObjectName("buttonLayout");
-        QToolButton buttonAccept = new QToolButton(this);
-        buttonAccept.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png"));
-        buttonAccept.setObjectName("buttonAccept");
-        QToolButton buttonCancel = new QToolButton(this);
-        buttonCancel.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/cancel.png"));
-        buttonCancel.setObjectName("buttonCancel");
-        buttonLayout.addWidget(buttonAccept);
-        buttonLayout.addWidget(buttonCancel);
-        
-        this.tabs = new QTabWidget();
-
-        // persona
-        QWidget widgetPersona = new QWidget();
-        QGridLayout gridLayoutPersona = new QGridLayout();
-        widgetPersona.setLayout(gridLayoutPersona);
-        lineEditNome = new QLineEdit();
-        lineEditNome.setMaxLength(50);
-        lineEditCognome = new QLineEdit();
-        lineEditCognome.setMaxLength(50);
-        comboBoxSesso = new QComboBox();
-        List<String> sessi = new ArrayList();
-        sessi.add("ND");
-        sessi.add("M");
-        sessi.add("F");
-        comboBoxSesso.insertItems(0, sessi);
-        lineEditCodicefiscale = new QLineEdit();
-        lineEditCodicefiscale.setMaxLength(16);
-        gridLayoutPersona.addWidget(new QLabel("Nome"), 0, 0);
-        gridLayoutPersona.addWidget(lineEditNome, 0, 1);
-        gridLayoutPersona.addWidget(new QLabel("Cognome"), 1, 0);
-        gridLayoutPersona.addWidget(lineEditCognome, 1, 1);
-        gridLayoutPersona.addWidget(new QLabel("Sesso"), 2, 0);
-        gridLayoutPersona.addWidget(comboBoxSesso, 2, 1);
-        gridLayoutPersona.addWidget(new QLabel("C.F."), 3, 0);
-        gridLayoutPersona.addWidget(lineEditCodicefiscale, 3, 1);
-        tabs.addTab(widgetPersona, "Persona");
-        
-        // azienda
-        QWidget widgetAzienda = new QWidget();
-        QGridLayout gridLayoutAzienda = new QGridLayout();
-        widgetAzienda.setLayout(gridLayoutAzienda);
-        lineEditRagionesociale = new QLineEdit();
-        lineEditRagionesociale.setMaxLength(100);
-        lineEditCodicefiscale2 = new QLineEdit();
-        lineEditCodicefiscale2.setMaxLength(16);
-        lineEditPartitaiva = new QLineEdit();
-        lineEditPartitaiva.setMaxLength(11);
-        gridLayoutAzienda.addWidget(new QLabel("Ragione sociale"), 0, 0);
-        gridLayoutAzienda.addWidget(lineEditRagionesociale, 0, 1);
-        gridLayoutAzienda.addWidget(new QLabel("C.F."), 1, 0);
-        gridLayoutAzienda.addWidget(lineEditCodicefiscale2, 1, 1);
-        gridLayoutAzienda.addWidget(new QLabel("P.IVA"), 2, 0);
-        gridLayoutAzienda.addWidget(lineEditPartitaiva, 2, 1);
-        tabs.addTab(widgetAzienda, "Azienda");
-        
-        // ente
-        QWidget widgetEnte = new QWidget();
-        QGridLayout gridLayoutEnte = new QGridLayout();
-        widgetEnte.setLayout(gridLayoutEnte);
-        lineEditDenominazione = new QLineEdit();
-        lineEditDenominazione.setMaxLength(100);
-        lineEditDenominazione2 = new QLineEdit();
-        lineEditDenominazione2.setMaxLength(100);
-        lineEditDenominazione3 = new QLineEdit();
-        lineEditDenominazione3.setMaxLength(100);
-        lineEditCodicefiscale3 = new QLineEdit();
-        lineEditCodicefiscale3.setMaxLength(16);
-        gridLayoutEnte.addWidget(new QLabel("Denominazione 1"), 0, 0);
-        gridLayoutEnte.addWidget(lineEditDenominazione, 0, 1);
-        gridLayoutEnte.addWidget(new QLabel("Denominazione 2"), 1, 0);
-        gridLayoutEnte.addWidget(lineEditDenominazione2, 1, 1);
-        gridLayoutEnte.addWidget(new QLabel("Denominazione 3"), 2, 0);
-        gridLayoutEnte.addWidget(lineEditDenominazione3, 2, 1);
-        gridLayoutEnte.addWidget(new QLabel("C.F."), 3, 0);
-        gridLayoutEnte.addWidget(lineEditCodicefiscale3, 3, 1);
-        tabs.addTab(widgetEnte, "Ente");
-        
-        layout.addWidget(tabs);
-        
-        // indirizzo
-        QGroupBox groupBoxIndirizzo = new QGroupBox("Indirizzo");
-        QGridLayout gridLayoutIndirizzo = new QGridLayout();
-        groupBoxIndirizzo.setLayout(gridLayoutIndirizzo);
-        lineEditIndirizzo = new QLineEdit();
-        lineEditIndirizzo.setMaxLength(100);
-        gridLayoutIndirizzo.addWidget(new QLabel("Indirizzo"), 0, 0);
-        gridLayoutIndirizzo.addWidget(lineEditIndirizzo, 0, 1);
-        lineEditCap = new QLineEdit();
-        lineEditCap.setMaxLength(5);
-        gridLayoutIndirizzo.addWidget(new QLabel("Cap"), 1, 0);
-        gridLayoutIndirizzo.addWidget(lineEditCap, 1, 1);
-        lineEditLocalita = new QLineEdit();
-        lineEditLocalita.setMaxLength(50);
-        gridLayoutIndirizzo.addWidget(new QLabel("Località"), 2, 0);
-        gridLayoutIndirizzo.addWidget(lineEditLocalita, 2, 1);
-        lineEditProvincia = new QLineEdit();
-        lineEditProvincia.setMaxLength(2);
-        gridLayoutIndirizzo.addWidget(new QLabel("Provincia"), 3, 0);
-        gridLayoutIndirizzo.addWidget(lineEditProvincia, 3, 1);
-        lineEditStato = new QLineEdit();
-        lineEditStato.setMaxLength(25);
-        gridLayoutIndirizzo.addWidget(new QLabel("Stato"), 4, 0);
-        gridLayoutIndirizzo.addWidget(lineEditStato, 4, 1);
-        layout.addWidget(groupBoxIndirizzo);
-        
-        layout.addLayout(buttonLayout);
+        QFile file = Util.ui2jui(new QFile("classpath:com/axiastudio/suite/anagrafiche/forms/quickinsertsoggetto.ui"));
+        this.loadUi(file);
         this.resize(500, 300);
-        buttonAccept.clicked.connect(this, "insertAndAccept()");
-        buttonCancel.clicked.connect(this, "reject()");
     }
     
+    private void loadUi(QFile uiFile){
+        QDialog dialog = null;
+        try {
+            dialog = (QDialog) QUiLoader.load(uiFile);
+        } catch (QUiLoaderException ex) {
+            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for( QByteArray name: dialog.dynamicPropertyNames()){
+            this.setProperty(name.toString(), dialog.property(name.toString()));
+        }
+        QToolButton buttonCancel = (QToolButton) dialog.findChild(QToolButton.class, "buttonCancel");
+        buttonCancel.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/cancel.png"));
+        buttonCancel.clicked.connect(this, "reject()");
+        QToolButton buttonAccept = (QToolButton) dialog.findChild(QToolButton.class, "buttonAccept");
+        buttonAccept.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png"));
+        buttonAccept.clicked.connect(this, "insertAndAccept()");       
+        this.setLayout(dialog.layout());
+        
+        // provincia
+        QComboBox comboBoxProvincia = (QComboBox) this.findChild(QComboBox.class, "comboBox_provincia");
+        comboBoxProvincia.clear();
+        List<Provincia> province = Arrays.asList(Provincia.class.getEnumConstants());
+        for( Provincia p: province){
+            comboBoxProvincia.addItem(p.name());
+        }
+        
+        // stato
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Stato.class);
+        QComboBox comboBoxStato = (QComboBox) this.findChild(QComboBox.class, "comboBox_stato");
+        comboBoxStato.clear();
+        storeStato = controller.createFullStore();
+        for( Object objStato: storeStato ){
+            Stato stato = (Stato) objStato;
+            comboBoxStato.addItem(stato.getCodice());
+        }
+    }
+        
     private void insertAndAccept(){
-        int idx = this.tabs.currentIndex();
+        QTabWidget tabs = (QTabWidget) this.findChild(QTabWidget.class, "tabs");
+        int idx = tabs.currentIndex();
         Soggetto s = new Soggetto();
         if( idx == 0 ){
             List<SessoSoggetto> sessi = new ArrayList();
@@ -197,28 +109,39 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
             sessi.add(SessoSoggetto.M);
             sessi.add(SessoSoggetto.F);
             s.setTipo(TipoSoggetto.PERSONA);
-            s.setNome(lineEditNome.text());
-            s.setCognome(lineEditCognome.text());
-            s.setCodicefiscale(lineEditCodicefiscale.text());
-            s.setSessoSoggetto(sessi.get(comboBoxSesso.currentIndex()));
+            s.setNome(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_nome")).text());
+            s.setCognome(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_cognome")).text());
+            s.setCodicefiscale(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_codicefiscaleP")).text());
+            s.setSessosoggetto(sessi.get(((QComboBox) this.findChild(QComboBox.class, "comboBox_sesso")).currentIndex()));
         } else if( idx == 1 ){
             s.setTipo(TipoSoggetto.AZIENDA);
-            s.setRagionesociale(lineEditRagionesociale.text());
-            s.setCodicefiscale(lineEditCodicefiscale2.text());
-            //s.setPartitaiva(lineEditPartitaiva.text());
+            s.setRagionesociale(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_ragionesociale")).text());
+            s.setCodicefiscale(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_codicefiscaleA")).text());
+            s.setPartitaiva(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_partitaiva")).text());
         } else if( idx == 2 ){
             s.setTipo(TipoSoggetto.ENTE);
-            s.setDenominazione(lineEditDenominazione.text());
-            //s.setDenominazione2(lineEditDenominazione2.text());
-            //s.setDenominazione3(lineEditDenominazione3.text());
-            s.setCodicefiscale(lineEditCodicefiscale3.text());
+            s.setDenominazione(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_denominazione")).text());
+            s.setDenominazione2(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_denominazione2")).text());
+            s.setDenominazione3(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_denominazione3")).text());
+            s.setCodicefiscale(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_codicefiscaleE")).text());
         }
         List<Indirizzo> indirizzi = new ArrayList();
         Indirizzo indirizzo = new Indirizzo();
-        indirizzo.setVia(lineEditIndirizzo.text());
-        //indirizzo.setCivico(null);
-        //indirizzo.setProvincia(lineEditProvincia.text());
+        indirizzo.setVia(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_via")).text());
+        indirizzo.setCivico(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_civico")).text());
+        indirizzo.setCap(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_cap")).text());
+        indirizzo.setFrazione(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_frazione")).text());
+        indirizzo.setComune(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_comune")).text());
+        indirizzo.setDescrizione(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_descrizione")).text());
+        indirizzo.setProvincia(Provincia.valueOf(((QComboBox) this.findChild(QComboBox.class, "comboBox_provincia")).currentText()));
+        indirizzo.setTipo(TipoIndirizzo.valueOf(((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo")).currentText()));
+        indirizzo.setStato((Stato) storeStato.get(((QComboBox) this.findChild(QComboBox.class, "comboBox_stato")).currentIndex()));
+        indirizzo.setPrincipale(Boolean.TRUE);
+        indirizzi.add(indirizzo);
         s.setIndirizzoCollection(indirizzi);
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Soggetto.class);
+        controller.commit(s);
         this.entity = s;
         this.accept();
     }

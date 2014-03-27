@@ -21,5 +21,5 @@ package com.axiastudio.suite.procedimenti.entities;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public enum CodiceCarica {
-    SINDACO, VICE_SINDACO, SEGRETARIO, RESPONSABILE_DI_SERVIZIO
+    SINDACO, VICE_SINDACO, SEGRETARIO, VICE_SEGRETARIO, RESPONSABILE_DI_SERVIZIO, RESPONSABILE_ATTRIBUZIONI, RESPONSABILE_DI_BILANCIO
 }

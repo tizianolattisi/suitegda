@@ -24,10 +24,7 @@ import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.anagrafiche.entities.SessoSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
-import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.base.entities.UfficioUtente;
-import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.base.entities.*;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
@@ -35,27 +32,22 @@ import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
-import com.axiastudio.suite.procedimenti.entities.Carica;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
-import com.axiastudio.suite.procedimenti.entities.Delega;
-import com.axiastudio.suite.procedimenti.entities.Iniziativa;
-import com.axiastudio.suite.procedimenti.entities.Norma;
-import com.axiastudio.suite.procedimenti.entities.NormaProcedimento;
-import com.axiastudio.suite.procedimenti.entities.Procedimento;
-import com.axiastudio.suite.procedimenti.entities.TipoNorma;
-import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
+import com.axiastudio.suite.procedimenti.entities.*;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.entities.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -82,6 +74,8 @@ public class DemoData {
         schema.add("SEDUTE");
         schema.add("FINANZIARIA");
         schema.add("DELIBEREDETERMINE");
+        schema.add("GENERALE");
+        schema.add("MODELLI");
         for( String name: schema){
             try {
                 Connection conn = DriverManager.getConnection("jdbc:h2:~/suite","","");
@@ -118,6 +112,20 @@ public class DemoData {
         em.getTransaction().commit();
         
         /*
+         * TITOLI (soggetto-protocollo)
+         */
+        Titolo proprietario = new Titolo();
+        proprietario.setDescrizione("PROPRIETARIO");
+        proprietario.setTipo(TipoTitolo.PERSONA_INTERESSATA);
+        Titolo progettista = new Titolo();
+        progettista.setDescrizione("PROGETTISTA");
+        progettista.setTipo(TipoTitolo.TECNICO);
+        em.getTransaction().begin();
+        em.persist(proprietario);
+        em.persist(progettista);
+        em.getTransaction().commit();
+        
+        /*
          * CARICHE
          */
         Carica sindaco = new Carica();
@@ -138,6 +146,20 @@ public class DemoData {
         em.persist(segretario);
         em.persist(responsabile);
         em.getTransaction().commit();
+
+        /*
+         * GIUNTA CORRENTE
+         */
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        Giunta giunta = new Giunta();
+        giunta.setNumero(1);
+        giunta.setDatanascita(today);
+        giunta.setNote("Giunta d'esempio");
+        em.getTransaction().begin();
+        em.persist(giunta);
+        em.getTransaction().commit();
+
         
         /*
          * SERVIZI
@@ -156,11 +178,23 @@ public class DemoData {
          */
         Ufficio uffInf = new Ufficio();
         uffInf.setDescrizione("Ufficio informativo");
+        uffInf.setSportello(Boolean.TRUE);
+        uffInf.setMittenteodestinatario(Boolean.TRUE);
+        uffInf.setAttribuzione(Boolean.TRUE);
         Ufficio uffPro = new Ufficio();
+        uffPro.setSportello(Boolean.TRUE);
+        uffPro.setMittenteodestinatario(Boolean.FALSE);
+        uffPro.setAttribuzione(Boolean.TRUE);
         uffPro.setDescrizione("Ufficio protocollo");
         Ufficio uffEdi = new Ufficio();
         uffEdi.setDescrizione("Ufficio edilizia");
+        uffEdi.setSportello(Boolean.FALSE);
+        uffEdi.setMittenteodestinatario(Boolean.TRUE);
+        uffEdi.setAttribuzione(Boolean.TRUE);
         Ufficio uffCom = new Ufficio();
+        uffCom.setSportello(Boolean.FALSE);
+        uffCom.setMittenteodestinatario(Boolean.TRUE);
+        uffCom.setAttribuzione(Boolean.TRUE);
         uffCom.setDescrizione("Ufficio commercio");
         em.getTransaction().begin();
         em.persist(uffInf);
@@ -238,27 +272,12 @@ public class DemoData {
         Soggetto tiziano = new Soggetto();
         tiziano.setNome("Tiziano");
         tiziano.setCognome("Lattisi");
-        tiziano.setSessoSoggetto(SessoSoggetto.M);
+        tiziano.setSessosoggetto(SessoSoggetto.M);
         tiziano.setTipo(TipoSoggetto.PERSONA);
         em.getTransaction().begin();
         em.persist(tiziano);
         em.getTransaction().commit();
-        
-        /*
-         * TIPI DI PRATICA
-         */
-        TipoPratica det = new TipoPratica();
-        det.setCodice("DET");
-        det.setDescrizione("Determina");
-        TipoPratica detrs = new TipoPratica();
-        detrs.setCodice("DETRS");
-        detrs.setDescrizione("Determina del responsabile");
-        detrs.setTipopadre(det);
-        em.getTransaction().begin();
-        em.persist(det);
-        em.persist(detrs);
-        em.getTransaction().commit();
-        
+
         /*
          * NORME
          */
@@ -271,6 +290,23 @@ public class DemoData {
         em.getTransaction().begin();
         em.persist(norma1);
         em.persist(norma2);
+        em.getTransaction().commit();
+
+        /*
+         * TIPI DI PRATICA
+         */
+        TipoPratica det = new TipoPratica();
+        det.setCodice("DET");
+        det.setDescrizione("Determina");
+        TipoPratica detrs = new TipoPratica();
+        detrs.setCodice("DETRS");
+        detrs.setDescrizione("Determina del responsabile");
+        detrs.setTipopadre(det);
+        detrs.setFormulacodifica("${s2}${anno}${n2,number,00000}");
+        detrs.setLunghezzaprogressivo(5);
+        em.getTransaction().begin();
+        em.persist(det);
+        em.persist(detrs);
         em.getTransaction().commit();
 
         /*
@@ -292,14 +328,17 @@ public class DemoData {
         procedimento.setNormaProcedimentoCollection(norme);
         List<TipoPraticaProcedimento> tipiPratica = new ArrayList();
         TipoPraticaProcedimento detrsProcedimento = new TipoPraticaProcedimento();
-        detrsProcedimento.setTipoPratica(detrs);
+        detrsProcedimento.setTipopratica(detrs);
+        detrsProcedimento.setProcedimento(procedimento);
         tipiPratica.add(detrsProcedimento);
-        procedimento.setTipoPraticaProcedimentoCollection(tipiPratica);
+        procedimento.setTipopraticaProcedimentoCollection(tipiPratica);
         em.getTransaction().begin();
         em.persist(procedimento);
         em.getTransaction().commit();
-        
+
         // pratiche
+        em.refresh(detrs);
+        //em.refresh(procedimento);
         Pratica pratica = new Pratica();
         pratica.setDescrizione("Pratica demo");
         pratica.setTipo(detrs);
@@ -333,7 +372,7 @@ public class DemoData {
         pro1.setAttribuzioneCollection(attribuzioni);
         SoggettoProtocollo sp = new SoggettoProtocollo();
         sp.setSoggetto(tiziano);
-        sp.setTitolo(TitoloSoggettoProtocollo.TECNICO);
+        sp.setTitolo(proprietario);
         sp.setProtocollo(pro1);
         List<SoggettoProtocollo> soggettiprotocollo = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo.add(sp);
@@ -351,7 +390,7 @@ public class DemoData {
         pro2.setTipo(TipoProtocollo.USCITA);
         SoggettoProtocollo sp2 = new SoggettoProtocollo();
         sp2.setSoggetto(tiziano);
-        sp2.setTitolo(TitoloSoggettoProtocollo.TECNICO);
+        sp2.setTitolo(progettista);
         sp2.setProtocollo(pro2);
         List<SoggettoProtocollo> soggettiprotocollo2 = new ArrayList<SoggettoProtocollo>();
         soggettiprotocollo2.add(sp2);
@@ -382,8 +421,8 @@ public class DemoData {
         servizioDetermina.setServizio(servizioAffariGenerali);
         servizioDeterminaCollection.add(servizioDetermina);
         determina.setServizioDeterminaCollection(servizioDeterminaCollection);
-        determina.setIdpratica(pratica.getIdpratica());
-        determina.setCodiceInterno("DETRS201300001");
+        //determina.setPratica(pratica);
+        determina.setCodiceinterno("DETRS201300001");
         
         em.getTransaction().begin();
         em.persist(servizioAffariGenerali);

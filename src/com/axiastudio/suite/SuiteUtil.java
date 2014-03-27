@@ -19,23 +19,22 @@ package com.axiastudio.suite;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.db.Store;
-import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.base.entities.Giunta;
+import com.axiastudio.suite.generale.entities.Costante;
+import com.axiastudio.suite.modelli.entities.Modello;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.pratiche.entities.Pratica_;
-import com.axiastudio.suite.protocollo.entities.Attribuzione;
-import com.axiastudio.suite.protocollo.entities.Attribuzione_;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -43,7 +42,8 @@ import javax.persistence.criteria.Root;
  */
 public class SuiteUtil {
     
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy h:mm");
+    public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     
     public static String digest(String s){
         try {
@@ -61,32 +61,56 @@ public class SuiteUtil {
         return null;
     }
     
-    public static Store attribuzioni(Utente autenticato){
-        Store store;
-        Database db = (Database) Register.queryUtility(IDatabase.class);
-        EntityManager em = db.getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Attribuzione> cq = cb.createQuery(Attribuzione.class);
-        Root<Attribuzione> root = cq.from(Attribuzione.class);
-        cq.select(root);
-        cq.where(cb.equal(root.get(Attribuzione_.letto), Boolean.FALSE));
-        TypedQuery<Attribuzione> tq = em.createQuery(cq);
-        List<Attribuzione> resultList = tq.getResultList();
-        store = new Store(resultList);
-        return store;
-    }
     
-    public static Pratica findPratica(String idpratica){
+    public static Pratica trovaPratica(String idpratica){
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Pratica> cq = cb.createQuery(Pratica.class);
         Root<Pratica> root = cq.from(Pratica.class);
         cq.select(root);
-        cq.where(cb.equal(root.get(Pratica_.idpratica), idpratica));
+        cq.where(cb.equal(root.get("idpratica"), idpratica));
         TypedQuery<Pratica> tq = em.createQuery(cq);
         Pratica pratica = tq.getSingleResult();
         return pratica;
+    }
+    
+    public static Costante trovaCostante(String name){
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Costante> cq = cb.createQuery(Costante.class);
+        Root<Costante> root = cq.from(Costante.class);
+        cq.select(root);
+        cq.where(cb.equal(root.get("nome"), name));
+        TypedQuery<Costante> tq = em.createQuery(cq);
+        Costante costante = tq.getSingleResult();
+        return costante;
+    }
+
+    public static Giunta trovaGiuntaCorrente(){
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Giunta> cq = cb.createQuery(Giunta.class);
+        Root<Giunta> root = cq.from(Giunta.class);
+        cq.select(root);
+        cq.where(cb.isNull(root.get("datacessazione")));
+        TypedQuery<Giunta> tq = em.createQuery(cq);
+        Giunta giunta = tq.getSingleResult();
+        return giunta;
+    }
+
+    public static List<Modello> elencoModelli(){
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Modello> cq = cb.createQuery(Modello.class);
+        Root<Modello> root = cq.from(Modello.class);
+        cq.select(root);
+        TypedQuery<Modello> query = em.createQuery(cq);
+        List<Modello> modelli = query.getResultList();
+        return modelli;
     }
     
 }

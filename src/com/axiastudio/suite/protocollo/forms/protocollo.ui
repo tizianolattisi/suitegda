@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>640</height>
+    <width>1030</width>
+    <height>606</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,40 +16,67 @@
   <property name="searchcolumns" stdset="0">
    <string>&gt;iddocumento&lt;,&gt;tipo&lt;,&gt;dataprotocollo&lt;,&lt;oggettop&gt;</string>
   </property>
+  <property name="sortcolumn" stdset="0">
+   <number>0</number>
+  </property>
+  <property name="sortorder" stdset="0">
+   <string>&gt;</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_5">
+   <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
-     <widget class="QGroupBox" name="groupBox_testa">
+     <widget class="QGroupBox" name="groupBox">
       <property name="minimumSize">
        <size>
-        <width>640</width>
+        <width>524</width>
         <height>244</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>640</width>
+        <width>524</width>
         <height>244</height>
        </size>
       </property>
       <property name="title">
        <string/>
       </property>
-      <layout class="QGridLayout" name="gridLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <property name="margin">
         <number>4</number>
        </property>
-       <item row="0" column="0" colspan="2">
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QLabel" name="label_10">
+           <property name="minimumSize">
+            <size>
+             <width>35</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
-            <string>Protocollo</string>
+            <string>Tipo</string>
+           </property>
+           <property name="buddy">
+            <cstring>comboBox_tipo</cstring>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QComboBox" name="comboBox_tipo">
+           <property name="minimumSize">
+            <size>
+             <width>103</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>103</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="column" stdset="0">
             <string>Tipo</string>
            </property>
@@ -79,7 +106,10 @@
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>N°</string>
+            <string>Protocollo n°</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_iddocumento</cstring>
            </property>
           </widget>
          </item>
@@ -87,6 +117,18 @@
           <widget class="QLineEdit" name="lineEdit_iddocumento">
            <property name="enabled">
             <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>110</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font-weight:bold;</string>
+           </property>
+           <property name="text">
+            <string>200000000001</string>
            </property>
            <property name="column" stdset="0">
             <string>iddocumento</string>
@@ -107,47 +149,41 @@
           </widget>
          </item>
          <item>
-          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_data">
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateTimeEdit" name="dateEdit_data">
            <property name="enabled">
             <bool>false</bool>
            </property>
-           <property name="minimumSize">
-            <size>
-             <width>120</width>
-             <height>0</height>
-            </size>
-           </property>
            <property name="maximumSize">
             <size>
-             <width>120</width>
+             <width>150</width>
              <height>16777215</height>
             </size>
            </property>
            <property name="displayFormat">
-            <string>dd/MM/yyyy</string>
+            <string>dd/MM/yyyy HH:mm</string>
            </property>
            <property name="calendarPopup">
             <bool>true</bool>
            </property>
            <property name="column" stdset="0">
-            <string>Dataprotocollo</string>
+            <string>dataprotocollo</string>
            </property>
            <property name="search" stdset="0">
-            <bool>true</bool>
-           </property>
-           <property name="export" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
          </item>
         </layout>
        </item>
-       <item row="1" column="0" colspan="2">
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QLabel" name="label_12">
            <property name="text">
-            <string>Riferimenti mittente</string>
+            <string>Rifer. mitt.</string>
+           </property>
+           <property name="buddy">
+            <cstring>comboBox_tiporiferimentomittente</cstring>
            </property>
           </widget>
          </item>
@@ -181,6 +217,21 @@
              <string>RACCOMANDATA</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>PEC</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>A_MANO</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>INVIO_TELEMATICO</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item>
@@ -192,6 +243,12 @@
          </item>
          <item>
           <widget class="QLineEdit" name="lineEdit_nrriferimentomittente">
+           <property name="minimumSize">
+            <size>
+             <width>80</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="column" stdset="0">
             <string>riferimentomittente</string>
            </property>
@@ -214,13 +271,13 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>120</width>
+             <width>90</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>120</width>
+             <width>100</width>
              <height>16777215</height>
             </size>
            </property>
@@ -237,168 +294,198 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="annullato">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Annullato</string>
-           </property>
-           <property name="column" stdset="0">
-            <string>annullato</string>
-           </property>
-          </widget>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="spedito">
+             <property name="text">
+              <string>Spedito</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>Spedito</string>
+             </property>
+             <property name="search" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="annullamentorichiesto">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Annull. richiesto</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>annullamentorichiesto</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QCheckBox" name="riservato">
+             <property name="text">
+              <string>Riservato</string>
+             </property>
+             <property name="shortcut">
+              <string>Ctrl+J</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>riservato</string>
+             </property>
+             <property name="export" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="richiederisposta">
+             <property name="text">
+              <string>Richiede risposta</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>richiederisposta</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QCheckBox" name="corrispostoostornato">
+             <property name="text">
+              <string>Corrisposto/stornato</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>corrispostoostornato</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="annullato">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Annullato</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>annullato</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
-         <item row="0" column="1">
-          <widget class="QCheckBox" name="spedito">
-           <property name="text">
-            <string>Spedito</string>
-           </property>
-           <property name="column" stdset="0">
-            <string>Spedito</string>
-           </property>
-           <property name="search" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="annullamentorichiesto">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Annull. richiesto</string>
-           </property>
-           <property name="column" stdset="0">
-            <string>annullamentorichiesto</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QCheckBox" name="riservato">
-           <property name="text">
-            <string>Riservato</string>
-           </property>
-           <property name="shortcut">
-            <string>Ctrl+J</string>
-           </property>
-           <property name="column" stdset="0">
-            <string>riservato</string>
-           </property>
-           <property name="export" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QCheckBox" name="richiederisposta">
-           <property name="text">
-            <string>Richiede risposta</string>
-           </property>
-           <property name="column" stdset="0">
-            <string>richiederisposta</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QCheckBox" name="corrispostoostornato">
-           <property name="text">
-            <string>Corrisposto/stornato</string>
-           </property>
-           <property name="column" stdset="0">
-            <string>corrispostoostornato</string>
-           </property>
-          </widget>
+         <item>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QLabel" name="labelSpedito">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_spedizione">
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="labelConvalidaAttribuzioni">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="label_convalidau">
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="labelConvalidaProtocollo">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="label_convalida">
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="labelConsolidaDocumenti">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLabel" name="label_consolida">
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
-       <item row="2" column="1">
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="labelSpedito">
-           <property name="minimumSize">
-            <size>
-             <width>32</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>32</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_spedizione">
-           <property name="text">
-            <string>-</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="labelConvalidaAttribuzioni">
-           <property name="minimumSize">
-            <size>
-             <width>32</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>32</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="label_convalidau">
-           <property name="text">
-            <string>-</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="labelConvalidaProtocollo">
-           <property name="minimumSize">
-            <size>
-             <width>32</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>32</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="label_convalida">
-           <property name="text">
-            <string>-</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="3" column="0" colspan="2">
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QLabel" name="label_11">
@@ -416,6 +503,9 @@
            </property>
            <property name="text">
             <string>Sportello</string>
+           </property>
+           <property name="buddy">
+            <cstring>comboBox_sportello</cstring>
            </property>
           </widget>
          </item>
@@ -441,7 +531,7 @@
          </item>
         </layout>
        </item>
-       <item row="4" column="0" colspan="2">
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
           <widget class="QLabel" name="label_9">
@@ -488,7 +578,7 @@
      <widget class="QGroupBox" name="groupBox_2">
       <property name="minimumSize">
        <size>
-        <width>0</width>
+        <width>200</width>
         <height>244</height>
        </size>
       </property>
@@ -502,8 +592,11 @@
        <string/>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>1</number>
+       </property>
        <property name="margin">
-        <number>8</number>
+        <number>4</number>
        </property>
        <item>
         <widget class="QLabel" name="label">
@@ -528,6 +621,59 @@
          </property>
          <property name="column" stdset="0">
           <string>Note</string>
+         </property>
+         <property name="private" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="maximumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Oggetto</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_oggettop</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_oggettop">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-weight:bold;</string>
+         </property>
+         <property name="text">
+          <string>200000000001</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>oggettop</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
          </property>
          <property name="private" stdset="0">
           <bool>true</bool>
@@ -565,7 +711,7 @@
           <bool>true</bool>
          </property>
          <property name="export" stdset="0">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -581,7 +727,7 @@
        <attribute name="title">
         <string>Corrispondenti e referenti</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_4">
+       <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0,0">
         <property name="margin">
          <number>4</number>
         </property>
@@ -589,6 +735,12 @@
          <widget class="QTabWidget" name="tabWidget_sinistra">
           <property name="enabled">
            <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>600</width>
+            <height>0</height>
+           </size>
           </property>
           <property name="currentIndex">
            <number>0</number>
@@ -613,16 +765,28 @@
                <string>.soggettoProtocolloCollection</string>
               </property>
               <property name="columns" stdset="0">
-               <string>&gt;soggetto&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
+               <string>&lt;soggettoformattato&gt;,titolo,&gt;corrispondenza&lt;,&gt;notifica&lt;,&gt;conoscenza&lt;</string>
               </property>
               <property name="reference" stdset="0">
                <string>soggetto</string>
               </property>
               <property name="headers" stdset="0">
-               <string>soggetto,titolo,con,not,cor</string>
+               <string>Soggetto,Titolo,cr,nt,cn</string>
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>
+              </property>
+              <property name="searchfields" stdset="0">
+               <string>soggetto,titolo.descrizione</string>
+              </property>
+              <property name="search" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="sortcolumn" stdset="0">
+               <number>0</number>
+              </property>
+              <property name="sortorder" stdset="0">
+               <string>&lt;</string>
               </property>
              </widget>
             </item>
@@ -648,13 +812,13 @@
                <string>.soggettoRiservatoProtocolloCollection</string>
               </property>
               <property name="columns" stdset="0">
-               <string>&gt;soggetto&lt;,titolo,&gt;conoscenza&lt;,&gt;notifica&lt;,&gt;corrispondenza&lt;</string>
+               <string>&lt;soggettoformattato&gt;,titolo,&gt;corrispondenza&lt;,&gt;notifica&lt;,&gt;conoscenza&lt;</string>
               </property>
               <property name="reference" stdset="0">
                <string>soggetto</string>
               </property>
               <property name="headers" stdset="0">
-               <string>soggetto,titolo,con,not,cor</string>
+               <string>Soggetto,Titolo,cr,nt,cn</string>
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>
@@ -669,6 +833,9 @@
          <widget class="QLabel" name="label_destra">
           <property name="text">
            <string>Destinatari</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableView_ufficiprotocollo</cstring>
           </property>
          </widget>
         </item>
@@ -686,12 +853,27 @@
           <property name="filters" stdset="0">
            <string>mittenteodestinatario=true</string>
           </property>
+          <property name="searchfields" stdset="0">
+           <string>ufficio.descrizione</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&lt;</string>
+          </property>
          </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_7">
           <property name="text">
            <string>Pratiche contenitore</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableView_pratiche</cstring>
           </property>
          </widget>
         </item>
@@ -700,18 +882,48 @@
           <property name="text">
            <string>Lista di attribuzione</string>
           </property>
+          <property name="buddy">
+           <cstring>tableView_attribuzioni</cstring>
+          </property>
          </widget>
         </item>
         <item row="3" column="0">
          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_pratiche">
+          <property name="minimumSize">
+           <size>
+            <width>600</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="sizeIncrement">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="columns" stdset="0">
-           <string>&gt;originale&lt;,&lt;pratica&gt;</string>
+           <string>&gt;originale&lt;,oggetto,&lt;pratica&gt;</string>
           </property>
           <property name="reference" stdset="0">
            <string>pratica</string>
           </property>
           <property name="entity" stdset="0">
            <string>.praticaProtocolloCollection</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>Orig,Oggetto,Pratica</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>pratica.codiceinterno</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>2</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
           </property>
          </widget>
         </item>
@@ -728,6 +940,21 @@
           </property>
           <property name="filters" stdset="0">
            <string>attribuzione=true</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>,Ufficio</string>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>ufficio.descrizione,principale</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
           </property>
          </widget>
         </item>
@@ -746,6 +973,9 @@
           <property name="text">
            <string>Riferimenti precedenti</string>
           </property>
+          <property name="buddy">
+           <cstring>tableView</cstring>
+          </property>
          </widget>
         </item>
         <item>
@@ -759,6 +989,12 @@
           <property name="columns" stdset="0">
            <string>&lt;precedente&gt;</string>
           </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
          </widget>
         </item>
         <item>
@@ -766,10 +1002,13 @@
           <property name="text">
            <string>Riferimenti successivi</string>
           </property>
+          <property name="buddy">
+           <cstring>tableView_riferimentisuccessivi</cstring>
+          </property>
          </widget>
         </item>
         <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_5">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_riferimentisuccessivi">
           <property name="entity" stdset="0">
            <string>.riferimentoProtocolloSuccessivoCollection</string>
           </property>
@@ -778,6 +1017,38 @@
           </property>
           <property name="columns" stdset="0">
            <string>&lt;protocollo&gt;</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>Richieste di annullamento</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_annullamenti">
+          <property name="entity" stdset="0">
+           <string>.annullamentoProtocolloCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;esecutorerichiesta&lt;,&gt;datarichiesta&lt;,&gt;statorichiesta&lt;,&lt;motivazioneannullamento&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>motivazioneannullamento</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>1</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
           </property>
          </widget>
         </item>
@@ -797,37 +1068,27 @@
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
+   <header location="global">pypapitableview.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
    <extends>QDateEdit</extends>
    <header>pypapidateedit.h</header>
   </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>pypapidatetimeedit.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>textEdit_oggetto</tabstop>
-  <tabstop>comboBox_tipo</tabstop>
-  <tabstop>lineEdit_iddocumento</tabstop>
-  <tabstop>comboBox_tiporiferimentomittente</tabstop>
-  <tabstop>lineEdit_nrriferimentomittente</tabstop>
-  <tabstop>dateEdit_datariferimentomittente</tabstop>
-  <tabstop>annullato</tabstop>
-  <tabstop>riservato</tabstop>
-  <tabstop>annullamentorichiesto</tabstop>
-  <tabstop>spedito</tabstop>
-  <tabstop>richiederisposta</tabstop>
-  <tabstop>corrispostoostornato</tabstop>
-  <tabstop>comboBox_sportello</tabstop>
-  <tabstop>comboBoxTitolario</tabstop>
-  <tabstop>toolButtonTitolario</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>tableView_soggettiprotocollo</tabstop>
   <tabstop>tableView_ufficiprotocollo</tabstop>
   <tabstop>tableView_pratiche</tabstop>
   <tabstop>tableView_attribuzioni</tabstop>
   <tabstop>textEdit_note</tabstop>
-  <tabstop>dateEdit_data</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../../../../../pypapi/pypapi/lib/pypapi/ui/resources/resources.qrc"/>

@@ -16,44 +16,55 @@
  */
 package com.axiastudio.suite.deliberedetermine.entities;
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
+import com.axiastudio.pypapi.db.Database;
+import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.deliberedetermine.DeterminaListener;
+import com.axiastudio.suite.finanziaria.entities.Progetto;
+import com.axiastudio.suite.finanziaria.entities.Servizio;
+import com.axiastudio.suite.pratiche.IDettaglio;
+import com.axiastudio.suite.pratiche.entities.Fase;
+import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.pratiche.entities.Visto;
+import com.axiastudio.suite.protocollo.IProtocollabile;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
+
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import java.util.List;
 
 /**
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 @Entity
+@EntityListeners({DeterminaListener.class})
 @Table(schema="deliberedetermine")
 @SequenceGenerator(name="gendetermina", sequenceName="deliberedetermine.determina_id_seq", initialValue=1, allocationSize=1)
-public class Determina implements Serializable {
+@NamedQuery(name="inAttesaDiVistoDiBilancio",
+        query = "SELECT d FROM Determina d JOIN d.pratica p JOIN p.fasePraticaCollection fp " +
+                "WHERE fp.attiva = true AND fp.fase.id = :idfase")
+public class Determina implements Serializable, IDettaglio, IProtocollabile {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
     private Long id;
-    @Column(name="idpratica")
-    private String idpratica;
+    @JoinColumn(name = "idpratica", referencedColumnName = "idpratica")
+    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.REFRESH})
+    private Pratica pratica;
     @Column(name="codiceinterno", unique=true)
-    private String codiceInterno;
+    private String codiceinterno;
     @Column(name="oggetto", length=2048)
     private String oggetto;
-    @Column(name="datapratica")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dataPratica;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<ServizioDetermina> servizioDeterminaCollection;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
@@ -61,75 +72,54 @@ public class Determina implements Serializable {
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioDetermina> ufficioDeterminaCollection;
     @Column(name="dispesa")
-    private Boolean diSpesa;
+    private Boolean dispesa=Boolean.FALSE;
     @Column(name="dientrata")
-    private Boolean diEntrata;
+    private Boolean diEntrata=Boolean.FALSE;
     @Column(name="diregolarizzazione")
-    private Boolean diRegolarizzazione;
+    private Boolean diRegolarizzazione=Boolean.FALSE;
+    @Column(name="diliquidazione")
+    private Boolean diLiquidazione=Boolean.FALSE;
+    @Column(name="diincarico")
+    private Boolean diIncarico=Boolean.FALSE;
     @Column(name="referentepolitico")
     private String referentePolitico;
-    @Column(name="ufficioresponsabile")
-    private String ufficioResponsabile;
-    @Column(name="nomeresponsabile")
-    private String nomeResponsabile;
+    @JoinColumn(name = "responsabile", referencedColumnName = "id")
+    @ManyToOne
+    private Utente Responsabile;
     @Column(name="anno")
     private Integer anno;
     @Column(name="numero")
     private Integer numero;
-    // data determina == data protocollo
-    
-    /* visto del responsabile del servizio */
-    @Column(name="vistoresponsabile")
-    private Boolean vistoResponsabile = false;
-    @Column(name="datavistoresponsabile")
+    @Column(name="data")
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dataVistoResponsabile;
-    @JoinColumn(name = "utentevistoresponsabile", referencedColumnName = "id")
-    @ManyToOne
-    private Utente utenteVistoResponsabile;
-    @Column(name="titolarevistoresponsabile")
-    private Boolean titolareVistoResponsabile;
-    @Column(name="segretariovistoresponsabile")
-    private Boolean segretarioVistoResponsabile;
-    @Column(name="delegatovistoresponsabile")
-    private Boolean delegatoVistoResponsabile;
-
-    /* visto del responsabile di bilancio */
-    @Column(name="vistobilancio")
-    private Boolean vistoBilancio = false;
-    @Column(name="datavistobilancio")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dataVistoBilancio;
-    @JoinColumn(name = "utentevistobilancio", referencedColumnName = "id")
-    @ManyToOne
-    private Utente utenteVistoBilancio;
-    @Column(name="titolarevistobilancio")
-    private Boolean titolareVistoBilancio;
-    @Column(name="segretariovistobilancio")
-    private Boolean segretarioVistoBilancio;
-    @Column(name="delegatovistobilancio")
-    private Boolean delegatoVistoBilancio;
-
-    /* visto del responsabile di bilancio */
-    @Column(name="vistonegato")
-    private Boolean vistoNegato = false;
-    @Column(name="datavistonegato")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dataVistoNegato;
-    @JoinColumn(name = "utentevistonegato", referencedColumnName = "id")
-    @ManyToOne
-    private Utente utenteVistoNegato;
-    @Column(name="titolarevistonegato")
-    private Boolean titolareVistoNegato;
-    @Column(name="segretariovistonegato")
-    private Boolean segretarioVistoNegato;
-    @Column(name="delegatovistonegato")
-    private Boolean delegatoVistoNegato;
-    
+    private Date data;
     /* protocollo */
-    @Column(name="iddocumento", length=12)
-    private String idDocumento;
-    
+    @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
+    @ManyToOne
+    private Protocollo protocollo;
+    @Enumerated(EnumType.STRING)
+    private TipoPubblicazione pubblicabile=TipoPubblicazione.PUBBLICABILE;
+    @Column(name="pluriennale")
+    private Boolean pluriennale=Boolean.FALSE;
+    @Column(name="finoadanno")
+    private Integer finoAdAnno;
+    @JoinColumn(name = "progetto", referencedColumnName = "id")
+    @ManyToOne
+    private Progetto progetto;
+
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
+
+
     public Long getId() {
         return id;
     }
@@ -138,36 +128,78 @@ public class Determina implements Serializable {
         this.id = id;
     }
 
+    @Override
+    public Pratica getPratica() {
+        return pratica;
+    }
+
+    @Override
+    public void setPratica(Pratica pratica) {
+        this.pratica = pratica;
+    }
+
+    @Override
     public String getIdpratica() {
-        return idpratica;
+        if( this.pratica != null ){
+            return pratica.getIdpratica();
+        }
+        return null;
     }
 
+    @Override
     public void setIdpratica(String idpratica) {
-        this.idpratica = idpratica;
+        // NOP
     }
 
-    public String getCodiceInterno() {
-        return codiceInterno;
+    @Override
+    public String getCodiceinterno() {
+        return codiceinterno;
     }
 
-    public void setCodiceInterno(String codiceInterno) {
-        this.codiceInterno = codiceInterno;
+    @Override
+    public void setCodiceinterno(String codiceinterno) {
+        this.codiceinterno = codiceinterno;
     }
 
+    @Override
+    public Servizio getServizio() {
+        Collection<ServizioDetermina> serviziDetermina = getServizioDeterminaCollection();
+        for( ServizioDetermina servizioDetermina: getServizioDeterminaCollection() ){
+            if( servizioDetermina.getPrincipale() ){
+                return servizioDetermina.getServizio();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Ufficio getUfficio() {
+        Servizio servizio = getServizio();
+        if( servizio != null ){
+            return servizio.getUfficio();
+        }
+        return null;
+    }
+
+    @Override
     public String getOggetto() {
         return oggetto;
     }
 
+    @Override
     public void setOggetto(String oggetto) {
         this.oggetto = oggetto;
     }
 
-    public Date getDataPratica() {
-        return dataPratica;
+    public Date getDatapratica() {
+        if( this.pratica != null ){
+            return pratica.getDatapratica();
+        }
+        return null;
     }
 
-    public void setDataPratica(Date dataPratica) {
-        this.dataPratica = dataPratica;
+    public void setDatapratica(Date datapratica) {
+        // NOP
     }
 
     public Collection<ServizioDetermina> getServizioDeterminaCollection() {
@@ -194,12 +226,12 @@ public class Determina implements Serializable {
         this.ufficioDeterminaCollection = ufficioDeterminaCollection;
     }
 
-    public Boolean getDiSpesa() {
-        return diSpesa;
+    public Boolean getDispesa() {
+        return dispesa;
     }
 
-    public void setDiSpesa(Boolean diSpesa) {
-        this.diSpesa = diSpesa;
+    public void setDispesa(Boolean dispesa) {
+        this.dispesa = dispesa;
     }
 
     public Boolean getDiEntrata() {
@@ -218,28 +250,28 @@ public class Determina implements Serializable {
         this.diRegolarizzazione = diRegolarizzazione;
     }
 
+    public Boolean getDiLiquidazione() {
+        return diLiquidazione;
+    }
+
+    public void setDiLiquidazione(Boolean diLiquidazione) {
+        this.diLiquidazione = diLiquidazione;
+    }
+
+    public Boolean getDiIncarico() {
+        return diIncarico;
+    }
+
+    public void setDiIncarico(Boolean diIncarico) {
+        this.diIncarico = diIncarico;
+    }
+
     public String getReferentePolitico() {
         return referentePolitico;
     }
 
     public void setReferentePolitico(String referentePolitico) {
         this.referentePolitico = referentePolitico;
-    }
-
-    public String getUfficioResponsabile() {
-        return ufficioResponsabile;
-    }
-
-    public void setUfficioResponsabile(String ufficioResponsabile) {
-        this.ufficioResponsabile = ufficioResponsabile;
-    }
-
-    public String getNomeResponsabile() {
-        return nomeResponsabile;
-    }
-
-    public void setNomeResponsabile(String nomeResponsabile) {
-        this.nomeResponsabile = nomeResponsabile;
     }
 
     public Integer getAnno() {
@@ -258,156 +290,144 @@ public class Determina implements Serializable {
         this.numero = numero;
     }
 
-    public Boolean getVistoResponsabile() {
-        return vistoResponsabile;
+    public Date getData() {
+        return data;
     }
 
-    public void setVistoResponsabile(Boolean vistoResponsabile) {
-        this.vistoResponsabile = vistoResponsabile;
+    public void setData(Date data) {
+        this.data = data;
     }
 
-    public Date getDataVistoResponsabile() {
-        return dataVistoResponsabile;
+    public Protocollo getProtocollo() {
+        return protocollo;
     }
 
-    public void setDataVistoResponsabile(Date dataVistoResponsabile) {
-        this.dataVistoResponsabile = dataVistoResponsabile;
+    public void setProtocollo(Protocollo protocollo) {
+        this.protocollo = protocollo;
     }
 
-    public Utente getUtenteVistoResponsabile() {
-        return utenteVistoResponsabile;
+    public Utente getResponsabile() {
+        return Responsabile;
     }
 
-    public void setUtenteVistoResponsabile(Utente utenteVistoResponsabile) {
-        this.utenteVistoResponsabile = utenteVistoResponsabile;
+    public void setResponsabile(Utente responsabile) {
+        Responsabile = responsabile;
     }
 
-    public Boolean getTitolareVistoResponsabile() {
-        return titolareVistoResponsabile;
+    public TipoPubblicazione getPubblicabile() {
+        return pubblicabile;
     }
 
-    public void setTitolareVistoResponsabile(Boolean titolareVistoResponsabile) {
-        this.titolareVistoResponsabile = titolareVistoResponsabile;
+    public void setPubblicabile(TipoPubblicazione pubblicabile) {
+        this.pubblicabile = pubblicabile;
     }
 
-    public Boolean getSegretarioVistoResponsabile() {
-        return segretarioVistoResponsabile;
+    public Boolean getPluriennale() {
+        return pluriennale;
     }
 
-    public void setSegretarioVistoResponsabile(Boolean segretarioVistoResponsabile) {
-        this.segretarioVistoResponsabile = segretarioVistoResponsabile;
+    public void setPluriennale(Boolean pluriennale) {
+        this.pluriennale = pluriennale;
     }
 
-    public Boolean getDelegatoVistoResponsabile() {
-        return delegatoVistoResponsabile;
+    public Integer getFinoAdAnno() {
+        return finoAdAnno;
     }
 
-    public void setDelegatoVistoResponsabile(Boolean delegatoVistoResponsabile) {
-        this.delegatoVistoResponsabile = delegatoVistoResponsabile;
+    public void setFinoAdAnno(Integer finoAdAnno) {
+        this.finoAdAnno = finoAdAnno;
     }
 
-    public Boolean getVistoBilancio() {
-        return vistoBilancio;
+    public Progetto getProgetto() {
+        return progetto;
     }
 
-    public void setVistoBilancio(Boolean vistoBilancio) {
-        this.vistoBilancio = vistoBilancio;
+    public void setProgetto(Progetto progetto) {
+        this.progetto = progetto;
     }
 
-    public Date getDataVistoBilancio() {
-        return dataVistoBilancio;
+    public String getServizioPrincipale() {
+        if (getServizio() != null) {
+            return getServizio().getDescrizione();
+        }
+        return null;
     }
 
-    public void setDataVistoBilancio(Date dataVistoBilancio) {
-        this.dataVistoBilancio = dataVistoBilancio;
+    public void setServizioPrincipale(String servizioPrincipale) {
+        // NOP
     }
 
-    public Utente getUtenteVistoBilancio() {
-        return utenteVistoBilancio;
+
+
+    private Visto getVisto(String tipoVisto) {
+        if( this.getPratica() != null ){
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            Long idFaseVisto = Long.parseLong(SuiteUtil.trovaCostante(tipoVisto).getValore());
+            Controller controller = db.createController(Fase.class);
+            Fase fase = (Fase)controller.get(idFaseVisto);
+            EntityManager em = db.getEntityManagerFactory().createEntityManager();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Visto> cq = cb.createQuery(Visto.class);
+            Root<Visto> root = cq.from(Visto.class);
+            cq.select(root);
+            cq.where(cb.and(cb.equal(root.get("pratica"), this.getPratica()),
+                    cb.equal(root.get("fase"), fase),
+                    cb.equal(root.get("negato"), false)));
+            cq.orderBy(cb.desc(root.get("data")));
+            TypedQuery<Visto> tq = em.createQuery(cq);
+            List<Visto> resultList = tq.getResultList();
+            if( resultList.size()>0 ){
+                return resultList.get(0);
+            }
+        }
+        return null;
     }
 
-    public void setUtenteVistoBilancio(Utente utenteVistoBilancio) {
-        this.utenteVistoBilancio = utenteVistoBilancio;
+    public Visto getVistoResponsabile() {
+        return getVisto("FASE_VISTO_RESPONSABILE");
+    }
+    public void setVistoResponsabile(Visto visto){  }
+
+    public Visto getVistoBilancio() {
+        return getVisto("FASE_VISTO_BILANCIO");
+    }
+    public void setVistoBilancio(Visto visto){  }
+
+    public Visto getVistoBilancioNegato() {
+        return getVisto("FASE_VISTO_BILANCIO_NEGATO");
+    }
+    public void setVistoBilancioNegato(Visto visto){  }
+
+    public Date getRecordcreato() {
+        return recordcreato;
     }
 
-    public Boolean getTitolareVistoBilancio() {
-        return titolareVistoBilancio;
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
     }
 
-    public void setTitolareVistoBilancio(Boolean titolareVistoBilancio) {
-        this.titolareVistoBilancio = titolareVistoBilancio;
+    public String getRecordcreatoda() {
+        return recordcreatoda;
     }
 
-    public Boolean getSegretarioVistoBilancio() {
-        return segretarioVistoBilancio;
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
     }
 
-    public void setSegretarioVistoBilancio(Boolean segretarioVistoBilancio) {
-        this.segretarioVistoBilancio = segretarioVistoBilancio;
+    public Date getRecordmodificato() {
+        return recordmodificato;
     }
 
-    public Boolean getDelegatoVistoBilancio() {
-        return delegatoVistoBilancio;
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
     }
 
-    public void setDelegatoVistoBilancio(Boolean delegatoVistoBilancio) {
-        this.delegatoVistoBilancio = delegatoVistoBilancio;
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
     }
 
-    public Boolean getVistoNegato() {
-        return vistoNegato;
-    }
-
-    public void setVistoNegato(Boolean vistoNegato) {
-        this.vistoNegato = vistoNegato;
-    }
-
-    public Date getDataVistoNegato() {
-        return dataVistoNegato;
-    }
-
-    public void setDataVistoNegato(Date dataVistoNegato) {
-        this.dataVistoNegato = dataVistoNegato;
-    }
-
-    public Utente getUtenteVistoNegato() {
-        return utenteVistoNegato;
-    }
-
-    public void setUtenteVistoNegato(Utente utenteVistoNegato) {
-        this.utenteVistoNegato = utenteVistoNegato;
-    }
-
-    public Boolean getTitolareVistoNegato() {
-        return titolareVistoNegato;
-    }
-
-    public void setTitolareVistoNegato(Boolean titolareVistoNegato) {
-        this.titolareVistoNegato = titolareVistoNegato;
-    }
-
-    public Boolean getSegretarioVistoNegato() {
-        return segretarioVistoNegato;
-    }
-
-    public void setSegretarioVistoNegato(Boolean segretarioVistoNegato) {
-        this.segretarioVistoNegato = segretarioVistoNegato;
-    }
-
-    public Boolean getDelegatoVistoNegato() {
-        return delegatoVistoNegato;
-    }
-
-    public void setDelegatoVistoNegato(Boolean delegatoVistoNegato) {
-        this.delegatoVistoNegato = delegatoVistoNegato;
-    }
-
-    public String getIdDocumento() {
-        return idDocumento;
-    }
-
-    public void setIdDocumento(String iddocumento) {
-        this.idDocumento = iddocumento;
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
 
     @Override

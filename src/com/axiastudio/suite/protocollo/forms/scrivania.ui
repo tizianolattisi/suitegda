@@ -6,62 +6,168 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>768</width>
-    <height>562</height>
+    <width>1090</width>
+    <height>612</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Scrivania</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="4">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="margin">
+     <number>4</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="minimumSize">
        <size>
-        <width>191</width>
-        <height>20</height>
+        <width>900</width>
+        <height>300</height>
        </size>
       </property>
-     </spacer>
-    </item>
-    <item row="0" column="0">
-     <widget class="QPushButton" name="pushButtonDaiPerLetto">
-      <property name="text">
-       <string>dai per letto</string>
+      <property name="currentIndex">
+       <number>0</number>
       </property>
+      <widget class="QWidget" name="tabProtocolli">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <attribute name="title">
+        <string>Protocolli</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,3,2">
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxUfficio">
+            <property name="minimumSize">
+             <size>
+              <width>500</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonFiltra">
+            <property name="text">
+             <string>filtra per ufficio</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>191</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QTableView" name="attribuzioni"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QGroupBox" name="groupBox">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>160</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>250</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Anteprima</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout" columnstretch="2,1">
+           <property name="margin">
+            <number>4</number>
+           </property>
+           <property name="spacing">
+            <number>4</number>
+           </property>
+           <item row="3" column="1">
+            <widget class="QListWidget" name="listWidget_uffici"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QTextEdit" name="textEdit_oggetto"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Attribuzioni</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QListWidget" name="listWidget_soggetti"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QListWidget" name="listWidget_attribuzioni"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Soggetti</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Uffici</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Oggetto</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabRichieste">
+       <attribute name="title">
+        <string>Richieste</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QTableView" name="richieste"/>
+        </item>
+       </layout>
+      </widget>
      </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QPushButton" name="pushButtonApriProtocollo">
-      <property name="text">
-       <string>apri protocollo</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QPushButton" name="pushButtonApriDocumenti">
-      <property name="text">
-       <string>apri documenti</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="3">
-     <widget class="QPushButton" name="pushButtonAggiornaLista">
-      <property name="text">
-       <string>aggiorna lista</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="5">
-     <widget class="QTableView" name="attribuzioni"/>
     </item>
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

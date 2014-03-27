@@ -19,73 +19,30 @@ package com.axiastudio.suite;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.ICriteriaFactory;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
-import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
-import com.axiastudio.pypapi.plugins.ooops.RuleSet;
-import com.axiastudio.pypapi.plugins.ooops.Template;
-import com.axiastudio.pypapi.ui.Dialog;
-import com.axiastudio.pypapi.ui.IQuickInsertDialog;
-import com.axiastudio.pypapi.ui.Window;
-import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
-import com.axiastudio.suite.anagrafiche.entities.Gruppo;
-import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
-import com.axiastudio.suite.anagrafiche.entities.Relazione;
-import com.axiastudio.suite.anagrafiche.entities.Riferimento;
-import com.axiastudio.suite.anagrafiche.entities.Soggetto;
-import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
-import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
-import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
 import com.axiastudio.suite.base.Login;
-import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.deliberedetermine.entities.Determina;
-import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.demo.DemoData;
-import com.axiastudio.suite.finanziaria.entities.Capitolo;
-import com.axiastudio.suite.finanziaria.entities.Servizio;
-import com.axiastudio.suite.pratiche.PraticaCallbacks;
-import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.pratiche.entities.TipoPratica;
-import com.axiastudio.suite.pratiche.forms.FormPratica;
+import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
+import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
+import com.axiastudio.suite.plugins.ooops.RuleSet;
+import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
-import com.axiastudio.suite.procedimenti.entities.Norma;
-import com.axiastudio.suite.procedimenti.entities.Procedimento;
-import com.axiastudio.suite.procedimenti.forms.FormDelega;
-import com.axiastudio.suite.protocollo.ProtocolloAdapters;
-import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
-import com.axiastudio.suite.protocollo.ProtocolloPrivate;
-import com.axiastudio.suite.protocollo.entities.Fascicolo;
-import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
-import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
-import com.axiastudio.suite.protocollo.forms.FormProtocollo;
-import com.axiastudio.suite.protocollo.forms.FormSoggettoProtocollo;
-import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
-import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
-import com.axiastudio.suite.sedute.entities.CaricaCommissione;
-import com.axiastudio.suite.sedute.entities.Commissione;
-import com.axiastudio.suite.sedute.entities.Seduta;
-import com.axiastudio.suite.sedute.entities.TipoSeduta;
-import com.axiastudio.suite.sedute.forms.FormTipoSeduta;
 import com.trolltech.qt.gui.QFileDialog;
 import com.trolltech.qt.gui.QMessageBox;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Root;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -99,189 +56,19 @@ public class SuiteDemo {
         db.open("SuitePU");
         Register.registerUtility(db, IDatabase.class);
         
-        Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
-        Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
-        Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
-        Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));
-        
+        // dati demo
         DemoData.initSchema();
         DemoData.initData();
         
+        // applicazione Qt
         Application app = new Application(args);
-        
         app.setLanguage("it");
         
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/base/forms/ufficio.ui",
-                              Ufficio.class,
-                              Window.class,
-                              "Uffici");
+        // configurazione SuitePA
+        Configure.configure(db, System.getProperties());
 
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/base/forms/utente.ui",
-                              Utente.class,
-                              Window.class,
-                              "Utenti");
-        
-        Register.registerForm(db.getEntityManagerFactory(),
-                              null,
-                              AlboProfessionale.class,
-                              Window.class,
-                              "Albo professionale");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/anagrafiche/forms/gruppo.ui",
-                              Gruppo.class,
-                              Window.class,
-                              "Gruppo");
-        
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/anagrafiche/forms/relazione.ui",
-                              Relazione.class,
-                              Window.class,
-                              "Gruppo");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
-                              Soggetto.class,
-                              FormSoggetto.class,
-                              "Soggetti anagrafici");
-
-        Register.registerUtility(FormQuickInsertSoggetto.class, IQuickInsertDialog.class, Soggetto.class.getName());
-        
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/anagrafiche/forms/indirizzo.ui",
-                              Indirizzo.class,
-                              FormIndirizzo.class,
-                              "Indirizzo");
-        
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/anagrafiche/forms/riferimento.ui",
-                              Riferimento.class,
-                              Dialog.class,
-                              "Riferimento");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",
-                              Pratica.class,
-                              FormPratica.class,
-                              "Pratiche");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/pratiche/forms/tipopratica.ui",
-                              TipoPratica.class,
-                              Window.class,
-                              "Tipo Pratica");
-        
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
-                              SoggettoProtocollo.class,
-                              FormSoggettoProtocollo.class,
-                              "Soggetto del protocollo");
-      
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
-                              SoggettoRiservatoProtocollo.class,
-                              FormSoggettoProtocollo.class,
-                              "Soggetto riservato del protocollo");
-        
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/protocollo/forms/praticaprotocollo.ui",
-                              PraticaProtocollo.class,
-                              Dialog.class,
-                              "Pratica contenente il protocollo");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/protocollo/forms/protocollo.ui",
-                              Protocollo.class,
-                              FormProtocollo.class, // custom form
-                              "Protocolli");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              null,
-                              Fascicolo.class,
-                              Window.class,
-                              "Finestra fascicolo");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/pubblicazioni/forms/pubblicazione.ui",
-                              Pubblicazione.class,
-                              FormPubblicazione.class,
-                              "Pubblicazione all'albo");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              null,
-                              Carica.class,
-                              Window.class,
-                              "Carica");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              null,
-                              Commissione.class,
-                              Window.class,
-                              "Commissione");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/sedute/forms/caricacommissione.ui",
-                              CaricaCommissione.class,
-                              Window.class,
-                              "Carica-commissione");
-        
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/sedute/forms/tiposeduta.ui",
-                              TipoSeduta.class,
-                              FormTipoSeduta.class,
-                              "Tipo seduta");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/sedute/forms/seduta.ui",
-                              Seduta.class,
-                              Window.class,
-                              "Seduta");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/finanziaria/forms/servizio.ui",
-                              Servizio.class,
-                              Window.class,
-                              "Servizi");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              null,
-                              Capitolo.class,
-                              Window.class,
-                              "Capitoli");
-        
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
-                              Determina.class,
-                              FormDetermina.class,
-                              "Determine");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                               "classpath:com/axiastudio/suite/deliberedetermine/forms/movimentodetermina.ui",
-                               MovimentoDetermina.class,
-                               Dialog.class,
-                               "Movimento determina");
-
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/procedimenti/forms/norma.ui",
-                              Norma.class,
-                              Window.class,
-                              "Norma");
-       
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/procedimenti/forms/procedimento.ui",
-                              Procedimento.class,
-                              Window.class,
-                              "Procedimenti");
-        
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
-                              Delega.class,
-                              FormDelega.class,
-                              "Incarichi e deleghe");
         // TODO: filtro sulle deleghe
-       try {
+        try {
             Method provider = GestoreDeleghe.class.getMethod("filtroDelegheUtente", CriteriaBuilder.class, Root.class);
             Register.registerUtility(provider, ICriteriaFactory.class, Delega.class.getName());
         } catch (NoSuchMethodException ex) {
@@ -334,7 +121,7 @@ public class SuiteDemo {
         IStreamProvider streamProviderDetermina = new FileStreamProvider("demo/determina.ott");
         Map<String, Object> objectsMap = new HashMap();
         objectsMap.put("gestoreDeleghe", gestoreDeleghe);
-        Template template = new Template(streamProviderDetermina, "Determina", "Template determina", ruleSet, objectsMap);
+        Template template = new Template(streamProviderDetermina, "Determina", "Template determina", null, ruleSet, objectsMap);
         ooopsPlugin.addTemplate(template);
         
         Register.registerPlugin(ooopsPlugin, FormDetermina.class);
@@ -365,15 +152,17 @@ public class SuiteDemo {
         }
         
         Login login = new Login();
+        login.setWindowTitle("PyPaPi Suite PA (demo)");
         int res = login.exec();
         if( res == 1 ){
         
             Mdi mdi = new Mdi();
+            mdi.setWindowTitle("PyPaPi Suite PA (demo)");
             //mdi.showMaximized();
             mdi.show();
             
             app.setCustomApplicationName("PyPaPi SuitePA - modalità dimostrazione");
-            app.setCustomApplicationCredits("Copyright AXIA Studio 2012<br/>");
+            app.setCustomApplicationCredits("Copyright AXIA Studio 2013<br/>");
             app.exec();
         }
         

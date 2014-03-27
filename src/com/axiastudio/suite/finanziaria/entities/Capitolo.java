@@ -16,21 +16,15 @@
  */
 package com.axiastudio.suite.finanziaria.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 /**
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 @Entity
-@Table(schema="finanziaria")
+@Table(schema="FINANZIARIA")
 @SequenceGenerator(name="gencapitolo", sequenceName="finanziaria.capitolo_id_seq", initialValue=1, allocationSize=1)
 public class Capitolo implements Serializable {
     private static final long serialVersionUID = 1L;

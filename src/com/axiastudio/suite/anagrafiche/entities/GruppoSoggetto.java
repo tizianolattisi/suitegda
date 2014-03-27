@@ -16,15 +16,11 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
+import com.axiastudio.suite.SuiteUtil;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.util.Date;
 
 /**
  *
@@ -44,6 +40,14 @@ public class GruppoSoggetto implements Serializable {
     @JoinColumn(name = "gruppo", referencedColumnName = "id")
     @ManyToOne
     private Gruppo gruppo;
+    @Column(name="datanascita")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datanascita;
+    @Column(name="datacessazione")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datacessazione;
+    @Column(name="note")
+    private String note;
 
     public Long getId() {
         return id;
@@ -69,6 +73,48 @@ public class GruppoSoggetto implements Serializable {
         this.gruppo = gruppo;
     }
 
+    public Date getDatanascita() {
+        return datanascita;
+    }
+
+    public void setDatanascita(Date datanascita) {
+        this.datanascita = datanascita;
+    }
+
+    public Date getDatacessazione() {
+        return datacessazione;
+    }
+
+    public void setDatacessazione(Date datacessazione) {
+        this.datacessazione = datacessazione;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+    
+    /*
+     * Il predicato esprime la relazione nel corretto verso
+     */
+    public String getPredicato(){
+        String out = "";
+        out += this.getGruppo();
+        if( this.getDatanascita() != null ){
+            out += " dal " + SuiteUtil.DATE_FORMAT.format(this.getDatanascita());
+        }
+        if( this.getDatacessazione()!= null ){
+            out += " fino al " + SuiteUtil.DATE_FORMAT.format(this.getDatacessazione());
+        }
+        return out;
+    }
+    
+    public void setPredicato(String predicato){
+        // non deve fare nulla
+    }
     @Override
     public int hashCode() {
         int hash = 0;

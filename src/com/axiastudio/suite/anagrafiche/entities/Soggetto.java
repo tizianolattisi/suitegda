@@ -17,16 +17,20 @@
 package com.axiastudio.suite.anagrafiche.entities;
 
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@EntityListeners({TimeStampedListener.class})
 @Table(schema="ANAGRAFICHE")
 @SequenceGenerator(name="gensoggetto", sequenceName="anagrafiche.soggetto_id_seq", initialValue=1, allocationSize=1)
 public class Soggetto implements Serializable, ITimeStamped {
@@ -39,10 +43,10 @@ public class Soggetto implements Serializable, ITimeStamped {
     private TipoSoggetto tipo = TipoSoggetto.PERSONA;
     @Column(name="sessosoggetto")
     @Enumerated(EnumType.STRING)
-    private SessoSoggetto sessoSoggetto;
-    @Column(name="titolosoggetto")
-    @Enumerated(EnumType.STRING)
-    private TitoloSoggetto titoloSoggetto;
+    private SessoSoggetto sessosoggetto;
+    @JoinColumn(name = "titolosoggetto", referencedColumnName = "id")
+    @ManyToOne
+    private TitoloSoggetto titolosoggetto;
     @Column(name="nick")
     private String nick;
     @Column(name="nome")
@@ -96,14 +100,20 @@ public class Soggetto implements Serializable, ITimeStamped {
     private Collection<Riferimento> riferimentoCollection;
     @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<RelazioneSoggetto> relazioneSoggettoCollection;
+    @OneToMany(mappedBy = "soggetto", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<TitoloStudioSoggetto> titolostudioSoggettoCollection;
 
     /* timestamped */
-    @Column(name="rec_creato")
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
     @Column(name="rec_modificato")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
     
     public Long getId() {
         return id;
@@ -153,20 +163,20 @@ public class Soggetto implements Serializable, ITimeStamped {
         this.tipo = tipo;
     }
 
-    public SessoSoggetto getSessoSoggetto() {
-        return sessoSoggetto;
+    public SessoSoggetto getSessosoggetto() {
+        return sessosoggetto;
     }
 
-    public void setSessoSoggetto(SessoSoggetto sessoSoggetto) {
-        this.sessoSoggetto = sessoSoggetto;
+    public void setSessosoggetto(SessoSoggetto sessoSoggetto) {
+        this.sessosoggetto = sessoSoggetto;
     }
 
-    public TitoloSoggetto getTitoloSoggetto() {
-        return titoloSoggetto;
+    public TitoloSoggetto getTitolosoggetto() {
+        return titolosoggetto;
     }
 
-    public void setTitoloSoggetto(TitoloSoggetto titoloSoggetto) {
-        this.titoloSoggetto = titoloSoggetto;
+    public void setTitolosoggetto(TitoloSoggetto titolosoggetto) {
+        this.titolosoggetto = titolosoggetto;
     }
 
     public String getCodicefiscale() {
@@ -337,24 +347,125 @@ public class Soggetto implements Serializable, ITimeStamped {
         this.riferimentoCollection = riferimentoCollection;
     }
 
-    @Override
+    public Collection<TitoloStudioSoggetto> getTitolostudioSoggettoCollection() {
+        return titolostudioSoggettoCollection;
+    }
+
+    public void setTitolostudioSoggettoCollection(Collection<TitoloStudioSoggetto> titolostudioSoggettoCollection) {
+        this.titolostudioSoggettoCollection = titolostudioSoggettoCollection;
+    }
+
+/* In ricerca, ritorna l'unione delle denominazioni dei soggetti */
+    
+    public String getDescrizione(){
+        String out = "";
+        if ( this.denominazione != null) {
+            out += " " + this.denominazione;
+        }
+        if ( this.denominazione2 != null) {
+            out += " " + this.denominazione2;
+        }
+        if ( this.denominazione3 != null) {
+            out += " " + this.denominazione3;
+        }
+        if ( this.ragionesociale != null) {
+            out += " " + this.ragionesociale;
+        }
+        if ( this.cognome != null) {
+            out += " " + this.cognome;
+        }
+        if ( this.nome != null) {
+            out += " " + this.nome;
+        }
+        return out.trim();
+    }
+    
+    public void setDescrizione(String descrizione){
+        // non deve fare nulla
+    }
+
+    public String getIndirizzo() {
+        String out ="";
+        for (Indirizzo indirizzo: indirizzoCollection) {
+            if (indirizzo.getPrincipale() == Boolean.TRUE) {
+                out=String.format("%s %s", indirizzo.getVia(), indirizzo.getCivico());
+            }
+        }
+        return out.trim();
+    }
+
+    public void setIndirizzo(String indirizzo){
+        // non deve fare nulla
+    }
+
+    public String getComune() {
+        String out ="";
+        for (Indirizzo indirizzo: indirizzoCollection) {
+            if (indirizzo.getPrincipale() == Boolean.TRUE) {
+                out=String.format("%s", indirizzo.getComune());
+                if (indirizzo.getProvincia() != null) {
+                    out+=" (" + indirizzo.getProvincia() + ")";
+                }
+            }
+        }
+        return out.trim();
+    }
+
+    public void setComune(String comune){
+        // non deve fare nulla
+    }
+
+    public String getCessazione() {
+
+        if ( this.getDatacessazione() == null ) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.applyPattern("dd/MM/yyyy");
+        return sdf.format(this.getDatacessazione());
+    }
+
+    public void setCessazione(String cessazione){
+        // non deve fare nulla
+    }
+
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     public Date getRecordcreato() {
         return recordcreato;
     }
 
     public void setRecordcreato(Date recordcreato) {
-        
+        this.recordcreato = recordcreato;
     }
 
-    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
     public Date getRecordmodificato() {
         return recordmodificato;
     }
 
     public void setRecordmodificato(Date recordmodificato) {
-        
+        this.recordmodificato = recordmodificato;
     }
-    
+
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -380,12 +491,13 @@ public class Soggetto implements Serializable, ITimeStamped {
         if( this.tipo == null ){
             return "-";
         }
+        String out = "(" + this.getTipo().toString().substring(0, 1) + "-" + this.id + ") ";
         if( this.tipo.equals(TipoSoggetto.PERSONA) ){
-            return this.nome+" "+this.cognome;
+            return out + this.nome+" "+this.cognome;
         } else if( this.tipo.equals(TipoSoggetto.AZIENDA) ){
-            return this.ragionesociale;
+            return out + this.ragionesociale;
         } else if ( this.tipo.equals(TipoSoggetto.ENTE) ){
-            return this.denominazione;
+            return out + this.denominazione;
         }
         return "-";
         //return "com.axiastudio.suite.anagrafiche.entities.Soggetto[ id=" + id + " ]";

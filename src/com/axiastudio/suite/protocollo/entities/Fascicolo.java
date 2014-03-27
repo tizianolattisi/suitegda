@@ -16,8 +16,8 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
-import java.io.Serializable;
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *
@@ -112,7 +112,7 @@ public class Fascicolo implements Serializable {
 
     @Override
     public String toString() {
-        return "(" + categoria + "-" + classe + "-" + fascicolo + ") " + this.getDescrizione();
+        return " (" + categoria + "-" + classe + "-" + fascicolo + ") " + this.getDescrizione();
     }
     
 }

@@ -17,16 +17,19 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@EntityListeners({TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genpraticaprotocollo", sequenceName="protocollo.praticaprotocollo_id_seq", initialValue=1, allocationSize=1)
 public class PraticaProtocollo implements Serializable, ITimeStamped {
@@ -34,24 +37,29 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genpraticaprotocollo")
     private Long id;
-    @JoinColumn(name = "pratica", referencedColumnName = "id")
+    @JoinColumn(name = "pratica", referencedColumnName = "idpratica")
     @ManyToOne
     private Pratica pratica;
-    @JoinColumn(name = "protocollo", referencedColumnName = "id")
+    @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
-    @Enumerated(EnumType.STRING)
-    private TitoloPraticaProtocollo titolo;
+    @JoinColumn(name = "oggetto", referencedColumnName = "id")
+    @ManyToOne
+    private Oggetto oggetto;
     @Column(name="originale")
     private Boolean originale=false;
 
     /* timestamped */
-    @Column(name="rec_creato")
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
     @Column(name="rec_modificato")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
     
     public Long getId() {
         return id;
@@ -77,13 +85,15 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
         this.protocollo = protocollo;
     }
 
-    public TitoloPraticaProtocollo getTitolo() {
-        return titolo;
+    public Oggetto getOggetto() {
+        return oggetto;
     }
 
-    public void setTitolo(TitoloPraticaProtocollo titolo) {
-        this.titolo = titolo;
+    public void setOggetto(Oggetto oggetto) {
+        this.oggetto = oggetto;
     }
+
+
 
     public Boolean getOriginale() {
         return originale;
@@ -99,7 +109,7 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     }
 
     public void setRecordcreato(Date recordcreato) {
-        
+        this.recordcreato = recordcreato;
     }
 
     @Override
@@ -108,7 +118,25 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     }
 
     public void setRecordmodificato(Date recordmodificato) {
-        
+        this.recordmodificato = recordmodificato;
+    }
+    
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+   @Override
+   public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
     
     @Override

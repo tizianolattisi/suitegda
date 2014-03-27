@@ -19,13 +19,8 @@ package com.axiastudio.suite.protocollo;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.annotations.Private;
 import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

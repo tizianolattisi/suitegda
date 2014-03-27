@@ -16,18 +16,11 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
+import com.axiastudio.suite.SuiteUtil;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
 
 /**
  *
@@ -36,6 +29,12 @@ import javax.persistence.Temporal;
 @Entity
 @Table(schema="ANAGRAFICHE")
 @SequenceGenerator(name="genrelazionesoggetto", sequenceName="anagrafiche.relazionesoggetto_id_seq", initialValue=1, allocationSize=1)
+@NamedQuery(name="trovaReferenteSoggetto",
+        query = "SELECT rs FROM RelazioneSoggetto rs  "
+                + "WHERE rs.soggetto.id = :id AND " +
+                    "rs.soggetto.tipo!=:tipo AND rs.relazionato.tipo=:tipo AND " +
+                    "(rs.datanascita IS NULL OR rs.datanascita<=:data) AND "+
+                    "(rs.datacessazione IS NULL OR rs.datacessazione>=:data)")
 public class RelazioneSoggetto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -114,11 +113,45 @@ public class RelazioneSoggetto implements Serializable {
     public void setInvertita(Boolean invertita) {
         this.invertita = invertita;
     }
+    
+    /*
+     * Il predicato esprime la relazione nel corretto verso
+     */
+
+    public String getPredicato(){
+         return getPredicato(this.getRelazione(), this.getInvertita());
+    }
+
+    public String getPredicato(Relazione currentRelazione, Boolean currentInvertita){
+        String out = "";
+
+        if( currentRelazione != null ){
+            if( currentInvertita==null || ! currentInvertita ){
+                out += " " + currentRelazione.getDescrizione() + " ";
+            } else {
+                out += " " + currentRelazione.getInversa() + " ";
+            }
+        } else {
+            out += " è in relazione con ";
+        }
+        out += this.getRelazionato().toString();
+        if( this.getDatanascita() != null ){
+            out += " dal " + SuiteUtil.DATE_FORMAT.format(this.getDatanascita());
+        }
+        if( this.getDatacessazione()!= null ){
+            out += " fino al " + SuiteUtil.DATE_FORMAT.format(this.getDatacessazione());
+        }
+        return out;
+    }
+
+    public void setPredicato(String predicato){
+        // non deve fare nulla
+    }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (id != null ? (id > 0 ? id.hashCode() : ((Long)((-1*id)+1000000)).hashCode()) : 0);
         return hash;
     }
 
@@ -137,7 +170,7 @@ public class RelazioneSoggetto implements Serializable {
 
     @Override
     public String toString() {
-        return relazione.getDescrizione() + "... da completare...";
+        return this.getPredicato();
     }
     
 }
