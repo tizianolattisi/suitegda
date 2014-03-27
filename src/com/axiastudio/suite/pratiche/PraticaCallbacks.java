@@ -96,6 +96,10 @@ public class PraticaCallbacks {
             if (codifica == null) {
                 msg = "Errore nella creazione della codifica della pratica.";
                 return new Validation(false, msg);
+            } else if (codifica == "Codifica errata") {
+                msg = "È stata trovata una codifica anomala per la tipologia di pratica selezionata. Calcolo del progressivo non riuscito." +
+                        " Contattare l'assistenza.";
+                return new Validation(false, msg);
             }
         } else {
             // l'amministratore pratiche modifica anche se non appartenente all'ufficio gestore e
