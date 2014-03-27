@@ -76,7 +76,9 @@ public class FormMailboxList extends QDialog {
         EntityManager em = emf.createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(Mailbox.class);
-        Root root = cq.from(Mailbox.class);
+        Root<Mailbox> root = cq.from(Mailbox.class);
+        cq.select(root);
+        // TODO: filtro sulle mailbox relative a pec di uffici dell'utente con flag "leggepec"
         Query q = em.createQuery(cq);
         List<Mailbox> mailboxes = q.getResultList();
         while( tableWidget.rowCount() > 0 ){
