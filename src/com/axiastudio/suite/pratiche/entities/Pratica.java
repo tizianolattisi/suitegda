@@ -98,6 +98,8 @@ public class Pratica implements Serializable, ITimeStamped {
     @Column(name="datascadenza")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datascadenza;
+    @Column(name="codificaanomala")
+    private Boolean codificaanomala=false;
     @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     @OrderColumn(name="progressivo")
     private List<FasePratica> fasePraticaCollection;
@@ -317,6 +319,14 @@ public class Pratica implements Serializable, ITimeStamped {
 
     public void setFase(Fase fase) {
         this.fase = fase;
+    }
+
+    public Boolean getCodificaanomala() {
+        return codificaanomala;
+    }
+
+    public void setCodificaanomala(Boolean codificaanomala) {
+        this.codificaanomala = codificaanomala;
     }
 
     public List<FasePratica> getFasePraticaCollection() {
