@@ -16,13 +16,18 @@
  */
 package com.axiastudio.suite.plugins.ooops;
 
+import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +50,30 @@ public class RuleSet {
         binding.setVariable("param", entity);
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         binding.setVariable("utente", utente);
+
+        // documenti
+        Class formClass = (Class) Register.queryUtility(IForm.class, entity.getClass().getName());
+        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(formClass, "CMIS");
+        AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(entity);
+        List<String> documenti = new ArrayList<String>();
+        List<HashMap> children=null;
+        try {
+            children = alfrescoHelper.children();
+        } catch (Exception e){
+            // log?
+        }
+        // XXX: e se Alfresco non è disponibile?
+        if( children != null ){
+            for( Map child: children ){
+                String fileName = (String) child.get("contentStreamFileName");
+                if( fileName != null ){ // XXX: per saltare le cartelle
+                    documenti.add(fileName);
+                }
+            }
+        }
+        binding.setVariable("documenti", documenti);
+
+
         GroovyShell shell = new GroovyShell(binding);
         for( String key: this.rules.keySet() ){
             String groovy = this.rules.get(key) + "(param)";
