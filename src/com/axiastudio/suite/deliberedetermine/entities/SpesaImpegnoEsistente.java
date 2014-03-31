@@ -49,7 +49,7 @@ public class SpesaImpegnoEsistente implements Serializable {
     @Column(name="annoimpegno")
     private Integer annoImpegno;
     @Column(name="importo")
-    private BigDecimal importo;
+    private BigDecimal importo=BigDecimal.valueOf(0);
     @Column(name="annoesercizio")
     private Integer annoEsercizio;
     @Column(name="codicebeneficiario")
