@@ -28,6 +28,7 @@
     <class>com.axiastudio.suite.procedimenti.entities.Carica</class>
     <class>com.axiastudio.suite.sedute.entities.DelegaSeduta</class>
     <class>com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina</class>
+    <class>com.axiastudio.suite.deliberedetermine.entities.SpesaImpegnoEsistente</class>
     <class>com.axiastudio.suite.finanziaria.entities.Capitolo</class>
     <class>com.axiastudio.suite.finanziaria.entities.Progetto</class>
     <class>com.axiastudio.suite.procedimenti.entities.TipoNorma</class>

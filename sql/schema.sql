@@ -423,6 +423,7 @@ ALTER TABLE ONLY servizio
 
 CREATE TABLE capitolo (
     id bigserial NOT NULL,
+    numero character varying(6),
     descrizione character varying(1024)
 );
 ALTER TABLE finanziaria.capitolo OWNER TO postgres;
@@ -683,11 +684,14 @@ CREATE TABLE pratica (
     datachiusura date,
     datatermineistruttoria date,
     datascadenza date,
-    procedimento bigint
+    procedimento bigint,
+    codificaanomala boolean NOT NULL DEFAULT FALSE
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE pratiche.pratica OWNER TO postgres;
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT pratica_idpratica_key UNIQUE (idpratica);
+ALTER TABLE ONLY pratica
+    ADD CONSTRAINT pratica_codiceinterno_key UNIQUE (codiceinterno);
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT pratica_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY pratica
@@ -1195,6 +1199,7 @@ CREATE TABLE determina (
     oggetto character varying(1024),
     dientrata boolean NOT NULL DEFAULT FALSE,
     dispesa boolean NOT NULL DEFAULT FALSE,
+    spesaimpegnoesistente boolean NOT NULL DEFAULT FALSE,
     diregolarizzazione boolean NOT NULL DEFAULT FALSE,
     diliquidazione boolean NOT NULL DEFAULT FALSE,
     diincarico boolean NOT NULL DEFAULT FALSE,
@@ -1266,7 +1271,13 @@ CREATE TABLE movimentodetermina (
     importo numeric(15,2),
     importoimpegnoaccertamento numeric(15,2),
     tipomovimento character varying(255),
-    annoesercizio bigint
+    annoesercizio bigint,
+    codicebeneficiario bigint,
+    descrizionebeneficiario character varying(255),
+    codicecup character varying(15),
+    codicecig character varying(40),
+    cespite  character varying(20),
+    descrizionecespite character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.movimentodetermina OWNER TO postgres;
 ALTER TABLE ONLY movimentodetermina
@@ -1275,6 +1286,28 @@ ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_determina FOREIGN KEY (determina) REFERENCES determina(id);
 ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_capitolo FOREIGN KEY (capitolo) REFERENCES finanziaria.capitolo(id);
+
+CREATE TABLE spesaimpegnoesistente (
+    id bigserial NOT NULL,
+    determina bigint,
+    capitolo integer,
+    impegno character varying(255),
+    sottoimpegno character varying(255),
+    annoimpegno integer,
+    importo numeric(15,2),
+    annoesercizio integer,
+    codicebeneficiario bigint,
+    descrizionebeneficiario character varying(255),
+    codicecup character varying(15),
+    codicecig character varying(40),
+    cespite  character varying(20),
+    descrizionecespite character varying(255)
+) INHERITS (generale.withtimestamp);
+ALTER TABLE deliberedetermine.spesaimpegnoesistente OWNER TO postgres;
+ALTER TABLE ONLY spesaimpegnoesistente
+    ADD CONSTRAINT spesaimpegnoesistente_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY spesaimpegnoesistente
+    ADD CONSTRAINT fk_spesaimpegnoesistente_determina FOREIGN KEY (determina) REFERENCES determina(id);
 
 
 -- modelli

@@ -70,9 +70,13 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<MovimentoDetermina> movimentoDeterminaCollection;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<SpesaImpegnoEsistente> spesaImpegnoEsistenteCollection;
+    @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioDetermina> ufficioDeterminaCollection;
     @Column(name="dispesa")
     private Boolean dispesa=Boolean.FALSE;
+    @Column(name="spesaimpegnoesistente")
+    private Boolean spesaimpegnoesistente =Boolean.FALSE;
     @Column(name="dientrata")
     private Boolean diEntrata=Boolean.FALSE;
     @Column(name="diregolarizzazione")
@@ -218,6 +222,14 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
         this.movimentoDeterminaCollection = movimentoDeterminaCollection;
     }
 
+    public Collection<SpesaImpegnoEsistente> getSpesaImpegnoEsistenteCollection() {
+        return spesaImpegnoEsistenteCollection;
+    }
+
+    public void setSpesaImpegnoEsistenteCollection(Collection<SpesaImpegnoEsistente> spesaImpegnoEsistenteCollection) {
+        this.spesaImpegnoEsistenteCollection = spesaImpegnoEsistenteCollection;
+    }
+
     public Collection<UfficioDetermina> getUfficioDeterminaCollection() {
         return ufficioDeterminaCollection;
     }
@@ -232,6 +244,14 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
 
     public void setDispesa(Boolean dispesa) {
         this.dispesa = dispesa;
+    }
+
+    public Boolean getSpesaimpegnoesistente() {
+        return spesaimpegnoesistente;
+    }
+
+    public void setSpesaimpegnoesistente(Boolean spesaprecedenteimpegno) {
+        this.spesaimpegnoesistente = spesaprecedenteimpegno;
     }
 
     public Boolean getDiEntrata() {

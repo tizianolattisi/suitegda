@@ -28,39 +28,30 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(schema="deliberedetermine")
-@SequenceGenerator(name="genmovimentodetermina", sequenceName="deliberedetermine.movimentodetermina_id_seq", initialValue=1, allocationSize=1)
-public class MovimentoDetermina implements Serializable {
+@SequenceGenerator(name="genspesaimpegnoesistente", sequenceName="deliberedetermine.spesaimpegnoesistente_id_seq", initialValue=1, allocationSize=1)
+public class SpesaImpegnoEsistente implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genmovimentodetermina")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genspesaimpegnoesistente")
     private Long id;
     @JoinColumn(name = "determina", referencedColumnName = "id")
     @ManyToOne
     private Determina determina;
-    @Column(name="tipomovimento")
-    @Enumerated(EnumType.STRING)
-    private TipoMovimento tipoMovimento;
-    @JoinColumn(name = "capitolo", referencedColumnName = "id")
+/*    @JoinColumn(name = "capitolo", referencedColumnName = "id")
     @ManyToOne
-    private Capitolo capitolo;
-    @Column(name="articolo")
-    private String articolo;
-    @Column(name="codicemeccanografico")
-    private String codiceMeccanografico;
+    private Capitolo capitolo;*/
+    @Column(name="capitolo")
+    private Integer capitolo;
     @Column(name="impegno")
     private String impegno;
     @Column(name="sottoimpegno")
     private String sottoImpegno;
-    @Column(name="descrizioneimpegno")
-    private String descrizioneImpegno;
     @Column(name="annoimpegno")
-    private Long annoImpegno;
+    private Integer annoImpegno;
     @Column(name="importo")
     private BigDecimal importo;
-    @Column(name="importoimpegnoaccertamento")
-    private BigDecimal importoImpegnoAccertamento;
     @Column(name="annoesercizio")
-    private Long annoEsercizio;
+    private Integer annoEsercizio;
     @Column(name="codicebeneficiario")
     private Long codiceBeneficiario;
     @Column(name="descrizionebeneficiario")
@@ -90,36 +81,12 @@ public class MovimentoDetermina implements Serializable {
         this.determina = determina;
     }
 
-    public TipoMovimento getTipoMovimento() {
-        return tipoMovimento;
-    }
-
-    public void setTipoMovimento(TipoMovimento tipoMovimento) {
-        this.tipoMovimento = tipoMovimento;
-    }
-
-    public Capitolo getCapitolo() {
+    public Integer getCapitolo() {
         return capitolo;
     }
 
-    public void setCapitolo(Capitolo capitolo) {
+    public void setCapitolo(Integer capitolo) {
         this.capitolo = capitolo;
-    }
-
-    public String getArticolo() {
-        return articolo;
-    }
-
-    public void setArticolo(String articolo) {
-        this.articolo = articolo;
-    }
-
-    public String getCodiceMeccanografico() {
-        return codiceMeccanografico;
-    }
-
-    public void setCodiceMeccanografico(String codiceMeccanografico) {
-        this.codiceMeccanografico = codiceMeccanografico;
     }
 
     public String getImpegno() {
@@ -138,19 +105,11 @@ public class MovimentoDetermina implements Serializable {
         this.sottoImpegno = sottoImpegno;
     }
 
-    public String getDescrizioneImpegno() {
-        return descrizioneImpegno;
-    }
-
-    public void setDescrizioneImpegno(String descrizioneImpegno) {
-        this.descrizioneImpegno = descrizioneImpegno;
-    }
-
-    public Long getAnnoImpegno() {
+    public Integer getAnnoImpegno() {
         return annoImpegno;
     }
 
-    public void setAnnoImpegno(Long annoImpegno) {
+    public void setAnnoImpegno(Integer annoImpegno) {
         this.annoImpegno = annoImpegno;
     }
 
@@ -162,19 +121,11 @@ public class MovimentoDetermina implements Serializable {
         this.importo = importo;
     }
 
-    public BigDecimal getImportoImpegnoAccertamento() {
-        return importoImpegnoAccertamento;
-    }
-
-    public void setImportoImpegnoAccertamento(BigDecimal importoImpegnoAccertamento) {
-        this.importoImpegnoAccertamento = importoImpegnoAccertamento;
-    }
-
-    public Long getAnnoEsercizio() {
+    public Integer getAnnoEsercizio() {
         return annoEsercizio;
     }
 
-    public void setAnnoEsercizio(Long annoEsercizio) {
+    public void setAnnoEsercizio(Integer annoEsercizio) {
         this.annoEsercizio = annoEsercizio;
     }
 
@@ -236,10 +187,10 @@ public class MovimentoDetermina implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MovimentoDetermina)) {
+        if (!(object instanceof SpesaImpegnoEsistente)) {
             return false;
         }
-        MovimentoDetermina other = (MovimentoDetermina) object;
+        SpesaImpegnoEsistente other = (SpesaImpegnoEsistente) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -248,7 +199,7 @@ public class MovimentoDetermina implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina[ id=" + id + " ]";
+        return "com.axiastudio.suite.deliberedetermine.entities.spesaimpegnoesistente[ id=" + id + " ]";
     }
 
 }

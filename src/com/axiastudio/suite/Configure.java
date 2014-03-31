@@ -36,6 +36,7 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaCallbacks;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
+import com.axiastudio.suite.deliberedetermine.entities.SpesaImpegnoEsistente;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
@@ -404,7 +405,12 @@ public class Configure {
                               "classpath:com/axiastudio/suite/deliberedetermine/forms/movimentodetermina.ui",
                               MovimentoDetermina.class,
                               Dialog.class);
-        
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/deliberedetermine/forms/spesaimpegnoesistente.ui",
+                SpesaImpegnoEsistente.class,
+                Dialog.class);
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/norma.ui",
                               Norma.class,
