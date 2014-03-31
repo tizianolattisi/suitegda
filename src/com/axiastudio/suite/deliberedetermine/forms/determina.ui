@@ -24,7 +24,16 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_4">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>4</number>
+    </property>
+    <property name="topMargin">
+     <number>4</number>
+    </property>
+    <property name="rightMargin">
+     <number>4</number>
+    </property>
+    <property name="bottomMargin">
      <number>4</number>
     </property>
     <property name="spacing">
@@ -36,7 +45,16 @@
        <string>Pratica</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>8</number>
+       </property>
+       <property name="rightMargin">
+        <number>8</number>
+       </property>
+       <property name="bottomMargin">
         <number>8</number>
        </property>
        <item row="0" column="0">
@@ -88,7 +106,16 @@
        <string>Registro</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>8</number>
+       </property>
+       <property name="rightMargin">
+        <number>8</number>
+       </property>
+       <property name="bottomMargin">
         <number>8</number>
        </property>
        <item row="0" column="0">
@@ -131,9 +158,30 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_5">
+        <widget class="QSpinBox" name="spinBox_3">
          <property name="enabled">
           <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frame">
+          <bool>true</bool>
+         </property>
+         <property name="keyboardTracking">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>2048</number>
+         </property>
+         <property name="value">
+          <number>0</number>
          </property>
          <property name="column" stdset="0">
           <string>numero</string>
@@ -152,7 +200,16 @@
        <string>Oggetto</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>8</number>
+       </property>
+       <property name="rightMargin">
+        <number>8</number>
+       </property>
+       <property name="bottomMargin">
         <number>8</number>
        </property>
        <item>
@@ -248,7 +305,16 @@
        <string>Servizi</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>8</number>
+       </property>
+       <property name="rightMargin">
+        <number>8</number>
+       </property>
+       <property name="bottomMargin">
         <number>8</number>
        </property>
        <item>
@@ -296,7 +362,16 @@
        <string>Procedimento</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_10">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>8</number>
+       </property>
+       <property name="rightMargin">
+        <number>8</number>
+       </property>
+       <property name="bottomMargin">
         <number>8</number>
        </property>
        <item>
@@ -311,7 +386,16 @@
        <string>Entrata/spesa</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>8</number>
+       </property>
+       <property name="rightMargin">
+        <number>8</number>
+       </property>
+       <property name="bottomMargin">
         <number>8</number>
        </property>
        <item row="2" column="1">
@@ -458,7 +542,7 @@
     <item row="6" column="0" colspan="4">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -466,7 +550,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_impegni">
           <property name="entity" stdset="0">
            <string>.movimentoDeterminaCollection</string>
           </property>

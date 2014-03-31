@@ -22,6 +22,7 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.ui.Delegate;
 import com.axiastudio.pypapi.ui.ITableModel;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.SuiteUtil;
@@ -59,6 +60,9 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         PyPaPiTableView tableViewServizi = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_servizi");
         tableViewServizi.entityInserted.connect(this, "servizioInserito(Object)");
         tableViewServizi.entityRemoved.connect(this, "servizioRimosso(Object)");
+
+        PyPaPiTableView tableView_impegni = (PyPaPiTableView) findChild(PyPaPiTableView.class, "tableView_impegni");
+        tableView_impegni.setItemDelegate(new Delegate(tableView_impegni));
     }
 
     @Override
