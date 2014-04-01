@@ -194,7 +194,8 @@ public class UfficioUtente implements Serializable {
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.base.entities.UfficioUtente[ id=" + id + " ]";
+        //return "com.axiastudio.suite.base.entities.UfficioUtente[ id=" + id + " ]";
+        return getUfficio().getId() + " - " + getUtente();
     }
     
 }

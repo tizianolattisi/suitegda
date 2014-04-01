@@ -26,7 +26,7 @@ import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.UtentePratica;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
-import com.axiastudio.suite.procedimenti.entities.UtenteProcedimento;
+import com.axiastudio.suite.procedimenti.entities.UfficioUtenteProcedimento;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -133,19 +133,19 @@ public class PraticaListener {
         // mi copio responsabile e istruttore dal procedimento
         Utente istruttore=null;
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        List<UtenteProcedimento> utentiProcedimento = new ArrayList<UtenteProcedimento>(pratica.getTipo().getProcedimento().getUtenteProcedimentoCollection());
+        List<UfficioUtenteProcedimento> utentiProcedimento = new ArrayList<UfficioUtenteProcedimento>(pratica.getTipo().getProcedimento().getUfficioUtenteProcedimentoCollection());
         List<UtentePratica> utentiPratica = new ArrayList<UtentePratica>();
         for( Integer i=0; i<utentiProcedimento.size(); i++ ){
-            UtenteProcedimento utenteProcedimento = utentiProcedimento.get(i);
-            Utente utente = utenteProcedimento.getUtente();
-            Ufficio ufficio = utenteProcedimento.getUfficio();
+            UfficioUtenteProcedimento ufficioUtenteProcedimento = utentiProcedimento.get(i);
+            Utente utente = ufficioUtenteProcedimento.getUfficioUtente().getUtente();
+            Ufficio ufficio = ufficioUtenteProcedimento.getUfficioUtente().getUfficio();
             // mi interessa solo l'ufficio gestore
             if( ufficio.equals(pratica.getGestione()) ) {
                 // se l'utente autenticato è nella lista come ufficio gestore della pratica e abilitato
-                if (utente.equals(autenticato) && utenteProcedimento.getAbilitato()) {
+                if (utente.equals(autenticato) && ufficioUtenteProcedimento.getAbilitato()) {
                     istruttore = utente;
                     break; // sicuramente è lui
-                } else if( utenteProcedimento.getAbituale() ){
+                } else if( ufficioUtenteProcedimento.getAbituale() ){
                     istruttore = utente;
                 }
             }

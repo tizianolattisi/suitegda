@@ -551,24 +551,21 @@ ALTER TABLE ONLY ufficioprocedimento
 ALTER TABLE ONLY ufficioprocedimento
     ADD CONSTRAINT fk_ufficioprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
-CREATE TABLE utenteprocedimento (
+CREATE TABLE ufficioutenteprocedimento (
     id bigserial NOT NULL,
     procedimento bigint,
-    utente bigint,
-    ufficio bigint,
+    ufficioutente bigint,
     responsabile boolean,
     abilitato boolean,
     abituale boolean
 ) INHERITS (generale.withtimestamp);
-ALTER TABLE procedimenti.utenteprocedimento OWNER TO postgres;
-ALTER TABLE ONLY utenteprocedimento
-    ADD CONSTRAINT utenteprocedimento_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY utenteprocedimento
-    ADD CONSTRAINT fk_utenteprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
-ALTER TABLE ONLY utenteprocedimento
-    ADD CONSTRAINT fk_utenteprocedimento_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
-ALTER TABLE ONLY ufficioprocedimento
-    ADD CONSTRAINT fk_utenteprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+ALTER TABLE procedimenti.ufficioutenteprocedimento OWNER TO postgres;
+ALTER TABLE ONLY ufficioutenteprocedimento
+    ADD CONSTRAINT ufficioutenteprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY ufficioutenteprocedimento
+    ADD CONSTRAINT fk_ufficioutenteprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY ufficioutenteprocedimento
+    ADD CONSTRAINT fk_ufficioutenteprocedimento_ufficioutente FOREIGN KEY (ufficioutente) REFERENCES base.ufficioutente(id);
 
 CREATE TABLE protocollo.fascicolo (
     id bigserial NOT NULL,
