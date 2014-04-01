@@ -29,6 +29,8 @@ import java.util.Date;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public interface IGestoreDeleghe {
+
+    public Utente trovaTitolare(CodiceCarica codiceCarica, Servizio servizio);
     
     public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica);
 

@@ -45,6 +45,31 @@ import java.util.List;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class GestoreDeleghe implements IGestoreDeleghe {
+
+    public Utente trovaTitolare(CodiceCarica codiceCarica, Servizio servizio) {
+        Carica carica = this.findCarica(codiceCarica);
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Delega> cq = cb.createQuery(Delega.class);
+        Root from = cq.from(Delega.class);
+
+        List<Predicate> predicates = new ArrayList();
+        predicates.add(cb.equal(from.get("carica"), carica));
+        predicates.add(cb.equal(from.get("servizio"), servizio));
+        predicates.add(cb.equal(from.get("titolare"), true));
+
+        cq = cq.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+
+        TypedQuery<Delega> tq = em.createQuery(cq);
+        List<Delega> deleghe = tq.getResultList();
+        if( deleghe.size()==1 ){
+            Utente utente = deleghe.get(0).getUtente();
+            em.detach(utente);
+            return utente;
+        }
+        return null;
+    }
         
     private List<Delega> trovaTitoliEDeleghe(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
 
