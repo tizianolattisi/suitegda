@@ -89,7 +89,7 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     private String referentePolitico;
     @JoinColumn(name = "responsabile", referencedColumnName = "id")
     @ManyToOne
-    private Utente Responsabile;
+    private Utente responsabile;
     @Column(name="anno")
     private Integer anno;
     @Column(name="numero")
@@ -327,11 +327,11 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     }
 
     public Utente getResponsabile() {
-        return Responsabile;
+        return responsabile;
     }
 
     public void setResponsabile(Utente responsabile) {
-        Responsabile = responsabile;
+        this.responsabile = responsabile;
     }
 
     public TipoPubblicazione getPubblicabile() {
