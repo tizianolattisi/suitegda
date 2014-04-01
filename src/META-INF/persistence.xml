@@ -72,6 +72,7 @@
     <class>com.axiastudio.suite.richieste.entities.DestinatarioUfficio</class>
     <class>com.axiastudio.suite.richieste.entities.DestinatarioUtente</class>
     <class>com.axiastudio.suite.pratiche.entities.Visto</class>
+    <class>com.axiastudio.suite.pratiche.entities.UtentePratica</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>

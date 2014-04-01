@@ -19,9 +19,14 @@ package com.axiastudio.suite.pratiche;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.pratiche.entities.UtentePratica;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
+import com.axiastudio.suite.procedimenti.entities.UtenteProcedimento;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -30,10 +35,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -127,6 +129,34 @@ public class PraticaListener {
             }
         }
         pratica.setFasePraticaCollection(fasiPratica);
+
+        // mi copio responsabile e istruttore dal procedimento
+        Utente istruttore=null;
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        List<UtenteProcedimento> utentiProcedimento = new ArrayList<UtenteProcedimento>(pratica.getTipo().getProcedimento().getUtenteProcedimentoCollection());
+        List<UtentePratica> utentiPratica = new ArrayList<UtentePratica>();
+        for( Integer i=0; i<utentiProcedimento.size(); i++ ){
+            UtenteProcedimento utenteProcedimento = utentiProcedimento.get(i);
+            Utente utente = utenteProcedimento.getUtente();
+            Ufficio ufficio = utenteProcedimento.getUfficio();
+            // mi interessa solo l'ufficio gestore
+            if( ufficio.equals(pratica.getGestione()) ) {
+                // se l'utente autenticato è nella lista come ufficio gestore della pratica e abilitato
+                if (utente.equals(autenticato) && utenteProcedimento.getAbilitato()) {
+                    istruttore = utente;
+                    break; // sicuramente è lui
+                } else if( utenteProcedimento.getAbituale() ){
+                    istruttore = utente;
+                }
+            }
+        }
+        UtentePratica utentePratica = new UtentePratica();
+        utentePratica.setUtente(istruttore);
+        utentePratica.setIstruttore(true);
+        utentePratica.setPratica(pratica);
+        utentiPratica.add(utentePratica);
+        pratica.setUtentePraticaCollection(utentiPratica);
+
     }
 
 }

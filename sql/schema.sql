@@ -814,6 +814,23 @@ ADD CONSTRAINT fk_fasepratica_confermata FOREIGN KEY (confermata) REFERENCES pra
 ALTER TABLE ONLY fasepratica
 ADD CONSTRAINT fk_fasepratica_rifiutata FOREIGN KEY (rifiutata) REFERENCES pratiche.fasepratica(id);
 
+CREATE TABLE utentepratica (
+  id bigserial NOT NULL,
+  pratica bigint,
+  utente bigint,
+  responsabile boolean,
+  istruttore boolean,
+  dal date,
+  al date,
+  motivazione character varying(512)
+) INHERITS (generale.withtimestamp);
+ALTER TABLE pratiche.utentepratica OWNER TO postgres;
+ALTER TABLE ONLY utentepratica
+ADD CONSTRAINT utentepratica_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY utentepratica
+ADD CONSTRAINT fk_utentepratica_pratica FOREIGN KEY (pratica) REFERENCES pratica(id);
+ALTER TABLE ONLY utentepratica
+ADD CONSTRAINT fk_utentepratica_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
 
 CREATE TABLE visto (
   id bigserial NOT NULL,

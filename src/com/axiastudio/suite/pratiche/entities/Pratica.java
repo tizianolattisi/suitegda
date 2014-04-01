@@ -105,6 +105,8 @@ public class Pratica implements Serializable, ITimeStamped {
     private List<FasePratica> fasePraticaCollection;
     @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Visto> vistoCollection;
+    @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<UtentePratica> utentePraticaCollection;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -383,7 +385,15 @@ public class Pratica implements Serializable, ITimeStamped {
     public void setRecordmodificatoda(String recordmodificatoda) {
         this.recordmodificatoda = recordmodificatoda;
     }
-    
+
+    public Collection<UtentePratica> getUtentePraticaCollection() {
+        return utentePraticaCollection;
+    }
+
+    public void setUtentePraticaCollection(Collection<UtentePratica> utentePraticaCollection) {
+        this.utentePraticaCollection = utentePraticaCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
