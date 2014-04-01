@@ -26,6 +26,7 @@ import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
+import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
@@ -76,6 +77,17 @@ public class DeterminaCallbacks {
             if( nrServiziPrincipali > 1 ){
                 msg += "E' possibile e necessario impostare un solo servizio principale.\n";
                 return new Validation(false, msg);
+            }
+        }
+
+        // imposto il responsabile
+        for( ServizioDetermina sd: determina.getServizioDeterminaCollection() ){
+            if( sd.getPrincipale() ){
+                Servizio servizio = sd.getServizio();
+                Utente responsabile = gestoreDeleghe.trovaTitolare(CodiceCarica.RESPONSABILE_DI_SERVIZIO, servizio);
+                if( responsabile != null ){
+                    determina.setResponsabile(responsabile);
+                }
             }
         }
 
