@@ -130,15 +130,15 @@ CREATE TABLE utente (
 ALTER TABLE base.utente OWNER TO postgres;
 ALTER TABLE ONLY utente
     ADD CONSTRAINT utente_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY utente
-    ADD CONSTRAINT fk_utente_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
 
 CREATE TABLE ufficio (
     id bigserial NOT NULL,
     descrizione character varying(255),
+    denominazione character varying(500),
     sportello boolean NOT NULL DEFAULT FALSE,
     mittenteodestinatario boolean NOT NULL DEFAULT FALSE,
     attribuzione boolean NOT NULL DEFAULT FALSE,
+    assessorato boolean NOT NULL DEFAULT FALSE,
     pec character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE base.ufficio OWNER TO postgres;
@@ -270,6 +270,11 @@ ALTER TABLE ONLY soggetto
     ADD CONSTRAINT fk_soggetto_alboprofessionale FOREIGN KEY (alboprofessionale) REFERENCES alboprofessionale(id);
 ALTER TABLE ONLY soggetto
     ADD CONSTRAINT fk_soggetto_titolosoggetto FOREIGN KEY (titolosoggetto) REFERENCES titolosoggetto(id);
+
+-- Tabella base.utente
+ALTER TABLE ONLY utente
+ADD CONSTRAINT fk_utente_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+-- /Tabella base.utente
 
 CREATE TABLE grupposoggetto (
     id bigserial NOT NULL,
@@ -817,7 +822,7 @@ ADD CONSTRAINT fk_fasepratica_rifiutata FOREIGN KEY (rifiutata) REFERENCES prati
 
 CREATE TABLE utentepratica (
   id bigserial NOT NULL,
-  pratica bigint,
+  pratica character varying(9),
   utente bigint,
   responsabile boolean,
   istruttore boolean,
@@ -829,7 +834,7 @@ ALTER TABLE pratiche.utentepratica OWNER TO postgres;
 ALTER TABLE ONLY utentepratica
 ADD CONSTRAINT utentepratica_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY utentepratica
-ADD CONSTRAINT fk_utentepratica_pratica FOREIGN KEY (pratica) REFERENCES pratica(id);
+ADD CONSTRAINT fk_utentepratica_pratica FOREIGN KEY (pratica) REFERENCES pratica(idpratica);
 ALTER TABLE ONLY utentepratica
 ADD CONSTRAINT fk_utentepratica_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
 

@@ -20,6 +20,7 @@ import com.axiastudio.suite.base.entities.Utente;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -32,8 +33,8 @@ public class UtentePratica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genutentepratica")
-    private Long id;
-    @JoinColumn(name = "pratica", referencedColumnName = "id")
+    private String id;
+    @JoinColumn(name = "pratica", referencedColumnName = "idpratica")
     @ManyToOne
     private Pratica pratica;
     @JoinColumn(name = "utente", referencedColumnName = "id")
@@ -43,12 +44,18 @@ public class UtentePratica implements Serializable {
     private Boolean responsabile=false;
     @Column(name="istruttore")
     private Boolean istruttore=false;
+    @Column(name="dal")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dal;
+    @Column(name="al")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date al;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
