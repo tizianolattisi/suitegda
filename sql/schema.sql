@@ -124,11 +124,14 @@ CREATE TABLE utente (
     supervisoreprotocollo boolean NOT NULL DEFAULT FALSE,
     ricercatoreprotocollo boolean NOT NULL DEFAULT FALSE,
     istruttorepratiche boolean NOT NULL DEFAULT FALSE,
-    disabilitato boolean NOT NULL DEFAULT FALSE
+    disabilitato boolean NOT NULL DEFAULT FALSE,
+    soggetto bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE base.utente OWNER TO postgres;
 ALTER TABLE ONLY utente
     ADD CONSTRAINT utente_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY utente
+    ADD CONSTRAINT fk_utente_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
 
 CREATE TABLE ufficio (
     id bigserial NOT NULL,
@@ -398,7 +401,8 @@ CREATE TABLE riferimento (
     tipo character varying(50),
     soggetto bigint,
     riferimento character varying(255),
-    descrizione character varying(255)
+    descrizione character varying(255),
+    lavoro boolean NOT NULL DEFAULT false
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.riferimento OWNER TO postgres;
 ALTER TABLE ONLY riferimento
