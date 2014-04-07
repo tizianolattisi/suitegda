@@ -33,7 +33,7 @@ public class UtentePratica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genutentepratica")
-    private String id;
+    private Long id;
     @JoinColumn(name = "pratica", referencedColumnName = "idpratica")
     @ManyToOne
     private Pratica pratica;
@@ -51,11 +51,11 @@ public class UtentePratica implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date al;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
