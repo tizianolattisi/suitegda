@@ -185,6 +185,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         }
         if ( determina.getReferentePolitico() == null || determina.getReferentePolitico().equals("")) {
             determina.setReferentePolitico(((Servizio) inserita.getServizio()).getReferentepolitico());
+            ((QLineEdit) findChild(QLineEdit.class, "lineEdit_RefPolitico")).setText(determina.getReferentePolitico());
         }
     }
     private void servizioRimosso(Object obj){
