@@ -226,7 +226,8 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         for( Delega titoloODelega: titoliEDelegheAmpie ){
             if( titoloODelega.getDelegato() ){
                 // L'utente è delegato, quindi devo verificare se il delegante ha titolo per delegare
-                if( this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, titoloODelega.getDelegante(), dataVerifica) != null ){
+                if( titoloODelega.getDelegante() != null &&
+                        this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, titoloODelega.getDelegante(), dataVerifica) != null ){
                     return new TitoloDelega(false, true, titoloODelega.getCarica(), utente, titoloODelega.getDelegante());
                 }
             }
