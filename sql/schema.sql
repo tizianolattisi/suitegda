@@ -1284,6 +1284,7 @@ ALTER TABLE ONLY ufficiodetermina
 CREATE TABLE movimentodetermina (
     id bigserial NOT NULL,
     determina bigint,
+    eu character (1),
     capitolo bigint,
     articolo character varying(255),
     codicemeccanografico character varying(255),

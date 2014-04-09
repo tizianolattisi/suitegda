@@ -163,7 +163,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         int res = swd.exec();
 
         if( res == 1 ){
-            if( determina.getVistoResponsabile() != null && determina.getNumero() == null ){
+            if(determina.getVistoResponsabile() != null && (determina.getNumero() == null || determina.getNumero() == 0)){
                 DeterminaUtil.numeroDiDetermina(determina);
                 Database db = (Database) Register.queryUtility(IDatabase.class);
                 Controller controller = db.createController(Determina.class);

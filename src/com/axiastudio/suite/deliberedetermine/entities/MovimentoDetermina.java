@@ -37,6 +37,8 @@ public class MovimentoDetermina implements Serializable {
     @JoinColumn(name = "determina", referencedColumnName = "id")
     @ManyToOne
     private Determina determina;
+    @Column(name="eu")
+    private String eu;
     @Column(name="tipomovimento")
     @Enumerated(EnumType.STRING)
     private TipoMovimento tipoMovimento;
@@ -88,6 +90,14 @@ public class MovimentoDetermina implements Serializable {
 
     public void setDetermina(Determina determina) {
         this.determina = determina;
+    }
+
+    public String getEu() {
+        return eu;
+    }
+
+    public void setEu(String eu) {
+        this.eu = eu;
     }
 
     public TipoMovimento getTipoMovimento() {
