@@ -99,6 +99,12 @@ public class CmisPlugin implements IPlugin {
     }
     
     public void showForm(Object entity, Boolean delete, Boolean download, Boolean parent, Boolean upload, Boolean version) {
+        if( entity==null ){
+            entity = ((Window) this.parent).getContext().getCurrentEntity();
+        }
+        if( entity == null || entity.hashCode() == 0 ){
+            return;
+        }
         AlfrescoHelper helper = createAlfrescoHelper(entity);
         ClientWindow dialog = new ClientWindow(null, helper);
         dialog.show();
@@ -115,9 +121,6 @@ public class CmisPlugin implements IPlugin {
     }
 
     public AlfrescoHelper createAlfrescoHelper(Object entity) {
-        if( entity==null ){
-            entity = ((Window) this.parent).getContext().getCurrentEntity();
-        }
         String path = CmisUtil.cmisPathGenerator(this.template, entity);
         AlfrescoHelper helper = new AlfrescoHelper(this.cmisUrl, this.user, this.password);
         helper.setPath(path);
