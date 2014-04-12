@@ -81,12 +81,14 @@ public class DeterminaCallbacks {
         }
 
         // imposto il responsabile
-        for( ServizioDetermina sd: determina.getServizioDeterminaCollection() ){
-            if( sd.getPrincipale() ){
-                Servizio servizio = sd.getServizio();
-                Utente responsabile = gestoreDeleghe.trovaTitolare(CodiceCarica.RESPONSABILE_DI_SERVIZIO, servizio);
-                if( responsabile != null ){
-                    determina.setResponsabile(responsabile);
+        if ( determina.getServizioDeterminaCollection() != null ) {
+            for( ServizioDetermina sd: determina.getServizioDeterminaCollection() ){
+                if( sd.getPrincipale() ){
+                    Servizio servizio = sd.getServizio();
+                    Utente responsabile = gestoreDeleghe.trovaTitolare(CodiceCarica.RESPONSABILE_DI_SERVIZIO, servizio);
+                    if( responsabile != null ){
+                        determina.setResponsabile(responsabile);
+                    }
                 }
             }
         }

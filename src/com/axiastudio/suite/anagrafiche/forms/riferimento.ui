@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>493</width>
-    <height>134</height>
+    <height>135</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,24 +20,20 @@
       <string>Dettagli riferimento</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="3">
-       <widget class="QLineEdit" name="lineEdit">
+      <property name="margin">
+       <number>4</number>
+      </property>
+      <item row="2" column="1" colspan="3">
+       <widget class="QLineEdit" name="lineEdit_2">
         <property name="column" stdset="0">
-         <string>riferimento</string>
+         <string>descrizione</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Tipo</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Riferimento</string>
+         <string>Descrizione</string>
         </property>
        </widget>
       </item>
@@ -78,17 +74,34 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="1" colspan="3">
-       <widget class="QLineEdit" name="lineEdit_2">
-        <property name="column" stdset="0">
-         <string>descrizione</string>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Riferimento</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
         <property name="text">
-         <string>Descrizione</string>
+         <string>Tipo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="column" stdset="0">
+         <string>riferimento</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="checkBoxLavoro">
+        <property name="text">
+         <string>Lavoro</string>
+        </property>
+        <property name="column" stdset="0">
+         <string>lavoro</string>
         </property>
        </widget>
       </item>

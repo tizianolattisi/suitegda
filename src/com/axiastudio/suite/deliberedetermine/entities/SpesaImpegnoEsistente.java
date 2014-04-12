@@ -21,6 +21,7 @@ import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Calendar;
 
 /**
  *
@@ -51,7 +52,7 @@ public class SpesaImpegnoEsistente implements Serializable {
     @Column(name="importo")
     private BigDecimal importo=BigDecimal.valueOf(0);
     @Column(name="annoesercizio")
-    private Integer annoEsercizio;
+    private Integer annoEsercizio = Calendar.getInstance().get(Calendar.YEAR);
     @Column(name="codicebeneficiario")
     private Long codiceBeneficiario;
     @Column(name="descrizionebeneficiario")

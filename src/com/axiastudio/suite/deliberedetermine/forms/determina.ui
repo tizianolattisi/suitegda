@@ -20,7 +20,7 @@
    <number>0</number>
   </property>
   <property name="sortorder" stdset="0">
-   <string>&lt;</string>
+   <string>&gt;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_6" columnstretch="0,0,0,1,3" rowminimumheight="0,0,0,0,0,0,1">
@@ -42,7 +42,10 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Codice pratica</string>
+          <string>Id pratica</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit</cstring>
          </property>
         </widget>
        </item>
@@ -55,7 +58,7 @@
           <string>idpratica</string>
          </property>
          <property name="search" stdset="0">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="export" stdset="0">
           <bool>true</bool>
@@ -66,6 +69,9 @@
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Codice interno</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_2</cstring>
          </property>
         </widget>
        </item>
@@ -102,12 +108,18 @@
          <property name="text">
           <string>Anno</string>
          </property>
+         <property name="buddy">
+          <cstring>spinBox</cstring>
+         </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string>Numero</string>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_2</cstring>
          </property>
         </widget>
        </item>
@@ -143,6 +155,9 @@
         <widget class="QSpinBox" name="spinBox_2">
          <property name="enabled">
           <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>9999</number>
          </property>
          <property name="column" stdset="0">
           <string>numero</string>
@@ -199,6 +214,9 @@
         <widget class="QLabel" name="label_6">
          <property name="text">
           <string>Fino al</string>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_finoAl</cstring>
          </property>
         </widget>
        </item>
@@ -514,13 +532,13 @@
            <string>.movimentoDeterminaCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;annoEsercizio&lt;,&lt;capitolo&gt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo,codiceCup,codiceCig,descrizioneCespite,descrizioneBeneficiario</string>
+           <string>&gt;eu&lt;,annoEsercizio,&lt;capitolo&gt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo,codiceCup,codiceCig,descrizioneCespite,descrizioneBeneficiario</string>
           </property>
           <property name="headers" stdset="0">
-           <string>esercizio,capitolo,impegno,sub,anno,importo,CUP,CIG,cespite,beneficiario</string>
+           <string>,esercizio,capitolo,impegno,sub,anno,importo,CUP,CIG,cespite,soggetto</string>
           </property>
           <property name="sortcolumn" stdset="0">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="sortorder" stdset="0">
            <string>&lt;</string>
@@ -653,10 +671,13 @@
          <property name="text">
           <string>Referente politico</string>
          </property>
+         <property name="buddy">
+          <cstring>lineEdit_RefPolitico</cstring>
+         </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_3">
+        <widget class="QLineEdit" name="lineEdit_RefPolitico">
          <property name="column" stdset="0">
           <string>referentePolitico</string>
          </property>
@@ -690,7 +711,7 @@
   <tabstop>checkBox_pluriennale</tabstop>
   <tabstop>spinBox_finoAl</tabstop>
   <tabstop>tableView_servizi</tabstop>
-  <tabstop>lineEdit_3</tabstop>
+  <tabstop>lineEdit_RefPolitico</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>tableView_impegni</tabstop>
   <tabstop>tableView_protocollo</tabstop>

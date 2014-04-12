@@ -26,6 +26,8 @@ select setval('pratiche.pratica_id_seq', coalesce((select max(id)+1 from pratich
 select setval('pratiche.tipopratica_id_seq', coalesce((select max(id)+1 from pratiche.tipopratica), 1), false);
 select setval('pratiche.dipendenzapratica_id_seq', coalesce((select max(id)+1 from pratiche.zdipendenzapratica), 1), false);
 select setval('pratiche.fase_id_seq', coalesce((select max(id)+1 from pratiche.fase), 1), false);
+select setval('pratiche.visto_id_seq', coalesce((select max(id)+1 from pratiche.visto), 1), false);
+select setval('pratiche.utentepratica_id_seq', coalesce((select max(id)+1 from pratiche.utentepratica), 1), false);
 
 select setval('procedimenti.carica_id_seq', coalesce((select max(id)+1 from procedimenti.carica), 1), false);
 select setval('procedimenti.delega_id_seq', coalesce((select max(id)+1 from procedimenti.delega), 1), false);
@@ -35,7 +37,7 @@ select setval('procedimenti.normaprocedimento_id_seq', coalesce((select max(id)+
 select setval('procedimenti.procedimento_id_seq', coalesce((select max(id)+1 from procedimenti.procedimento), 1), false);
 select setval('procedimenti.tipopraticaprocedimento_id_seq', coalesce((select max(id)+1 from procedimenti.tipopraticaprocedimento), 1), false);
 select setval('procedimenti.ufficioprocedimento_id_seq', coalesce((select max(id)+1 from procedimenti.ufficioprocedimento), 1), false);
-select setval('procedimenti.utenteprocedimento_id_seq', coalesce((select max(id)+1 from procedimenti.utenteprocedimento), 1), false);
+select setval('procedimenti.ufficioutenteprocedimento_id_seq', coalesce((select max(id)+1 from procedimenti.ufficioutenteprocedimento), 1), false);
 
 select setval('protocollo.attribuzione_id_seq', coalesce((select max(id)+1 from protocollo.attribuzione), 1), false);
 select setval('protocollo.fascicolo_id_seq', coalesce((select max(id)+1 from protocollo.fascicolo), 1), false);
