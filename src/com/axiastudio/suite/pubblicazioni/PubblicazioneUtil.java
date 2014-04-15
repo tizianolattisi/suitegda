@@ -42,7 +42,7 @@ public class PubblicazioneUtil {
 
         CmisPlugin cmisPluginPubblicazione = (CmisPlugin) Register.queryPlugin(Pubblicazione.class, "CMIS");
         AlfrescoHelper helperPubblicazione = cmisPluginPubblicazione.createAlfrescoHelper(pubblicazione);
-        helperPubblicazione.children(); // XXX: per invocare la creazione del path
+        helperPubblicazione.createFolder();
         String path = helperPubblicazione.getPath();
 
         CmisPlugin cmisPluginProtocollo = (CmisPlugin) Register.queryPlugin(Protocollo.class, "CMIS");
