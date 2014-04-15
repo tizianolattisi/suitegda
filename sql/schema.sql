@@ -1138,7 +1138,9 @@ CREATE TABLE pubblicazione (
     datapubblicazione date,
     durataconsultazione integer,
     tipoattopubblicazione bigint NOT NULL,
-    pubblicato boolean
+    pubblicato boolean,
+    dataatto date,
+    numeroatto integer
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE pubblicazioni.pubblicazione OWNER TO postgres;
 ALTER TABLE ONLY pubblicazione

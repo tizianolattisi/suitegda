@@ -48,6 +48,11 @@ public class Pubblicazione implements Serializable {
     @JoinColumn(name = "tipoattopubblicazione", referencedColumnName = "id")
     @ManyToOne
     private TipoAttoPubblicazione tipoattopubblicazione;
+    @Column(name="numeroatto")
+    private Integer numeroatto;
+    @Column(name="dataatto")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataatto;
 
 
 
@@ -113,6 +118,22 @@ public class Pubblicazione implements Serializable {
 
     public void setTipoattopubblicazione(TipoAttoPubblicazione tipoAttoPubblicazione) {
         this.tipoattopubblicazione = tipoAttoPubblicazione;
+    }
+
+    public Integer getNumeroatto() {
+        return numeroatto;
+    }
+
+    public void setNumeroatto(Integer numeroatto) {
+        this.numeroatto = numeroatto;
+    }
+
+    public Date getDataatto() {
+        return dataatto;
+    }
+
+    public void setDataatto(Date dataatto) {
+        this.dataatto = dataatto;
     }
 
     @Override
