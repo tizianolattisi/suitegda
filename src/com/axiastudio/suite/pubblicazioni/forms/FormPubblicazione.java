@@ -36,10 +36,6 @@ public class FormPubblicazione extends Window {
 
         QSpinBox n_giorni = (QSpinBox) findChild(QSpinBox.class, "spinBox_n_giorni");
         n_giorni.valueChanged.connect(this, "nGiorniChanged(int)");
-        PyPaPiDateEdit dateEdit_inizio = (PyPaPiDateEdit) findChild(PyPaPiDateEdit.class, "dateEdit_inizio");
-        dateEdit_inizio.dateChanged.connect(this, "dataInizioChanged(QDate)");
-        PyPaPiDateEdit dateEdit_fine = (PyPaPiDateEdit) findChild(PyPaPiDateEdit.class, "dateEdit_fine");
-        dateEdit_fine.dateChanged.connect(this, "dataFineChanged(QDate)");
 
         QPushButton pubblica = (QPushButton) findChild(QPushButton.class, "pushButton_pubblica");
         pubblica.clicked.connect(this, "pubblicaOra()");
@@ -47,44 +43,13 @@ public class FormPubblicazione extends Window {
     }
 
     private void nGiorniChanged(int i){
-        // sposta la fine della consultazione
-        PyPaPiDateEdit dateEdit_inizio = (PyPaPiDateEdit) findChild(PyPaPiDateEdit.class, "dateEdit_inizio");
-        QDate inizio = dateEdit_inizio.date();
+        QDate dataPubblicazione = QDate.currentDate();
         PyPaPiDateEdit dateEdit_fine = (PyPaPiDateEdit) findChild(PyPaPiDateEdit.class, "dateEdit_fine");
-        QDate fine = inizio.addDays(i);
-        dateEdit_fine.setDate(fine);
-        Pubblicazione pubblicazione = (Pubblicazione) this.getContext().getCurrentEntity();
-        if( pubblicazione != null ) {
-            GregorianCalendar gc = new GregorianCalendar(fine.year(), fine.month()-1, fine.day());
-            pubblicazione.setFineconsultazione(gc.getTime());
-        }
+        QDate fineConsultazione = dataPubblicazione.addDays(i);
+        dateEdit_fine.setDate(fineConsultazione);
     }
 
-    private void dataInizioChanged(QDate date){
-        // sposta la fine della consultazione
-        QSpinBox n_giorni = (QSpinBox) findChild(QSpinBox.class, "spinBox_n_giorni");
-        int n = n_giorni.value();
-        PyPaPiDateEdit dateEdit_fine = (PyPaPiDateEdit) findChild(PyPaPiDateEdit.class, "dateEdit_fine");
-        QDate fine = date.addDays(n);
-        dateEdit_fine.setDate(fine);
-        Pubblicazione pubblicazione = (Pubblicazione) this.getContext().getCurrentEntity();
-        if( pubblicazione != null ) {
-            GregorianCalendar gc = new GregorianCalendar(fine.year(), fine.month()-1, fine.day());
-            pubblicazione.setFineconsultazione(gc.getTime());
-        }
-    }
 
-    private void dataFineChanged(QDate date){
-        // cambia la durata di consultazione
-        PyPaPiDateEdit dateEdit_inizio = (PyPaPiDateEdit) findChild(PyPaPiDateEdit.class, "dateEdit_inizio");
-        int n = dateEdit_inizio.date().daysTo(date);
-        QSpinBox n_giorni = (QSpinBox) findChild(QSpinBox.class, "spinBox_n_giorni");
-        n_giorni.setValue(n);
-        Pubblicazione pubblicazione = (Pubblicazione) this.getContext().getCurrentEntity();
-        if( pubblicazione != null ) {
-            pubblicazione.setDurataconsultazione(n);
-        }
-    }
 
     public void pubblicaOra(){
         // da implementare per personalizzazione

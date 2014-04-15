@@ -35,7 +35,7 @@ public class PubblicazioneUtil {
         Pubblicazione pubblicazione = new Pubblicazione();
         pubblicazione.setDescrizione(protocollo.getOggetto());
         pubblicazione.setTitolo("Da completare");
-        pubblicazione.setInizioconsultazione(today);
+        // TODO: data e numero dell'atto
         pubblicazione.setDurataconsultazione(10);
         pubblicazione.setTipoattopubblicazione(delibere);
         controllerPubblicazione.commit(pubblicazione);
