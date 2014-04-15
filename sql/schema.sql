@@ -1135,8 +1135,7 @@ CREATE TABLE pubblicazione (
     titolo character varying(25),
     descrizione character varying(2048),
     richiedente character varying(255),
-    inizioconsultazione date,
-    fineconsultazione date,
+    datapubblicazione date,
     durataconsultazione integer,
     tipoattopubblicazione bigint NOT NULL,
     pubblicato boolean

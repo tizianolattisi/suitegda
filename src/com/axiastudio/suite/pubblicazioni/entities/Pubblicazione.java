@@ -38,12 +38,9 @@ public class Pubblicazione implements Serializable {
     private String descrizione;
     @Column(name="richiedente", length=255)
     private String richiedente;
-    @Column(name="inizioconsultazione")
+    @Column(name="datapubblicazione")
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date inizioconsultazione;
-    @Column(name="fineconsultazione")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fineconsultazione;
+    private Date datapubblicazione;
     @Column(name="durataconsultazione")
     private Integer durataconsultazione;
     @Column(name="pubblicato")
@@ -86,20 +83,12 @@ public class Pubblicazione implements Serializable {
         this.richiedente = richiedente;
     }
 
-    public Date getInizioconsultazione() {
-        return inizioconsultazione;
+    public Date getDatapubblicazione() {
+        return datapubblicazione;
     }
 
-    public void setInizioconsultazione(Date inizioconsultazione) {
-        this.inizioconsultazione = inizioconsultazione;
-    }
-
-    public Date getFineconsultazione() {
-        return fineconsultazione;
-    }
-
-    public void setFineconsultazione(Date fineconsultazione) {
-        this.fineconsultazione = fineconsultazione;
+    public void setDatapubblicazione(Date datapubblicazione) {
+        this.datapubblicazione = datapubblicazione;
     }
 
     public Integer getDurataconsultazione() {
