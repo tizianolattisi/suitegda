@@ -272,8 +272,8 @@ ALTER TABLE ONLY soggetto
     ADD CONSTRAINT fk_soggetto_titolosoggetto FOREIGN KEY (titolosoggetto) REFERENCES titolosoggetto(id);
 
 -- Tabella base.utente
-ALTER TABLE ONLY utente
-ADD CONSTRAINT fk_utente_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+ALTER TABLE ONLY base.utente
+    ADD CONSTRAINT fk_utente_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
 -- /Tabella base.utente
 
 CREATE TABLE grupposoggetto (
@@ -1285,7 +1285,7 @@ ALTER TABLE ONLY ufficiodetermina
 CREATE TABLE movimentodetermina (
     id bigserial NOT NULL,
     determina bigint,
-    eu character (1),
+    eu character(1),
     capitolo bigint,
     articolo character varying(255),
     codicemeccanografico character varying(255),
