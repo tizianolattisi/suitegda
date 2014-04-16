@@ -147,6 +147,11 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
     }
 
     private void completaFase(QListWidgetItem item){
+
+        if( getContext().getIsDirty() ){
+            QMessageBox.warning(this, "Attenzione", "Per completare una fase la determina deve essere prima salvata.");
+            return;
+        }
         Integer i = (Integer) item.data(Qt.ItemDataRole.UserRole);
 
         // XXX: se ci sono eventuali modifiche nelle condizioni?
