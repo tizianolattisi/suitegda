@@ -898,7 +898,9 @@ CREATE TABLE protocollo (
     esecutorespedizione character varying(40),
     controlloreposta character varying(40),
     scansionemassiva boolean,
-    fascicolo bigint
+    fascicolo bigint,
+    numeroatto integer,
+    dataatto date
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.protocollo OWNER TO postgres;
 ALTER TABLE ONLY protocollo

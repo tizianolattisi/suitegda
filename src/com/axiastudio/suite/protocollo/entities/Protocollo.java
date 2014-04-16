@@ -134,6 +134,12 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Column(name="controlloreposta", length=40)
     private String controlloreposta;
 
+    @Column(name="numeroatto")
+    private Integer numeroatto;
+    @Column(name="dataatto")
+    @Temporal(TemporalType.DATE)
+    private Date dataatto;
+
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -483,6 +489,22 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     public void setControlloreposta(String controlloreposta) {
         this.controlloreposta = controlloreposta;
+    }
+
+    public Integer getNumeroatto() {
+        return numeroatto;
+    }
+
+    public void setNumeroatto(Integer numeroatto) {
+        this.numeroatto = numeroatto;
+    }
+
+    public Date getDataatto() {
+        return dataatto;
+    }
+
+    public void setDataatto(Date dataatto) {
+        this.dataatto = dataatto;
     }
 
     @Override

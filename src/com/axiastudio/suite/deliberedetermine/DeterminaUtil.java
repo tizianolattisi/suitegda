@@ -1,8 +1,10 @@
 package com.axiastudio.suite.deliberedetermine;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 
 import javax.persistence.EntityManager;
@@ -21,12 +23,11 @@ import java.util.Calendar;
 public class DeterminaUtil {
 
 
-    public static void numeroDiDetermina(Determina determina) {
+    public static Boolean numeroDiDetermina(Determina determina) {
 
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
+        int year = Calendar.getInstance().get(Calendar.YEAR);
         determina.setAnno(year);
 
         // cerchiamo il numero di determina
@@ -37,7 +38,6 @@ public class DeterminaUtil {
         cq.where(cb.and(cb.equal(root.get("anno"), year), cb.isNotNull(root.get("numero"))));
         cq.orderBy(cb.desc(root.get("numero")));
         TypedQuery<Determina> tq = em.createQuery(cq).setMaxResults(1);
-        Determina max;
         Integer numero;
         try {
             numero = tq.getSingleResult().getNumero()+1;
@@ -45,7 +45,19 @@ public class DeterminaUtil {
             numero = 1;
         } catch (NullPointerException ex) {
             numero = 1;
+        } catch (Exception ex) {
+            System.out.println("Errore generico");
+            return Boolean.FALSE;
         }
         determina.setNumero(numero);
+
+        // setto anche la data della determina
+        determina.setData(Calendar.getInstance().getTime());
+
+        // commit
+        Controller controller = db.createController(Determina.class);
+        Validation validation = controller.commit(determina);
+
+        return validation.getResponse();
     }
 }
