@@ -35,9 +35,19 @@ public class PubblicazioneUtil {
         Pubblicazione pubblicazione = new Pubblicazione();
         pubblicazione.setDescrizione(protocollo.getOggetto());
         pubblicazione.setTitolo("Da completare");
-        // TODO: data e numero dell'atto
+        if( protocollo.getDataatto() != null ) {
+            pubblicazione.setDatapubblicazione(protocollo.getDataatto());
+        } else {
+            pubblicazione.setDatapubblicazione(protocollo.getDataprotocollo());
+        }
+        if( protocollo.getNumeroatto() != null ){
+            pubblicazione.setNumeroatto(protocollo.getNumeroatto());
+        }
+
+        // defaults
         pubblicazione.setDurataconsultazione(10);
         pubblicazione.setTipoattopubblicazione(delibere);
+
         controllerPubblicazione.commit(pubblicazione);
 
         CmisPlugin cmisPluginPubblicazione = (CmisPlugin) Register.queryPlugin(Pubblicazione.class, "CMIS");
