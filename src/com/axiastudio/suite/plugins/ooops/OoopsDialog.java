@@ -94,7 +94,7 @@ public class OoopsDialog extends QDialog {
         qtw.setAlternatingRowColors(true);
         qtw.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
         qtw.setSortingEnabled(true);
-        qtw.horizontalHeader().setResizeMode(QHeaderView.ResizeMode.Interactive);
+        qtw.horizontalHeader().setResizeMode(QHeaderView.ResizeMode.ResizeToContents);
 
         // file type
         QComboBox fileType = (QComboBox) this.findChild(QComboBox.class, "comboBoxFileType");
@@ -225,7 +225,8 @@ public class OoopsDialog extends QDialog {
                     rules.put("numeroprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.iddocumento : \"YYYYNNNNNNNN\" }");
                     rules.put("dataprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.dataprotocollo : \"GG/MM/YYYY\"}");
                     rules.put("numeroatto", "{ obj -> (obj.protocollo && obj.protocollo.numeroatto) ? obj.protocollo.numeroatto : \"NNNNN\" }");
-                    rules.put("dataatto", "{ obj -> (obj.protocollo && obj.protocollo.dataatto) ? obj.protocollo.dataatto : \"GG/MM/YYYY\"}");
+                    rules.put("dataatto",
+                            "{ obj -> (obj.protocollo && obj.protocollo.dataatto) ? obj.protocollo.dataatto.format(\"dd/MM/yyyy\") : \"GG/MM/YYYY\"}");
                     rules.put("barcode",
                                     "{ obj -> \n" +
                                     "        if (!obj.protocollo) {\n" +

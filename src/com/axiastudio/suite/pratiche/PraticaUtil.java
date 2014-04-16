@@ -190,6 +190,9 @@ public class PraticaUtil {
 
         Validation val=protocollaPratica(pratica, sportello, determina.getOggetto(), attribuzioni, oggetto, null, uffici,
                 TipoProtocollo.INTERNO);
+        if ( val.getResponse()==true ) {
+            determina.setProtocollo((Protocollo) val.getEntity());
+        }
         return val;
     }
 
