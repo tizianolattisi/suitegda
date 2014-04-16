@@ -190,13 +190,6 @@ public class PraticaUtil {
 
         Validation val=protocollaPratica(pratica, sportello, determina.getOggetto(), attribuzioni, oggetto, null, uffici,
                 TipoProtocollo.INTERNO);
-        if ( val.getResponse()==true ) {
-            determina.setProtocollo((Protocollo) val.getEntity());
-            if ( determina.getNumero() != null ) {
-                determina.getProtocollo().setNumeroatto(determina.getNumero());
-                determina.getProtocollo().setDataatto(determina.getData());
-            }
-        }
         return val;
     }
 
@@ -305,6 +298,13 @@ public class PraticaUtil {
                 soggettoProtocollo.setSoggetto(soggetto);
             }
             protocollo.setSoggettoProtocolloCollection(soggettiProtocollo);
+        }
+        // riferimenti atto
+        IDettaglio dettaglio = trovaDettaglioDaPratica(pratica);
+        if( dettaglio != null && dettaglio instanceof IAtto ){
+            IAtto atto = (IAtto) dettaglio;
+            protocollo.setNumeroatto(atto.getNumero());
+            protocollo.setDataatto(atto.getData());
         }
         // inserimento protocollo nella pratica
         Collection<PraticaProtocollo> pratiche = new ArrayList<PraticaProtocollo>();

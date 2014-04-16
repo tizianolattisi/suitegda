@@ -26,6 +26,7 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaListener;
 import com.axiastudio.suite.finanziaria.entities.Progetto;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
+import com.axiastudio.suite.pratiche.IAtto;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.Pratica;
@@ -53,7 +54,7 @@ import java.util.List;
 @NamedQuery(name="inAttesaDiVistoDiBilancio",
         query = "SELECT d FROM Determina d JOIN d.pratica p JOIN p.fasePraticaCollection fp " +
                 "WHERE fp.attiva = true AND fp.fase.id = :idfase")
-public class Determina implements Serializable, IDettaglio, IProtocollabile {
+public class Determina implements Serializable, IDettaglio, IProtocollabile, IAtto {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
@@ -474,5 +475,5 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     public String toString() {
         return "com.axiastudio.suite.deliberedetermine.entities.Determina[ id=" + id + " ]";
     }
-    
+
 }
