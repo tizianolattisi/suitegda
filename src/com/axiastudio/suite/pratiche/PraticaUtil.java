@@ -188,7 +188,16 @@ public class PraticaUtil {
         List<Ufficio> uffici = new ArrayList<Ufficio>();
         uffici.add(sportello);
 
-        return protocollaPratica(pratica, sportello, determina.getOggetto(), attribuzioni, oggetto, null, uffici, TipoProtocollo.INTERNO);
+        Validation val=protocollaPratica(pratica, sportello, determina.getOggetto(), attribuzioni, oggetto, null, uffici,
+                TipoProtocollo.INTERNO);
+        if ( val.getResponse()==true ) {
+            determina.setProtocollo((Protocollo) val.getEntity());
+            if ( determina.getNumero() != null ) {
+                determina.getProtocollo().setNumeroatto(determina.getNumero());
+                determina.getProtocollo().setDataatto(determina.getData());
+            }
+        }
+        return val;
     }
 
     public static Validation inserisciAttribuzioniProtocolloDetermina(Determina determina) {

@@ -24,6 +24,7 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.deliberedetermine.DeterminaUtil;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.pratiche.IDettaglio;
@@ -121,6 +122,7 @@ public class SimpleWorkFlow {
         binding.setVariable("documenti", documenti);
         binding.setVariable("CodiceCarica", CodiceCarica.class);
         binding.setVariable("PraticaUtil", PraticaUtil.class);
+        binding.setVariable("DeterminaUtil", DeterminaUtil.class);
         return binding;
     }
 

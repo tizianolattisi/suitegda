@@ -218,11 +218,32 @@ public class OoopsDialog extends QDialog {
                         }
                     }
                 }
+                // TODO: protocollabile se istanza di IProtocollabile
                 // se protocollabile aggiungo le regole
                 if( protocollabile ){
                     HashMap<String, String> rules = new HashMap<String, String>();
                     rules.put("numeroprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.iddocumento : \"YYYYNNNNNNNN\" }");
                     rules.put("dataprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.dataprotocollo : \"GG/MM/YYYY\"}");
+                    rules.put("numeroatto", "{ obj -> (obj.protocollo && obj.protocollo.numeroatto) ? obj.protocollo.numeroatto : \"NNNNN\" }");
+                    rules.put("dataatto", "{ obj -> (obj.protocollo && obj.protocollo.dataatto) ? obj.protocollo.dataatto : \"GG/MM/YYYY\"}");
+                    rules.put("barcode",
+                                    "{ obj -> \n" +
+                                    "        if (!obj.protocollo) {\n" +
+                                    "            return null\n" +
+                                    "       }\n" +
+                                    "       String barcode = \"(\"\n" +
+                                    "       String id =obj.protocollo.iddocumento\n" +
+                                    "       int codepart=0\n" +
+                                    "       for (int i=0; i<=10; i+=2) {\n" +
+                                    "          codepart=Integer.parseInt(id.substring(i,i+2))\n" +
+                                    "          if (codepart<50) {\n" +
+                                    "              codepart+=48\n" +
+                                    "           } else {\n" +
+                                    "              codepart+=142\n" +
+                                    "           }\n" +
+                                    "           barcode += String.valueOf(Character.toChars(codepart))\n" +
+                                    "        }\n" +
+                                    "        return barcode+\")\" }");
                     RuleSet ruleSetProtocollo = new RuleSet(rules);
                     template.setRuleSet(ruleSetProtocollo);
                 }
