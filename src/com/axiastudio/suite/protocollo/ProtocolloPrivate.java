@@ -40,7 +40,7 @@ public class ProtocolloPrivate {
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(protocollo, utente);
         
-        if( utente.getSupervisoreprotocollo() == true){
+        if( utente.getSupervisoreprotocollo() || utente.getRicercatoreprotocollo() ){
             return false;
         }
         
