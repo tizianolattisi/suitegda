@@ -63,6 +63,8 @@ public class FasePratica implements Serializable {
     private String azione;
     @Column(name="completata")
     private Boolean completata=Boolean.FALSE;
+    @Column(name="negata")
+    private Boolean negata=Boolean.FALSE;
     @Column(name="attiva")
     private Boolean attiva=Boolean.FALSE;
     @Column(name="usoresponsabile")
@@ -172,6 +174,14 @@ public class FasePratica implements Serializable {
 
     public void setCompletata(Boolean completata) {
         this.completata = completata;
+    }
+
+    public Boolean getNegata() {
+        return negata;
+    }
+
+    public void setNegata(Boolean negata) {
+        this.negata = negata;
     }
 
     public Boolean getAttiva() {

@@ -804,6 +804,7 @@ CREATE TABLE fasepratica (
   condizione text,
   azione text,
   completata boolean default false,
+  negata boolean default false,
   attiva boolean default false,
   usoresponsabile boolean default false,
   cariche character varying(512)

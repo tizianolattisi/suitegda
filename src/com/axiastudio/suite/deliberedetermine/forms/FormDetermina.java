@@ -136,6 +136,8 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
             QIcon icon=null;
             if( fp.getCompletata() ){
                 icon = new QIcon("classpath:com/axiastudio/suite/resources/tick.png");
+            } else if ( fp.getNegata() ){
+                icon = new QIcon("classpath:com/axiastudio/suite/resources/cross.png");
             } else if ( fp.equals(wf.getFaseAttiva()) ){
                 icon = new QIcon("classpath:com/axiastudio/suite/resources/star.png");
             }

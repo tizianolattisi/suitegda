@@ -221,6 +221,7 @@ public class SimpleWorkFlow {
     public void completaFase(FasePratica fp, Boolean confermata){
         if( confermata ){
             fp.setCompletata(true);
+            fp.setNegata(false);
             FasePratica successiva = fp.getConfermata();
             while( successiva.getDascartare()!=null && successiva.getDascartare() != "" &&
                     eseguiClosure(successiva.getDascartare()) ){
@@ -229,8 +230,10 @@ public class SimpleWorkFlow {
             setFaseAttiva(successiva);
             creaVisto(fp);
         } else {
+            fp.setCompletata(false);
+            fp.setNegata(true);
             setFaseAttiva(fp.getRifiutata());
-            creaVisto(fp, true);
+            creaVisto(fp, true); // negato
         }
 
     }
