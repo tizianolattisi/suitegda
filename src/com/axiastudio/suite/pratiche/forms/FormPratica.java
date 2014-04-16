@@ -84,6 +84,10 @@ public class FormPratica extends Window implements IDocumentFolder {
         // visti non editabili
         PyPaPiTableView tableView_visti = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_visti");
         Util.setWidgetReadOnly(tableView_visti, true);
+        // tab 'Visti' visibile solo da utenti con flag 'Supervisore pratiche'
+        // TODO: tab visibile anche da: istruttori, responsabile firma, resp. Bilancio (x determine), assessore/politico competente
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        tableView_visti.setVisible(autenticato.getSupervisorepratiche());
     }
 
     private void apriDettaglio(){

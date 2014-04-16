@@ -359,7 +359,7 @@ public class FormProtocollo extends Window {
 
         // Visibilità dei soggetti riservati
         PyPaPiTableView tvSoggettiRiservati =  (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_soggettiriservatiprotocollo");
-        if( !(nuovoInserimento || profilo.inSportelloOAttribuzioneR()) ){
+        if( !(nuovoInserimento || profilo.inSportelloOAttribuzioneR() || autenticato.getSupervisoreprotocollo()) ){
             tvSoggettiRiservati.hide();
         } else {
             tvSoggettiRiservati.show();

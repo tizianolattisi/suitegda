@@ -53,9 +53,9 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Column(name="anno")
     private Integer anno;
     @Column(name="oggetto", length=1024)
-    private String oggetto;
+    private String oggetto="";
     @Column(name="note", length=1024)
-    private String note;
+    private String note="";
     @Enumerated(EnumType.STRING)
     private TipoProtocollo tipo=TipoProtocollo.ENTRATA;
     @JoinColumn(name = "sportello", referencedColumnName = "id")
@@ -89,7 +89,7 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataspedizione;
     @Column(name="esecutorespedizione", length=40)
-    private String esecutorespedizione;
+    private String esecutorespedizione="";
     @Column(name="riservato")
     private Boolean riservato=false;
     @Column(name="corrispostoostornato")
@@ -97,7 +97,7 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Enumerated(EnumType.STRING)
     private TipoRiferimentoMittente tiporiferimentomittente;
     @Column(name="riferimentomittente")
-    private String riferimentomittente;
+    private String riferimentomittente="";
     @Column(name="datariferimentomittente")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datariferimentomittente;
@@ -111,7 +111,7 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataconvalidaattribuzioni;
     @Column(name="esecutoreconvalidaattribuzioni", length=40)
-    private String esecutoreconvalidaattribuzioni;
+    private String esecutoreconvalidaattribuzioni="";
 
     @Column(name="convalidaprotocollo")
     private Boolean convalidaprotocollo=false;
@@ -119,9 +119,9 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataconvalidaprotocollo;
     @Column(name="esecutoreconvalidaprotocollo", length=40)
-    private String esecutoreconvalidaprotocollo;
+    private String esecutoreconvalidaprotocollo="";
     @Column(name="numeroconvalidaprotocollo", length=10)
-    private String numeroconvalidaprotocollo;
+    private String numeroconvalidaprotocollo="";
     
     @Column(name="consolidadocumenti")
     private Boolean consolidadocumenti=false;
@@ -129,10 +129,10 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataconsolidadocumenti;
     @Column(name="esecutoreconsolidadocumenti", length=40)
-    private String esecutoreconsolidadocumenti;
+    private String esecutoreconsolidadocumenti="";
 
     @Column(name="controlloreposta", length=40)
-    private String controlloreposta;
+    private String controlloreposta="";
 
     @Column(name="numeroatto")
     private Integer numeroatto;

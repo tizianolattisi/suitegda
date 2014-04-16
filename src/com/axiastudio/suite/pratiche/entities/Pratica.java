@@ -54,9 +54,9 @@ public class Pratica implements Serializable, ITimeStamped {
     @Column(name="anno")
     private Integer anno;
     @Column(name="descrizione")
-    private String descrizione;
+    private String descrizione="";
     @Column(name="note")
-    private String note;
+    private String note="";
     @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<PraticaProtocollo> praticaProtocolloCollection;
     @JoinColumn(name = "attribuzione", referencedColumnName = "id")

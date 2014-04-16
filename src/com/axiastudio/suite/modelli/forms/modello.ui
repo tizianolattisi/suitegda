@@ -111,16 +111,7 @@
        <string>Tipi di pratica</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="leftMargin">
-        <number>6</number>
-       </property>
-       <property name="topMargin">
-        <number>6</number>
-       </property>
-       <property name="rightMargin">
-        <number>6</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>6</number>
        </property>
        <item>
@@ -129,7 +120,7 @@
           <string>.tipoPraticaModelloCollection</string>
          </property>
          <property name="columns" stdset="0">
-          <string>&gt;tipopratica&lt;</string>
+          <string>&lt;tipopratica&gt;</string>
          </property>
          <property name="reference" stdset="0">
           <string>tipopratica</string>
@@ -151,16 +142,7 @@
        <string>Procedimenti</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="leftMargin">
-        <number>6</number>
-       </property>
-       <property name="topMargin">
-        <number>6</number>
-       </property>
-       <property name="rightMargin">
-        <number>6</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>6</number>
        </property>
        <item>
@@ -169,7 +151,7 @@
           <string>.procedimentoModelloCollection</string>
          </property>
          <property name="columns" stdset="0">
-          <string>&gt;procedimento&lt;</string>
+          <string>&lt;procedimento&gt;</string>
          </property>
          <property name="reference" stdset="0">
           <string>procedimento</string>
@@ -185,16 +167,7 @@
        <string>Test</string>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="leftMargin">
-        <number>8</number>
-       </property>
-       <property name="topMargin">
-        <number>8</number>
-       </property>
-       <property name="rightMargin">
-        <number>8</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>8</number>
        </property>
        <item>
@@ -254,7 +227,7 @@
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
+   <header location="global">pypapitableview.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
