@@ -149,7 +149,7 @@ public class Configure {
 
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
         cmisPluginPubblicazioni.setup(cmisUrl, cmisUser, cmisPassword,
-                alfrescoPathPubblicazione + "/${inizioconsultazione,date,yyyy}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
+                alfrescoPathPubblicazione + "/${dataatto,date,yyyy}/${dataatto,date,MM}/${dataatto,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
         Register.registerPlugin(cmisPluginPubblicazioni, Pubblicazione.class);
 
