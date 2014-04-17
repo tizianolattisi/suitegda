@@ -18,6 +18,8 @@ package com.axiastudio.suite.plugins.ooops;
 
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.suite.pratiche.IAtto;
+import com.axiastudio.suite.protocollo.IProtocollabile;
 import com.trolltech.qt.core.QFile;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.designer.QUiLoader;
@@ -200,12 +202,45 @@ public class OoopsDialog extends QDialog {
         String mimeType = "application/pdf";
         String filter = "writer_pdf_Export";
 
+        Object entity = ((Window) this.parent()).getContext().getCurrentEntity();
+        HashMap<String, String> rules = new HashMap<String, String>();
+        if (entity instanceof IProtocollabile) {
+            rules.put("numeroprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.iddocumento : \"YYYYNNNNNNNN\" }");
+            rules.put("dataprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.dataprotocollo : \"GG/MM/YYYY\"}");
+            rules.put("barcode",
+                    "{ obj -> \n" +
+                            "        if (!obj.protocollo) {\n" +
+                            "            return null\n" +
+                            "       }\n" +
+                            "       String barcode = \"(\"\n" +
+                            "       String id =obj.protocollo.iddocumento\n" +
+                            "       int codepart=0\n" +
+                            "       for (int i=0; i<=10; i+=2) {\n" +
+                            "          codepart=Integer.parseInt(id.substring(i,i+2))\n" +
+                            "          if (codepart<50) {\n" +
+                            "              codepart+=48\n" +
+                            "           } else {\n" +
+                            "              codepart+=142\n" +
+                            "           }\n" +
+                            "           barcode += String.valueOf(Character.toChars(codepart))\n" +
+                            "        }\n" +
+                            "        return barcode+\")\" }");
+        }
+        if (entity instanceof IAtto) {
+            rules.put("numeroatto", "{ obj -> (obj.protocollo && obj.protocollo.numeroatto) ? obj.protocollo.numeroatto : \"NNNNN\" }");
+            rules.put("dataatto",
+                    "{ obj -> (obj.protocollo && obj.protocollo.dataatto) ? obj.protocollo.dataatto.format(\"dd/MM/yyyy\") : \"GG/MM/YYYY\"}");
+            rules.put("firma",
+                    "{ obj -> (obj.firma) ? obj.firma : \"FIRMA\"}");
+        }
+        RuleSet ruleSetProtocollo = new RuleSet(rules);
+
         QTableWidget qtw = (QTableWidget) this.findChild(QTableWidget.class, "tableWidget");
         for( int y=0; y<qtw.rowCount(); y++ ){
             QTableWidgetItem item = qtw.item(y, 0);
             Integer i = (Integer) item.data(Qt.ItemDataRole.UserRole);
             Template template = this.templates.get(i);
-            Boolean protocollabile=false;
+            Boolean regoleapplicabili=false;
             String parentTemplateName = template.getName();
             if( template.getName().endsWith(".odt") ){
                 if( template.getParentTemplateName() != null ){
@@ -213,47 +248,21 @@ public class OoopsDialog extends QDialog {
                         if( t.getName().equals(template.getParentTemplateName()) ){
                             //template.setRuleSet(t.getRuleSet());
                             parentTemplateName = t.getName();
-                            protocollabile=true;
+                            regoleapplicabili=true;
                             break;
                         }
                     }
                 }
-                // TODO: protocollabile se istanza di IProtocollabile
-                // se protocollabile aggiungo le regole
-                if( protocollabile ){
-                    HashMap<String, String> rules = new HashMap<String, String>();
-                    rules.put("numeroprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.iddocumento : \"YYYYNNNNNNNN\" }");
-                    rules.put("dataprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.dataprotocollo : \"GG/MM/YYYY\"}");
-                    rules.put("numeroatto", "{ obj -> (obj.protocollo && obj.protocollo.numeroatto) ? obj.protocollo.numeroatto : \"NNNNN\" }");
-                    rules.put("dataatto",
-                            "{ obj -> (obj.protocollo && obj.protocollo.dataatto) ? obj.protocollo.dataatto.format(\"dd/MM/yyyy\") : \"GG/MM/YYYY\"}");
-                    rules.put("barcode",
-                                    "{ obj -> \n" +
-                                    "        if (!obj.protocollo) {\n" +
-                                    "            return null\n" +
-                                    "       }\n" +
-                                    "       String barcode = \"(\"\n" +
-                                    "       String id =obj.protocollo.iddocumento\n" +
-                                    "       int codepart=0\n" +
-                                    "       for (int i=0; i<=10; i+=2) {\n" +
-                                    "          codepart=Integer.parseInt(id.substring(i,i+2))\n" +
-                                    "          if (codepart<50) {\n" +
-                                    "              codepart+=48\n" +
-                                    "           } else {\n" +
-                                    "              codepart+=142\n" +
-                                    "           }\n" +
-                                    "           barcode += String.valueOf(Character.toChars(codepart))\n" +
-                                    "        }\n" +
-                                    "        return barcode+\")\" }");
-                    RuleSet ruleSetProtocollo = new RuleSet(rules);
+                if( regoleapplicabili ){
                     template.setRuleSet(ruleSetProtocollo);
                 }
+                
                 composeFromTemplate(template);
                 if( IDocumentFolder.class.isInstance(this.parent()) ){
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     helper.storeDocumentComponent(outputStream, filter);
                     // XXX: maybe is better to use streams?
-                    ((IDocumentFolder) this.parent()).createDocument("protocollo", template.getName(), "Protocollo", parentTemplateName, outputStream.toByteArray(), mimeType);
+                    ((IDocumentFolder) this.parent()).createDocument("protocollo/", template.getName(), "Protocollo", parentTemplateName, outputStream.toByteArray(), mimeType);
                 }
 
             }

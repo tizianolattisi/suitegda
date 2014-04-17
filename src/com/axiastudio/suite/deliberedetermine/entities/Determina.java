@@ -31,8 +31,10 @@ import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Visto;
+import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.protocollo.IProtocollabile;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
+import com.axiastudio.suite.protocollo.entities.UfficioProtocollo;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -378,7 +380,42 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile, IAt
         // NOP
     }
 
+    public String getFirma() {
+        String firma = " RESPONSABILE DEL SERVIZIO DI BILANCIO\n";
 
+        Visto vistoResp = this.getVisto("FASE_VISTO_RESPONSABILE");
+        if( vistoResp != null ){
+            if( vistoResp.getUtente().equals(vistoResp.getResponsabile()) ){
+                firma = "IL" + firma;
+            } else {
+                firma = "PER TEMPORANEA ASSENZA DEL" + firma;
+            }
+        }
+
+        if ( this.getProtocollo() != null && this.getProtocollo().getUfficioProtocolloCollection() != null ) {
+            UfficioProtocollo ufficio = (UfficioProtocollo) this.getProtocollo().getUfficioProtocolloCollection().iterator().next();
+            firma +=  ufficio.getUfficio().getDenominazione() +"\n";
+        } else {
+            firma += "[ufficio]\n";
+        }
+
+        if ( vistoResp != null && vistoResp.getCodiceCarica() != null ) {
+            if ( vistoResp.getCodiceCarica().equals(CodiceCarica.RESPONSABILE_DI_SERVIZIO) &&
+                    ! vistoResp.getUtente().equals(vistoResp.getResponsabile()) ) {
+                firma += "IL FUNZIONARIO INCARICATO\n";
+            } else if ( vistoResp.getCodiceCarica().equals(CodiceCarica.SEGRETARIO) ) {
+                firma += "IL SEGRETARIO GENERALE\n";
+            } else if ( vistoResp.getCodiceCarica().equals(CodiceCarica.VICE_SEGRETARIO) ) {
+                firma += "IL VICESEGRETARIO GENERALE\n";
+            }
+            firma += vistoResp.getUtente();
+        }
+        return firma;
+    }
+
+    public void setFirma(String firma) {
+        // NOP
+    }
 
     private Visto getVisto(String tipoVisto) {
         if( this.getPratica() != null ){
