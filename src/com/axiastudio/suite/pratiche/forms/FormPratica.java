@@ -254,7 +254,11 @@ public class FormPratica extends Window implements IDocumentFolder {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         Boolean nuovoInserimento = pratica.getId() == null;
-        
+
+        // abilitazione visualizzazione documenti tramite Menjazo
+        this.praticaToolbar.actionByName("apriDocumenti").
+                setEnabled(!nuovoInserimento && PraticaUtil.trovaDettaglioDaPratica(pratica) == null);
+
         // Abilitazione scelta della tipologia
         Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, "comboBoxTipo"), !nuovoInserimento);
         ((QToolButton) this.findChild(QToolButton.class, "toolButtonTipo")).setEnabled(nuovoInserimento);
