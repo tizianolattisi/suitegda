@@ -20,6 +20,7 @@ import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
+import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
@@ -333,6 +334,32 @@ public class FormPratica extends Window implements IDocumentFolder {
         }
         helper.createDocument(subpath, documentName, content, mimeType, title, description);
         cmisPlugin.showForm(pratica);
+    }
+
+    // XXX: codice simile a FormScrivania
+    private void apriDocumenti(){
+        Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+        if( pratica == null || pratica.getId() == null ){
+            return;
+        }
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
+        for(IPlugin plugin: plugins){
+            if( "CMIS".equals(plugin.getName()) ){
+                Boolean view = true;
+                Boolean delete = true;
+                Boolean download = true;
+                Boolean parent = false;
+                Boolean upload = true;
+                Boolean version = true;
+                if( view ){
+                    ((CmisPlugin) plugin).showForm(pratica, delete, download, parent, upload, version);
+                } else {
+                    QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
+                    return;
+                }
+            }
+        }
     }
     
 }

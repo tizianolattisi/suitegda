@@ -155,7 +155,8 @@ public class Configure {
 
         CmisPlugin cmisPluginPratica = new CmisPlugin();
         cmisPluginPratica.setup(cmisUrl, cmisUser, cmisPassword,
-                alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/");
+                alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/",
+                Boolean.FALSE);
         Register.registerPlugin(cmisPluginPratica, FormPratica.class);
         Register.registerPlugin(cmisPluginPratica, FormDetermina.class);
 
