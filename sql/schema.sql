@@ -1135,6 +1135,7 @@ SET search_path = pubblicazioni, pg_catalog;
 
 CREATE TABLE pubblicazione (
     id bigserial NOT NULL,
+    protocollo character varying(12),
     titolo character varying(25),
     descrizione character varying(2048),
     richiedente character varying(255),
@@ -1148,6 +1149,9 @@ CREATE TABLE pubblicazione (
 ALTER TABLE pubblicazioni.pubblicazione OWNER TO postgres;
 ALTER TABLE ONLY pubblicazione
     ADD CONSTRAINT pubblicazione_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY pubblicazione
+ADD CONSTRAINT fk_pubblicazione_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
+
 
 
 CREATE TABLE tipoattopubblicazione (

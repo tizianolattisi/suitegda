@@ -64,6 +64,8 @@ public class PubblicazioneUtil {
             helperProtocollo.copyDocument((String) map.get("objectId"), path);
         }
 
+        pubblicazione.setProtocollo(protocollo);
+
         return pubblicazione;
 
     }

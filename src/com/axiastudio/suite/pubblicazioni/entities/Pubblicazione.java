@@ -16,6 +16,8 @@
  */
 package com.axiastudio.suite.pubblicazioni.entities;
 
+import com.axiastudio.suite.protocollo.entities.Protocollo;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -32,6 +34,9 @@ public class Pubblicazione implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genpubblicazione")
     private Long id;
+    @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
+    @ManyToOne
+    private Protocollo protocollo;
     @Column(name="titolo", length=255)
     private String titolo;
     @Column(name="descrizione", length=2048)
@@ -62,6 +67,14 @@ public class Pubblicazione implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Protocollo getProtocollo() {
+        return protocollo;
+    }
+
+    public void setProtocollo(Protocollo protocollo) {
+        this.protocollo = protocollo;
     }
 
     public String getTitolo() {
