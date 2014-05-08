@@ -37,11 +37,14 @@ public class MovimentoDetermina implements Serializable {
     @JoinColumn(name = "determina", referencedColumnName = "id")
     @ManyToOne
     private Determina determina;
+    @Column(name="archivio")
+    private String archivio;
     @Column(name="eu")
     private String eu;
     @Column(name="tipomovimento")
-    @Enumerated(EnumType.STRING)
-    private TipoMovimento tipoMovimento;
+ //   @Enumerated(EnumType.STRING)
+ //   private TipoMovimento tipoMovimento;
+    private String tipoMovimento;
     @JoinColumn(name = "capitolo", referencedColumnName = "id")
     @ManyToOne
     private Capitolo capitolo;
@@ -84,6 +87,14 @@ public class MovimentoDetermina implements Serializable {
         this.id = id;
     }
 
+    public String getArchivio() {
+        return archivio;
+    }
+
+    public void setArchivio(String archivio) {
+        this.archivio = archivio;
+    }
+
     public Determina getDetermina() {
         return determina;
     }
@@ -100,11 +111,11 @@ public class MovimentoDetermina implements Serializable {
         this.eu = eu;
     }
 
-    public TipoMovimento getTipoMovimento() {
+    public String getTipoMovimento() {
         return tipoMovimento;
     }
 
-    public void setTipoMovimento(TipoMovimento tipoMovimento) {
+    public void setTipoMovimento(String tipoMovimento) {
         this.tipoMovimento = tipoMovimento;
     }
 

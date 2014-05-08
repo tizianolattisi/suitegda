@@ -130,6 +130,8 @@ CREATE TABLE utente (
 ALTER TABLE base.utente OWNER TO postgres;
 ALTER TABLE ONLY utente
     ADD CONSTRAINT utente_pkey PRIMARY KEY (id);
+-- ALTER TABLE ONLY utente
+--     ADD CONSTRAINT fk_utente_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
 
 CREATE TABLE ufficio (
     id bigserial NOT NULL,
@@ -847,7 +849,8 @@ CREATE TABLE visto (
   utente bigint,
   responsabile bigint,
   data  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  negato boolean default false
+  negato boolean default false,
+  commento character varying
 );
 ALTER TABLE pratiche.visto OWNER TO postgres;
 ALTER TABLE ONLY visto
@@ -1292,6 +1295,7 @@ ALTER TABLE ONLY ufficiodetermina
 CREATE TABLE movimentodetermina (
     id bigserial NOT NULL,
     determina bigint,
+    archivio character(1),
     eu character(1),
     capitolo bigint,
     articolo character varying(255),

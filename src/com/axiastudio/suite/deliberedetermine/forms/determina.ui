@@ -532,10 +532,10 @@
            <string>.movimentoDeterminaCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;eu&lt;,annoEsercizio,&lt;capitolo&gt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo,codiceCup,codiceCig,descrizioneCespite,descrizioneBeneficiario</string>
+           <string>&gt;tipoMovimento&lt;,&gt;eu&lt;,annoEsercizio,&lt;capitolo&gt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo,codiceCup,codiceCig,descrizioneCespite,descrizioneBeneficiario</string>
           </property>
           <property name="headers" stdset="0">
-           <string>,esercizio,capitolo,impegno,sub,anno,importo,CUP,CIG,cespite,soggetto</string>
+           <string>,,esercizio,capitolo,impegno,sub,anno,importo,CUP,CIG,cespite,soggetto</string>
           </property>
           <property name="sortcolumn" stdset="0">
            <number>2</number>
