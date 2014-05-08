@@ -18,6 +18,7 @@ package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
+import com.trolltech.qt.gui.QKeySequence;
 
 /**
  *
@@ -44,7 +45,7 @@ public class ProtocolloMenuBar extends PyPaPiToolBar {
                 "Crea una nuova pubblicazione a partire dal protocollo selezionato", parent);
         this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
                           "classpath:com/axiastudio/suite/resources/datamatrix_find.png",
-                          "Ricerca da etichetta", parent);
+                          "Ricerca da etichetta", parent, new QKeySequence(tr("F9")));
         this.insertButton("stampaEtichetta", "Stampa etichetta",
                           "classpath:com/axiastudio/suite/resources/datamatrix.png",
                           "Stampa etichetta", parent);
