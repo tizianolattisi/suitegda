@@ -42,7 +42,7 @@ public class ProtocolloMenuBar extends PyPaPiToolBar {
                 "Apre lo spazio documenti", parent);
         this.insertButton("pubblicaProtocollo", "Crea una pubblicazione dal protocollo",
                 "classpath:com/axiastudio/suite/resources/newspaper.png",
-                "Crea una nuova pubblicazione a partire dal protocollo selezionato", parent);
+                "Crea una nuova pubblicazione all'albo telematico a partire dal protocollo selezionato", parent);
         this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
                           "classpath:com/axiastudio/suite/resources/datamatrix_find.png",
                           "Ricerca da etichetta", parent, new QKeySequence(tr("F9")));

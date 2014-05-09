@@ -124,6 +124,7 @@ CREATE TABLE utente (
     supervisoreprotocollo boolean NOT NULL DEFAULT FALSE,
     ricercatoreprotocollo boolean NOT NULL DEFAULT FALSE,
     istruttorepratiche boolean NOT NULL DEFAULT FALSE,
+    pubblicaalbo boolean NOT NULL DEFAULT FALSE,
     disabilitato boolean NOT NULL DEFAULT FALSE,
     soggetto bigint
 ) INHERITS (generale.withtimestamp);
