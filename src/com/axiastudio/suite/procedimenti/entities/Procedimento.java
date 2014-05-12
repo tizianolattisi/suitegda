@@ -56,7 +56,7 @@ public class Procedimento implements Serializable {
     @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioProcedimento> ufficioProcedimentoCollection;
     @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
-    private Collection<UtenteProcedimento> utenteProcedimentoCollection;
+    private Collection<UfficioUtenteProcedimento> ufficioUtenteProcedimentoCollection;
     @OneToMany(mappedBy = "procedimento", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<TipoPraticaProcedimento> tipopraticaProcedimentoCollection;
     @Column(name="tipodettaglio")
@@ -143,12 +143,12 @@ public class Procedimento implements Serializable {
         this.ufficioProcedimentoCollection = ufficioProcedimentoCollection;
     }
 
-    public Collection<UtenteProcedimento> getUtenteProcedimentoCollection() {
-        return utenteProcedimentoCollection;
+    public Collection<UfficioUtenteProcedimento> getUfficioUtenteProcedimentoCollection() {
+        return ufficioUtenteProcedimentoCollection;
     }
 
-    public void setUtenteProcedimentoCollection(Collection<UtenteProcedimento> utenteProcedimentoCollection) {
-        this.utenteProcedimentoCollection = utenteProcedimentoCollection;
+    public void setUfficioUtenteProcedimentoCollection(Collection<UfficioUtenteProcedimento> ufficioUtenteProcedimentoCollection) {
+        this.ufficioUtenteProcedimentoCollection = ufficioUtenteProcedimentoCollection;
     }
 
     public Collection<TipoPraticaProcedimento> getTipopraticaProcedimentoCollection() {

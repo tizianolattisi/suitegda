@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.base.entities;
 
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 
 import javax.persistence.*;
@@ -70,10 +71,16 @@ public class Utente implements Serializable, IUtente {
     private Boolean modellatorepratiche=false;
     @Column(name="istruttorepratiche")
     private Boolean istruttorepratiche=false;
+    @Column(name="pubblicaalbo")
+    private Boolean pubblicaalbo=false;
     @Column(name="disabilitato")
     private Boolean disabilitato=false;
     @OneToMany(mappedBy = "utente", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Delega> delegaCollection;
+    @JoinColumn(name = "soggetto", referencedColumnName = "id")
+    @OneToOne
+    private Soggetto soggetto;
+
 
     public Long getId() {
         return id;
@@ -233,6 +240,22 @@ public class Utente implements Serializable, IUtente {
 
     public void setIstruttorepratiche(Boolean istruttorepratiche) {
         this.istruttorepratiche = istruttorepratiche;
+    }
+
+    public Boolean getPubblicaalbo() {
+        return pubblicaalbo;
+    }
+
+    public void setPubblicaalbo(Boolean pubblicaalbo) {
+        this.pubblicaalbo = pubblicaalbo;
+    }
+
+    public Soggetto getSoggetto() {
+        return soggetto;
+    }
+
+    public void setSoggetto(Soggetto soggetto) {
+        this.soggetto = soggetto;
     }
 
     public Boolean getDisabilitato() {

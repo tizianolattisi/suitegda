@@ -17,6 +17,7 @@
 package com.axiastudio.suite.procedimenti.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 
 import javax.persistence.*;
@@ -29,7 +30,7 @@ import java.io.Serializable;
 @Entity
 @Table(schema="PROCEDIMENTI")
 @SequenceGenerator(name="genutenteprocedimento", sequenceName="procedimenti.utenteprocedimento_id_seq", initialValue=1, allocationSize=1)
-public class UtenteProcedimento implements Serializable {
+public class UfficioUtenteProcedimento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genutenteprocedimento")
@@ -37,12 +38,9 @@ public class UtenteProcedimento implements Serializable {
     @JoinColumn(name = "procedimento", referencedColumnName = "id")
     @ManyToOne
     private Procedimento procedimento;
-    @JoinColumn(name = "utente", referencedColumnName = "id")
+    @JoinColumn(name = "ufficioutente", referencedColumnName = "id")
     @ManyToOne
-    private Utente utente;
-    @JoinColumn(name = "ufficio", referencedColumnName = "id")
-    @ManyToOne
-    private Ufficio ufficio;
+    private UfficioUtente ufficioUtente;
     @Column(name="responsabile")
     private Boolean responsabile=false;
     @Column(name="abilitato")
@@ -66,20 +64,12 @@ public class UtenteProcedimento implements Serializable {
         this.procedimento = procedimento;
     }
 
-    public Utente getUtente() {
-        return utente;
+    public UfficioUtente getUfficioUtente() {
+        return ufficioUtente;
     }
 
-    public void setUtente(Utente utente) {
-        this.utente = utente;
-    }
-
-    public Ufficio getUfficio() {
-        return ufficio;
-    }
-
-    public void setUfficio(Ufficio ufficio) {
-        this.ufficio = ufficio;
+    public void setUfficioUtente(UfficioUtente ufficioUtente) {
+        this.ufficioUtente = ufficioUtente;
     }
 
     public Boolean getResponsabile() {
@@ -116,10 +106,10 @@ public class UtenteProcedimento implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UtenteProcedimento)) {
+        if (!(object instanceof UfficioUtenteProcedimento)) {
             return false;
         }
-        UtenteProcedimento other = (UtenteProcedimento) object;
+        UfficioUtenteProcedimento other = (UfficioUtenteProcedimento) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

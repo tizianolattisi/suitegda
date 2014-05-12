@@ -218,8 +218,8 @@ insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (
 insert into ufficioprocedimento (id, ufficio, procedimento, principale) values (2, 3, 2, true);
 SELECT setval('procedimenti.ufficioprocedimento_id_seq', 3, true);
 
-insert into utenteprocedimento (id, utente, ufficio, procedimento, responsabile, abilitato, abituale)
-    values (1, 2, 3, 1, true, true, true);
+insert into ufficioutenteprocedimento (id, ufficioutente, procedimento, responsabile, abilitato, abituale)
+    values (1, 2, 1, true, true, true);
 SELECT setval('procedimenti.utenteprocedimento_id_seq', 2, true);
 
 insert into tipopraticaprocedimento (id, tipopratica, procedimento) values (1, 3, 1);

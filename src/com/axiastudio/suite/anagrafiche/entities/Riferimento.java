@@ -41,6 +41,8 @@ public class Riferimento implements Serializable {
     private String riferimento;
     @Column(name="descrizione")
     private String descrizione;
+    @Column(name="lavoro")
+    private Boolean lavoro=Boolean.FALSE;
 
     public Long getId() {
         return id;
@@ -80,6 +82,14 @@ public class Riferimento implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public Boolean getLavoro() {
+        return lavoro;
+    }
+
+    public void setLavoro(Boolean lavoro) {
+        this.lavoro = lavoro;
     }
 
     @Override

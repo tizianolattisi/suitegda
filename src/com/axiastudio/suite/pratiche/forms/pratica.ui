@@ -29,7 +29,7 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab_2">
+      <widget class="QWidget" name="tab_pratiche">
        <attribute name="title">
         <string>&amp;Pratiche relazionate</string>
        </attribute>
@@ -55,7 +55,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="tab_protocolli">
        <attribute name="title">
         <string>Protocolli associati</string>
        </attribute>
@@ -84,7 +84,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_4">
+      <widget class="QWidget" name="tab_visti">
        <attribute name="title">
         <string>Visti</string>
        </attribute>
@@ -107,7 +107,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_3">
+      <widget class="QWidget" name="tab_responsabili">
        <attribute name="title">
         <string>&amp;Responsabili e archiviazione</string>
        </attribute>
@@ -118,16 +118,7 @@
            <string>Archiviazione</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
-           <property name="leftMargin">
-            <number>4</number>
-           </property>
-           <property name="topMargin">
-            <number>4</number>
-           </property>
-           <property name="rightMargin">
-            <number>4</number>
-           </property>
-           <property name="bottomMargin">
+           <property name="margin">
             <number>4</number>
            </property>
            <property name="spacing">
@@ -330,6 +321,9 @@
          <property name="private" stdset="0">
           <bool>true</bool>
          </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -376,16 +370,7 @@
        <string/>
       </property>
       <layout class="QGridLayout" name="gridLayout_8">
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>4</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>4</number>
        </property>
        <property name="spacing">
@@ -402,12 +387,12 @@
             <string>Id pratica</string>
            </property>
            <property name="buddy">
-            <cstring>lineEdit</cstring>
+            <cstring>lineEdit_Idpratica</cstring>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="lineEdit">
+          <widget class="QLineEdit" name="lineEdit_Idpratica">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -415,6 +400,9 @@
             <string>idpratica</string>
            </property>
            <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="export" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
@@ -468,6 +456,9 @@
             <string>codiceinterno</string>
            </property>
            <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="export" stdset="0">
             <bool>true</bool>
            </property>
           </widget>
@@ -581,16 +572,7 @@
           <string>Uffici</string>
          </property>
          <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
-          <property name="leftMargin">
-           <number>4</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>4</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>4</number>
           </property>
           <property name="spacing">
@@ -850,15 +832,15 @@
  </customwidgets>
  <tabstops>
   <tabstop>comboBox_attribuzione</tabstop>
+  <tabstop>lineEdit_Idpratica</tabstop>
+  <tabstop>textEdit</tabstop>
   <tabstop>comboBox_gestione</tabstop>
   <tabstop>comboBox_5</tabstop>
   <tabstop>comboBoxTipo</tabstop>
   <tabstop>lineEdit_3</tabstop>
-  <tabstop>textEdit</tabstop>
   <tabstop>textEdit_2</tabstop>
   <tabstop>comboBox_fase</tabstop>
   <tabstop>lineEdit_2</tabstop>
-  <tabstop>lineEdit</tabstop>
   <tabstop>toolButtonTipo</tabstop>
   <tabstop>checkBox_riservata</tabstop>
   <tabstop>tabWidget</tabstop>

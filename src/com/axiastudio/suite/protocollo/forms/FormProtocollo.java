@@ -279,6 +279,7 @@ public class FormProtocollo extends Window {
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
         this.protocolloMenuBar.actionByName("consolidaDocumenti").setEnabled(!consDocumenti && profilo.inAttribuzionePrincipaleC());
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "spedito"), protocollo.getSpedito());
+        this.protocolloMenuBar.actionByName("pubblicaProtocollo").setEnabled(autenticato.getPubblicaalbo());
 
         // convalida attribuzioni
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
@@ -359,7 +360,7 @@ public class FormProtocollo extends Window {
 
         // Visibilità dei soggetti riservati
         PyPaPiTableView tvSoggettiRiservati =  (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_soggettiriservatiprotocollo");
-        if( !(nuovoInserimento || profilo.inSportelloOAttribuzioneR()) ){
+        if( !(nuovoInserimento || profilo.inSportelloOAttribuzioneR() || autenticato.getSupervisoreprotocollo()) ){
             tvSoggettiRiservati.hide();
         } else {
             tvSoggettiRiservati.show();

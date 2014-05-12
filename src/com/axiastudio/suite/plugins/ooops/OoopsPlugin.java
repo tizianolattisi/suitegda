@@ -79,6 +79,10 @@ public class OoopsPlugin implements IPlugin {
     }
 
     public void showForm() {
+        Object entity = ((Window) parent).getContext().getCurrentEntity();
+        if( entity == null || entity.hashCode() == 0 ){
+            return;
+        }
         List<Template> dialogTemplates = new ArrayList();
         HashMap<String, RuleSet> ruleSetMap = new HashMap();
         for( Template template: this.templates ){

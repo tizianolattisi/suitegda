@@ -20,6 +20,7 @@ import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
+import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
@@ -84,6 +85,10 @@ public class FormPratica extends Window implements IDocumentFolder {
         // visti non editabili
         PyPaPiTableView tableView_visti = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_visti");
         Util.setWidgetReadOnly(tableView_visti, true);
+        // tab 'Visti' visibile solo da utenti con flag 'Supervisore pratiche'
+        // TODO: tab visibile anche da: istruttori, responsabile firma, resp. Bilancio (x determine), assessore/politico competente
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        tableView_visti.setVisible(autenticato.getSupervisorepratiche());
     }
 
     private void apriDettaglio(){
@@ -249,7 +254,11 @@ public class FormPratica extends Window implements IDocumentFolder {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         Boolean nuovoInserimento = pratica.getId() == null;
-        
+
+        // abilitazione visualizzazione documenti tramite Menjazo
+        this.praticaToolbar.actionByName("apriDocumenti").
+                setEnabled(!nuovoInserimento && PraticaUtil.trovaDettaglioDaPratica(pratica) == null);
+
         // Abilitazione scelta della tipologia
         Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, "comboBoxTipo"), !nuovoInserimento);
         ((QToolButton) this.findChild(QToolButton.class, "toolButtonTipo")).setEnabled(nuovoInserimento);
@@ -329,6 +338,32 @@ public class FormPratica extends Window implements IDocumentFolder {
         }
         helper.createDocument(subpath, documentName, content, mimeType, title, description);
         cmisPlugin.showForm(pratica);
+    }
+
+    // XXX: codice simile a FormScrivania
+    private void apriDocumenti(){
+        Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+        if( pratica == null || pratica.getId() == null ){
+            return;
+        }
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
+        for(IPlugin plugin: plugins){
+            if( "CMIS".equals(plugin.getName()) ){
+                Boolean view = true;
+                Boolean delete = true;
+                Boolean download = true;
+                Boolean parent = false;
+                Boolean upload = true;
+                Boolean version = true;
+                if( view ){
+                    ((CmisPlugin) plugin).showForm(pratica, delete, download, parent, upload, version);
+                } else {
+                    QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
+                    return;
+                }
+            }
+        }
     }
     
 }

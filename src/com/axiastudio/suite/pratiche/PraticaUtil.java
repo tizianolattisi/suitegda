@@ -37,7 +37,6 @@ import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.protocollo.entities.*;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.trolltech.qt.core.QProcess;
 
 import javax.persistence.EntityManager;
@@ -49,6 +48,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -91,6 +92,8 @@ public class PraticaUtil {
             String sql = "select max(substring(p.codiceinterno, length(p.codiceinterno) - " + tipoPratica.getLunghezzaprogressivo().toString() + " + 1)) " +
                                 "from Pratica p join p.tipo t";
             sql += " where p.codiceinterno like '"+tipo.getCodice()+"%'";
+            sql += " and p.codificaanomala = FALSE";
+//            sql += " and trim(both '0123456789' from substring(p.codiceinterno, length(p.codiceinterno) - 3 + 1))=''";  // filtro solo le pratiche che rispettano il comportamento atteso (casi di vecchi inserimenti)
             if( tipoPratica.getProgressivoanno() ){
                 sql += " and t.progressivoanno = TRUE";
                 sql += " and p.anno = " + year.toString();
@@ -103,8 +106,19 @@ public class PraticaUtil {
             String maxString = (String) q.getSingleResult();
             Integer max=1;
             if( maxString != null ){
-                max = Integer.parseInt(maxString.substring(maxString.length() - n));
-                max += 1;
+                try {
+                    max = Integer.parseInt(maxString.substring(maxString.length() - n));
+                    max += 1;
+                }
+                catch (NumberFormatException ex) {
+                    Logger.getLogger(PraticaUtil.class.getName()).log(Level.SEVERE,
+                            "È stata selezionata una pratica con codifica anomala rispetto alle regole di calcolo del progressivo.", ex);
+                    return "Codifica errata";
+                }
+                catch (Exception ex) {
+                    Logger.getLogger(PraticaUtil.class.getName()).log(Level.SEVERE, null, ex);
+                    return null;
+                }
             }
             map.put("n"+i, max);
             }
@@ -126,7 +140,6 @@ public class PraticaUtil {
         String codifica=creaCodificaInterna(tipoPratica);
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
-//        String sql = "select count(p.codiceinterno) from Pratica p where p.codiceinterno = '" + codifica + "'";
         Query q = em.createQuery("select count(p.codiceinterno) from Pratica p where p.codiceinterno = '" + codifica + "'");
         Long i = (Long) q.getSingleResult();
         return (i == 0);
@@ -175,7 +188,12 @@ public class PraticaUtil {
         List<Ufficio> uffici = new ArrayList<Ufficio>();
         uffici.add(sportello);
 
-        return protocollaPratica(pratica, sportello, determina.getOggetto(), attribuzioni, oggetto, null, uffici, TipoProtocollo.INTERNO);
+        Validation val=protocollaPratica(pratica, sportello, determina.getOggetto(), attribuzioni, oggetto, null, uffici,
+                TipoProtocollo.INTERNO);
+        if ( val.getResponse()==true ) {
+            determina.setProtocollo((Protocollo) val.getEntity());
+        }
+        return val;
     }
 
     public static Validation inserisciAttribuzioniProtocolloDetermina(Determina determina) {
@@ -283,6 +301,13 @@ public class PraticaUtil {
                 soggettoProtocollo.setSoggetto(soggetto);
             }
             protocollo.setSoggettoProtocolloCollection(soggettiProtocollo);
+        }
+        // riferimenti atto
+        IDettaglio dettaglio = trovaDettaglioDaPratica(pratica);
+        if( dettaglio != null && dettaglio instanceof IAtto ){
+            IAtto atto = (IAtto) dettaglio;
+            protocollo.setNumeroatto(atto.getNumero());
+            protocollo.setDataatto(atto.getData());
         }
         // inserimento protocollo nella pratica
         Collection<PraticaProtocollo> pratiche = new ArrayList<PraticaProtocollo>();

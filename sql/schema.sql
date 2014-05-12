@@ -124,18 +124,24 @@ CREATE TABLE utente (
     supervisoreprotocollo boolean NOT NULL DEFAULT FALSE,
     ricercatoreprotocollo boolean NOT NULL DEFAULT FALSE,
     istruttorepratiche boolean NOT NULL DEFAULT FALSE,
-    disabilitato boolean NOT NULL DEFAULT FALSE
+    pubblicaalbo boolean NOT NULL DEFAULT FALSE,
+    disabilitato boolean NOT NULL DEFAULT FALSE,
+    soggetto bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE base.utente OWNER TO postgres;
 ALTER TABLE ONLY utente
     ADD CONSTRAINT utente_pkey PRIMARY KEY (id);
+-- ALTER TABLE ONLY utente
+--     ADD CONSTRAINT fk_utente_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
 
 CREATE TABLE ufficio (
     id bigserial NOT NULL,
     descrizione character varying(255),
+    denominazione character varying(500),
     sportello boolean NOT NULL DEFAULT FALSE,
     mittenteodestinatario boolean NOT NULL DEFAULT FALSE,
     attribuzione boolean NOT NULL DEFAULT FALSE,
+    assessorato boolean NOT NULL DEFAULT FALSE,
     pec character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE base.ufficio OWNER TO postgres;
@@ -268,6 +274,11 @@ ALTER TABLE ONLY soggetto
 ALTER TABLE ONLY soggetto
     ADD CONSTRAINT fk_soggetto_titolosoggetto FOREIGN KEY (titolosoggetto) REFERENCES titolosoggetto(id);
 
+-- Tabella base.utente
+ALTER TABLE ONLY base.utente
+    ADD CONSTRAINT fk_utente_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+-- /Tabella base.utente
+
 CREATE TABLE grupposoggetto (
     id bigserial NOT NULL,
     soggetto bigint NOT NULL,
@@ -398,7 +409,8 @@ CREATE TABLE riferimento (
     tipo character varying(50),
     soggetto bigint,
     riferimento character varying(255),
-    descrizione character varying(255)
+    descrizione character varying(255),
+    lavoro boolean NOT NULL DEFAULT false
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.riferimento OWNER TO postgres;
 ALTER TABLE ONLY riferimento
@@ -423,6 +435,7 @@ ALTER TABLE ONLY servizio
 
 CREATE TABLE capitolo (
     id bigserial NOT NULL,
+    numero character varying(6),
     descrizione character varying(1024)
 );
 ALTER TABLE finanziaria.capitolo OWNER TO postgres;
@@ -550,24 +563,21 @@ ALTER TABLE ONLY ufficioprocedimento
 ALTER TABLE ONLY ufficioprocedimento
     ADD CONSTRAINT fk_ufficioprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
-CREATE TABLE utenteprocedimento (
+CREATE TABLE ufficioutenteprocedimento (
     id bigserial NOT NULL,
     procedimento bigint,
-    utente bigint,
-    ufficio bigint,
+    ufficioutente bigint,
     responsabile boolean,
     abilitato boolean,
     abituale boolean
 ) INHERITS (generale.withtimestamp);
-ALTER TABLE procedimenti.utenteprocedimento OWNER TO postgres;
-ALTER TABLE ONLY utenteprocedimento
-    ADD CONSTRAINT utenteprocedimento_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY utenteprocedimento
-    ADD CONSTRAINT fk_utenteprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
-ALTER TABLE ONLY utenteprocedimento
-    ADD CONSTRAINT fk_utenteprocedimento_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
-ALTER TABLE ONLY ufficioprocedimento
-    ADD CONSTRAINT fk_utenteprocedimento_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+ALTER TABLE procedimenti.ufficioutenteprocedimento OWNER TO postgres;
+ALTER TABLE ONLY ufficioutenteprocedimento
+    ADD CONSTRAINT ufficioutenteprocedimento_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY ufficioutenteprocedimento
+    ADD CONSTRAINT fk_ufficioutenteprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
+ALTER TABLE ONLY ufficioutenteprocedimento
+    ADD CONSTRAINT fk_ufficioutenteprocedimento_ufficioutente FOREIGN KEY (ufficioutente) REFERENCES base.ufficioutente(id);
 
 CREATE TABLE protocollo.fascicolo (
     id bigserial NOT NULL,
@@ -683,11 +693,14 @@ CREATE TABLE pratica (
     datachiusura date,
     datatermineistruttoria date,
     datascadenza date,
-    procedimento bigint
+    procedimento bigint,
+    codificaanomala boolean NOT NULL DEFAULT FALSE
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE pratiche.pratica OWNER TO postgres;
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT pratica_idpratica_key UNIQUE (idpratica);
+ALTER TABLE ONLY pratica
+    ADD CONSTRAINT pratica_codiceinterno_key UNIQUE (codiceinterno);
 ALTER TABLE ONLY pratica
     ADD CONSTRAINT pratica_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY pratica
@@ -794,6 +807,7 @@ CREATE TABLE fasepratica (
   condizione text,
   azione text,
   completata boolean default false,
+  negata boolean default false,
   attiva boolean default false,
   usoresponsabile boolean default false,
   cariche character varying(512)
@@ -810,6 +824,23 @@ ADD CONSTRAINT fk_fasepratica_confermata FOREIGN KEY (confermata) REFERENCES pra
 ALTER TABLE ONLY fasepratica
 ADD CONSTRAINT fk_fasepratica_rifiutata FOREIGN KEY (rifiutata) REFERENCES pratiche.fasepratica(id);
 
+CREATE TABLE utentepratica (
+  id bigserial NOT NULL,
+  pratica character varying(9),
+  utente bigint,
+  responsabile boolean,
+  istruttore boolean,
+  dal date,
+  al date,
+  motivazione character varying(512)
+) INHERITS (generale.withtimestamp);
+ALTER TABLE pratiche.utentepratica OWNER TO postgres;
+ALTER TABLE ONLY utentepratica
+ADD CONSTRAINT utentepratica_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY utentepratica
+ADD CONSTRAINT fk_utentepratica_pratica FOREIGN KEY (pratica) REFERENCES pratica(idpratica);
+ALTER TABLE ONLY utentepratica
+ADD CONSTRAINT fk_utentepratica_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
 
 CREATE TABLE visto (
   id bigserial NOT NULL,
@@ -819,7 +850,8 @@ CREATE TABLE visto (
   utente bigint,
   responsabile bigint,
   data  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  negato boolean default false
+  negato boolean default false,
+  commento character varying
 );
 ALTER TABLE pratiche.visto OWNER TO postgres;
 ALTER TABLE ONLY visto
@@ -871,7 +903,9 @@ CREATE TABLE protocollo (
     esecutorespedizione character varying(40),
     controlloreposta character varying(40),
     scansionemassiva boolean,
-    fascicolo bigint
+    fascicolo bigint,
+    numeroatto integer,
+    dataatto date
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.protocollo OWNER TO postgres;
 ALTER TABLE ONLY protocollo
@@ -1105,18 +1139,23 @@ SET search_path = pubblicazioni, pg_catalog;
 
 CREATE TABLE pubblicazione (
     id bigserial NOT NULL,
+    protocollo character varying(12),
     titolo character varying(25),
     descrizione character varying(2048),
     richiedente character varying(255),
-    inizioconsultazione date,
-    fineconsultazione date,
+    datapubblicazione date,
     durataconsultazione integer,
     tipoattopubblicazione bigint NOT NULL,
-    pubblicato boolean
+    pubblicato boolean,
+    dataatto date,
+    numeroatto integer
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE pubblicazioni.pubblicazione OWNER TO postgres;
 ALTER TABLE ONLY pubblicazione
     ADD CONSTRAINT pubblicazione_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY pubblicazione
+ADD CONSTRAINT fk_pubblicazione_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
+
 
 
 CREATE TABLE tipoattopubblicazione (
@@ -1195,6 +1234,7 @@ CREATE TABLE determina (
     oggetto character varying(1024),
     dientrata boolean NOT NULL DEFAULT FALSE,
     dispesa boolean NOT NULL DEFAULT FALSE,
+    spesaimpegnoesistente boolean NOT NULL DEFAULT FALSE,
     diregolarizzazione boolean NOT NULL DEFAULT FALSE,
     diliquidazione boolean NOT NULL DEFAULT FALSE,
     diincarico boolean NOT NULL DEFAULT FALSE,
@@ -1256,6 +1296,8 @@ ALTER TABLE ONLY ufficiodetermina
 CREATE TABLE movimentodetermina (
     id bigserial NOT NULL,
     determina bigint,
+    archivio character(1),
+    eu character(1),
     capitolo bigint,
     articolo character varying(255),
     codicemeccanografico character varying(255),
@@ -1266,7 +1308,13 @@ CREATE TABLE movimentodetermina (
     importo numeric(15,2),
     importoimpegnoaccertamento numeric(15,2),
     tipomovimento character varying(255),
-    annoesercizio bigint
+    annoesercizio bigint,
+    codicebeneficiario bigint,
+    descrizionebeneficiario character varying(255),
+    codicecup character varying(15),
+    codicecig character varying(40),
+    cespite  character varying(20),
+    descrizionecespite character varying(255)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.movimentodetermina OWNER TO postgres;
 ALTER TABLE ONLY movimentodetermina
@@ -1275,6 +1323,28 @@ ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_determina FOREIGN KEY (determina) REFERENCES determina(id);
 ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT fk_movimentodetermina_capitolo FOREIGN KEY (capitolo) REFERENCES finanziaria.capitolo(id);
+
+CREATE TABLE spesaimpegnoesistente (
+    id bigserial NOT NULL,
+    determina bigint,
+    capitolo integer,
+    impegno character varying(255),
+    sottoimpegno character varying(255),
+    annoimpegno integer,
+    importo numeric(15,2),
+    annoesercizio integer,
+    codicebeneficiario bigint,
+    descrizionebeneficiario character varying(255),
+    codicecup character varying(15),
+    codicecig character varying(40),
+    cespite  character varying(20),
+    descrizionecespite character varying(255)
+) INHERITS (generale.withtimestamp);
+ALTER TABLE deliberedetermine.spesaimpegnoesistente OWNER TO postgres;
+ALTER TABLE ONLY spesaimpegnoesistente
+    ADD CONSTRAINT spesaimpegnoesistente_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY spesaimpegnoesistente
+    ADD CONSTRAINT fk_spesaimpegnoesistente_determina FOREIGN KEY (determina) REFERENCES determina(id);
 
 
 -- modelli

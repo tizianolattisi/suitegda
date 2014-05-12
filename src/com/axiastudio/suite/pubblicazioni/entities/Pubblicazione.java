@@ -16,6 +16,8 @@
  */
 package com.axiastudio.suite.pubblicazioni.entities;
 
+import com.axiastudio.suite.protocollo.entities.Protocollo;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -32,18 +34,18 @@ public class Pubblicazione implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genpubblicazione")
     private Long id;
+    @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
+    @ManyToOne
+    private Protocollo protocollo;
     @Column(name="titolo", length=255)
     private String titolo;
     @Column(name="descrizione", length=2048)
     private String descrizione;
     @Column(name="richiedente", length=255)
     private String richiedente;
-    @Column(name="inizioconsultazione")
+    @Column(name="datapubblicazione")
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date inizioconsultazione;
-    @Column(name="fineconsultazione")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fineconsultazione;
+    private Date datapubblicazione;
     @Column(name="durataconsultazione")
     private Integer durataconsultazione;
     @Column(name="pubblicato")
@@ -51,6 +53,11 @@ public class Pubblicazione implements Serializable {
     @JoinColumn(name = "tipoattopubblicazione", referencedColumnName = "id")
     @ManyToOne
     private TipoAttoPubblicazione tipoattopubblicazione;
+    @Column(name="numeroatto")
+    private Integer numeroatto;
+    @Column(name="dataatto")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dataatto;
 
 
 
@@ -60,6 +67,14 @@ public class Pubblicazione implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Protocollo getProtocollo() {
+        return protocollo;
+    }
+
+    public void setProtocollo(Protocollo protocollo) {
+        this.protocollo = protocollo;
     }
 
     public String getTitolo() {
@@ -86,20 +101,12 @@ public class Pubblicazione implements Serializable {
         this.richiedente = richiedente;
     }
 
-    public Date getInizioconsultazione() {
-        return inizioconsultazione;
+    public Date getDatapubblicazione() {
+        return datapubblicazione;
     }
 
-    public void setInizioconsultazione(Date inizioconsultazione) {
-        this.inizioconsultazione = inizioconsultazione;
-    }
-
-    public Date getFineconsultazione() {
-        return fineconsultazione;
-    }
-
-    public void setFineconsultazione(Date fineconsultazione) {
-        this.fineconsultazione = fineconsultazione;
+    public void setDatapubblicazione(Date datapubblicazione) {
+        this.datapubblicazione = datapubblicazione;
     }
 
     public Integer getDurataconsultazione() {
@@ -124,6 +131,22 @@ public class Pubblicazione implements Serializable {
 
     public void setTipoattopubblicazione(TipoAttoPubblicazione tipoAttoPubblicazione) {
         this.tipoattopubblicazione = tipoAttoPubblicazione;
+    }
+
+    public Integer getNumeroatto() {
+        return numeroatto;
+    }
+
+    public void setNumeroatto(Integer numeroatto) {
+        this.numeroatto = numeroatto;
+    }
+
+    public Date getDataatto() {
+        return dataatto;
+    }
+
+    public void setDataatto(Date dataatto) {
+        this.dataatto = dataatto;
     }
 
     @Override

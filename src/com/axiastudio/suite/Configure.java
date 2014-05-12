@@ -36,6 +36,7 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaCallbacks;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
+import com.axiastudio.suite.deliberedetermine.entities.SpesaImpegnoEsistente;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
@@ -148,13 +149,14 @@ public class Configure {
 
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
         cmisPluginPubblicazioni.setup(cmisUrl, cmisUser, cmisPassword,
-                alfrescoPathPubblicazione + "/${inizioconsultazione,date,yyyy}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
+                alfrescoPathPubblicazione + "/${dataatto,date,yyyy}/${dataatto,date,MM}/${dataatto,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
         Register.registerPlugin(cmisPluginPubblicazioni, Pubblicazione.class);
 
         CmisPlugin cmisPluginPratica = new CmisPlugin();
         cmisPluginPratica.setup(cmisUrl, cmisUser, cmisPassword,
-                alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/");
+                alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/",
+                Boolean.FALSE);
         Register.registerPlugin(cmisPluginPratica, FormPratica.class);
         Register.registerPlugin(cmisPluginPratica, FormDetermina.class);
 
@@ -404,7 +406,12 @@ public class Configure {
                               "classpath:com/axiastudio/suite/deliberedetermine/forms/movimentodetermina.ui",
                               MovimentoDetermina.class,
                               Dialog.class);
-        
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/deliberedetermine/forms/spesaimpegnoesistente.ui",
+                SpesaImpegnoEsistente.class,
+                Dialog.class);
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/norma.ui",
                               Norma.class,

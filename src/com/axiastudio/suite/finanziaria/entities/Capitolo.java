@@ -31,6 +31,8 @@ public class Capitolo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gencapitolo")
     private Long id;
+    @Column(name="numero")
+    private String numero;
     @Column(name="descrizione")
     private String descrizione;
 
@@ -48,6 +50,14 @@ public class Capitolo implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
     @Override

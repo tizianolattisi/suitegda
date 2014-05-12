@@ -2,6 +2,7 @@ package com.axiastudio.suite.pratiche.forms;
 
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
+import com.trolltech.qt.gui.QKeySequence;
 
 /**
  * User: tiziano
@@ -17,10 +18,13 @@ public class PraticaToolbar extends PyPaPiToolBar {
                 "Apri il dettaglio collegato", parent);
         this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
                 "classpath:com/axiastudio/suite/resources/datamatrix_find.png",
-                "Ricerca da etichetta", parent);
+                "Ricerca da etichetta", parent, new QKeySequence(tr("F9")));
         this.insertButton("stampaEtichetta", "Stampa etichetta",
                 "classpath:com/axiastudio/suite/resources/datamatrix.png",
                 "Stampa etichetta", parent);
+        this.insertButton("apriDocumenti", "Apri documenti",
+                "classpath:com/axiastudio/menjazo/resources/menjazo.png",
+                "Apre lo spazio documenti", parent);
     }
 }
 

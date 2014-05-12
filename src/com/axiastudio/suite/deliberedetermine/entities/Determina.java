@@ -26,12 +26,15 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaListener;
 import com.axiastudio.suite.finanziaria.entities.Progetto;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
+import com.axiastudio.suite.pratiche.IAtto;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Visto;
+import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.protocollo.IProtocollabile;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
+import com.axiastudio.suite.protocollo.entities.UfficioProtocollo;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -53,7 +56,7 @@ import java.util.List;
 @NamedQuery(name="inAttesaDiVistoDiBilancio",
         query = "SELECT d FROM Determina d JOIN d.pratica p JOIN p.fasePraticaCollection fp " +
                 "WHERE fp.attiva = true AND fp.fase.id = :idfase")
-public class Determina implements Serializable, IDettaglio, IProtocollabile {
+public class Determina implements Serializable, IDettaglio, IProtocollabile, IAtto {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
@@ -70,9 +73,13 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<MovimentoDetermina> movimentoDeterminaCollection;
     @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<SpesaImpegnoEsistente> spesaImpegnoEsistenteCollection;
+    @OneToMany(mappedBy = "determina", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioDetermina> ufficioDeterminaCollection;
     @Column(name="dispesa")
     private Boolean dispesa=Boolean.FALSE;
+    @Column(name="spesaimpegnoesistente")
+    private Boolean spesaimpegnoesistente =Boolean.FALSE;
     @Column(name="dientrata")
     private Boolean diEntrata=Boolean.FALSE;
     @Column(name="diregolarizzazione")
@@ -85,7 +92,7 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     private String referentePolitico;
     @JoinColumn(name = "responsabile", referencedColumnName = "id")
     @ManyToOne
-    private Utente Responsabile;
+    private Utente responsabile;
     @Column(name="anno")
     private Integer anno;
     @Column(name="numero")
@@ -218,6 +225,14 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
         this.movimentoDeterminaCollection = movimentoDeterminaCollection;
     }
 
+    public Collection<SpesaImpegnoEsistente> getSpesaImpegnoEsistenteCollection() {
+        return spesaImpegnoEsistenteCollection;
+    }
+
+    public void setSpesaImpegnoEsistenteCollection(Collection<SpesaImpegnoEsistente> spesaImpegnoEsistenteCollection) {
+        this.spesaImpegnoEsistenteCollection = spesaImpegnoEsistenteCollection;
+    }
+
     public Collection<UfficioDetermina> getUfficioDeterminaCollection() {
         return ufficioDeterminaCollection;
     }
@@ -232,6 +247,14 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
 
     public void setDispesa(Boolean dispesa) {
         this.dispesa = dispesa;
+    }
+
+    public Boolean getSpesaimpegnoesistente() {
+        return spesaimpegnoesistente;
+    }
+
+    public void setSpesaimpegnoesistente(Boolean spesaprecedenteimpegno) {
+        this.spesaimpegnoesistente = spesaprecedenteimpegno;
     }
 
     public Boolean getDiEntrata() {
@@ -307,11 +330,11 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     }
 
     public Utente getResponsabile() {
-        return Responsabile;
+        return responsabile;
     }
 
     public void setResponsabile(Utente responsabile) {
-        Responsabile = responsabile;
+        this.responsabile = responsabile;
     }
 
     public TipoPubblicazione getPubblicabile() {
@@ -357,7 +380,42 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
         // NOP
     }
 
+    public String getFirma() {
+        String firma = " RESPONSABILE DEL SERVIZIO DI BILANCIO\n";
 
+        Visto vistoResp = this.getVisto("FASE_VISTO_RESPONSABILE");
+        if( vistoResp != null ){
+            if( vistoResp.getUtente().equals(vistoResp.getResponsabile()) ){
+                firma = "IL" + firma;
+            } else {
+                firma = "PER TEMPORANEA ASSENZA DEL" + firma;
+            }
+        }
+
+        if ( this.getProtocollo() != null && this.getProtocollo().getUfficioProtocolloCollection() != null ) {
+            UfficioProtocollo ufficio = (UfficioProtocollo) this.getProtocollo().getUfficioProtocolloCollection().iterator().next();
+            firma +=  ufficio.getUfficio().getDenominazione() +"\n";
+        } else {
+            firma += "[ufficio]\n";
+        }
+
+        if ( vistoResp != null && vistoResp.getCodiceCarica() != null ) {
+            if ( vistoResp.getCodiceCarica().equals(CodiceCarica.RESPONSABILE_DI_SERVIZIO) &&
+                    ! vistoResp.getUtente().equals(vistoResp.getResponsabile()) ) {
+                firma += "IL FUNZIONARIO INCARICATO\n";
+            } else if ( vistoResp.getCodiceCarica().equals(CodiceCarica.SEGRETARIO) ) {
+                firma += "IL SEGRETARIO GENERALE\n";
+            } else if ( vistoResp.getCodiceCarica().equals(CodiceCarica.VICE_SEGRETARIO) ) {
+                firma += "IL VICESEGRETARIO GENERALE\n";
+            }
+            firma += vistoResp.getUtente();
+        }
+        return firma;
+    }
+
+    public void setFirma(String firma) {
+        // NOP
+    }
 
     private Visto getVisto(String tipoVisto) {
         if( this.getPratica() != null ){
@@ -454,5 +512,5 @@ public class Determina implements Serializable, IDettaglio, IProtocollabile {
     public String toString() {
         return "com.axiastudio.suite.deliberedetermine.entities.Determina[ id=" + id + " ]";
     }
-    
+
 }

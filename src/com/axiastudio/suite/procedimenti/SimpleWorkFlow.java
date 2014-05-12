@@ -24,6 +24,7 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.deliberedetermine.DeterminaUtil;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.pratiche.IDettaglio;
@@ -121,6 +122,7 @@ public class SimpleWorkFlow {
         binding.setVariable("documenti", documenti);
         binding.setVariable("CodiceCarica", CodiceCarica.class);
         binding.setVariable("PraticaUtil", PraticaUtil.class);
+        binding.setVariable("DeterminaUtil", DeterminaUtil.class);
         return binding;
     }
 
@@ -219,6 +221,7 @@ public class SimpleWorkFlow {
     public void completaFase(FasePratica fp, Boolean confermata){
         if( confermata ){
             fp.setCompletata(true);
+            fp.setNegata(false);
             FasePratica successiva = fp.getConfermata();
             while( successiva.getDascartare()!=null && successiva.getDascartare() != "" &&
                     eseguiClosure(successiva.getDascartare()) ){
@@ -227,8 +230,10 @@ public class SimpleWorkFlow {
             setFaseAttiva(successiva);
             creaVisto(fp);
         } else {
+            fp.setCompletata(false);
+            fp.setNegata(true);
             setFaseAttiva(fp.getRifiutata());
-            creaVisto(fp, true);
+            creaVisto(fp, true); // negato
         }
 
     }

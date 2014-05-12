@@ -22,12 +22,14 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.ui.Delegate;
 import com.axiastudio.pypapi.ui.ITableModel;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.deliberedetermine.DeterminaUtil;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
+import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.Template;
@@ -59,6 +61,11 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         PyPaPiTableView tableViewServizi = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_servizi");
         tableViewServizi.entityInserted.connect(this, "servizioInserito(Object)");
         tableViewServizi.entityRemoved.connect(this, "servizioRimosso(Object)");
+
+        PyPaPiTableView tableView_impegni = (PyPaPiTableView) findChild(PyPaPiTableView.class, "tableView_impegni");
+        tableView_impegni.setItemDelegate(new Delegate(tableView_impegni));
+        PyPaPiTableView tableView_spese = (PyPaPiTableView) findChild(PyPaPiTableView.class, "tableView_spese");
+        tableView_spese.setItemDelegate(new Delegate(tableView_spese));
     }
 
     @Override
@@ -66,6 +73,15 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         super.indexChanged(row);
         popolaProcedimento();
         popolaVisti();
+
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesaImpegnoEsistente")).setEnabled(
+                ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked());
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_pluriennale")).setEnabled(
+                ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked() ||
+                        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_entrata")).isChecked());
+        ((QSpinBox) this.findChild(QSpinBox.class, "spinBox_finoAl")).setVisible(
+                ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_pluriennale")).isChecked());
+
     }
 
     private void popolaVisti() {
@@ -76,7 +92,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         if( vistoResponsabile != null ){
             testoResponsabile = SuiteUtil.DATE_FORMAT.format(vistoResponsabile.getData()) + ", " + vistoResponsabile.getUtente();
             if( vistoResponsabile.getResponsabile() != null && !vistoResponsabile.getResponsabile().equals(vistoResponsabile.getUtente()) ){
-                testoResponsabile += " (res. " + vistoResponsabile.getResponsabile() + ")";
+                testoResponsabile += " (resp. " + vistoResponsabile.getResponsabile() + ")";
             }
         }
         QLabel responsabile = (QLabel) findChild(QLabel.class, "label_vistoResponsabile");
@@ -87,7 +103,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         if( vistoBilancio != null ){
             testoBilancio = SuiteUtil.DATE_FORMAT.format(vistoBilancio.getData()) + ", " + vistoBilancio.getUtente();
             if( vistoBilancio.getResponsabile() != null && !vistoBilancio.getResponsabile().equals(vistoBilancio.getUtente()) ){
-                testoBilancio += " (res. " + vistoBilancio.getResponsabile() + ")";
+                testoBilancio += " (resp. " + vistoBilancio.getResponsabile() + ")";
             }
         }
         QLabel bilancio = (QLabel) findChild(QLabel.class, "label_vistoBilancio");
@@ -98,7 +114,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         if( vistoBilancioNegato != null ){
             testoBilancioNegato = SuiteUtil.DATE_FORMAT.format(vistoBilancioNegato.getData()) + ", " + vistoBilancioNegato.getUtente();
             if( vistoBilancioNegato.getResponsabile() != null && !vistoBilancioNegato.getResponsabile().equals(vistoBilancioNegato.getUtente()) ){
-                testoBilancioNegato += " (res. " + vistoBilancioNegato.getResponsabile() + ")";
+                testoBilancioNegato += " (resp. " + vistoBilancioNegato.getResponsabile() + ")";
             }
         }
         QLabel bilancioNegato = (QLabel) findChild(QLabel.class, "label_vistoBilancioNegato");
@@ -120,6 +136,8 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
             QIcon icon=null;
             if( fp.getCompletata() ){
                 icon = new QIcon("classpath:com/axiastudio/suite/resources/tick.png");
+            } else if ( fp.getNegata() ){
+                icon = new QIcon("classpath:com/axiastudio/suite/resources/cross.png");
             } else if ( fp.equals(wf.getFaseAttiva()) ){
                 icon = new QIcon("classpath:com/axiastudio/suite/resources/star.png");
             }
@@ -131,6 +149,11 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
     }
 
     private void completaFase(QListWidgetItem item){
+
+        if( getContext().getIsDirty() ){
+            QMessageBox.warning(this, "Attenzione", "Per completare una fase la determina deve essere prima salvata.");
+            return;
+        }
         Integer i = (Integer) item.data(Qt.ItemDataRole.UserRole);
 
         // XXX: se ci sono eventuali modifiche nelle condizioni?
@@ -147,24 +170,29 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         int res = swd.exec();
 
         if( res == 1 ){
-            if( determina.getVistoResponsabile() != null && determina.getNumero() == null ){
+/*            if(determina.getVistoResponsabile() != null && (determina.getNumero() == null || determina.getNumero() == 0)){
                 DeterminaUtil.numeroDiDetermina(determina);
                 Database db = (Database) Register.queryUtility(IDatabase.class);
                 Controller controller = db.createController(Determina.class);
                 controller.commit(determina);
-            }
+            }   */
             this.getContext().commitChanges();
         }
     }
 
  /*
  * Il primo servizio diventa principale, e non può più essere rimosso
+ * Se non indicato il referente politico, viene inserito quello di default x il servizio
  */
     private void servizioInserito(Object obj){
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         ServizioDetermina inserita = (ServizioDetermina) obj;
         if( determina.getServizioDeterminaCollection().size() == 1 ){
             inserita.setPrincipale(Boolean.TRUE);
+        }
+        if ( determina.getReferentePolitico() == null || determina.getReferentePolitico().equals("")) {
+            determina.setReferentePolitico(((Servizio) inserita.getServizio()).getReferentepolitico());
+            ((QLineEdit) findChild(QLineEdit.class, "lineEdit_RefPolitico")).setText(determina.getReferentePolitico());
         }
     }
     private void servizioRimosso(Object obj){

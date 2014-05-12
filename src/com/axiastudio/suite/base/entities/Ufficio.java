@@ -34,12 +34,16 @@ public class Ufficio implements Serializable {
     private Long id;
     @Column(name="descrizione")
     private String descrizione;
+    @Column(name="denominazione")
+    private String denominazione;
     @Column(name="sportello")
     private Boolean sportello=false;
     @Column(name="mittenteodestinatario")
     private Boolean mittenteodestinatario=false;
     @Column(name="attribuzione")
     private Boolean attribuzione=false;
+    @Column(name="assessorato")
+    private Boolean assessorato=false;
     @OneToMany(mappedBy = "ufficio", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UfficioUtente> ufficioUtenteCollection;
     @Column(name="pec")
@@ -60,6 +64,14 @@ public class Ufficio implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public String getDenominazione() {
+        return denominazione;
+    }
+
+    public void setDenominazione(String denominazione) {
+        this.denominazione = denominazione;
     }
 
     public Boolean getSportello() {
@@ -92,6 +104,14 @@ public class Ufficio implements Serializable {
 
     public void setUfficioUtenteCollection(Collection<UfficioUtente> ufficioUtenteCollection) {
         this.ufficioUtenteCollection = ufficioUtenteCollection;
+    }
+
+    public Boolean getAssessorato() {
+        return assessorato;
+    }
+
+    public void setAssessorato(Boolean assessorato) {
+        this.assessorato = assessorato;
     }
 
     public String getPec() {

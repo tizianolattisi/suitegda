@@ -54,9 +54,9 @@ public class Pratica implements Serializable, ITimeStamped {
     @Column(name="anno")
     private Integer anno;
     @Column(name="descrizione")
-    private String descrizione;
+    private String descrizione="";
     @Column(name="note")
-    private String note;
+    private String note="";
     @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<PraticaProtocollo> praticaProtocolloCollection;
     @JoinColumn(name = "attribuzione", referencedColumnName = "id")
@@ -98,11 +98,15 @@ public class Pratica implements Serializable, ITimeStamped {
     @Column(name="datascadenza")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datascadenza;
+    @Column(name="codificaanomala")
+    private Boolean codificaanomala=false;
     @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     @OrderColumn(name="progressivo")
     private List<FasePratica> fasePraticaCollection;
     @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Visto> vistoCollection;
+    @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<UtentePratica> utentePraticaCollection;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -319,6 +323,14 @@ public class Pratica implements Serializable, ITimeStamped {
         this.fase = fase;
     }
 
+    public Boolean getCodificaanomala() {
+        return codificaanomala;
+    }
+
+    public void setCodificaanomala(Boolean codificaanomala) {
+        this.codificaanomala = codificaanomala;
+    }
+
     public List<FasePratica> getFasePraticaCollection() {
         return fasePraticaCollection;
     }
@@ -373,7 +385,15 @@ public class Pratica implements Serializable, ITimeStamped {
     public void setRecordmodificatoda(String recordmodificatoda) {
         this.recordmodificatoda = recordmodificatoda;
     }
-    
+
+    public Collection<UtentePratica> getUtentePraticaCollection() {
+        return utentePraticaCollection;
+    }
+
+    public void setUtentePraticaCollection(Collection<UtentePratica> utentePraticaCollection) {
+        this.utentePraticaCollection = utentePraticaCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

@@ -17,7 +17,13 @@
 package com.axiastudio.suite.pubblicazioni.forms;
 
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit;
+import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
+import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QPushButton;
+import com.trolltech.qt.gui.QSpinBox;
+
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -28,10 +34,22 @@ public class FormPubblicazione extends Window {
     public FormPubblicazione(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
 
+        QSpinBox n_giorni = (QSpinBox) findChild(QSpinBox.class, "spinBox_n_giorni");
+        n_giorni.valueChanged.connect(this, "nGiorniChanged(int)");
+
         QPushButton pubblica = (QPushButton) findChild(QPushButton.class, "pushButton_pubblica");
         pubblica.clicked.connect(this, "pubblicaOra()");
 
     }
+
+    private void nGiorniChanged(int i){
+        QDate dataPubblicazione = QDate.currentDate();
+        PyPaPiDateEdit dateEdit_fine = (PyPaPiDateEdit) findChild(PyPaPiDateEdit.class, "dateEdit_fine");
+        QDate fineConsultazione = dataPubblicazione.addDays(i);
+        dateEdit_fine.setDate(fineConsultazione);
+    }
+
+
 
     public void pubblicaOra(){
         // da implementare per personalizzazione

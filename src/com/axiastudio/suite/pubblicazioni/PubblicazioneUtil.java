@@ -35,14 +35,24 @@ public class PubblicazioneUtil {
         Pubblicazione pubblicazione = new Pubblicazione();
         pubblicazione.setDescrizione(protocollo.getOggetto());
         pubblicazione.setTitolo("Da completare");
-        pubblicazione.setInizioconsultazione(today);
+        if( protocollo.getDataatto() != null ) {
+            pubblicazione.setDatapubblicazione(protocollo.getDataatto());
+        } else {
+            pubblicazione.setDatapubblicazione(protocollo.getDataprotocollo());
+        }
+        if( protocollo.getNumeroatto() != null ){
+            pubblicazione.setNumeroatto(protocollo.getNumeroatto());
+        }
+
+        // defaults
         pubblicazione.setDurataconsultazione(10);
         pubblicazione.setTipoattopubblicazione(delibere);
+
         controllerPubblicazione.commit(pubblicazione);
 
         CmisPlugin cmisPluginPubblicazione = (CmisPlugin) Register.queryPlugin(Pubblicazione.class, "CMIS");
         AlfrescoHelper helperPubblicazione = cmisPluginPubblicazione.createAlfrescoHelper(pubblicazione);
-        helperPubblicazione.children(); // XXX: per invocare la creazione del path
+        helperPubblicazione.createFolder();
         String path = helperPubblicazione.getPath();
 
         CmisPlugin cmisPluginProtocollo = (CmisPlugin) Register.queryPlugin(Protocollo.class, "CMIS");
@@ -53,6 +63,8 @@ public class PubblicazioneUtil {
         for( Map map: helperProtocollo.children() ){
             helperProtocollo.copyDocument((String) map.get("objectId"), path);
         }
+
+        pubblicazione.setProtocollo(protocollo);
 
         return pubblicazione;
 

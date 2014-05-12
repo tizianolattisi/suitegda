@@ -38,6 +38,9 @@ public class Servizio implements Serializable {
     @JoinColumn(name = "ufficio", referencedColumnName = "id")
     @ManyToOne
     private Ufficio ufficio;
+    @Column(name="referentepolitico")
+    private String referentepolitico;
+
 
     public Long getId() {
         return id;
@@ -61,6 +64,14 @@ public class Servizio implements Serializable {
 
     public void setUfficio(Ufficio ufficio) {
         this.ufficio = ufficio;
+    }
+
+    public String getReferentepolitico() {
+        return referentepolitico;
+    }
+
+    public void setReferentepolitico(String referentepolitico) {
+        this.referentepolitico = referentepolitico;
     }
 
     @Override
