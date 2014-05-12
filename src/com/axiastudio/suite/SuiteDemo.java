@@ -65,7 +65,7 @@ public class SuiteDemo {
         app.setLanguage("it");
         
         // configurazione SuitePA
-        Configure.configure(db, System.getProperties());
+        Configure.configure(db);
 
         // TODO: filtro sulle deleghe
         try {

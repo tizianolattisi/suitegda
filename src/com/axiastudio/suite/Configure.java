@@ -90,15 +90,15 @@ import java.util.Properties;
  */
 public class Configure {
 
-    public static void configure(Database db, Properties properties){
+    public static void configure(Database db){
 
         adapters();
         callbacks();
         privates();
 
         forms(db);
-        plugins(properties);
-        templates(properties);
+        plugins();
+        templates();
 
         // gestore deleghe
         GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
@@ -124,14 +124,14 @@ public class Configure {
         Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));
     }
 
-    private static void plugins(Properties properties) {
+    private static void plugins() {
 
         /* CMIS */
 
-        String cmisUrl = properties.getProperty("cmis.url");
-        String cmisUser = properties.getProperty("cmis.user");
-        String cmisPassword = properties.getProperty("cmis.password");
         Application app = Application.getApplicationInstance();
+        String cmisUrl = (String) app.getConfigItem("cmis.url");
+        String cmisUser = (String) app.getConfigItem("cmis.user");
+        String cmisPassword = (String) app.getConfigItem("cmis.password");
         String alfrescoPathProtocollo = (String) app.getConfigItem("alfrescopath.protocollo");
         String alfrescoPathPratica = (String) app.getConfigItem("alfrescopath.pratica");
         String alfrescoPathRichiesta = (String) app.getConfigItem("alfrescopath.richiesta");
@@ -174,12 +174,13 @@ public class Configure {
 
     }
 
-    private static void templates(Properties properties) {
+    private static void templates() {
 
         /* CMIS */
-        String cmisUrl = properties.getProperty("cmis.url");
-        String cmisUser = properties.getProperty("cmis.user");
-        String cmisPassword = properties.getProperty("cmis.password");
+        Application app = Application.getApplicationInstance();
+        String cmisUrl = (String) app.getConfigItem("cmis.url");
+        String cmisUser = (String) app.getConfigItem("cmis.user");
+        String cmisPassword = (String) app.getConfigItem("cmis.password");
 
         OoopsPlugin ooopsPlugin = (OoopsPlugin) Register.queryPlugin(FormPratica.class, "Ooops");
         List<Modello> modelli = SuiteUtil.elencoModelli();
