@@ -194,6 +194,7 @@ public class Mdi extends QMainWindow implements IMdi {
         itemScanNDo.setText(0, "Scan'n'do - marcatura rapida protocolli");
         itemScanNDo.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemScanNDo.setText(1, "SCANNDO");
+        itemScanNDo.setDisabled(!autenticato.getSpedisceprotocollo());
 
         QTreeWidgetItem itemEmail = new QTreeWidgetItem(itemProtocolloInformatico);
         itemEmail.setText(0, "PEC");

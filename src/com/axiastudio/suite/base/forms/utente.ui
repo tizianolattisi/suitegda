@@ -24,7 +24,16 @@
        <string>Utente</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>4</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
         <number>4</number>
        </property>
        <item row="0" column="0">
@@ -160,7 +169,16 @@
        <string>Permessi</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>4</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
         <number>4</number>
        </property>
        <item row="0" column="0">
@@ -169,7 +187,16 @@
           <string>Generici</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
+          <property name="topMargin">
+           <number>4</number>
+          </property>
+          <property name="rightMargin">
+           <number>4</number>
+          </property>
+          <property name="bottomMargin">
            <number>4</number>
           </property>
           <item>
@@ -200,20 +227,8 @@
          <property name="title">
           <string>Protocollo</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>4</number>
-          </property>
-          <property name="bottomMargin">
-           <number>4</number>
-          </property>
-          <property name="spacing">
-           <number>4</number>
-          </property>
-          <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
            <widget class="QCheckBox" name="checkBox_3">
             <property name="text">
              <string>Operatore</string>
@@ -223,7 +238,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item>
            <widget class="QCheckBox" name="checkBox_12">
             <property name="text">
              <string>Ricercatore</string>
@@ -233,7 +248,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item>
            <widget class="QCheckBox" name="checkBox_10">
             <property name="text">
              <string>Attributore</string>
@@ -243,7 +258,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item>
            <widget class="QCheckBox" name="checkBox_4">
             <property name="text">
              <string>Supervisore</string>
@@ -253,7 +268,17 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item>
+           <widget class="QCheckBox" name="checkBox_14">
+            <property name="text">
+             <string>Da per spedito</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>spedisceprotocollo</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QCheckBox" name="checkBox_13">
             <property name="text">
              <string>Pubblica all'albo</string>
@@ -263,7 +288,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
+          <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -288,7 +313,16 @@
           <property name="spacing">
            <number>4</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
+          <property name="topMargin">
+           <number>4</number>
+          </property>
+          <property name="rightMargin">
+           <number>4</number>
+          </property>
+          <property name="bottomMargin">
            <number>4</number>
           </property>
           <item>

@@ -123,6 +123,7 @@ CREATE TABLE utente (
     supervisorepratiche boolean NOT NULL DEFAULT FALSE,
     supervisoreprotocollo boolean NOT NULL DEFAULT FALSE,
     ricercatoreprotocollo boolean NOT NULL DEFAULT FALSE,
+    spedisceprotocollo boolean NOT NULL DEFAULT FALSE,
     istruttorepratiche boolean NOT NULL DEFAULT FALSE,
     pubblicaalbo boolean NOT NULL DEFAULT FALSE,
     disabilitato boolean NOT NULL DEFAULT FALSE,

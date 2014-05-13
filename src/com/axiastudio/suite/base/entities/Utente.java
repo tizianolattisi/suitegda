@@ -63,6 +63,8 @@ public class Utente implements Serializable, IUtente {
     private Boolean attributoreprotocollo=false;
     @Column(name="supervisoreprotocollo")
     private Boolean supervisoreprotocollo=false;
+    @Column(name="spedisceprotocollo")
+    private Boolean spedisceprotocollo=false;
     @Column(name="operatorepratiche")
     private Boolean operatorepratiche=true;
     @Column(name="supervisorepratiche")
@@ -192,6 +194,14 @@ public class Utente implements Serializable, IUtente {
 
     public void setAttributoreprotocollo(Boolean attributoreprotocollo) {
         this.attributoreprotocollo = attributoreprotocollo;
+    }
+
+    public Boolean getSpedisceprotocollo() {
+        return spedisceprotocollo;
+    }
+
+    public void setSpedisceprotocollo(Boolean spedisceprotocollo) {
+        this.spedisceprotocollo = spedisceprotocollo;
     }
 
     public Boolean getSuperutente() {
