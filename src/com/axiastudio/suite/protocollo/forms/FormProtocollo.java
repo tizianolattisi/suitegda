@@ -41,6 +41,7 @@ import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.axiastudio.suite.pubblicazioni.PubblicazioneUtil;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
+import com.axiastudio.suite.scanndo.ScanNDo;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
 
@@ -489,6 +490,16 @@ public class FormProtocollo extends Window {
         if( exec == 1 ){
             System.out.println("Print!");            
         }
+    }
+
+    private void scanNDo() {
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        ScanNDo form = new ScanNDo(protocollo.getIddocumento());
+        QMdiArea workspace = Util.findParentMdiArea(this);
+        if( workspace != null ){
+            workspace.addSubWindow((QDialog) form);
+        }
+        form.show();
     }
 
     private void pubblicaProtocollo() {

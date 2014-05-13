@@ -49,6 +49,9 @@ public class ProtocolloMenuBar extends PyPaPiToolBar {
         this.insertButton("stampaEtichetta", "Stampa etichetta",
                           "classpath:com/axiastudio/suite/resources/datamatrix.png",
                           "Stampa etichetta", parent);
+        this.insertButton("scanNDo", "Apri l'utilità scan'n'do",
+                "classpath:com/axiastudio/suite/resources/email_go.png",
+                "Apri l'utilità scan'n'do", parent);
         // XXX: in attesa di pubblicare gli altri componenti
         /*
         this.insertButton("segnaturaXml", "Crea Segnatura.xml",

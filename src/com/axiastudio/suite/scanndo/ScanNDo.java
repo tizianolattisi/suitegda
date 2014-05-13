@@ -34,6 +34,10 @@ public class ScanNDo extends QDialog {
     private final QSound beep;
 
     public ScanNDo() {
+        this(null);
+    }
+
+    public ScanNDo(String preselezione) {
         QFile file = Util.ui2jui(new QFile("classpath:com/axiastudio/suite/scanndo/scanndo.ui"));
         loadUi(file);
 
@@ -41,6 +45,10 @@ public class ScanNDo extends QDialog {
         scansione.returnPressed.connect(this, "doSomething()");
 
         beep = new QSound(getClass().getResource("beep.wav").getPath());
+
+        if( preselezione != null ){
+            scansione.setText(preselezione);
+        }
 
     }
 
