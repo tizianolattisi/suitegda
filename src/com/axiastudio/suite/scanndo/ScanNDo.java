@@ -79,6 +79,10 @@ public class ScanNDo extends QDialog {
         cq.select(from);
         cq.where(predicate);
         TypedQuery<Protocollo> tq = em.createQuery(cq);
+        if ( tq.getResultList().size() == 0 ) {
+            QMessageBox.warning(this, "Attenzione", "Protocollo non trovato.");
+            return;
+        }
         Protocollo protocollo = tq.getSingleResult();
         if( !protocollo.getSpedito() ) {
             protocollo.setSpedito(true);
@@ -87,6 +91,8 @@ public class ScanNDo extends QDialog {
             em.persist(protocollo);
             em.getTransaction().commit();
             beep.play();
+        } else {
+            QMessageBox.warning(this, "Attenzione", "Protocollo già spedito.");
         }
     }
 
