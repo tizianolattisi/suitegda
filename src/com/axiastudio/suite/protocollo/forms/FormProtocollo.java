@@ -386,12 +386,12 @@ public class FormProtocollo extends Window {
             tipoProtocollo = protocollo.getTipo();
         }
 
-        if( tipoProtocollo.equals(TipoProtocollo.USCITA) ){
-            labelDestra = "Mittenti";
-            labelSinistra = "Destinatari";
-        } else {
+        if( tipoProtocollo.equals(TipoProtocollo.ENTRATA) ){
             labelSinistra = "Mittenti";
             labelDestra = "Destinatari";
+        } else {
+            labelDestra = "Mittenti";
+            labelSinistra = "Destinatari";
         }
         ((QLabel) this.findChild(QLabel.class, "label_destra")).setText(labelDestra);
         QTabWidget tabWidgetSoggettiProtocollo = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget_sinistra");
