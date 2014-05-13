@@ -220,7 +220,7 @@ SELECT setval('procedimenti.ufficioprocedimento_id_seq', 3, true);
 
 insert into ufficioutenteprocedimento (id, ufficioutente, procedimento, responsabile, abilitato, abituale)
     values (1, 2, 1, true, true, true);
-SELECT setval('procedimenti.utenteprocedimento_id_seq', 2, true);
+SELECT setval('procedimenti.ufficioutenteprocedimento_id_seq', 2, true);
 
 insert into tipopraticaprocedimento (id, tipopratica, procedimento) values (1, 3, 1);
 insert into tipopraticaprocedimento (id, tipopratica, procedimento) values (2, 2, 2);
