@@ -493,6 +493,11 @@ public class FormProtocollo extends Window {
     }
 
     private void scanNDo() {
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        if( !autenticato.getSpedisceprotocollo() ){
+            Util.warningBox(this, "Utente non abilitato", "Attenzione, l'utente non è abilitato.");
+            return;
+        }
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         ScanNDo form = new ScanNDo(protocollo.getIddocumento());
         QMdiArea workspace = Util.findParentMdiArea(this);
