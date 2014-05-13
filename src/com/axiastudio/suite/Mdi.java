@@ -26,8 +26,11 @@ import com.axiastudio.pypapi.ui.IUIFile;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.base.entities.CambiaPassword;
 import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.pratiche.forms.FormTipoPratica;
+import com.axiastudio.suite.protocollo.forms.FormGestioneAnnullati;
 import com.axiastudio.suite.protocollo.forms.FormMailboxList;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
@@ -178,6 +181,22 @@ public class Mdi extends QMainWindow implements IMdi {
         itemProtocollo.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemProtocollo.setText(1, "com.axiastudio.suite.protocollo.entities.Protocollo");
         itemProtocollo.setText(2, "NEW");
+
+        QTreeWidgetItem itemGestioneAnnullati = new QTreeWidgetItem(itemProtocolloInformatico);
+        itemGestioneAnnullati.setText(0, "Protocolli annullati");
+        itemGestioneAnnullati.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+        itemGestioneAnnullati.setText(1, "GESTIONEANNULLATI");
+        Costante costanteUfficioAnnullati = SuiteUtil.trovaCostante("UFFICIO_ANNULLATI");
+        Long idUfficioAnnullati = Long.parseLong(costanteUfficioAnnullati.getValore());
+        Boolean inUfficioAnnullati = Boolean.FALSE;
+        for( UfficioUtente ufficio: autenticato.getUfficioUtenteCollection()) {
+            if (ufficio.getUfficio().getId().equals(idUfficioAnnullati) && ufficio.getRicerca()) {
+                inUfficioAnnullati = Boolean.TRUE;
+            }
+        }
+        Boolean permessoGestioneAnnullati = autenticato.getAttributoreprotocollo() &&
+                autenticato.getSupervisorepratiche() && inUfficioAnnullati;
+        itemGestioneAnnullati.setDisabled(!permessoGestioneAnnullati);
 
         QTreeWidgetItem itemTitolario = new QTreeWidgetItem(itemProtocolloInformatico);
         itemTitolario.setText(0, "Titolario");
@@ -403,6 +422,10 @@ public class Mdi extends QMainWindow implements IMdi {
         if( "PASSWORD".equals(formName) ){
             CambiaPassword passDlg = new CambiaPassword(this);
             int exec = passDlg.exec();
+        } else if( "GESTIONEANNULLATI".equals(formName) ){
+            FormGestioneAnnullati form = new FormGestioneAnnullati();
+            this.workspace.addSubWindow(form);
+            form.show();
         } else if( "TITOLARIO".equals(formName) ){
             FormTitolario titolario = new FormTitolario();
             this.workspace.addSubWindow(titolario);

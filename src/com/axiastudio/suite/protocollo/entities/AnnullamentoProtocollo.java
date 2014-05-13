@@ -29,6 +29,9 @@ import java.util.Date;
 @Entity
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genannullamentoprotocollo", sequenceName="protocollo.annullamentoprotocollo_id_seq", initialValue=1, allocationSize=1)
+@NamedQuery(name="annullamentiRichiesti",
+        query = "SELECT a FROM AnnullamentoPrototollo a WHERE a.autorizzato = FALSE AND uu.respinto = FALSE "
+                + "ORDER BY a.datarichiesta DESC")
 public class AnnullamentoProtocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
