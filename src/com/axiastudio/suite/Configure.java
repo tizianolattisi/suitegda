@@ -25,6 +25,7 @@ import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.AnagraficheAdapters;
+import com.axiastudio.suite.anagrafiche.SoggettoCallbacks;
 import com.axiastudio.suite.anagrafiche.entities.*;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
@@ -113,6 +114,7 @@ public class Configure {
     }
 
     private static void callbacks() {
+        Register.registerCallbacks(Resolver.callbacksFromClass(SoggettoCallbacks.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacks.class));
