@@ -366,6 +366,13 @@ public class FormProtocollo extends Window {
         } else {
             tvSoggettiRiservati.show();
         }
+        QTabWidget tabWidgetSoggettiProtocollo = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget_sinistra");
+        tabWidgetSoggettiProtocollo.setTabEnabled(1, protocollo.getRiservato());
+
+        // Indicazione num riferimenti precedenti/successivi su label della tab
+        QTabWidget tabWidgetRiferimentiProtocollo = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget");
+        tabWidgetRiferimentiProtocollo.setTabText(1, "Riferimenti precedenti (" + protocollo.getRiferimentoProtocolloCollection().size() +
+                ") e successivi (" + protocollo.getRiferimentoProtocolloSuccessivoCollection().size() + ")");
 
     }
 
