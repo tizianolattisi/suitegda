@@ -35,6 +35,7 @@ import javax.print.attribute.AttributeSet;
 import javax.print.attribute.HashAttributeSet;
 import javax.print.attribute.standard.PrinterName;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -110,32 +111,44 @@ public class DialogStampaEtichetta extends QDialog {
 //locate printer
             Application app = Application.getApplicationInstance();
             String device = (String) app.getConfigItem("barcode.device");
-            AttributeSet attributeSet = new HashAttributeSet();
-            attributeSet.add(new PrinterName(device, null));
-            PrintService[] printService = PrintServiceLookup.lookupPrintServices(null, attributeSet);
-            if (printService.length == 0) {
+            PrintService[] printService = PrintServiceLookup.lookupPrintServices(null, null);
+            Boolean stampanteTrovata = Boolean.FALSE;
+            for (PrintService printer: printService) {
+                if ( printer.getName().contains(device) ) {
+                    stampanteTrovata = Boolean.TRUE;
+                    stampaEtichetta(printer);
+                    return;
+                }
+            }
+            if ( ! stampanteTrovata ) {
                 QMessageBox.warning(this, "Attenzione", "Impossibile contattare la stampante.");
                 return;
-            } else {
-                System.out.println("Printer online: "+printService[0]);
             }
-//create a print job
-            DocPrintJob job = printService[0].createPrintJob();
-//define the print document
-            Etichetta etichetta = (Etichetta) comboBox.itemData(comboBox.currentIndex());
-            MessageMapFormat mmp = new MessageMapFormat(etichetta.getDefinizione());
-            String codice = mmp.format(this.map);
-            InputStream is = new ByteArrayInputStream(codice.getBytes());
-//print the data
-            Doc doc = new SimpleDoc(is, DocFlavor.INPUT_STREAM.AUTOSENSE, null);
-            job.print(doc, null);
-
-            is.close();
-            System.out.println("Printing Done!!");
         } catch (Exception ex) {
             Logger.getLogger(DialogStampaEtichetta.class.getName()).log(Level.SEVERE, null, ex);
         }
         super.accept();
+    }
+
+    private void stampaEtichetta(PrintService printer) throws PrintException, IOException {
+        try {
+        //create a print job
+        DocPrintJob job = printer.createPrintJob();
+//define the print document
+        Etichetta etichetta = (Etichetta) comboBox.itemData(comboBox.currentIndex());
+        MessageMapFormat mmp = new MessageMapFormat(etichetta.getDefinizione());
+        String codice = mmp.format(this.map);
+        InputStream is = new ByteArrayInputStream(codice.getBytes());
+//print the data
+        Doc doc = new SimpleDoc(is, DocFlavor.INPUT_STREAM.AUTOSENSE, null);
+        job.print(doc, null);
+
+        is.close();
+        System.out.println("Printing Done!!");
+        } catch (Exception ex) {
+            Logger.getLogger(DialogStampaEtichetta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }
