@@ -31,6 +31,7 @@ import com.axiastudio.suite.pratiche.forms.FormTipoPratica;
 import com.axiastudio.suite.protocollo.forms.FormMailboxList;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
+import com.axiastudio.suite.scanndo.ScanNDo;
 import com.trolltech.qt.core.QObject;
 import com.trolltech.qt.core.QSignalMapper;
 import com.trolltech.qt.gui.*;
@@ -188,6 +189,11 @@ public class Mdi extends QMainWindow implements IMdi {
         itemPubblicazioni.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemPubblicazioni.setText(1, "com.axiastudio.suite.pubblicazioni.entities.Pubblicazione");
         //itemPubblicazioni.setDisabled(true);
+
+        QTreeWidgetItem itemScanNDo = new QTreeWidgetItem(itemProtocolloInformatico);
+        itemScanNDo.setText(0, "Scan'n'do - marcatura rapida protocolli");
+        itemScanNDo.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+        itemScanNDo.setText(1, "SCANNDO");
 
         QTreeWidgetItem itemEmail = new QTreeWidgetItem(itemProtocolloInformatico);
         itemEmail.setText(0, "PEC");
@@ -410,6 +416,10 @@ public class Mdi extends QMainWindow implements IMdi {
             int exec = tipipratica.exec();
         } else if( "SCRIVANIA".equals(formName) ){
             FormScrivania form = new FormScrivania();
+            this.workspace.addSubWindow(form);
+            form.show();
+        } else if( "SCANNDO".equals(formName) ){
+            ScanNDo form = new ScanNDo();
             this.workspace.addSubWindow(form);
             form.show();
         } else {
