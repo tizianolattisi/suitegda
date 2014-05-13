@@ -82,51 +82,64 @@ public class PraticaUtil {
             iter = iter.getTipopadre();
         }
 
-        Integer n = tipoPratica.getLunghezzaprogressivo();
+        MessageMapFormat mmp = new MessageMapFormat(formulacodifica);
 
-        // calcolo progressivi per nodo
+        Integer nodo = 0;
+
+        List<String> filteredKeys = new ArrayList();
+        for( String key: mmp.getKeys() ){
+            if ( key.matches("n.*") ) {
+                nodo = Integer.parseInt(key.substring(1));
+                break;
+            }
+        }
+
+        Integer n = tipoPratica.getLunghezzaprogressivo();
+        // calcolo progressivi sul nodo richiesto
         Integer i = 0;
         for( TipoPratica tipo: tipi ){
             i++;
-            if (n>0) {
-            String sql = "select max(substring(p.codiceinterno, length(p.codiceinterno) - " + tipoPratica.getLunghezzaprogressivo().toString() + " + 1)) " +
-                                "from Pratica p join p.tipo t";
-            sql += " where p.codiceinterno like '"+tipo.getCodice()+"%'";
-            sql += " and p.codificaanomala = FALSE";
-//            sql += " and trim(both '0123456789' from substring(p.codiceinterno, length(p.codiceinterno) - 3 + 1))=''";  // filtro solo le pratiche che rispettano il comportamento atteso (casi di vecchi inserimenti)
-            if( tipoPratica.getProgressivoanno() ){
-                sql += " and t.progressivoanno = TRUE";
-                sql += " and p.anno = " + year.toString();
-            }
-            if( tipoPratica.getProgressivogiunta() ){
-                sql += " and t.progressivogiunta = TRUE";
-                sql += " and p.datapratica >= '" + SuiteUtil.DATE_FORMAT.format(giuntaCorrente.getDatanascita()) +"'";
-            }
-            Query q = em.createQuery(sql);
-            String maxString = (String) q.getSingleResult();
-            Integer max=1;
-            if( maxString != null ){
-                try {
-                    max = Integer.parseInt(maxString.substring(maxString.length() - n));
-                    max += 1;
-                }
-                catch (NumberFormatException ex) {
-                    Logger.getLogger(PraticaUtil.class.getName()).log(Level.SEVERE,
-                            "È stata selezionata una pratica con codifica anomala rispetto alle regole di calcolo del progressivo.", ex);
-                    return "Codifica errata";
-                }
-                catch (Exception ex) {
-                    Logger.getLogger(PraticaUtil.class.getName()).log(Level.SEVERE, null, ex);
-                    return null;
-                }
-            }
-            map.put("n"+i, max);
-            }
             map.put("s"+i, tipo.getCodice());
+            if ( !i.equals(nodo) ) {
+                continue;
+            }
+            if (n>0) {
+                String sql = "select max(substring(p.codiceinterno, length(p.codiceinterno) - " + tipoPratica.getLunghezzaprogressivo().toString() + " + 1)) " +
+                                "from Pratica p join p.tipo t";
+                sql += " where p.codiceinterno like '"+tipo.getCodice()+"%'";
+                sql += " and p.codificaanomala = FALSE";
+//            sql += " and trim(both '0123456789' from substring(p.codiceinterno, length(p.codiceinterno) - 3 + 1))=''";  // filtro solo le pratiche che rispettano il comportamento atteso (casi di vecchi inserimenti)
+                if( tipoPratica.getProgressivoanno() ){
+                    sql += " and t.progressivoanno = TRUE";
+                    sql += " and p.anno = " + year.toString();
+                }
+                if( tipoPratica.getProgressivogiunta() ){
+                    sql += " and t.progressivogiunta = TRUE";
+                    sql += " and p.datapratica >= '" + SuiteUtil.DATE_FORMAT.format(giuntaCorrente.getDatanascita()) +"'";
+                }
+                Query q = em.createQuery(sql);
+                String maxString = (String) q.getSingleResult();
+                Integer max=1;
+                if( maxString != null ){
+                    try {
+                        max = Integer.parseInt(maxString.substring(maxString.length() - n));
+                        max += 1;
+                    }
+                    catch (NumberFormatException ex) {
+                        Logger.getLogger(PraticaUtil.class.getName()).log(Level.SEVERE,
+                                "È stata selezionata una pratica con codifica anomala rispetto alle regole di calcolo del progressivo.", ex);
+                        return "Codifica errata";
+                    }
+                    catch (Exception ex) {
+                        Logger.getLogger(PraticaUtil.class.getName()).log(Level.SEVERE, null, ex);
+                        return null;
+                    }
+                }
+                map.put("n"+i, max);
+                }
         }
 
         // composizione codifica
-        MessageMapFormat mmp = new MessageMapFormat(formulacodifica);
         String codifica = mmp.format(map);
         return codifica;
     }
