@@ -34,7 +34,6 @@ public class PubblicazioneUtil {
 
         Pubblicazione pubblicazione = new Pubblicazione();
         pubblicazione.setDescrizione(protocollo.getOggetto());
-        pubblicazione.setTitolo("Da completare");
         if( protocollo.getDataatto() != null ) {
             pubblicazione.setDatapubblicazione(protocollo.getDataatto());
         } else {
@@ -47,6 +46,7 @@ public class PubblicazioneUtil {
         // defaults
         pubblicazione.setDurataconsultazione(10);
         pubblicazione.setTipoattopubblicazione(delibere);
+        pubblicazione.setOrgano("");
 
         controllerPubblicazione.commit(pubblicazione);
 

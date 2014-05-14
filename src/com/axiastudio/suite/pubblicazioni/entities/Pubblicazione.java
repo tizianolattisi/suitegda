@@ -37,12 +37,12 @@ public class Pubblicazione implements Serializable {
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
-    @Column(name="titolo", length=255)
-    private String titolo;
     @Column(name="descrizione", length=2048)
     private String descrizione;
     @Column(name="richiedente", length=255)
     private String richiedente;
+    @Column(name="organo", length=255)
+    private String organo;
     @Column(name="datapubblicazione")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datapubblicazione;
@@ -77,14 +77,6 @@ public class Pubblicazione implements Serializable {
         this.protocollo = protocollo;
     }
 
-    public String getTitolo() {
-        return titolo;
-    }
-
-    public void setTitolo(String titolo) {
-        this.titolo = titolo;
-    }
-
     public String getDescrizione() {
         return descrizione;
     }
@@ -99,6 +91,14 @@ public class Pubblicazione implements Serializable {
 
     public void setRichiedente(String richiedente) {
         this.richiedente = richiedente;
+    }
+
+    public String getOrgano() {
+        return organo;
+    }
+
+    public void setOrgano(String organo) {
+        this.organo = organo;
     }
 
     public Date getDatapubblicazione() {

@@ -1141,9 +1141,9 @@ SET search_path = pubblicazioni, pg_catalog;
 CREATE TABLE pubblicazione (
     id bigserial NOT NULL,
     protocollo character varying(12),
-    titolo character varying(25),
     descrizione character varying(2048),
     richiedente character varying(255),
+    organo character varying(255),
     datapubblicazione date,
     durataconsultazione integer,
     tipoattopubblicazione bigint NOT NULL,
