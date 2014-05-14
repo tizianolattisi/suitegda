@@ -4,19 +4,14 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Store;
-import com.axiastudio.pypapi.ui.Column;
-import com.axiastudio.pypapi.ui.TableModel;
-import com.axiastudio.pypapi.ui.Util;
-import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
 import com.trolltech.qt.core.QByteArray;
 import com.trolltech.qt.core.QFile;
+import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.designer.QUiLoader;
 import com.trolltech.qt.designer.QUiLoaderException;
-import com.trolltech.qt.gui.QHeaderView;
-import com.trolltech.qt.gui.QItemSelectionModel;
-import com.trolltech.qt.gui.QMainWindow;
-import com.trolltech.qt.gui.QTableView;
+import com.trolltech.qt.gui.*;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -32,11 +27,14 @@ import java.util.logging.Logger;
 public class FormGestioneAnnullati extends QMainWindow {
 
     private final QTableView annullati;
+    private List<AnnullamentoProtocollo> selectionAnnullamentoProtocollo = new ArrayList<AnnullamentoProtocollo>();
 
     public FormGestioneAnnullati() {
         QFile file = Util.ui2jui(new QFile("classpath:com/axiastudio/suite/protocollo/forms/gestioneannullati.ui"));
         loadUi(file);
         annullati = (QTableView) this.findChild(QTableView.class, "annullati");
+        annullati.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
+        annullati.doubleClicked.connect(this, "apri()");
         popolaAnnullati();
     }
 
@@ -74,6 +72,44 @@ public class FormGestioneAnnullati extends QMainWindow {
         annullati.horizontalHeader().setResizeMode(0, QHeaderView.ResizeMode.ResizeToContents);
         annullati.horizontalHeader().setResizeMode(1, QHeaderView.ResizeMode.ResizeToContents);
         annullati.horizontalHeader().setResizeMode(1, QHeaderView.ResizeMode.Stretch);
+    }
+
+    private void selectRows(QItemSelection selected, QItemSelection deselected){
+
+        TableModel model = (TableModel) annullati.model();
+        List<Integer> selectedIndexes = new ArrayList();
+        List<Integer> deselectedIndexes = new ArrayList();
+        for (QModelIndex i: selected.indexes()){
+            if(!selectedIndexes.contains(i.row())){
+                selectedIndexes.add(i.row());
+            }
+        }
+        for (QModelIndex i: deselected.indexes()){
+            if(!deselectedIndexes.contains(i.row())){
+                deselectedIndexes.add(i.row());
+            }
+        }
+        for (Integer idx: selectedIndexes){
+            this.selectionAnnullamentoProtocollo.add((AnnullamentoProtocollo) model.getEntityByRow(idx));
+        }
+        for (Integer idx: deselectedIndexes){
+            this.selectionAnnullamentoProtocollo.remove(model.getEntityByRow(idx));
+        }
+
+        //refreshInfo();
+    }
+
+    private void apri(){
+        AnnullamentoProtocollo annullamentoProtocollo = this.selectionAnnullamentoProtocollo.get(0);
+        IForm form = Util.formFromEntity(annullamentoProtocollo);
+        if( form == null ){
+            return;
+        }
+        QMdiArea workspace = Util.findParentMdiArea(this);
+        if( workspace != null ){
+            workspace.addSubWindow((QDialog) form);
+        }
+        form.show();
     }
 
 }
