@@ -1143,6 +1143,7 @@ CREATE TABLE pubblicazione (
     protocollo character varying(12),
     descrizione character varying(2048),
     richiedente character varying(255),
+    organo character varying(255),
     datapubblicazione date,
     durataconsultazione integer,
     tipoattopubblicazione bigint NOT NULL,

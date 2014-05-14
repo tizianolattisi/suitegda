@@ -41,6 +41,8 @@ public class Pubblicazione implements Serializable {
     private String descrizione;
     @Column(name="richiedente", length=255)
     private String richiedente;
+    @Column(name="organo", length=255)
+    private String organo;
     @Column(name="datapubblicazione")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datapubblicazione;
@@ -89,6 +91,14 @@ public class Pubblicazione implements Serializable {
 
     public void setRichiedente(String richiedente) {
         this.richiedente = richiedente;
+    }
+
+    public String getOrgano() {
+        return organo;
+    }
+
+    public void setOrgano(String organo) {
+        this.organo = organo;
     }
 
     public Date getDatapubblicazione() {

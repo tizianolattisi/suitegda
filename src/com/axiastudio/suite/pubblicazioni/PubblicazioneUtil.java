@@ -46,6 +46,7 @@ public class PubblicazioneUtil {
         // defaults
         pubblicazione.setDurataconsultazione(10);
         pubblicazione.setTipoattopubblicazione(delibere);
+        pubblicazione.setOrgano("");
 
         controllerPubblicazione.commit(pubblicazione);
 
