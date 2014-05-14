@@ -46,6 +46,7 @@ import com.trolltech.qt.gui.*;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -284,16 +285,29 @@ public class FormScrivania  extends QMainWindow {
     private void daiPerLetto(){
         Database db = (Database) Register.queryUtility(IDatabase.class);
         Controller controller = db.createController(Attribuzione.class);
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        List<Ufficio> ufficiDaiPerLetto = new ArrayList();
+        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
+            if( uu.getDaiperletto() ){
+                ufficiDaiPerLetto.add(uu.getUfficio());
+            }
+        }
+        List<Attribuzione> attribuzioniLette = new ArrayList();
         for(Attribuzione attribuzione: this.selectionProtocollo){
-            attribuzione.setLetto(Boolean.TRUE);
-            controller.commit(attribuzione);
+            if ( ufficiDaiPerLetto.contains(attribuzione.getUfficio()) ) {
+                attribuzione.setLetto(Boolean.TRUE);
+                attribuzione.setDataletto(Calendar.getInstance().getTime());
+                attribuzione.setEsecutoreletto(autenticato.getLogin());
+                controller.commit(attribuzione);
+                attribuzioniLette.add(attribuzione);
+            }
         }
 //        this.popolaAttribuzioni();
-        attribuzioneStoreGenerale.removeAll(this.selectionProtocollo);
+        attribuzioneStoreGenerale.removeAll(attribuzioniLette);
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         TableModel model = (TableModel) tableView.model();
         Store store=model.getStore();
-        store.removeAll(this.selectionProtocollo);
+        store.removeAll(attribuzioniLette);
         model.setStore(store);
 
         this.selectionProtocollo.clear();

@@ -49,6 +49,11 @@ public class Attribuzione implements Serializable {
     private Boolean principale=false;
     @Column(name="letto")
     private Boolean letto=false;
+    @Column(name="dataletto")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataletto;
+    @Column(name="esecutoreletto", length=1)
+    private String esecutoreletto;
     @Column(name="evidenza", length=1)
     private String evidenza;
 
@@ -126,6 +131,22 @@ public class Attribuzione implements Serializable {
 
     public String getEvidenza() {
         return evidenza;
+    }
+
+    public Date getDataletto() {
+        return dataletto;
+    }
+
+    public void setDataletto(Date dataletto) {
+        this.dataletto = dataletto;
+    }
+
+    public String getEsecutoreletto() {
+        return esecutoreletto;
+    }
+
+    public void setEsecutoreletto(String esecutoreletto) {
+        this.esecutoreletto = esecutoreletto;
     }
 
     public void setEvidenza(String evidenza) {
