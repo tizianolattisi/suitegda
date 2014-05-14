@@ -37,8 +37,6 @@ public class Pubblicazione implements Serializable {
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
-    @Column(name="titolo", length=255)
-    private String titolo;
     @Column(name="descrizione", length=2048)
     private String descrizione;
     @Column(name="richiedente", length=255)
@@ -75,14 +73,6 @@ public class Pubblicazione implements Serializable {
 
     public void setProtocollo(Protocollo protocollo) {
         this.protocollo = protocollo;
-    }
-
-    public String getTitolo() {
-        return titolo;
-    }
-
-    public void setTitolo(String titolo) {
-        this.titolo = titolo;
     }
 
     public String getDescrizione() {

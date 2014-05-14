@@ -34,7 +34,6 @@ public class PubblicazioneUtil {
 
         Pubblicazione pubblicazione = new Pubblicazione();
         pubblicazione.setDescrizione(protocollo.getOggetto());
-        pubblicazione.setTitolo("Da completare");
         if( protocollo.getDataatto() != null ) {
             pubblicazione.setDatapubblicazione(protocollo.getDataatto());
         } else {
