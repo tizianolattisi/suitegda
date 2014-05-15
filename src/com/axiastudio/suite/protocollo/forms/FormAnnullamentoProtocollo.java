@@ -36,6 +36,7 @@ public class FormAnnullamentoProtocollo extends Window {
     
     public FormAnnullamentoProtocollo(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
+        this.formShown.connect(this, "updatePermission()");
     }
 
     @Override
@@ -45,10 +46,14 @@ public class FormAnnullamentoProtocollo extends Window {
 
     private void updatePermission() {
         /* permesso di confermare o respingere */
+        if( getParentForm() != null ){
+            this.setEnabled(false);
+            return;
+        }
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         Costante costanteUfficioAnnullati = SuiteUtil.trovaCostante("UFFICIO_ANNULLATI");
         Long idUfficioAnnullati = Long.parseLong(costanteUfficioAnnullati.getValore());
-        Boolean inUfficioAnnullati = Boolean.FALSE;     // TODO: conferma annullamento da rifare tramite finestra 'scollegata' da form Protocollo (e dalla logica della callback)
+        Boolean inUfficioAnnullati = Boolean.FALSE;
         for( UfficioUtente ufficio: autenticato.getUfficioUtenteCollection()) {
             if (ufficio.getUfficio().getId().equals(idUfficioAnnullati) && ufficio.getRicerca()) {
                 inUfficioAnnullati = Boolean.TRUE;
