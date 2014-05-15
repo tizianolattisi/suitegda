@@ -52,22 +52,14 @@ public class FormAnnullamentoProtocollo extends Window {
         }
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         Costante costanteUfficioAnnullati = SuiteUtil.trovaCostante("UFFICIO_ANNULLATI");
-        Long idUfficioAnnullati = Long.parseLong(costanteUfficioAnnullati.getValore());
-        Boolean inUfficioAnnullati = Boolean.FALSE;
-        for( UfficioUtente ufficio: autenticato.getUfficioUtenteCollection()) {
-            if (ufficio.getUfficio().getId().equals(idUfficioAnnullati) && ufficio.getRicerca()) {
-                inUfficioAnnullati = Boolean.TRUE;
-            }
-        }
         AnnullamentoProtocollo annullamento = (AnnullamentoProtocollo) this.getContext().getCurrentEntity();
         QCheckBox checkBox_autorizzato = (QCheckBox) this.findChild(QCheckBox.class, "checkBox_autorizzato");
         QCheckBox checkBox_respinto = (QCheckBox) this.findChild(QCheckBox.class, "checkBox_respinto");
-        Boolean modifica = annullamento.getId()!=null && !annullamento.getRespinto() && !annullamento.getAutorizzato()
-                            && autenticato.getAttributoreprotocollo() && autenticato.getSupervisorepratiche() && inUfficioAnnullati;
+        QComboBox comboBox_motivazione = (QComboBox) this.findChild(QComboBox.class, "comboBox_motivazione");
+        Boolean modifica = annullamento.getId()!=null && !annullamento.getRespinto() && !annullamento.getAutorizzato();
         checkBox_autorizzato.setEnabled( modifica );
         checkBox_respinto.setEnabled( modifica );
-        QComboBox comboBox_motivazione = (QComboBox) this.findChild(QComboBox.class, "comboBox_motivazione");
-        comboBox_motivazione.setEnabled( modifica || !(annullamento.getAutorizzato() || annullamento.getRespinto()) );
+        comboBox_motivazione.setEnabled( modifica );
     }
 
 }

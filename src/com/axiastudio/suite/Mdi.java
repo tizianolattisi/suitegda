@@ -193,8 +193,7 @@ public class Mdi extends QMainWindow implements IMdi {
                 inUfficioAnnullati = Boolean.TRUE;
             }
         }
-        Boolean permessoGestioneAnnullati = autenticato.getAttributoreprotocollo() &&
-                autenticato.getSupervisorepratiche() && inUfficioAnnullati;
+        Boolean permessoGestioneAnnullati = autenticato.getAttributoreprotocollo() && inUfficioAnnullati;
         itemGestioneAnnullati.setDisabled(!permessoGestioneAnnullati);
 
         QTreeWidgetItem itemTitolario = new QTreeWidgetItem(itemProtocolloInformatico);
