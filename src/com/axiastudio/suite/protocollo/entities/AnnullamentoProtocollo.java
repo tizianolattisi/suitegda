@@ -144,7 +144,17 @@ public class AnnullamentoProtocollo implements Serializable {
     public void setStatorichiesta(String stato) {
         
     }
-    
+
+    public String getDettaglioProtocollo() {
+        return protocollo.toString();
+    }
+
+    public void setDettaglioProtocollo(String dettaglioProtocollo) {
+
+    }
+
+
+
     @Override
     public int hashCode() {
         int hash = 0;

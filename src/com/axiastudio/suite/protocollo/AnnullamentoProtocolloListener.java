@@ -86,6 +86,7 @@ public class AnnullamentoProtocolloListener {
             List<PraticaProtocollo> praticheProtocollo = new ArrayList();
             PraticaProtocollo praticaProtocollo = new PraticaProtocollo();
             praticaProtocollo.setPratica(praticaAnnullati);
+            praticaProtocollo.setProtocollo(protocollo);
             praticaProtocollo.setOriginale(Boolean.TRUE);
             praticheProtocollo.add(praticaProtocollo);
             protocollo.setPraticaProtocolloCollection(praticheProtocollo);

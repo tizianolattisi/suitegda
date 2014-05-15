@@ -42,6 +42,7 @@ public class FormAnnullamentoProtocollo extends Window {
     @Override
     protected void indexChanged(int row) {
         updatePermission();
+        super.indexChanged(row);
     }
 
     private void updatePermission() {

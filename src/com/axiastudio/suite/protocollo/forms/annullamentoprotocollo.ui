@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>536</width>
-    <height>219</height>
+    <width>521</width>
+    <height>274</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,6 +21,27 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Protocollo</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPlainTextEdit" name="plainTextEdit">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="column" stdset="0">
+         <string>dettaglioProtocollo</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">

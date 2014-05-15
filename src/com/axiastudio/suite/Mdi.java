@@ -185,6 +185,7 @@ public class Mdi extends QMainWindow implements IMdi {
         itemGestioneAnnullati.setText(0, "Protocolli annullati");
         itemGestioneAnnullati.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemGestioneAnnullati.setText(1, "com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo");
+        itemGestioneAnnullati.setText(2, "NAMEDQUERY:annullamentiRichiesti");
         Costante costanteUfficioAnnullati = SuiteUtil.trovaCostante("UFFICIO_ANNULLATI");
         Long idUfficioAnnullati = Long.parseLong(costanteUfficioAnnullati.getValore());
         Boolean inUfficioAnnullati = Boolean.FALSE;
