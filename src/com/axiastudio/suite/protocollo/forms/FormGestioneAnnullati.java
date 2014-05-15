@@ -101,15 +101,16 @@ public class FormGestioneAnnullati extends QMainWindow {
 
     private void apri(){
         AnnullamentoProtocollo annullamentoProtocollo = this.selectionAnnullamentoProtocollo.get(0);
-        IForm form = Util.formFromEntity(annullamentoProtocollo);
+        FormAnnullamentoProtocollo form = (FormAnnullamentoProtocollo) Util.formFromEntity(annullamentoProtocollo);
         if( form == null ){
             return;
         }
         QMdiArea workspace = Util.findParentMdiArea(this);
         if( workspace != null ){
-            workspace.addSubWindow((QDialog) form);
+            workspace.addSubWindow(form);
         }
-        form.show();
+        int res = form.exec();
+        popolaAnnullati();
     }
 
 }
