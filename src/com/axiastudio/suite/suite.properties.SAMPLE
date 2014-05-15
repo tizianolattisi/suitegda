@@ -1,0 +1,25 @@
+
+# connessione a Postgres
+jdbc.url=jdbc:postgresql://127.0.0.1:5432/suite
+jdbc.driver=org.postgresql.Driver
+jdbc.password=
+jdbc.user=
+
+# log
+suite.loglevel=
+
+# connessione ad Alfresco
+cmis.user=
+cmis.password=
+cmis.url=http://127.0.0.1:8080/alfresco/service/cmis
+alfrescopath.protocollo=/Protocollo
+alfrescopath.pratica=/Pratiche
+alfrescopath.pubblicazione=/Pubblicazioni
+
+# OpenOffice
+ooo.connection=uno:socket,host=127.0.0.1,port=2002;urp;StarOffice.ServiceManager
+
+# configurazione stampante
+barcode.device=Zebra_Technologies_ZTC_GK420t
+barcode.language=ZPL
+
