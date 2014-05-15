@@ -59,15 +59,8 @@ public class DeterminaCallbacks {
                 }
             }
         }
-        // se l'utente non è inserito nell'ufficio gestore con flag modificapratiche non può modificare
-        GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
-        if( !inUfficioGestore && gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_BILANCIO) == null ){
-            msg = "Per modificare la determina devi appartenere all'ufficio gestore della pratica con i permessi di modifica, o essere responsabile di bilancio.";
-            return new Validation(false, msg);
-        }
         if( determina.getId() != null ){
             /* massimo un servizio principale */
-            ServizioDetermina servizioPrincipale = null;
             int nrServiziPrincipali = 0;
             for( ServizioDetermina servizio: determina.getServizioDeterminaCollection() ){
                 if( servizio.getPrincipale() ){
@@ -78,6 +71,15 @@ public class DeterminaCallbacks {
                 msg += "E' possibile e necessario impostare un solo servizio principale.\n";
                 return new Validation(false, msg);
             }
+        }
+
+        // se l'utente non è inserito nell'ufficio gestore con flag modificapratiche non può modificare
+        GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
+        if( !inUfficioGestore && gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_SERVIZIO, determina.getServizio()) == null &&
+                gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_BILANCIO) == null ){
+            msg = "Per modificare la determina devi appartenere all'ufficio gestore della pratica con i permessi di modifica, " +
+                    "essere responsabile di servizio o essere responsabile di bilancio.";
+            return new Validation(false, msg);
         }
 
         // imposto il responsabile

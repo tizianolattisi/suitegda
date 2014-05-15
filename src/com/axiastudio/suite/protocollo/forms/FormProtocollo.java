@@ -281,6 +281,7 @@ public class FormProtocollo extends Window {
         this.protocolloMenuBar.actionByName("consolidaDocumenti").setEnabled(!consDocumenti && profilo.inAttribuzionePrincipaleC());
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "spedito"), protocollo.getSpedito());
         this.protocolloMenuBar.actionByName("pubblicaProtocollo").setEnabled(autenticato.getPubblicaalbo());
+        this.protocolloMenuBar.actionByName("stampaEtichetta").setEnabled(!nuovoInserimento);
 
         // convalida attribuzioni
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
@@ -434,11 +435,14 @@ public class FormProtocollo extends Window {
                 Boolean parent = false;
                 Boolean upload = false;
                 Boolean version = false;
+                // gli utenti 'supervisore protocollo' possono vedere tutti i documenti; gli utenti 'ricercatore protocollo'
+                //    solo i documenti non riservati
                 if( protocollo.getRiservato() ){
-                    view = pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR();
+                    view = (pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR()) || autenticato.getSupervisoreprotocollo();
                     download = view;
                 } else {
-                    view = autenticato.getSupervisoreprotocollo() || pup.inSportelloOAttribuzioneV();
+                    view = autenticato.getSupervisoreprotocollo() || autenticato.getRicercatoreprotocollo() ||
+                            pup.inSportelloOAttribuzioneV();
                     download = view;
                 }
                 if( protocollo.getConsolidadocumenti() ){
