@@ -50,8 +50,6 @@ public class FormAnnullamentoProtocollo extends Window {
             this.setEnabled(false);
             return;
         }
-        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        Costante costanteUfficioAnnullati = SuiteUtil.trovaCostante("UFFICIO_ANNULLATI");
         AnnullamentoProtocollo annullamento = (AnnullamentoProtocollo) this.getContext().getCurrentEntity();
         QCheckBox checkBox_autorizzato = (QCheckBox) this.findChild(QCheckBox.class, "checkBox_autorizzato");
         QCheckBox checkBox_respinto = (QCheckBox) this.findChild(QCheckBox.class, "checkBox_respinto");
