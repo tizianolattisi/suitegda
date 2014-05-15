@@ -346,6 +346,11 @@ public class Configure {
                               FormPraticaProtocollo.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/protocollo/forms/annullamentoprotocollo.ui",
+                AnnullamentoProtocollo.class,
+                FormAnnullamentoProtocollo.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/protocollo.ui",
                               Protocollo.class,
                               FormProtocollo.class);

@@ -3,7 +3,7 @@
 -- Generale
 SET search_path = generale, pg_catalog;
 
-INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (1, 'PRATICA_ANNULLATI', 'Pratica contenente i protocolli annullati', '1', 'LONG');
+INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (1, 'PRATICA_ANNULLATI', 'Pratica contenente i protocolli annullati', '201200001', 'STRING');
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (2, 'UFFICIO_ANNULLATI', 'Ufficio di attribuzione dei protocolli annullati', '1', 'LONG');
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (3, 'SOGGETTO_INTERNI', 'Il soggetto a cui collegare i protocolli interni, se non specificato diversamente.', '3', 'LONG');
 INSERT INTO costante (id, nome, descrizione, valore, tipocostante) VALUES (4, 'CODICE_AMMINISTRAZIONE', 'Codice amministrazione.', 'r_h330', 'STRING');

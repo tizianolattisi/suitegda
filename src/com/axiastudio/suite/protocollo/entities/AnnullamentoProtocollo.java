@@ -17,6 +17,7 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.protocollo.AnnullamentoProtocolloListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,8 +28,12 @@ import java.util.Date;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 @Entity
+@EntityListeners({AnnullamentoProtocolloListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genannullamentoprotocollo", sequenceName="protocollo.annullamentoprotocollo_id_seq", initialValue=1, allocationSize=1)
+@NamedQuery(name="annullamentiRichiesti",
+        query = "SELECT a FROM AnnullamentoProtocollo a WHERE a.autorizzato = FALSE AND a.respinto = FALSE "
+                + "ORDER BY a.datarichiesta DESC")
 public class AnnullamentoProtocollo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
