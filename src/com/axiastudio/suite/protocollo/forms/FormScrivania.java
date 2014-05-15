@@ -147,7 +147,7 @@ public class FormScrivania  extends QMainWindow {
         tableView.horizontalHeader().setResizeMode(1, QHeaderView.ResizeMode.ResizeToContents); // iddocumento
         tableView.horizontalHeader().setResizeMode(2, QHeaderView.ResizeMode.ResizeToContents); // tipoprotocollo
         tableView.horizontalHeader().setResizeMode(3, QHeaderView.ResizeMode.ResizeToContents); // dataprotocollo
-        tableView.horizontalHeader().setResizeMode(4, QHeaderView.ResizeMode.ResizeToContents); // ufficio
+        tableView.horizontalHeader().setResizeMode(4, QHeaderView.ResizeMode.Interactive); // ufficio
         tableView.horizontalHeader().setResizeMode(5, QHeaderView.ResizeMode.ResizeToContents); // principale
         tableView.horizontalHeader().setResizeMode(6, QHeaderView.ResizeMode.Stretch);          // oggetto
     }
