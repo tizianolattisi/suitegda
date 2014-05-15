@@ -30,7 +30,6 @@ import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.pratiche.forms.FormTipoPratica;
-import com.axiastudio.suite.protocollo.forms.FormGestioneAnnullati;
 import com.axiastudio.suite.protocollo.forms.FormMailboxList;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
@@ -185,7 +184,7 @@ public class Mdi extends QMainWindow implements IMdi {
         QTreeWidgetItem itemGestioneAnnullati = new QTreeWidgetItem(itemProtocolloInformatico);
         itemGestioneAnnullati.setText(0, "Protocolli annullati");
         itemGestioneAnnullati.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
-        itemGestioneAnnullati.setText(1, "GESTIONEANNULLATI");
+        itemGestioneAnnullati.setText(1, "com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo");
         Costante costanteUfficioAnnullati = SuiteUtil.trovaCostante("UFFICIO_ANNULLATI");
         Long idUfficioAnnullati = Long.parseLong(costanteUfficioAnnullati.getValore());
         Boolean inUfficioAnnullati = Boolean.FALSE;
@@ -422,10 +421,6 @@ public class Mdi extends QMainWindow implements IMdi {
         if( "PASSWORD".equals(formName) ){
             CambiaPassword passDlg = new CambiaPassword(this);
             int exec = passDlg.exec();
-        } else if( "GESTIONEANNULLATI".equals(formName) ){
-            FormGestioneAnnullati form = new FormGestioneAnnullati();
-            this.workspace.addSubWindow(form);
-            form.show();
         } else if( "TITOLARIO".equals(formName) ){
             FormTitolario titolario = new FormTitolario();
             this.workspace.addSubWindow(titolario);
