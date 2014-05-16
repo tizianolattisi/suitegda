@@ -35,9 +35,9 @@ public class PubblicazioneUtil {
         Pubblicazione pubblicazione = new Pubblicazione();
         pubblicazione.setDescrizione(protocollo.getOggetto());
         if( protocollo.getDataatto() != null ) {
-            pubblicazione.setDatapubblicazione(protocollo.getDataatto());
+            pubblicazione.setDataatto(protocollo.getDataatto());
         } else {
-            pubblicazione.setDatapubblicazione(protocollo.getDataprotocollo());
+            pubblicazione.setDataatto(protocollo.getDataprotocollo());
         }
         if( protocollo.getNumeroatto() != null ){
             pubblicazione.setNumeroatto(protocollo.getNumeroatto());
