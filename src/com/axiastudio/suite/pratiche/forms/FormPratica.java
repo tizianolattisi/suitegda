@@ -113,7 +113,7 @@ public class FormPratica extends Window implements IDocumentFolder {
     }
 
     private void cercaDaEtichetta() {
-        String barcode = QInputDialog.getText(this, "Ricerca da etichetta", "Etichetta");
+        String barcode = QInputDialog.getText(this, "Ricerca da etichetta", "Etichetta").substring(0, 9);
         if( barcode == null ){
             return;
         }
