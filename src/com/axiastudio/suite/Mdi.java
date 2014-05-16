@@ -182,7 +182,7 @@ public class Mdi extends QMainWindow implements IMdi {
         itemProtocollo.setText(2, "NEW");
 
         QTreeWidgetItem itemGestioneAnnullati = new QTreeWidgetItem(itemProtocolloInformatico);
-        itemGestioneAnnullati.setText(0, "Protocolli annullati");
+        itemGestioneAnnullati.setText(0, "Protocolli da annullare");
         itemGestioneAnnullati.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         itemGestioneAnnullati.setText(1, "com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo");
         itemGestioneAnnullati.setText(2, "NAMEDQUERY:annullamentiRichiesti");
