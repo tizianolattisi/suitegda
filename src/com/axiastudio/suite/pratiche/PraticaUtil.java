@@ -39,10 +39,7 @@ import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.trolltech.qt.core.QProcess;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -237,6 +234,7 @@ public class PraticaUtil {
         for( Ufficio ufficio: ufficiDetermina ){
             Attribuzione attribuzione = new Attribuzione();
             attribuzione.setUfficio(ufficio);
+            attribuzione.setProtocollo(protocollo);
             if( principale ){
                 attribuzione.setPrincipale(Boolean.TRUE);
                 principale = Boolean.FALSE;
@@ -247,6 +245,7 @@ public class PraticaUtil {
             if( !ufficiDetermina.contains(ufficio) ){
                 Attribuzione attribuzione = new Attribuzione();
                 attribuzione.setUfficio(ufficio);
+                attribuzione.setProtocollo(protocollo);
                 attribuzione.setPrincipale(Boolean.FALSE);
                 attribuzioni.add(attribuzione);
             }
@@ -255,8 +254,13 @@ public class PraticaUtil {
         protocollo.setAttribuzioneCollection(attribuzioni);
 
         Database db = (Database) Register.queryUtility(IDatabase.class);
-        Controller controller = db.createController(Protocollo.class);
-        Validation validation = controller.commit(protocollo);
+        EntityManagerFactory emf = db.getEntityManagerFactory();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(protocollo);
+        em.getTransaction().commit();
+        Validation validation = new Validation();
+        validation.setResponse(Boolean.TRUE);
 
         return validation;
     }
