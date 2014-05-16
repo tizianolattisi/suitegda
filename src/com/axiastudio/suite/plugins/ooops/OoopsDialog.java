@@ -243,7 +243,7 @@ public class OoopsDialog extends QDialog {
             Boolean regoleapplicabili=false;
             String parentTemplateName = template.getName();
             if( template.getName().endsWith(".odt") ){
-                if( template.getParentTemplateName() != null ){
+                if( template.getParentTemplateName() != null ){ // e ""?
                     for( Template t: this.templates ){
                         if( t.getName().equals(template.getParentTemplateName()) ){
                             //template.setRuleSet(t.getRuleSet());
@@ -264,7 +264,6 @@ public class OoopsDialog extends QDialog {
                     // XXX: maybe is better to use streams?
                     ((IDocumentFolder) this.parent()).createDocument("protocollo/", template.getName(), "Protocollo", parentTemplateName, outputStream.toByteArray(), mimeType);
                 }
-
             }
         }
         this.close();
@@ -274,7 +273,12 @@ public class OoopsDialog extends QDialog {
 
     protected void composeFromTemplate(Template template) {
         Object entity = ((Window) this.parent()).getContext().getCurrentEntity();
-        Map<String, Object> values = template.getRuleSet().eval(entity);
+        Map<String, Object> values;
+        if( template.getRuleSet() != null ) {
+            values = template.getRuleSet().eval(entity);
+        } else {
+            values = new HashMap<String, Object>();
+        }
         this.helper.loadDocumentComponent(template.getStreamProvider().getInputStream());
         this.helper.composeDocument(values);
         //this.helper.close();
