@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,9 +43,9 @@ public class Suite {
     public static void main(String[] args) {
 
         Application app = new Application(args);
-        String propertiesFile = Suite.class.getResource("suite.properties").getPath();
+        InputStream propertiesStream = Suite.class.getResourceAsStream("suite.properties");
 
-        configure(app, propertiesFile);
+        configure(app, propertiesStream);
         Database db = (Database) Register.queryUtility(IDatabase.class);
 
         /* login */
@@ -69,7 +71,7 @@ public class Suite {
     
     }
 
-    protected static void configure(Application app, String propertiesFile) {
+    protected static void configure(Application app, InputStream propertiesStream) {
 
         String jdbcUrl = null;
         String jdbcUser = null;
@@ -94,9 +96,8 @@ public class Suite {
         // file di Properties
         Properties properties = new Properties();
         try {
-            InputStream inputStream = new FileInputStream(propertiesFile);
-            if( inputStream != null ) {
-                properties.load(inputStream);
+            if( propertiesStream != null ) {
+                properties.load(propertiesStream);
 
                 jdbcUrl = properties.getProperty("jdbc.url");
                 jdbcUser = properties.getProperty("jdbc.user");
@@ -120,7 +121,8 @@ public class Suite {
 
             }
         } catch (IOException e) {
-
+            String message = "Unable to read properties file: " + propertiesStream;
+            Logger.getLogger(Suite.class.getName()).log(Level.WARNING, message, e);
         }
 
         /*
