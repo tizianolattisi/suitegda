@@ -22,10 +22,13 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.Delegate;
 import com.axiastudio.pypapi.ui.ITableModel;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaUtil;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
@@ -134,12 +137,12 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         for( FasePratica fp: wf.getFasi() ){
             Fase fase = fp.getFase();
             QIcon icon=null;
-            if( fp.getCompletata() ){
-                icon = new QIcon("classpath:com/axiastudio/suite/resources/tick.png");
+            if ( fp.equals(wf.getFaseAttiva()) ){
+                icon = new QIcon("classpath:com/axiastudio/suite/resources/star.png");
+            } else if ( fp.getCompletata() ){
+            icon = new QIcon("classpath:com/axiastudio/suite/resources/tick.png");
             } else if ( fp.getNegata() ){
                 icon = new QIcon("classpath:com/axiastudio/suite/resources/cross.png");
-            } else if ( fp.equals(wf.getFaseAttiva()) ){
-                icon = new QIcon("classpath:com/axiastudio/suite/resources/star.png");
             }
             QListWidgetItem item = new QListWidgetItem(icon, fase.getDescrizione());
             item.setData(Qt.ItemDataRole.UserRole, i);
@@ -257,4 +260,31 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         helper.createDocument(subpath, documentName, content, mimeType, title, description);
         cmisPlugin.showForm(determina);
     }
+
+    // XXX: codice simile a FormScrivania
+    private void apriDocumenti(){
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        if( determina == null || determina.getId() == null ){
+            return;
+        }
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
+        for(IPlugin plugin: plugins){
+            if( "CMIS".equals(plugin.getName()) ){
+                Boolean view = true;
+                Boolean delete = true;
+                Boolean download = true;
+                Boolean parent = false;
+                Boolean upload = true;
+                Boolean version = true;
+                if( view ){
+                    ((CmisPlugin) plugin).showForm(determina, delete, download, parent, upload, version);
+                } else {
+                    QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
+                    return;
+                }
+            }
+        }
+    }
+
 }
