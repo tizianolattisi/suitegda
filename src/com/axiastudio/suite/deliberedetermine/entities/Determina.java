@@ -26,6 +26,8 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaListener;
 import com.axiastudio.suite.finanziaria.entities.Progetto;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
+import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.pratiche.IAtto;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.Fase;
@@ -50,13 +52,13 @@ import java.util.List;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 @Entity
-@EntityListeners({DeterminaListener.class})
+@EntityListeners({DeterminaListener.class, TimeStampedListener.class})
 @Table(schema="deliberedetermine")
 @SequenceGenerator(name="gendetermina", sequenceName="deliberedetermine.determina_id_seq", initialValue=1, allocationSize=1)
 @NamedQuery(name="inAttesaDiVistoDiBilancio",
         query = "SELECT d FROM Determina d JOIN d.pratica p JOIN p.fasePraticaCollection fp " +
                 "WHERE fp.attiva = true AND fp.fase.id = :idfase")
-public class Determina implements Serializable, IDettaglio, IProtocollabile, IAtto {
+public class Determina implements Serializable, ITimeStamped, IDettaglio, IProtocollabile, IAtto {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")

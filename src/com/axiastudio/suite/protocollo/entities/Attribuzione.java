@@ -17,6 +17,8 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,6 +29,7 @@ import java.util.Date;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@EntityListeners({TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genattribuzione", sequenceName="protocollo.attribuzione_id_seq", initialValue=1, allocationSize=1)
 @NamedQuery(name="trovaAttribuzioniUtente",
@@ -34,7 +37,7 @@ import java.util.Date;
                   + "JOIN u.ufficioUtenteCollection uu "
                   + "WHERE a.letto = FALSE AND uu.ricerca = TRUE "
                   + "AND uu.utente.id = :id ORDER BY a.protocollo.iddocumento DESC")
-public class Attribuzione implements Serializable {
+public class Attribuzione implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genattribuzione")
@@ -56,6 +59,18 @@ public class Attribuzione implements Serializable {
     private String esecutoreletto;
     @Column(name="evidenza", length=1)
     private String evidenza;
+
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
 
     public Long getId() {
         return id;
@@ -153,7 +168,43 @@ public class Attribuzione implements Serializable {
         this.evidenza = evidenza;
     }
 
-   @Override
+    @Override
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
+    }
+
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+    @Override
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
+    }
+
+    @Override
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
+    }
+
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
