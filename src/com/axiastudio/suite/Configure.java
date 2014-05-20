@@ -63,6 +63,7 @@ import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.*;
 import com.axiastudio.suite.procedimenti.forms.FormDelega;
 import com.axiastudio.suite.procedimenti.forms.FormFaseProcedimento;
+import com.axiastudio.suite.protocollo.AttribuzioneCallbacks;
 import com.axiastudio.suite.protocollo.ProtocolloAdapters;
 import com.axiastudio.suite.protocollo.ProtocolloCallbacks;
 import com.axiastudio.suite.protocollo.ProtocolloPrivate;
@@ -119,6 +120,7 @@ public class Configure {
         Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacks.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(RichiestaCallbacks.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(AttribuzioneCallbacks.class));
     }
 
     private static void privates() {
