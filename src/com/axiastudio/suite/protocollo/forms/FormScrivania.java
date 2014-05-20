@@ -126,6 +126,7 @@ public class FormScrivania  extends QMainWindow {
 //        Store store = new Store(attribuzioni);
         attribuzioneStoreGenerale.clear();
         attribuzioneStoreGenerale.addAll(attribuzioni);
+        selectionProtocollo.clear();
 
         List<Column> colonne = new ArrayList();
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
@@ -315,6 +316,9 @@ public class FormScrivania  extends QMainWindow {
     }
 
     private void apriProtocollo(){
+        if( selectionProtocollo.size() != 1 ){
+            return;
+        }
         Protocollo protocollo = this.selectionProtocollo.get(0).getProtocollo();
         IForm form = Util.formFromEntity(protocollo);
         if( form == null ){
