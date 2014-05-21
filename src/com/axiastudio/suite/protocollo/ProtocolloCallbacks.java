@@ -152,18 +152,39 @@ public class ProtocolloCallbacks {
                 /* Nuovo inserimento */
                 Pratica pratica = praticaProtocollo.getPratica();
                 Ufficio ufficioGestore = pratica.getGestione();
-                if( false ){
-                    /* TODO: riservato */
+                if( pratica.getRiservata() ){
                     if( !ufficiPrivato.contains(ufficioGestore) && !autenticato.getSupervisorepratiche() ){
                         msg += "Per poter inserire pratiche riservate è necessario appartenere al loro ufficio gestore\n";
-                        msg += "con flag riservato, o essere un amministratore delle pratiche.\n";
+                        msg += "con flag riservato.\n";
                         res = false;
                     }
                 } else {
-                    if( !uffici.contains(ufficioGestore) && !autenticato.getSupervisorepratiche() ){
+                    if( !uffici.contains(ufficioGestore) && !autenticato.getSupervisorepratiche() && !autenticato.getAttributorepratiche()){
                         msg += "Per poter inserire pratiche è necessario appartenere al loro ufficio gestore,\n";
                         msg += "o essere un amministratore delle pratiche.\n";
                         res = false;
+                    }
+                }
+            } else {
+                if( praticaProtocollo.getOggettoModificato() || praticaProtocollo.getOriginaleModificato() ) {
+                /* Modifica oggetto o originale */
+                    Pratica pratica = praticaProtocollo.getPratica();
+                    Ufficio ufficioGestore = pratica.getGestione();
+                    Ufficio ufficioAttribuzione = pratica.getAttribuzione();
+                    Ufficio ufficioUbicazione = pratica.getUbicazione();
+                    if (praticaProtocollo.getOggettoModificato()) {
+                        if( !uffici.contains(ufficioGestore) && !uffici.contains(ufficioAttribuzione) && !uffici.contains(ufficioUbicazione) ){
+                            msg += "Per poter modificare l'oggetto di una pratica pratiche è necessario appartenere al suo ufficio gestore,\n";
+                            msg += "attribuzione, o ubicazione.\n";
+                            res = false;
+                        }
+                    }
+                    if (praticaProtocollo.getOriginaleModificato()) {
+                        if( !uffici.contains(ufficioGestore) && !uffici.contains(ufficioAttribuzione) && !uffici.contains(ufficioUbicazione) && !autenticato.getAttributorepratiche() ){
+                            msg += "Per poter modificare l'attributo 'originale' di una pratica pratiche è necessario appartenere al suo ufficio gestore,\n";
+                            msg += "attribuzione, ubicazione, oppure essere un attributore di pratiche.\n";
+                            res = false;
+                        }
                     }
                 }
             }
