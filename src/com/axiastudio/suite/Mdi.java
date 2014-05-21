@@ -471,7 +471,7 @@ public class Mdi extends QMainWindow implements IMdi {
             if( "NEW".equals(mode) ){
                 store = new Store(new ArrayList<Object>());
                 try {
-                    Constructor<? extends Window> entityConstructor = factory.getConstructor(new Class[]{});
+                    Constructor entityConstructor = factory.getConstructor(new Class[]{});
                     Object entity = entityConstructor.newInstance(new Object[]{});
                     store.add(entity);
                 } catch (NoSuchMethodException e) {
