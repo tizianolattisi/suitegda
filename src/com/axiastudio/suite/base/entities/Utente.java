@@ -73,6 +73,8 @@ public class Utente implements Serializable, IUtente {
     private Boolean modellatorepratiche=false;
     @Column(name="istruttorepratiche")
     private Boolean istruttorepratiche=false;
+    @Column(name="attributorepratiche")
+    private Boolean attributorepratiche=false;
     @Column(name="pubblicaalbo")
     private Boolean pubblicaalbo=false;
     @Column(name="disabilitato")
@@ -234,6 +236,14 @@ public class Utente implements Serializable, IUtente {
 
     public void setSupervisoreprotocollo(Boolean supervisoreprotocollo) {
         this.supervisoreprotocollo = supervisoreprotocollo;
+    }
+
+    public Boolean getAttributorepratiche() {
+        return attributorepratiche;
+    }
+
+    public void setAttributorepratiche(Boolean attributorepratiche) {
+        this.attributorepratiche = attributorepratiche;
     }
 
     public Collection<Delega> getDelegaCollection() {

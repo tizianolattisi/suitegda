@@ -310,21 +310,6 @@
           <string>Pratiche</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
-          <property name="spacing">
-           <number>4</number>
-          </property>
-          <property name="leftMargin">
-           <number>4</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>4</number>
-          </property>
-          <property name="bottomMargin">
-           <number>4</number>
-          </property>
           <item>
            <widget class="QCheckBox" name="checkBox_6">
             <property name="text">
@@ -362,6 +347,16 @@
             </property>
             <property name="column" stdset="0">
              <string>modellatorepratiche</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_15">
+            <property name="text">
+             <string>Attributore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>attributorepratiche</string>
             </property>
            </widget>
           </item>

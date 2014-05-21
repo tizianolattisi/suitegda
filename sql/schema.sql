@@ -125,6 +125,7 @@ CREATE TABLE utente (
     ricercatoreprotocollo boolean NOT NULL DEFAULT FALSE,
     spedisceprotocollo boolean NOT NULL DEFAULT FALSE,
     istruttorepratiche boolean NOT NULL DEFAULT FALSE,
+    attributorepratiche boolean NOT NULL DEFAULT FALSE,
     pubblicaalbo boolean NOT NULL DEFAULT FALSE,
     disabilitato boolean NOT NULL DEFAULT FALSE,
     soggetto bigint
