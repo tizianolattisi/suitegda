@@ -60,7 +60,13 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     private Date recordmodificato;
     @Column(name="rec_modificato_da")
     private String recordmodificatoda;
-    
+
+    /* transients */
+    @Transient
+    private Boolean oggettoModificato=false;
+    @Transient
+    private Boolean originaleModificato=false;
+
     public Long getId() {
         return id;
     }
@@ -90,6 +96,7 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     }
 
     public void setOggetto(Oggetto oggetto) {
+        oggettoModificato = Boolean.TRUE;
         this.oggetto = oggetto;
     }
 
@@ -100,6 +107,7 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     }
 
     public void setOriginale(Boolean originale) {
+        originaleModificato = Boolean.TRUE;
         this.originale = originale;
     }
 
@@ -163,5 +171,20 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     public String toString() {
         return "com.axiastudio.suite.protocollo.entities.PraticaProtocollo[ id=" + id + " ]";
     }
-    
+
+    public Boolean getOggettoModificato() {
+        return oggettoModificato;
+    }
+
+    public void setOggettoModificato(Boolean oggettoModificato) {
+        this.oggettoModificato = oggettoModificato;
+    }
+
+    public Boolean getOriginaleModificato() {
+        return originaleModificato;
+    }
+
+    public void setOriginaleModificato(Boolean originaleModificato) {
+        this.originaleModificato = originaleModificato;
+    }
 }
