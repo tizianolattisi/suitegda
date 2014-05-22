@@ -534,6 +534,20 @@ public class Mdi extends QMainWindow implements IMdi {
     public QMdiArea getWorkspace() {
         return workspace;
     }
-    
-    
+
+    @Override
+    protected void closeEvent(QCloseEvent event) {
+        boolean iHaveToClose = true;
+        for( QMdiSubWindow subWindow: this.workspace.subWindowList() ){
+            if( subWindow.widget() instanceof QMainWindow ){
+                subWindow.widget().setFocus();
+                iHaveToClose = iHaveToClose && subWindow.close();
+            }
+        }
+        if( iHaveToClose ) {
+            super.closeEvent(event);
+            return;
+        }
+        event.ignore();
+    }
 }
