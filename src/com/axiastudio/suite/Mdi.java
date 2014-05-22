@@ -23,6 +23,7 @@ import com.axiastudio.pypapi.db.IFactory;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.IUIFile;
+import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.base.entities.CambiaPassword;
 import com.axiastudio.suite.base.entities.IUtente;
@@ -443,29 +444,8 @@ public class Mdi extends QMainWindow implements IMdi {
             form.show();
         } else {
             /* form registrata */
-            Window form=null;
-            Class<? extends Window> formClass = (Class) Register.queryUtility(IForm.class, formName);
-            String uiFile = (String) Register.queryUtility(IUIFile.class, formName);
+
             Class factory = (Class) Register.queryUtility(IFactory.class, formName);
-            try {
-                Constructor<? extends Window> constructor = formClass.getConstructor(new Class[]{String.class, Class.class, String.class});
-                try {
-                    form = constructor.newInstance(new Object[]{uiFile, factory, ""});
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalArgumentException ex) {
-                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvocationTargetException ex) {
-                    Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SecurityException ex) {
-                Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            // A store with a new element
             Store store = null;
 
             if( "NEW".equals(mode) ){
@@ -509,12 +489,7 @@ public class Mdi extends QMainWindow implements IMdi {
                 List<?> resultList = namedQuery.getResultList();
                 store = new Store(resultList);
             }
-
-            if( store != null ){
-                form.init(store);
-            } else {
-                form.init();
-            }
+            Window form = (Window) Util.formFromStore(store);
             this.workspace.addSubWindow(form);
             this.showForm(form);
             form.getContext().getDirty();
