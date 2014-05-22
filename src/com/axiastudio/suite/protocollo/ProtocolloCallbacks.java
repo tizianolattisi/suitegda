@@ -213,8 +213,8 @@ public class ProtocolloCallbacks {
          */
         if( protocollo.getRiferimentoProtocolloCollection() != null ){
             for( RiferimentoProtocollo rp: protocollo.getRiferimentoProtocolloCollection() ){
-                if( rp.getPrecedente().getDataprotocollo().after(protocollo.getDataprotocollo()) ){
-                    msg += "I protocolli precedenti riferiti non possono avere data successiva al protocollo.\n";
+                if( ! rp.getPrecedente().getDataprotocollo().before(protocollo.getDataprotocollo()) ){
+                    msg += "I protocolli precedenti riferiti non possono avere data uguale o successiva al protocollo.\n";
                     res = false;
                     break;
                 }
