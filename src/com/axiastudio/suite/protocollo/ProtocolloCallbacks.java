@@ -173,16 +173,18 @@ public class ProtocolloCallbacks {
                     Ufficio ufficioAttribuzione = pratica.getAttribuzione();
                     Ufficio ufficioUbicazione = pratica.getUbicazione();
                     if (praticaProtocollo.getOggettoModificato()) {
-                        if( !uffici.contains(ufficioGestore) && !uffici.contains(ufficioAttribuzione) && !uffici.contains(ufficioUbicazione) ){
-                            msg += "Per poter modificare l'oggetto di una pratica pratiche è necessario appartenere al suo ufficio gestore,\n";
-                            msg += "attribuzione, o ubicazione.\n";
+                        if( !uffici.contains(ufficioGestore) && !uffici.contains(ufficioAttribuzione) && !uffici.contains(ufficioUbicazione) &&
+                                !autenticato.getSupervisorepratiche() && !autenticato.getAttributorepratiche()){
+                            msg += "Per poter modificare l'oggetto di una pratica è necessario appartenere al suo ufficio gestore,\n";
+                            msg += "attribuzione, o ubicazione, oppure avere permessi speciali sulle pratiche.\n";
                             res = false;
                         }
                     }
                     if (praticaProtocollo.getOriginaleModificato()) {
-                        if( !uffici.contains(ufficioGestore) && !uffici.contains(ufficioAttribuzione) && !uffici.contains(ufficioUbicazione) && !autenticato.getAttributorepratiche() ){
+                        if( !uffici.contains(ufficioGestore) && !uffici.contains(ufficioAttribuzione) && !uffici.contains(ufficioUbicazione) &&
+                                !autenticato.getSupervisorepratiche() && !autenticato.getAttributorepratiche() ){
                             msg += "Per poter modificare l'attributo 'originale' di una pratica pratiche è necessario appartenere al suo ufficio gestore,\n";
-                            msg += "attribuzione, ubicazione, oppure essere un attributore di pratiche.\n";
+                            msg += "attribuzione, ubicazione, oppure oppure avere permessi speciali sulle pratiche.\n";
                             res = false;
                         }
                     }
