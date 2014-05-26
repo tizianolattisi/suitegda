@@ -415,6 +415,20 @@ public class Soggetto implements Serializable, ITimeStamped {
         // non deve fare nulla
     }
 
+    public String getCap() {
+        String out ="";
+        for (Indirizzo indirizzo: indirizzoCollection) {
+            if (indirizzo.getPrincipale() == Boolean.TRUE) {
+                out=String.format("%s", indirizzo.getCap());
+            }
+        }
+        return out.trim();
+    }
+
+    public void setCap(String comune){
+        // non deve fare nulla
+    }
+
     public String getCessazione() {
 
         if ( this.getDatacessazione() == null ) {
