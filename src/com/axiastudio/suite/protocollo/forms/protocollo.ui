@@ -379,6 +379,11 @@
              <string>INVIO_TELEMATICO</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>ATTO_GIUDIZIARIO</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item>
