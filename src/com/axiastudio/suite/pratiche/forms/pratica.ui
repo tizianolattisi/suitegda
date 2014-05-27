@@ -14,7 +14,7 @@
    <string>Pratiche</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>&gt;idpratica&lt;,&gt;codiceinterno&lt;,fase,&lt;descrizione&gt;,&gt;attribuzione&lt;</string>
+   <string>&gt;idpratica&lt;,&gt;codiceinterno&lt;,fase,&lt;descrizioner&gt;,&gt;attribuzione&lt;</string>
   </property>
   <property name="sortcolumn" stdset="0">
    <number>0</number>

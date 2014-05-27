@@ -16,10 +16,14 @@
  */
 package com.axiastudio.suite.pratiche.entities;
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.pratiche.PraticaListener;
+import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 
@@ -185,7 +189,9 @@ public class Pratica implements Serializable, ITimeStamped {
     }
     
     public String getDescrizioner() {
-        if( this.getRiservata() != null && this.getRiservata() == true ){
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        if( this.getRiservata() != null && this.getRiservata() == true && !PraticaUtil.utenteInGestorePratica(this, autenticato) &&
+                !autenticato.getSupervisorepratiche() ){
             return "RISERVATA";
         }
         return this.getDescrizione();

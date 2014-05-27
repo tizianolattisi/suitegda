@@ -23,7 +23,6 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
@@ -45,17 +44,8 @@ public class PraticaCallbacks {
         String msg = "";
         Boolean res = true;
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        Boolean inUfficioGestore = false;
-        for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
-            if( uu.getUfficio().equals(pratica.getGestione()) && uu.getModificapratica() ){
-                // se la pratica è riservata, mi serve anche il flag
-                if( !pratica.getRiservata() || uu.getRiservato() ){
-                    inUfficioGestore = true;
-                    break;
-                }
-            }
-        }
-        
+        Boolean inUfficioGestore = PraticaUtil.utenteInGestorePraticaMod(pratica, autenticato);
+
         // se l'utente non è istruttore non può inserire o modificare pratiche,
         if( !autenticato.getIstruttorepratiche() ){
             msg = "Devi avere come ruolo \"istruttore\" per poter inserire\n";
@@ -121,7 +111,7 @@ public class PraticaCallbacks {
 
         /*
          * Verifica inserimento protocollo in pratica: permesso solo all'ufficio gestore (già sopra),
-         * e solo se l'utente ha piena visibilità del protocollo (sportello o attribuzione)
+         * e solo se l'utente ha piena visibilità del protocollo (sportello o attribuzione o superutente protocollo)
          */
         for( PraticaProtocollo praticaProtocollo: pratica.getPraticaProtocolloCollection() ){
             // nuovo inserimento
@@ -130,10 +120,11 @@ public class PraticaCallbacks {
                 if( !(!pratica.getRiservata() && autenticato.getSupervisorepratiche()) ){
                     Protocollo protocollo = praticaProtocollo.getProtocollo();
                     ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(protocollo, autenticato);
-                    if( !pratica.getRiservata() && !profilo.inSportelloOAttribuzione() ){
+                    if( !pratica.getRiservata() && !profilo.inSportelloOAttribuzione() && !autenticato.getRicercatoreprotocollo() &&
+                            !autenticato.getSupervisoreprotocollo() ){
                         msg = "Devi avere completa visibilità del protocollo per poterlo inserire nella pratica.";
                         return new Validation(false, msg);
-                    } else if( pratica.getRiservata() && !profilo.inSportelloOAttribuzioneR() ){
+                    } else if( pratica.getRiservata() && !profilo.inSportelloOAttribuzioneR() && !autenticato.getSupervisoreprotocollo()){
                         msg = "Devi avere completa visibilità del protocollo e permesso sui dati riservati per poterlo inserire nella pratica riservata.";
                         return new Validation(false, msg);
                     }

@@ -25,10 +25,7 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
-import com.axiastudio.suite.base.entities.Giunta;
-import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.base.entities.*;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.deliberedetermine.entities.UfficioDetermina;
@@ -210,57 +207,52 @@ public class PraticaUtil {
 
         Protocollo protocollo = determina.getProtocollo();
 
-        // la lista degli uffici della determina (il primo è il principale)
-        Collection<UfficioDetermina> ufficioDeterminaCollection = determina.getUfficioDeterminaCollection();
-        List<Ufficio> ufficiDetermina = new ArrayList<Ufficio>();
-        for( UfficioDetermina ufficioDetermina: ufficioDeterminaCollection ){
-            if( ufficioDetermina.getPrincipale() ){
-                ufficiDetermina.add(0, ufficioDetermina.getUfficio());
-            } else {
-                ufficiDetermina.add(ufficioDetermina.getUfficio());
-            }
-        }
+        // Tutte le attribuzioni non in via principale
+       for (Attribuzione attribuzione: protocollo.getAttribuzioneCollection()) {
+            attribuzione.setPrincipale(Boolean.FALSE);
+       }
 
         // la lista degli uffici attribuzioni già presenti sul protocollo (non mi interessa il principale)
-        Collection<Attribuzione> attribuzioneCollection = protocollo.getAttribuzioneCollection();
         List<Ufficio> ufficiProtocollo = new ArrayList<Ufficio>();
-        for( Attribuzione attribuzione: attribuzioneCollection ){
+        for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ) {
             ufficiProtocollo.add(attribuzione.getUfficio());
         }
 
-        // la lista degli uffici attribuzione nuovi
-        List<Attribuzione> attribuzioni = new ArrayList<Attribuzione>();
-        Boolean principale = Boolean.TRUE;
-        for( Ufficio ufficio: ufficiDetermina ){
-            Attribuzione attribuzione = new Attribuzione();
-            attribuzione.setUfficio(ufficio);
-            attribuzione.setProtocollo(protocollo);
-            if( principale ){
-                attribuzione.setPrincipale(Boolean.TRUE);
-                principale = Boolean.FALSE;
-            }
-            attribuzioni.add(attribuzione);
-        }
-        for( Ufficio ufficio: ufficiProtocollo ){
-            if( !ufficiDetermina.contains(ufficio) ){
+        // Carico le nuove attribuzioni; se quella in via principale è già inserita, modifico flag su attribuzione
+        for( UfficioDetermina ufficiodetermina: determina.getUfficioDeterminaCollection() ) {
+            if( !ufficiProtocollo.contains(ufficiodetermina.getUfficio()) ){
                 Attribuzione attribuzione = new Attribuzione();
-                attribuzione.setUfficio(ufficio);
+                attribuzione.setUfficio(ufficiodetermina.getUfficio());
                 attribuzione.setProtocollo(protocollo);
-                attribuzione.setPrincipale(Boolean.FALSE);
-                attribuzioni.add(attribuzione);
+                attribuzione.setPrincipale(ufficiodetermina.getPrincipale());
+                protocollo.getAttribuzioneCollection().add(attribuzione);
+                ufficiProtocollo.add(ufficiodetermina.getUfficio());
+            } else if ( ufficiodetermina.getPrincipale() == Boolean.TRUE) {
+                for (Attribuzione attribuzione: protocollo.getAttribuzioneCollection()) {
+                    if ( attribuzione.getUfficio().equals(ufficiodetermina.getUfficio()) ) {
+                        attribuzione.setPrincipale(Boolean.TRUE);
+                    }
+                }
             }
         }
 
-        protocollo.setAttribuzioneCollection(attribuzioni);
+        Validation validation = new Validation();
+        validation.setResponse(Boolean.TRUE);
 
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManagerFactory emf = db.getEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.merge(protocollo);
-        em.getTransaction().commit();
-        Validation validation = new Validation();
-        validation.setResponse(Boolean.TRUE);
+        try {
+            em.getTransaction().commit();
+        } catch (EntityExistsException e) {
+            validation.setResponse(Boolean.FALSE);
+            validation.setMessage("Ufficio già esistente??\n" + e.getMessage());
+        }  catch (Exception e) {
+            validation.setResponse(Boolean.FALSE);
+            validation.setMessage(e.getMessage());
+        }
 
         return validation;
     }
@@ -417,4 +409,31 @@ public class PraticaUtil {
         return execute == 0;
     }
 
+    public static Boolean utenteInGestorePratica(Pratica pratica, Utente autenticato) {
+        Boolean inUfficioGestore = Boolean.FALSE;
+        for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
+            if( uu.getUfficio().equals(pratica.getGestione()) ){
+                // se la pratica è riservata, mi serve anche il flag
+                if( !pratica.getRiservata() || uu.getRiservato() ){
+                    inUfficioGestore = true;
+                    break;
+                }
+            }
+        }
+        return inUfficioGestore;
+    }
+
+    public static Boolean utenteInGestorePraticaMod(Pratica pratica, Utente autenticato) {
+        Boolean inUfficioGestore = Boolean.FALSE;
+        for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
+            if( uu.getUfficio().equals(pratica.getGestione()) && uu.getModificapratica() ){
+                // se la pratica è riservata, mi serve anche il flag
+                if( !pratica.getRiservata() || uu.getRiservato() ){
+                    inUfficioGestore = true;
+                    break;
+                }
+            }
+        }
+        return inUfficioGestore;
+    }
 }
