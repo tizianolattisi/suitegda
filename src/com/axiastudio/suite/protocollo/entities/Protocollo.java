@@ -204,7 +204,7 @@ public class Protocollo implements Serializable, ITimeStamped {
     public String getOggettop() {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(this, autenticato);
-        if( !profilo.inSportelloOAttribuzione() ){
+        if( !profilo.inSportelloOAttribuzione() && !autenticato.getSupervisoreprotocollo() && !autenticato.getRicercatoreprotocollo()){
             return "RISERVATO";
         }
         return this.getOggetto();
@@ -566,7 +566,7 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     @Override
     public String toString() {
-        return this.tipo.toString().substring(0, 1) + " " + this.iddocumento + " (" + SuiteUtil.DATETIME_FORMAT.format(this.dataprotocollo) + ") " + this.getOggettop();
+        return this.iddocumento + "-" + this.tipo.toString().substring(0, 1) + " (" + SuiteUtil.DATETIME_FORMAT.format(this.dataprotocollo) + ") " + this.getOggettop();
     }
     
 }

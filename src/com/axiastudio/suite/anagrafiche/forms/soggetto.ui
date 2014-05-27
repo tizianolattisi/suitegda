@@ -22,6 +22,9 @@
   <property name="sortorder" stdset="0">
    <string>&lt;</string>
   </property>
+  <property name="nodelete" stdset="0">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_7">
     <item row="0" column="0" colspan="2">
@@ -110,7 +113,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -359,6 +362,9 @@
          <widget class="QLineEdit" name="lineEdit_13">
           <property name="column" stdset="0">
            <string>referente</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
