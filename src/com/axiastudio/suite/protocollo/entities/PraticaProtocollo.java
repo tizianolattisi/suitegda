@@ -19,6 +19,7 @@ package com.axiastudio.suite.protocollo.entities;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import org.apache.commons.lang3.SerializationUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -66,6 +67,17 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
     private Boolean oggettoModificato=false;
     @Transient
     private Boolean originaleModificato=false;
+
+    /* OLD STATE */
+    @Transient
+    private PraticaProtocollo old;
+    @PostLoad
+    private void saveOld(){
+        old = SerializationUtils.clone(this);
+    }
+    public PraticaProtocollo getOldState() {
+        return old;
+    }
 
     public Long getId() {
         return id;

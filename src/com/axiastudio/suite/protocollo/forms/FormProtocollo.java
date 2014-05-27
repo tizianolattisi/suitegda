@@ -113,6 +113,7 @@ public class FormProtocollo extends Window {
         PyPaPiTableView tableViewPratica = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_pratiche");
         tableViewPratica.entityInserted.connect(this, "praticaInserita(Object)");
         tableViewPratica.entityRemoved.connect(this, "praticaRimossa(Object)");
+        tableViewPratica.entityUpdated.connect(this, "praticaAggiornata(Object)");
         
         /* Gestione annullamenti protocollo */
         PyPaPiTableView tableViewAnnullamento = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_annullamenti");
@@ -171,6 +172,11 @@ public class FormProtocollo extends Window {
             rimossa.setOriginale(Boolean.TRUE);
             ((ITableModel) tableViewPratica.model()).getContextHandle().insertElement(rimossa);
         }
+    }
+    private void praticaAggiornata(Object obj){
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        PraticaProtocollo aggiornata = (PraticaProtocollo) obj;
+        System.out.println(aggiornata);
     }
     
     /*

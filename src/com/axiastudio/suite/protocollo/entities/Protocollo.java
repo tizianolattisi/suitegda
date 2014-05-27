@@ -25,6 +25,7 @@ import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.ProtocolloListener;
+import org.apache.commons.lang3.SerializationUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -71,7 +72,7 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Collection<Attribuzione> attribuzioneCollection;
     @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<PraticaProtocollo> praticaProtocolloCollection;
-    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     private Collection<RiferimentoProtocollo> riferimentoProtocolloCollection;
     @OneToMany(mappedBy = "precedente", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<RiferimentoProtocollo> riferimentoProtocolloSuccessivoCollection;
@@ -151,6 +152,18 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Date recordmodificato;
     @Column(name="rec_modificato_da")
     private String recordmodificatoda;
+
+    /* OLD STATE */
+    @Transient
+    private Protocollo old;
+    @PostLoad
+    private void saveOld(){
+        old = SerializationUtils.clone(this);
+        old.setPraticaProtocolloCollection(this.getPraticaProtocolloCollection());
+    }
+    public Protocollo getOldState() {
+        return old;
+    }
 
 
     public Long getId() {
