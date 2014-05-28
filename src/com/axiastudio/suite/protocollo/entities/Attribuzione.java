@@ -19,6 +19,7 @@ package com.axiastudio.suite.protocollo.entities;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
+import org.apache.commons.lang3.SerializationUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -71,6 +72,18 @@ public class Attribuzione implements Serializable, ITimeStamped {
     private Date recordmodificato;
     @Column(name="rec_modificato_da")
     private String recordmodificatoda;
+
+    /* OLD STATE */
+    @Transient
+    private Attribuzione old;
+    @PostLoad
+    private void saveOld(){
+        old = SerializationUtils.clone(this);
+    }
+    public Attribuzione getOldState() {
+        return old;
+    }
+
 
     public Long getId() {
         return id;

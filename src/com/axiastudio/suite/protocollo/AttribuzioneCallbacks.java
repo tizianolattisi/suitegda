@@ -5,8 +5,10 @@ import com.axiastudio.pypapi.annotations.Callback;
 import com.axiastudio.pypapi.annotations.CallbackType;
 import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
 
 /**
  * User: tiziano
@@ -26,8 +28,26 @@ public class AttribuzioneCallbacks {
 
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         if( !autenticato.getAttributoreprotocollo() ){
-            res = false;
-            msg = "Devi essere un utente attributore di protocollo per poter modificare direttamente le attribuzioni.";
+            // non sono attributore protocollo, quindi posso solo committare la singola attribuzione per dare per letto
+            if( autenticato.getId() == null ){
+                // attribuzione nuova
+                res = false;
+            } else {
+                Protocollo protocollo = attribuzione.getProtocollo();
+                if( !attribuzione.getOldState().getPrincipale().equals(attribuzione.getPrincipale()) ){
+                    // cambio attribuzione principale
+                    res = false;
+                }
+                if( !attribuzione.getOldState().getLetto() && attribuzione.getLetto() ){
+                    // sto dando per letto
+                    for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
+                        if( uu.getUfficio().equals(attribuzione.getUfficio()) && uu.getDaiperletto() ){
+                            // e hai il permesso per farlo
+                            res = true;
+                        }
+                    }
+                }
+            }
         }
 
         /*
