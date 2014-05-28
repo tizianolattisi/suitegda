@@ -21,10 +21,8 @@ package com.axiastudio.suite.anagrafiche.entities;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public enum Provincia {
-    AG, AL, AN, AO, AR, AP, AT, AV, BA, BT, BL, BN, BG, BI, BO, BZ, BS, BR, CA,
-    CL, CB, CI, CE, CT, CZ, CH, CO, CS, CR, KR, CN, EN, FM, FE, FI, FG, FC, FR,
-    GE, GO, GR, IM, IS, SP, AQ, LT, LE, LC, LI, LO, LU, MC, MN, MS, MT, ME, MI,
-    MO, MB, NA, NO, NU, OT, OR, PD, PA, PR, PV, PG, PU, PE, PC, PI, PT, PN, PZ,
-    PO, RG, RA, RC, RE, RI, RN, RM, RO, SA, VS, SS, SV, SI, SR, SO, TA, TE, TR,
-    TO, OG, TP, TN, TV, TS, UD, VA, VE, VB, VC, VR, VV, VI, VT
+    AG, AL, AN, AO, AP, AQ, AR, AT, AV, BA, BG, BI, BL, BN, BO, BR, BS, BT, BZ, CA, CB, CE, CH, CI, CL, CN, CO, CR,
+    CS, CT, CZ, EN, FC, FE, FG, FI, FM, FR, GE, GO, GR, IM, IS, KR, LC, LE, LI, LO, LT, LU, MB, MC, ME, MI, MN, MO,
+    MS, MT, NA, NO, NU, OG, OR, OT, PA, PC, PD, PE, PG, PI, PN, PO, PR, PT, PU, PV, PZ, RA, RC, RE, RG, RI, RM, RN,
+    RO, SA, SI, SO, SP, SR, SS, SV, TA, TE, TN, TO, TP, TR, TS, TV, UD, VA, VB, VC, VE, VI, VR, VS, VT, VV
 }
