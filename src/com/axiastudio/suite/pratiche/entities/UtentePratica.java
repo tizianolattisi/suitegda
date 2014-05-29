@@ -91,6 +91,22 @@ public class UtentePratica implements Serializable {
         this.istruttore = istruttore;
     }
 
+    public Date getDal() {
+        return dal;
+    }
+
+    public void setDal(Date dal) {
+        this.dal = dal;
+    }
+
+    public Date getAl() {
+        return al;
+    }
+
+    public void setAl(Date al) {
+        this.al = al;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
