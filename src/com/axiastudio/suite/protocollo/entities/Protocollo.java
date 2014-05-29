@@ -72,7 +72,7 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Collection<Attribuzione> attribuzioneCollection;
     @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<PraticaProtocollo> praticaProtocolloCollection;
-    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<RiferimentoProtocollo> riferimentoProtocolloCollection;
     @OneToMany(mappedBy = "precedente", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<RiferimentoProtocollo> riferimentoProtocolloSuccessivoCollection;
