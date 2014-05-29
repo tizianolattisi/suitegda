@@ -83,13 +83,13 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     @Column(name="spesaimpegnoesistente")
     private Boolean spesaimpegnoesistente =Boolean.FALSE;
     @Column(name="dientrata")
-    private Boolean diEntrata=Boolean.FALSE;
+    private Boolean dientrata =Boolean.FALSE;
     @Column(name="diregolarizzazione")
-    private Boolean diRegolarizzazione=Boolean.FALSE;
+    private Boolean diregolarizzazione =Boolean.FALSE;
     @Column(name="diliquidazione")
-    private Boolean diLiquidazione=Boolean.FALSE;
+    private Boolean diliquidazione =Boolean.FALSE;
     @Column(name="diincarico")
-    private Boolean diIncarico=Boolean.FALSE;
+    private Boolean diincarico =Boolean.FALSE;
     @Column(name="referentepolitico")
     private String referentePolitico;
     @JoinColumn(name = "responsabile", referencedColumnName = "id")
@@ -259,36 +259,36 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
         this.spesaimpegnoesistente = spesaprecedenteimpegno;
     }
 
-    public Boolean getDiEntrata() {
-        return diEntrata;
+    public Boolean getDientrata() {
+        return dientrata;
     }
 
-    public void setDiEntrata(Boolean diEntrata) {
-        this.diEntrata = diEntrata;
+    public void setDientrata(Boolean diEntrata) {
+        this.dientrata = diEntrata;
     }
 
-    public Boolean getDiRegolarizzazione() {
-        return diRegolarizzazione;
+    public Boolean getDiregolarizzazione() {
+        return diregolarizzazione;
     }
 
-    public void setDiRegolarizzazione(Boolean diRegolarizzazione) {
-        this.diRegolarizzazione = diRegolarizzazione;
+    public void setDiregolarizzazione(Boolean diRegolarizzazione) {
+        this.diregolarizzazione = diRegolarizzazione;
     }
 
-    public Boolean getDiLiquidazione() {
-        return diLiquidazione;
+    public Boolean getDiliquidazione() {
+        return diliquidazione;
     }
 
-    public void setDiLiquidazione(Boolean diLiquidazione) {
-        this.diLiquidazione = diLiquidazione;
+    public void setDiliquidazione(Boolean diLiquidazione) {
+        this.diliquidazione = diLiquidazione;
     }
 
-    public Boolean getDiIncarico() {
-        return diIncarico;
+    public Boolean getDiincarico() {
+        return diincarico;
     }
 
-    public void setDiIncarico(Boolean diIncarico) {
-        this.diIncarico = diIncarico;
+    public void setDiincarico(Boolean diIncarico) {
+        this.diincarico = diIncarico;
     }
 
     public String getReferentePolitico() {

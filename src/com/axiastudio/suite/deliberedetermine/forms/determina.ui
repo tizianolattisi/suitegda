@@ -14,7 +14,7 @@
    <string>Determine</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>&gt;codiceinterno&lt;,oggetto,&gt;anno&lt;,&gt;numero&lt;,&gt;dispesa&lt;,&gt;diEntrata&lt;,&gt;diRegolarizzazione&lt;,servizioPrincipale</string>
+   <string>&gt;codiceinterno&lt;,oggetto,&gt;anno&lt;,&gt;numero&lt;,&gt;dispesa&lt;,&gt;dientrata&lt;,&gt;diregolarizzazione&lt;,servizioPrincipale</string>
   </property>
   <property name="sortcolumn" stdset="0">
    <number>0</number>
@@ -322,7 +322,7 @@
           <string>di entrata</string>
          </property>
          <property name="column" stdset="0">
-          <string>diEntrata</string>
+          <string>dientrata</string>
          </property>
          <property name="search" stdset="0">
           <bool>true</bool>
@@ -338,7 +338,7 @@
           <string>di regolarizzazione</string>
          </property>
          <property name="column" stdset="0">
-          <string>diRegolarizzazione</string>
+          <string>diregolarizzazione</string>
          </property>
          <property name="search" stdset="0">
           <bool>true</bool>
@@ -354,7 +354,7 @@
           <string>di liquidazione</string>
          </property>
          <property name="column" stdset="0">
-          <string>diLiquidazione</string>
+          <string>diliquidazione</string>
          </property>
          <property name="search" stdset="0">
           <bool>true</bool>
@@ -370,7 +370,7 @@
           <string>di incarico</string>
          </property>
          <property name="column" stdset="0">
-          <string>diIncarico</string>
+          <string>diincarico</string>
          </property>
          <property name="search" stdset="0">
           <bool>true</bool>
@@ -699,7 +699,7 @@
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
-   <header location="global">pypapitableview.h</header>
+   <header>pypapitableview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -31,8 +31,10 @@ public class AdminConsole extends QMainWindow {
         testButton.clicked.connect(this, "esegui()");
         layout.addWidget(testButton);
         textEdit = new QTextEdit();
+        textEdit.setMinimumSize(600, 400);
         layout.addWidget(textEdit);
         textOut = new QTextEdit();
+        textOut.setMinimumSize(600, 100);
         layout.addWidget(textOut);
         this.setCentralWidget(widget);
     }
