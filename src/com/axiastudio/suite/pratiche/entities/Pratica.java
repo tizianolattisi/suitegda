@@ -400,6 +400,30 @@ public class Pratica implements Serializable, ITimeStamped {
         this.utentePraticaCollection = utentePraticaCollection;
     }
 
+    public String getIstruttorePratica() {
+        for ( UtentePratica utente: this.getUtentePraticaCollection()) {
+            if ( utente.getIstruttore() && utente.getAl() == null ) {
+                return utente.getUtente().getNome();
+            }
+        }
+        return "";
+    }
+
+    public void setIstruttorePratica(String istruttorePratica) {
+    }
+
+    public String getResponsabilePratica() {
+        for ( UtentePratica utente: this.getUtentePraticaCollection()) {
+            if ( utente.getResponsabile() && utente.getAl() == null ) {
+                return utente.getUtente().getNome();
+            }
+        }
+        return "";
+    }
+
+    public void setResponsabilePratica(String istruttorePratica) {
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
