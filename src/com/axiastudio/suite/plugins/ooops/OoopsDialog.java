@@ -153,6 +153,10 @@ public class OoopsDialog extends QDialog {
         QTableWidget qtw = (QTableWidget) this.findChild(QTableWidget.class, "tableWidget");
         QTableWidgetItem item = qtw.item(qtw.currentRow(), 0);
         //QTableWidgetItem item = qtw.currentItem();
+        if( item == null ){
+            Util.warningBox(this, "Nessun modello selezionato", "Attenzione, è necessario selezionare un modello da rielaborare.");
+            return;
+        }
         Integer i = (Integer) item.data(Qt.ItemDataRole.UserRole);
         Template template = this.templates.get(i);
         String parentTemplateName = template.getName();
