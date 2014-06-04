@@ -1,4 +1,4 @@
-package com.axiastudio.menjazo;
+package com.axiastudio.suite.menjazo;
 
 /**
  * User: tiziano

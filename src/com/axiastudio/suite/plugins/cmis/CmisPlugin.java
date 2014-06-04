@@ -16,8 +16,8 @@
  */
 package com.axiastudio.suite.plugins.cmis;
 
-import com.axiastudio.menjazo.AlfrescoHelper;
-import com.axiastudio.menjazo.ClientWindow;
+import com.axiastudio.suite.menjazo.AlfrescoHelper;
+import com.axiastudio.suite.menjazo.ClientWindow;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.Window;
@@ -33,7 +33,7 @@ class CMISMenuBar extends PyPaPiToolBar {
     public CMISMenuBar(String title, Window parent, IPlugin plugin){
         super(title, parent);
         this.insertButton("showForm", "CMIS",
-                          "classpath:com/axiastudio/menjazo/resources/menjazo.png",
+                          "classpath:com/axiastudio/suite/menjazo/resources/menjazo.png",
                           "Open CMIS form", plugin);
     }
 }

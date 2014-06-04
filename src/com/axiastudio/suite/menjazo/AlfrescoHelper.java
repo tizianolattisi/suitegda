@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.axiastudio.menjazo;
+package com.axiastudio.suite.menjazo;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

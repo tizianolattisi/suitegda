@@ -16,7 +16,7 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
-import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.plugins.IPlugin;

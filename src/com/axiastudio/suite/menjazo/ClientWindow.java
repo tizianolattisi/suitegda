@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.axiastudio.menjazo;
+package com.axiastudio.suite.menjazo;
 
 import com.trolltech.qt.core.QDir;
 import com.trolltech.qt.core.QFile;
@@ -99,34 +99,34 @@ public class ClientWindow extends QMainWindow {
     private void initLayout(){
 
         QToolBar toolBar = new QToolBar();
-        parentAction.setIcon(new QIcon("classpath:com/axiastudio/menjazo/resources/arrow_up.png"));
-        parentAction.setText(tr("PARENT_FOLDER"));
-        parentAction.setToolTip(tr("GO_TO_THE_PARENT_FOLDER"));
+        parentAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/arrow_up.png"));
+        parentAction.setText("Cartella precedente");
+        parentAction.setToolTip("Vai alla cartella precedente");
         parentAction.triggered.connect(this, "goParentFolder()");
         toolBar.addAction(parentAction);
-        openAction.setIcon(new QIcon("classpath:com/axiastudio/menjazo/resources/open.png"));
-        openAction.setText(tr("DOWNLOAD"));
-        openAction.setToolTip(tr("DOWNLOAD_AND_OPEN_THE_SELECTED_DOCUMENT"));
+        openAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/open.png"));
+        openAction.setText("Apri");
+        openAction.setToolTip("Scarica e apri il documento selezionato");
         openAction.triggered.connect(this, "open()");
         toolBar.addAction(openAction);
-        downloadAction.setIcon(new QIcon("classpath:com/axiastudio/menjazo/resources/download.png"));
-        downloadAction.setText(tr("DOWNLOAD"));
-        downloadAction.setToolTip(tr("DOWNLOAD_THE_SELECTED_DOCUMENT"));
+        downloadAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/download.png"));
+        downloadAction.setText("Scarica");
+        downloadAction.setToolTip("Scarica il documento selezionato");
         downloadAction.triggered.connect(this, "download()");
         toolBar.addAction(downloadAction);
-        uploadAction.setIcon(new QIcon("classpath:com/axiastudio/menjazo/resources/upload.png"));
-        uploadAction.setText(tr("UPLOAD"));
-        uploadAction.setToolTip(tr("UPLOAD_A_NEW_DOCUMENT"));
+        uploadAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/upload.png"));
+        uploadAction.setText("Carica");
+        uploadAction.setToolTip("Carica un nuovo documento");
         uploadAction.triggered.connect(this, "upload()");
         toolBar.addAction(uploadAction);
-        versionAction.setIcon(new QIcon("classpath:com/axiastudio/menjazo/resources/version.png"));
-        versionAction.setText(tr("VERSION"));
-        versionAction.setToolTip(tr("UPLOAD_A_NEW_VERSION_OF_THE_SELECTED_DOCUMENT"));
+        versionAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/version.png"));
+        versionAction.setText("Versione");
+        versionAction.setToolTip("Carica una nuova versione del documento selezionato");
         versionAction.triggered.connect(this, "uploadVersion()");
         toolBar.addAction(versionAction);
-        deleteAction.setIcon(new QIcon("classpath:com/axiastudio/menjazo/resources/delete.png"));
-        deleteAction.setText(tr("DELETE"));
-        deleteAction.setToolTip(tr("DELETE_THE_SELECTED_DOCUMENT"));
+        deleteAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/delete.png"));
+        deleteAction.setText("Cancella");
+        deleteAction.setToolTip("Cancella il documento selezionato");
         deleteAction.triggered.connect(this, "delete()");
         toolBar.addAction(deleteAction);
 
@@ -151,20 +151,20 @@ public class ClientWindow extends QMainWindow {
         this.addToolBar(toolBar);
         
         // Dock titled
-        QDockWidget titledDockWidget = new QDockWidget(tr("TITLED"), this);
+        QDockWidget titledDockWidget = new QDockWidget("Attributi", this);
         QWidget titledWidget = new QWidget(titledDockWidget);
         QVBoxLayout vBoxTitled = new QVBoxLayout();
-        vBoxTitled.addWidget(new QLabel(tr("TITLE")));
+        vBoxTitled.addWidget(new QLabel("Titolo"));
         QLineEdit lineEditTitle = new QLineEdit();
         lineEditTitle.setObjectName("title");
         vBoxTitled.addWidget(lineEditTitle);
-        vBoxTitled.addWidget(new QLabel(tr("DESCRIPTION")));
+        vBoxTitled.addWidget(new QLabel("Descrizione"));
         QTextEdit textEditDescription = new QTextEdit();
         textEditDescription.setObjectName("description");
         vBoxTitled.addWidget(textEditDescription);
         QToolButton toolButtonSaveProperties = new QToolButton();
         toolButtonSaveProperties.setObjectName("toolButtonSave");
-        toolButtonSaveProperties.setIcon(new QIcon("classpath:com/axiastudio/menjazo/resources/disk.png"));
+        toolButtonSaveProperties.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/disk.png"));
         toolButtonSaveProperties.setEnabled(false);
         vBoxTitled.addWidget(toolButtonSaveProperties);
         vBoxTitled.addStretch();
@@ -173,7 +173,7 @@ public class ClientWindow extends QMainWindow {
         this.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, titledDockWidget);
         
         // Dock versions
-        QDockWidget versionsDockWidget = new QDockWidget(tr("VERSIONS"), this);
+        QDockWidget versionsDockWidget = new QDockWidget("Versioni", this);
         versionsDockWidget.setObjectName("versionsDockWidget");
         this.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, versionsDockWidget);
 
@@ -212,13 +212,13 @@ public class ClientWindow extends QMainWindow {
         String objectId = (String) map.get("objectId");
         String selectedFile = null;
         if( this.tempFiles.containsKey(objectId) ){
-            int res = QMessageBox.question(this, tr("VERSION_LABEL"), tr("UPDATE_CHANGES_QUESTION"),
+            int res = QMessageBox.question(this, "Etichetta di versione", "Vuoi aggiornare le modifiche al documento (verrà creata una nuova revisione)?",
                     QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
             if( QMessageBox.StandardButton.Yes.value() == res ){
                 selectedFile = this.tempFiles.get(objectId).getLocalPath();
             }
         } else {
-            QFileDialog dialog = new QFileDialog(this, tr("UPLOAD_FILE"));
+            QFileDialog dialog = new QFileDialog(this, "Carica file");
             int exec = dialog.exec();
             List<String> selectedFiles = dialog.selectedFiles();
             if( selectedFiles.size()== 1 ){
@@ -227,7 +227,7 @@ public class ClientWindow extends QMainWindow {
         }
         if( selectedFile != null ){
             QFile file = new QFile(selectedFile);
-            String label = QInputDialog.getText(this, tr("VERSION_LABEL"), tr("INSERT_THE_LABEL_FOR_THE_VERSION"), QLineEdit.EchoMode.Normal, tr("NEW_VERSION"));
+            String label = QInputDialog.getText(this, "Etichetta di versione", "Inserisci una etichetta per la versione", QLineEdit.EchoMode.Normal, "Nuova versione");
             if (file.open(QIODevice.OpenModeFlag.ReadOnly)){
                 byte[] content = file.readAll().toByteArray();
                 this.helper.createVersion(objectId, content, label);
@@ -237,7 +237,7 @@ public class ClientWindow extends QMainWindow {
     }
     
     private void upload(){
-        QFileDialog dialog = new QFileDialog(this, tr("UPLOAD_FILE"));
+        QFileDialog dialog = new QFileDialog(this, "Carica file");
         int exec = dialog.exec();
         List<String> selectedFiles = dialog.selectedFiles();
         String subpath = ""; // XXX
@@ -313,7 +313,7 @@ public class ClientWindow extends QMainWindow {
         if( currentRow < 0 ){
             return;
         }
-        int res = QMessageBox.question(this, "", tr("CONFIRM_DELETION_QUESTION"),
+        int res = QMessageBox.question(this, "", "Vuoi cancellare il file selezionato?",
                         QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
         if( QMessageBox.StandardButton.Yes.value() == res ){
             Map map = this.ids.get(currentRow);
@@ -332,13 +332,13 @@ public class ClientWindow extends QMainWindow {
         
         tableWidget.setColumnCount(7);
         List<String> labels = new ArrayList();
-        labels.add(tr("NAME"));
-        labels.add(tr("TITLE"));
-        labels.add(tr("VERSION"));
-        labels.add(tr("SIZE"));
-        labels.add(tr("CREATION_DATE"));
-        labels.add(tr("MODIFICATION_DATE"));
-        labels.add(tr("MIME_TYPE"));
+        labels.add("Nome");
+        labels.add("Titolo");
+        labels.add("Versione");
+        labels.add("Dimensioni");
+        labels.add("Data di creazione");
+        labels.add("Data di modifica");
+        labels.add("Tipo Mime");
         tableWidget.setHorizontalHeaderLabels(labels);
 
         int i = 0;
@@ -358,10 +358,10 @@ public class ClientWindow extends QMainWindow {
             QTableWidgetItem itemName = new QTableWidgetItem(name);
             if( "cmis:document".equals((String) map.get("baseTypeId")) ){
                 String ext = name.substring(name.indexOf(".")+1);
-                String iconName = "classpath:com/axiastudio/menjazo/resources/page_"+ ext +".png";
+                String iconName = "classpath:com/axiastudio/suite/menjazo/resources/page_"+ ext +".png";
                 itemName.setIcon(new QIcon(iconName));
             } else if( "cmis:folder".equals((String) map.get("baseTypeId")) ){
-                itemName.setIcon(new QIcon("classpath:com/axiastudio/menjazo/resources/folder.png"));                
+                itemName.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/folder.png"));
             }
             
             // map in ids
@@ -472,7 +472,7 @@ public class ClientWindow extends QMainWindow {
                 qLabel.setToolTip(toolTip);
                 hBox.addWidget(qLabel);
                 QToolButton toolButton = new QToolButton();
-                toolButton.setIcon(new QIcon("classpath:com/axiastudio/menjazo/resources/download.png"));
+                toolButton.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/download.png"));
                 toolButton.clicked.connect(signalMapper, "map()");
                 String value = ((String) mapVersion.get("objectId")) + ";" + ((String) mapVersion.get("contentStreamFileName"));
                 signalMapper.setMapping(toolButton, value);

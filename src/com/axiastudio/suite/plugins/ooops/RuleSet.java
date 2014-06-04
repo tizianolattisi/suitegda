@@ -16,7 +16,7 @@
  */
 package com.axiastudio.suite.plugins.ooops;
 
-import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.IUtente;
