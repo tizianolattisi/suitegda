@@ -34,11 +34,11 @@ public class AttribuzioneCallbacks {
                 res = false;
             } else {
                 Protocollo protocollo = attribuzione.getProtocollo();
-                if( !attribuzione.getOldState().getPrincipale().equals(attribuzione.getPrincipale()) ){
+                if( !attribuzione.getSnapshot().getPrincipale().equals(attribuzione.getPrincipale()) ){
                     // cambio attribuzione principale
                     res = false;
                 }
-                if( !attribuzione.getOldState().getLetto() && attribuzione.getLetto() ){
+                if( !attribuzione.getSnapshot().getLetto() && attribuzione.getLetto() ){
                     // sto dando per letto
                     for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
                         if( uu.getUfficio().equals(attribuzione.getUfficio()) && uu.getDaiperletto() ){

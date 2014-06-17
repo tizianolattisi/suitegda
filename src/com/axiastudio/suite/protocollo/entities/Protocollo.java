@@ -17,6 +17,7 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.db.ISnapshot;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
@@ -41,7 +42,7 @@ import java.util.Date;
 @EntityListeners({ProtocolloListener.class, TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genprotocollo", sequenceName="protocollo.protocollo_id_seq", initialValue=1, allocationSize=1)
-public class Protocollo implements Serializable, ITimeStamped {
+public class Protocollo implements Serializable, ITimeStamped, ISnapshot<Protocollo> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genprotocollo")
@@ -153,16 +154,21 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Column(name="rec_modificato_da")
     private String recordmodificatoda;
 
-    /* OLD STATE */
+    /* ISnapshot impl */
     @Transient
-    private Protocollo old;
-    @PostLoad
-    private void saveOld(){
+    private Protocollo old=null;
+    @Override
+    public void takeSnapshot() {
         old = SerializationUtils.clone(this);
         old.setPraticaProtocolloCollection(this.getPraticaProtocolloCollection());
     }
-    public Protocollo getOldState() {
-        return old;
+
+    @Override
+    public Protocollo getSnapshot() {
+        if( old != null ){
+            return old;
+        }
+        return this;
     }
 
 
@@ -581,5 +587,5 @@ public class Protocollo implements Serializable, ITimeStamped {
     public String toString() {
         return this.iddocumento + "-" + this.tipo.toString().substring(0, 1) + " (" + SuiteUtil.DATETIME_FORMAT.format(this.dataprotocollo) + ") " + this.getOggettop();
     }
-    
+
 }
