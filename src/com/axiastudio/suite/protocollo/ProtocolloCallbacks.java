@@ -204,7 +204,10 @@ public class ProtocolloCallbacks {
          * Una sola pratica in originale
          */
         if( protocollo.getPraticaProtocolloCollection().size() > 0 ){
-            if( nrPraticheOriginali != 1 ){
+            if( nrPraticheOriginali < 1 ){
+                msg += "Il protocollo deve essere inserito come originale in una pratica.\n";
+                res = false;
+            } else if( nrPraticheOriginali > 1 ){
                 msg += "Il protocollo può essere inserito come originale in una sola pratica.\n";
                 res = false;
             }

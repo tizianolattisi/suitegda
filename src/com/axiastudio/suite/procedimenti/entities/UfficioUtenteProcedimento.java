@@ -29,7 +29,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(schema="PROCEDIMENTI")
-@SequenceGenerator(name="genutenteprocedimento", sequenceName="procedimenti.utenteprocedimento_id_seq", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="genutenteprocedimento", sequenceName="procedimenti.ufficioutenteprocedimento_id_seq", initialValue=1, allocationSize=1)
 public class UfficioUtenteProcedimento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

@@ -340,7 +340,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Descrizione</string>
+          <string>Oggetto</string>
          </property>
          <property name="buddy">
           <cstring>textEdit</cstring>

@@ -33,6 +33,7 @@ import com.axiastudio.suite.anagrafiche.forms.FormRelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
 import com.axiastudio.suite.base.entities.Giunta;
 import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaCallbacks;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
@@ -239,6 +240,11 @@ public class Configure {
                               "classpath:com/axiastudio/suite/base/forms/utente.ui",
                               Utente.class,
                               Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/base/forms/ufficioutente.ui",
+                              UfficioUtente.class,
+                              Dialog.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,

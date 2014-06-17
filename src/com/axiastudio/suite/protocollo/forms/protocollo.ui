@@ -52,6 +52,41 @@
         <number>4</number>
        </property>
        <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Oggetto</string>
+         </property>
+         <property name="buddy">
+          <cstring>textEdit_oggetto</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="textEdit_oggetto">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="acceptRichText">
+          <bool>false</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>Oggetto</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="private" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Note</string>
@@ -130,41 +165,6 @@
          </property>
          <property name="private" stdset="0">
           <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Oggetto</string>
-         </property>
-         <property name="buddy">
-          <cstring>textEdit_oggetto</cstring>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTextEdit" name="textEdit_oggetto">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="acceptRichText">
-          <bool>false</bool>
-         </property>
-         <property name="column" stdset="0">
-          <string>Oggetto</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="private" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -1099,13 +1099,11 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>textEdit_oggetto</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>tableView_soggettiprotocollo</tabstop>
   <tabstop>tableView_ufficiprotocollo</tabstop>
   <tabstop>tableView_pratiche</tabstop>
   <tabstop>tableView_attribuzioni</tabstop>
-  <tabstop>textEdit_note</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../../../../../pypapi/pypapi/lib/pypapi/ui/resources/resources.qrc"/>
