@@ -30,6 +30,7 @@ import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.pratiche.IAtto;
 import com.axiastudio.suite.pratiche.IDettaglio;
+import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Visto;
@@ -371,6 +372,14 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
         this.progetto = progetto;
     }
 
+    public String getNumeroprotocollo() {
+        return getProtocollo().getIddocumento();
+    }
+
+    public void setNumeroprotocollo(String numeroprotocollo) {
+        // NOP
+    }
+
     public String getServizioPrincipale() {
         if (getServizio() != null) {
             return getServizio().getDescrizione();
@@ -379,6 +388,21 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     }
 
     public void setServizioPrincipale(String servizioPrincipale) {
+        // NOP
+    }
+
+    public String getPraticaprincipale() {
+        if (getPratica().getDipendenzaPraticaCollection() != null) {
+            for (DipendenzaPratica dp: getPratica().getDipendenzaPraticaCollection()) {
+                if (dp.getDipendenza().getId() == -1 && dp.getInvertita() ) {
+                    return dp.getPraticadipendente().getCodiceinterno();
+                }
+            }
+        }
+        return null;
+    }
+
+    public void setPraticaprincipale(String praticaprincipale) {
         // NOP
     }
 

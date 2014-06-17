@@ -26,6 +26,7 @@ import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
+import com.axiastudio.suite.deliberedetermine.entities.UfficioDetermina;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
@@ -80,6 +81,22 @@ public class DeterminaCallbacks {
             msg = "Per modificare la determina devi appartenere all'ufficio gestore della pratica con i permessi di modifica, " +
                     "essere responsabile di servizio o essere responsabile di bilancio.";
             return new Validation(false, msg);
+        }
+
+        // Una sola attribuzione in via principale
+        int nrAttribuzioniPrincipali = 0;
+        for( UfficioDetermina ufficioDetermina: determina.getUfficioDeterminaCollection() ){
+            if( ufficioDetermina.getPrincipale() ) {
+                nrAttribuzioniPrincipali += 1;
+            }
+        }
+        if( nrAttribuzioniPrincipali == 0 ){
+            msg += "E' necessario impostare un'attribuzione principale.\n";
+            res = false;
+        }
+        if( nrAttribuzioniPrincipali > 1 ){
+            msg += "Non si può impostare più di un'attribuzione principale.\n";
+            res = false;
         }
 
         // imposto il responsabile
