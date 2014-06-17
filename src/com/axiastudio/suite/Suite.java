@@ -199,9 +199,6 @@ public class Suite {
         db.open("SuitePU", mapProperties);
         Register.registerUtility(db, IDatabase.class);
 
-        // applicazione Qt
-        app.addQmFile("classpath:com/axiastudio/menjazo/lang/menjazo_{0}.qm"); // menjazo
-        app.setLanguage("it");
 
         // jdbc
         app.setConfigItem("jdbc.url", jdbcUrl);

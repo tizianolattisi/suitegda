@@ -16,7 +16,7 @@
  */
 package com.axiastudio.suite.plugins.cmis;
 
-import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 
 import java.io.InputStream;

@@ -16,12 +16,9 @@
  */
 package com.axiastudio.suite.deliberedetermine.forms;
 
-import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.Delegate;
 import com.axiastudio.pypapi.ui.ITableModel;
@@ -29,7 +26,6 @@ import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.deliberedetermine.DeterminaUtil;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.finanziaria.entities.Servizio;

@@ -17,7 +17,7 @@
 package com.axiastudio.suite.pratiche;
 
 import com.axiastudio.mapformat.MessageMapFormat;
-import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
