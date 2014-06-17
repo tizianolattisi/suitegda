@@ -373,7 +373,10 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     }
 
     public String getNumeroprotocollo() {
-        return getProtocollo().getIddocumento();
+        if ( getProgetto() != null) {
+            return getProtocollo().getIddocumento();
+        }
+        return null;
     }
 
     public void setNumeroprotocollo(String numeroprotocollo) {
@@ -392,7 +395,7 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     }
 
     public String getPraticaprincipale() {
-        if (getPratica().getDipendenzaPraticaCollection() != null) {
+        if ( getPratica()!=null && getPratica().getDipendenzaPraticaCollection() != null ) {
             for (DipendenzaPratica dp: getPratica().getDipendenzaPraticaCollection()) {
                 if (dp.getDipendenza().getId() == -1 && dp.getInvertita() ) {
                     return dp.getPraticadipendente().getCodiceinterno();
