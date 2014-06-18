@@ -41,6 +41,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -107,9 +108,10 @@ public class PraticaUtil {
                     sql += " and t.progressivoanno = TRUE";
                     sql += " and p.anno = " + year.toString();
                 }
-                if( tipoPratica.getProgressivogiunta() ){
+                if( tipoPratica.getProgressivogiunta() ) {
                     sql += " and t.progressivogiunta = TRUE";
-                    sql += " and p.datapratica >= '" + SuiteUtil.DATE_FORMAT.format(giuntaCorrente.getDatanascita()) +"'";
+                    String dataGiunta = (new SimpleDateFormat("yyyy-MM-dd")).format(giuntaCorrente.getDatanascita());
+                    sql += " and p.datapratica >= '" + dataGiunta + "'";
                 }
                 Query q = em.createQuery(sql);
                 String maxString = (String) q.getSingleResult();
