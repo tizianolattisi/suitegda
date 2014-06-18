@@ -25,6 +25,7 @@ import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
+import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
@@ -91,6 +92,17 @@ public class PraticaCallbacks {
                         " Contattare l'assistenza.";
                 return new Validation(false, msg);
             }
+
+            // verifica esistenza di 1! procedimento collegato alla tipologia di pratica
+            if ( pratica.getTipo().getTipopraticaProcedimentoCollection() == null ||
+                        pratica.getTipo().getTipopraticaProcedimentoCollection().size() == 0 ) {
+                msg = "Nessun procedimento collegato alla codifica selezionata. Inserimento annullato.";
+                return new Validation(false, msg);
+            } else if ( pratica.getTipo().getTipopraticaProcedimentoCollection().size() > 1 ) {
+                msg = "Esiste più di un procedimento collegato alla codifica selezionata. Inserimento annullato.";
+                return new Validation(false, msg);
+            }
+
         } else {
             // l'amministratore pratiche modifica anche se non appartenente all'ufficio gestore e
             // anche se la pratica è archiviata.
