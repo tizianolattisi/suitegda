@@ -23,6 +23,7 @@ import com.axiastudio.pypapi.db.IFactory;
 import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.IUIFile;
+import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.base.entities.CambiaPassword;
 import com.axiastudio.suite.base.entities.IUtente;
@@ -511,7 +512,13 @@ public class Mdi extends QMainWindow implements IMdi {
             }
 
             if( store != null ){
-                form.init(store);
+                if ( store.size()>0 ) {
+                    form.init(store);
+                }
+                else {
+                    Util.warningBox(this, "Attenzione", "Nessun record trovato");
+                    return;
+                }
             } else {
                 form.init();
             }
