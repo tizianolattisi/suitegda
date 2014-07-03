@@ -401,9 +401,11 @@ public class Pratica implements Serializable, ITimeStamped {
     }
 
     public String getIstruttorePratica() {
-        for ( UtentePratica utente: this.getUtentePraticaCollection()) {
-            if ( utente.getIstruttore() && utente.getAl() == null ) {
-                return utente.getUtente().getNome();
+        if ( this.getUtentePraticaCollection()!=null && this.getUtentePraticaCollection().size()>0 ) {
+            for ( UtentePratica utente: this.getUtentePraticaCollection()) {
+                if ( utente.getIstruttore() && utente.getAl() == null && utente.getUtente() != null ) {
+                    return utente.getUtente().getNome();
+                }
             }
         }
         return "";
@@ -413,9 +415,11 @@ public class Pratica implements Serializable, ITimeStamped {
     }
 
     public String getResponsabilePratica() {
-        for ( UtentePratica utente: this.getUtentePraticaCollection()) {
-            if ( utente.getResponsabile() && utente.getAl() == null ) {
-                return utente.getUtente().getNome();
+        if ( this.getUtentePraticaCollection()!=null && this.getUtentePraticaCollection().size()>0 ) {
+            for ( UtentePratica utente: this.getUtentePraticaCollection()) {
+                if ( utente.getResponsabile() && utente.getAl() == null && utente.getUtente() != null ) {
+                    return utente.getUtente().getNome();
+                }
             }
         }
         return "";
