@@ -68,10 +68,12 @@ public class OoopsDialog extends QDialog {
         QToolButton toolButtonCompose = (QToolButton) this.findChild(QToolButton.class, "toolButtonCompose");
         toolButtonCompose.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/page_white_add.png"));
         toolButtonCompose.clicked.connect(this, "compose()");
+        toolButtonCompose.setToolTip("Componi/Rielabora");
 
         QToolButton toolButtonPreparaProtocollo = (QToolButton) this.findChild(QToolButton.class, "toolButtonPreparaProtocollo");
         toolButtonPreparaProtocollo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
         toolButtonPreparaProtocollo.clicked.connect(this, "preparaProtocollo()");
+        toolButtonPreparaProtocollo.setToolTip("Prepara pdf per il protocollo");
 
         QToolButton uploadModel = (QToolButton) this.findChild(QToolButton.class, "toolButtonUploadModel");
         uploadModel.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/upload.png"));
@@ -206,9 +208,8 @@ public class OoopsDialog extends QDialog {
         String mimeType = "application/pdf";
         String filter = "writer_pdf_Export";
 
-        Object entity = ((Window) this.parent()).getContext().getCurrentEntity();
         HashMap<String, String> rules = new HashMap<String, String>();
-        if (entity instanceof IProtocollabile) {
+        if (currentEntity instanceof IProtocollabile) {
             rules.put("numeroprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.iddocumento : \"YYYYNNNNNNNN\" }");
             rules.put("dataprotocollo", "{ obj -> obj.protocollo ? obj.protocollo.dataprotocollo : \"GG/MM/YYYY\"}");
             rules.put("barcode",
@@ -230,7 +231,7 @@ public class OoopsDialog extends QDialog {
                             "        }\n" +
                             "        return barcode+\")\" }");
         }
-        if (entity instanceof IAtto) {
+        if (currentEntity instanceof IAtto) {
             rules.put("numeroatto", "{ obj -> (obj.protocollo && obj.protocollo.numeroatto) ? obj.protocollo.numeroatto : \"NNNNN\" }");
             rules.put("dataatto",
                     "{ obj -> (obj.protocollo && obj.protocollo.dataatto) ? obj.protocollo.dataatto.format(\"dd/MM/yyyy\") : \"GG/MM/YYYY\"}");
@@ -276,10 +277,9 @@ public class OoopsDialog extends QDialog {
 
 
     protected void composeFromTemplate(Template template) {
-        Object entity = ((Window) this.parent()).getContext().getCurrentEntity();
         Map<String, Object> values;
         if( template.getRuleSet() != null ) {
-            values = template.getRuleSet().eval(entity);
+            values = template.getRuleSet().eval(currentEntity);
         } else {
             values = new HashMap<String, Object>();
         }
