@@ -73,7 +73,9 @@ public class Oggetto implements Serializable, Comparable<Oggetto> {
 
     @Override
     public String toString() {
-        return "( "+ this.getId() + " ) " + this.getDescrizione();
+//        return this.getDescrizione();
+          return "-" + this.getDescrizione() + " (."+ this.getId() + ".)";
+
     }
 
     @Override

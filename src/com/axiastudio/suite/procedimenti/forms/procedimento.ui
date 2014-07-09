@@ -14,7 +14,7 @@
    <string>Procedimenti</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>id,descrizione</string>
+   <string>id,&lt;descrizione&gt;,elencotipopratica</string>
   </property>
   <property name="nodelete" stdset="0">
    <bool>true</bool>
@@ -24,144 +24,50 @@
     <property name="margin">
      <number>8</number>
     </property>
-    <item row="0" column="0" rowspan="2">
-     <widget class="QGroupBox" name="groupBox">
+    <item row="3" column="1">
+     <widget class="QGroupBox" name="groupBox_4">
       <property name="title">
-       <string>Procedimento</string>
+       <string>Utenti</string>
       </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Descrizione</string>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_3">
+         <property name="entity" stdset="0">
+          <string>.ufficioUtenteProcedimentoCollection</string>
+         </property>
+         <property name="headers" stdset="0">
+          <string>resp.,abil.,abit.,ufficio-utente</string>
+         </property>
+         <property name="columns" stdset="0">
+          <string>&gt;responsabile&lt;,&gt;abilitato&lt;,&gt;abituale&lt;,&lt;ufficioUtente&gt;</string>
+         </property>
+         <property name="reference" stdset="0">
+          <string>ufficioUtente</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" rowspan="2" colspan="2">
-        <widget class="QTextEdit" name="textEdit">
-         <property name="column" stdset="0">
-          <string>descrizione</string>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>Uffici</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
+         <property name="entity" stdset="0">
+          <string>.ufficioProcedimentoCollection</string>
          </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+         <property name="columns" stdset="0">
+          <string>&gt;principale&lt;,&lt;ufficio&gt;</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>136</height>
-          </size>
+         <property name="headers" stdset="0">
+          <string>princ.,ufficio</string>
          </property>
-        </spacer>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Normativa</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="2">
-        <widget class="QLineEdit" name="lineEdit">
-         <property name="column" stdset="0">
-          <string>normativa</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Iniziativa</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="2">
-        <widget class="QComboBox" name="comboBox">
-         <property name="column" stdset="0">
-          <string>iniziativa</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>DI_UFFICIO</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>DI_PARTE</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>DI_UFFICIO_TUTELATA</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>DI_PARTE_TUTELATA</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>COPIE_ED_ALTRO</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Giorni istruttoria</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QSpinBox" name="spinBox">
-         <property name="column" stdset="0">
-          <string>maxGiorniIstruttoria</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>192</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Soggetto</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1" colspan="2">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>da inserire</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Tipo dettaglio</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1" colspan="2">
-        <widget class="QLineEdit" name="lineEdit_2">
-         <property name="column" stdset="0">
-          <string>tipodettaglio</string>
+         <property name="reference" stdset="0">
+          <string>ufficio</string>
          </property>
         </widget>
        </item>
@@ -207,6 +113,12 @@
          <property name="reference" stdset="0">
           <string>tipopratica</string>
          </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="searchfields" stdset="0">
+          <string>tipopratica.codice</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -234,50 +146,198 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0">
-     <widget class="QGroupBox" name="groupBox_3">
+    <item row="0" column="0" rowspan="2">
+     <widget class="QGroupBox" name="groupBox">
       <property name="title">
-       <string>Uffici</string>
+       <string>Procedimento</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
-         <property name="entity" stdset="0">
-          <string>.ufficioProcedimentoCollection</string>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="5" column="1">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Iniziativa</string>
          </property>
-         <property name="columns" stdset="0">
-          <string>&gt;principale&lt;,&lt;ufficio&gt;</string>
-         </property>
-         <property name="headers" stdset="0">
-          <string>princ.,ufficio</string>
-         </property>
-         <property name="reference" stdset="0">
-          <string>ufficio</string>
+         <property name="buddy">
+          <cstring>comboBox</cstring>
          </property>
         </widget>
        </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QGroupBox" name="groupBox_4">
-      <property name="title">
-       <string>Utenti</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_3">
-         <property name="entity" stdset="0">
-          <string>.ufficioUtenteProcedimentoCollection</string>
+       <item row="8" column="4" colspan="3">
+        <widget class="QLineEdit" name="lineEdit_2">
+         <property name="column" stdset="0">
+          <string>tipodettaglio</string>
          </property>
-         <property name="headers" stdset="0">
-          <string>resp.,abil.,abit.,ufficio-utente</string>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Soggetto</string>
          </property>
-         <property name="columns" stdset="0">
-          <string>&gt;responsabile&lt;,&gt;abilitato&lt;,&gt;abituale&lt;,&lt;ufficioUtente&gt;</string>
+        </widget>
+       </item>
+       <item row="6" column="6">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="reference" stdset="0">
-          <string>ufficioUtente</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>192</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="6" column="4">
+        <widget class="QSpinBox" name="spinBox">
+         <property name="column" stdset="0">
+          <string>maxGiorniIstruttoria</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="4" colspan="3">
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="column" stdset="0">
+          <string>normativa</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4" rowspan="2" colspan="3">
+        <widget class="QTextEdit" name="textEdit">
+         <property name="column" stdset="0">
+          <string>descrizione</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Giorni istruttoria</string>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>136</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Normativa</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Tipo dettaglio</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_2</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="4" colspan="3">
+        <widget class="QComboBox" name="comboBox">
+         <property name="column" stdset="0">
+          <string>iniziativa</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>DI_UFFICIO</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>DI_PARTE</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>DI_UFFICIO_TUTELATA</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>DI_PARTE_TUTELATA</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COPIE_ED_ALTRO</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Descrizione</string>
+         </property>
+         <property name="buddy">
+          <cstring>textEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5" colspan="2">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>201</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="7" column="4" colspan="2">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>da inserire</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Numero</string>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_2</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QSpinBox" name="spinBox_2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>id</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

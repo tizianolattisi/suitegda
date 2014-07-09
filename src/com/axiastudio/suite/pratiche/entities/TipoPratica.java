@@ -40,7 +40,7 @@ public class TipoPratica implements Serializable, Comparable<TipoPratica> {
     @Column(name="codice")
     private String codice;
     @Column(name="descrizione")
-    private String descrizione;
+    private String descrizione="";
     @JoinColumn(name = "tipopadre", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.EAGER)
     private TipoPratica tipopadre;

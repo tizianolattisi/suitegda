@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>428</width>
+    <width>800</width>
     <height>357</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Tipo pratica</string>
@@ -17,7 +23,7 @@
    <string>codice,descrizione</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,1">
     <item row="0" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
@@ -27,6 +33,18 @@
     </item>
     <item row="0" column="1" colspan="3">
      <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>650</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="column" stdset="0">
        <string>tipopadre</string>
       </property>

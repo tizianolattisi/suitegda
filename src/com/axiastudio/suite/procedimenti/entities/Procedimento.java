@@ -167,6 +167,20 @@ public class Procedimento implements Serializable {
         this.tipodettaglio = tipodettaglio;
     }
 
+    public String getElencotipopratica() {
+        String elenco = "";
+        for (TipoPraticaProcedimento tpp : tipopraticaProcedimentoCollection) {
+            elenco += tpp.getTipopratica().getCodice() + ", ";
+        }
+        if ( elenco.length()>2 ){
+            elenco=elenco.substring(0, elenco.length()-2);
+        }
+        return elenco;
+    }
+
+    public void setElencotipopratica(String tipodettaglio) {
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
