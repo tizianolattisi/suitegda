@@ -68,6 +68,7 @@ public class Mdi extends QMainWindow implements IMdi {
     private QAction actionSeparator;
     private QAction actionClose;
     private QSignalMapper windowMapper;
+    private QTreeWidgetItem itemPassword;
     
     public Mdi(){
         this.setWindowIcon(new QIcon(ICON));
@@ -401,7 +402,7 @@ public class Mdi extends QMainWindow implements IMdi {
         itemDeleghe.setText(1, "com.axiastudio.suite.procedimenti.entities.Delega");
         //itemDeleghe.setDisabled(!autenticato.getAmministratore());
         
-        QTreeWidgetItem itemPassword = new QTreeWidgetItem(itemAmministrazione);
+        itemPassword = new QTreeWidgetItem(itemAmministrazione);
         itemPassword.setText(0, "Cambio password");
         itemPassword.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/key.png"));
         itemPassword.setText(1, "PASSWORD");
@@ -537,6 +538,14 @@ public class Mdi extends QMainWindow implements IMdi {
         } else {
             form.showMaximized();
         }
+    }
+
+    public QTreeWidgetItem getItemPassword() {
+        return itemPassword;
+    }
+
+    public void setItemPassword(QTreeWidgetItem itemPassword) {
+        this.itemPassword = itemPassword;
     }
 
     @Override
