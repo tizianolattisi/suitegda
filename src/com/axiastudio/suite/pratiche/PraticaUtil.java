@@ -63,6 +63,7 @@ public class PraticaUtil {
         Calendar calendar = Calendar.getInstance();
         Integer year = calendar.get(Calendar.YEAR);
         map.put("anno", year.toString());
+        map.put("anno1", ((Integer)(year+1)).toString());
 
         // giunta
         Giunta giuntaCorrente = SuiteUtil.trovaGiuntaCorrente();
