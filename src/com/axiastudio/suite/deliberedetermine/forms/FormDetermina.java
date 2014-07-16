@@ -119,6 +119,14 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         QLabel bilancioNegato = (QLabel) findChild(QLabel.class, "label_vistoBilancioNegato");
         bilancioNegato.setText(testoBilancioNegato);
 
+        Visto vistoLiquidazione = determina.getVistoLiquidazione();
+        String testoVistoLiquidazione = "";
+        if( vistoLiquidazione != null ){
+            testoVistoLiquidazione="(liquidata)";
+        }
+        QLabel liquidazione = (QLabel) findChild(QLabel.class, "label_vistoLiquidazione");
+        liquidazione.setText(testoVistoLiquidazione);
+
     }
 
     private void popolaProcedimento() {

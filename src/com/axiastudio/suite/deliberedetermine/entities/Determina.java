@@ -485,6 +485,11 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     }
     public void setVistoBilancioNegato(Visto visto){  }
 
+    public Visto getVistoLiquidazione() {
+        return getVisto("FASE_LIQUIDAZIONE");
+    }
+    public void setVistoLiquidazione(Visto visto){  }
+
     public Date getRecordcreato() {
         return recordcreato;
     }
