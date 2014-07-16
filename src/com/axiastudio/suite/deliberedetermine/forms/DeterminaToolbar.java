@@ -15,6 +15,9 @@ public class DeterminaToolbar extends PyPaPiToolBar {
         this.insertButton("apriDocumenti", "Apri documenti",
                 "classpath:com/axiastudio/suite/menjazo/resources/menjazo.png",
                 "Apre lo spazio documenti", parent);
+        this.insertButton("vistoLiquidazione", "Visto avvenuta liquidazione",
+                "classpath:com/axiastudio/suite/resources/money.png",
+                "Inserisce il visto di avvenuta liquidazione della determina", parent);
     }
 }
 

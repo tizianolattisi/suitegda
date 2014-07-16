@@ -51,8 +51,14 @@ import java.util.List;
  */
 public class FormDetermina extends FormDettaglio implements IDocumentFolder {
 
+    protected DeterminaToolbar determinaToolbar;
+
     public FormDetermina(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
+
+        determinaToolbar = new DeterminaToolbar("Dettaglio", this);
+        addToolBar(determinaToolbar);
+        this.determinaToolbar.actionByName("vistoLiquidazione").setEnabled(Boolean.FALSE);
 
         QListWidget procedimento = (QListWidget) findChild(QListWidget.class, "procedimento");
         procedimento.itemDoubleClicked.connect(this, "completaFase(QListWidgetItem)");
@@ -127,6 +133,10 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         QLabel liquidazione = (QLabel) findChild(QLabel.class, "label_vistoLiquidazione");
         liquidazione.setText(testoVistoLiquidazione);
 
+        this.determinaToolbar.actionByName("vistoLiquidazione").
+                setEnabled( this.determinaToolbar.actionByName("vistoLiquidazione").isEnabled() &&
+                        determina.getDiliquidazione() && vistoLiquidazione == null );
+
     }
 
     private void popolaProcedimento() {
@@ -187,10 +197,10 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         }
     }
 
- /*
- * Il primo servizio diventa principale, e non può più essere rimosso
- * Se non indicato il referente politico, viene inserito quello di default x il servizio
- */
+/*
+* Il primo servizio diventa principale, e non può più essere rimosso
+* Se non indicato il referente politico, viene inserito quello di default x il servizio
+*/
     private void servizioInserito(Object obj){
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         ServizioDetermina inserita = (ServizioDetermina) obj;
@@ -289,6 +299,21 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
                 }
             }
         }
+    }
+
+    private void vistoLiquidazione(){
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+
+        SimpleWorkFlow wf = new SimpleWorkFlow(determina);
+        Fase fase = new Fase();
+        FasePratica fp = new FasePratica();
+
+        fase.setId(Long.parseLong(SuiteUtil.trovaCostante("FASE_LIQUIDAZIONE").getValore()));
+        fp.setFase(fase);
+        fp.setPratica(determina.getPratica());
+        wf.creaVisto(fp);
+
+        this.getContext().refreshElement();
     }
 
 }

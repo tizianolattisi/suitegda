@@ -56,6 +56,9 @@
        <property name="column" stdset="0">
         <string>ufficio</string>
        </property>
+       <property name="sortbytostring" stdset="0">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item row="2" column="0">
@@ -70,6 +73,9 @@
        <property name="column" stdset="0">
         <string>servizio</string>
        </property>
+       <property name="sortbytostring" stdset="0">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item row="3" column="0">
@@ -83,6 +89,9 @@
       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_procedimento">
        <property name="column" stdset="0">
         <string>procedimento</string>
+       </property>
+       <property name="sortbytostring" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -173,6 +182,9 @@
        <property name="column" stdset="0">
         <string>utente</string>
        </property>
+       <property name="sortbytostring" stdset="0">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item row="3" column="1" colspan="2">
@@ -226,6 +238,9 @@
       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_delegante">
        <property name="column" stdset="0">
         <string>delegante</string>
+       </property>
+       <property name="sortbytostring" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
