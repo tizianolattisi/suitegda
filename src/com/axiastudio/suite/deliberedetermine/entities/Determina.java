@@ -28,6 +28,7 @@ import com.axiastudio.suite.finanziaria.entities.Progetto;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
+import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.pratiche.IAtto;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
@@ -395,9 +396,9 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     }
 
     public String getPraticaprincipale() {
-        if ( getPratica()!=null && getPratica().getDipendenzaPraticaCollection() != null ) {
+        if ( getPratica()!=null && getPratica().getDipendenzaPraticaCollection()!=null ) {
             for (DipendenzaPratica dp: getPratica().getDipendenzaPraticaCollection()) {
-                if (dp.getDipendenza().getId() == -1 && dp.getInvertita() ) {
+                if ( dp.getDipendenza()!=null && dp.getDipendenza().getId() == -1 && dp.getInvertita() ) {
                     return dp.getPraticadipendente().getCodiceinterno();
                 }
             }
@@ -449,22 +450,25 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     private Visto getVisto(String tipoVisto) {
         if( this.getPratica() != null ){
             Database db = (Database) Register.queryUtility(IDatabase.class);
-            Long idFaseVisto = Long.parseLong(SuiteUtil.trovaCostante(tipoVisto).getValore());
-            Controller controller = db.createController(Fase.class);
-            Fase fase = (Fase)controller.get(idFaseVisto);
-            EntityManager em = db.getEntityManagerFactory().createEntityManager();
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Visto> cq = cb.createQuery(Visto.class);
-            Root<Visto> root = cq.from(Visto.class);
-            cq.select(root);
-            cq.where(cb.and(cb.equal(root.get("pratica"), this.getPratica()),
-                    cb.equal(root.get("fase"), fase),
-                    cb.equal(root.get("negato"), false)));
-            cq.orderBy(cb.desc(root.get("data")));
-            TypedQuery<Visto> tq = em.createQuery(cq);
-            List<Visto> resultList = tq.getResultList();
-            if( resultList.size()>0 ){
-                return resultList.get(0);
+            Costante faseVisto = SuiteUtil.trovaCostante(tipoVisto);
+            if ( faseVisto != null ) {
+                Long idFaseVisto = Long.parseLong(faseVisto.getValore());
+                Controller controller = db.createController(Fase.class);
+                Fase fase = (Fase) controller.get(idFaseVisto);
+                EntityManager em = db.getEntityManagerFactory().createEntityManager();
+                CriteriaBuilder cb = em.getCriteriaBuilder();
+                CriteriaQuery<Visto> cq = cb.createQuery(Visto.class);
+                Root<Visto> root = cq.from(Visto.class);
+                cq.select(root);
+                cq.where(cb.and(cb.equal(root.get("pratica"), this.getPratica()),
+                        cb.equal(root.get("fase"), fase),
+                        cb.equal(root.get("negato"), false)));
+                cq.orderBy(cb.desc(root.get("data")));
+                TypedQuery<Visto> tq = em.createQuery(cq);
+                List<Visto> resultList = tq.getResultList();
+                if (resultList.size() > 0) {
+                    return resultList.get(0);
+                }
             }
         }
         return null;
