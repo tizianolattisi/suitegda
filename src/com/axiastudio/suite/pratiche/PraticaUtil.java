@@ -17,6 +17,7 @@
 package com.axiastudio.suite.pratiche;
 
 import com.axiastudio.mapformat.MessageMapFormat;
+import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
@@ -192,7 +193,13 @@ public class PraticaUtil {
                     attribuzioni.add(ufficioDetermina.getUfficio());
                 }
             }
-
+            Costante infoUfficioGestore = SuiteUtil.trovaCostante("UFFICIO_GESTORE_DETERMINE");
+            if ( infoUfficioGestore != null ) {
+                Ufficio ufficioGestore = (Ufficio) controllerUfficio.get(Long.valueOf(infoUfficioGestore.getValore()));
+                if( !attribuzioni.contains(ufficioGestore) ) {
+                    attribuzioni.add(ufficioGestore);
+                }
+            }
         }
 
         List<Ufficio> uffici = new ArrayList<Ufficio>();
@@ -236,6 +243,20 @@ public class PraticaUtil {
                         attribuzione.setPrincipale(Boolean.TRUE);
                     }
                 }
+            }
+        }
+        // Se esiste, carico ufficio gestore delle determine
+        Costante infoUfficioGestore = SuiteUtil.trovaCostante("UFFICIO_GESTORE_DETERMINE");
+        if ( infoUfficioGestore != null ) {
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            Controller controllerUfficio = db.createController(Ufficio.class);
+            Ufficio ufficioGestore = (Ufficio) controllerUfficio.get(Long.valueOf(infoUfficioGestore.getValore()));
+            if( !ufficiProtocollo.contains(ufficioGestore) ){
+                Attribuzione attribuzione = new Attribuzione();
+                attribuzione.setUfficio(ufficioGestore);
+                attribuzione.setProtocollo(protocollo);
+                attribuzione.setPrincipale(Boolean.FALSE);
+                protocollo.getAttribuzioneCollection().add(attribuzione);
             }
         }
 

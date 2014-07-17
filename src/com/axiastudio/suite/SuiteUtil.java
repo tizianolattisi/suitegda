@@ -25,6 +25,7 @@ import com.axiastudio.suite.modelli.entities.Modello;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -84,8 +85,15 @@ public class SuiteUtil {
         cq.select(root);
         cq.where(cb.equal(root.get("nome"), name));
         TypedQuery<Costante> tq = em.createQuery(cq);
-        Costante costante = tq.getSingleResult();
-        return costante;
+//        Costante costante = tq.getSingleResult();   // errore se la costante non esiste;
+        // return null se costante non esiste (in caso di gestione esterna...); eccezione se si ottiene più di 1 risultato
+        List results = tq.getResultList();
+        if ( results == null || results.isEmpty() ) {
+            return null;
+        } else if (results.size() == 1) {
+            return (Costante) results.get(0);
+        }
+        throw new NonUniqueResultException();
     }
 
     public static Giunta trovaGiuntaCorrente(){
