@@ -29,6 +29,7 @@ import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.PraticaUtil;
+import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Visto;
@@ -37,6 +38,8 @@ import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -214,11 +217,16 @@ public class SimpleWorkFlow {
         return null;
     }
 
-    public void completaFase(FasePratica fp){
-        completaFase(fp, Boolean.TRUE);
+    public Boolean completaFase(FasePratica fp){
+        return completaFase(fp, Boolean.TRUE, "");
     }
 
-    public void completaFase(FasePratica fp, Boolean confermata){
+    public Boolean completaFase(FasePratica fp, Boolean confermata){
+        return completaFase(fp, confermata, "");
+    }
+
+    public Boolean completaFase(FasePratica fp, Boolean confermata, String commento){
+
         if( confermata ){
             fp.setCompletata(true);
             fp.setNegata(false);
@@ -228,27 +236,32 @@ public class SimpleWorkFlow {
                 successiva = successiva.getConfermata();
             }
             setFaseAttiva(successiva);
-            creaVisto(fp);
+            creaVisto(fp, commento);
         } else {
             fp.setCompletata(false);
             fp.setNegata(true);
             setFaseAttiva(fp.getRifiutata());
-            creaVisto(fp, true); // negato
+            creaVisto(fp, true, commento); // negato
         }
-
+        return Boolean.TRUE;
     }
 
-    private void creaVisto(FasePratica fp) {
-        creaVisto(fp, false);
+    public void creaVisto(FasePratica fp) {
+        creaVisto(fp, false, "");
     }
 
-    private void creaVisto(FasePratica fp, Boolean negato) {
+    private void creaVisto(FasePratica fp, String commento) {
+        creaVisto(fp, false, commento);
+    }
+
+    private void creaVisto(FasePratica fp, Boolean negato, String commento) {
         Pratica pratica = fp.getPratica();
         Visto visto = new Visto();
         visto.setFase(fp.getFase());
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         visto.setUtente(utente);
         visto.setNegato(negato);
+        visto.setCommento(commento);
         IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(fp.getPratica());
         String cariche = fp.getCariche();
         if( cariche != null && !cariche.equals("")){
@@ -282,6 +295,24 @@ public class SimpleWorkFlow {
                 fp.setAttiva(false);
             }
         }
+    }
+
+    public Boolean setFasePratica(FasePratica fp, Fase faseAttiva){
+
+        Pratica pratica=fp.getPratica();
+        pratica.setFase(faseAttiva);
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManagerFactory emf = db.getEntityManagerFactory();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(pratica);
+        try {
+            em.getTransaction().commit();
+        }  catch (Exception e) {
+            result=e.getMessage();
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 
 }

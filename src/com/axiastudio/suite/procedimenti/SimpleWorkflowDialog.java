@@ -13,6 +13,7 @@ public class SimpleWorkflowDialog extends QDialog {
     private final SimpleWorkFlow simpleWorkFlow;
     private FasePratica fasePratica;
     private QComboBox choice;
+    private QTextEdit commento;
 
     public SimpleWorkflowDialog(QWidget parent, SimpleWorkFlow simpleWorkFlow, FasePratica fasePratica) {
         super(parent);
@@ -63,6 +64,9 @@ public class SimpleWorkflowDialog extends QDialog {
             choice.addItem(fasePratica.getTestorifiutata());
         }
 
+        commento = new QTextEdit();
+        vBox.addWidget(commento);
+
         QHBoxLayout hBox = new QHBoxLayout();
         vBox.addLayout(hBox);
         hBox.addStretch();
@@ -89,7 +93,11 @@ public class SimpleWorkflowDialog extends QDialog {
         if( idx == 0 ){
             Boolean res = simpleWorkFlow.azione(fasePratica);
             if( res ){
-                simpleWorkFlow.completaFase(fasePratica);
+                if ( !simpleWorkFlow.completaFase(fasePratica) ) {
+                    QMessageBox.critical(this, "Attenzione", simpleWorkFlow.getResult().toString(),
+                            QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+                    return;
+                }
             } else {
                 String msg = "Non è stato possibile concludere la fase.";
                 if( simpleWorkFlow.getResult() != null ){
@@ -99,7 +107,7 @@ public class SimpleWorkflowDialog extends QDialog {
                 return;
             }
         } else if( idx == 1 ){
-            simpleWorkFlow.completaFase(fasePratica, Boolean.FALSE);
+            simpleWorkFlow.completaFase(fasePratica, Boolean.FALSE, commento.toPlainText());
         }
         super.accept();
     }

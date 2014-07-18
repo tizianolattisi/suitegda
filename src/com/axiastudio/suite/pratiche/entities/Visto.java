@@ -54,6 +54,8 @@ public class Visto implements Serializable {
     private Date data;
     @Column(name="negato")
     Boolean negato=false;
+    @Column(name="commento")
+    String commento;
 
     public Long getId() {
         return id;
@@ -117,5 +119,13 @@ public class Visto implements Serializable {
 
     public void setNegato(Boolean negato) {
         this.negato = negato;
+    }
+
+    public String getCommento() {
+        return commento;
+    }
+
+    public void setCommento(String commento) {
+        this.commento = commento;
     }
 }
