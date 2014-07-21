@@ -201,7 +201,7 @@ public class TipoPratica implements Serializable, Comparable<TipoPratica> {
 
     @Override
     public String toString() {
-        return " "+this.getCodice()+" - "+this.getDescrizione();
+        return "-"+this.getCodice()+" - "+this.getDescrizione();
     }
 
     @Override

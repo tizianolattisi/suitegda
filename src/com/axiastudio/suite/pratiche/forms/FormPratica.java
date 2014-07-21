@@ -201,7 +201,7 @@ public class FormPratica extends Window implements IDocumentFolder {
     }
 
     /*
-     * Uno store contenente gli oggetti ordinati x descrizione
+     * Uno store contenente gli oggetti ordinati x descrizione; solo tipologie 'foglie' e non obsolete
      */
     public Store storeTipo(){
         Database db = (Database) Register.queryUtility(IDatabase.class);
@@ -209,7 +209,9 @@ public class FormPratica extends Window implements IDocumentFolder {
         Store storeTipo = controller.createFullStore();
         List<TipoPratica> oggetti = new ArrayList<TipoPratica>();
         for(Object ogg: storeTipo){
-            oggetti.add((TipoPratica) ogg);
+            if ( ((TipoPratica) ogg).getObsoleta().equals(Boolean.FALSE) && ((TipoPratica) ogg).getFoglia().equals(Boolean.TRUE) ) {
+                oggetti.add((TipoPratica) ogg);
+            }
         }
         Collections.sort(oggetti, TipoPratica.Comparators.CODICE);
         return new Store(oggetti);
