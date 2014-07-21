@@ -95,7 +95,7 @@ public class FormProtocollo extends Window {
             Logger.getLogger(FormProtocollo.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        ((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo")).currentIndexChanged.connect(this, "aggiornaLabelSoggetti()");
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo")).currentIndexChanged.connect(this, "aggiornaTipo()");
         
         /* fascicolazione */
         QToolButton toolButtonTitolario = (QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario");
@@ -281,6 +281,15 @@ public class FormProtocollo extends Window {
         Boolean convProtocollo = protocollo.getConvalidaprotocollo();
         Boolean consDocumenti = protocollo.getConsolidadocumenti();
 
+        // colore identificativo x entrata/uscita/interno
+        if ( protocollo.getTipo().equals(TipoProtocollo.ENTRATA) ) {
+            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(255, 255, 127);}");
+        } else if ( protocollo.getTipo().equals(TipoProtocollo.INTERNO) ) {
+            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(170, 255, 127);}");
+        } else if ( protocollo.getTipo().equals(TipoProtocollo.USCITA) ) {
+            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(170, 255, 255);}");
+        }
+
         // abilitazione azioni: convalida, consolida e spedizione
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
@@ -381,6 +390,20 @@ public class FormProtocollo extends Window {
         tabWidgetRiferimentiProtocollo.setTabText(1, "Riferimenti precedenti (" + protocollo.getRiferimentoProtocolloCollection().size() +
                 ") e successivi (" + protocollo.getRiferimentoProtocolloSuccessivoCollection().size() + ")");
 
+    }
+
+    private void aggiornaTipo() {
+        aggiornaLabelSoggetti();
+        QComboBox cmbTipo = ((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo"));
+        // colore identificativo x entrata/uscita/interno
+        TipoProtocollo tipoProtocollo = TipoProtocollo.values()[cmbTipo.currentIndex()];
+        if ( tipoProtocollo.equals(TipoProtocollo.ENTRATA) ) {
+            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(255, 255, 127);}");
+        } else if ( tipoProtocollo.equals(TipoProtocollo.INTERNO) ) {
+            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(170, 255, 127);}");
+        } else if ( tipoProtocollo.equals(TipoProtocollo.USCITA) ) {
+            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(170, 255, 255);}");
+        }
     }
 
     private void aggiornaLabelSoggetti() {
