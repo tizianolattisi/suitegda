@@ -325,17 +325,11 @@
        <string/>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="leftMargin">
+       <property name="spacing">
         <number>4</number>
        </property>
-       <property name="topMargin">
-        <number>5</number>
-       </property>
-       <property name="rightMargin">
+       <property name="margin">
         <number>4</number>
-       </property>
-       <property name="bottomMargin">
-        <number>5</number>
        </property>
        <item>
         <widget class="QLabel" name="label_2">
@@ -614,7 +608,7 @@
          <property name="title">
           <string>Uffici</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
+         <layout class="QGridLayout" name="gridLayout">
           <property name="margin">
            <number>4</number>
           </property>
@@ -690,7 +684,17 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="2">
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>Posizione</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_4</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
            <widget class="QLineEdit" name="lineEdit_4">
             <property name="column" stdset="0">
              <string>dettaglioubicazione</string>
@@ -702,6 +706,12 @@
        </item>
        <item row="2" column="0">
         <layout class="QGridLayout" name="gridLayout_4">
+         <property name="topMargin">
+          <number>4</number>
+         </property>
+         <property name="bottomMargin">
+          <number>4</number>
+         </property>
          <item row="0" column="3">
           <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_datascadenza">
            <property name="sizePolicy">
@@ -807,6 +817,12 @@
        <item row="3" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
+          <number>4</number>
+         </property>
+         <property name="topMargin">
+          <number>4</number>
+         </property>
+         <property name="bottomMargin">
           <number>4</number>
          </property>
          <item>
