@@ -52,6 +52,8 @@ import java.util.List;
 public class FormDetermina extends FormDettaglio implements IDocumentFolder {
 
     protected DeterminaToolbar determinaToolbar;
+    private Determina determina;
+    private Visto vistoLiquidazione;
 
     public FormDetermina(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
@@ -75,6 +77,8 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
 
     @Override
     protected void indexChanged(int row) {
+        determina = (Determina) this.getContext().getCurrentEntity();
+
         super.indexChanged(row);
         popolaProcedimento();
         popolaVisti();
@@ -87,11 +91,12 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         ((QSpinBox) this.findChild(QSpinBox.class, "spinBox_finoAl")).setVisible(
                 ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_pluriennale")).isChecked());
 
+        this.determinaToolbar.actionByName("vistoLiquidazione").
+                setEnabled( this.determinaToolbar.actionByName("vistoLiquidazione").isEnabled() &&
+                        determina.getDiliquidazione() && vistoLiquidazione == null );
     }
 
     private void popolaVisti() {
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-
         Visto vistoResponsabile = determina.getVistoResponsabile();
         String testoResponsabile = "-";
         if( vistoResponsabile != null ){
@@ -125,23 +130,17 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         QLabel bilancioNegato = (QLabel) findChild(QLabel.class, "label_vistoBilancioNegato");
         bilancioNegato.setText(testoBilancioNegato);
 
-        Visto vistoLiquidazione = determina.getVistoLiquidazione();
+        vistoLiquidazione = determina.getVistoLiquidazione();
         String testoVistoLiquidazione = "";
         if( vistoLiquidazione != null ){
             testoVistoLiquidazione="(liquidata)";
         }
         QLabel liquidazione = (QLabel) findChild(QLabel.class, "label_vistoLiquidazione");
         liquidazione.setText(testoVistoLiquidazione);
-
-        this.determinaToolbar.actionByName("vistoLiquidazione").
-                setEnabled( this.determinaToolbar.actionByName("vistoLiquidazione").isEnabled() &&
-                        determina.getDiliquidazione() && vistoLiquidazione == null );
-
     }
 
     private void popolaProcedimento() {
         QListWidget listWidget = (QListWidget) findChild(QListWidget.class, "procedimento");
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
         if( determina.getId() == null ){
             return;
         }
@@ -174,7 +173,6 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         Integer i = (Integer) item.data(Qt.ItemDataRole.UserRole);
 
         // XXX: se ci sono eventuali modifiche nelle condizioni?
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
         SimpleWorkFlow wf = new SimpleWorkFlow(determina);
         FasePratica fasePratica = wf.getFase(i);
 
@@ -187,12 +185,6 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         int res = swd.exec();
 
         if( res == 1 ){
-/*            if(determina.getVistoResponsabile() != null && (determina.getNumero() == null || determina.getNumero() == 0)){
-                DeterminaUtil.numeroDiDetermina(determina);
-                Database db = (Database) Register.queryUtility(IDatabase.class);
-                Controller controller = db.createController(Determina.class);
-                controller.commit(determina);
-            }   */
             this.getContext().commitChanges();
         }
     }
@@ -202,7 +194,6 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
 * Se non indicato il referente politico, viene inserito quello di default x il servizio
 */
     private void servizioInserito(Object obj){
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
         ServizioDetermina inserita = (ServizioDetermina) obj;
         if( determina.getServizioDeterminaCollection().size() == 1 ){
             inserita.setPrincipale(Boolean.TRUE);
@@ -213,7 +204,6 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         }
     }
     private void servizioRimosso(Object obj){
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
         ServizioDetermina rimossa = (ServizioDetermina) obj;
         if( rimossa.getPrincipale() ){
             QMessageBox.warning(this, "Attenzione", "Il servizio principale non può venir rimosso.");
@@ -227,9 +217,6 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
     @Override
     public List<Template> getTemplates() {
         List<Template> templates = new ArrayList<Template>();
-        //Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-        //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
         helper.children("protocollo"); // XXX: per creare il subpath "protocollo"
@@ -251,7 +238,6 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
     /* XXX: codice simile a FormPratica */
     @Override
     public void createDocument(String subpath, String name, String title, String description, byte[] content, String mimeType) {
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
         //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
@@ -277,7 +263,6 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
 
     // XXX: codice simile a FormScrivania
     private void apriDocumenti(){
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
         if( determina == null || determina.getId() == null ){
             return;
         }
@@ -302,8 +287,6 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
     }
 
     private void vistoLiquidazione(){
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-
         SimpleWorkFlow wf = new SimpleWorkFlow(determina);
         Fase fase = new Fase();
         FasePratica fp = new FasePratica();
