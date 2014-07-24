@@ -759,39 +759,63 @@ DROP SEQUENCE pratiche.zdipendenzapratica_id_seq;
 
 -- la vista delle dipendenze è una union delle dipendenze reali "dritte" con quelle "girate"
 -- tre regole gestiscono insert/update/delete dalla vista alla tabella reale.
-CREATE VIEW dipendenzapratica AS
-        SELECT id, praticadominante, dipendenza, praticadipendente,
-            FALSE AS invertita
-        FROM zdipendenzapratica
-    UNION
-        SELECT (-(id)::integer) AS id, praticadipendente AS praticadominante, dipendenza,
-            praticadominante AS praticadipendente,
-            TRUE AS invertita
-        FROM zdipendenzapratica;
+CREATE OR REPLACE VIEW pratiche.dipendenzapratica AS
+    SELECT zdipendenzapratica.id,
+        zdipendenzapratica.praticadominante,
+        zdipendenzapratica.dipendenza,
+        zdipendenzapratica.praticadipendente,
+        false AS invertita,
+        rec_creato,
+	    rec_creato_da,
+	    rec_modificato,
+	    rec_modificato_da
+    FROM pratiche.zdipendenzapratica
+UNION
+    SELECT - zdipendenzapratica.id::integer AS id,
+        zdipendenzapratica.praticadipendente AS praticadominante,
+        zdipendenzapratica.dipendenza,
+        zdipendenzapratica.praticadominante AS praticadipendente,
+        true AS invertita,
+        rec_creato,
+	    rec_creato_da,
+	    rec_modificato,
+	    rec_modificato_da
+    FROM pratiche.zdipendenzapratica;
 
 CREATE RULE dipendenzapratica_delete AS ON DELETE TO dipendenzapratica DO INSTEAD
 	DELETE FROM zdipendenzapratica
 	WHERE zdipendenzapratica.id::integer = abs(old.id);
 
-CREATE RULE dipendenzapratica_insert AS ON INSERT TO dipendenzapratica DO INSTEAD
-	INSERT INTO zdipendenzapratica (praticadominante, dipendenza, praticadipendente)
-            VALUES (new.praticadominante, new.dipendenza, new.praticadipendente)
-        RETURNING zdipendenzapratica.id, zdipendenzapratica.praticadominante,
-            zdipendenzapratica.dipendenza, zdipendenzapratica.praticadipendente, FALSE;
+CREATE OR REPLACE RULE dipendenzapratica_insert AS
+    ON INSERT TO pratiche.dipendenzapratica DO INSTEAD
+        INSERT INTO pratiche.zdipendenzapratica (praticadominante, dipendenza, praticadipendente, rec_creato_da)
+        SELECT
+            CASE new.invertita
+                WHEN true THEN new.praticadipendente
+                ELSE new.praticadominante
+            END AS praticadominante, new.dipendenza,
+            CASE new.invertita
+                WHEN true THEN new.praticadominante
+                ELSE  new.praticadipendente
+            END AS praticadipendente,
+            new.rec_creato_da
+    RETURNING zdipendenzapratica.id, zdipendenzapratica.praticadominante, zdipendenzapratica.dipendenza,
+        zdipendenzapratica.praticadipendente, false AS bool, rec_creato, rec_creato_da, rec_modificato, rec_modificato_da;
 
 CREATE OR REPLACE RULE dipendenzapratica_update AS
     ON UPDATE TO pratiche.dipendenzapratica DO INSTEAD nothing;
 
 CREATE OR REPLACE RULE dipendenzapratica_update_dritta AS
-    ON UPDATE TO pratiche.dipendenzapratica WHERE new.invertita=false DO 
-    UPDATE pratiche.zdipendenzapratica SET praticadominante = new.praticadominante, dipendenza = new.dipendenza, praticadipendente = new.praticadipendente
-	WHERE zdipendenzapratica.id::integer = abs(old.id);
+    ON UPDATE TO pratiche.dipendenzapratica WHERE new.invertita = false DO
+        UPDATE pratiche.zdipendenzapratica SET praticadominante = new.praticadominante, dipendenza = new.dipendenza,
+            praticadipendente = new.praticadipendente, rec_modificato_da=new.rec_modificato_da
+        WHERE zdipendenzapratica.id::integer = abs(old.id);
 
 CREATE OR REPLACE RULE dipendenzapratica_update_invertita AS
-    ON UPDATE TO pratiche.dipendenzapratica WHERE new.invertita DO 
-    UPDATE pratiche.zdipendenzapratica SET praticadominante = new.praticadipendente, dipendenza = new.dipendenza, praticadipendente = new.praticadominante
-	WHERE zdipendenzapratica.id::integer = abs(old.id);
-
+    ON UPDATE TO pratiche.dipendenzapratica WHERE new.invertita DO
+        UPDATE pratiche.zdipendenzapratica SET praticadominante = new.praticadipendente, dipendenza = new.dipendenza,
+                praticadipendente = new.praticadominante, rec_modificato_da=new.rec_modificato_da
+        WHERE zdipendenzapratica.id::integer = abs(old.id);
 
 CREATE TABLE fasepratica (
   id bigserial NOT NULL,

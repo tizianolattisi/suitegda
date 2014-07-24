@@ -28,6 +28,9 @@
        <property name="column" stdset="0">
         <string>dipendenza</string>
        </property>
+       <property name="sortbytostring" stdset="0">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>

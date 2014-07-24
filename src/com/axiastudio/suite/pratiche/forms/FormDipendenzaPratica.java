@@ -45,16 +45,6 @@ public class FormDipendenzaPratica extends Dialog {
         super(uiFile, entityClass, title);
         ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_inverti")).stateChanged.connect(this, "aggiornaPredicato()");
         ((QComboBox) this.findChild(QComboBox.class, "comboBox_dipendenza")).currentIndexChanged.connect(this, "aggiornaPredicato()");
-        this.storeInitialized.connect(this, "storeAbilitaInvertita()");
-
-        try {
-            Method storeFactory = this.getClass().getMethod("storeDipendenza");
-            Register.registerUtility(storeFactory, IStoreFactory.class, "Dipendenza");
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(FormDipendenzaPratica.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(FormDipendenzaPratica.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     private void aggiornaPredicato(){
@@ -72,28 +62,6 @@ public class FormDipendenzaPratica extends Dialog {
         PyPaPiComboBox cmbDipendenza = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_dipendenza");
         Dipendenza dip = (Dipendenza) cmbDipendenza.getCurrentEntity();
         predicato.setText(dp.getPredicato(dip, inverti));
-    }
-
-    public void storeAbilitaInvertita() {
-        DipendenzaPratica dp = (DipendenzaPratica) this.getContext().getModel().getStore().get(0); // XXX: perché non currentEntity??
-        if( dp == null || dp.getInvertita()==null ) {
-            ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_inverti")).setEnabled(false);
-        }
-    }
-
-    /*
-     * Uno store contenente gli oggetti ordinati x descrizione
-     */
-    public Store storeDipendenza(){
-        Database db = (Database) Register.queryUtility(IDatabase.class);
-        Controller controller = db.createController(Dipendenza.class);
-        Store storeDipendenza = controller.createFullStore();
-        List<Dipendenza> dipendenze = new ArrayList<Dipendenza>();
-        for(Object ogg: storeDipendenza){
-            dipendenze.add((Dipendenza) ogg);
-        }
-        Collections.sort(dipendenze, Dipendenza.Comparators.DESCRIZIONE);
-        return new Store(dipendenze);
     }
 
 }
