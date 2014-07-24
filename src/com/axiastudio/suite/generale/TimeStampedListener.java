@@ -54,11 +54,9 @@ public class TimeStampedListener {
         timeStamped.setRecordmodificatoda(autenticato.getLogin());
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
-        if( timeStamped.getRecordcreato() == null || today.after(timeStamped.getRecordcreato()) ){
-            timeStamped.setRecordmodificato(today);
-        } else {
+        if( timeStamped.getRecordcreato() != null && today.before(timeStamped.getRecordcreato()) ){
             throw new RuntimeException();
-        }
+        } // data di modifica generata da trigger su tabella (come x rec_creato)
     }
 
 }
