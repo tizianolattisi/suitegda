@@ -67,6 +67,11 @@ public class CmisPlugin implements IPlugin {
         }
     }
 
+    @Override
+    public void uninstall() {
+        parent = null;
+    }
+
     public void setup(String cmisUrl, String user, 
                       String password) {
         this.setup(cmisUrl, user, password, null, true);
