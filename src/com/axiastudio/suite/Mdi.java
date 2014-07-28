@@ -69,7 +69,7 @@ public class Mdi extends QMainWindow implements IMdi {
     private QAction actionClose;
     private QSignalMapper windowMapper;
     private QTreeWidgetItem itemPassword;
-    
+
     public Mdi(){
         this.setWindowIcon(new QIcon(ICON));
         this.createWorkspace();
@@ -100,7 +100,7 @@ public class Mdi extends QMainWindow implements IMdi {
         
         menuWindows.aboutToShow.connect(this, "refreshMenuWindows()");     
     }
-    
+
     private void refreshMenuWindows(){
         
         menuWindows.clear();
@@ -524,6 +524,7 @@ public class Mdi extends QMainWindow implements IMdi {
                 form.init();
             }
             this.workspace.addSubWindow(form);
+            form.disableGarbageCollection();
             this.showForm(form);
             if( store != null ) {
                 form.getContext().getDirty();
