@@ -524,7 +524,6 @@ public class Mdi extends QMainWindow implements IMdi {
                 form.init();
             }
             this.workspace.addSubWindow(form);
-            form.disableGarbageCollection();
             this.showForm(form);
             if( store != null ) {
                 form.getContext().getDirty();
