@@ -53,7 +53,7 @@ public class OoopsPlugin implements IPlugin {
 
     @Override
     public void install(QWidget parent) {
-            this.install(parent, Boolean.FALSE);
+            this.install(parent, Boolean.TRUE);
     }
 
     @Override
