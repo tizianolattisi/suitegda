@@ -374,7 +374,7 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     }
 
     public String getNumeroprotocollo() {
-        if ( getProgetto() != null) {
+        if ( getProtocollo() != null) {
             return getProtocollo().getIddocumento();
         }
         return null;

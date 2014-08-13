@@ -45,14 +45,6 @@ public class DeterminaCallbacks {
         Boolean res = true;
         Boolean inUfficioGestore = false;
 
-        // se determina già approvata/visto Bilancio negato non si possono modificare i dati
-        if ( (!(determina.getDispesa() || determina.getDientrata() || determina.getSpesaimpegnoesistente()) &&
-                        determina.getVistoResponsabile()!=null ) ||
-                    determina.getVistoBilancio()!=null || determina.getVistoBilancioNegato()!=null ) {
-            msg = "Determina già approvata.\nNon è possibile modificare ulteriormente i dati.";
-            return new Validation(false, msg);
-        }
-
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         // se l'utente non è istruttore non può inserire o modificare pratiche,
         if( !autenticato.getIstruttorepratiche() ){

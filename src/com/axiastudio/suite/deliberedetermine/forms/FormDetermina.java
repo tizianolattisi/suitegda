@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.deliberedetermine.forms;
 
+import com.axiastudio.suite.SuiteUiUtil;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
@@ -94,6 +95,14 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         this.determinaToolbar.actionByName("vistoLiquidazione").
                 setEnabled( this.determinaToolbar.actionByName("vistoLiquidazione").isEnabled() &&
                         determina.getDiliquidazione() && vistoLiquidazione == null );
+
+        Boolean modificaBloccata=Boolean.FALSE;
+        if ( (!(determina.getDispesa() || determina.getDientrata() || determina.getSpesaimpegnoesistente()) &&
+                determina.getVistoResponsabile()!=null ) ||
+                determina.getVistoBilancio()!=null || determina.getVistoBilancioNegato()!=null ) {
+            modificaBloccata=Boolean.TRUE;
+        }
+        this.getContext().setReadOnly(modificaBloccata);
     }
 
     private void popolaVisti() {
@@ -297,6 +306,10 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         wf.creaVisto(fp);
 
         this.getContext().refreshElement();
+    }
+
+    private void information() {
+        SuiteUiUtil.showInfo(this);
     }
 
 }
