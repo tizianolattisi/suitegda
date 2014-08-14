@@ -79,6 +79,8 @@ public class Utente implements Serializable, IUtente {
     private Boolean pubblicaalbo=false;
     @Column(name="disabilitato")
     private Boolean disabilitato=false;
+    @Column(name="nuovodocsuconsolidato")
+    private Boolean nuovodocsuconsolidato=false;
     @OneToMany(mappedBy = "utente", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<Delega> delegaCollection;
     @JoinColumn(name = "soggetto", referencedColumnName = "id")
@@ -284,6 +286,14 @@ public class Utente implements Serializable, IUtente {
 
     public void setDisabilitato(Boolean disabilitato) {
         this.disabilitato = disabilitato;
+    }
+
+    public Boolean getNuovodocsuconsolidato() {
+        return nuovodocsuconsolidato;
+    }
+
+    public void setNuovodocsuconsolidato(Boolean nuovodocsuconsolidato) {
+        this.nuovodocsuconsolidato = nuovodocsuconsolidato;
     }
 
     @Override

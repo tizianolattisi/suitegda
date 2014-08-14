@@ -24,16 +24,7 @@
        <string>Utente</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>4</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>4</number>
        </property>
        <item row="0" column="0">
@@ -169,16 +160,7 @@
        <string>Permessi</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>4</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>4</number>
        </property>
        <item row="0" column="0">
@@ -187,16 +169,7 @@
           <string>Generici</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
-          <property name="leftMargin">
-           <number>4</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>4</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>4</number>
           </property>
           <item>
@@ -227,8 +200,14 @@
          <property name="title">
           <string>Protocollo</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <property name="margin">
+           <number>4</number>
+          </property>
+          <property name="spacing">
+           <number>4</number>
+          </property>
+          <item row="0" column="0">
            <widget class="QCheckBox" name="checkBox_3">
             <property name="text">
              <string>Operatore</string>
@@ -238,7 +217,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="1" column="0">
            <widget class="QCheckBox" name="checkBox_12">
             <property name="text">
              <string>Ricercatore</string>
@@ -248,7 +227,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="2" column="0">
            <widget class="QCheckBox" name="checkBox_10">
             <property name="text">
              <string>Attributore</string>
@@ -258,7 +237,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="3" column="0">
            <widget class="QCheckBox" name="checkBox_4">
             <property name="text">
              <string>Supervisore</string>
@@ -268,7 +247,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="4" column="0">
            <widget class="QCheckBox" name="checkBox_14">
             <property name="text">
              <string>Da per spedito</string>
@@ -278,7 +257,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="5" column="0">
            <widget class="QCheckBox" name="checkBox_13">
             <property name="text">
              <string>Pubblica all'albo</string>
@@ -288,18 +267,15 @@
             </property>
            </widget>
           </item>
-          <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+          <item row="6" column="0">
+           <widget class="QCheckBox" name="checkBox_16">
+            <property name="text">
+             <string>Nuovo doc su consolidato</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>50</height>
-             </size>
+            <property name="column" stdset="0">
+             <string>nuovodocsuconsolidato</string>
             </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -442,7 +418,7 @@
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
    <extends>QTableView</extends>
-   <header location="global">pypapitableview.h</header>
+   <header>pypapitableview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

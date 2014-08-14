@@ -477,7 +477,7 @@ public class FormProtocollo extends Window {
                 if( protocollo.getConsolidadocumenti() ){
                     delete = false;
                     version = pup.inAttribuzionePrincipaleC();
-                    upload = version;
+                    upload = version && autenticato.getNuovodocsuconsolidato();
                 } else {
                     upload = pup.inSportelloOAttribuzionePrincipale();
                     delete = upload;

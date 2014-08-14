@@ -128,6 +128,7 @@ CREATE TABLE utente (
     attributorepratiche boolean NOT NULL DEFAULT FALSE,
     pubblicaalbo boolean NOT NULL DEFAULT FALSE,
     disabilitato boolean NOT NULL DEFAULT FALSE,
+    nuovodocsuconsolidato boolean NOT NULL DEFAULT FALSE,
     soggetto bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE base.utente OWNER TO postgres;
