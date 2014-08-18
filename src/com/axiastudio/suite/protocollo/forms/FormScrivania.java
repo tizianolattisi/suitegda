@@ -59,6 +59,7 @@ public class FormScrivania  extends QMainWindow {
     private Store<Attribuzione> attribuzioneStoreGenerale = new Store<Attribuzione>(null);
     private List<Attribuzione> selectionProtocollo = new ArrayList<Attribuzione>();
     private List<DestinatarioUfficio> selectionRichiesta = new ArrayList<DestinatarioUfficio>();
+    private QLabel totRecord;
     private final Integer DEFAULT_ROW_HEIGHT = 24;
     public ScrivaniaMenuBar scrivaniaMenuBar;
 
@@ -83,9 +84,10 @@ public class FormScrivania  extends QMainWindow {
         ufficio.setLookupStore(storeUffici);
         ufficio.setCurrentIndex(storeUffici.size()-1);
 
+        totRecord = (QLabel) this.findChild(QLabel.class, "labelTotRecord");
+
         QPushButton pushButtonFiltra = (QPushButton) this.findChild(QPushButton.class, "pushButtonFiltra");
         pushButtonFiltra.clicked.connect(this, "filtraPerUfficio()");
-
 
         /* table view richieste */
         QTableView tableViewRichieste = (QTableView) this.findChild(QTableView.class, "richieste");
@@ -123,10 +125,12 @@ public class FormScrivania  extends QMainWindow {
         List<Attribuzione> attribuzioni = em.createNamedQuery("trovaAttribuzioniUtente", Attribuzione.class)
                                             .setParameter("id", autenticato.getId())
                                             .getResultList();
-//        Store store = new Store(attribuzioni);
         attribuzioneStoreGenerale.clear();
         attribuzioneStoreGenerale.addAll(attribuzioni);
+        totRecord.setText("Totale record: "+ String.valueOf(attribuzioneStoreGenerale.size()));
         selectionProtocollo.clear();
+        PyPaPiComboBox ufficio = (PyPaPiComboBox) this.findChild(QComboBox.class, "comboBoxUfficio");
+        ufficio.setCurrentIndex(ufficio.getLookupStore().size() - 1);
 
         List<Column> colonne = new ArrayList();
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
@@ -303,13 +307,13 @@ public class FormScrivania  extends QMainWindow {
                 attribuzioniLette.add(attribuzione);
             }
         }
-//        this.popolaAttribuzioni();
         attribuzioneStoreGenerale.removeAll(attribuzioniLette);
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         TableModel model = (TableModel) tableView.model();
         Store store=model.getStore();
         store.removeAll(attribuzioniLette);
         model.setStore(store);
+        totRecord.setText("Totale record: " + String.valueOf(store.size()));
 
         this.selectionProtocollo.clear();
         this.refreshInfo();
@@ -383,10 +387,6 @@ public class FormScrivania  extends QMainWindow {
     }
 
     private void filtraPerUfficio(){
-/*        QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
-        TableModel model = (TableModel) tableView.model();
-        Store store = model.getStore();
-*/
         Store<Attribuzione> store = new Store<Attribuzione>(null);
         PyPaPiComboBox comboUfficio = (PyPaPiComboBox) this.findChild(QComboBox.class, "comboBoxUfficio");
         int idx = comboUfficio.currentIndex();
@@ -404,6 +404,7 @@ public class FormScrivania  extends QMainWindow {
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
         TableModel model = (TableModel) tableView.model();
         model.setStore(store);
+        totRecord.setText("Totale record: "+ String.valueOf(store.size()));
         this.selectionProtocollo.clear();
         this.refreshInfo();
     }
@@ -421,5 +422,63 @@ public class FormScrivania  extends QMainWindow {
         }
         return new Store(uffici);
     }
+    private void cercaDaEtichetta() {
+        String barcode = QInputDialog.getText(this, "Ricerca da etichetta", "Etichetta");
+        if( barcode == null ){
+            return;
+        }
+        barcode = barcode.trim();
+        if( barcode.length() < 5 ){
+            QMessageBox.warning(this, "Attenzione", "Numero di protocollo troppo breve");
+            return;
+        }
+        String year = barcode.substring(0, 4);
+        Integer n = Integer.parseInt(barcode.substring(4));
+        barcode = year + String.format("%08d", n);
+
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        List<Attribuzione> attribuzioni = em.createNamedQuery("trovaAttribuzioniUtenteProtocollo", Attribuzione.class)
+                .setParameter("id", autenticato.getId()).setParameter("protocollo", barcode)
+                .getResultList();
+        if (attribuzioni.size() > 0) {
+            attribuzioneStoreGenerale.clear();
+            attribuzioneStoreGenerale.addAll(attribuzioni);
+            totRecord.setText("Totale record: "+ String.valueOf(attribuzioneStoreGenerale.size()));
+            selectionProtocollo.clear();
+            PyPaPiComboBox ufficio = (PyPaPiComboBox) this.findChild(QComboBox.class, "comboBoxUfficio");
+            ufficio.setCurrentIndex(ufficio.getLookupStore().size() - 1);
+
+            List<Column> colonne = new ArrayList();
+            QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
+            colonne.add(new Column("evidenza", "Ev.", "Attribuzione in evidenza"));
+            colonne.add(new Column("iddocumento", "Protocollo", "Numero di protocollo"));
+            colonne.add(new Column("tipoprotocollo", "E/U/I", "Entrata / Uscita / Interno"));
+            colonne.add(new Column("dataprotocollo", "Data", "Data di protocollazione"));
+            colonne.add(new Column("ufficio", "Ufficio", "Ufficio di attribuzione"));
+            colonne.add(new Column("principale", "Pr.", "Attribuzione in via principale"));
+            colonne.add(new Column("oggetto", "Oggetto", "Oggetto del protocollo"));
+            colonne.add(new Column("letto", "Letto", "Dato per letto"));
+            TableModel model = new TableModel(attribuzioneStoreGenerale, colonne);
+            tableView.clearSelection();
+            model.setEditable(false);
+            tableView.setModel(model);
+            QItemSelectionModel selectionModel = new QItemSelectionModel(model);
+            tableView.setSelectionModel(selectionModel);
+            selectionModel.selectionChanged.connect(this, "selectRows(QItemSelection, QItemSelection)");
+            tableView.horizontalHeader().setResizeMode(0, QHeaderView.ResizeMode.ResizeToContents); // evidenza
+            tableView.horizontalHeader().setResizeMode(1, QHeaderView.ResizeMode.ResizeToContents); // iddocumento
+            tableView.horizontalHeader().setResizeMode(2, QHeaderView.ResizeMode.ResizeToContents); // tipoprotocollo
+            tableView.horizontalHeader().setResizeMode(3, QHeaderView.ResizeMode.ResizeToContents); // dataprotocollo
+            tableView.horizontalHeader().setResizeMode(4, QHeaderView.ResizeMode.Interactive); // ufficio
+            tableView.horizontalHeader().setResizeMode(5, QHeaderView.ResizeMode.ResizeToContents); // principale
+            tableView.horizontalHeader().setResizeMode(6, QHeaderView.ResizeMode.Stretch);          // oggetto
+            tableView.horizontalHeader().setResizeMode(7, QHeaderView.ResizeMode.ResizeToContents); // letto
+        } else {
+            QMessageBox.warning(this, "Attenzione", "Protocollo" + barcode + " non trovato");
+        }
+    }
 
 }
+

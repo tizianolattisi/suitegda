@@ -34,11 +34,18 @@ import java.util.Date;
 @EntityListeners({TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genattribuzione", sequenceName="protocollo.attribuzione_id_seq", initialValue=1, allocationSize=1)
-@NamedQuery(name="trovaAttribuzioniUtente",
-            query = "SELECT a FROM Attribuzione a JOIN a.ufficio u "
-                  + "JOIN u.ufficioUtenteCollection uu "
-                  + "WHERE a.letto = FALSE AND uu.ricerca = TRUE "
-                  + "AND uu.utente.id = :id ORDER BY a.protocollo.iddocumento DESC")
+@NamedQueries({
+    @NamedQuery(name="trovaAttribuzioniUtente",
+        query = "SELECT a FROM Attribuzione a JOIN a.ufficio u "
+                + "JOIN u.ufficioUtenteCollection uu "
+                + "WHERE a.letto = FALSE AND uu.ricerca = TRUE "
+                + "AND uu.utente.id = :id ORDER BY a.protocollo.iddocumento DESC"),
+    @NamedQuery(name="trovaAttribuzioniUtenteProtocollo",
+        query = "SELECT a FROM Attribuzione a JOIN a.ufficio u "
+                + "JOIN u.ufficioUtenteCollection uu "
+                + "WHERE a.protocollo.iddocumento = :protocollo AND uu.ricerca = TRUE "
+                + "AND uu.utente.id = :id ORDER BY a.protocollo.iddocumento DESC")
+})
 public class Attribuzione implements Serializable, ITimeStamped, ISnapshot<Attribuzione> {
     private static final long serialVersionUID = 1L;
     @Id

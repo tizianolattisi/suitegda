@@ -45,6 +45,9 @@ public class ScrivaniaMenuBar extends QToolBar {
         this.insertButton("aggiornaLista", "Aggiorna lista",
                 "classpath:com/axiastudio/suite/resources/arrow_refresh.png",
                 "Aggiorna la lista visualizzata", parent);
+        this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
+                "classpath:com/axiastudio/suite/resources/datamatrix_find.png",
+                "Ricerca da etichetta", parent, new QKeySequence(tr("F9")));
 
         actionByName("daiPerLetto").setEnabled(false);
         actionByName("apriProtocollo").setEnabled(false);
@@ -54,6 +57,11 @@ public class ScrivaniaMenuBar extends QToolBar {
     protected QAction insertButton(String actionName, String text, String iconName,
                                    String toolTip, QObject agent){
         return this.insertButton(actionName, text, iconName, toolTip, agent, null, null);
+    }
+
+    private QAction insertButton(String actionName, String text, String iconName,
+                                 String toolTip, QObject agent, QKeySequence qks){
+        return this.insertButton(actionName, text, iconName, toolTip, agent, qks, null);
     }
 
     private QAction insertButton(String actionName, String text, String iconName,

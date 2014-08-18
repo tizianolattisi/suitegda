@@ -41,7 +41,10 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,3,2">
         <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,1,0">
+          <property name="spacing">
+           <number>10</number>
+          </property>
           <item>
            <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxUfficio">
             <property name="minimumSize">
@@ -60,17 +63,24 @@
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer">
+           <spacer name="horizontalSpacer_2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>191</width>
+              <width>40</width>
               <height>20</height>
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelTotRecord">
+            <property name="text">
+             <string>Totale record: </string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
