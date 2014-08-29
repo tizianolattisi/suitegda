@@ -46,21 +46,23 @@ public class SuiteUiUtil {
         Object currentEntity = window.getContext().getCurrentEntity();
         if( currentEntity instanceof ITimeStamped ){
             ITimeStamped timeStamped = (ITimeStamped) currentEntity;
+            credits += "Creato da: ";
             String recordcreatoda = timeStamped.getRecordcreatoda();
-            if( recordcreatoda != null ){
-                credits += "<br/>Creato da: " + recordcreatoda;
-                Date recordcreato = timeStamped.getRecordcreato();
-                if( recordcreato != null ){
-                    credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordcreato);
-                }
+            if( recordcreatoda != null ) {
+                credits += recordcreatoda;
             }
+            Date recordcreato = timeStamped.getRecordcreato();
+            if( recordcreato != null ){
+                credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordcreato);
+            }
+            credits += "<br/><br/>Modificato da: ";
             String recordmodificatoda = timeStamped.getRecordmodificatoda();
-            if( recordmodificatoda != null ){
-                credits += "<br/>Modificato da: " + recordmodificatoda;
-                Date recordmodificato = timeStamped.getRecordmodificato();
-                if( recordmodificato != null ){
-                    credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
-                }
+            if( recordmodificatoda != null ) {
+                credits += recordmodificatoda;
+            }
+            Date recordmodificato = timeStamped.getRecordmodificato();
+            if( recordmodificato != null ){
+                credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
             }
         }
         if( extra != "" ){

@@ -52,11 +52,11 @@ public class TimeStampedListener {
         ITimeStamped timeStamped = (ITimeStamped) object;
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         timeStamped.setRecordmodificatoda(autenticato.getLogin());
-        Calendar calendar = Calendar.getInstance();
+/*        Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
         if( timeStamped.getRecordcreato() != null && today.before(timeStamped.getRecordcreato()) ){
             throw new RuntimeException();
-        } // data di modifica generata da trigger su tabella (come x rec_creato)
+        } // data di modifica generata da trigger su tabella (come x rec_creato)  */
     }
 
 }
