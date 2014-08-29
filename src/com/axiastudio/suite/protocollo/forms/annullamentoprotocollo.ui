@@ -20,27 +20,25 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Protocollo</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPlainTextEdit" name="plainTextEdit">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="column" stdset="0">
-         <string>dettaglioProtocollo</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>Protocollo</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPlainTextEdit" name="plainTextEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>dettaglioProtocollo</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
     <item>
      <widget class="QGroupBox" name="groupBox">
@@ -52,6 +50,13 @@
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Esecutore richiesta</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Motivazione</string>
          </property>
         </widget>
        </item>
@@ -72,13 +77,6 @@
          </property>
          <property name="column" stdset="0">
           <string>datarichiesta</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Motivazione</string>
          </property>
         </widget>
        </item>
@@ -176,6 +174,16 @@
    <header>pypapidatetimeedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>checkBox_autorizzato</tabstop>
+  <tabstop>dateTimeEdit_2</tabstop>
+  <tabstop>comboBox_motivazione</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>dateTimeEdit</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>checkBox_respinto</tabstop>
+  <tabstop>plainTextEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

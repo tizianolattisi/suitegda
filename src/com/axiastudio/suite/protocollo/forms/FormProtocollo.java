@@ -498,6 +498,7 @@ public class FormProtocollo extends Window {
         if( barcode == null ){
             return;
         }
+        barcode = barcode.trim();
         if( barcode.length() < 5 ){
             QMessageBox.warning(this, "Attenzione", "Numero di protocollo troppo breve");
             return;

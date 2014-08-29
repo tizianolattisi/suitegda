@@ -117,6 +117,7 @@ public class FormPratica extends Window implements IDocumentFolder {
         if( barcode == null ){
             return;
         }
+        barcode = barcode.trim();
         if( barcode.length() < 5 ){
             QMessageBox.warning(this, "Attenzione", "Numero di pratica troppo breve");
             return;
