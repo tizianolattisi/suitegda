@@ -85,7 +85,6 @@ import com.axiastudio.suite.sedute.forms.FormTipoSeduta;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 
 /**
  *
@@ -234,12 +233,12 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/base/forms/ufficio.ui",
                               Ufficio.class,
-                              Window.class);
+                              SuiteBaseForm.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/base/forms/utente.ui",
                               Utente.class,
-                              Window.class);
+                              SuiteBaseForm.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/base/forms/ufficioutente.ui",
@@ -274,12 +273,12 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/gruppo.ui",
                               Gruppo.class,
-                              Window.class);
+                              SuiteBaseForm.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/relazione.ui",
                               Relazione.class,
-                              Window.class);
+                              SuiteBaseForm.class);
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
@@ -316,7 +315,7 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/tipopratica.ui",
                               TipoPratica.class,
-                              Window.class);
+                              SuiteBaseForm.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
@@ -326,13 +325,13 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/motivazioneannullamento.ui",
                               MotivazioneAnnullamento.class,
-                              Window.class);
+                              SuiteBaseForm.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/annullamentoprotocollo.ui",
                               AnnullamentoProtocollo.class,
                               FormAnnullamentoProtocollo.class);
-        
+
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/dipendenzapratica.ui",
                               DipendenzaPratica.class,
@@ -354,11 +353,6 @@ public class Configure {
                               FormPraticaProtocollo.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
-                "classpath:com/axiastudio/suite/protocollo/forms/annullamentoprotocollo.ui",
-                AnnullamentoProtocollo.class,
-                FormAnnullamentoProtocollo.class);
-
-        Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/protocollo.ui",
                               Protocollo.class,
                               FormProtocollo.class);
@@ -374,9 +368,9 @@ public class Configure {
                               FormPubblicazione.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
-                null,
-                TipoAttoPubblicazione.class,
-                Window.class);
+                              null,
+                              TipoAttoPubblicazione.class,
+                              Window.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
@@ -391,7 +385,7 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/sedute/forms/caricacommissione.ui",
                               CaricaCommissione.class,
-                              Window.class);
+                              SuiteBaseForm.class);
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/sedute/forms/tiposeduta.ui",
@@ -406,7 +400,7 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/finanziaria/forms/servizio.ui",
                               Servizio.class,
-                              Window.class);
+                              SuiteBaseForm.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
@@ -424,9 +418,9 @@ public class Configure {
                               Dialog.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
-                "classpath:com/axiastudio/suite/deliberedetermine/forms/spesaimpegnoesistente.ui",
-                SpesaImpegnoEsistente.class,
-                Dialog.class);
+                              "classpath:com/axiastudio/suite/deliberedetermine/forms/spesaimpegnoesistente.ui",
+                              SpesaImpegnoEsistente.class,
+                              Dialog.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/norma.ui",
@@ -436,12 +430,12 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/procedimento.ui",
                               Procedimento.class,
-                              Window.class);
+                              SuiteBaseForm.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
-                "classpath:com/axiastudio/suite/procedimenti/forms/faseprocedimento.ui",
-                FaseProcedimento.class,
-                FormFaseProcedimento.class);
+                              "classpath:com/axiastudio/suite/procedimenti/forms/faseprocedimento.ui",
+                              FaseProcedimento.class,
+                              FormFaseProcedimento.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/procedimenti/forms/delega.ui",
@@ -456,7 +450,7 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/titolostudio.ui",
                               TitoloStudio.class,
-                              Window.class);
+                              SuiteBaseForm.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/titolostudiosoggetto.ui",
@@ -464,24 +458,24 @@ public class Configure {
                               Dialog.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
-                "classpath:com/axiastudio/suite/modelli/forms/modello.ui",
-                Modello.class,
-                FormModello.class);
+                              "classpath:com/axiastudio/suite/modelli/forms/modello.ui",
+                              Modello.class,
+                              FormModello.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
-                "classpath:com/axiastudio/suite/modelli/forms/segnalibro.ui",
-                Segnalibro.class,
-                Dialog.class);
+                              "classpath:com/axiastudio/suite/modelli/forms/segnalibro.ui",
+                              Segnalibro.class,
+                              Dialog.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
-                "classpath:com/axiastudio/suite/richieste/forms/richiesta.ui",
-                Richiesta.class,
-                FormRichiesta.class);
+                              "classpath:com/axiastudio/suite/richieste/forms/richiesta.ui",
+                              Richiesta.class,
+                              FormRichiesta.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
-                null,
-                DestinatarioUfficio.class,
-                Window.class);
+                              null,
+                              DestinatarioUfficio.class,
+                              Window.class);
 
     }
     
