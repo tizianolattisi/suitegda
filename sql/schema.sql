@@ -963,6 +963,41 @@ ALTER TABLE ONLY attribuzione
 ALTER TABLE ONLY attribuzione
     ADD CONSTRAINT fk_attribuzione_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
+CREATE TABLE protocollo.attribuzionecancellata (
+  id bigserial NOT NULL,
+  protocollo character varying(12) NOT NULL,
+  ufficio bigint NOT NULL,
+  dataattribuzioneprotocollo timestamp without time zone,
+  letto boolean NOT NULL DEFAULT false,
+  dataletto timestamp without time zone,
+  esecutoreletto character varying(40),
+  principale boolean NOT NULL DEFAULT false,
+  evidenza character varying(1),
+  rec_cancellato timestamp without time zone NOT NULL
+);
+ALTER TABLE protocollo.attribuzionecancellata
+  OWNER TO postgres;
+
+CREATE OR REPLACE FUNCTION protocollo.delete_attribuzione()
+  RETURNS trigger AS
+$BODY$begin
+INSERT INTO protocollo.attribuzionecancellata (protocollo, ufficio, dataattribuzioneprotocollo, letto, dataletto,
+	esecutoreletto, principale, evidenza, rec_cancellato)
+VALUES (old.protocollo, old.ufficio, old.dataattribuzioneprotocollo, old.letto, old.dataletto, old.esecutoreletto,
+	old.principale, old.evidenza, current_timestamp);
+return old;
+end$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION protocollo.delete_attribuzione()
+  OWNER TO postgres;
+
+CREATE TRIGGER trg_del_attribuzione
+  BEFORE DELETE
+  ON protocollo.attribuzione
+  FOR EACH ROW
+  EXECUTE PROCEDURE protocollo.delete_attribuzione();
+
 CREATE TABLE oggetto (
     id bigserial NOT NULL,
     descrizione character varying(255)
