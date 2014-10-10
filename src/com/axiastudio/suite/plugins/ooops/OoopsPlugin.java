@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.plugins.ooops;
 
+import com.axiastudio.ooops.Ooops;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.Window;
@@ -106,7 +107,7 @@ public class OoopsPlugin implements IPlugin {
                 dialogTemplates.add(template);
             }
         }
-        OoopsHelper helper = new OoopsHelper(this.connectionString, this.hidden);
+        Ooops helper = Ooops.create().open(this.connectionString);
         OoopsDialog dialog = new OoopsDialog(this.parent, helper, dialogTemplates);
         dialog.show();
     }
@@ -117,7 +118,7 @@ public class OoopsPlugin implements IPlugin {
 
     public void setup(String connectionString, Boolean hidden){
         this.connectionString = connectionString;
-        this.hidden = hidden;
+        this.hidden = hidden; // XXX: non gestito
     }
 
 

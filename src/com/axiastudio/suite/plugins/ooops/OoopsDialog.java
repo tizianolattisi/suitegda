@@ -16,6 +16,8 @@
  */
 package com.axiastudio.suite.plugins.ooops;
 
+import com.axiastudio.ooops.Ooops;
+import com.axiastudio.ooops.filters.Filter;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.pratiche.IAtto;
@@ -42,9 +44,9 @@ public class OoopsDialog extends QDialog {
     
     private final Object currentEntity;
     private final List<Template> templates;
-    private final OoopsHelper helper;
+    private final Ooops helper;
 
-    public OoopsDialog(QWidget parent, OoopsHelper helper, List<Template> templates) {
+    public OoopsDialog(QWidget parent, Ooops helper, List<Template> templates) {
         super(parent);
         this.currentEntity = ((Window) parent).getContext().getCurrentEntity();
         this.templates = templates;
@@ -144,7 +146,7 @@ public class OoopsDialog extends QDialog {
         }
     }
 
-    protected OoopsHelper getHelper() {
+    protected Ooops getHelper() {
         return helper;
     }
 
@@ -174,15 +176,16 @@ public class OoopsDialog extends QDialog {
 
         // filter
         QComboBox fileType = (QComboBox) this.findChild(QComboBox.class, "comboBoxFileType");
-        String filter = (String) fileType.itemData(fileType.currentIndex());
+        String filterName = (String) fileType.itemData(fileType.currentIndex());
+        Filter filter = Filter.valueOf(filterName);
 
         // mime type
         String mimeType = null;
-        if( filter.equals("writer_pdf_Export") ){
+        if( filterName.equals("writer_pdf_Export") ){
             mimeType = "application/pdf";
-        } else if( filter.equals("writer8") ){
+        } else if( filterName.equals("writer8") ){
             mimeType = "application/vnd.oasis.opendocument.text";
-        } else if( filter.equals("writer_MS_Word_97") ){
+        } else if( filterName.equals("writer_MS_Word_97") ){
             mimeType = "application/msword";
         }
 
@@ -191,7 +194,7 @@ public class OoopsDialog extends QDialog {
         // TODO: post compose handler
         if( IDocumentFolder.class.isInstance(this.parent()) ){
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            helper.storeDocumentComponent(outputStream, filter);
+            helper.filter(filter).toStream(outputStream);
             // XXX: maybe is better to use streams?
             ((IDocumentFolder) this.parent()).createDocument("", template.getName(), "Autocomposizione", parentTemplateName, outputStream.toByteArray(), mimeType);
         }
@@ -206,7 +209,6 @@ public class OoopsDialog extends QDialog {
 
         // i documenti da allegare al protocollo sono convertiti in pdf
         String mimeType = "application/pdf";
-        String filter = "writer_pdf_Export";
 
         HashMap<String, String> rules = new HashMap<String, String>();
         if (currentEntity instanceof IProtocollabile) {
@@ -265,7 +267,7 @@ public class OoopsDialog extends QDialog {
                 composeFromTemplate(template);
                 if( IDocumentFolder.class.isInstance(this.parent()) ){
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    helper.storeDocumentComponent(outputStream, filter);
+                    helper.filter(Filter.writer_pdf_Export).toStream(outputStream);
                     // XXX: maybe is better to use streams?
                     ((IDocumentFolder) this.parent()).createDocument("protocollo/", template.getName(), "Protocollo", parentTemplateName, outputStream.toByteArray(), mimeType);
                 }
@@ -283,8 +285,6 @@ public class OoopsDialog extends QDialog {
         } else {
             values = new HashMap<String, Object>();
         }
-        this.helper.loadDocumentComponent(template.getStreamProvider().getInputStream());
-        this.helper.composeDocument(values);
-        //this.helper.close();
+        helper.load(template.getStreamProvider().getInputStream()).map(values);
     }
 }
