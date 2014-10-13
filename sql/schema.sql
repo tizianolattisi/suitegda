@@ -514,7 +514,8 @@ CREATE TABLE pratiche.fase (
   id bigserial NOT NULL,
   descrizione character varying(255) NOT NULL,
   esclusivadaufficio bigint,
-  istruttoria boolean
+  istruttoria boolean,
+  evidenza boolean default false
 );
 ALTER TABLE pratiche.fase OWNER TO postgres;
 ALTER TABLE ONLY pratiche.fase

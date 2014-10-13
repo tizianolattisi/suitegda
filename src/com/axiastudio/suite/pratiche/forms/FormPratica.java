@@ -89,6 +89,8 @@ public class FormPratica extends Window implements IDocumentFolder {
         // TODO: tab visibile anche da: istruttori, responsabile firma, resp. Bilancio (x determine), assessore/politico competente
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         tableView_visti.setVisible(autenticato.getSupervisorepratiche());
+
+        ((QComboBox) this.findChild(QComboBox.class, "comboBox_fase")).currentIndexChanged.connect(this, "aggiornaFase()");
     }
 
     private void apriDettaglio(){
@@ -141,6 +143,11 @@ public class FormPratica extends Window implements IDocumentFolder {
         Map<String, Object> map = new HashMap();
         map.put("idpratica", pratica.getIdpratica());
         map.put("codiceinterno", pratica.getCodiceinterno());
+        if ( pratica.getCodiceaggiuntivo() == null ) {
+            map.put("codiceaggiuntivo", "");
+        } else {
+            map.put("codiceaggiuntivo", pratica.getCodiceaggiuntivo());
+        }
         map.put("tipopratica", pratica.getCodiceinterno().substring(0, 3));
         map.put("hash", "1234567890");
         DialogStampaEtichetta dialog = new DialogStampaEtichetta(this, map);
@@ -282,11 +289,28 @@ public class FormPratica extends Window implements IDocumentFolder {
         ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_riservata")).setEnabled(nuovoInserimento || inUfficioGestore);
 
         Store store = storeFase();
-        ((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_fase")).setLookupStore(store);
+        PyPaPiComboBox fase=((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_fase"));
+        fase.setLookupStore(store);
         this.getColumn("Fase").setLookupStore(store);
-        ((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_fase")).select(pratica.getFase());
+        fase.select(pratica.getFase());
+        if ( pratica.getFase()!= null && pratica.getFase().getEvidenza() ) {
+            fase.setStyleSheet("QComboBox{background: rgb(255, 0, 0);}");
+        } else {
+            fase.setStyleSheet("QComboBox{background: rgb(255, 255, 255);}");
+        }
     }
-    
+
+    private void aggiornaFase() {
+        if ( this.getContext()!=null ) {
+            PyPaPiComboBox cmbFase=((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_fase"));
+            if ( cmbFase.getCurrentEntity()!=null && ((Fase) cmbFase.getCurrentEntity()).getEvidenza() ) {
+                cmbFase.setStyleSheet("QComboBox{background: rgb(255, 0, 0);}");
+            } else {
+                cmbFase.setStyleSheet("QComboBox{background: rgb(255, 255, 255);}");
+            }
+        }
+    }
+
     private void information() {
         SuiteUiUtil.showInfo(this);
     }

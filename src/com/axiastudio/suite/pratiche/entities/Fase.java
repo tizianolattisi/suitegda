@@ -41,7 +41,9 @@ public class Fase implements Serializable, Comparable<Fase> {
     private Ufficio esclusivadaufficio;
     @Column(name="istruttoria")
     private Boolean istruttoria;
-    
+    @Column(name="evidenza")
+    private Boolean evidenza;
+
     
     public Long getId() {
         return id;
@@ -74,7 +76,14 @@ public class Fase implements Serializable, Comparable<Fase> {
     public void setIstruttoria(Boolean istruttoria) {
         this.istruttoria = istruttoria;
     }
-        
+
+    public Boolean getEvidenza() {
+        return evidenza;
+    }
+
+    public void setEvidenza(Boolean evidenza) {
+        this.evidenza = evidenza;
+    }
 
     @Override
     public int hashCode() {
