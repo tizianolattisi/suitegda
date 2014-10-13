@@ -112,6 +112,7 @@ public class CmisPlugin implements IPlugin {
         }
         AlfrescoHelper helper = createAlfrescoHelper(entity);
         ClientWindow dialog = new ClientWindow(null, helper);
+        dialog.setEntity(entity);
         dialog.show();
         dialog.setDeleteEnabled(delete);
         dialog.setDownloadEnabled(download);

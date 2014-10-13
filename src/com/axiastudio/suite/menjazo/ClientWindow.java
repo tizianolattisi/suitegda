@@ -16,6 +16,13 @@
  */
 package com.axiastudio.suite.menjazo;
 
+import com.axiastudio.iwas.DatamatrixSize;
+import com.axiastudio.iwas.IWas;
+import com.axiastudio.pypapi.ui.Util;
+import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
+import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
+import com.itextpdf.text.DocumentException;
 import com.trolltech.qt.core.QDir;
 import com.trolltech.qt.core.QFile;
 import com.trolltech.qt.core.QIODevice;
@@ -28,11 +35,9 @@ import com.trolltech.qt.core.QUrl;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,6 +53,7 @@ import java.util.logging.Logger;
 public class ClientWindow extends QMainWindow {
     
     private final AlfrescoHelper helper;
+    private Object entity=null;
     private Boolean dirty=false;
     private QTableWidget tableWidget;
     private QAction parentAction = new QAction(this);
@@ -95,7 +101,10 @@ public class ClientWindow extends QMainWindow {
         deleteAction.setEnabled(enabled);
     }
 
-    
+    public void setEntity(Object entity) {
+        this.entity = entity;
+    }
+
     private void initLayout(){
 
         QToolBar toolBar = new QToolBar();
@@ -236,19 +245,52 @@ public class ClientWindow extends QMainWindow {
         this.refreshList();
     }
     
-    private void upload(){
+    private void upload() throws IOException, DocumentException {
         QFileDialog dialog = new QFileDialog(this, "Carica file");
         int exec = dialog.exec();
         List<String> selectedFiles = dialog.selectedFiles();
         String subpath = ""; // XXX
         for( String fileName: selectedFiles ){
-            QFile file = new QFile(fileName);
-            if (file.open(QIODevice.OpenModeFlag.ReadOnly)){
-                byte[] content = file.readAll().toByteArray();
-                String[] split = file.fileName().split("/");
-                String name = split[split.length-1];
-                this.helper.createDocument(subpath, name, content);
+            byte[] content;
+            if( fileName.toLowerCase().endsWith("pdf") &&
+                    entity != null && entity instanceof Protocollo && TipoProtocollo.USCITA.equals(((Protocollo) entity).getTipo()) &&
+                    Util.questionBox(this, "Etichetta", "Desideri applicare sul documento l'etichetta?")) {
+                Protocollo protocollo = (Protocollo) entity;
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                String denominazione = SuiteUtil.trovaCostante("DENOMINAZIONE").getValore();
+                String codiceAmministrazione = SuiteUtil.trovaCostante("CODICE_AMMINISTRAZIONE").getValore();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
+                String data = dateFormat.format(protocollo.getDataprotocollo());
+                dateFormat = new SimpleDateFormat("#MM#dd#");
+                String dataCodice = dateFormat.format(protocollo.getDataprotocollo());
+                if( denominazione.startsWith("Comune") || denominazione.startsWith("COMUNE") ){
+                    denominazione = denominazione.substring(7);
+                }
+                String iddocumento = protocollo.getIddocumento();
+                String codice = codiceAmministrazione + "#" + iddocumento + dataCodice ;
+                IWas.create()
+                        .load(new FileInputStream(fileName))
+                        .offset(65f, 660f)
+                        .text("COMUNE", 10, 0f, 47f)
+                        .text(denominazione, 10, 0f, 38f)
+                        .text("Prot.N.", 8, 0f, 28f)
+                        .text(iddocumento, 10, 0f, 18f)
+                        .text(data, 8, 0f, 9f)
+                        .text(codiceAmministrazione, 8, 0f, 0f)
+                        .datamatrix(codice, DatamatrixSize._22x22, 85f, 16f, 1.9f)
+                        .toStream(outputStream);
+                content = outputStream.toByteArray();
+            } else {
+                QFile file = new QFile(fileName);
+                if (file.open(QIODevice.OpenModeFlag.ReadOnly)){
+                    content = file.readAll().toByteArray();
+                } else {
+                    return;
+                }
             }
+            String[] split = fileName.split("/");
+            String name = split[split.length-1];
+            this.helper.createDocument(subpath, name, content);
         }
         this.refreshList();
     }
