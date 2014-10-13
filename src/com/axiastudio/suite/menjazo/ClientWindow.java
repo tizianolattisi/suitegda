@@ -125,12 +125,12 @@ public class ClientWindow extends QMainWindow {
         toolBar.addAction(downloadAction);
         uploadAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/upload.png"));
         uploadAction.setText("Carica");
-        uploadAction.setToolTip("Carica un nuovo documento");
+        uploadAction.setToolTip("Aggiungi un nuovo documento");
         uploadAction.triggered.connect(this, "upload()");
         toolBar.addAction(uploadAction);
         versionAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/version.png"));
         versionAction.setText("Versione");
-        versionAction.setToolTip("Carica una nuova versione del documento selezionato");
+        versionAction.setToolTip("Carica una nuova versione del documento selezionato (versionamento)");
         versionAction.triggered.connect(this, "uploadVersion()");
         toolBar.addAction(versionAction);
         deleteAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/delete.png"));
