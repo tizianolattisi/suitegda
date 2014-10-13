@@ -96,7 +96,16 @@ public class GruppoSoggetto implements Serializable {
     public void setNote(String note) {
         this.note = note;
     }
-    
+
+    public Boolean getAttivo() {
+        return getDatacessazione() == null;
+    }
+
+    public void setAttivo(Boolean attivo) {
+
+    }
+
+
     /*
      * Il predicato esprime la relazione nel corretto verso
      */

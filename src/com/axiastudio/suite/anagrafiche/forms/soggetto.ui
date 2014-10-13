@@ -244,7 +244,7 @@
            <bool>true</bool>
           </property>
           <property name="export" stdset="0">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -290,7 +290,7 @@
            <string>nick</string>
           </property>
           <property name="search" stdset="0">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -745,7 +745,7 @@
            <string>gruppo</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;gruppo&lt;,datanascita,datacessazione,&lt;note&gt;</string>
+           <string>&gt;gruppo&lt;,datanascita,datacessazione,&lt;note&gt;,attivo</string>
           </property>
           <property name="sortcolumn" stdset="0">
            <number>1</number>
@@ -754,7 +754,13 @@
            <string>&gt;</string>
           </property>
           <property name="headers" stdset="0">
-           <string>Denominazione,Dal,Al,Note</string>
+           <string>Denominazione,Dal,Al,Note,Attivo</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>gruppo</string>
           </property>
          </widget>
         </item>

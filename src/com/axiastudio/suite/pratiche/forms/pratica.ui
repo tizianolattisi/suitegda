@@ -163,6 +163,9 @@
              <property name="column" stdset="0">
               <string>numeroinventario</string>
              </property>
+             <property name="search" stdset="0">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="2" column="4">
@@ -208,6 +211,9 @@
              </property>
              <property name="column" stdset="0">
               <string>annoinventario</string>
+             </property>
+             <property name="search" stdset="0">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -874,11 +880,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
-   <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
-  </customwidget>
-  <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
    <extends>QComboBox</extends>
    <header>pypapicombobox.h</header>
@@ -887,6 +888,11 @@
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
    <extends>QDateEdit</extends>
    <header>pypapidateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
+   <extends>QTableView</extends>
+   <header>pypapitableview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
