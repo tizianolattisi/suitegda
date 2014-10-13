@@ -21,5 +21,5 @@ package com.axiastudio.suite.anagrafiche.entities;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public enum TipoRiferimento {
-    TELEFONO, CELLULARE, FAX, EMAIL, PEC, URL
+    TELEFONO, CELLULARE, FAX, EMAIL, PEC, URL, ALTRO
 }
