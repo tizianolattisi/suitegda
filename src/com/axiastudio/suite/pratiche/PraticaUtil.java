@@ -17,6 +17,8 @@
 package com.axiastudio.suite.pratiche;
 
 import com.axiastudio.mapformat.MessageMapFormat;
+import com.axiastudio.ooops.Ooops;
+import com.axiastudio.ooops.filters.Filter;
 import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
@@ -31,9 +33,11 @@ import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.deliberedetermine.entities.UfficioDetermina;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.protocollo.IProtocollabile;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.trolltech.qt.core.QProcess;
 
@@ -42,6 +46,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
@@ -459,5 +464,89 @@ public class PraticaUtil {
             }
         }
         return inUfficioGestore;
+    }
+
+    public static Boolean preparaProtocollo(IDettaglio dettaglio) {
+
+        // generare le regole (IProtocollabile e IAtto)
+        // recuperare lista dei documenti generati (.odt)
+        // per ogni documento:
+        //  - se con descrizione (probabilmente da modello): applico regole
+        //  - giro l'ooops e mando in protocollo/*.pdf
+
+        // i documenti da allegare al protocollo sono convertiti in pdf
+        String mimeType = "application/pdf";
+
+        /* generazione RuleSet con regole di protocollo e atto */
+        HashMap<String, Object> rules = new HashMap<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        if (dettaglio instanceof IProtocollabile) {
+            Protocollo protocollo = ((IProtocollabile) dettaglio).getProtocollo();
+            if( protocollo != null ){
+                rules.put("numeroprotocollo", protocollo.getIddocumento());
+                rules.put("dataprotocollo", dateFormat.format(protocollo.getDataprotocollo()) );
+
+                /* stringa barcode 1D per il font */
+                String barcode = "(";
+                String id = protocollo.getIddocumento();
+                int codepart = 0;
+                for (Integer i=0; i<=10; i+=2) {
+                    codepart = Integer.parseInt(id.substring(i, i + 2));
+                    if (codepart<50) {
+                        codepart += 48;
+                    } else {
+                        codepart += 142;
+                    }
+                    barcode += String.valueOf(Character.toChars(codepart));
+                }
+                barcode += ")";
+
+                rules.put("barcode", barcode);
+
+                if (dettaglio instanceof IAtto) {
+                    if( protocollo.getNumeroatto() != null ){
+                        rules.put("numeroatto", protocollo.getNumeroatto());
+                        rules.put("dataatto", dateFormat.format(protocollo.getDataatto()));
+
+                    } else {
+                        rules.put("numeroatto", "NNNNN");
+                        rules.put("dataatto", "GG/MM/YYY");
+                    }
+                    if( ((IAtto) dettaglio).getFirma() != null ){
+                        rules.put("firma", ((IAtto) dettaglio).getFirma());
+                    } else {
+                        rules.put("firma", "FIRMA");
+                    }
+                }
+
+            } else {
+                rules.put("numeroprotocollo", "YYYYNNNNNNNN");
+                rules.put("dataprotocollo", "GG/MM/YYYY");
+                rules.put("barcode", "");
+            }
+        }
+
+        /* ricerca e preparazione */
+        CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(dettaglio.getClass(), "CMIS");
+        AlfrescoHelper alfrescoHelper = plugin.createAlfrescoHelper(dettaglio);
+        OoopsPlugin ooopsPlugin = (OoopsPlugin) Register.queryPlugin(Pratica.class, "Ooops");
+        String ooopsConnectionString = ooopsPlugin.getConnectionString();
+        for( Map child: alfrescoHelper.children() ){
+            String name = (String) child.get("name");
+            if( name.toLowerCase().endsWith(".odt") || name.toLowerCase().endsWith(".doc") ) {
+                String title = (String) child.get("title");
+                String description = (String) child.get("description");
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                Ooops.create().open(ooopsConnectionString)
+                        .load(alfrescoHelper.getDocumentStream((String) child.get("objectId")))
+                        .map(rules)
+                        .filter(Filter.writer_pdf_Export)
+                        .toStream(outputStream);
+                String fileName = name.substring(0, name.length()-4) + ".pdf";
+                alfrescoHelper.createDocument("protocollo/", fileName, outputStream.toByteArray(), mimeType, title, description);
+            }
+        }
+
+        return Boolean.TRUE;
     }
 }

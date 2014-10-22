@@ -162,7 +162,9 @@ public class Configure {
                 alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/",
                 Boolean.FALSE);
         Register.registerPlugin(cmisPluginPratica, FormPratica.class);
+        Register.registerPlugin(cmisPluginPratica, Pratica.class);
         Register.registerPlugin(cmisPluginPratica, FormDetermina.class);
+        Register.registerPlugin(cmisPluginPratica, Determina.class);
 
         CmisPlugin cmisPluginRichiesta = new CmisPlugin();
         cmisPluginRichiesta.setup(cmisUrl, cmisUser, cmisPassword,
@@ -174,7 +176,9 @@ public class Configure {
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
         ooopsPlugin.setup(ooopsConnString);
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
+        Register.registerPlugin(ooopsPlugin, Pratica.class);
         Register.registerPlugin(ooopsPlugin, FormDetermina.class);
+        Register.registerPlugin(ooopsPlugin, Determina.class);
 
     }
 

@@ -121,5 +121,7 @@ public class OoopsPlugin implements IPlugin {
         this.hidden = hidden; // XXX: non gestito
     }
 
-
+    public String getConnectionString() {
+        return connectionString;
+    }
 }
