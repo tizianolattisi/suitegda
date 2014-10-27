@@ -79,6 +79,27 @@ public class Attribuzione implements Serializable, ITimeStamped {
     @Column(name="rec_modificato_da")
     private String recordmodificatoda;
 
+    /* transient */
+    @Transient
+    private Boolean tPrincipale;
+    @Transient
+    private Boolean tLetto;
+
+    public Boolean gettPrincipale() {
+        return tPrincipale;
+    }
+
+    public Boolean gettLetto() {
+        return tLetto;
+    }
+
+    @PostLoad
+    private void saveTransients() {
+        tPrincipale = principale;
+        tLetto = letto;
+    }
+
+
     public Long getId() {
         return id;
     }
