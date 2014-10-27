@@ -17,7 +17,6 @@
 package com.axiastudio.suite.protocollo.entities;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.ISnapshot;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
@@ -26,7 +25,6 @@ import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.ProtocolloListener;
-import org.apache.commons.lang3.SerializationUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -42,7 +40,7 @@ import java.util.Date;
 @EntityListeners({ProtocolloListener.class, TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genprotocollo", sequenceName="protocollo.protocollo_id_seq", initialValue=1, allocationSize=1)
-public class Protocollo implements Serializable, ITimeStamped, ISnapshot<Protocollo> {
+public class Protocollo implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genprotocollo")
@@ -153,23 +151,6 @@ public class Protocollo implements Serializable, ITimeStamped, ISnapshot<Protoco
     private Date recordmodificato;
     @Column(name="rec_modificato_da")
     private String recordmodificatoda;
-
-    /* ISnapshot impl */
-    @Transient
-    private Protocollo old=null;
-    @Override
-    public void takeSnapshot() {
-        old = SerializationUtils.clone(this);
-        old.setPraticaProtocolloCollection(this.getPraticaProtocolloCollection());
-    }
-
-    @Override
-    public Protocollo getSnapshot() {
-        if( old != null ){
-            return old;
-        }
-        return this;
-    }
 
 
     public Long getId() {

@@ -16,11 +16,9 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
-import com.axiastudio.pypapi.db.ISnapshot;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import org.apache.commons.lang3.SerializationUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,7 +32,7 @@ import java.util.Date;
 @EntityListeners({TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genpraticaprotocollo", sequenceName="protocollo.praticaprotocollo_id_seq", initialValue=1, allocationSize=1)
-public class PraticaProtocollo implements Serializable, ITimeStamped, ISnapshot<PraticaProtocollo> {
+public class PraticaProtocollo implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genpraticaprotocollo")
@@ -68,29 +66,6 @@ public class PraticaProtocollo implements Serializable, ITimeStamped, ISnapshot<
     private Boolean oggettoModificato=false;
     @Transient
     private Boolean originaleModificato=false;
-
-    /* ISnapshot impl */
-    @Transient
-    private PraticaProtocollo old;
-    @Override
-    public void takeSnapshot() {
-        old = SerializationUtils.clone(this);
-    }
-    @Override
-    public PraticaProtocollo getSnapshot() {
-        if( old != null ){
-            return old;
-        }
-        return this;
-    }
-
-    @PostLoad
-    private void saveOld(){
-        old = SerializationUtils.clone(this);
-    }
-    public PraticaProtocollo getOldState() {
-        return old;
-    }
 
     public Long getId() {
         return id;

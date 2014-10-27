@@ -16,11 +16,9 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
-import com.axiastudio.pypapi.db.ISnapshot;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
-import org.apache.commons.lang3.SerializationUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -46,7 +44,7 @@ import java.util.Date;
                 + "WHERE a.protocollo.iddocumento = :protocollo AND uu.ricerca = TRUE "
                 + "AND uu.utente.id = :id ORDER BY a.protocollo.iddocumento DESC")
 })
-public class Attribuzione implements Serializable, ITimeStamped, ISnapshot<Attribuzione> {
+public class Attribuzione implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genattribuzione")
@@ -80,23 +78,6 @@ public class Attribuzione implements Serializable, ITimeStamped, ISnapshot<Attri
     private Date recordmodificato;
     @Column(name="rec_modificato_da")
     private String recordmodificatoda;
-
-    /* ISnapshot impl */
-    @Transient
-    private Attribuzione old;
-    @Override
-    public void takeSnapshot() {
-        old = SerializationUtils.clone(this);
-    }
-
-    @Override
-    public Attribuzione getSnapshot() {
-        if( old != null ){
-            return old;
-        }
-        return this;
-    }
-
 
     public Long getId() {
         return id;
