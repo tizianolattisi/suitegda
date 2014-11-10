@@ -59,6 +59,7 @@ import com.axiastudio.suite.pratiche.PraticaPrivate;
 import com.axiastudio.suite.pratiche.entities.*;
 import com.axiastudio.suite.pratiche.forms.FormDipendenzaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
+import com.axiastudio.suite.pratiche.forms.FormTipoPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.*;
@@ -319,7 +320,7 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/tipopratica.ui",
                               TipoPratica.class,
-                              SuiteBaseForm.class);
+                              FormTipoPratica.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               null,

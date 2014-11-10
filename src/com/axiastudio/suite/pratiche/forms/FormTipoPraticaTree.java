@@ -36,20 +36,20 @@ import java.util.List;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class FormTipoPratica extends QDialog {
+public class FormTipoPraticaTree extends QDialog {
     private QTreeWidget tree;
     private Pratica pratica=null;
     private List ids;
     
-    public FormTipoPratica(){
+    public FormTipoPraticaTree(){
         this(null);
     }
         
-    public FormTipoPratica(QWidget parent){
+    public FormTipoPraticaTree(QWidget parent){
         this(parent, null);
     }
 
-    public FormTipoPratica(QWidget parent, Pratica pratica){
+    public FormTipoPraticaTree(QWidget parent, Pratica pratica){
         super(parent);
         this.pratica = pratica;
         tree = new QTreeWidget();
@@ -81,12 +81,6 @@ public class FormTipoPratica extends QDialog {
 
         // tipologie non obsolete
         predicates.add(cb.isFalse(root.get("obsoleta")));       
-        
-//        if( parent == null ){
-//            cq.where(cb.isNull(root.get("tipopadre")));
-//        } else {
-//            cq.where(cb.equal(root.get("tipopadre"), parent));
-//       }
         
         if( parent == null ){
             predicates.add(cb.isNull(root.get("tipopadre")));

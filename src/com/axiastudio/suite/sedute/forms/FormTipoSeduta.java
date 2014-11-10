@@ -19,7 +19,7 @@ package com.axiastudio.suite.sedute.forms;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
-import com.axiastudio.suite.pratiche.forms.FormTipoPratica;
+import com.axiastudio.suite.pratiche.forms.FormTipoPraticaTree;
 import com.trolltech.qt.gui.QIcon;
 import com.trolltech.qt.gui.QToolButton;
 
@@ -43,7 +43,7 @@ public class FormTipoSeduta extends Window {
      * XXX: copia e incolla da FormPratica
      */
     private void apriTipo(){
-        FormTipoPratica tipo = new FormTipoPratica();
+        FormTipoPraticaTree tipo = new FormTipoPraticaTree();
         int exec = tipo.exec();
         if( exec == 1 ){
             TipoPratica selection = tipo.getSelection();

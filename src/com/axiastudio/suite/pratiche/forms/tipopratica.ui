@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>357</height>
+    <height>393</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -23,7 +23,7 @@
    <string>codice,descrizione</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,1">
+   <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
@@ -31,8 +31,179 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1" colspan="3">
-     <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_codice">
+      <property name="column" stdset="0">
+       <string>codice</string>
+      </property>
+      <property name="search" stdset="0">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QCheckBox" name="checkBox_3">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>foglia</string>
+      </property>
+      <property name="column" stdset="0">
+       <string>foglia</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Descrizione</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Codice</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="5">
+     <widget class="QCheckBox" name="checkBox_4">
+      <property name="text">
+       <string>obsoleta</string>
+      </property>
+      <property name="column" stdset="0">
+       <string>obsoleta</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1" colspan="5">
+     <widget class="QTextEdit" name="textEdit">
+      <property name="column" stdset="0">
+       <string>descrizione</string>
+      </property>
+      <property name="search" stdset="0">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="6">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_9">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Fascicolazione</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxTitolario">
+        <property name="column" stdset="0">
+         <string>Fascicolo</string>
+        </property>
+        <property name="sortbytostring" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="7" column="0" colspan="6">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="spinBox">
+        <property name="column" stdset="0">
+         <string>lunghezzaprogressivo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QCheckBox" name="checkBox_2">
+        <property name="text">
+         <string>progressivo per giunta</string>
+        </property>
+        <property name="column" stdset="0">
+         <string>progressivogiunta</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Formula</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QCheckBox" name="checkBox">
+        <property name="text">
+         <string>progressivo per anno</string>
+        </property>
+        <property name="column" stdset="0">
+         <string>progressivoanno</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Lunghezza progressivo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="4">
+       <widget class="QLineEdit" name="lineEdit_2">
+        <property name="column" stdset="0">
+         <string>formulacodifica</string>
+        </property>
+        <property name="search" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>152</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="2" colspan="2">
+     <spacer name="horizontalSpacer_4">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>291</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="1" colspan="4">
+     <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_tipopadre">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -48,139 +219,8 @@
       <property name="column" stdset="0">
        <string>tipopadre</string>
       </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Codice</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1" colspan="2">
-     <widget class="QLineEdit" name="lineEdit">
-      <property name="column" stdset="0">
-       <string>codice</string>
-      </property>
-      <property name="search" stdset="0">
+      <property name="sortbytostring" stdset="0">
        <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="3">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>93</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Descrizione</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1" colspan="3">
-     <widget class="QTextEdit" name="textEdit">
-      <property name="column" stdset="0">
-       <string>descrizione</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>Formula</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineEdit_2">
-      <property name="column" stdset="0">
-       <string>formulacodifica</string>
-      </property>
-      <property name="search" stdset="0">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>Lunghezza progressivo</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QSpinBox" name="spinBox">
-      <property name="column" stdset="0">
-       <string>lunghezzaprogressivo</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="2" colspan="2">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>164</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="5" column="0">
-     <spacer name="horizontalSpacer_3">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>152</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="5" column="1" colspan="3">
-     <widget class="QCheckBox" name="checkBox">
-      <property name="text">
-       <string>progressivo per anno</string>
-      </property>
-      <property name="column" stdset="0">
-       <string>progressivoanno</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <spacer name="horizontalSpacer_4">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>152</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="6" column="1" colspan="3">
-     <widget class="QCheckBox" name="checkBox_2">
-      <property name="text">
-       <string>progressivo per giunta</string>
-      </property>
-      <property name="column" stdset="0">
-       <string>progressivogiunta</string>
       </property>
      </widget>
     </item>

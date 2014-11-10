@@ -16,6 +16,8 @@
  */
 package com.axiastudio.suite.pratiche.entities;
 
+import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
@@ -24,6 +26,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
 
 /**
  *
@@ -31,8 +34,9 @@ import java.util.Comparator;
  */
 @Entity
 @Table(schema="PRATICHE")
+@EntityListeners(TimeStampedListener.class)
 @SequenceGenerator(name="gentipopratica", sequenceName="pratiche.tipopratica_id_seq", initialValue=1, allocationSize=1)
-public class TipoPratica implements Serializable, Comparable<TipoPratica> {
+public class TipoPratica implements Serializable, ITimeStamped, Comparable<TipoPratica> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gentipopratica")
@@ -65,6 +69,17 @@ public class TipoPratica implements Serializable, Comparable<TipoPratica> {
     @OneToMany(mappedBy = "tipopratica", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<TipoPraticaProcedimento> tipopraticaProcedimentoCollection;
 
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
 
     public Long getId() {
         return id;
@@ -177,6 +192,42 @@ public class TipoPratica implements Serializable, Comparable<TipoPratica> {
 
     public void setTipopraticaProcedimentoCollection(Collection<TipoPraticaProcedimento> tipopraticaProcedimentoCollection) {
         this.tipopraticaProcedimentoCollection = tipopraticaProcedimentoCollection;
+    }
+
+    @Override
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
+    }
+
+    @Override
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
+    }
+
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+    @Override
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
 
     @Override

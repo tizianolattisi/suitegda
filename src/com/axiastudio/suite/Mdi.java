@@ -30,7 +30,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.entities.Costante;
-import com.axiastudio.suite.pratiche.forms.FormTipoPratica;
+import com.axiastudio.suite.pratiche.forms.FormTipoPraticaTree;
 import com.axiastudio.suite.protocollo.forms.FormMailboxList;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
@@ -432,7 +432,7 @@ public class Mdi extends QMainWindow implements IMdi {
             this.workspace.addSubWindow(mailboxes);
             int exec = mailboxes.exec();
         } else if( "TIPIPRATICA".equals(formName) ){
-            FormTipoPratica tipipratica = new FormTipoPratica();
+            FormTipoPraticaTree tipipratica = new FormTipoPraticaTree();
             this.workspace.addSubWindow(tipipratica);
             int exec = tipipratica.exec();
         } else if( "SCRIVANIA".equals(formName) ){
