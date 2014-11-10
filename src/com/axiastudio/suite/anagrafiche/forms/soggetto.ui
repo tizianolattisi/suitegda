@@ -719,7 +719,7 @@
            <string>.riferimentoCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;tipo&lt;,lavoro,&gt;riferimento&lt;,&lt;descrizione&gt;</string>
+           <string>&gt;tipo&lt;,lavoro,&gt;riferimento&lt;,&lt;descrizione&gt;,pubblicabile</string>
           </property>
           <property name="search" stdset="0">
            <bool>true</bool>

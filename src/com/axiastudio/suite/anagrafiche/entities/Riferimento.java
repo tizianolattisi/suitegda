@@ -43,6 +43,8 @@ public class Riferimento implements Serializable {
     private String descrizione;
     @Column(name="lavoro")
     private Boolean lavoro=Boolean.FALSE;
+    @Column(name="pubblicabile")
+    private Boolean pubblicabile=Boolean.FALSE;
 
     public Long getId() {
         return id;
@@ -90,6 +92,14 @@ public class Riferimento implements Serializable {
 
     public void setLavoro(Boolean lavoro) {
         this.lavoro = lavoro;
+    }
+
+    public Boolean getPubblicabile() {
+        return pubblicabile;
+    }
+
+    public void setPubblicabile(Boolean pubblicabile) {
+        this.pubblicabile = pubblicabile;
     }
 
     @Override

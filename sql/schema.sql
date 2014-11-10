@@ -413,7 +413,8 @@ CREATE TABLE riferimento (
     soggetto bigint,
     riferimento character varying(255),
     descrizione character varying(255),
-    lavoro boolean NOT NULL DEFAULT false
+    lavoro boolean NOT NULL DEFAULT false,
+    pubblicabile boolean NOT NULL DEFAULT false
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE anagrafiche.riferimento OWNER TO postgres;
 ALTER TABLE ONLY riferimento
