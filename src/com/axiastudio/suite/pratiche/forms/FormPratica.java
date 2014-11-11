@@ -170,7 +170,7 @@ public class FormPratica extends Window implements IDocumentFolder {
             Util.warningBox(this, "Error", msg);
             return;
         }
-        FormTipoPratica tipi = new FormTipoPratica(this, pratica);
+        FormTipoPraticaTree tipi = new FormTipoPraticaTree(this, pratica);
         int exec = tipi.exec();
         if( exec == 1 ){
             TipoPratica selection = tipi.getSelection();
