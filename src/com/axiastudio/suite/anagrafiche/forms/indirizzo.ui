@@ -59,23 +59,19 @@
         <property name="column" stdset="0">
          <string>stato</string>
         </property>
+        <property name="sortbytostring" stdset="0">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QComboBox" name="comboBoxProvincia">
+       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxProvincia">
         <property name="column" stdset="0">
          <string>provincia</string>
         </property>
-        <item>
-         <property name="text">
-          <string>TN</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>BZ</string>
-         </property>
-        </item>
+        <property name="sortbytostring" stdset="0">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="0" column="6">

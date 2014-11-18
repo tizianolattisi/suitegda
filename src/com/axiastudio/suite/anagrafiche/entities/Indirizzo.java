@@ -52,8 +52,8 @@ public class Indirizzo implements Serializable {
     private String frazione;
     @Column(name="comune")
     private String comune;
-    @Column(name="provincia")
-    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "provincia", referencedColumnName = "codice")
+    @ManyToOne
     private Provincia provincia;
     @JoinColumn(name = "stato", referencedColumnName = "codice")
     @ManyToOne

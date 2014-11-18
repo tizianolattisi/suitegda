@@ -27,7 +27,6 @@ import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.anagrafiche.AnagraficheAdapters;
 import com.axiastudio.suite.anagrafiche.SoggettoCallbacks;
 import com.axiastudio.suite.anagrafiche.entities.*;
-import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormRelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
@@ -305,7 +304,7 @@ public class Configure {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/indirizzo.ui",
                               Indirizzo.class,
-                              FormIndirizzo.class);
+                              Dialog.class);
 
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/riferimento.ui",

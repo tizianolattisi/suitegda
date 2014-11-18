@@ -45,7 +45,8 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
 
     private Object entity=null;
     private Store storeStato;
-    
+    private Store storeProvincia;
+
     public FormQuickInsertSoggetto(QWidget parent) {
         super(parent);
         this.initLayout();
@@ -80,16 +81,18 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
         this.setLayout(dialog.layout());
         
         // provincia
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Provincia.class);
         QComboBox comboBoxProvincia = (QComboBox) this.findChild(QComboBox.class, "comboBox_provincia");
         comboBoxProvincia.clear();
-        List<Provincia> province = Arrays.asList(Provincia.class.getEnumConstants());
-        for( Provincia p: province){
-            comboBoxProvincia.addItem(p.name());
+        storeProvincia = controller.createFullStore();
+        for( Object objProvincia: storeProvincia ){
+            Provincia provincia = (Provincia) objProvincia;
+            comboBoxProvincia.addItem(provincia.getCodice());
         }
         
         // stato
-        Database db = (Database) Register.queryUtility(IDatabase.class);
-        Controller controller = db.createController(Stato.class);
+        controller = db.createController(Stato.class);
         QComboBox comboBoxStato = (QComboBox) this.findChild(QComboBox.class, "comboBox_stato");
         comboBoxStato.clear();
         storeStato = controller.createFullStore();
@@ -133,7 +136,7 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
         indirizzo.setFrazione(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_frazione")).text());
         indirizzo.setComune(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_comune")).text());
         indirizzo.setDescrizione(((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_descrizione")).text());
-        indirizzo.setProvincia(Provincia.valueOf(((QComboBox) this.findChild(QComboBox.class, "comboBox_provincia")).currentText()));
+        indirizzo.setProvincia((Provincia) storeProvincia.get(((QComboBox) this.findChild(QComboBox.class, "comboBox_provincia")).currentIndex()));
         indirizzo.setTipo(TipoIndirizzo.valueOf(((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo")).currentText()));
         indirizzo.setStato((Stato) storeStato.get(((QComboBox) this.findChild(QComboBox.class, "comboBox_stato")).currentIndex()));
         indirizzo.setPrincipale(Boolean.TRUE);

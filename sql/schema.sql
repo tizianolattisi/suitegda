@@ -205,6 +205,19 @@ ALTER TABLE ONLY stato
 ALTER TABLE ONLY stato
     ADD CONSTRAINT stato_codice_key UNIQUE (codice);
 
+CREATE TABLE anagrafiche.provincia
+(
+  id bigserial NOT NULL,
+  codice character varying(2),
+  descrizione character varying(255),
+  attiva boolean NOT NULL DEFAULT TRUE
+);
+ALTER TABLE anagrafiche.provincia OWNER TO postgres;
+ALTER TABLE ONLY provincia
+    ADD CONSTRAINT provincia_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY provincia
+    ADD CONSTRAINT provincia_codice_key UNIQUE (codice);
+
 CREATE TABLE alboprofessionale (
     id bigserial NOT NULL,
     descrizione character varying(255)
@@ -406,6 +419,8 @@ ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT fk_indirizzo_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
 ALTER TABLE ONLY indirizzo
     ADD CONSTRAINT fk_indirizzo_stato FOREIGN KEY (stato) REFERENCES stato(codice);
+ALTER TABLE ONLY indirizzo
+    ADD CONSTRAINT fk_indirizzo_provincia FOREIGN KEY (provincia) REFERENCES provincia(codice);
 
 CREATE TABLE riferimento (
     id bigserial NOT NULL,

@@ -46,6 +46,7 @@
     <class>com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Gruppo</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Stato</class>
+    <class>com.axiastudio.suite.anagrafiche.entities.Provincia</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Riferimento</class>
     <class>com.axiastudio.suite.anagrafiche.entities.Relazione</class>
     <class>com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto</class>
