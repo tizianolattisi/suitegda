@@ -32,6 +32,8 @@ CREATE SCHEMA modelli;
 ALTER SCHEMA modelli OWNER TO postgres;
 CREATE SCHEMA richieste;
 ALTER SCHEMA richieste OWNER TO postgres;
+CREATE SCHEMA urp;
+ALTER SCHEMA urp OWNER TO postgres;
 
 -- Create pgplsql
 CREATE OR REPLACE FUNCTION public.create_plpgsql_language ()
@@ -1582,6 +1584,66 @@ ALTER TABLE ONLY richieste.richiestaprotocollo
 ALTER TABLE ONLY richieste.richiestaprotocollo
     ADD CONSTRAINT fk_richiestaprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
 
+
+
+-- Ticket
+SET search_path = urp, pg_catalog;
+
+CREATE TABLE sportello (
+    id BIGSERIAL NOT NULL,
+    descrizione CHARACTER VARYING(255),
+    attivo boolean NOT NULL DEFAULT false,
+    utente bigint
+);
+ALTER TABLE urp.sportello OWNER TO postgres;
+ALTER TABLE ONLY sportello
+ADD CONSTRAINT sportello_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY sportello
+ADD CONSTRAINT fk_sportello_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
+
+CREATE TABLE servizioalcittadino (
+    id bigserial NOT NULL,
+    descrizione character varying(255)
+);
+ALTER TABLE urp.servizioalcittadino OWNER TO postgres;
+ALTER TABLE ONLY servizioalcittadino
+ADD CONSTRAINT servizioalcittadino_pkey PRIMARY KEY (id);
+
+CREATE TABLE servizioalcittadinosportello (
+    id BIGSERIAL NOT NULL,
+    servizioalcittadino bigint,
+    sportello bigint
+);
+ALTER TABLE urp.servizioalcittadinosportello OWNER TO postgres;
+ALTER TABLE ONLY servizioalcittadinosportello
+ADD CONSTRAINT servizioalcittadinosportello_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY servizioalcittadinosportello
+ADD CONSTRAINT fk_servizioalcittadinosportello_sportello FOREIGN KEY (sportello) REFERENCES urp.sportello(id);
+ALTER TABLE ONLY servizioalcittadinosportello
+ADD CONSTRAINT fk_servizioalcittadinosportello_servizioalcittadino FOREIGN KEY (servizioalcittadino) REFERENCES urp.servizioalcittadino(id);
+
+CREATE TABLE ticket (
+    id bigserial NOT NULL,
+    sportello bigint,
+    servizioalcittadino bigint,
+    utente bigint,
+    numero integer,
+    tsemesso timestamp without time zone,
+    chiamato boolean NOT NULL DEFAULT false,
+    tschiamato timestamp without time zone,
+    servito boolean NOT NULL DEFAULT false,
+    annullato boolean NOT NULL DEFAULT false,
+    tschiuso timestamp without time zone
+);
+ALTER TABLE urp.ticket OWNER TO postgres;
+ALTER TABLE ONLY ticket
+ADD CONSTRAINT ticket_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY ticket
+ADD CONSTRAINT fk_ticket_sportello FOREIGN KEY (sportello) REFERENCES urp.sportello(id);
+ALTER TABLE ONLY ticket
+ADD CONSTRAINT fk_ticket_servizioalcittadino FOREIGN KEY (servizioalcittadino) REFERENCES urp.servizioalcittadino(id);
+ALTER TABLE ONLY ticket
+ADD CONSTRAINT fk_ticket_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
 
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
