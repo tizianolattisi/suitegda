@@ -1603,6 +1603,7 @@ ADD CONSTRAINT fk_sportello_utente FOREIGN KEY (utente) REFERENCES base.utente(i
 
 CREATE TABLE servizioalcittadino (
     id bigserial NOT NULL,
+    codiceservizio CHARACTER VARYING(255),
     descrizione character varying(255)
 );
 ALTER TABLE urp.servizioalcittadino OWNER TO postgres;

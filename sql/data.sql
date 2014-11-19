@@ -332,9 +332,9 @@ SELECT setval('modelli.tipopraticamodello_id_seq', 2, true);
 -- Sportelli e servizi al cittadini
 SET search_path = urp, pg_catalog;
 
-insert into servizioalcittadino (id,descrizione) values (1, 'Anagrafe e stato civile');
-insert into servizioalcittadino (id,descrizione) values (2, 'Protocollo');
-insert into servizioalcittadino (id,descrizione) values (3, 'Tributi');
+insert into servizioalcittadino (id,descrizione, codiceservizio) values (1, 'Anagrafe e stato civile', 'A');
+insert into servizioalcittadino (id,descrizione, codiceservizio) values (2, 'Protocollo', 'B');
+insert into servizioalcittadino (id,descrizione, codiceservizio) values (3, 'Tributi', 'C');
 SELECT setval('urp.servizioalcittadino_id_seq', 4, true);
 
 insert into sportello (id, descrizione, attivo) values (1, 'Sportello 1', TRUE);
