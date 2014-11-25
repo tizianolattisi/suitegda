@@ -35,8 +35,7 @@ public class Visto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genvisto")
     private Long id;
-    @Enumerated(EnumType.STRING)
-    private CodiceCarica codiceCarica;
+    private String codiceCarica;
     @JoinColumn(name = "pratica", referencedColumnName = "idpratica")
     @ManyToOne
     private Pratica pratica;
@@ -65,11 +64,11 @@ public class Visto implements Serializable {
         this.id = id;
     }
 
-    public CodiceCarica getCodiceCarica() {
+    public String getCodiceCarica() {
         return codiceCarica;
     }
 
-    public void setCodiceCarica(CodiceCarica codiceCarica) {
+    public void setCodiceCarica(String codiceCarica) {
         this.codiceCarica = codiceCarica;
     }
 
