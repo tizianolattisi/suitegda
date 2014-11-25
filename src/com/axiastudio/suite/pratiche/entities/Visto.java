@@ -17,7 +17,6 @@
 package com.axiastudio.suite.pratiche.entities;
 
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 
 import javax.persistence.*;
 import java.io.Serializable;

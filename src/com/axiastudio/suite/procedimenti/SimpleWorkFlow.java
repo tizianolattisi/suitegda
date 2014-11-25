@@ -33,7 +33,6 @@ import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Visto;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -123,7 +122,7 @@ public class SimpleWorkFlow {
         binding.setVariable("finanziariaUtil", finanziariaUtil);
         binding.setVariable("alfrescoHelper", alfrescoHelper);
         binding.setVariable("documenti", documenti);
-        binding.setVariable("CodiceCarica", CodiceCarica.class);
+        binding.setVariable("CodiceCarica", String.class);
         binding.setVariable("PraticaUtil", PraticaUtil.class);
         binding.setVariable("DeterminaUtil", DeterminaUtil.class);
         return binding;
@@ -146,9 +145,8 @@ public class SimpleWorkFlow {
         }
         GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         for( String carica: cariche.split(",") ){
-            CodiceCarica codiceCarica = CodiceCarica.valueOf(carica);
             Utente utente = (Utente) Register.queryUtility(IUtente.class);
-            TitoloDelega check = gestoreDeleghe.checkTitoloODelega(codiceCarica, dettaglio.getServizio(), procedimento,
+            TitoloDelega check = gestoreDeleghe.checkTitoloODelega(carica, dettaglio.getServizio(), procedimento,
                     dettaglio.getUfficio(), utente);
             if( check != null ){
                 return check;
@@ -268,10 +266,9 @@ public class SimpleWorkFlow {
             // ci sono dele cariche da verificare
             GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
             for( String carica: cariche.split(",") ){
-                CodiceCarica codiceCarica = CodiceCarica.valueOf(carica);
-                TitoloDelega titoloDelega = gestoreDeleghe.checkTitoloODelega(codiceCarica, dettaglio.getServizio(), procedimento, dettaglio.getUfficio());
+                TitoloDelega titoloDelega = gestoreDeleghe.checkTitoloODelega(carica, dettaglio.getServizio(), procedimento, dettaglio.getUfficio());
                 if( titoloDelega != null ){
-                    visto.setCodiceCarica(codiceCarica);
+                    visto.setCodiceCarica(carica);
                     if( titoloDelega.getTitolo() ){
                         visto.setResponsabile(utente);
                     } else if( titoloDelega.getDelega() ){

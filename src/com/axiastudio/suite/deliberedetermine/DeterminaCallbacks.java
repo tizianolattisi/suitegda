@@ -30,7 +30,6 @@ import com.axiastudio.suite.deliberedetermine.entities.UfficioDetermina;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 
 /**
  * User: tiziano
@@ -77,8 +76,8 @@ public class DeterminaCallbacks {
 
         // se l'utente non è inserito nell'ufficio gestore con flag modificapratiche non può modificare
         GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
-        if( !inUfficioGestore && gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_SERVIZIO, determina.getServizio()) == null &&
-                gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_BILANCIO) == null ){
+        if( !inUfficioGestore && gestoreDeleghe.checkTitoloODelega("RESPONSABILE_DI_SERVIZIO", determina.getServizio()) == null &&
+                gestoreDeleghe.checkTitoloODelega("RESPONSABILE_DI_BILANCIO") == null ){
             msg = "Per modificare la determina devi appartenere all'ufficio gestore della pratica con i permessi di modifica, " +
                     "essere responsabile di servizio o essere responsabile di bilancio.";
             return new Validation(false, msg);
@@ -105,7 +104,7 @@ public class DeterminaCallbacks {
             for( ServizioDetermina sd: determina.getServizioDeterminaCollection() ){
                 if( sd.getPrincipale() ){
                     Servizio servizio = sd.getServizio();
-                    Utente responsabile = gestoreDeleghe.trovaTitolare(CodiceCarica.RESPONSABILE_DI_SERVIZIO, servizio);
+                    Utente responsabile = gestoreDeleghe.trovaTitolare("RESPONSABILE_DI_SERVIZIO", servizio);
                     if( responsabile != null ){
                         determina.setResponsabile(responsabile);
                     }

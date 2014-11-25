@@ -35,7 +35,6 @@ import com.axiastudio.suite.interoperabilita.utilities.JAXBHelper;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.*;
@@ -197,7 +196,7 @@ public class FormProtocollo extends Window {
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManagerFactory emf = db.getEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
-        Carica carica = GestoreDeleghe.findCarica(CodiceCarica.RESPONSABILE_ATTRIBUZIONI);
+        Carica carica = GestoreDeleghe.findCarica("RESPONSABILE_ATTRIBUZIONI");
         List<Delega> deleghe = em.createNamedQuery("trovaIncaricatiODelegati", Delega.class)
                 .setParameter("carica", carica)
                 .getResultList();

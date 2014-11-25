@@ -19,7 +19,6 @@ package com.axiastudio.suite.procedimenti;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 
 import java.util.Date;
@@ -30,18 +29,18 @@ import java.util.Date;
  */
 public interface IGestoreDeleghe {
 
-    public Utente trovaTitolare(CodiceCarica codiceCarica, Servizio servizio);
+    public Utente trovaTitolare(String codiceCarica, Servizio servizio);
     
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica);
+    public TitoloDelega checkTitoloODelega(String codiceCarica);
 
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio);
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio);
     
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento);
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento);
 
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio);
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio);
 
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente);
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente);
 
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica);
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica);
 
 }

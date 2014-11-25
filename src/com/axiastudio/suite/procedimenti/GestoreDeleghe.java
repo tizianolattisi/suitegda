@@ -25,7 +25,6 @@ import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.procedimenti.entities.Carica;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 
@@ -54,7 +53,7 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         }
     }
 
-    public Utente trovaTitolare(CodiceCarica codiceCarica, Servizio servizio) {
+    public Utente trovaTitolare(String codiceCarica, Servizio servizio) {
         Carica carica = this.findCarica(codiceCarica);
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
@@ -79,7 +78,7 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         return null;
     }
         
-    private List<Delega> trovaTitoliEDeleghe(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
+    private List<Delega> trovaTitoliEDeleghe(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
 
         Carica carica = this.findCarica(codiceCarica);
         
@@ -136,15 +135,19 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         return null;
     }
 
-    public static Carica findCarica(CodiceCarica codiceCarica){
-        return findCarica(codiceCarica.name());
+    public static List<String> codiciCarica() {
+        List<String> codiciCarica = new ArrayList<>();
+        for( String key: cariche.keySet() ){
+            codiciCarica.add(key);
+        }
+        return codiciCarica;
     }
 
     /*
      * Ricerca secca della carica, non esiste una delega più ampia
      */
     @Override
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica) {
+    public TitoloDelega checkTitoloODelega(String codiceCarica) {
         return this.checkTitoloODelega(codiceCarica, null, null, null, null, null);
     }
 
@@ -152,27 +155,27 @@ public class GestoreDeleghe implements IGestoreDeleghe {
     /*
      * Ricerca per servizio, da verificare il caso più ampio "tutti i servizi"
      */
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio) {
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio) {
         return this.checkTitoloODelega(codiceCarica, servizio, null, null, null, null);
     }
 
     @Override
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento) {
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento) {
         return this.checkTitoloODelega(codiceCarica, servizio, procedimento, null, null, null);
     }
 
     @Override
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio) {
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio) {
         return this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, null, null);
     }
 
     @Override
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente) {
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente) {
         return this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, utente, null);
     }
 
     @Override
-    public TitoloDelega checkTitoloODelega(CodiceCarica codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
 
         // prima cerchiamo un titolo o una delega esatta
         List<Delega> titoliEDeleghe = this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, ufficio, utente, dataVerifica);
