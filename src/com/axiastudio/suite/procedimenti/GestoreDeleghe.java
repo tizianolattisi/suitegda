@@ -35,16 +35,24 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class GestoreDeleghe implements IGestoreDeleghe {
+
+    private static Map<String, Carica> cariche = new HashMap<>();
+
+    public GestoreDeleghe() {
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(Carica.class);
+        for (Iterator it = controller.createFullStore().iterator(); it.hasNext();) {
+            Carica carica = (Carica) it.next();
+            cariche.put(carica.getCodiceCarica(), carica);
+        }
+    }
 
     public Utente trovaTitolare(CodiceCarica codiceCarica, Servizio servizio) {
         Carica carica = this.findCarica(codiceCarica);
@@ -120,17 +128,16 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         List<Delega> deleghe = tq.getResultList();
         return deleghe;
     }
-    
-    public static Carica findCarica(CodiceCarica codiceCarica){
-        Database db = (Database) Register.queryUtility(IDatabase.class);
-        Controller controller = db.createController(Carica.class);
-        for (Iterator it = controller.createFullStore().iterator(); it.hasNext();) {
-            Carica carica = (Carica) it.next();
-            if( codiceCarica.equals(carica.getCodiceCarica()) ){
-                return carica;
-            }
+
+    public static Carica findCarica(String codiceCarica){
+        if( cariche.keySet().contains(codiceCarica) ) {
+            return cariche.get(codiceCarica);
         }
         return null;
+    }
+
+    public static Carica findCarica(CodiceCarica codiceCarica){
+        return findCarica(codiceCarica.name());
     }
 
     /*
