@@ -35,7 +35,6 @@ import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Visto;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.axiastudio.suite.protocollo.IProtocollabile;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.UfficioProtocollo;
@@ -430,12 +429,12 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
         }
 
         if ( vistoResp != null && vistoResp.getCodiceCarica() != null ) {
-            if ( vistoResp.getCodiceCarica().equals(CodiceCarica.RESPONSABILE_DI_SERVIZIO) &&
+            if ( "RESPONSABILE_DI_SERVIZIO".equals(vistoResp.getCodiceCarica()) &&
                     ! vistoResp.getUtente().equals(vistoResp.getResponsabile()) ) {
                 firma += "IL FUNZIONARIO INCARICATO\n";
-            } else if ( vistoResp.getCodiceCarica().equals(CodiceCarica.SEGRETARIO) ) {
+            } else if ( "SEGRETARIO".equals(vistoResp.getCodiceCarica()) ) {
                 firma += "IL SEGRETARIO GENERALE\n";
-            } else if ( vistoResp.getCodiceCarica().equals(CodiceCarica.VICE_SEGRETARIO) ) {
+            } else if ( "VICE_SEGRETARIO".equals(vistoResp.getCodiceCarica()) ) {
                 firma += "IL VICESEGRETARIO GENERALE\n";
             }
             firma += vistoResp.getUtente();

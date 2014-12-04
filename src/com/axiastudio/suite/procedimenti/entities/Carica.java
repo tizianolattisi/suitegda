@@ -34,8 +34,7 @@ public class Carica implements Serializable {
     @Column(name="descrizione", length=1024)
     private String descrizione;
     @Column(name="codicecarica")
-    @Enumerated(EnumType.STRING)
-    private CodiceCarica codiceCarica;
+    private String codiceCarica;
 
     public Long getId() {
         return id;
@@ -53,11 +52,11 @@ public class Carica implements Serializable {
         this.descrizione = descrizione;
     }
 
-    public CodiceCarica getCodiceCarica() {
+    public String getCodiceCarica() {
         return codiceCarica;
     }
 
-    public void setCodiceCarica(CodiceCarica codiceCarica) {
+    public void setCodiceCarica(String codiceCarica) {
         this.codiceCarica = codiceCarica;
     }
 

@@ -24,7 +24,7 @@ import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.AdminConsole;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
+import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.sun.deploy.util.StringUtils;
@@ -72,17 +72,16 @@ public class FormFaseProcedimento extends Dialog {
     private void inizializzaCariche() {
         FaseProcedimento faseProcedimento = (FaseProcedimento) this.getContext().getCurrentEntity();
 
-        for( CodiceCarica codiceCarica: CodiceCarica.values() ){
+        for( String codiceCarica: GestoreDeleghe.codiciCarica() ){
             QListWidgetItem item = new QListWidgetItem();
-            item.setText(codiceCarica.name());
+            item.setText(codiceCarica);
             caricheDisponibili.addItem(item);
         }
 
         if( faseProcedimento.getCariche() != null ){
             for( String token: faseProcedimento.getCariche().split(",") ){
-                CodiceCarica codiceCarica = CodiceCarica.valueOf(token);
                 QListWidgetItem item = new QListWidgetItem();
-                item.setText(codiceCarica.name());
+                item.setText(token);
                 caricheAbilitate.addItem(item);
             }
         }

@@ -130,16 +130,16 @@ public class DemoData {
          */
         Carica sindaco = new Carica();
         sindaco.setDescrizione("Sindaco");
-        sindaco.setCodiceCarica(CodiceCarica.SINDACO);
+        sindaco.setCodiceCarica("SINDACO");
         Carica viceSindaco = new Carica();
         viceSindaco.setDescrizione("Vice Sindaco");
-        viceSindaco.setCodiceCarica(CodiceCarica.VICE_SINDACO);
+        viceSindaco.setCodiceCarica("VICE_SINDACO");
         Carica segretario = new Carica();
         segretario.setDescrizione("Segretario");
-        segretario.setCodiceCarica(CodiceCarica.SEGRETARIO);
+        segretario.setCodiceCarica("SEGRETARIO");
         Carica responsabile = new Carica();
         responsabile.setDescrizione("Responsabile del servizio di bilancio");
-        responsabile.setCodiceCarica(CodiceCarica.RESPONSABILE_DI_SERVIZIO);
+        responsabile.setCodiceCarica("RESPONSABILE_DI_SERVIZIO");
         em.getTransaction().begin();
         em.persist(sindaco);
         em.persist(viceSindaco);
