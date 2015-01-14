@@ -253,7 +253,7 @@ public class ClientWindow extends QMainWindow {
         for( String fileName: selectedFiles ){
             byte[] content;
             if( fileName.toLowerCase().endsWith("pdf") &&
-                    entity != null && entity instanceof Protocollo && TipoProtocollo.USCITA.equals(((Protocollo) entity).getTipo()) &&
+                    entity != null && entity instanceof Protocollo && !TipoProtocollo.ENTRATA.equals(((Protocollo) entity).getTipo()) &&
                     Util.questionBox(this, "Etichetta", "Desideri applicare sul documento l'etichetta?")) {
                 Protocollo protocollo = (Protocollo) entity;
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
