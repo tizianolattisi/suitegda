@@ -28,6 +28,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
@@ -282,6 +283,12 @@ public class FormScrivania  extends QMainWindow {
                     listWidget_soggetti.addItem(item);
                 }
             }
+            // numero di documenti contenuti nella cartella Alfresco
+            CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Protocollo.class, "CMIS");
+            AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(protocollo);
+            Long n = alfrescoHelper.numberOfDocument();
+            QGroupBox groupBox = (QGroupBox) this.findChild(QGroupBox.class, "groupBox");
+            groupBox.setTitle("Anteprima - " + n + " documenti.");
         } else {
             textEdit_oggetto.setText("");
         }

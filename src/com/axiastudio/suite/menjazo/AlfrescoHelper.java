@@ -77,26 +77,42 @@ public class AlfrescoHelper {
         Repository repository = factory.getRepositories(parameter).get(0);
         return repository.createSession();
     }
-    
+
+    public Folder folderFromPath(String path){
+        Folder folder;
+        Session session = this.createSession();
+        try{
+            folder = (Folder) session.getObjectByPath(path);
+        } catch (CmisObjectNotFoundException ex) {
+            folder = this.createFolder(path);
+        }
+        return folder;
+    }
+
     public List<HashMap> children() {
         return children("");
     }
     
     public List<HashMap> children(String subpath) {
+        Folder folder = folderFromPath(this.path + subpath);
         List<HashMap> children = new ArrayList();
-        Folder folder;
-        Session session = this.createSession();
-        try{
-            folder = (Folder) session.getObjectByPath(this.path+subpath);
-        } catch (CmisObjectNotFoundException ex) {
-            folder = this.createFolder(this.path+subpath);
-        }
         ItemIterable<CmisObject> cmisChildren = folder.getChildren();
         for (CmisObject o : cmisChildren) {
             HashMap map = mapFromCmisObject(o);
             children.add(map);
         }
         return children;
+    }
+
+    public Long numberOfDocument(){
+        return numberOfDocument("", Boolean.TRUE);
+    }
+    public Long numberOfDocument(String subpath){
+        return numberOfDocument(subpath, Boolean.TRUE);
+    }
+    public Long numberOfDocument(String subpath, Boolean excludeFolders){
+        Folder folder = folderFromPath(this.path + subpath);
+        return folder.getChildren().getTotalNumItems();
     }
     
     public List<HashMap> getAllVersions(String objectId){
