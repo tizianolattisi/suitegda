@@ -1646,6 +1646,18 @@ ADD CONSTRAINT fk_ticket_servizioalcittadino FOREIGN KEY (servizioalcittadino) R
 ALTER TABLE ONLY ticket
 ADD CONSTRAINT fk_ticket_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
 
+CREATE TABLE urp.aperturaurp (
+    id bigserial NOT NULL,
+    giornosettimana integer,
+    oraapertura integer,
+    minutoapertura integer,
+    orachiusura integer,
+    minutochiusura integer,
+    anticipochiusura integer
+);
+ALTER TABLE urp.aperturaurp OWNER TO postgres;
+ALTER TABLE ONLY aperturaurp
+ADD CONSTRAINT aperturaurp_pkey PRIMARY KEY (id);
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
