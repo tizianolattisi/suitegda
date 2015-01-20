@@ -1649,6 +1649,7 @@ ADD CONSTRAINT fk_ticket_utente FOREIGN KEY (utente) REFERENCES base.utente(id);
 CREATE TABLE urp.aperturaurp (
     id bigserial NOT NULL,
     giornosettimana integer,
+    anticipoapertura integer,
     oraapertura integer,
     minutoapertura integer,
     orachiusura integer,
