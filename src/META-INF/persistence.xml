@@ -74,6 +74,10 @@
     <class>com.axiastudio.suite.richieste.entities.DestinatarioUtente</class>
     <class>com.axiastudio.suite.pratiche.entities.Visto</class>
     <class>com.axiastudio.suite.pratiche.entities.UtentePratica</class>
+    <class>com.axiastudio.suite.urp.entities.ServizioAlCittadino</class>
+    <class>com.axiastudio.suite.urp.entities.Sportello</class>
+    <class>com.axiastudio.suite.urp.entities.ServizioAlCittadinoSportello</class>
+    <class>com.axiastudio.suite.urp.entities.Ticket</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>
