@@ -43,6 +43,7 @@ public class Suite {
     public static void main(String[] args) {
 
         Application app = new Application(args);
+        app.setLanguage("it");
         InputStream propertiesStream = Suite.class.getResourceAsStream("suite.properties");
 
         configure(app, propertiesStream);
