@@ -1660,6 +1660,17 @@ ALTER TABLE urp.aperturaurp OWNER TO postgres;
 ALTER TABLE ONLY aperturaurp
 ADD CONSTRAINT aperturaurp_pkey PRIMARY KEY (id);
 
+CREATE TABLE urp.notiziaurp (
+  id bigserial NOT NULL,
+  titolo CHARACTER VARYING(128),
+  testo character varying(512),
+  iniziopubblicazione timestamp without time zone,
+  finepubblicazione timestamp without time zone
+);
+ALTER TABLE urp.notiziaurp OWNER TO postgres;
+ALTER TABLE ONLY notiziaurp
+ADD CONSTRAINT notiziaurp_pkey PRIMARY KEY (id);
+
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
