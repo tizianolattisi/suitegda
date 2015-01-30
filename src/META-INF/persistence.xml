@@ -78,6 +78,8 @@
     <class>com.axiastudio.suite.urp.entities.Sportello</class>
     <class>com.axiastudio.suite.urp.entities.ServizioAlCittadinoSportello</class>
     <class>com.axiastudio.suite.urp.entities.Ticket</class>
+    <class>com.axiastudio.suite.urp.entities.AperturaURP</class>
+    <class>com.axiastudio.suite.urp.entities.NotiziaURP</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
       <property name="javax.persistence.jdbc.password" value=""/>
