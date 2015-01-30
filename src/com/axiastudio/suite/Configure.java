@@ -82,6 +82,10 @@ import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
 import com.axiastudio.suite.sedute.entities.TipoSeduta;
 import com.axiastudio.suite.sedute.forms.FormTipoSeduta;
+import com.axiastudio.suite.urp.entities.AperturaURP;
+import com.axiastudio.suite.urp.entities.NotiziaURP;
+import com.axiastudio.suite.urp.entities.ServizioAlCittadino;
+import com.axiastudio.suite.urp.entities.Sportello;
 
 import java.util.HashMap;
 import java.util.List;
@@ -480,6 +484,26 @@ public class Configure {
                               null,
                               DestinatarioUfficio.class,
                               Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/urp/forms/servizioalcittadino.ui",
+                ServizioAlCittadino.class,
+                Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/urp/forms/sportello.ui",
+                Sportello.class,
+                Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/urp/forms/aperturaurp.ui",
+                AperturaURP.class,
+                Window.class);
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/urp/forms/notiziaurp.ui",
+                NotiziaURP.class,
+                Window.class);
 
     }
     
