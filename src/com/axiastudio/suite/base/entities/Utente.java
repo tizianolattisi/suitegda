@@ -61,12 +61,16 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
     private Boolean supervisoreanagrafiche=false;
     @Column(name="operatoreprotocollo")
     private Boolean operatoreprotocollo=true;
+    @Column(name="operatoreurp")
+    private Boolean operatoreurp=true;
     @Column(name="ricercatoreprotocollo")
     private Boolean ricercatoreprotocollo=false;
     @Column(name="attributoreprotocollo")
     private Boolean attributoreprotocollo=false;
     @Column(name="supervisoreprotocollo")
     private Boolean supervisoreprotocollo=false;
+    @Column(name="supervisoreurp")
+    private Boolean supervisoreurp=false;
     @Column(name="spedisceprotocollo")
     private Boolean spedisceprotocollo=false;
     @Column(name="operatorepratiche")
@@ -254,6 +258,22 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
 
     public void setSupervisoreprotocollo(Boolean supervisoreprotocollo) {
         this.supervisoreprotocollo = supervisoreprotocollo;
+    }
+
+    public Boolean getOperatoreurp() {
+        return operatoreurp;
+    }
+
+    public void setOperatoreurp(Boolean operatoreurp) {
+        this.operatoreurp = operatoreurp;
+    }
+
+    public Boolean getSupervisoreurp() {
+        return supervisoreurp;
+    }
+
+    public void setSupervisoreurp(Boolean supervisoreurp) {
+        this.supervisoreurp = supervisoreurp;
     }
 
     public Boolean getAttributorepratiche() {
