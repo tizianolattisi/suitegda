@@ -77,7 +77,7 @@
        <item>
         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView">
          <property name="entity" stdset="0">
-          <string>.servizioalcittadinoCollection</string>
+          <string>.servizioalcittadinosportelloCollection</string>
          </property>
          <property name="reference" stdset="0">
           <string>servizioalcittadino</string>

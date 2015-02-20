@@ -32,7 +32,7 @@ public class Sportello implements Serializable {
     private Utente utente;*/
 
     @OneToMany(mappedBy = "sportello", orphanRemoval = true, cascade=CascadeType.ALL)
-    private Collection<ServizioAlCittadinoSportello> servizioalcittadinoCollection;
+    private Collection<ServizioAlCittadinoSportello> servizioalcittadinosportelloCollection;
 
     @OneToMany(fetch= FetchType.EAGER)
     @JoinTable(name = "servizioalcittadinosportello", schema = "urp",
@@ -72,12 +72,12 @@ public class Sportello implements Serializable {
         this.servizialcittadino = servizialcittadino;
     }
 
-    public Collection<ServizioAlCittadinoSportello> getServizioalcittadinoCollection() {
-        return servizioalcittadinoCollection;
+    public Collection<ServizioAlCittadinoSportello> getServizioalcittadinosportelloCollection() {
+        return servizioalcittadinosportelloCollection;
     }
 
-    public void setServizioalcittadinoCollection(Collection<ServizioAlCittadinoSportello> servizioalcittadinoCollection) {
-        this.servizioalcittadinoCollection = servizioalcittadinoCollection;
+    public void setServizioalcittadinosportelloCollection(Collection<ServizioAlCittadinoSportello> servizioalcittadinoCollection) {
+        this.servizioalcittadinosportelloCollection = servizioalcittadinoCollection;
     }
 
     @Override
