@@ -3,9 +3,11 @@ package com.axiastudio.suite.urp.forms;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.urp.entities.ServizioAlCittadino;
+import com.axiastudio.suite.urp.entities.ServizioAlCittadinoSportello;
 import com.axiastudio.suite.urp.entities.Sportello;
 import com.axiastudio.suite.urp.entities.Ticket;
 import com.trolltech.qt.core.Qt;
@@ -16,9 +18,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: tiziano
@@ -31,6 +31,7 @@ public class TicketApplet extends QDialog {
     private final Sportello sportello;
     private QLabel labelSportello;
     private QLabel labelChiamato;
+    private QToolButton buttonConfig;
     private QToolButton buttonInfo;
     private QToolButton buttonChiama;
     private QToolButton buttonAnnulla;
@@ -49,6 +50,11 @@ public class TicketApplet extends QDialog {
 
         QHBoxLayout hBox = new QHBoxLayout();
         hBox.setMargin(0);
+
+        buttonConfig = new QToolButton();
+        buttonConfig.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/cog.png"));
+        buttonConfig.clicked.connect(this, "configurazione()");
+        hBox.addWidget(buttonConfig);
 
         buttonInfo = new QToolButton();
         buttonInfo.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/information.png"));
@@ -85,6 +91,64 @@ public class TicketApplet extends QDialog {
 
         setLayout(hBox);
 
+    }
+
+    private void configurazione(){
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+
+        Store servizisportelli = db.createController(ServizioAlCittadinoSportello.class).createFullStore();
+        List<ServizioAlCittadino> serviziSportello = new ArrayList<>();
+        for( Object obj: servizisportelli ){
+            ServizioAlCittadinoSportello scs = (ServizioAlCittadinoSportello) obj;
+            if( sportello.equals(scs.getSportello()) ){
+                serviziSportello.add(scs.getServizioalcittadino());
+            }
+        }
+
+        QDialog dialog = new QDialog(this);
+        QVBoxLayout layout = new QVBoxLayout(dialog);
+        Store servizi = db.createController(ServizioAlCittadino.class).createFullStore();
+        List<QCheckBox> checkBoxes = new ArrayList<>();
+        for( Object obj: servizi ){
+            ServizioAlCittadino servizio = (ServizioAlCittadino) obj;
+            QCheckBox checkBox = new QCheckBox();
+            checkBox.setText(servizio.getDescrizione());
+            if( serviziSportello.contains(servizio) ){
+                checkBox.setCheckState(Qt.CheckState.Checked);
+            }
+            layout.addWidget(checkBox);
+            checkBoxes.add(checkBox);
+        }
+        QPushButton button = new QPushButton();
+        button.setText("Conferma");
+        button.clicked.connect(dialog, "accept()");
+        layout.addWidget(button);
+        int exec = dialog.exec();
+        if( exec == 1 ){
+            Collection<ServizioAlCittadinoSportello> servizioalcittadinosportelloCollection = sportello.getServizioalcittadinosportelloCollection();
+            for( int i=0; i<servizi.size(); i++ ){
+                QCheckBox checkBox = checkBoxes.get(i);
+                ServizioAlCittadino servizio = (ServizioAlCittadino) servizi.get(i);
+                if( Qt.CheckState.Checked.equals(checkBox.checkState()) ){
+                    if( !serviziSportello.contains(servizio) ){
+                        ServizioAlCittadinoSportello scs = new ServizioAlCittadinoSportello();
+                        scs.setServizioalcittadino(servizio);
+                        servizioalcittadinosportelloCollection.add(scs);
+                    }
+                } else {
+                    if( serviziSportello.contains(servizio) ){
+                        for( Object obj: servizioalcittadinosportelloCollection ){
+                            if( ((ServizioAlCittadinoSportello) obj).getServizioalcittadino().equals(servizio) ){
+                                servizioalcittadinosportelloCollection.remove(obj);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            sportello.setServizioalcittadinosportelloCollection(servizioalcittadinosportelloCollection);
+            db.createController(Sportello.class).commit(sportello);
+        }
     }
 
     private void informazioni(){
