@@ -486,20 +486,22 @@ public class Mdi extends QMainWindow implements IMdi {
             this.workspace.addSubWindow(form);
             form.show();
         } else if( "TICKET".equals(formName) ){
-            // XXX
             Database db = (Database) Register.queryUtility(IDatabase.class);
-            EntityManager em = db.getEntityManagerFactory().createEntityManager();
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Sportello> cq = cb.createQuery(Sportello.class);
-            Root<Sportello> from = cq.from(Sportello.class);
-            cq.select(from);
-            Predicate predicate = cb.equal(from.get("id"), 2L);
-            cq = cq.where(predicate);
-            TypedQuery<Sportello> query = em.createQuery(cq);
-            Sportello sportello = query.getSingleResult();
-            TicketApplet form = new TicketApplet(sportello);
-            //this.workspace.addSubWindow(form);
-            form.show();
+            Store sportelli = db.createController(Sportello.class).createFullStore();
+            List<String> nomiSportelli = new ArrayList<>();
+            for( Object obj: sportelli ){
+                Sportello sportello = (Sportello) obj;
+                nomiSportelli.add(sportello.getDescrizione());
+            }
+            String item = QInputDialog.getItem(this, "Apertura sportello", "Scegli lo sportello da aprire",
+                    nomiSportelli, 0, false);
+            int i = nomiSportelli.indexOf(item);
+            if( i != -1 ) {
+                Sportello sportello = (Sportello) sportelli.get(i);
+                TicketApplet form = new TicketApplet(sportello);
+                //this.workspace.addSubWindow(form);
+                form.show();
+            }
         } else {
             /* form registrata */
             Window form=null;
