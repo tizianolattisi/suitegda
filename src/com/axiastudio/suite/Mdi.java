@@ -35,13 +35,20 @@ import com.axiastudio.suite.protocollo.forms.FormMailboxList;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.axiastudio.suite.scanndo.ScanNDo;
+import com.axiastudio.suite.urp.entities.Sportello;
+import com.axiastudio.suite.urp.forms.TicketApplet;
 import com.trolltech.qt.core.QObject;
 import com.trolltech.qt.core.QSignalMapper;
 import com.trolltech.qt.gui.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -355,6 +362,41 @@ public class Mdi extends QMainWindow implements IMdi {
         itemTipoSeduta.setText(1, "com.axiastudio.suite.sedute.entities.TipoSeduta");
         itemTipoSeduta.setDisabled(!autenticato.getAmministratore());
 
+        /* URP */
+        QTreeWidgetItem itemUrp = new QTreeWidgetItem(this.tree);
+        itemUrp.setText(0, "URP");
+        this.tree.addTopLevelItem(itemUrp);
+
+        QTreeWidgetItem itemApplet = new QTreeWidgetItem(itemUrp);
+        itemApplet.setText(0, "Applet");
+        itemApplet.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/cog.png"));
+        itemApplet.setText(1, "TICKET");
+        itemApplet.setDisabled(!autenticato.getOperatoreurp());
+
+        QTreeWidgetItem itemServizioAlCittadino = new QTreeWidgetItem(itemUrp);
+        itemServizioAlCittadino.setText(0, "Servizo al cittadino");
+        itemServizioAlCittadino.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/cog.png"));
+        itemServizioAlCittadino.setText(1, "com.axiastudio.suite.urp.entities.ServizioAlCittadino");
+        itemServizioAlCittadino.setDisabled(!autenticato.getSupervisoreurp());
+
+        QTreeWidgetItem itemSportello = new QTreeWidgetItem(itemUrp);
+        itemSportello.setText(0, "Sportelli");
+        itemSportello.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/cog.png"));
+        itemSportello.setText(1, "com.axiastudio.suite.urp.entities.Sportello");
+        itemSportello.setDisabled(!autenticato.getSupervisoreurp());
+
+        QTreeWidgetItem itemAperturaURP = new QTreeWidgetItem(itemUrp);
+        itemAperturaURP.setText(0, "Aperture URP");
+        itemAperturaURP.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/cog.png"));
+        itemAperturaURP.setText(1, "com.axiastudio.suite.urp.entities.AperturaURP");
+        itemAperturaURP.setDisabled(!autenticato.getSupervisoreurp());
+
+        QTreeWidgetItem itemNotiziaURP = new QTreeWidgetItem(itemUrp);
+        itemNotiziaURP.setText(0, "Notizie URP");
+        itemNotiziaURP.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/cog.png"));
+        itemNotiziaURP.setText(1, "com.axiastudio.suite.urp.entities.NotiziaURP");
+        itemNotiziaURP.setDisabled(!autenticato.getSupervisoreurp());
+
         /* Amministrazione */
         QTreeWidgetItem itemAmministrazione = new QTreeWidgetItem(this.tree);
         itemAmministrazione.setText(0, "Amministrazione");
@@ -442,6 +484,21 @@ public class Mdi extends QMainWindow implements IMdi {
         } else if( "SCANNDO".equals(formName) ){
             ScanNDo form = new ScanNDo();
             this.workspace.addSubWindow(form);
+            form.show();
+        } else if( "TICKET".equals(formName) ){
+            // XXX
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            EntityManager em = db.getEntityManagerFactory().createEntityManager();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Sportello> cq = cb.createQuery(Sportello.class);
+            Root<Sportello> from = cq.from(Sportello.class);
+            cq.select(from);
+            Predicate predicate = cb.equal(from.get("id"), 2L);
+            cq = cq.where(predicate);
+            TypedQuery<Sportello> query = em.createQuery(cq);
+            Sportello sportello = query.getSingleResult();
+            TicketApplet form = new TicketApplet(sportello);
+            //this.workspace.addSubWindow(form);
             form.show();
         } else {
             /* form registrata */
