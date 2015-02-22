@@ -14,9 +14,11 @@ import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
 
@@ -94,14 +96,18 @@ public class TicketApplet extends QDialog {
     }
 
     private void configurazione(){
+
         Database db = (Database) Register.queryUtility(IDatabase.class);
 
+        // numero di sportelli agganciati ad ogni servizio
         Store servizisportelli = db.createController(ServizioAlCittadinoSportello.class).createFullStore();
-        List<ServizioAlCittadino> serviziSportello = new ArrayList<>();
+        Map<ServizioAlCittadino, Integer> nSportelli = new HashMap<>();
         for( Object obj: servizisportelli ){
             ServizioAlCittadinoSportello scs = (ServizioAlCittadinoSportello) obj;
-            if( sportello.equals(scs.getSportello()) ){
-                serviziSportello.add(scs.getServizioalcittadino());
+            if( !nSportelli.keySet().contains(scs.getServizioalcittadino()) ){
+                nSportelli.put(scs.getServizioalcittadino(), 1);
+            } else {
+                nSportelli.put(scs.getServizioalcittadino(), nSportelli.get(scs.getServizioalcittadino())+1);
             }
         }
 
@@ -113,8 +119,10 @@ public class TicketApplet extends QDialog {
             ServizioAlCittadino servizio = (ServizioAlCittadino) obj;
             QCheckBox checkBox = new QCheckBox();
             checkBox.setText(servizio.getDescrizione());
-            if( serviziSportello.contains(servizio) ){
+            if( sportello.getServizialcittadino().contains(servizio) ){
                 checkBox.setCheckState(Qt.CheckState.Checked);
+                // puoi rimuovere un servizio solo se non se l'unico sportello che lo serve
+                checkBox.setEnabled(nSportelli.get(servizio)>1);
             }
             layout.addWidget(checkBox);
             checkBoxes.add(checkBox);
@@ -130,13 +138,13 @@ public class TicketApplet extends QDialog {
                 QCheckBox checkBox = checkBoxes.get(i);
                 ServizioAlCittadino servizio = (ServizioAlCittadino) servizi.get(i);
                 if( Qt.CheckState.Checked.equals(checkBox.checkState()) ){
-                    if( !serviziSportello.contains(servizio) ){
+                    if( !sportello.getServizialcittadino().contains(servizio) ){
                         ServizioAlCittadinoSportello scs = new ServizioAlCittadinoSportello();
                         scs.setServizioalcittadino(servizio);
                         servizioalcittadinosportelloCollection.add(scs);
                     }
                 } else {
-                    if( serviziSportello.contains(servizio) ){
+                    if( sportello.getServizialcittadino().contains(servizio) ){
                         for( Object obj: servizioalcittadinosportelloCollection ){
                             if( ((ServizioAlCittadinoSportello) obj).getServizioalcittadino().equals(servizio) ){
                                 servizioalcittadinosportelloCollection.remove(obj);
