@@ -41,7 +41,10 @@ public class Fascicolo implements Serializable {
     private String descrizione;
     @Column(name="note")
     private String note;
-    
+
+    @Transient
+    private String codicefascicolo;
+
     public Long getId() {
         return id;
     }
@@ -88,6 +91,13 @@ public class Fascicolo implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getCodicefascicolo() {
+        return this.getCategoria() + "-" + this.getClasse() + "-" + this.getFascicolo();
+    }
+
+    public void setCodicefascicolo(String codicefascicolo) {
     }
 
     @Override
