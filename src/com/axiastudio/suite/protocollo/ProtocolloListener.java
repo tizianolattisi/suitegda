@@ -98,23 +98,27 @@ public class ProtocolloListener {
 
     private void convalide(Protocollo protocollo, Utente autenticato, Date today){
         if( protocollo.getConvalidaattribuzioni() &&
-                (protocollo.getEsecutoreconvalidaattribuzioni() == null || protocollo.getEsecutoreconvalidaattribuzioni().length() == 0)){
+                (protocollo.getEsecutoreconvalidaattribuzioni() == null || protocollo.getEsecutoreconvalidaattribuzioni().length() == 0) &&
+                protocollo.getDataconvalidaattribuzioni() == null ){
             protocollo.setEsecutoreconvalidaattribuzioni(autenticato.getLogin());
             protocollo.setDataconvalidaattribuzioni(today);
         }
         if( protocollo.getConvalidaprotocollo()&&
-                (protocollo.getEsecutoreconvalidaprotocollo() == null || protocollo.getEsecutoreconvalidaprotocollo().length() == 0)){
+                (protocollo.getEsecutoreconvalidaprotocollo() == null || protocollo.getEsecutoreconvalidaprotocollo().length() == 0) &&
+                protocollo.getDataconvalidaprotocollo() == null ){
             protocollo.setEsecutoreconvalidaprotocollo(autenticato.getLogin());
             protocollo.setDataconvalidaprotocollo(today);
             // numero protocollo
         }
         if( protocollo.getConsolidadocumenti()&&
-                (protocollo.getEsecutoreconsolidadocumenti() == null || protocollo.getEsecutoreconsolidadocumenti().length() == 0)){
+                (protocollo.getEsecutoreconsolidadocumenti() == null || protocollo.getEsecutoreconsolidadocumenti().length() == 0) &&
+                protocollo.getDataconsolidadocumenti() == null ){
             protocollo.setEsecutoreconsolidadocumenti(autenticato.getLogin());
             protocollo.setDataconsolidadocumenti(today);
         }
         if( protocollo.getSpedito() &&
-                (protocollo.getEsecutorespedizione() == null || protocollo.getEsecutorespedizione().length() == 0)){
+                (protocollo.getEsecutorespedizione() == null || protocollo.getEsecutorespedizione().length() == 0) &&
+                protocollo.getDataspedizione() == null ){
             protocollo.setEsecutorespedizione(autenticato.getLogin());
             protocollo.setDataspedizione(today);
         }

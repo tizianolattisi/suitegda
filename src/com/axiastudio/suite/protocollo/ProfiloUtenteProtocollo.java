@@ -94,7 +94,7 @@ public class ProfiloUtenteProtocollo {
      */
     public Boolean inSportelloOAttribuzioneR(){
         List intersezione = new ArrayList(attribuzioni);
-        intersezione.retainAll(ufficiUtente);
+        intersezione.retainAll(ufficiRiservatoUtente);
         return ufficiRiservatoUtente.contains(sportello) || intersezione.size()>0;
     }
 
