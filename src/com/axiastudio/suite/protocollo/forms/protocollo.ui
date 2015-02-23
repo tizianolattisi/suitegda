@@ -387,6 +387,11 @@
              <string>ATTO_GIUDIZIARIO</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>CORRIERE</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item>
