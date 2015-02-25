@@ -83,10 +83,10 @@
           <string>servizioalcittadino</string>
          </property>
          <property name="columns" stdset="0">
-          <string>&lt;servizioalcittadino&gt;</string>
+          <string>&lt;servizioalcittadino&gt;,attivo</string>
          </property>
          <property name="headers" stdset="0">
-          <string>servizioalcittadino</string>
+          <string>servizioalcittadino,attivo</string>
          </property>
         </widget>
        </item>

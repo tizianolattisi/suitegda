@@ -100,62 +100,53 @@ public class TicketApplet extends QDialog {
         Database db = (Database) Register.queryUtility(IDatabase.class);
 
         // numero di sportelli agganciati ad ogni servizio
-        Store servizisportelli = db.createController(ServizioAlCittadinoSportello.class).createFullStore();
-        Map<ServizioAlCittadino, Integer> nSportelli = new HashMap<>();
-        for( Object obj: servizisportelli ){
+        Store scscTutti = db.createController(ServizioAlCittadinoSportello.class).createFullStore();
+        Map<ServizioAlCittadino, Integer> ns = new HashMap<>();
+        for( Object obj: scscTutti ){
+
             ServizioAlCittadinoSportello scs = (ServizioAlCittadinoSportello) obj;
-            if( !nSportelli.keySet().contains(scs.getServizioalcittadino()) ){
-                nSportelli.put(scs.getServizioalcittadino(), 1);
-            } else {
-                nSportelli.put(scs.getServizioalcittadino(), nSportelli.get(scs.getServizioalcittadino())+1);
+            if (!ns.keySet().contains(scs.getServizioalcittadino())) {
+                ns.put(scs.getServizioalcittadino(), 0);
+            }
+            if( scs.getAttivo() ){
+                ns.put(scs.getServizioalcittadino(), ns.get(scs.getServizioalcittadino()) + 1);
             }
         }
 
+        System.out.println(ns);
+
         QDialog dialog = new QDialog(this);
         QVBoxLayout layout = new QVBoxLayout(dialog);
-        Store servizi = db.createController(ServizioAlCittadino.class).createFullStore();
         List<QCheckBox> checkBoxes = new ArrayList<>();
-        for( Object obj: servizi ){
-            ServizioAlCittadino servizio = (ServizioAlCittadino) obj;
+
+        List<ServizioAlCittadinoSportello> scsc = new ArrayList<>(sportello.getServizioalcittadinosportelloCollection());
+
+        for( ServizioAlCittadinoSportello scs: scsc){
+            ServizioAlCittadino servizio = scs.getServizioalcittadino();
             QCheckBox checkBox = new QCheckBox();
             checkBox.setText(servizio.getDescrizione());
-            if( sportello.getServizialcittadino().contains(servizio) ){
+            if( scs.getAttivo() ) {
                 checkBox.setCheckState(Qt.CheckState.Checked);
-                // puoi rimuovere un servizio solo se non se l'unico sportello che lo serve
-                checkBox.setEnabled(nSportelli.get(servizio)>1);
+                checkBox.setEnabled(ns.get(servizio)>1);
+            } else {
+                checkBox.setCheckState(Qt.CheckState.Unchecked);
             }
             layout.addWidget(checkBox);
             checkBoxes.add(checkBox);
         }
+
         QPushButton button = new QPushButton();
         button.setText("Conferma");
         button.clicked.connect(dialog, "accept()");
         layout.addWidget(button);
         int exec = dialog.exec();
         if( exec == 1 ){
-            Collection<ServizioAlCittadinoSportello> servizioalcittadinosportelloCollection = sportello.getServizioalcittadinosportelloCollection();
-            for( int i=0; i<servizi.size(); i++ ){
-                QCheckBox checkBox = checkBoxes.get(i);
-                ServizioAlCittadino servizio = (ServizioAlCittadino) servizi.get(i);
-                if( Qt.CheckState.Checked.equals(checkBox.checkState()) ){
-                    if( !sportello.getServizialcittadino().contains(servizio) ){
-                        ServizioAlCittadinoSportello scs = new ServizioAlCittadinoSportello();
-                        scs.setServizioalcittadino(servizio);
-                        servizioalcittadinosportelloCollection.add(scs);
-                    }
-                } else {
-                    if( sportello.getServizialcittadino().contains(servizio) ){
-                        for( Object obj: servizioalcittadinosportelloCollection ){
-                            if( ((ServizioAlCittadinoSportello) obj).getServizioalcittadino().equals(servizio) ){
-                                servizioalcittadinosportelloCollection.remove(obj);
-                                break;
-                            }
-                        }
-                    }
-                }
+
+            for( int i=0; i<scsc.size(); i++ ){
+                scsc.get(i).setAttivo(Qt.CheckState.Checked.equals(checkBoxes.get(i).checkState()));
             }
-            sportello.setServizioalcittadinosportelloCollection(servizioalcittadinosportelloCollection);
             db.createController(Sportello.class).commit(sportello);
+
         }
     }
 
