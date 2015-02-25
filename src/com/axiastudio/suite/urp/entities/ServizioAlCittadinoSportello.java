@@ -27,6 +27,10 @@ public class ServizioAlCittadinoSportello implements Serializable {
     @ManyToOne
     private ServizioAlCittadino servizioalcittadino;
 
+    @Column(name="attivo")
+    private Boolean attivo=false;
+
+
     public Long getId() {
         return id;
     }
@@ -49,6 +53,14 @@ public class ServizioAlCittadinoSportello implements Serializable {
 
     public void setServizioalcittadino(ServizioAlCittadino servizioAlCittadino) {
         this.servizioalcittadino = servizioAlCittadino;
+    }
+
+    public Boolean getAttivo() {
+        return attivo;
+    }
+
+    public void setAttivo(Boolean attivo) {
+        this.attivo = attivo;
     }
 
     @Override

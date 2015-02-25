@@ -1615,7 +1615,8 @@ ADD CONSTRAINT servizioalcittadino_pkey PRIMARY KEY (id);
 CREATE TABLE servizioalcittadinosportello (
     id BIGSERIAL NOT NULL,
     servizioalcittadino bigint,
-    sportello bigint
+    sportello bigint,
+    attivo boolean NOT NULL DEFAULT true
 );
 ALTER TABLE urp.servizioalcittadinosportello OWNER TO postgres;
 ALTER TABLE ONLY servizioalcittadinosportello
@@ -1624,6 +1625,8 @@ ALTER TABLE ONLY servizioalcittadinosportello
 ADD CONSTRAINT fk_servizioalcittadinosportello_sportello FOREIGN KEY (sportello) REFERENCES urp.sportello(id);
 ALTER TABLE ONLY servizioalcittadinosportello
 ADD CONSTRAINT fk_servizioalcittadinosportello_servizioalcittadino FOREIGN KEY (servizioalcittadino) REFERENCES urp.servizioalcittadino(id);
+ALTER TABLE ONLY servizioalcittadinosportello
+ADD CONSTRAINT unique_servizioalcittadino_sportello UNIQUE (servizioalcittadino, sportello);
 
 CREATE TABLE ticket (
     id bigserial NOT NULL,
