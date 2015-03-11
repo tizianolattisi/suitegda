@@ -335,17 +335,20 @@ public class TicketApplet extends QDialog {
         TypedQuery<Ticket> query = em.createQuery(cq);
         List<Ticket> resultList = query.getResultList();
         for( Ticket ticket: resultList ){
-            for( ServizioAlCittadino sevizio: sportello.getServizialcittadino() ){
-                if( ticket.getServizioalcittadino().equals(sevizio) ){
-                    ticket.setChiamato(Boolean.TRUE);
-                    ticket.setSportello(sportello);
-                    ticket.setTschiamato(new Date());
-                    Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-                    ticket.setUtente(autenticato);
-                    em.getTransaction().begin();
-                    em.merge(ticket);
-                    em.getTransaction().commit();
-                    return ticket;
+            for( ServizioAlCittadinoSportello scs: sportello.getServizioalcittadinosportelloCollection() ){
+                if( scs.getAttivo() ) {
+                    ServizioAlCittadino servizio = scs.getServizioalcittadino();
+                    if (ticket.getServizioalcittadino().equals(servizio)) {
+                        ticket.setChiamato(Boolean.TRUE);
+                        ticket.setSportello(sportello);
+                        ticket.setTschiamato(new Date());
+                        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+                        ticket.setUtente(autenticato);
+                        em.getTransaction().begin();
+                        em.merge(ticket);
+                        em.getTransaction().commit();
+                        return ticket;
+                    }
                 }
             }
         }
