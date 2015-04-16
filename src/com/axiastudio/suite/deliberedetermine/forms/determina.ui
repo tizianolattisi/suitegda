@@ -29,172 +29,10 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_6" columnstretch="0,0,0,0,0">
+   <layout class="QGridLayout" name="gridLayout_6" columnstretch="0,0,0,0,1">
     <property name="margin">
      <number>4</number>
     </property>
-    <property name="spacing">
-     <number>4</number>
-    </property>
-    <item row="3" column="0" rowspan="2">
-     <widget class="QGroupBox" name="groupBox_10">
-      <property name="title">
-       <string>Entrata/spesa</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <property name="margin">
-        <number>4</number>
-       </property>
-       <item row="2" column="1">
-        <widget class="QSpinBox" name="spinBox_finoAl">
-         <property name="frame">
-          <bool>true</bool>
-         </property>
-         <property name="keyboardTracking">
-          <bool>true</bool>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>2040</number>
-         </property>
-         <property name="value">
-          <number>0</number>
-         </property>
-         <property name="column" stdset="0">
-          <string>finoAdAnno</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>false</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="text">
-          <string>Fino al</string>
-         </property>
-         <property name="buddy">
-          <cstring>spinBox_finoAl</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QCheckBox" name="checkBox_pluriennale">
-         <property name="text">
-          <string>pluriennale</string>
-         </property>
-         <property name="column" stdset="0">
-          <string>pluriennale</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="2">
-     <widget class="QGroupBox" name="groupBox_6">
-      <property name="title">
-       <string>Pratica</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <property name="margin">
-        <number>4</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Id pratica</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="column" stdset="0">
-          <string>idpratica</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>false</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Codice interno</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_2</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_2">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="column" stdset="0">
-          <string>codiceinterno</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Pratica princ.</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_4</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEdit_4">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="column" stdset="0">
-          <string>praticaprincipale</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>false</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="0" column="2">
      <widget class="QGroupBox" name="groupBox_7">
       <property name="title">
@@ -320,17 +158,73 @@
       </layout>
      </widget>
     </item>
-    <item row="2" column="4" rowspan="4">
-     <widget class="QGroupBox" name="groupBox_8">
+    <item row="0" column="3">
+     <widget class="QGroupBox" name="groupBox_11">
       <property name="title">
-       <string>Procedimento</string>
+       <string>Pubblicabile</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_10">
+      <layout class="QGridLayout" name="gridLayout_4">
+       <property name="margin">
+        <number>4</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QComboBox" name="comboBox_pubblicabile">
+         <property name="minimumSize">
+          <size>
+           <width>103</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="column" stdset="0">
+          <string>Pubblicabile</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>false</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>PUBBLICABILE</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SOLO_TITOLO</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>NON_PUBBLICABILE</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="4" rowspan="2">
+     <widget class="QGroupBox" name="groupBox_5">
+      <property name="title">
+       <string>Oggetto</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
        <property name="margin">
         <number>4</number>
        </property>
        <item>
-        <widget class="QListWidget" name="procedimento"/>
+        <widget class="QTextEdit" name="textEdit">
+         <property name="column" stdset="0">
+          <string>oggetto</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -468,158 +362,161 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="3">
-     <widget class="QGroupBox" name="groupBox_11">
-      <property name="title">
-       <string>Pubblicabile</string>
+    <item row="1" column="1" rowspan="2" colspan="3">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <layout class="QGridLayout" name="gridLayout_4">
+      <property name="title">
+       <string>Servizi</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_7">
        <property name="margin">
         <number>4</number>
        </property>
+       <property name="spacing">
+        <number>3</number>
+       </property>
        <item row="0" column="0">
-        <widget class="QComboBox" name="comboBox_pubblicabile">
-         <property name="minimumSize">
-          <size>
-           <width>103</width>
-           <height>0</height>
-          </size>
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_servizi">
+         <property name="entity" stdset="0">
+          <string>.servizioDeterminaCollection</string>
+         </property>
+         <property name="reference" stdset="0">
+          <string>servizio</string>
+         </property>
+         <property name="columns" stdset="0">
+          <string>&gt;principale&lt;,&lt;servizio&gt;</string>
+         </property>
+         <property name="headers" stdset="0">
+          <string>,Servizio</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="searchfields" stdset="0">
+          <string>servizio.descrizione</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Responsabile procedimento</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_RefPolitico</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_RespProcedimento">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
          <property name="column" stdset="0">
-          <string>Pubblicabile</string>
+          <string>responsabileprocedimento</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Referente politico</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_RefPolitico</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLineEdit" name="lineEdit_RefPolitico">
+         <property name="column" stdset="0">
+          <string>referentePolitico</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="4" rowspan="4">
+     <widget class="QGroupBox" name="groupBox_8">
+      <property name="title">
+       <string>Procedimento</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <property name="margin">
+        <number>4</number>
+       </property>
+       <item>
+        <widget class="QListWidget" name="procedimento"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0" rowspan="2">
+     <widget class="QGroupBox" name="groupBox_10">
+      <property name="title">
+       <string>Entrata/spesa</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <property name="margin">
+        <number>4</number>
+       </property>
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="spinBox_finoAl">
+         <property name="frame">
+          <bool>true</bool>
+         </property>
+         <property name="keyboardTracking">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>2040</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="column" stdset="0">
+          <string>finoAdAnno</string>
          </property>
          <property name="search" stdset="0">
           <bool>false</bool>
          </property>
          <property name="export" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
-         <item>
-          <property name="text">
-           <string>PUBBLICABILE</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>SOLO_TITOLO</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>NON_PUBBLICABILE</string>
-          </property>
-         </item>
         </widget>
        </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="4" column="1" colspan="3">
-     <widget class="QGroupBox" name="groupBox_3">
-      <property name="title">
-       <string>Visto di bilancio</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <property name="spacing">
-        <number>4</number>
-       </property>
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>2</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
-        <number>2</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label_vistoBilancio">
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
          <property name="text">
-          <string>-</string>
+          <string>Fino al</string>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_finoAl</cstring>
          </property>
         </widget>
        </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="5" column="1" colspan="3">
-     <widget class="QGroupBox" name="groupBox_9">
-      <property name="title">
-       <string>Visto di bilancio negato</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <property name="spacing">
-        <number>4</number>
-       </property>
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>2</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
-        <number>2</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label_vistoBilancioNegato">
+       <item row="0" column="0" colspan="2">
+        <widget class="QCheckBox" name="checkBox_pluriennale">
          <property name="text">
-          <string>-</string>
+          <string>pluriennale</string>
          </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="3" column="1" colspan="3">
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="title">
-       <string>Visto responsabile</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="spacing">
-        <number>4</number>
-       </property>
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>2</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
-        <number>3</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label_vistoResponsabile">
-         <property name="text">
-          <string>-</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="4" rowspan="2">
-     <widget class="QGroupBox" name="groupBox_5">
-      <property name="title">
-       <string>Oggetto</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_7">
-       <property name="margin">
-        <number>4</number>
-       </property>
-       <item>
-        <widget class="QTextEdit" name="textEdit">
          <property name="column" stdset="0">
-          <string>oggetto</string>
+          <string>pluriennale</string>
          </property>
          <property name="search" stdset="0">
           <bool>true</bool>
@@ -648,10 +545,10 @@
            <string>.movimentoDeterminaCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;tipoMovimento&lt;,&gt;eu&lt;,annoEsercizio,&lt;capitolo&gt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo,codiceCup,codiceCig,descrizioneCespite,descrizioneBeneficiario</string>
+           <string>&gt;tipoMovimento&lt;,&gt;eu&lt;,annoEsercizio,&lt;capitolo&gt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo,codiceCup,codiceCig,descrizioneCespite,descrizioneBeneficiario,modalitaindividuazionebeneficiario,normatitoloattribuzione,albobeneficiari</string>
           </property>
           <property name="headers" stdset="0">
-           <string>,,esercizio,capitolo,impegno,sub,anno,importo,CUP,CIG,cespite,soggetto</string>
+           <string>,,esercizio,capitolo,impegno,sub,anno,importo,CUP,CIG,cespite,soggetto,modalità indiv.,norma/titolo,albo beneficiari</string>
           </property>
           <property name="sortcolumn" stdset="0">
            <number>2</number>
@@ -720,57 +617,183 @@
       </widget>
      </widget>
     </item>
-    <item row="1" column="1" rowspan="2" colspan="3">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
+    <item row="3" column="1" colspan="3">
+     <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
-       <string>Servizi</string>
+       <string>Visto responsabile</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>2</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
+        <number>3</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_vistoResponsabile">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="3">
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>Visto di bilancio</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>2</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
+        <number>2</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_vistoBilancio">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="5" column="1" colspan="3">
+     <widget class="QGroupBox" name="groupBox_9">
+      <property name="title">
+       <string>Visto di bilancio negato</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>2</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
+        <number>2</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_vistoBilancioNegato">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupBox_6">
+      <property name="title">
+       <string>Pratica</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
        <property name="margin">
         <number>4</number>
        </property>
-       <item>
-        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_servizi">
-         <property name="entity" stdset="0">
-          <string>.servizioDeterminaCollection</string>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Id pratica</string>
          </property>
-         <property name="reference" stdset="0">
-          <string>servizio</string>
+         <property name="buddy">
+          <cstring>lineEdit</cstring>
          </property>
-         <property name="columns" stdset="0">
-          <string>&gt;principale&lt;,&lt;servizio&gt;</string>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="enabled">
+          <bool>false</bool>
          </property>
-         <property name="headers" stdset="0">
-          <string>,Servizio</string>
+         <property name="column" stdset="0">
+          <string>idpratica</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Codice interno</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_2</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>codiceinterno</string>
          </property>
          <property name="search" stdset="0">
           <bool>true</bool>
          </property>
-         <property name="searchfields" stdset="0">
-          <string>servizio.descrizione</string>
+         <property name="export" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="label_3">
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_9">
          <property name="text">
-          <string>Referente politico</string>
+          <string>Pratica princ.</string>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_RefPolitico</cstring>
+          <cstring>lineEdit_4</cstring>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_RefPolitico">
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_4">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="column" stdset="0">
-          <string>referentePolitico</string>
+          <string>praticaprincipale</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -782,14 +805,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
-   <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
    <extends>QDateEdit</extends>
    <header>pypapidateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
+   <extends>QTableView</extends>
+   <header>pypapitableview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

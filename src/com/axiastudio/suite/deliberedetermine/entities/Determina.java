@@ -21,6 +21,7 @@ import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaListener;
@@ -116,6 +117,9 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     @JoinColumn(name = "progetto", referencedColumnName = "id")
     @ManyToOne
     private Progetto progetto;
+    @JoinColumn(name = "responsabileprocedimento", referencedColumnName = "id")
+    @ManyToOne
+    private Soggetto responsabileprocedimento;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -370,6 +374,14 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
 
     public void setProgetto(Progetto progetto) {
         this.progetto = progetto;
+    }
+
+    public Soggetto getResponsabileprocedimento() {
+        return responsabileprocedimento;
+    }
+
+    public void setResponsabileprocedimento(Soggetto responsabileprocedimento) {
+        this.responsabileprocedimento = responsabileprocedimento;
     }
 
     public String getNumeroprotocollo() {

@@ -16,7 +16,10 @@
  */
 package com.axiastudio.suite.deliberedetermine.forms;
 
+import com.axiastudio.pypapi.db.*;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.SuiteUiUtil;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
@@ -39,12 +42,17 @@ import com.axiastudio.suite.pratiche.entities.Visto;
 import com.axiastudio.suite.pratiche.forms.FormDettaglio;
 import com.axiastudio.suite.procedimenti.SimpleWorkFlow;
 import com.axiastudio.suite.procedimenti.SimpleWorkflowDialog;
+import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 
+import javax.persistence.EntityManager;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -69,11 +77,21 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         PyPaPiTableView tableViewServizi = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_servizi");
         tableViewServizi.entityInserted.connect(this, "servizioInserito(Object)");
         tableViewServizi.entityRemoved.connect(this, "servizioRimosso(Object)");
+        tableViewServizi.entityUpdated.connect(this, "servizioModificato(Object)");
 
         PyPaPiTableView tableView_impegni = (PyPaPiTableView) findChild(PyPaPiTableView.class, "tableView_impegni");
         tableView_impegni.setItemDelegate(new Delegate(tableView_impegni));
         PyPaPiTableView tableView_spese = (PyPaPiTableView) findChild(PyPaPiTableView.class, "tableView_spese");
         tableView_spese.setItemDelegate(new Delegate(tableView_spese));
+
+        try {
+            Method storeFactory = this.getClass().getMethod("storeResponsabileProcedimento");
+            Register.registerUtility(storeFactory, IStoreFactory.class, "Responsabileprocedimento");
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(FormDetermina.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(FormDetermina.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -95,6 +113,13 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         this.determinaToolbar.actionByName("vistoLiquidazione").
                 setEnabled( this.determinaToolbar.actionByName("vistoLiquidazione").isEnabled() &&
                         determina.getDiliquidazione() && vistoLiquidazione == null );
+
+        Store store = storeResponsabileProcedimento();
+        PyPaPiComboBox cmbResponsabileProcedimento=
+                ((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_RespProcedimento"));
+        cmbResponsabileProcedimento.setLookupStore(store);
+        this.getColumn("Responsabileprocedimento").setLookupStore(store);
+        cmbResponsabileProcedimento.select(determina.getResponsabileprocedimento());
 
         Boolean modificaBloccata=Boolean.FALSE;
         if ( (!(determina.getDispesa() || determina.getDientrata() || determina.getSpesaimpegnoesistente()) &&
@@ -221,6 +246,52 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         }
     }
 
+    private void servizioModificato(Object obj) {
+        Store store = storeResponsabileProcedimento();
+        PyPaPiComboBox cmbResponsabileProcedimento=
+                ((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_RespProcedimento"));
+        cmbResponsabileProcedimento.setLookupStore(store);
+        this.getColumn("Responsabileprocedimento").setLookupStore(store);
+        if ( cmbResponsabileProcedimento.findData(determina.getResponsabileprocedimento()) > -1 ) {
+            cmbResponsabileProcedimento.select(determina.getResponsabileprocedimento());
+        } else {
+            determina.setResponsabileprocedimento(null);
+            cmbResponsabileProcedimento.select(null);
+        }
+    }
+
+    /*
+     * Uno store contenente i resp procedimento per il servizio principale ordinati x descrizione
+     */
+    public Store storeResponsabileProcedimento(){
+        List<Soggetto> respProcedimento = new ArrayList<Soggetto>();
+
+        if (this.getContext() == null || this.getContext().getCurrentEntity() == null) {
+            return new Store(respProcedimento);
+        }
+
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        if ( determina.getId() == null || determina.getServizioDeterminaCollection().isEmpty() ) {
+            return new Store(respProcedimento);
+        }
+
+        for (ServizioDetermina servizio: determina.getServizioDeterminaCollection()) {
+            if ( servizio.getPrincipale() ) {
+                Database db = (Database) Register.queryUtility(IDatabase.class);
+                Controller controller = db.createController(Delega.class);
+                EntityManager em = controller.getEntityManager();
+
+                String query = "SELECT u FROM Delega d JOIN d.utente u JOIN d.carica c JOIN d.servizio s ";
+                query = query + "WHERE s.id = " + servizio.getServizio().getId().toString() +
+                        " AND (d.fine IS NULL OR d.fine>current_timestamp) " +
+                        " AND c.codiceCarica='RESPONSABILE_BENEFICI_DENARO'";
+                for (Utente resp: em.createQuery(query, Utente.class).getResultList()) {
+                    respProcedimento.add((Soggetto) resp.getSoggetto());
+                }
+            }
+        }
+        return new Store(respProcedimento);
+    }
 
     /* XXX: codice simile a FormPratica */
     @Override

@@ -78,6 +78,12 @@ public class MovimentoDetermina implements Serializable {
     private String cespite;
     @Column(name="descrizionecespite")
     private String descrizioneCespite;
+    @Column(name="modalitaindividuazionebeneficiario")
+    private String modalitaindividuazionebeneficiario;
+    @Column(name="normatitoloattribuzione")
+    private String normatitoloattribuzione;
+    @Column(name="albobeneficiari")
+    private String albobeneficiari;
 
     public Long getId() {
         return id;
@@ -245,6 +251,30 @@ public class MovimentoDetermina implements Serializable {
 
     public void setDescrizioneCespite(String descrizioneCespite) {
         this.descrizioneCespite = descrizioneCespite;
+    }
+
+    public String getModalitaindividuazionebeneficiario() {
+        return modalitaindividuazionebeneficiario;
+    }
+
+    public void setModalitaindividuazionebeneficiario(String modalitaIndividuazioneBeneficiario) {
+        this.modalitaindividuazionebeneficiario = modalitaIndividuazioneBeneficiario;
+    }
+
+    public String getNormatitoloattribuzione() {
+        return normatitoloattribuzione;
+    }
+
+    public void setNormatitoloattribuzione(String normaTitoloAttribuzione) {
+        this.normatitoloattribuzione = normaTitoloAttribuzione;
+    }
+
+    public String getAlbobeneficiari() {
+        return albobeneficiari;
+    }
+
+    public void setAlbobeneficiari(String albobeneficiari) {
+        this.albobeneficiari = albobeneficiari;
     }
 
     @Override

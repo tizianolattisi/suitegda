@@ -1369,7 +1369,8 @@ CREATE TABLE determina (
     pubblicabile character varying,
     pluriennale boolean,
     finoadanno int,
-    progetto bigint
+    progetto bigint,
+    responsabileprocedimento bigint
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.determina OWNER TO postgres;
 ALTER TABLE ONLY determina
@@ -1384,6 +1385,8 @@ ALTER TABLE ONLY determina
       ADD CONSTRAINT fk_determina_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
 ALTER TABLE ONLY determina
       ADD CONSTRAINT fk_determina_progetto FOREIGN KEY (progetto) REFERENCES finanziaria.progetto(id);
+ALTER TABLE ONLY determina
+    ADD CONSTRAINT fk_determina_responsabileprocedimento FOREIGN KEY (responsabileprocedimento) REFERENCES anagrafiche.soggetto(id);
 
 CREATE TABLE serviziodetermina (
     id bigserial NOT NULL,
@@ -1436,7 +1439,10 @@ CREATE TABLE movimentodetermina (
     codicecup character varying(15),
     codicecig character varying(40),
     cespite  character varying(20),
-    descrizionecespite character varying(255)
+    descrizionecespite character varying(255),
+    modalitaindividuazionebeneficiario character varying(50),
+    normatitoloattribuzione character varying(50),
+    albobeneficiari character varying(50)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.movimentodetermina OWNER TO postgres;
 ALTER TABLE ONLY movimentodetermina
