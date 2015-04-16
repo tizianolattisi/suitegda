@@ -17,6 +17,8 @@
 package com.axiastudio.suite.anagrafiche.entities;
 
 import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,6 +29,7 @@ import java.util.Date;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 @Entity
+@EntityListeners({TimeStampedListener.class})
 @Table(schema="ANAGRAFICHE")
 @SequenceGenerator(name="genrelazionesoggetto", sequenceName="anagrafiche.relazionesoggetto_id_seq", initialValue=1, allocationSize=1)
 @NamedQuery(name="trovaReferenteSoggetto",
@@ -35,7 +38,7 @@ import java.util.Date;
                     "rs.soggetto.tipo!=:tipo AND rs.relazionato.tipo=:tipo AND " +
                     "(rs.datanascita IS NULL OR rs.datanascita<=:data) AND "+
                     "(rs.datacessazione IS NULL OR rs.datacessazione>=:data)")
-public class RelazioneSoggetto implements Serializable {
+public class RelazioneSoggetto implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genrelazionesoggetto")
@@ -55,8 +58,22 @@ public class RelazioneSoggetto implements Serializable {
     @Column(name="datacessazione")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datacessazione;
+    @Column(name="abilitatoweb")
+    private Boolean abilitatoweb=false;
     @Column(name="invertita")
     private Boolean invertita=false;
+
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
 
     public Long getId() {
         return id;
@@ -106,6 +123,14 @@ public class RelazioneSoggetto implements Serializable {
         this.datacessazione = datacessazione;
     }
 
+    public Boolean getAbilitatoweb() {
+        return abilitatoweb;
+    }
+
+    public void setAbilitatoweb(Boolean abilitatoweb) {
+        this.abilitatoweb = abilitatoweb;
+    }
+
     public Boolean getInvertita() {
         return invertita;
     }
@@ -146,6 +171,38 @@ public class RelazioneSoggetto implements Serializable {
 
     public void setPredicato(String predicato){
         // non deve fare nulla
+    }
+
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
+    }
+
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
+    }
+
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
 
     @Override

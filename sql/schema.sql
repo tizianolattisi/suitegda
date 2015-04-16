@@ -365,39 +365,78 @@ DROP SEQUENCE anagrafiche.zrelazionesoggetto_id_seq;
 
 -- la vista delle relazioni è una union delle relazioni reali "dritte" con quelle "girate"
 -- tre regole gestiscono insert/update/delete dalla vista alla tabella reale.
-CREATE VIEW relazionesoggetto AS
-        SELECT id, soggetto, relazione, relazionato, datanascita, datacessazione, abilitatoweb,
-            FALSE AS invertita
-        FROM zrelazionesoggetto
-    UNION
-        SELECT (-(id)::integer) AS id, relazionato AS soggetto, relazione,
-            soggetto AS relazionato, datanascita, datacessazione, abilitatoweb,
-            TRUE AS invertita
-        FROM zrelazionesoggetto;
+CREATE OR REPLACE VIEW anagrafiche.relazionesoggetto AS
+ SELECT zrelazionesoggetto.id,
+    zrelazionesoggetto.soggetto,
+    zrelazionesoggetto.relazione,
+    zrelazionesoggetto.relazionato,
+    zrelazionesoggetto.datanascita,
+    zrelazionesoggetto.datacessazione,
+    zrelazionesoggetto.abilitatoweb,
+    false AS invertita,
+    zrelazionesoggetto.rec_creato,
+    zrelazionesoggetto.rec_creato_da,
+    zrelazionesoggetto.rec_modificato,
+    zrelazionesoggetto.rec_modificato_da
+   FROM anagrafiche.zrelazionesoggetto
+UNION
+ SELECT - zrelazionesoggetto.id::integer AS id,
+    zrelazionesoggetto.relazionato AS soggetto,
+    zrelazionesoggetto.relazione,
+    zrelazionesoggetto.soggetto AS relazionato,
+    zrelazionesoggetto.datanascita,
+    zrelazionesoggetto.datacessazione,
+    zrelazionesoggetto.abilitatoweb,
+    true AS invertita,
+    zrelazionesoggetto.rec_creato,
+    zrelazionesoggetto.rec_creato_da,
+    zrelazionesoggetto.rec_modificato,
+    zrelazionesoggetto.rec_modificato_da
+   FROM anagrafiche.zrelazionesoggetto;
+ALTER TABLE anagrafiche.relazionesoggetto
+  OWNER TO postgres;
 
 CREATE RULE relazionesoggetto_delete AS ON DELETE TO relazionesoggetto DO INSTEAD
 	DELETE FROM zrelazionesoggetto
 	WHERE zrelazionesoggetto.id::integer = abs(old.id);
 
-CREATE RULE relazionesoggetto_insert AS ON INSERT TO relazionesoggetto DO INSTEAD
-	INSERT INTO zrelazionesoggetto (soggetto, relazione, relazionato, datanascita, datacessazione, abilitatoweb)
-            VALUES (new.soggetto, new.relazione, new.relazionato, new.datanascita, new.datacessazione, new.abilitatoweb)
-        RETURNING zrelazionesoggetto.id, zrelazionesoggetto.soggetto,
-            zrelazionesoggetto.relazione, zrelazionesoggetto.relazionato,
-            zrelazionesoggetto.datanascita, zrelazionesoggetto.datacessazione, zrelazionesoggetto.abilitatoweb, FALSE;
+CREATE OR REPLACE RULE relazionesoggetto_insert AS
+    ON INSERT TO anagrafiche.relazionesoggetto DO INSTEAD
+  INSERT INTO anagrafiche.zrelazionesoggetto (soggetto, relazione, relazionato, datanascita, datacessazione, abilitatoweb,
+    rec_creato, rec_creato_da, rec_modificato, rec_modificato_da)
+  VALUES (new.soggetto, new.relazione, new.relazionato, new.datanascita, new.datacessazione, new.abilitatoweb,
+    new.rec_creato, new.rec_creato_da, new.rec_modificato, new.rec_modificato_da)
+  RETURNING zrelazionesoggetto.id,
+    zrelazionesoggetto.soggetto,
+    zrelazionesoggetto.relazione,
+    zrelazionesoggetto.relazionato,
+    zrelazionesoggetto.datanascita,
+    zrelazionesoggetto.datacessazione,
+    zrelazionesoggetto.abilitatoweb,
+    false AS bool,
+    zrelazionesoggetto.rec_creato,
+    zrelazionesoggetto.rec_creato_da,
+    zrelazionesoggetto.rec_modificato,
+    zrelazionesoggetto.rec_modificato_da;
 
 CREATE OR REPLACE RULE relazionesoggetto_update AS
     ON UPDATE TO anagrafiche.relazionesoggetto DO INSTEAD nothing; 
 
 CREATE OR REPLACE RULE relazionesoggetto_update_dritta AS
-    ON UPDATE TO anagrafiche.relazionesoggetto WHERE new.invertita=false DO 
-    UPDATE anagrafiche.zrelazionesoggetto SET soggetto=new.soggetto, relazione=new.relazione, relazionato=new.relazionato, datanascita=new.datanascita, 	datacessazione=new.datacessazione, abilitatoweb=new.abilitatoweb
-    WHERE zrelazionesoggetto.id::integer = abs(old.id);
+    ON UPDATE TO anagrafiche.relazionesoggetto
+   WHERE new.invertita = false DO
+  UPDATE anagrafiche.zrelazionesoggetto SET soggetto = new.soggetto, relazione = new.relazione, relazionato = new.relazionato,
+    datanascita = new.datanascita, datacessazione = new.datacessazione, abilitatoweb = new.abilitatoweb,
+    rec_creato = new.rec_creato, rec_creato_da = new.rec_creato_da, rec_modificato = new.rec_modificato, rec_modificato_da = new.rec_modificato_da
+  WHERE zrelazionesoggetto.id::integer = abs(old.id);
 
 CREATE OR REPLACE RULE relazionesoggetto_update_invertita AS
-    ON UPDATE TO anagrafiche.relazionesoggetto WHERE new.invertita DO 
-    UPDATE anagrafiche.zrelazionesoggetto SET soggetto=new.relazionato, relazione=new.relazione, relazionato=new.soggetto, datanascita=new.datanascita, 	datacessazione=new.datacessazione, abilitatoweb=new.abilitatoweb
-    WHERE zrelazionesoggetto.id::integer = abs(old.id);
+    ON UPDATE TO anagrafiche.relazionesoggetto
+   WHERE new.invertita DO
+  UPDATE anagrafiche.zrelazionesoggetto SET soggetto = new.relazionato, relazione = new.relazione, relazionato = new.soggetto,
+    datanascita = new.datanascita, datacessazione = new.datacessazione, abilitatoweb = new.abilitatoweb,
+    rec_creato = new.rec_creato, rec_creato_da = new.rec_creato_da, rec_modificato = new.rec_modificato, rec_modificato_da = new.rec_modificato_da
+  WHERE zrelazionesoggetto.id::integer = abs(old.id);
 
 
 CREATE TABLE indirizzo (
