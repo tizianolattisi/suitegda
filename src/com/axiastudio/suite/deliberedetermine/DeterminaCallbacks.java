@@ -84,19 +84,24 @@ public class DeterminaCallbacks {
         }
 
         // Una sola attribuzione in via principale
-        int nrAttribuzioniPrincipali = 0;
-        for( UfficioDetermina ufficioDetermina: determina.getUfficioDeterminaCollection() ){
-            if( ufficioDetermina.getPrincipale() ) {
-                nrAttribuzioniPrincipali += 1;
-            }
-        }
-        if( nrAttribuzioniPrincipali == 0 ){
+        if (determina.getUfficioDeterminaCollection() == null) {
             msg += "E' necessario impostare un'attribuzione principale.\n";
             res = false;
-        }
-        if( nrAttribuzioniPrincipali > 1 ){
-            msg += "Non si può impostare più di un'attribuzione principale.\n";
-            res = false;
+        } else {
+            int nrAttribuzioniPrincipali = 0;
+            for (UfficioDetermina ufficioDetermina : determina.getUfficioDeterminaCollection()) {
+                if (ufficioDetermina.getPrincipale()) {
+                    nrAttribuzioniPrincipali += 1;
+                }
+            }
+            if (nrAttribuzioniPrincipali == 0) {
+                msg += "E' necessario impostare un'attribuzione principale.\n";
+                res = false;
+            }
+            if (nrAttribuzioniPrincipali > 1) {
+                msg += "Non si può impostare più di un'attribuzione principale.\n";
+                res = false;
+            }
         }
 
         // imposto il responsabile
