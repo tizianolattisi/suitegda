@@ -40,6 +40,8 @@ public class Servizio implements Serializable {
     private Ufficio ufficio;
     @Column(name="referentepolitico")
     private String referentepolitico;
+    @Column(name="responsabileprocedura")
+    private String responsabileprocedura;
 
 
     public Long getId() {
@@ -72,6 +74,14 @@ public class Servizio implements Serializable {
 
     public void setReferentepolitico(String referentepolitico) {
         this.referentepolitico = referentepolitico;
+    }
+
+    public String getResponsabileprocedura() {
+        return responsabileprocedura;
+    }
+
+    public void setResponsabileprocedura(String responsabileprocedura) {
+        this.responsabileprocedura = responsabileprocedura;
     }
 
     @Override

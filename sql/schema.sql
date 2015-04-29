@@ -487,7 +487,8 @@ CREATE TABLE servizio (
     id bigserial NOT NULL,
     descrizione character varying(1024),
     ufficio bigint,
-    referentepolitico character varying(100)
+    referentepolitico character varying(100),
+    responsabileprocedura character varying(10)
 );
 ALTER TABLE finanziaria.servizio OWNER TO postgres;
 ALTER TABLE ONLY servizio
