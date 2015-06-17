@@ -178,7 +178,7 @@ public class Configure {
         /* OOOPS (OpenOffice) */
 
         OoopsPlugin ooopsPlugin = new OoopsPlugin();
-        ooopsPlugin.setup(ooopsConnString);
+        ooopsPlugin.setup(ooopsConnString, Boolean.FALSE);
         Register.registerPlugin(ooopsPlugin, FormPratica.class);
         Register.registerPlugin(ooopsPlugin, Pratica.class);
         Register.registerPlugin(ooopsPlugin, FormDetermina.class);

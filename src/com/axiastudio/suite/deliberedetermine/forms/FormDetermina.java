@@ -35,6 +35,7 @@ import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
+import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
@@ -362,6 +363,19 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
                     QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
                     return;
                 }
+            }
+        }
+    }
+
+    private void apriOoops(){
+        if( determina == null || determina.getId() == null ){
+            return;
+        }
+        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
+        for(IPlugin plugin: plugins){
+            if( "Ooops".equals(plugin.getName()) ){
+                plugin.install(this, false);
+                ((OoopsPlugin) plugin).showForm();
             }
         }
     }

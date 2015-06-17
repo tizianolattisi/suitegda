@@ -50,7 +50,7 @@ public class OoopsPlugin implements IPlugin {
     private QWidget parent=null;
     private List<Template> templates = new ArrayList();
     private String connectionString;
-    private Boolean hidden;
+    private Boolean canInsertToolbar;
 
     @Override
     public void install(QWidget parent) {
@@ -64,14 +64,14 @@ public class OoopsPlugin implements IPlugin {
 
     @Override
     public void install(QWidget parent, Boolean addToolbar) {
-        if( Window.class.isInstance(parent) && addToolbar){
-            OoopsMenuBar bar = new OoopsMenuBar("Ooops", (Window) parent, this);
-            ((Window) parent).addToolBar(bar);
+        if( Window.class.isInstance(parent) ){
             this.parent = (Window) parent;
+            if( addToolbar && this.canInsertToolbar  ){
+                OoopsMenuBar bar = new OoopsMenuBar("Ooops", (Window) parent, this);
+                ((Window) parent).addToolBar(bar);
+            }
         } else if( Dialog.class.isInstance(parent) ){
             this.parent = (Dialog) parent;
-        } else {
-            this.parent = parent;
         }
     }
 
@@ -116,9 +116,9 @@ public class OoopsPlugin implements IPlugin {
         this.setup(connectionString, true);
     }
 
-    public void setup(String connectionString, Boolean hidden){
+    public void setup(String connectionString, Boolean canInsertToolbar){
         this.connectionString = connectionString;
-        this.hidden = hidden; // XXX: non gestito
+        this.canInsertToolbar = canInsertToolbar; // XXX: non gestito
     }
 
     public String getConnectionString() {

@@ -12,6 +12,9 @@ public class DeterminaToolbar extends PyPaPiToolBar {
 
     public DeterminaToolbar(String title, Window parent){
         super(title, parent);
+        this.insertButton("apriOoops", "Apri Ooops",
+                "classpath:com/axiastudio/suite/resources/ooops.png",
+                "Apre il generatore di documenti Ooops", parent);
         this.insertButton("apriDocumenti", "Apri documenti",
                 "classpath:com/axiastudio/suite/menjazo/resources/menjazo.png",
                 "Apre lo spazio documenti", parent);
