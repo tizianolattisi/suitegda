@@ -16,6 +16,9 @@
  */
 package com.axiastudio.suite.anagrafiche.entities;
 
+import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -25,9 +28,10 @@ import java.util.Date;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
+@EntityListeners({TimeStampedListener.class})
 @Table(schema="ANAGRAFICHE")
 @SequenceGenerator(name="genindirizzo", sequenceName="anagrafiche.indirizzo_id_seq", initialValue=1, allocationSize=1)
-public class Indirizzo implements Serializable {
+public class Indirizzo implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genindirizzo")
@@ -64,6 +68,18 @@ public class Indirizzo implements Serializable {
     @Column(name="datacessazione")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datacessazione;
+
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
 
 
     public Long getId() {
@@ -183,6 +199,38 @@ public class Indirizzo implements Serializable {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
+    }
+
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
+    }
+
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
+    }
+
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
 
     @Override
