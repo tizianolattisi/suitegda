@@ -58,6 +58,7 @@ public class ClientWindow extends QMainWindow {
     private QTableWidget tableWidget;
     private QAction parentAction = new QAction(this);
     private QAction openAction = new QAction(this);
+    private QAction openStampAction = new QAction(this);
     private QAction downloadAction = new QAction(this);
     private QAction uploadAction = new QAction(this);
     private QAction versionAction = new QAction(this);
@@ -116,8 +117,13 @@ public class ClientWindow extends QMainWindow {
         openAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/open.png"));
         openAction.setText("Apri");
         openAction.setToolTip("Scarica e apri il documento selezionato");
-        openAction.triggered.connect(this, "open()");
+        openAction.triggered.connect(this, "openWithoutStamp()");
         toolBar.addAction(openAction);
+        openStampAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/open.png"));
+        openStampAction.setText("Apri copia conforme");
+        openStampAction.setToolTip("Scarica e apri il documento selezionato come copia conforme");
+        openStampAction.triggered.connect(this, "openWithStamp()");
+        toolBar.addAction(openStampAction);
         downloadAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/download.png"));
         downloadAction.setText("Scarica");
         downloadAction.setToolTip("Scarica il documento selezionato");
@@ -191,7 +197,7 @@ public class ClientWindow extends QMainWindow {
         textEditDescription.textChanged.connect(this, "getDirty()");
         tableWidget.currentItemChanged.connect(this, "refreshProperties()");
         toolButtonSaveProperties.clicked.connect(this, "saveProperties()");
-        tableWidget.itemDoubleClicked.connect(this, "open()");
+        tableWidget.itemDoubleClicked.connect(this, "openWithoutStamp()");
     }
     
     private Boolean isDirty() {
@@ -307,8 +313,16 @@ public class ClientWindow extends QMainWindow {
         this.helper.setPath(newPath);
         this.refreshList();   
     }
+
+    private void openWithoutStamp(){
+        open(false);
+    }
+
+    private void openWithStamp(){
+        open(true);
+    }
     
-    private void open(){
+    private void open(Boolean stamp){
         int currentRow = getOrderedCurrentRow();
         if( currentRow < 0 ){
             return;
@@ -321,7 +335,21 @@ public class ClientWindow extends QMainWindow {
             String objectId = (String) (map).get("objectId");
             String fileName = (String) (map).get("contentStreamFileName");
             InputStream in = this.helper.getDocumentStream(objectId);
-            openAsTemporaryFile(fileName, in, objectId);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            if( stamp ){
+                try {
+                    IWas.create()
+                            .load(in)
+                            .offset(15f, 15f)
+                            .text("COPIA CONFORME", 12, 0f, 0f, 90f)
+                            .toStream(outputStream);
+                    openAsTemporaryFile(fileName, new ByteArrayInputStream(outputStream.toByteArray()), objectId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                openAsTemporaryFile(fileName, in, objectId);
+            }
         }
     }
 
@@ -349,7 +377,7 @@ public class ClientWindow extends QMainWindow {
         InputStream in = this.helper.getDocumentStream(objectId);
         openAsTemporaryFile(fileName, in, objectId);
     }
-    
+
     private void delete(){
         int currentRow = getOrderedCurrentRow();
         if( currentRow < 0 ){
