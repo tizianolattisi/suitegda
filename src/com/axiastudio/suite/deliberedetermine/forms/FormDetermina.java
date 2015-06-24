@@ -85,6 +85,9 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         PyPaPiTableView tableView_spese = (PyPaPiTableView) findChild(PyPaPiTableView.class, "tableView_spese");
         tableView_spese.setItemDelegate(new Delegate(tableView_spese));
 
+        ((QCheckBox) findChild(QCheckBox.class, "benioservizi")).clicked.connect(this, "beniOServizi(Boolean)");
+        ((QRadioButton) findChild(QRadioButton.class, "convenzioneattiva")).toggled.connect(this, "convenzioneAttiva(Boolean)");
+
         try {
             Method storeFactory = this.getClass().getMethod("storeResponsabileProcedimento");
             Register.registerUtility(storeFactory, IStoreFactory.class, "Responsabileprocedimento");
@@ -93,6 +96,14 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         } catch (SecurityException ex) {
             Logger.getLogger(FormDetermina.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void beniOServizi(Boolean b){
+        ((QGroupBox) findChild(QGroupBox.class, "groupBox_A")).setEnabled(b);
+    }
+
+    private void convenzioneAttiva(Boolean b){
+        ((QGroupBox) findChild(QGroupBox.class, "groupBox_B")).setEnabled(!b);
     }
 
     @Override
@@ -112,8 +123,8 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
                 ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_pluriennale")).isChecked());
 
         this.determinaToolbar.actionByName("vistoLiquidazione").
-                setEnabled( this.determinaToolbar.actionByName("vistoLiquidazione").isEnabled() &&
-                        determina.getDiliquidazione() && vistoLiquidazione == null );
+                setEnabled(this.determinaToolbar.actionByName("vistoLiquidazione").isEnabled() &&
+                        determina.getDiliquidazione() && vistoLiquidazione == null);
 
         Store store = storeResponsabileProcedimento();
         PyPaPiComboBox cmbResponsabileProcedimento=

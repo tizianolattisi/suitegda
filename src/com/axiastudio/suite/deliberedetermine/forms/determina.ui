@@ -469,34 +469,6 @@
        <property name="margin">
         <number>4</number>
        </property>
-       <item row="2" column="1">
-        <widget class="QSpinBox" name="spinBox_finoAl">
-         <property name="frame">
-          <bool>true</bool>
-         </property>
-         <property name="keyboardTracking">
-          <bool>true</bool>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>2040</number>
-         </property>
-         <property name="value">
-          <number>0</number>
-         </property>
-         <property name="column" stdset="0">
-          <string>finoAdAnno</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>false</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_6">
          <property name="styleSheet">
@@ -526,95 +498,35 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="spinBox_finoAl">
+         <property name="frame">
+          <bool>true</bool>
+         </property>
+         <property name="keyboardTracking">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>2040</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="column" stdset="0">
+          <string>finoAdAnno</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
-     </widget>
-    </item>
-    <item row="6" column="0" colspan="5">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Movimentazioni</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_8">
-        <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_impegni">
-          <property name="entity" stdset="0">
-           <string>.movimentoDeterminaCollection</string>
-          </property>
-          <property name="columns" stdset="0">
-           <string>&gt;tipoMovimento&lt;,&gt;eu&lt;,annoEsercizio,&lt;capitolo&gt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo,codiceCup,codiceCig,descrizioneCespite,descrizioneBeneficiario,modalitaindividuazionebeneficiario,normatitoloattribuzione,albobeneficiari</string>
-          </property>
-          <property name="headers" stdset="0">
-           <string>,,esercizio,capitolo,impegno,sub,anno,importo,CUP,CIG,cespite,soggetto,modalità indiv.,norma/titolo,albo beneficiari</string>
-          </property>
-          <property name="sortcolumn" stdset="0">
-           <number>2</number>
-          </property>
-          <property name="sortorder" stdset="0">
-           <string>&lt;</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>Protocollazione</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_9">
-        <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_protocollo">
-          <property name="entity" stdset="0">
-           <string>.ufficioDeterminaCollection</string>
-          </property>
-          <property name="columns" stdset="0">
-           <string>&gt;principale&lt;,&lt;ufficio&gt;</string>
-          </property>
-          <property name="reference" stdset="0">
-           <string>ufficio</string>
-          </property>
-          <property name="filters" stdset="0">
-           <string>attribuzione=true</string>
-          </property>
-          <property name="sortcolumn" stdset="0">
-           <number>0</number>
-          </property>
-          <property name="sortorder" stdset="0">
-           <string>&gt;</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_3">
-       <attribute name="title">
-        <string>Spesa su impegno esistente</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_8">
-        <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_spese">
-          <property name="entity" stdset="0">
-           <string>.spesaImpegnoEsistenteCollection</string>
-          </property>
-          <property name="columns" stdset="0">
-           <string>&gt;capitolo&lt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo</string>
-          </property>
-          <property name="headers" stdset="0">
-           <string>capitolo,impegno,sub,anno,importo</string>
-          </property>
-          <property name="sortcolumn" stdset="0">
-           <number>0</number>
-          </property>
-          <property name="sortorder" stdset="0">
-           <string>&lt;</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </item>
     <item row="3" column="1" colspan="3">
@@ -798,6 +710,396 @@
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="5">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>3</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Movimentazioni</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_impegni">
+          <property name="entity" stdset="0">
+           <string>.movimentoDeterminaCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;tipoMovimento&lt;,&gt;eu&lt;,annoEsercizio,&lt;capitolo&gt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo,codiceCup,codiceCig,descrizioneCespite,descrizioneBeneficiario,modalitaindividuazionebeneficiario,normatitoloattribuzione,albobeneficiari</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>,,esercizio,capitolo,impegno,sub,anno,importo,CUP,CIG,cespite,soggetto,modalità indiv.,norma/titolo,albo beneficiari</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>2</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&lt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Protocollazione</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_protocollo">
+          <property name="entity" stdset="0">
+           <string>.ufficioDeterminaCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;principale&lt;,&lt;ufficio&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>ufficio</string>
+          </property>
+          <property name="filters" stdset="0">
+           <string>attribuzione=true</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Spesa su impegno esistente</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_spese">
+          <property name="entity" stdset="0">
+           <string>.spesaImpegnoEsistenteCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&gt;capitolo&lt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>capitolo,impegno,sub,anno,importo</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&lt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Spending review</string>
+       </attribute>
+       <widget class="QComboBox" name="convenzione">
+        <property name="geometry">
+         <rect>
+          <x>650</x>
+          <y>0</y>
+          <width>104</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="column" stdset="0">
+         <string>convenzione</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>APAC</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>CONSIP</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QComboBox" name="mercato">
+        <property name="geometry">
+         <rect>
+          <x>650</x>
+          <y>30</y>
+          <width>104</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="column" stdset="0">
+         <string>mercato</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>ME-PAT</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>MePA</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QLineEdit" name="oggettoconvenzione">
+        <property name="geometry">
+         <rect>
+          <x>650</x>
+          <y>60</y>
+          <width>251</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="column" stdset="0">
+         <string>oggettoconvenzione</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="bando">
+        <property name="geometry">
+         <rect>
+          <x>650</x>
+          <y>90</y>
+          <width>251</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="column" stdset="0">
+         <string>bando</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="cpv">
+        <property name="geometry">
+         <rect>
+          <x>650</x>
+          <y>120</y>
+          <width>251</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="column" stdset="0">
+         <string>cpv</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_11">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>0</y>
+          <width>81</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>convenzione</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_12">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>60</y>
+          <width>131</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>oggetto convenzione</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_13">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>90</y>
+          <width>90</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>bando</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_14">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>120</y>
+          <width>90</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>cpv</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_15">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>30</y>
+          <width>90</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>mercato</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="motivoanomalia">
+        <property name="geometry">
+         <rect>
+          <x>650</x>
+          <y>150</y>
+          <width>251</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="column" stdset="0">
+         <string>motivoanomalia</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_16">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>150</y>
+          <width>90</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>*motivazioni</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="benioservizi">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>0</y>
+          <width>341</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>riguarda acquisti di beni o servizi</string>
+        </property>
+        <property name="column" stdset="0">
+         <string>benioservizi</string>
+        </property>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_A">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>491</width>
+          <height>77</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="margin">
+          <number>4</number>
+         </property>
+         <item>
+          <widget class="QRadioButton" name="convenzioneattiva">
+           <property name="text">
+            <string>è attiva una convenzione quadro dell'APAC / di Consip</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>convenzioneattiva</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="noadesioneconvenzione">
+           <property name="text">
+            <string>è attiva una convenzione alla quale non risulta possibile o conveniente aderire*</string>
+           </property>
+           <property name="column" stdset="0">
+            <string>noadesioneconvenzione</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="noconvenzioneattiva">
+           <property name="text">
+            <string>non sono attive convenzioni quadro dell'APAC / di Consip</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_B">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>100</y>
+          <width>491</width>
+          <height>71</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="margin">
+          <number>4</number>
+         </property>
+         <item>
+          <widget class="QRadioButton" name="cpvpresente">
+           <property name="text">
+            <string>è presente il cpv d'interesse</string>
+           </property>
+           <property name="column" stdset="0">
+            <string>cpvpresente</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="cpvnonfruibile">
+           <property name="text">
+            <string>è presente il cpv d'interesse, tuttavia non risulta possibile avvalersene</string>
+           </property>
+           <property name="column" stdset="0">
+            <string>cpvnonfruibile</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="nocpvpresente">
+           <property name="text">
+            <string>non è presente il cpv d'interesse</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
      </widget>
     </item>
    </layout>
