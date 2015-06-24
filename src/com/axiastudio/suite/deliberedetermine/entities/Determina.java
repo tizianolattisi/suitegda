@@ -121,6 +121,31 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     @ManyToOne
     private Soggetto responsabileprocedimento;
 
+    /* Spending review */
+    @Column(name="benioservizi")
+    private Boolean benioservizi =Boolean.FALSE;
+    @Column(name="convenzioneattiva")
+    private Boolean convenzioneattiva=Boolean.FALSE;
+    @Column(name="noadesioneconvenzione")
+    private Boolean noadesioneconvenzione=Boolean.FALSE;
+    @Column(name="cpvpresente")
+    private Boolean cpvpresente=Boolean.FALSE;
+    @Column(name="cpvnonfruibile")
+    private Boolean cpvnonfruibile=Boolean.FALSE;
+    @Enumerated(EnumType.STRING)
+    private Mercato mercato=Mercato.ME_PAT;
+    @Enumerated(EnumType.STRING)
+    private Convenzione convenzione=Convenzione.APAC;
+    @Column(name="oggettoconvenzione")
+    private String oggettoconvenzione;
+    @Column(name="bando")
+    private String bando;
+    @Column(name="cpv")
+    private String cpv;
+    @Column(name="motivoanomalia")
+    private String motivoanomalia;
+
+
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -504,6 +529,94 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
         return getVisto("FASE_LIQUIDAZIONE");
     }
     public void setVistoLiquidazione(Visto visto){  }
+
+    public Boolean getBenioservizi() {
+        return benioservizi;
+    }
+
+    public void setBenioservizi(Boolean nobenioservizi) {
+        this.benioservizi = nobenioservizi;
+    }
+
+    public Boolean getConvenzioneattiva() {
+        return convenzioneattiva;
+    }
+
+    public void setConvenzioneattiva(Boolean convenzioneattiva) {
+        this.convenzioneattiva = convenzioneattiva;
+    }
+
+    public Boolean getNoadesioneconvenzione() {
+        return noadesioneconvenzione;
+    }
+
+    public void setNoadesioneconvenzione(Boolean noadesioneconvenzione) {
+        this.noadesioneconvenzione = noadesioneconvenzione;
+    }
+
+    public Boolean getCpvpresente() {
+        return cpvpresente;
+    }
+
+    public void setCpvpresente(Boolean cpvpresente) {
+        this.cpvpresente = cpvpresente;
+    }
+
+    public Boolean getCpvnonfruibile() {
+        return cpvnonfruibile;
+    }
+
+    public void setCpvnonfruibile(Boolean cpvnonfruibile) {
+        this.cpvnonfruibile = cpvnonfruibile;
+    }
+
+    public Mercato getMercato() {
+        return mercato;
+    }
+
+    public void setMercato(Mercato mercato) {
+        this.mercato = mercato;
+    }
+
+    public Convenzione getConvenzione() {
+        return convenzione;
+    }
+
+    public void setConvenzione(Convenzione convenzione) {
+        this.convenzione = convenzione;
+    }
+
+    public String getOggettoconvenzione() {
+        return oggettoconvenzione;
+    }
+
+    public void setOggettoconvenzione(String oggettoconvenzione) {
+        this.oggettoconvenzione = oggettoconvenzione;
+    }
+
+    public String getBando() {
+        return bando;
+    }
+
+    public void setBando(String bando) {
+        this.bando = bando;
+    }
+
+    public String getCpv() {
+        return cpv;
+    }
+
+    public void setCpv(String cpv) {
+        this.cpv = cpv;
+    }
+
+    public String getMotivoanomalia() {
+        return motivoanomalia;
+    }
+
+    public void setMotivoanomalia(String motivoanomalia) {
+        this.motivoanomalia = motivoanomalia;
+    }
 
     public Date getRecordcreato() {
         return recordcreato;

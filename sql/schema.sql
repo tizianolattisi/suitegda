@@ -1371,7 +1371,18 @@ CREATE TABLE determina (
     pluriennale boolean,
     finoadanno int,
     progetto bigint,
-    responsabileprocedimento bigint
+    responsabileprocedimento bigint,
+    benioservizi boolean NOT NULL DEFAULT FALSE,
+    convenzioneattiva boolean NOT NULL DEFAULT FALSE,
+    noadesioneconvenzione boolean NOT NULL DEFAULT FALSE,
+    cpvpresente boolean NOT NULL DEFAULT FALSE,
+    cpvnonfruibile boolean NOT NULL DEFAULT FALSE,
+    convenzione character varying,
+    mercato character varying,
+    oggettoconvenzione character varying,
+    bando character varying,
+    cpv character varying,
+    motivoanomalia character varying
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.determina OWNER TO postgres;
 ALTER TABLE ONLY determina
