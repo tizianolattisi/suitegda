@@ -1021,18 +1021,12 @@
            <property name="checked">
             <bool>true</bool>
            </property>
-           <property name="column" stdset="0">
-            <string>convenzioneattiva</string>
-           </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="noadesioneconvenzione">
            <property name="text">
             <string>è attiva una convenzione alla quale non risulta possibile o conveniente aderire*</string>
-           </property>
-           <property name="column" stdset="0">
-            <string>noadesioneconvenzione</string>
            </property>
           </widget>
          </item>
@@ -1072,18 +1066,12 @@
            <property name="text">
             <string>è presente il cpv d'interesse</string>
            </property>
-           <property name="column" stdset="0">
-            <string>cpvpresente</string>
-           </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="cpvnonfruibile">
            <property name="text">
             <string>è presente il cpv d'interesse, tuttavia non risulta possibile avvalersene</string>
-           </property>
-           <property name="column" stdset="0">
-            <string>cpvnonfruibile</string>
            </property>
           </widget>
          </item>
@@ -1098,6 +1086,73 @@
           </widget>
          </item>
         </layout>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_A">
+        <property name="geometry">
+         <rect>
+          <x>790</x>
+          <y>0</y>
+          <width>31</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>A</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <property name="column" stdset="0">
+         <string>convenzioneattiva</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_B">
+        <property name="geometry">
+         <rect>
+          <x>830</x>
+          <y>0</y>
+          <width>31</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>B</string>
+        </property>
+        <property name="column" stdset="0">
+         <string>noadesioneconvenzione</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_D">
+        <property name="geometry">
+         <rect>
+          <x>830</x>
+          <y>30</y>
+          <width>31</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>D</string>
+        </property>
+        <property name="column" stdset="0">
+         <string>cpvnonfruibile</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_C">
+        <property name="geometry">
+         <rect>
+          <x>790</x>
+          <y>30</y>
+          <width>31</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>C</string>
+        </property>
+        <property name="column" stdset="0">
+         <string>cpvpresente</string>
+        </property>
        </widget>
       </widget>
      </widget>
