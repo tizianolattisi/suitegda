@@ -554,6 +554,14 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
         this.noadesioneconvenzione = noadesioneconvenzione;
     }
 
+    public Boolean getNoconvenzioneattiva() {
+        return !convenzioneattiva && !noadesioneconvenzione;
+    }
+
+    public void setNoconvenzioneattiva(Boolean noconvenzioneattiva) {
+
+    }
+
     public Boolean getCpvpresente() {
         return cpvpresente;
     }
@@ -570,6 +578,13 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
         this.cpvnonfruibile = cpvnonfruibile;
     }
 
+    public Boolean getNocpvpresente() {
+        return !cpvpresente && !cpvnonfruibile;
+    }
+
+    public void setNocpvpresente(Boolean cpvpresente) {
+
+    }
     public Mercato getMercato() {
         return mercato;
     }

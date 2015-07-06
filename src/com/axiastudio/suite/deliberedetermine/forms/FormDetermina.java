@@ -85,20 +85,10 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         PyPaPiTableView tableView_spese = (PyPaPiTableView) findChild(PyPaPiTableView.class, "tableView_spese");
         tableView_spese.setItemDelegate(new Delegate(tableView_spese));
 
+
         ((QCheckBox) findChild(QCheckBox.class, "benioservizi")).clicked.connect(this, "beniOServizi(Boolean)");
 
         ((QRadioButton) findChild(QRadioButton.class, "convenzioneattiva")).toggled.connect(this, "convenzioneAttiva(Boolean)");
-        ((QRadioButton) findChild(QRadioButton.class, "noadesioneconvenzione")).toggled.connect(this, "noAdesioneConvenzione(Boolean)");
-        ((QRadioButton) findChild(QRadioButton.class, "cpvpresente")).toggled.connect(this, "cpvPresente(Boolean)");
-        ((QRadioButton) findChild(QRadioButton.class, "cpvnonfruibile")).toggled.connect(this, "cpvNonFruibile(Boolean)");
-        ((QCheckBox) findChild(QCheckBox.class, "checkBox_A")).toggled.connect(this, "checkBox_A(Boolean)");
-        ((QCheckBox) findChild(QCheckBox.class, "checkBox_B")).toggled.connect(this, "checkBox_B(Boolean)");
-        ((QCheckBox) findChild(QCheckBox.class, "checkBox_C")).toggled.connect(this, "checkBox_C(Boolean)");
-        ((QCheckBox) findChild(QCheckBox.class, "checkBox_D")).toggled.connect(this, "checkBox_D(Boolean)");
-        //((QCheckBox) findChild(QCheckBox.class, "checkBox_A")).setVisible(false);
-        //((QCheckBox) findChild(QCheckBox.class, "checkBox_B")).setVisible(false);
-        //((QCheckBox) findChild(QCheckBox.class, "checkBox_C")).setVisible(false);
-        //((QCheckBox) findChild(QCheckBox.class, "checkBox_D")).setVisible(false);
 
         try {
             Method storeFactory = this.getClass().getMethod("storeResponsabileProcedimento");
@@ -112,30 +102,12 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
 
     private void beniOServizi(Boolean b){
         ((QGroupBox) findChild(QGroupBox.class, "groupBox_A")).setEnabled(b);
-        if( !b ){
-            ((QGroupBox) findChild(QGroupBox.class, "groupBox_B")).setEnabled(false);
-        }
+        ((QGroupBox) findChild(QGroupBox.class, "groupBox_B")).setEnabled(b && ! ((QRadioButton) findChild(QRadioButton.class, "convenzioneattiva")).isChecked());
     }
 
     private void convenzioneAttiva(Boolean b){
         ((QGroupBox) findChild(QGroupBox.class, "groupBox_B")).setEnabled(!b);
-        setCheckBox("checkBox_A", b);
     }
-    private void noAdesioneConvenzione(Boolean b) { setCheckBox("checkBox_B", b); }
-    private void cpvPresente(Boolean b) { setCheckBox("checkBox_C", b); }
-    private void cpvNonFruibile(Boolean b) { setCheckBox("checkBox_D", b); }
-    private void setCheckBox(String name, Boolean b){
-        QCheckBox checkBox = (QCheckBox) findChild(QCheckBox.class, name);
-        if( b) {
-            checkBox.setCheckState(Qt.CheckState.Checked);
-        } else {
-            checkBox.setCheckState(Qt.CheckState.Unchecked);
-        }
-    }
-    private void checkBox_A(Boolean b){ ((QRadioButton) findChild(QRadioButton.class, "convenzioneattiva")).setChecked(b);}
-    private void checkBox_B(Boolean b){ ((QRadioButton) findChild(QRadioButton.class, "noadesioneconvenzione")).setChecked(b);}
-    private void checkBox_C(Boolean b){ ((QRadioButton) findChild(QRadioButton.class, "cpvpresente")).setChecked(b);}
-    private void checkBox_D(Boolean b){ ((QRadioButton) findChild(QRadioButton.class, "cpvnonfruibile")).setChecked(b);}
 
     @Override
     protected void indexChanged(int row) {
