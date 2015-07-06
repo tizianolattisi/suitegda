@@ -276,6 +276,7 @@ public class ClientWindow extends QMainWindow {
                 String codice = codiceAmministrazione + "#" + iddocumento + dataCodice ;
                 IWas.create()
                         .load(new FileInputStream(fileName))
+                        .pages(new ArrayList<>(Arrays.asList(1)))
                         .offset(65f, 660f)
                         .text("COMUNE", 10, 0f, 47f)
                         .text(denominazione, 10, 0f, 38f)
