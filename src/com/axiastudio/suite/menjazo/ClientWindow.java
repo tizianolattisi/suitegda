@@ -18,6 +18,7 @@ package com.axiastudio.suite.menjazo;
 
 import com.axiastudio.iwas.DatamatrixSize;
 import com.axiastudio.iwas.IWas;
+import com.axiastudio.mapformat.MessageMapFormat;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
@@ -38,11 +39,7 @@ import com.trolltech.qt.gui.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,10 +62,12 @@ public class ClientWindow extends QMainWindow {
     private QAction deleteAction = new QAction(this);
     private List<Map> ids = new ArrayList();
     private Map<String,TempFile> tempFiles = new HashMap();
-    
-    public ClientWindow(QWidget parent, AlfrescoHelper helper){
+    private Map<String, Object> stampMap;
+
+    public ClientWindow(QWidget parent, AlfrescoHelper helper, Map map){
         super(parent);
         this.helper = helper;
+        this.stampMap = map;
         this.initLayout();
         QRect screenGeometry = QApplication.desktop().screenGeometry();
         int x = screenGeometry.center().x()-500;
@@ -119,7 +118,7 @@ public class ClientWindow extends QMainWindow {
         openAction.setToolTip("Scarica e apri il documento selezionato");
         openAction.triggered.connect(this, "openWithoutStamp()");
         toolBar.addAction(openAction);
-        openStampAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/open.png"));
+        openStampAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/page_copiaconforme.png"));
         openStampAction.setText("Apri copia conforme");
         openStampAction.setToolTip("Scarica e apri il documento selezionato come copia conforme");
         openStampAction.triggered.connect(this, "openWithStamp()");
@@ -338,15 +337,35 @@ public class ClientWindow extends QMainWindow {
             InputStream in = this.helper.getDocumentStream(objectId);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             if( stamp ){
-                try {
-                    IWas.create()
-                            .load(in)
-                            .offset(15f, 15f)
-                            .text("COPIA CONFORME", 12, 0f, 0f, 90f)
-                            .toStream(outputStream);
-                    openAsTemporaryFile(fileName, new ByteArrayInputStream(outputStream.toByteArray()), objectId);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if( fileName.toLowerCase().endsWith("pdf") ) {
+                    Calendar calendar = Calendar.getInstance();
+                    stampMap.put("datacorrente", calendar.getTime());
+
+                    Float offsetX = Float.valueOf(SuiteUtil.trovaCostante("COPIA_CONFORME_OFFSETX").getValore());
+                    Float offsetY = Float.valueOf(SuiteUtil.trovaCostante("COPIA_CONFORME_OFFSETY").getValore());
+                    IWas iwas = IWas.create();
+                    try {
+                        iwas.load(in)
+                                .offset(offsetX, offsetY);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    for (int i = 1; i < 5; i++) {
+                        String testoCC = SuiteUtil.trovaCostante("COPIA_CONFORME_TESTO" + String.valueOf(i)).getValore();
+                        MessageMapFormat mmp = new MessageMapFormat(testoCC);
+                        String testo = mmp.format(this.stampMap);
+                        iwas.text(testo, 9, (float) (i - 1) * 9, 0f, 90f);
+                    }
+                    try {
+                        iwas.toStream(outputStream);
+                        openAsTemporaryFile(fileName, new ByteArrayInputStream(outputStream.toByteArray()), objectId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    QMessageBox.critical(this, "Copia conforme non possibile",
+                            "Attenzione!! È possibile effettuare copia conforme unicamente di documenti salvati in formato pdf.");
                 }
             } else {
                 openAsTemporaryFile(fileName, in, objectId);

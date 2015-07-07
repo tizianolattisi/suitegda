@@ -31,10 +31,7 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
-import com.axiastudio.suite.protocollo.entities.Attribuzione;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
-import com.axiastudio.suite.protocollo.entities.UfficioProtocollo;
+import com.axiastudio.suite.protocollo.entities.*;
 import com.axiastudio.suite.richieste.entities.DestinatarioUfficio;
 import com.axiastudio.suite.richieste.entities.IDestinatarioRichiesta;
 import com.axiastudio.suite.richieste.entities.Richiesta;
@@ -46,9 +43,7 @@ import com.trolltech.qt.designer.QUiLoaderException;
 import com.trolltech.qt.gui.*;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -384,7 +379,19 @@ public class FormScrivania  extends QMainWindow {
                     delete = upload;
                     version = upload;
                 }
-                ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);                
+                HashMap stampMap = new HashMap();
+                stampMap.put("iddocumento", protocollo.getIddocumento());
+                stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
+                String codiceinterno="";
+                for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
+                    if ( pratica.getOriginale() ) {
+                        codiceinterno=pratica.getPratica().getCodiceinterno();
+                    }
+                }
+                stampMap.put("codiceinterno", codiceinterno);
+                stampMap.put("utente", autenticato.getNome().toUpperCase());
+
+                ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version, stampMap);
             }
         }
     }

@@ -33,6 +33,7 @@ import com.axiastudio.suite.generale.forms.DialogStampaEtichetta;
 import com.axiastudio.suite.interoperabilita.entities.Segnatura;
 import com.axiastudio.suite.interoperabilita.utilities.JAXBHelper;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
@@ -483,7 +484,19 @@ public class FormProtocollo extends Window {
                     version = upload;
                 }
                 if( view ){
-                    ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version);
+                    HashMap stampMap = new HashMap();
+                    stampMap.put("iddocumento", protocollo.getIddocumento());
+                    stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
+                    String codiceinterno="";
+                    for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
+                        if ( pratica.getOriginale() ) {
+                            codiceinterno=pratica.getPratica().getCodiceinterno();
+                        }
+                    }
+                    stampMap.put("codiceinterno", codiceinterno);
+                    stampMap.put("utente", autenticato.getNome().toUpperCase());
+
+                    ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version, stampMap);
                 } else {
                     QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
                     return;

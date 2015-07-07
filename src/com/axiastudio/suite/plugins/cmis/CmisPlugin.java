@@ -24,6 +24,8 @@ import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
 import com.trolltech.qt.gui.QWidget;
 
+import java.util.HashMap;
+
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
@@ -102,8 +104,12 @@ public class CmisPlugin implements IPlugin {
     public void showForm(Object entity) {
         this.showForm(entity, true, true, false, true, true);
     }
-    
+
     public void showForm(Object entity, Boolean delete, Boolean download, Boolean parent, Boolean upload, Boolean version) {
+        this.showForm(entity, delete, download, parent, upload, version, new HashMap());
+    }
+
+    public void showForm(Object entity, Boolean delete, Boolean download, Boolean parent, Boolean upload, Boolean version, HashMap map) {
         if( entity==null ){
             entity = ((Window) this.parent).getContext().getCurrentEntity();
         }
@@ -111,7 +117,7 @@ public class CmisPlugin implements IPlugin {
             return;
         }
         AlfrescoHelper helper = createAlfrescoHelper(entity);
-        ClientWindow dialog = new ClientWindow(null, helper);
+        ClientWindow dialog = new ClientWindow(null, helper, map);
         dialog.setEntity(entity);
         dialog.show();
         dialog.setDeleteEnabled(delete);
