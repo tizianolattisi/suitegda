@@ -173,7 +173,7 @@ public class SimpleWorkFlow {
         Binding binding = createBindings();
 
         GroovyShell shell = new GroovyShell(binding);
-        String groovy = groovyClosure + "(obj)";
+        String groovy = groovyClosure.trim() + "(obj)";
         Object value=null;
         try{
             value = shell.evaluate(groovy);
