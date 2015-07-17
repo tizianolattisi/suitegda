@@ -14,7 +14,7 @@
    <string>Utenti</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>id,login,nome</string>
+   <string>id,login,nome,disabilitato</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
@@ -24,16 +24,7 @@
        <string>Utente</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>4</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>4</number>
        </property>
        <item row="0" column="0">
@@ -169,98 +160,13 @@
        <string>Permessi</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0" rowspan="2">
-        <widget class="QGroupBox" name="groupBox_6">
-         <property name="title">
-          <string>Anagrafiche</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_4">
-          <property name="leftMargin">
-           <number>4</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="checkBox_5">
-            <property name="text">
-             <string>Operatore</string>
-            </property>
-            <property name="column" stdset="0">
-             <string>operatoreanagrafiche</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="checkBox_11">
-            <property name="text">
-             <string>Supervisore</string>
-            </property>
-            <property name="column" stdset="0">
-             <string>supervisoreanagrafiche</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="title">
-          <string>Generici</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <property name="leftMargin">
-           <number>4</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>4</number>
-          </property>
-          <property name="bottomMargin">
-           <number>4</number>
-          </property>
-          <item>
-           <widget class="QCheckBox" name="checkBox">
-            <property name="text">
-             <string>Amministratore</string>
-            </property>
-            <property name="column" stdset="0">
-             <string>amministratore</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="checkBox_2">
-            <property name="text">
-             <string>Super utente</string>
-            </property>
-            <property name="column" stdset="0">
-             <string>superutente</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="2" column="2">
         <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
           <string>Urp</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
-          <property name="leftMargin">
-           <number>4</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>4</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>4</number>
           </property>
           <item>
@@ -292,16 +198,7 @@
           <string>Protocollo</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
-          <property name="leftMargin">
-           <number>4</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>4</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>4</number>
           </property>
           <property name="spacing">
@@ -433,6 +330,83 @@
             </property>
             <property name="column" stdset="0">
              <string>attributorepratiche</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="title">
+          <string>Anagrafiche</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
+          <property name="topMargin">
+           <number>4</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox_5">
+            <property name="text">
+             <string>Operatore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>operatoreanagrafiche</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="checkBox_11">
+            <property name="text">
+             <string>Supervisore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>supervisoreanagrafiche</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0" rowspan="2">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Generici</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox">
+            <property name="text">
+             <string>Amministratore</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>amministratore</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="checkBox_2">
+            <property name="text">
+             <string>Super utente</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>superutente</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="checkBox_17">
+            <property name="text">
+             <string>Disabilitato</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>disabilitato</string>
+            </property>
+            <property name="search" stdset="0">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
