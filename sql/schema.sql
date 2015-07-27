@@ -487,6 +487,7 @@ CREATE TABLE servizio (
     id bigserial NOT NULL,
     descrizione character varying(1024),
     ufficio bigint,
+    attribuzione bigint,
     referentepolitico character varying(100),
     responsabileprocedura character varying(10)
 );
@@ -495,6 +496,8 @@ ALTER TABLE ONLY servizio
     ADD CONSTRAINT servizio_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY servizio
     ADD CONSTRAINT fk_servizio_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+ALTER TABLE ONLY servizio
+    ADD CONSTRAINT fk_servizio_attribuzione FOREIGN KEY (attribuzione) REFERENCES base.ufficio (id);
 
 CREATE TABLE capitolo (
     id bigserial NOT NULL,
