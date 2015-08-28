@@ -29,7 +29,7 @@ import java.io.Serializable;
 public class Stato implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genstato")
     private Long id;
     @Column(name="codice", length=3)
     private String codice;
