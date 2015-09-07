@@ -77,7 +77,8 @@ public class DeterminaCallbacks {
         // se l'utente non è inserito nell'ufficio gestore con flag modificapratiche non può modificare
         GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         if( !inUfficioGestore && gestoreDeleghe.checkTitoloODelega("RESPONSABILE_DI_SERVIZIO", determina.getServizio()) == null &&
-                gestoreDeleghe.checkTitoloODelega("RESPONSABILE_DI_BILANCIO") == null ){
+                gestoreDeleghe.checkTitoloODelega("RESPONSABILE_DI_BILANCIO") == null &&
+                gestoreDeleghe.checkTitoloODelega("OPERATORE_RAGIONERIA") == null ){
             msg = "Per modificare la determina devi appartenere all'ufficio gestore della pratica con i permessi di modifica, " +
                     "essere responsabile di servizio o essere responsabile di bilancio.";
             return new Validation(false, msg);
