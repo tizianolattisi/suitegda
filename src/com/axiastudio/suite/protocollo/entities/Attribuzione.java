@@ -38,11 +38,26 @@ import java.util.Date;
                 + "JOIN u.ufficioUtenteCollection uu "
                 + "WHERE a.letto = FALSE AND uu.ricerca = TRUE "
                 + "AND uu.utente.id = :id ORDER BY a.protocollo.iddocumento DESC"),
+        @NamedQuery(name="trovaAttribuzioniFiltrateUtente",
+                query = "SELECT a FROM Attribuzione a JOIN a.ufficio u "
+                        + "JOIN u.ufficioUtenteCollection uu "
+                        + "WHERE a.letto = FALSE AND uu.ricerca = TRUE "
+                        + "AND uu.utente.id = :id AND u.id = :idufficio ORDER BY a.protocollo.iddocumento DESC"),
     @NamedQuery(name="trovaAttribuzioniUtenteProtocollo",
         query = "SELECT a FROM Attribuzione a JOIN a.ufficio u "
                 + "JOIN u.ufficioUtenteCollection uu "
                 + "WHERE a.protocollo.iddocumento = :protocollo AND uu.ricerca = TRUE "
-                + "AND uu.utente.id = :id ORDER BY a.protocollo.iddocumento DESC")
+                + "AND uu.utente.id = :id ORDER BY a.protocollo.iddocumento DESC"),
+    @NamedQuery(name="contaAttribuzioniUtente",
+            query = "SELECT COUNT(a) FROM Attribuzione a JOIN a.ufficio u "
+                    + "JOIN u.ufficioUtenteCollection uu "
+                    + "WHERE a.letto = FALSE AND uu.ricerca = TRUE "
+                    + "AND uu.utente.id = :id"),
+    @NamedQuery(name="contaAttribuzioniFiltrateUtente",
+            query = "SELECT COUNT(a) FROM Attribuzione a JOIN a.ufficio u "
+                    + "JOIN u.ufficioUtenteCollection uu "
+                    + "WHERE a.letto = FALSE AND uu.ricerca = TRUE "
+                    + "AND uu.utente.id = :id AND u.id = :idufficio")
 })
 public class Attribuzione implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;

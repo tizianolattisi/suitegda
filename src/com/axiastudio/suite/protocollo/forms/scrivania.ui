@@ -39,31 +39,20 @@
        <attribute name="title">
         <string>Protocolli</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,3,2">
-        <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,1,0">
-          <property name="spacing">
-           <number>10</number>
-          </property>
+       <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,3,0,0,2">
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
+        <property name="rightMargin">
+         <number>10</number>
+        </property>
+        <property name="bottomMargin">
+         <number>10</number>
+        </property>
+        <item row="2" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,0,0,0,0">
           <item>
-           <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxUfficio">
-            <property name="minimumSize">
-             <size>
-              <width>500</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButtonFiltra">
-            <property name="text">
-             <string>filtra per ufficio</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_2">
+           <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -76,18 +65,43 @@
            </spacer>
           </item>
           <item>
-           <widget class="QLabel" name="labelTotRecord">
+           <widget class="QToolButton" name="toolButtonFirstPage">
             <property name="text">
-             <string>Totale record: </string>
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="toolButtonPreviousPage">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelPage">
+            <property name="text">
+             <string>1/1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="toolButtonNextPage">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="toolButtonLastPage">
+            <property name="text">
+             <string>...</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
-        <item row="1" column="0">
-         <widget class="QTableView" name="attribuzioni"/>
-        </item>
-        <item row="2" column="0">
+        <item row="4" column="0">
          <widget class="QGroupBox" name="groupBox">
           <property name="minimumSize">
            <size>
@@ -153,6 +167,53 @@
            </item>
           </layout>
          </widget>
+        </item>
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,1,0">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxUfficio">
+            <property name="minimumSize">
+             <size>
+              <width>500</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonFiltra">
+            <property name="text">
+             <string>filtra per ufficio</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelTotRecord">
+            <property name="text">
+             <string>Totale record: </string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QTableView" name="attribuzioni"/>
         </item>
        </layout>
       </widget>

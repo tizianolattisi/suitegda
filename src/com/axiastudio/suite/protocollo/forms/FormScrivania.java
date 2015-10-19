@@ -43,6 +43,7 @@ import com.trolltech.qt.designer.QUiLoaderException;
 import com.trolltech.qt.gui.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,12 +53,17 @@ import java.util.logging.Logger;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class FormScrivania  extends QMainWindow {
+
+    private final static Integer MAX_ELEMENTS = 50;
+
     private Store<Attribuzione> attribuzioneStoreGenerale = new Store<Attribuzione>(null);
     private List<Attribuzione> selectionProtocollo = new ArrayList<Attribuzione>();
     private List<DestinatarioUfficio> selectionRichiesta = new ArrayList<DestinatarioUfficio>();
     private QLabel totRecord;
     private final Integer DEFAULT_ROW_HEIGHT = 24;
     public ScrivaniaMenuBar scrivaniaMenuBar;
+    private Integer startFromPage = 0;
+    private QLabel labelPage;
 
     public FormScrivania(){
         QFile file = Util.ui2jui(new QFile("classpath:com/axiastudio/suite/protocollo/forms/scrivania.ui"));
@@ -65,6 +71,21 @@ public class FormScrivania  extends QMainWindow {
 
         this.scrivaniaMenuBar = new ScrivaniaMenuBar("Scrivania", this);
         this.addToolBar(scrivaniaMenuBar);
+
+        /* paging */
+        QToolButton toolButtonFirstPage = (QToolButton) findChild(QToolButton.class, "toolButtonFirstPage");
+        toolButtonFirstPage.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/resultset_first.png"));
+        toolButtonFirstPage.clicked.connect(this, "firstPage()");
+        QToolButton toolButtonPreviousPage = (QToolButton) findChild(QToolButton.class, "toolButtonPreviousPage");
+        toolButtonPreviousPage.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/resultset_previous.png"));
+        toolButtonPreviousPage.clicked.connect(this, "previousPage()");
+        QToolButton toolButtonNextPage = (QToolButton) findChild(QToolButton.class, "toolButtonNextPage");
+        toolButtonNextPage.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/resultset_next.png"));
+        toolButtonNextPage.clicked.connect(this, "nextPage()");
+        QToolButton toolButtonLastPage = (QToolButton) findChild(QToolButton.class, "toolButtonLastPage");
+        toolButtonLastPage.setIcon(new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/resultset_last.png"));
+        toolButtonLastPage.clicked.connect(this, "lastPage()");
+        labelPage = (QLabel) findChild(QLabel.class, "labelPage");
 
         /* table view protocolli */
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
@@ -83,7 +104,7 @@ public class FormScrivania  extends QMainWindow {
         totRecord = (QLabel) this.findChild(QLabel.class, "labelTotRecord");
 
         QPushButton pushButtonFiltra = (QPushButton) this.findChild(QPushButton.class, "pushButtonFiltra");
-        pushButtonFiltra.clicked.connect(this, "filtraPerUfficio()");
+        pushButtonFiltra.clicked.connect(this, "firstPage()");
 
         /* table view richieste */
         QTableView tableViewRichieste = (QTableView) this.findChild(QTableView.class, "richieste");
@@ -93,13 +114,71 @@ public class FormScrivania  extends QMainWindow {
         tableViewRichieste.verticalHeader().setDefaultSectionSize(DEFAULT_ROW_HEIGHT);
         tableViewRichieste.doubleClicked.connect(this, "apriRichiesta()");
 
-        this.popolaAttribuzioni();
+        //this.popolaAttribuzioni();
+        firstPage();
 
         // disabilito le richieste
         ((QTabWidget) this.findChild(QTabWidget.class, "tabWidget")).setTabEnabled(1, false);
         //this.popolaRichieste();
     }
-    
+
+    private void firstPage(){
+        startFromPage = 0;
+        popolaAttribuzioni();
+        labelPage.setText((startFromPage + 1) + "/" + totalePagine());
+    }
+
+    private void nextPage(){
+        if( startFromPage < totalePagine() - 1 ) {
+            startFromPage++;
+            popolaAttribuzioni();
+            labelPage.setText((startFromPage + 1) + "/" + totalePagine());
+        }
+    }
+
+    private void previousPage(){
+        if( startFromPage > 0 ) {
+            startFromPage--;
+            popolaAttribuzioni();
+            labelPage.setText((startFromPage + 1) + "/" + totalePagine());
+        }
+    }
+
+    private void lastPage(){
+        Long count = totalePagine();
+        if( startFromPage < count - 1 ) {
+            startFromPage = count.intValue() - 1;
+            popolaAttribuzioni();
+            labelPage.setText((startFromPage + 1) + "/" + count);
+        }
+    }
+
+    private Long totalePagine(){
+
+        PyPaPiComboBox comboUfficio = (PyPaPiComboBox) this.findChild(QComboBox.class, "comboBoxUfficio");
+        int idx = comboUfficio.currentIndex();
+        Ufficio ufficio = (Ufficio) comboUfficio.itemData(idx);
+
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+
+        String queryName;
+        if( ufficio == null ) {
+            queryName = "contaAttribuzioniUtente";
+        } else {
+            queryName = "contaAttribuzioniFiltrateUtente";
+        }
+        TypedQuery<Long> query = em.createNamedQuery(queryName, Long.class)
+                .setParameter("id", autenticato.getId());
+        if( ufficio != null ){
+            query = query.setParameter("idufficio", ufficio.getId());
+        }
+        Long count = query
+                .getSingleResult();
+        return new Double(Math.ceil(count.doubleValue()/MAX_ELEMENTS)).longValue();
+    }
+
     private void loadUi(QFile uiFile){
         QMainWindow window = null;
         try {
@@ -118,15 +197,35 @@ public class FormScrivania  extends QMainWindow {
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        List<Attribuzione> attribuzioni = em.createNamedQuery("trovaAttribuzioniUtente", Attribuzione.class)
-                                            .setParameter("id", autenticato.getId())
-                                            .getResultList();
+
+        PyPaPiComboBox comboUfficio = (PyPaPiComboBox) this.findChild(QComboBox.class, "comboBoxUfficio");
+        int idx = comboUfficio.currentIndex();
+        Ufficio ufficio = (Ufficio) comboUfficio.itemData(idx);
+
+        String queryName;
+        if( ufficio == null ) {
+            queryName = "trovaAttribuzioniUtente";
+        } else {
+            queryName = "trovaAttribuzioniFiltrateUtente";
+
+        }
+
+        TypedQuery<Attribuzione> query = em.createNamedQuery(queryName, Attribuzione.class)
+                .setFirstResult(startFromPage * MAX_ELEMENTS)
+                .setMaxResults(MAX_ELEMENTS)
+                .setParameter("id", autenticato.getId());
+
+        if( ufficio != null ){
+            query = query.setParameter("idufficio", ufficio.getId());
+        }
+
+        List<Attribuzione> attribuzioni = query.getResultList();
         attribuzioneStoreGenerale.clear();
         attribuzioneStoreGenerale.addAll(attribuzioni);
         totRecord.setText("Totale record: "+ String.valueOf(attribuzioneStoreGenerale.size()));
         selectionProtocollo.clear();
-        PyPaPiComboBox ufficio = (PyPaPiComboBox) this.findChild(QComboBox.class, "comboBoxUfficio");
-        ufficio.setCurrentIndex(ufficio.getLookupStore().size() - 1);
+        //PyPaPiComboBox ufficio = (PyPaPiComboBox) this.findChild(QComboBox.class, "comboBoxUfficio");
+        //ufficio.setCurrentIndex(ufficio.getLookupStore().size() - 1);
 
         List<Column> colonne = new ArrayList();
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
