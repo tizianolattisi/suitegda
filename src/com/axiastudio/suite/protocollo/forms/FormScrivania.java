@@ -174,9 +174,8 @@ public class FormScrivania  extends QMainWindow {
         if( ufficio != null ){
             query = query.setParameter("idufficio", ufficio.getId());
         }
-        Long count = query
-                .getSingleResult();
-        return new Double(Math.ceil(count.doubleValue()/MAX_ELEMENTS)).longValue();
+        Long totaleAttribuzioni = query.getSingleResult();
+        return new Double(Math.ceil(totaleAttribuzioni.doubleValue()/MAX_ELEMENTS)).longValue();
     }
 
     private void loadUi(QFile uiFile){
@@ -222,7 +221,7 @@ public class FormScrivania  extends QMainWindow {
         List<Attribuzione> attribuzioni = query.getResultList();
         attribuzioneStoreGenerale.clear();
         attribuzioneStoreGenerale.addAll(attribuzioni);
-        totRecord.setText("Totale record: "+ String.valueOf(attribuzioneStoreGenerale.size()));
+        totRecord.setText("Totale pagine: "+ String.valueOf(totalePagine()));
         selectionProtocollo.clear();
         //PyPaPiComboBox ufficio = (PyPaPiComboBox) this.findChild(QComboBox.class, "comboBoxUfficio");
         //ufficio.setCurrentIndex(ufficio.getLookupStore().size() - 1);
@@ -408,13 +407,15 @@ public class FormScrivania  extends QMainWindow {
                 attribuzioniLette.add(attribuzione);
             }
         }
-        attribuzioneStoreGenerale.removeAll(attribuzioniLette);
-        QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
-        TableModel model = (TableModel) tableView.model();
-        Store store=model.getStore();
-        store.removeAll(attribuzioniLette);
-        model.setStore(store);
-        totRecord.setText("Totale record: " + String.valueOf(store.size()));
+        firstPage();
+
+        //attribuzioneStoreGenerale.removeAll(attribuzioniLette);
+        //QTableView tableView = (QTableView) this.findChild(QTableView.class, "attribuzioni");
+        //TableModel model = (TableModel) tableView.model();
+        //Store store=model.getStore();
+        //store.removeAll(attribuzioniLette);
+        //model.setStore(store);
+        totRecord.setText("Totale pagine: " + String.valueOf(totalePagine()));
 
         this.selectionProtocollo.clear();
         this.refreshInfo();
