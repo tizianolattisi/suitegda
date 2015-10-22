@@ -54,7 +54,7 @@ import java.util.logging.Logger;
  */
 public class FormScrivania  extends QMainWindow {
 
-    private final static Integer MAX_ELEMENTS = 50;
+    private final static Integer MAX_ELEMENTS = 100;
 
     private Store<Attribuzione> attribuzioneStoreGenerale = new Store<Attribuzione>(null);
     private List<Attribuzione> selectionProtocollo = new ArrayList<Attribuzione>();
