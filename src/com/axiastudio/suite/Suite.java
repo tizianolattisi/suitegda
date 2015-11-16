@@ -231,7 +231,7 @@ public class Suite {
         if( username != null ){
             applicationName += " - " + username;
         }
-        mapProperties.put("javax.persistence.jdbc.url", mapProperties.get("javax.persistence.jdbc.url") + "?ApplicationName=" + applicationName);
+        mapProperties.put("javax.persistence.jdbc.url", ((String) mapProperties.get("javax.persistence.jdbc.url")).split("\\?")[0] + "?ApplicationName=" + applicationName);
 
         //jdbcUrl += "?ApplicationName=GDA - " + username;
         db.open("SuitePU", mapProperties);
