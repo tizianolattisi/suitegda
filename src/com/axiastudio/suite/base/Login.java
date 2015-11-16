@@ -19,6 +19,7 @@ package com.axiastudio.suite.base;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.Suite;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
@@ -72,6 +73,10 @@ public class Login extends QDialog {
     
     @Override
     public void accept() {
+        String username = this.username.text();
+        String password = this.password.text();
+        Suite.open(username);
+
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -84,10 +89,10 @@ public class Login extends QDialog {
         List entities = q.getResultList();
         if( entities.size() == 1 ){
             utente = (Utente) entities.get(0);
-            String pwd = this.password.text();
+            String pwd = password;
             ICheckLogin checkLogin = (ICheckLogin) Register.queryUtility(ICheckLogin.class);
             if( checkLogin != null ){
-                if( checkLogin.check(this.username.text(), this.password.text()) ){
+                if( checkLogin.check(username, password) ){
                     Register.registerUtility(utente, IUtente.class);
                     super.accept();
                     return;

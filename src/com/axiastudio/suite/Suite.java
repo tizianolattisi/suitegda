@@ -37,6 +37,8 @@ import java.util.logging.Logger;
  */
 public class Suite {
 
+    private static Map mapProperties;
+
     /**
      * @param args the command line arguments
      */
@@ -179,7 +181,7 @@ public class Suite {
             barcodeLanguage = System.getProperty("barcode.language");
         }
 
-        Map mapProperties = new HashMap();
+        mapProperties = new HashMap();
         mapProperties.put("javax.persistence.jdbc.url", jdbcUrl);
         if( jdbcUser != null ){
             mapProperties.put("javax.persistence.jdbc.user", jdbcUser);
@@ -195,10 +197,8 @@ public class Suite {
             mapProperties.put("eclipselink.logging.parameters", "true");
         }
 
-        Database db = new Database();
         mapProperties.put("eclipselink.ddl-generation", "");
-        db.open("SuitePU", mapProperties);
-        Register.registerUtility(db, IDatabase.class);
+        //db.open("SuitePU", mapProperties);
 
 
         // jdbc
@@ -221,8 +221,21 @@ public class Suite {
         //app.setConfigItem("ooops.connection", "uno:socket,host=192.168.64.56,port=2002;urp;StarOffice.ServiceManager");
 
         // configurazione originale SuitePA
-        Configure.configure(db);
+        //.configure(db);
 
+    }
+
+    public static void open(String username){
+        Database db = new Database();
+        String applicationName = "GDA";
+        if( username != null ){
+            applicationName += " - " + username;
+        }
+        mapProperties.put("javax.persistence.jdbc.url", mapProperties.get("javax.persistence.jdbc.url") + "?ApplicationName=" + applicationName);
+
+        //jdbcUrl += "?ApplicationName=GDA - " + username;
+        db.open("SuitePU", mapProperties);
+        //Register.registerUtility(db, IDatabase.class);
     }
     
 }
