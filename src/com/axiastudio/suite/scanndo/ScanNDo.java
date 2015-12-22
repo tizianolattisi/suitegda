@@ -84,6 +84,7 @@ public class ScanNDo extends QDialog {
                 if ( tq.getResultList().size() == 0 ) {
                     QMessageBox.warning(this, "Attenzione", "Protocollo non trovato.");
                     em.close();
+                    scansione.selectAll();
                     return;
                 }
                 Protocollo protocollo = tq.getSingleResult();
@@ -95,10 +96,12 @@ public class ScanNDo extends QDialog {
                     em.getTransaction().commit();
                     em.close();
                     beep.play();
+                    scansione.selectAll();
                     return;
                 } else {
                     QMessageBox.warning(this, "Attenzione", "Protocollo già spedito.");
                     em.close();
+                    scansione.selectAll();
                     return;
                 }
 
