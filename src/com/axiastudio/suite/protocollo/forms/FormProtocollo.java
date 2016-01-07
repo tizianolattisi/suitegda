@@ -16,6 +16,9 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.suite.anagrafiche.entities.Riferimento;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.anagrafiche.entities.TipoRiferimento;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
@@ -32,8 +35,9 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.forms.DialogStampaEtichetta;
 import com.axiastudio.suite.interoperabilita.entities.Segnatura;
 import com.axiastudio.suite.interoperabilita.utilities.JAXBHelper;
+import com.axiastudio.suite.pec.NuovoMessaggioRequest;
+import com.axiastudio.suite.pec.NuovoMessaggioResponse;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
-import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
@@ -44,16 +48,29 @@ import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.scanndo.ScanNDo;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
+import org.apache.chemistry.opencmis.client.api.Document;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 
 /**
@@ -569,6 +586,93 @@ public class FormProtocollo extends Window {
             workspace.addSubWindow((QMainWindow) form);
         }
         form.show();
+    }
+
+    private void inviaPec() {
+        System.out.println("pec");
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        if( !protocollo.getTipo().equals(TipoProtocollo.USCITA) ){
+            QMessageBox.warning(this, "Attenzione", "E' possibile inviare tramite PEC solo per i protocolli in uscita.");
+            return;
+        }
+        if( protocollo.getUfficioProtocolloCollection().size()!=1 ){
+            QMessageBox.warning(this, "Attenzione", "E' necessario che sia presente un unico ufficio mittente.");
+            return;
+        }
+        Ufficio mittente = protocollo.getUfficioProtocolloCollection().iterator().next().getUfficio();
+        if( mittente.getPec() == null || mittente.getPec() == "" ){
+            QMessageBox.warning(this, "Attenzione", "L'ufficio mittente deve essere configurato con una mailbox PEC.");
+            return;
+        }
+        List<String> destinatari = new ArrayList<>();
+        for( SoggettoProtocollo soggettoProtocollo: protocollo.getSoggettoProtocolloCollection() ){
+            for( Riferimento riferimento: soggettoProtocollo.getSoggetto().getRiferimentoCollection() ){
+                if( TipoRiferimento.PEC.equals(riferimento.getTipo()) ){
+                    destinatari.add(riferimento.getRiferimento());
+                    break;
+                }
+            }
+        }
+        if( destinatari.size()==0 ){
+            QMessageBox.warning(this, "Attenzione", "I destinatari devono aver configurato un indirizzo PEC.");
+            return;
+        }
+        if( destinatari.size()<protocollo.getSoggettoProtocolloCollection().size() ){
+            QMessageBox.warning(this, "Attenzione", "Alcuni destinatari non sono raggiungibili tramite PEC.");
+            return;
+        }
+
+        CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
+        AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
+        if( helper.children().size() == 0 ){
+            QMessageBox.warning(this, "Attenzione", "Non ci sono file allegati.");
+            return;
+        }
+
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://192.168.64.200:8080/gdapec/").path("api/messaggi");
+
+        NuovoMessaggioRequest requestData = new NuovoMessaggioRequest();
+        requestData.setMailbox(mittente.getPec()); // pectest@pec.comune.rivadelgarda.tn.it
+
+        for( String destinatario: destinatari ){
+            requestData.addDestinatario(destinatario); // axiastudio@pec.it
+        }
+        requestData.setOggetto(protocollo.getOggetto());
+        requestData.setTestoMessaggio(protocollo.getNote());
+
+        for( Map<String, String> map: helper.children()){
+            String objectId = map.get("objectId");
+            String name = map.get("name");
+            String mime = map.get("mime");
+            Integer length = Integer.parseInt(map.get("contentStreamLength"));
+            Document document = helper.getDocument(objectId);
+            // XXX: add document.getContentStream();
+        }
+
+        NuovoMessaggioResponse responseData = target.request(MediaType.APPLICATION_JSON).post(Entity.entity(requestData, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
+
+        System.out.println(responseData.getMessageId());
+        System.out.println(responseData.getLink());
+        System.out.println("done");
+
+        // eseguo il PUT
+        try {
+            URL url = new URL("http://192.168.64.200:8080/gdapec/api/azioni/invia/" + responseData.getMessageId());
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("PUT");
+            //OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+            //out.write("Dummy content...");
+            //out.close();
+            conn.getInputStream();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void segnaturaXml() {
