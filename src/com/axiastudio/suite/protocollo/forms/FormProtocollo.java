@@ -17,7 +17,6 @@
 package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.suite.anagrafiche.entities.Riferimento;
-import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipoRiferimento;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
@@ -37,6 +36,7 @@ import com.axiastudio.suite.interoperabilita.entities.Segnatura;
 import com.axiastudio.suite.interoperabilita.utilities.JAXBHelper;
 import com.axiastudio.suite.pec.NuovoMessaggioRequest;
 import com.axiastudio.suite.pec.NuovoMessaggioResponse;
+import com.axiastudio.suite.pec.UploadAllegatoRequest;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
@@ -49,11 +49,15 @@ import com.axiastudio.suite.scanndo.ScanNDo;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
 import org.apache.chemistry.opencmis.client.api.Document;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -71,6 +75,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 
 /**
@@ -78,6 +83,7 @@ import javax.ws.rs.core.MediaType;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class FormProtocollo extends Window {
+    public static final String JPEC_SERVER_URL = "http://192.168.64.200:8080/gdapec/";
     /**
      *
      */
@@ -618,7 +624,7 @@ public class FormProtocollo extends Window {
             return;
         }
         if( destinatari.size()<protocollo.getSoggettoProtocolloCollection().size() ){
-            QMessageBox.warning(this, "Attenzione", "Alcuni destinatari non sono raggiungibili tramite PEC.");
+            QMessageBox.warning(this, "Attenzione", "Alcuni destinatari non sono raggiungibili tramite PEC."); // si, no
             return;
         }
 
@@ -629,42 +635,65 @@ public class FormProtocollo extends Window {
             return;
         }
 
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://192.168.64.200:8080/gdapec/").path("api/messaggi");
+        Client client = ClientBuilder.newBuilder()
+                .register(MultiPartFeature.class)
+                .property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024)
+                .build();
 
-        NuovoMessaggioRequest requestData = new NuovoMessaggioRequest();
-        requestData.setMailbox(mittente.getPec()); // pectest@pec.comune.rivadelgarda.tn.it
+        WebTarget messaggiTarget = client.target(JPEC_SERVER_URL).path("api/messaggi");
+
+        NuovoMessaggioRequest messaggiRequest = new NuovoMessaggioRequest();
+        messaggiRequest.setMailbox(mittente.getPec());
 
         for( String destinatario: destinatari ){
-            requestData.addDestinatario(destinatario); // axiastudio@pec.it
+            messaggiRequest.addDestinatario(destinatario);
         }
-        requestData.setOggetto(protocollo.getOggetto());
-        requestData.setTestoMessaggio(protocollo.getNote());
+        messaggiRequest.setOggetto(protocollo.getOggetto());
+        messaggiRequest.setTestoMessaggio(protocollo.getNote());
 
-        for( Map<String, String> map: helper.children()){
-            String objectId = map.get("objectId");
-            String name = map.get("name");
-            String mime = map.get("mime");
-            Integer length = Integer.parseInt(map.get("contentStreamLength"));
-            Document document = helper.getDocument(objectId);
-            // XXX: add document.getContentStream();
+        NuovoMessaggioResponse messaggioResponse = messaggiTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(messaggiRequest, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
+
+        if( helper.children().size()>0 ) { // c'è qualcosa da allegare
+            for (Map<String, String> map : helper.children()) {
+                String objectId = map.get("objectId");
+                String name = map.get("name");
+                String mime = map.get("mime");
+                Integer length = Integer.parseInt(map.get("contentStreamLength"));
+                Document document = helper.getDocument(objectId);
+
+                WebTarget allegatiTarget = client.target(JPEC_SERVER_URL).path("api/allegati/upload");
+                MultiPart multiPart = new MultiPart();
+                multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
+
+                UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
+                allegatoRequest.setContentType(mime);
+                allegatoRequest.setFileName(name);
+                allegatoRequest.setSize(length);
+                allegatoRequest.setIdMessaggio(messaggioResponse.getMessageId());
+                FormDataBodyPart allegatoDataBodyPart = new FormDataBodyPart("allegato", allegatoRequest, MediaType.APPLICATION_JSON_TYPE);
+                multiPart.bodyPart(allegatoDataBodyPart);
+
+                StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", document.getContentStream().getStream(), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+                multiPart.bodyPart(fileDataBodyPart);
+
+                Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+                if (!(response.getStatus() == Response.Status.OK.getStatusCode()))
+                    System.out.println("Problema: " + name);
+                    break;
+            }
         }
 
-        NuovoMessaggioResponse responseData = target.request(MediaType.APPLICATION_JSON).post(Entity.entity(requestData, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
-
-        System.out.println(responseData.getMessageId());
-        System.out.println(responseData.getLink());
-        System.out.println("done");
+        System.out.println(messaggioResponse.getMessageId());
+        System.out.println(messaggioResponse.getLink());
+        System.out.println("invio");
 
         // eseguo il PUT
         try {
-            URL url = new URL("http://192.168.64.200:8080/gdapec/api/azioni/invia/" + responseData.getMessageId());
+            URL url = new URL(JPEC_SERVER_URL + "api/azioni/invia/" + messaggioResponse.getMessageId());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("PUT");
-            //OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-            //out.write("Dummy content...");
-            //out.close();
             conn.getInputStream();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -673,6 +702,8 @@ public class FormProtocollo extends Window {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("fatto");
+
     }
 
     private void segnaturaXml() {
