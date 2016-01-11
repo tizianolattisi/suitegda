@@ -70,6 +70,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -651,8 +652,14 @@ public class FormProtocollo extends Window {
         messaggiRequest.setOggetto(protocollo.getOggetto());
         messaggiRequest.setTestoMessaggio(protocollo.getNote());
 
-        NuovoMessaggioResponse messaggioResponse = messaggiTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(messaggiRequest, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
-
+        NuovoMessaggioResponse messaggioResponse;
+        try {
+            messaggioResponse = messaggiTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(messaggiRequest, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
+        } catch (ClientErrorException restError) {
+            String error_response = restError.getResponse().readEntity(String.class);
+            System.out.println(error_response);
+            return;
+        }
         if( helper.children().size()>0 ) { // c'è qualcosa da allegare
             for (Map<String, String> map : helper.children()) {
                 String objectId = map.get("objectId");
