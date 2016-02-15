@@ -1008,6 +1008,83 @@ ALTER TABLE ONLY protocollo
 ALTER TABLE ONLY protocollo
     ADD CONSTRAINT fk_protocollo_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
 
+CREATE TABLE protocollo.protocollomodificato
+(
+  id bigserial NOT NULL,
+  tipo character varying(10) NOT NULL,
+  anno integer NOT NULL,
+  iddocumento character varying(12) NOT NULL,
+  dataprotocollo timestamp without time zone NOT NULL DEFAULT now(),
+  sportello bigint NOT NULL,
+  oggetto character varying(1024) NOT NULL,
+  note character varying(1024),
+  tiporiferimentomittente character varying(25),
+  riferimentomittente character varying(255),
+  datariferimentomittente date,
+  riservato boolean NOT NULL DEFAULT false,
+  convalidaattribuzioni boolean NOT NULL DEFAULT false,
+  dataconvalidaattribuzioni timestamp without time zone,
+  esecutoreconvalidaattribuzioni character varying(40),
+  convalidaprotocollo boolean NOT NULL DEFAULT false,
+  numeroconvalidaprotocollo character varying(10),
+  dataconvalidaprotocollo timestamp without time zone,
+  esecutoreconvalidaprotocollo character varying(40),
+  consolidadocumenti boolean NOT NULL DEFAULT false,
+  dataconsolidadocumenti timestamp without time zone,
+  esecutoreconsolidadocumenti character varying(40),
+  numeroricevuta character varying(10),
+  dataricevuta timestamp without time zone,
+  annullamentorichiesto boolean NOT NULL DEFAULT false,
+  annullato boolean NOT NULL DEFAULT false,
+  corrispostoostornato boolean NOT NULL DEFAULT false,
+  richiederisposta boolean NOT NULL DEFAULT false,
+  spedito boolean NOT NULL DEFAULT false,
+  dataspedizione timestamp without time zone,
+  esecutorespedizione character varying(40),
+  controlloreposta character varying(40),
+  scansionemassiva boolean,
+  fascicolo bigint,
+  numeroatto integer,
+  dataatto date,
+  CONSTRAINT protocollomodificato_pkey PRIMARY KEY (id)
+)
+INHERITS (generale.withtimestamp)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE protocollo.protocollomodificato
+  OWNER TO postgres;
+GRANT ALL ON TABLE protocollo.protocollomodificato TO postgres;
+
+CREATE OR REPLACE FUNCTION protocollo.update_protocollo()
+  RETURNS trigger AS
+$BODY$begin
+INSERT INTO protocollo.protocollomodificato (rec_creato, rec_creato_da, rec_modificato, rec_modificato_da, tipo, anno, iddocumento, dataprotocollo,
+	sportello, oggetto, note, tiporiferimentomittente, riferimentomittente, datariferimentomittente, riservato, convalidaattribuzioni,
+	dataconvalidaattribuzioni, esecutoreconvalidaattribuzioni, convalidaprotocollo, numeroconvalidaprotocollo, dataconvalidaprotocollo,
+	esecutoreconvalidaprotocollo, consolidadocumenti, dataconsolidadocumenti, esecutoreconsolidadocumenti, numeroricevuta, dataricevuta,
+	annullamentorichiesto, annullato, corrispostoostornato, richiederisposta, spedito, dataspedizione, esecutorespedizione, controlloreposta,
+	scansionemassiva, fascicolo, numeroatto, dataatto)
+VALUES (old.rec_creato, old.rec_creato_da, old.rec_modificato, old.rec_modificato_da, old.tipo, old.anno, old.iddocumento, old.dataprotocollo,
+	old.sportello, old.oggetto, old.note, old.tiporiferimentomittente, old.riferimentomittente, old.datariferimentomittente, old.riservato,
+	old.convalidaattribuzioni, old.dataconvalidaattribuzioni, old.esecutoreconvalidaattribuzioni, old.convalidaprotocollo,
+	old.numeroconvalidaprotocollo, old.dataconvalidaprotocollo, old.esecutoreconvalidaprotocollo, old.consolidadocumenti,
+	old.dataconsolidadocumenti, old.esecutoreconsolidadocumenti, old.numeroricevuta, old.dataricevuta, old.annullamentorichiesto, old.annullato,
+	old.corrispostoostornato, old.richiederisposta, old.spedito, old.dataspedizione, old.esecutorespedizione, old.controlloreposta,
+	old.scansionemassiva, old.fascicolo, old.numeroatto, old.dataatto);
+return new;
+end$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION protocollo.update_protocollo()
+  OWNER TO postgres;
+
+CREATE TRIGGER log_update_protocollo
+  BEFORE UPDATE
+  ON protocollo.protocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE protocollo.update_protocollo();
+
 CREATE TABLE attribuzione (
     id bigserial NOT NULL,
     protocollo character varying(12) NOT NULL,
@@ -1061,6 +1138,56 @@ CREATE TRIGGER trg_del_attribuzione
   ON protocollo.attribuzione
   FOR EACH ROW
   EXECUTE PROCEDURE protocollo.delete_attribuzione();
+
+CREATE TABLE protocollo.attribuzionemodificata
+(
+  id bigserial NOT NULL,
+  attribuzione bigint NOT NULL,
+  protocollo character varying(12) NOT NULL,
+  ufficio bigint NOT NULL,
+  dataattribuzioneprotocollo timestamp without time zone,
+  letto boolean NOT NULL DEFAULT false,
+  dataletto timestamp without time zone,
+  esecutoreletto character varying(40),
+  principale boolean NOT NULL DEFAULT false,
+  evidenza character varying(1),
+  dataprincipale timestamp without time zone,
+  esecutoreprincipale character varying(40),
+  CONSTRAINT attribuzionemodificata_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_attribuzionemodificata_protocollo FOREIGN KEY (protocollo)
+      REFERENCES protocollo.protocollo (iddocumento) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_attribuzionemodificata_ufficio FOREIGN KEY (ufficio)
+      REFERENCES base.ufficio (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+INHERITS (generale.withtimestamp)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE protocollo.attribuzionemodificata
+  OWNER TO postgres;
+
+CREATE OR REPLACE FUNCTION protocollo.update_attribuzione()
+  RETURNS trigger AS
+$BODY$begin
+INSERT INTO protocollo.attribuzionemodificata (rec_creato, rec_creato_da, rec_modificato, rec_modificato_da, attribuzione, protocollo, ufficio,
+	dataattribuzioneprotocollo, letto, dataletto, esecutoreletto, principale, evidenza, dataprincipale, esecutoreprincipale)
+VALUES (old.rec_creato, old.rec_creato_da, old.rec_modificato, old.rec_modificato_da, old.id, old.protocollo, old.ufficio,
+	old.dataattribuzioneprotocollo, old.letto, old.dataletto, old.esecutoreletto, old.principale, old.evidenza, old.dataprincipale,
+	old.esecutoreprincipale);
+return new;
+end$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION protocollo.update_attribuzione()
+  OWNER TO postgres;
+
+CREATE TRIGGER log_update_attribuzione
+  BEFORE UPDATE OF principale
+  ON protocollo.attribuzione
+  FOR EACH ROW
+  EXECUTE PROCEDURE protocollo.update_attribuzione();
 
 CREATE TABLE oggetto (
     id bigserial NOT NULL,
