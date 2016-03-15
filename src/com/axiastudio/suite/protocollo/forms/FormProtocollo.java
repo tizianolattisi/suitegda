@@ -38,6 +38,7 @@ import com.axiastudio.suite.pec.NuovoMessaggioRequest;
 import com.axiastudio.suite.pec.NuovoMessaggioResponse;
 import com.axiastudio.suite.pec.UploadAllegatoRequest;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.CmisUtil;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
@@ -63,10 +64,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,14 +84,18 @@ import javax.ws.rs.core.Response;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class FormProtocollo extends Window {
+
     public static final String JPEC_SERVER_URL = "http://192.168.64.200:8080/gdapec/";
+    public static final String DOCS_SERVER_URL = "http://192.168.64.200:8080/documentale/";
+    private static final String DOCS_FEED = "1234";
+
     /**
      *
      */
     public ProtocolloMenuBar protocolloMenuBar;
     private QTabWidget tabWidget;
-    
-    
+
+
     public FormProtocollo(FormProtocollo form){
         super(form.uiFile, form.entityClass, form.title);
         this.protocolloMenuBar = null;
@@ -652,6 +656,13 @@ public class FormProtocollo extends Window {
         messaggiRequest.setOggetto(protocollo.getOggetto());
         messaggiRequest.setTestoMessaggio(protocollo.getNote());
 
+        // url del documentale
+        String template = "/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
+        String path = CmisUtil.cmisPathGenerator(template, protocollo);
+        String hash = md5Hash(protocollo.getIddocumento()+ DOCS_FEED);
+        String urlDocumentale = DOCS_SERVER_URL + path + "/" + hash + "/documento";
+        messaggiRequest.setUrlDocumentale(urlDocumentale);
+
         NuovoMessaggioResponse messaggioResponse;
         try {
             messaggioResponse = messaggiTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(messaggiRequest, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
@@ -734,6 +745,22 @@ public class FormProtocollo extends Window {
         String xml = JAXBHelper.scriviSegnatura(segnatura);
         helper.createDocument("", "Segnatura.xml", xml.getBytes());
 
+    }
+
+    private String md5Hash(String s) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            return "00000000000000000000000000000000";
+        }
+        md.update(s.getBytes());
+        byte[] digest = md.digest();
+        StringBuffer sb = new StringBuffer();
+        for( int i=0; i<digest.length; i++ ){
+            sb.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
     }
         
 }
