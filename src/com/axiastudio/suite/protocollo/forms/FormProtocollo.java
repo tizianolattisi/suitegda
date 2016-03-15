@@ -696,9 +696,10 @@ public class FormProtocollo extends Window {
 
                 Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-                if (!(response.getStatus() == Response.Status.OK.getStatusCode()))
-                    System.out.println("Problema: " + name);
-                    break;
+                if (!(response.getStatus() == Response.Status.OK.getStatusCode())) {
+                    QMessageBox.warning(this, "Attenzione!", "Problemi con l'allegato " + name);
+                    return;
+                }
             }
         }
 
