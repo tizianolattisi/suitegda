@@ -657,10 +657,10 @@ public class FormProtocollo extends Window {
         messaggiRequest.setTestoMessaggio(protocollo.getNote());
 
         // url del documentale
-        String template = "/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
+        String template = "${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
         String path = CmisUtil.cmisPathGenerator(template, protocollo);
         String hash = md5Hash(protocollo.getIddocumento()+ DOCS_FEED);
-        String urlDocumentale = DOCS_SERVER_URL + path + "/" + hash + "/documento";
+        String urlDocumentale = DOCS_SERVER_URL + path + hash + "/documento";
         messaggiRequest.setUrlDocumentale(urlDocumentale);
 
         NuovoMessaggioResponse messaggioResponse;
