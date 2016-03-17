@@ -600,8 +600,28 @@ public class FormProtocollo extends Window {
     }
 
     private void inviaPec() {
-        System.out.println("pec");
+
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+
+        // verifica stato attuale
+        String out="";
+        for( SoggettoProtocollo soggettoProtocollo: protocollo.getSoggettoProtocolloCollection() ){
+            Long messaggiopec = soggettoProtocollo.getMessaggiopec();
+            if( messaggiopec !=null ) {
+                Client client = ClientBuilder.newClient();
+                WebTarget target = client.target(JPEC_SERVER_URL).path("api/messaggi/"+messaggiopec+"/stato");
+                String stato = target.request(MediaType.APPLICATION_JSON).get(String.class);
+                out += soggettoProtocollo.getSoggettoformattato() + " - ";
+                out += messaggiopec;
+                out += " (" + stato + ")\n";
+            }
+        }
+        if( out.length()>0 ) {
+            QMessageBox.information(this, "Stato invio PEC", out);
+            return;
+        }
+
+
         if( !protocollo.getTipo().equals(TipoProtocollo.USCITA) ){
             QMessageBox.warning(this, "Attenzione", "E' possibile inviare tramite PEC solo per i protocolli in uscita.");
             return;
@@ -616,11 +636,34 @@ public class FormProtocollo extends Window {
             return;
         }
         List<String> destinatari = new ArrayList<>();
+        Map<String, SoggettoProtocollo> mappaDestinatari = new HashMap<>();
         for( SoggettoProtocollo soggettoProtocollo: protocollo.getSoggettoProtocolloCollection() ){
-            for( Riferimento riferimento: soggettoProtocollo.getSoggetto().getRiferimentoCollection() ){
-                if( TipoRiferimento.PEC.equals(riferimento.getTipo()) ){
-                    destinatari.add(riferimento.getRiferimento());
-                    break;
+            if( soggettoProtocollo.getPec() && soggettoProtocollo.getMessaggiopec()==null ) {
+                List<String> pecDisponibili = new ArrayList<>();
+                for (Riferimento riferimento : soggettoProtocollo.getSoggetto().getRiferimentoCollection()) {
+                    if( TipoRiferimento.PEC.equals(riferimento.getTipo()) ) {
+                        pecDisponibili.add(riferimento.getRiferimento());
+                    }
+                }
+                String pecSelezionata;
+                if (pecDisponibili.size() == 0) {
+                    pecSelezionata = null;
+                } else if (pecDisponibili.size() == 1) {
+                    pecSelezionata = pecDisponibili.get(0);
+                } else {
+                    pecSelezionata = QInputDialog.getItem(this,
+                            "Seleziona PEC destinatario",
+                            "Scegliere l'indirizzo PEC per il destinatario " + soggettoProtocollo.getSoggettoformattato(),
+                            pecDisponibili,
+                            0,
+                            false);
+                }
+                if (pecSelezionata != null) {
+                    destinatari.add(pecSelezionata);
+                    mappaDestinatari.put(pecSelezionata, soggettoProtocollo);
+                } else {
+                    // destinatario non raggiungibilie tramite pec
+                    QMessageBox.warning(this, "Attenzione", "Il destinatario " + soggettoProtocollo.getSoggettoformattato() + " non è raggiungibile tramite PEC.");
                 }
             }
         }
@@ -640,88 +683,105 @@ public class FormProtocollo extends Window {
             return;
         }
 
-        Client client = ClientBuilder.newBuilder()
-                .register(MultiPartFeature.class)
-                .property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024)
-                .build();
-
-        WebTarget messaggiTarget = client.target(JPEC_SERVER_URL).path("api/messaggi");
-
-        NuovoMessaggioRequest messaggiRequest = new NuovoMessaggioRequest();
-        messaggiRequest.setMailbox(mittente.getPec());
-
-        for( String destinatario: destinatari ){
-            messaggiRequest.addDestinatario(destinatario);
-        }
-        messaggiRequest.setOggetto(protocollo.getOggetto());
-        messaggiRequest.setTestoMessaggio(protocollo.getNote());
-
-        // url del documentale
-        String template = "${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
-        String path = CmisUtil.cmisPathGenerator(template, protocollo);
-        String hash = md5Hash(protocollo.getIddocumento()+ DOCS_FEED);
-        String urlDocumentale = DOCS_SERVER_URL + path + hash + "/documento";
-        messaggiRequest.setUrlDocumentale(urlDocumentale);
-
-        NuovoMessaggioResponse messaggioResponse;
-        try {
-            messaggioResponse = messaggiTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(messaggiRequest, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
-        } catch (ClientErrorException restError) {
-            String error_response = restError.getResponse().readEntity(String.class);
-            System.out.println(error_response);
+        int conferma = QMessageBox.question(this,
+                "Conferma", "Conferma invio PEC", QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
+        if( QMessageBox.StandardButton.No.equals(conferma)){
+            System.out.println("sono uscito");
             return;
         }
-        if( helper.children().size()>0 ) { // c'è qualcosa da allegare
-            for (Map<String, String> map : helper.children()) {
-                String objectId = map.get("objectId");
-                String name = map.get("name");
-                String mime = map.get("mime");
-                Integer length = Integer.parseInt(map.get("contentStreamLength"));
-                Document document = helper.getDocument(objectId);
 
-                WebTarget allegatiTarget = client.target(JPEC_SERVER_URL).path("api/allegati/upload");
-                MultiPart multiPart = new MultiPart();
-                multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
+        for( String destinatario: destinatari ) {
 
-                UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
-                allegatoRequest.setContentType(mime);
-                allegatoRequest.setFileName(name);
-                allegatoRequest.setSize(length);
-                allegatoRequest.setIdMessaggio(messaggioResponse.getMessageId());
-                FormDataBodyPart allegatoDataBodyPart = new FormDataBodyPart("allegato", allegatoRequest, MediaType.APPLICATION_JSON_TYPE);
-                multiPart.bodyPart(allegatoDataBodyPart);
 
-                StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", document.getContentStream().getStream(), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
-                multiPart.bodyPart(fileDataBodyPart);
+            Client client = ClientBuilder.newBuilder()
+                    .register(MultiPartFeature.class)
+                    .property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024)
+                    .build();
 
-                Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
+            WebTarget messaggiTarget = client.target(JPEC_SERVER_URL).path("api/messaggi");
 
-                if (!(response.getStatus() == Response.Status.OK.getStatusCode())) {
-                    QMessageBox.warning(this, "Attenzione!", "Problemi con l'allegato " + name);
-                    return;
+
+            NuovoMessaggioRequest messaggiRequest = new NuovoMessaggioRequest();
+            messaggiRequest.setMailbox(mittente.getPec());
+
+            messaggiRequest.addDestinatario(destinatario);
+            messaggiRequest.setOggetto(protocollo.getOggetto());
+            messaggiRequest.setTestoMessaggio(protocollo.getNote());
+
+            // url del documentale
+            String template = "${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
+            String path = CmisUtil.cmisPathGenerator(template, protocollo);
+            String hash = md5Hash(protocollo.getIddocumento() + DOCS_FEED);
+            String urlDocumentale = DOCS_SERVER_URL + path + hash + "/documento";
+            messaggiRequest.setUrlDocumentale(urlDocumentale);
+
+            NuovoMessaggioResponse messaggioResponse;
+            try {
+                messaggioResponse = messaggiTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(messaggiRequest, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
+            } catch (ClientErrorException restError) {
+                String error_response = restError.getResponse().readEntity(String.class);
+                System.out.println(error_response);
+                return;
+            }
+            if (helper.children().size() > 0) { // c'è qualcosa da allegare
+                for (Map<String, String> map : helper.children()) {
+                    String objectId = map.get("objectId");
+                    String name = map.get("name");
+                    String mime = map.get("mime");
+                    Integer length = Integer.parseInt(map.get("contentStreamLength"));
+                    Document document = helper.getDocument(objectId);
+
+                    WebTarget allegatiTarget = client.target(JPEC_SERVER_URL).path("api/allegati/upload");
+                    MultiPart multiPart = new MultiPart();
+                    multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
+
+                    UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
+                    allegatoRequest.setContentType(mime);
+                    allegatoRequest.setFileName(name);
+                    allegatoRequest.setSize(length);
+                    allegatoRequest.setIdMessaggio(messaggioResponse.getMessageId());
+                    FormDataBodyPart allegatoDataBodyPart = new FormDataBodyPart("allegato", allegatoRequest, MediaType.APPLICATION_JSON_TYPE);
+                    multiPart.bodyPart(allegatoDataBodyPart);
+
+                    StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", document.getContentStream().getStream(), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+                    multiPart.bodyPart(fileDataBodyPart);
+
+                    Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+                    if (!(response.getStatus() == Response.Status.OK.getStatusCode())) {
+                        QMessageBox.warning(this, "Attenzione!", "Problemi con l'allegato " + name);
+                        return;
+
+                    }
                 }
             }
-        }
 
-        System.out.println(messaggioResponse.getMessageId());
-        System.out.println(messaggioResponse.getLink());
-        System.out.println("invio");
+            //System.out.println(messaggioResponse.getMessageId());
+            //System.out.println(messaggioResponse.getLink());
+            //System.out.println("invio");
 
-        // eseguo il PUT
-        try {
-            URL url = new URL(JPEC_SERVER_URL + "api/azioni/invia/" + messaggioResponse.getMessageId());
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("PUT");
-            conn.getInputStream();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            mappaDestinatari.get(destinatario).setMessaggiopec(messaggioResponse.getMessageId());
+
+            // salvare
+            getContext().commitChanges();
+
+
+            // eseguo il PUT
+            try {
+                URL url = new URL(JPEC_SERVER_URL + "api/azioni/invia/" + messaggioResponse.getMessageId());
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setDoOutput(true);
+                conn.setRequestMethod("PUT");
+                conn.getInputStream();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("fatto");
         }
-        System.out.println("fatto");
 
     }
 
