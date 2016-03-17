@@ -1119,13 +1119,38 @@ CREATE TABLE protocollo.attribuzionecancellata (
 ALTER TABLE protocollo.attribuzionecancellata
   OWNER TO postgres;
 
+ALTER TABLE protocollo.attribuzionecancellata
+    ADD COLUMN rec_creato timestamp without time zone;
+ALTER TABLE protocollo.attribuzionecancellata
+    ADD COLUMN  rec_creato_da character varying(40);
+ALTER TABLE protocollo.attribuzionecancellata
+    ADD COLUMN  rec_modificato timestamp without time zone;
+ALTER TABLE protocollo.attribuzionecancellata
+    ADD COLUMN  rec_modificato_da character varying(40);
+ALTER TABLE protocollo.attribuzionecancellata
+    ADD COLUMN dataprincipale timestamp without time zone;
+ALTER TABLE protocollo.attribuzionecancellata
+    ADD COLUMN esecutoreprincipale character varying(40);
+ALTER TABLE protocollo.attribuzionecancellata
+    ADD COLUMN esecutorecancellato character varying(40);
+
 CREATE OR REPLACE FUNCTION protocollo.delete_attribuzione()
   RETURNS trigger AS
-$BODY$begin
-INSERT INTO protocollo.attribuzionecancellata (protocollo, ufficio, dataattribuzioneprotocollo, letto, dataletto,
-	esecutoreletto, principale, evidenza, rec_cancellato)
-VALUES (old.protocollo, old.ufficio, old.dataattribuzioneprotocollo, old.letto, old.dataletto, old.esecutoreletto,
-	old.principale, old.evidenza, current_timestamp);
+$BODY$
+DECLARE
+	utente_sessione varchar;
+	utente_appl varchar;
+	postgres_user varchar;
+begin
+  SELECT usename, substring(application_name, 7) INTO postgres_user, utente_appl FROM pg_stat_activity WHERE pid=pg_backend_pid();
+  SELECT utente INTO utente_sessione FROM generale.sessionigda WHERE pid=pg_backend_pid();
+  INSERT INTO protocollo.attribuzionecancellata (protocollo, ufficio, dataattribuzioneprotocollo, letto, dataletto,
+	esecutoreletto, principale, evidenza, rec_cancellato, rec_creato, rec_creato_da, rec_modificato, rec_modificato_da,
+	dataprincipale, esecutoreprincipale, esecutorecancellato)
+  VALUES (old.protocollo, old.ufficio, old.dataattribuzioneprotocollo, old.letto, old.dataletto, old.esecutoreletto,
+	old.principale, old.evidenza, current_timestamp, old.rec_creato, old.rec_creato_da, old.rec_modificato, old.rec_modificato_da,
+	old.dataprincipale, old.esecutoreprincipale,
+	CASE WHEN postgres_user='suitepa' THEN CASE WHEN utente_appl IS NOT NULL THEN utente_appl ELSE utente_sessione END ELSE postgres_user END);
 return old;
 end$BODY$
   LANGUAGE plpgsql VOLATILE
@@ -1168,7 +1193,7 @@ WITH (
 ALTER TABLE protocollo.attribuzionemodificata
   OWNER TO postgres;
 
-CREATE OR REPLACE FUNCTION protocollo.update_attribuzione()
+CREATE OR REPLACE FUNCTION protocollo.update_attribuzioneprincipale()
   RETURNS trigger AS
 $BODY$begin
 INSERT INTO protocollo.attribuzionemodificata (rec_creato, rec_creato_da, rec_modificato, rec_modificato_da, attribuzione, protocollo, ufficio,
@@ -1180,14 +1205,14 @@ return new;
 end$BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION protocollo.update_attribuzione()
+ALTER FUNCTION protocollo.update_attribuzioneprincipale()
   OWNER TO postgres;
 
-CREATE TRIGGER log_update_attribuzione
+CREATE TRIGGER log_update_attribuzioneprincipale
   BEFORE UPDATE OF principale
   ON protocollo.attribuzione
   FOR EACH ROW
-  EXECUTE PROCEDURE protocollo.update_attribuzione();
+  EXECUTE PROCEDURE protocollo.update_attribuzioneprincipale();
 
 CREATE TABLE oggetto (
     id bigserial NOT NULL,
@@ -1264,6 +1289,13 @@ ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_referente FOREIGN KEY (soggettoreferente) REFERENCES anagrafiche.soggetto(id);
 ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_titolo FOREIGN KEY (titolo) REFERENCES titolo(id);
+
+ALTER TABLE protocollo.soggettoprotocollo
+  ADD COLUMN indirizzo bigint;
+ALTER TABLE protocollo.soggettoprotocollo
+  ADD COLUMN messaggiopec bigint;
+ALTER TABLE ONLY protocollo.soggettoprotocollo
+  ADD CONSTRAINT fk_soggettoprotocollo_indirizzo FOREIGN KEY (indirizzo) REFERENCES anagrafiche.indirizzo(id);
 
 -- i soggetti di primo inserimento vengono solo annullati
 CREATE OR REPLACE FUNCTION protocollo.delete_soggettoprotocollo()
