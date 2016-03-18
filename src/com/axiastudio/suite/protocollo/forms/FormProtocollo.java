@@ -94,7 +94,13 @@ public class FormProtocollo extends Window {
      */
     public ProtocolloMenuBar protocolloMenuBar;
     private QTabWidget tabWidget;
+    private QTabWidget tabWidgetSoggettiProtocollo;
 
+    Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+    List<Ufficio> uffici = new ArrayList();
+    List<Ufficio> ufficiRicerca = new ArrayList();
+    List<Ufficio> ufficiPrivato = new ArrayList();
+    AlfrescoHelper alfrescoHelper;
 
     public FormProtocollo(FormProtocollo form){
         super(form.uiFile, form.entityClass, form.title);
@@ -133,6 +139,11 @@ public class FormProtocollo extends Window {
         /* I riferimenti successivi sono sempre in sola lettura */
         PyPaPiTableView tableViewRiferimentiSuccessivi = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_riferimentisuccessivi");
         Util.setWidgetReadOnly(tableViewRiferimentiSuccessivi, true);
+
+        /* Tab della finestra */
+        tabWidgetSoggettiProtocollo = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget_sinistra");
+        tabWidget = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget");
+        tabWidget.currentChanged.connect(this, "focusTabModificato()");
 
         /* Gestione attribuzione principale e pratica in originale */
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
@@ -389,12 +400,12 @@ public class FormProtocollo extends Window {
             this.setStyleSheet("");
         }
 
-        // protocollo convalidato: disabilitazione di tutto tranne oggetto e pratiche
+        // protocollo convalidato: disabilitazione di tutto tranne note e pratiche
         String[] roWidgets = {"textEdit_oggetto", "tableView_soggettiprotocollo",
                 "tableView_soggettiriservatiprotocollo", "tableView_ufficiprotocollo",
                 "comboBoxTitolario", "comboBox_tiporiferimentomittente", "lineEdit_nrriferimentomittente",
                 "dateEdit_datariferimentomittente", "richiederisposta", "riservato",
-                "corrispostoostornato"};
+                "corrispostoostornato","textEditPECBody"};
         for( String widgetName: roWidgets ){
             Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, widgetName), protocollo.getConvalidaprotocollo());
         }
@@ -410,14 +421,32 @@ public class FormProtocollo extends Window {
         } else {
             tvSoggettiRiservati.show();
         }
-        QTabWidget tabWidgetSoggettiProtocollo = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget_sinistra");
         tabWidgetSoggettiProtocollo.setTabEnabled(1, protocollo.getRiservato());
 
         // Indicazione num riferimenti precedenti/successivi su label della tab
-        QTabWidget tabWidgetRiferimentiProtocollo = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget");
-        tabWidgetRiferimentiProtocollo.setTabText(1, "Riferimenti precedenti (" + protocollo.getRiferimentoProtocolloCollection().size() +
+        tabWidget.setTabText(1, "Riferimenti precedenti (" + protocollo.getRiferimentoProtocolloCollection().size() +
                 ") e successivi (" + protocollo.getRiferimentoProtocolloSuccessivoCollection().size() + ")");
 
+        // Gestione abilitazione tab PEC; aggiornamento informazioni se attiva
+        if ( protocollo.getTipo().equals(TipoProtocollo.USCITA) && protocollo.getTiporiferimentomittente()!=null &&
+                                            protocollo.getTiporiferimentomittente().getDescrizione().equals("PEC") ) {
+            tabWidget.setTabText(3, "PEC");
+            tabWidget.setTabEnabled(3, true);
+            if ( tabWidget.currentIndex()==3 ) {
+                // Richiesta informazioni sullo stato dell'invio
+                QTextEdit textStatoPec = (QTextEdit) this.findChild(QTextEdit.class, "textEdit_StatoPEC");
+                textStatoPec.setText(getStatoPec());
+            }
+        } else {
+            tabWidget.setTabText(3, "");
+            tabWidget.setTabEnabled(3, false);
+        }
+
+        // numero di documenti contenuti nella cartella Alfresco
+        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Protocollo.class, "CMIS");
+        alfrescoHelper = cmisPlugin.createAlfrescoHelper(protocollo);
+        Long n = alfrescoHelper.numberOfDocument();
+        labelConsolida.setText(labelConsolida.text() + "\n " + n + " documento/i");
     }
 
     private void aggiornaTipo() {
@@ -460,9 +489,8 @@ public class FormProtocollo extends Window {
             labelSinistra = "Destinatari";
         }
         ((QLabel) this.findChild(QLabel.class, "label_destra")).setText(labelDestra);
-        QTabWidget tabWidgetSoggettiProtocollo = (QTabWidget) this.findChild(QTabWidget.class, "tabWidget_sinistra");
         tabWidgetSoggettiProtocollo.setTabText(0, labelSinistra);
-        tabWidgetSoggettiProtocollo.setTabText(1, labelSinistra+" riservati (" + nrRiservati +")");
+        tabWidgetSoggettiProtocollo.setTabText(1, labelSinistra + " riservati (" + nrRiservati + ")");
     }
 
     private void information() {
@@ -604,18 +632,7 @@ public class FormProtocollo extends Window {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
 
         // verifica stato attuale
-        String out="";
-        for( SoggettoProtocollo soggettoProtocollo: protocollo.getSoggettoProtocolloCollection() ){
-            Long messaggiopec = soggettoProtocollo.getMessaggiopec();
-            if( messaggiopec !=null ) {
-                Client client = ClientBuilder.newClient();
-                WebTarget target = client.target(JPEC_SERVER_URL).path("api/messaggi/"+messaggiopec+"/stato");
-                String stato = target.request(MediaType.APPLICATION_JSON).get(String.class);
-                out += soggettoProtocollo.getSoggettoformattato() + " - ";
-                out += messaggiopec;
-                out += " (" + stato + ")\n";
-            }
-        }
+        String out=getStatoPec();
         if( out.length()>0 ) {
             QMessageBox.information(this, "Stato invio PEC", out);
             return;
@@ -823,5 +840,29 @@ public class FormProtocollo extends Window {
         }
         return sb.toString();
     }
-        
+
+    private void focusTabModificato() {
+        if ( tabWidget.currentIndex()==3 ) {
+            // Richiesta informazioni sullo stato dell'invio
+            QTextEdit textStatoPec = (QTextEdit) this.findChild(QTextEdit.class, "textEdit_StatoPEC");
+            textStatoPec.setText(getStatoPec());
+        }
+    }
+
+    private String getStatoPec() {
+        String out = "";
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        for (SoggettoProtocollo soggettoProtocollo : protocollo.getSoggettoProtocolloCollection()) {
+            Long messaggiopec = soggettoProtocollo.getMessaggiopec();
+            if (messaggiopec != null) {
+                Client client = ClientBuilder.newClient();
+                WebTarget target = client.target(JPEC_SERVER_URL).path("api/messaggi/" + messaggiopec + "/stato");
+                String stato = target.request(MediaType.APPLICATION_JSON).get(String.class);
+                out += soggettoProtocollo.getSoggettoformattato() + " - ";
+                out += messaggiopec;
+                out += " (" + stato + ")\n";
+            }
+        }
+        return out;
+    }
 }

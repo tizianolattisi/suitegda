@@ -1419,6 +1419,21 @@ ALTER TABLE protocollo.mailbox OWNER TO postgres;
 ALTER TABLE ONLY mailbox
 ADD CONSTRAINT mailbox_pkey PRIMARY KEY (id);
 
+CREATE TABLE protocollo.pecprotocollo
+(
+  id bigserial NOT NULL,
+  protocollo character varying(12),
+  body character varying,
+  CONSTRAINT pecprotocollo_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_pecprotocollo_protocollo FOREIGN KEY (protocollo)
+      REFERENCES protocollo.protocollo (iddocumento) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+INHERITS (generale.withtimestamp)
+);
+ALTER TABLE protocollo.pecprotocollo OWNER TO postgres;
+
+
 -- Pubblicazioni
 SET search_path = pubblicazioni, pg_catalog;
 

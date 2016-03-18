@@ -140,6 +140,9 @@ public class Protocollo implements Serializable, ITimeStamped {
     @Temporal(TemporalType.DATE)
     private Date dataatto;
 
+    @OneToOne(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
+    private PecProtocollo pecProtocollo;
+
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -505,6 +508,26 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     public void setDataatto(Date dataatto) {
         this.dataatto = dataatto;
+    }
+
+    public PecProtocollo getPecProtocollo() {
+        return pecProtocollo;
+    }
+
+    public void setPecProtocollo(PecProtocollo pecProtocollo) {
+        this.pecProtocollo = pecProtocollo;
+    }
+
+    public String getPecBody() {
+        if ( this.getPecProtocollo()!=null) {
+            return this.getPecProtocollo().getBody();
+        } else {
+            return "";
+        }
+    }
+
+    public void setPecBody(String pecBody) {
+        this.controlloreposta = controlloreposta;
     }
 
     @Override

@@ -70,6 +70,7 @@
     <class>com.axiastudio.suite.modelli.entities.Segnalibro</class>
     <class>com.axiastudio.suite.protocollo.entities.Mailbox</class>
     <class>com.axiastudio.suite.richieste.entities.Richiesta</class>
+    <class>com.axiastudio.suite.protocollo.entities.PecProtocollo</class>
     <class>com.axiastudio.suite.richieste.entities.DestinatarioUfficio</class>
     <class>com.axiastudio.suite.richieste.entities.DestinatarioUtente</class>
     <class>com.axiastudio.suite.pratiche.entities.Visto</class>
