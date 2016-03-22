@@ -86,7 +86,7 @@ import javax.ws.rs.core.Response;
 public class FormProtocollo extends Window {
 
     public static final String JPEC_SERVER_URL = "http://192.168.64.200:8080/gdapec/";
-    public static final String DOCS_SERVER_URL = "http://192.168.64.200:8080/documentale/";
+    public static final String DOCS_SERVER_URL = "http://192.168.64.200:8080/gda-documentale/rest/protocollo/";
     private static final String DOCS_FEED = "1234";
 
     /**
@@ -336,6 +336,9 @@ public class FormProtocollo extends Window {
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "spedito"), protocollo.getSpedito());
         this.protocolloMenuBar.actionByName("pubblicaProtocollo").setEnabled(autenticato.getPubblicaalbo());
         this.protocolloMenuBar.actionByName("stampaEtichetta").setEnabled(!nuovoInserimento);
+        this.protocolloMenuBar.actionByName("inviaPec").setEnabled( !this.getContext().getIsDirty() && convProtocollo && consDocumenti &&
+                protocollo.getTipo().equals(TipoProtocollo.USCITA) &&
+                protocollo.getTiporiferimentomittente() != null && protocollo.getTiporiferimentomittente().getDescrizione().equals("PEC"));
 
         // convalida attribuzioni
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
@@ -405,7 +408,7 @@ public class FormProtocollo extends Window {
                 "tableView_soggettiriservatiprotocollo", "tableView_ufficiprotocollo",
                 "comboBoxTitolario", "comboBox_tiporiferimentomittente", "lineEdit_nrriferimentomittente",
                 "dateEdit_datariferimentomittente", "richiederisposta", "riservato",
-                "corrispostoostornato","textEditPECBody"};
+                "corrispostoostornato","textEdit_PECBody"};
         for( String widgetName: roWidgets ){
             Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, widgetName), protocollo.getConvalidaprotocollo());
         }
@@ -631,14 +634,6 @@ public class FormProtocollo extends Window {
 
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
 
-        // verifica stato attuale
-        String out=getStatoPec();
-        if( out.length()>0 ) {
-            QMessageBox.information(this, "Stato invio PEC", out);
-            return;
-        }
-
-
         if( !protocollo.getTipo().equals(TipoProtocollo.USCITA) ){
             QMessageBox.warning(this, "Attenzione", "E' possibile inviare tramite PEC solo per i protocolli in uscita.");
             return;
@@ -654,50 +649,71 @@ public class FormProtocollo extends Window {
         }
         List<String> destinatari = new ArrayList<>();
         Map<String, SoggettoProtocollo> mappaDestinatari = new HashMap<>();
+        int giaInviato = 0;
+        int destinatariPec = 0;
         for( SoggettoProtocollo soggettoProtocollo: protocollo.getSoggettoProtocolloCollection() ){
-            if( soggettoProtocollo.getPec() && soggettoProtocollo.getMessaggiopec()==null ) {
-                List<String> pecDisponibili = new ArrayList<>();
-                for (Riferimento riferimento : soggettoProtocollo.getSoggetto().getRiferimentoCollection()) {
-                    if( TipoRiferimento.PEC.equals(riferimento.getTipo()) ) {
-                        pecDisponibili.add(riferimento.getRiferimento());
+            if ( soggettoProtocollo.getPec() ){
+                destinatariPec++;
+                if ( soggettoProtocollo.getMessaggiopec()==null ) {
+                    List<String> pecDisponibili = new ArrayList<String>();
+                    for (Riferimento riferimento : soggettoProtocollo.getSoggetto().getRiferimentoCollection()) {
+                        if (TipoRiferimento.PEC.equals(riferimento.getTipo())) {
+                            pecDisponibili.add(riferimento.getRiferimento());
+                        }
                     }
-                }
-                String pecSelezionata;
-                if (pecDisponibili.size() == 0) {
-                    pecSelezionata = null;
-                } else if (pecDisponibili.size() == 1) {
-                    pecSelezionata = pecDisponibili.get(0);
+                    String pecSelezionata;
+                    if (pecDisponibili.size() == 0) {
+                        pecSelezionata = null;
+                    } else if (pecDisponibili.size() == 1) {
+                        pecSelezionata = pecDisponibili.get(0);
+                    } else {
+                        pecSelezionata = QInputDialog.getItem(this,
+                                "Seleziona PEC destinatario",
+                                "Scegliere l'indirizzo PEC per il destinatario " + soggettoProtocollo.getSoggettoformattato(),
+                                pecDisponibili,
+                                0,
+                                false);
+                    }
+                    if (pecSelezionata != null) {
+                        destinatari.add(pecSelezionata);
+                        mappaDestinatari.put(pecSelezionata, soggettoProtocollo);
+                    } else {
+                        // destinatario non raggiungibilie tramite pec
+                        QMessageBox.warning(this, "Attenzione", "Il destinatario " + soggettoProtocollo.getSoggettoformattato() + " non è raggiungibile tramite PEC.");
+                        return;
+                    }
                 } else {
-                    pecSelezionata = QInputDialog.getItem(this,
-                            "Seleziona PEC destinatario",
-                            "Scegliere l'indirizzo PEC per il destinatario " + soggettoProtocollo.getSoggettoformattato(),
-                            pecDisponibili,
-                            0,
-                            false);
-                }
-                if (pecSelezionata != null) {
-                    destinatari.add(pecSelezionata);
-                    mappaDestinatari.put(pecSelezionata, soggettoProtocollo);
-                } else {
-                    // destinatario non raggiungibilie tramite pec
-                    QMessageBox.warning(this, "Attenzione", "Il destinatario " + soggettoProtocollo.getSoggettoformattato() + " non è raggiungibile tramite PEC.");
+                    giaInviato++;
                 }
             }
+        }
+        if ( giaInviato==destinatariPec ) {
+            QMessageBox.warning(this, "Attenzione", "PEC già inviata a tutti i destinatari indicati.");
+            return;
         }
         if( destinatari.size()==0 ){
             QMessageBox.warning(this, "Attenzione", "I destinatari devono aver configurato un indirizzo PEC.");
             return;
         }
-        if( destinatari.size()<protocollo.getSoggettoProtocolloCollection().size() ){
-            QMessageBox.warning(this, "Attenzione", "Alcuni destinatari non sono raggiungibili tramite PEC."); // si, no
-            return;
+        if( destinatariPec<protocollo.getSoggettoProtocolloCollection().size() ){
+            int conferma = QMessageBox.question(this,
+                    "Attenzione", "Alcuni destinatari non hanno attivo il flag per l'invio tramite PEC. Si desidera procedere?",
+                    QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
+            if( QMessageBox.StandardButton.No.equals(conferma) ){
+                System.out.println("sono uscito");
+                return;
+            }
         }
 
         CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
         AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
         if( helper.children().size() == 0 ){
-            QMessageBox.warning(this, "Attenzione", "Non ci sono file allegati.");
-            return;
+            int conferma = QMessageBox.question(this, "Attenzione", "Non ci sono file allegati. Si desidera continuare?",
+                    QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
+            if( QMessageBox.StandardButton.No.equals(conferma) ){
+                System.out.println("sono uscito");
+                return;
+            }
         }
 
         int conferma = QMessageBox.question(this,
@@ -724,6 +740,7 @@ public class FormProtocollo extends Window {
             messaggiRequest.addDestinatario(destinatario);
             messaggiRequest.setOggetto(protocollo.getOggetto());
             messaggiRequest.setTestoMessaggio(protocollo.getNote());
+            messaggiRequest.setProtocollo(protocollo.getIddocumento());
 
             // url del documentale
             String template = "${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
@@ -738,6 +755,7 @@ public class FormProtocollo extends Window {
             } catch (ClientErrorException restError) {
                 String error_response = restError.getResponse().readEntity(String.class);
                 System.out.println(error_response);
+                QMessageBox.critical(this, "Errore", "Errore nella preparazione della PEC da inviare.");
                 return;
             }
             if (helper.children().size() > 0) { // c'è qualcosa da allegare
@@ -766,22 +784,16 @@ public class FormProtocollo extends Window {
                     Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
 
                     if (!(response.getStatus() == Response.Status.OK.getStatusCode())) {
-                        QMessageBox.warning(this, "Attenzione!", "Problemi con l'allegato " + name);
+                        QMessageBox.critical(this, "Attenzione!", "Problemi con l'allegato " + name);
                         return;
-
                     }
                 }
             }
-
-            //System.out.println(messaggioResponse.getMessageId());
-            //System.out.println(messaggioResponse.getLink());
-            //System.out.println("invio");
 
             mappaDestinatari.get(destinatario).setMessaggiopec(messaggioResponse.getMessageId());
 
             // salvare
             getContext().commitChanges();
-
 
             // eseguo il PUT
             try {
@@ -798,8 +810,8 @@ public class FormProtocollo extends Window {
                 e.printStackTrace();
             }
             System.out.println("fatto");
+            QMessageBox.information(this, "PEC", "PEC in spedizione.");
         }
-
     }
 
     private void segnaturaXml() {
@@ -858,9 +870,11 @@ public class FormProtocollo extends Window {
                 Client client = ClientBuilder.newClient();
                 WebTarget target = client.target(JPEC_SERVER_URL).path("api/messaggi/" + messaggiopec + "/stato");
                 String stato = target.request(MediaType.APPLICATION_JSON).get(String.class);
-                out += soggettoProtocollo.getSoggettoformattato() + " - ";
-                out += messaggiopec;
-                out += " (" + stato + ")\n";
+                out += soggettoProtocollo.getSoggetto().toString() + " - ";
+                out += stato;
+                out += " (PEC n. " + messaggiopec + ")\n";
+//                out += messaggiopec;
+//                out += " (" + stato + ")\n";
             }
         }
         return out;
