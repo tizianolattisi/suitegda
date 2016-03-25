@@ -42,6 +42,8 @@ public class PecProtocollo implements Serializable, ITimeStamped {
     private Protocollo protocollo;
     @Column(name="body")
     private String body="";
+    @Column(name="segnatura")
+    private String segnatura="";
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -76,6 +78,14 @@ public class PecProtocollo implements Serializable, ITimeStamped {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getSegnatura() {
+        return segnatura;
+    }
+
+    public void setSegnatura(String segnatura) {
+        this.segnatura = segnatura;
     }
 
     @Override

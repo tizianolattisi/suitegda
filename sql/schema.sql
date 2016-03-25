@@ -479,6 +479,10 @@ ALTER TABLE ONLY riferimento
     ADD CONSTRAINT riferimento_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY riferimento
     ADD CONSTRAINT fk_riferimento_soggetto FOREIGN KEY (soggetto) REFERENCES soggetto(id);
+ALTER TABLE anagrafiche.riferimento
+    ADD COLUMN principaleentrata boolean NOT NULL DEFAULT FALSE;
+ALTER TABLE anagrafiche.riferimento
+    ADD COLUMN principaleuscita boolean NOT NULL DEFAULT FALSE;
 
 -- Finanziaria (per ora solo i servizi per delibere e determine)
 SET search_path = finanziaria, pg_catalog;
@@ -1424,6 +1428,7 @@ CREATE TABLE protocollo.pecprotocollo
   id bigserial NOT NULL,
   protocollo character varying(12),
   body character varying,
+  segnatura character varying,
   CONSTRAINT pecprotocollo_pkey PRIMARY KEY (id),
   CONSTRAINT fk_pecprotocollo_protocollo FOREIGN KEY (protocollo)
       REFERENCES protocollo.protocollo (iddocumento) MATCH SIMPLE

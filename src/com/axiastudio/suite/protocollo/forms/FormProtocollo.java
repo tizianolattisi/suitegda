@@ -350,6 +350,7 @@ public class FormProtocollo extends Window {
         Util.setWidgetReadOnly((QWidget) this.findChild(QLineEdit.class, "lineEdit_iddocumento"), true);
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "annullato"), true);
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "annullamentorichiesto"), true);
+        Util.setWidgetReadOnly((QWidget) this.findChild(QTextEdit.class, "textEdit_Segnatura"), true);
 
         // solo primo inserimento
         Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_sportello"), !nuovoInserimento);
@@ -431,7 +432,7 @@ public class FormProtocollo extends Window {
                 ") e successivi (" + protocollo.getRiferimentoProtocolloSuccessivoCollection().size() + ")");
 
         // Gestione abilitazione tab PEC; aggiornamento informazioni se attiva
-        if ( protocollo.getTipo().equals(TipoProtocollo.USCITA) && protocollo.getTiporiferimentomittente()!=null &&
+        if ( !protocollo.getTipo().equals(TipoProtocollo.INTERNO) && protocollo.getTiporiferimentomittente()!=null &&
                                             protocollo.getTiporiferimentomittente().getDescrizione().equals("PEC") ) {
             tabWidget.setTabText(3, "PEC");
             tabWidget.setTabEnabled(3, true);
@@ -638,15 +639,28 @@ public class FormProtocollo extends Window {
             QMessageBox.warning(this, "Attenzione", "E' possibile inviare tramite PEC solo per i protocolli in uscita.");
             return;
         }
-        if( protocollo.getUfficioProtocolloCollection().size()!=1 ){
+/*        if( protocollo.getUfficioProtocolloCollection().size()!=1 ){
             QMessageBox.warning(this, "Attenzione", "E' necessario che sia presente un unico ufficio mittente.");
             return;
         }
-        Ufficio mittente = protocollo.getUfficioProtocolloCollection().iterator().next().getUfficio();
-        if( mittente.getPec() == null || mittente.getPec() == "" ){
-            QMessageBox.warning(this, "Attenzione", "L'ufficio mittente deve essere configurato con una mailbox PEC.");
+        Ufficio mittente = protocollo.getUfficioProtocolloCollection().iterator().next().getUfficio(); */
+
+        Ufficio mittente = new Ufficio();
+        for ( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ) {
+            if (attribuzione.getPrincipale()) {
+                mittente = attribuzione.getUfficio();
+                if( mittente.getPec() == null || mittente.getPec() == "" ){
+                    QMessageBox.warning(this, "Attenzione", "L'attribuzione in via principale deve essere configurata con una mailbox PEC.");
+                    return;
+                }
+                break;
+            }
+        }
+        if ( mittente == null) {
+            QMessageBox.critical(this, "Attenzione", "E' necessario che sia presente un'attribuzione in via principale.");
             return;
         }
+
         List<String> destinatari = new ArrayList<>();
         Map<String, SoggettoProtocollo> mappaDestinatari = new HashMap<>();
         int giaInviato = 0;
@@ -739,7 +753,7 @@ public class FormProtocollo extends Window {
 
             messaggiRequest.addDestinatario(destinatario);
             messaggiRequest.setOggetto(protocollo.getOggetto());
-            messaggiRequest.setTestoMessaggio(protocollo.getNote());
+            messaggiRequest.setTestoMessaggio(protocollo.getPecBody());
             messaggiRequest.setProtocollo(protocollo.getIddocumento());
 
             // url del documentale

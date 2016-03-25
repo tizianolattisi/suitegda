@@ -527,8 +527,23 @@ public class Protocollo implements Serializable, ITimeStamped {
     }
 
     public void setPecBody(String pecBody) {
-        this.controlloreposta = controlloreposta;
+        if( getPecProtocollo()==null ){
+            PecProtocollo pecProtocollo = new PecProtocollo();
+            pecProtocollo.setProtocollo(this);
+            setPecProtocollo(pecProtocollo);
+        }
+        getPecProtocollo().setBody(pecBody);
     }
+
+    public String getSegnatura() {
+        if ( this.getPecProtocollo()!=null) {
+            return this.getPecProtocollo().getSegnatura();
+        } else {
+            return "";
+        }
+    }
+
+    public void setSegnatura(String segnatura) {}
 
     @Override
     public Date getRecordcreato() {
