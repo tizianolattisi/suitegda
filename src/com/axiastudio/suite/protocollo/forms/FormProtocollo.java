@@ -339,7 +339,7 @@ public class FormProtocollo extends Window {
         this.protocolloMenuBar.actionByName("stampaEtichetta").setEnabled(!nuovoInserimento);
         this.protocolloMenuBar.actionByName("inviaPec").setEnabled( !this.getContext().getIsDirty() && convProtocollo && consDocumenti &&
                 protocollo.getTipo().equals(TipoProtocollo.USCITA) &&
-                protocollo.getTiporiferimentomittente() != null );
+                protocollo.getTiporiferimentomittente() != null && protocollo.getTiporiferimentomittente().getDescrizione().equals("PEC"));
 
         // convalida attribuzioni
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
@@ -433,9 +433,8 @@ public class FormProtocollo extends Window {
                 ") e successivi (" + protocollo.getRiferimentoProtocolloSuccessivoCollection().size() + ")");
 
         // Gestione abilitazione tab PEC; aggiornamento informazioni se attiva
-        if ( !protocollo.getTipo().equals(TipoProtocollo.INTERNO) && protocollo.getTiporiferimentomittente()!=null
-        //        && protocollo.getTiporiferimentomittente().getDescrizione().equals("PEC")
-                ) {
+        if ( !protocollo.getTipo().equals(TipoProtocollo.INTERNO) && protocollo.getTiporiferimentomittente()!=null &&
+                                            protocollo.getTiporiferimentomittente().getDescrizione().equals("PEC") ) {
             tabWidget.setTabText(3, "PEC");
             tabWidget.setTabEnabled(3, true);
             if ( tabWidget.currentIndex()==3 ) {

@@ -94,7 +94,8 @@ public class Protocollo implements Serializable, ITimeStamped {
     private Boolean riservato=false;
     @Column(name="corrispostoostornato")
     private Boolean corrispostoostornato=false;
-    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "tiporiferimentomittente", referencedColumnName = "descrizione")
+    @ManyToOne
     private TipoRiferimentoMittente tiporiferimentomittente;
     @Column(name="riferimentomittente")
     private String riferimentomittente="";

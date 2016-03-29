@@ -1438,6 +1438,14 @@ INHERITS (generale.withtimestamp)
 );
 ALTER TABLE protocollo.pecprotocollo OWNER TO postgres;
 
+CREATE TABLE protocollo.tiporiferimentomittente
+(
+  id serial NOT NULL,
+  descrizione character varying,
+  CONSTRAINT tiporiferimentomittente_pkey PRIMARY KEY (id)
+);
+ALTER TABLE protocollo.tiporiferimentomittente OWNER TO postgres;
+
 
 -- Pubblicazioni
 SET search_path = pubblicazioni, pg_catalog;
