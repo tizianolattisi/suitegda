@@ -1,9 +1,12 @@
 package com.axiastudio.suite.interoperabilita.utilities;
 
 import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.interoperabilita.entities.*;
 import com.axiastudio.suite.protocollo.entities.Oggetto;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
+
+import java.util.List;
 
 /**
  * User: tiziano
@@ -24,7 +27,7 @@ public class JAXBHelper {
         return xml;
     }
 
-    public static Segnatura segnaturaDaProtocollo(Protocollo protocollo){
+    public static Segnatura segnaturaDaProtocollo(Protocollo protocollo, Soggetto soggetto, String pecDestinatario, List<String> fileAllegati){
 
         Segnatura segnatura = new Segnatura();
         segnatura.setVersione("aaaa-mm-gg");
@@ -36,17 +39,18 @@ public class JAXBHelper {
         Identificatore identificatore = new Identificatore();
         identificatore.setCodiceAmministrazione(SuiteUtil.trovaCostante("CODICE_AMMINISTRAZIONE").getValore());
         identificatore.setCodiceAOO(SuiteUtil.trovaCostante("CODICE_AOO").getValore());
-        identificatore.setNumeroRegistrazione(protocollo.getIddocumento());
+        identificatore.setNumeroRegistrazione(protocollo.getIddocumento().substring(4));
         identificatore.setDataRegistrazione(protocollo.getDataprotocollo().toString());
         identificatore.setCodiceRegistro("--");
         intestazione.setIdentificatore(identificatore);
+        intestazione.setOggetto(protocollo.getOggetto());
 
         Origine origine = new Origine();
         intestazione.setOrigine(origine);
 
         IndirizzoTelematico indirizzoTelematico = new IndirizzoTelematico();
         indirizzoTelematico.setTipo("smtp");
-        indirizzoTelematico.setvalue("info@comune.rivadelgarda.tn.it");
+        indirizzoTelematico.setvalue(protocollo.getUfficioProtocolloCollection().iterator().next().getUfficio().getPec());
         origine.setIndirizzoTelematico(indirizzoTelematico);
 
         Mittente mittente = new Mittente();
@@ -60,7 +64,7 @@ public class JAXBHelper {
         UnitaOrganizzativa unitaOrganizzativa = new UnitaOrganizzativa();
         unitaOrganizzativa.setTipo("permanente");
         Denominazione denominazioneUnitaOrganizzativa = new Denominazione();
-        denominazioneUnitaOrganizzativa.setvalue("Sistema informativo comunale");
+        denominazioneUnitaOrganizzativa.setvalue(SuiteUtil.trovaCostante("DENOMINAZIONE").getValore());
         unitaOrganizzativa.setDenominazione(denominazioneUnitaOrganizzativa);
         IndirizzoPostale indirizzoPostaleUnitaOrganizzativa = new IndirizzoPostale();
         indirizzoPostaleUnitaOrganizzativa.getDenominazioneOrToponimoOrCivicoOrCAPOrComuneOrProvinciaOrNazione()
@@ -74,7 +78,7 @@ public class JAXBHelper {
         mittente.setAOO(aoo);
         Denominazione denominazioneAoo = new Denominazione();
         aoo.setDenominazione(denominazioneAoo);
-        denominazioneAoo.setvalue("RSERVIZI");
+        denominazioneAoo.setvalue(SuiteUtil.trovaCostante("CODICE_AOO").getValore());
 
         Destinazione destinazione = new Destinazione();
         intestazione.getDestinazione().add(destinazione);
@@ -82,28 +86,30 @@ public class JAXBHelper {
         IndirizzoTelematico indirizzoTelematicoDestinazione = new IndirizzoTelematico();
         indirizzoTelematicoDestinazione.setTipo("smtp");
         destinazione.setIndirizzoTelematico(indirizzoTelematicoDestinazione);
-        indirizzoTelematicoDestinazione.setvalue("serv.supportoeinformatica@pec.provincia.tn.it");
+        indirizzoTelematicoDestinazione.setvalue(pecDestinatario);
+
+        /* // opzionale
         Destinatario destinatario = new Destinatario();
         destinazione.getDestinatario().add(destinatario);
         Amministrazione amministrazioneDestinatario = new Amministrazione();
         destinatario.getAmministrazioneOrAOOOrDenominazioneOrPersona().add(amministrazioneDestinatario);
         Denominazione denominazioneAministrazioneDestinatario = new Denominazione();
         amministrazioneDestinatario.setDenominazione(denominazioneAministrazioneDestinatario);
-        denominazioneAministrazioneDestinatario.setvalue("Provincia Autonoma di Trento");
+        denominazioneAministrazioneDestinatario.setvalue(soggetto.getDenominazione());
         UnitaOrganizzativa unitaOrganizzativaAmministrazioneDestinatario = new UnitaOrganizzativa();
         unitaOrganizzativaAmministrazioneDestinatario.setTipo("permanente");
         amministrazioneDestinatario.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
                 .add(unitaOrganizzativaAmministrazioneDestinatario);
         Denominazione denominazioneUnitaOrganizzativaDestinatario = new Denominazione();
         unitaOrganizzativaAmministrazioneDestinatario.setDenominazione(denominazioneUnitaOrganizzativaDestinatario);
-        denominazioneUnitaOrganizzativaDestinatario.setvalue("Direzione Generale della Provincia");
+        denominazioneUnitaOrganizzativaDestinatario.setvalue(soggetto.getDenominazione2());
         UnitaOrganizzativa unitaOrganizzativaAmministrazioneDestinatario2 = new UnitaOrganizzativa();
         unitaOrganizzativaAmministrazioneDestinatario2.setTipo("permanente");
         unitaOrganizzativaAmministrazioneDestinatario.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
                 .add(unitaOrganizzativaAmministrazioneDestinatario2);
         Denominazione denominazioneUnitaOrganizzativaDestinatario2 = new Denominazione();
         unitaOrganizzativaAmministrazioneDestinatario2.setDenominazione(denominazioneUnitaOrganizzativaDestinatario2);
-        denominazioneUnitaOrganizzativaDestinatario2.setvalue("Servizio supporto amministrativo e informatica");
+        denominazioneUnitaOrganizzativaDestinatario2.setvalue(soggetto.getDenominazione3());
         IndirizzoPostale indirizzoPostale = new IndirizzoPostale();
         unitaOrganizzativaAmministrazioneDestinatario2.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
                 .add(indirizzoPostale);
@@ -111,20 +117,45 @@ public class JAXBHelper {
         indirizzoPostale.getDenominazioneOrToponimoOrCivicoOrCAPOrComuneOrProvinciaOrNazione()
                 .add(denominazioneIndirizzoPostale);
         denominazioneIndirizzoPostale.setvalue("");
+        */
 
-        intestazione.setOggetto("Risposta");
 
         //Riferimenti riferimenti = new Riferimenti();
         //segnatura.setRiferimenti(riferimenti);
 
+        // documento principale o corpo del messaggio
         Descrizione descrizione = new Descrizione();
         segnatura.setDescrizione(descrizione);
-        Documento documento = new Documento();
-        descrizione.getDocumentoOrTestoDelMessaggio().add(documento);
-        documento.setNome("risposta.pdf");
-        documento.setTipoRiferimento("MIME");
-        Oggetto oggetto = new Oggetto();
-        documento.setOggetto("Descrizione del file risposta.pdf");
+        Integer allegatiDa = 0;
+        if( protocollo.getPecBody()==null || protocollo.getPecBody().equals("") ) {
+            Documento documento = new Documento();
+            descrizione.getDocumentoOrTestoDelMessaggio().add(documento);
+            documento.setNome(fileAllegati.get(0));
+            documento.setTipoRiferimento("MIME"); // fisso
+            documento.setOggetto(fileAllegati.get(0));
+            allegatiDa++;
+        } else {
+            TestoDelMessaggio testoDelMessaggio = new TestoDelMessaggio();
+            testoDelMessaggio.setTipoMIME("text/plain");
+            testoDelMessaggio.setTipoRiferimento("MIME");
+            testoDelMessaggio.setId("body");
+        }
+
+        // allegati
+        Allegati allegati = new Allegati();
+        for( Integer i=allegatiDa; i<fileAllegati.size(); i++ ){
+            Documento documento = new Documento();
+            descrizione.getDocumentoOrTestoDelMessaggio().add(documento);
+            documento.setNome(fileAllegati.get(i));
+            documento.setTipoRiferimento("MIME"); // fisso
+            documento.setOggetto(fileAllegati.get(i));
+            allegati.getDocumentoOrFascicolo().add(documento);
+        }
+        if( allegati.getDocumentoOrFascicolo().size()>0 ){
+            descrizione.setAllegati(allegati);
+        }
+
+        segnatura.setDescrizione(descrizione);
 
         return segnatura;
 

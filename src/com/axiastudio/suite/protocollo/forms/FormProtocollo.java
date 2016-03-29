@@ -18,6 +18,7 @@ package com.axiastudio.suite.protocollo.forms;
 
 import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.TipoRiferimento;
+import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
@@ -338,7 +339,7 @@ public class FormProtocollo extends Window {
         this.protocolloMenuBar.actionByName("stampaEtichetta").setEnabled(!nuovoInserimento);
         this.protocolloMenuBar.actionByName("inviaPec").setEnabled( !this.getContext().getIsDirty() && convProtocollo && consDocumenti &&
                 protocollo.getTipo().equals(TipoProtocollo.USCITA) &&
-                protocollo.getTiporiferimentomittente() != null && protocollo.getTiporiferimentomittente().getDescrizione().equals("PEC"));
+                protocollo.getTiporiferimentomittente() != null );
 
         // convalida attribuzioni
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
@@ -432,8 +433,9 @@ public class FormProtocollo extends Window {
                 ") e successivi (" + protocollo.getRiferimentoProtocolloSuccessivoCollection().size() + ")");
 
         // Gestione abilitazione tab PEC; aggiornamento informazioni se attiva
-        if ( !protocollo.getTipo().equals(TipoProtocollo.INTERNO) && protocollo.getTiporiferimentomittente()!=null &&
-                                            protocollo.getTiporiferimentomittente().getDescrizione().equals("PEC") ) {
+        if ( !protocollo.getTipo().equals(TipoProtocollo.INTERNO) && protocollo.getTiporiferimentomittente()!=null
+        //        && protocollo.getTiporiferimentomittente().getDescrizione().equals("PEC")
+                ) {
             tabWidget.setTabText(3, "PEC");
             tabWidget.setTabEnabled(3, true);
             if ( tabWidget.currentIndex()==3 ) {
@@ -763,6 +765,7 @@ public class FormProtocollo extends Window {
             String urlDocumentale = DOCS_SERVER_URL + path + hash + "/documento";
             messaggiRequest.setUrlDocumentale(urlDocumentale);
 
+            // messaggio
             NuovoMessaggioResponse messaggioResponse;
             try {
                 messaggioResponse = messaggiTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(messaggiRequest, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
@@ -772,6 +775,11 @@ public class FormProtocollo extends Window {
                 QMessageBox.critical(this, "Errore", "Errore nella preparazione della PEC da inviare.");
                 return;
             }
+            SoggettoProtocollo soggettoProtocollo = mappaDestinatari.get(destinatario);
+            soggettoProtocollo.setMessaggiopec(messaggioResponse.getMessageId());
+
+            // allegati
+            List<String> nomiFile = new ArrayList<>();
             if (helper.children().size() > 0) { // c'è qualcosa da allegare
                 for (Map<String, String> map : helper.children()) {
                     String objectId = map.get("objectId");
@@ -787,6 +795,7 @@ public class FormProtocollo extends Window {
                     UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
                     allegatoRequest.setContentType(mime);
                     allegatoRequest.setFileName(name);
+                    nomiFile.add(name);
                     allegatoRequest.setSize(length);
                     allegatoRequest.setIdMessaggio(messaggioResponse.getMessageId());
                     FormDataBodyPart allegatoDataBodyPart = new FormDataBodyPart("allegato", allegatoRequest, MediaType.APPLICATION_JSON_TYPE);
@@ -804,7 +813,37 @@ public class FormProtocollo extends Window {
                 }
             }
 
-            mappaDestinatari.get(destinatario).setMessaggiopec(messaggioResponse.getMessageId());
+            // Segnatura.xml
+            Boolean SEGNATURA = Boolean.TRUE;
+            Boolean DRY_RUN = Boolean.FALSE;
+            Boolean SEGNATURA_A_TUTTI = Boolean.TRUE;
+            if(SEGNATURA && (SEGNATURA_A_TUTTI || TipoSoggetto.ENTE.equals(soggettoProtocollo.getSoggetto().getTipo())) ) {
+                Segnatura segnatura = JAXBHelper.segnaturaDaProtocollo(protocollo,
+                        soggettoProtocollo.getSoggetto(),
+                        destinatario,
+                        nomiFile);
+                String segnaturaXml = JAXBHelper.scriviSegnatura(segnatura);
+                if( DRY_RUN ){
+                    System.out.println(segnaturaXml);
+                } else {
+                    WebTarget allegatiTarget = client.target(JPEC_SERVER_URL).path("api/allegati/upload");
+                    MultiPart multiPart = new MultiPart();
+                    multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
+                    UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
+                    allegatoRequest.setContentType("text/xml");
+                    allegatoRequest.setFileName("Segnatura.xml");
+                    allegatoRequest.setSize(segnaturaXml.length());
+                    allegatoRequest.setIdMessaggio(messaggioResponse.getMessageId());
+                    FormDataBodyPart allegatoDataBodyPart = new FormDataBodyPart("allegato", allegatoRequest, MediaType.APPLICATION_JSON_TYPE);
+                    multiPart.bodyPart(allegatoDataBodyPart);
+
+                    StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", new ByteArrayInputStream(segnaturaXml.getBytes()), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+                    multiPart.bodyPart(fileDataBodyPart);
+
+                    Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
+                }
+            }
+
 
             // salvare
             getContext().commitChanges();
@@ -828,28 +867,16 @@ public class FormProtocollo extends Window {
         }
     }
 
-    private void segnaturaXml() {
+    /*
+    private String segnaturaXml() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        if( protocollo.getId() == null ){
-            QMessageBox.warning(this, "Attenzione", "E' necessario registrare il protocollo per poter generare la segntura.");
-            return;
-        }
-        if( !protocollo.getTipo().equals(TipoProtocollo.USCITA) ){
-            QMessageBox.warning(this, "Attenzione", "E' possibile generare la segnatura solo per i protocolli in uscita.");
-            return;
-        }
         CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
         AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
-        if( helper.children().size() == 0 ){
-            QMessageBox.warning(this, "Attenzione", "Deve essere presente almeno un documento.");
-            return;
-        }
-
         Segnatura segnatura = JAXBHelper.segnaturaDaProtocollo(protocollo);
         String xml = JAXBHelper.scriviSegnatura(segnatura);
-        helper.createDocument("", "Segnatura.xml", xml.getBytes());
-
+        return xml;
     }
+    */
 
     private String md5Hash(String s) {
         MessageDigest md;
