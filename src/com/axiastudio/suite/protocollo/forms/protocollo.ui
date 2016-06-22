@@ -333,7 +333,7 @@
             <string>Rifer. mitt.</string>
            </property>
            <property name="buddy">
-            <cstring>lineEdit_nrriferimentomittente</cstring>
+            <cstring>comboBox_tiporiferimentomittente</cstring>
            </property>
           </widget>
          </item>
@@ -345,12 +345,18 @@
            <property name="sortbytostring" stdset="0">
             <bool>true</bool>
            </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>N°</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_nrriferimentomittente</cstring>
            </property>
           </widget>
          </item>
@@ -374,6 +380,9 @@
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>del</string>
+           </property>
+           <property name="buddy">
+            <cstring>dateEdit_datariferimentomittente</cstring>
            </property>
           </widget>
          </item>
@@ -406,6 +415,9 @@
            <property name="column" stdset="0">
             <string>datariferimentomittente</string>
            </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
         </layout>
@@ -414,32 +426,6 @@
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="1">
-            <widget class="QCheckBox" name="spedito">
-             <property name="text">
-              <string>Spedito</string>
-             </property>
-             <property name="column" stdset="0">
-              <string>Spedito</string>
-             </property>
-             <property name="search" stdset="0">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="annullamentorichiesto">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Annull. richiesto</string>
-             </property>
-             <property name="column" stdset="0">
-              <string>annullamentorichiesto</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="1">
             <widget class="QCheckBox" name="riservato">
              <property name="text">
@@ -453,6 +439,32 @@
              </property>
              <property name="export" stdset="0">
               <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="annullato">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Annullato</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>annullato</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="annullamentorichiesto">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Annull. richiesto</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>annullamentorichiesto</string>
              </property>
             </widget>
            </item>
@@ -476,16 +488,16 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QCheckBox" name="annullato">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="spedito">
              <property name="text">
-              <string>Annullato</string>
+              <string>Spedito</string>
              </property>
              <property name="column" stdset="0">
-              <string>annullato</string>
+              <string>Spedito</string>
+             </property>
+             <property name="search" stdset="0">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -693,7 +705,7 @@
     <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -1036,24 +1048,18 @@
        <attribute name="title">
         <string/>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,2,0,1">
+       <layout class="QGridLayout" name="gridLayout_5">
         <item row="0" column="0">
          <widget class="QLabel" name="label_6">
           <property name="text">
            <string>Corpo del messaggio</string>
           </property>
-          <property name="buddy">
-           <cstring>textEdit_note</cstring>
-          </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_18">
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_17">
           <property name="text">
-           <string>Segnatura</string>
-          </property>
-          <property name="buddy">
-           <cstring>textEdit_note</cstring>
+           <string>Stato invio PEC</string>
           </property>
          </widget>
         </item>
@@ -1083,6 +1089,13 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_18">
+          <property name="text">
+           <string>Segnatura</string>
+          </property>
+         </widget>
+        </item>
         <item row="3" column="0" colspan="2">
          <widget class="QTextEdit" name="textEdit_Segnatura">
           <property name="enabled">
@@ -1099,16 +1112,6 @@
           </property>
           <property name="private" stdset="0">
            <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLabel" name="label_17">
-          <property name="text">
-           <string>Stato invio PEC</string>
-          </property>
-          <property name="buddy">
-           <cstring>textEdit_note</cstring>
           </property>
          </widget>
         </item>

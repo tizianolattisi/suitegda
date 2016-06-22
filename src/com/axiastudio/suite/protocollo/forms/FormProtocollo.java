@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.TipoRiferimento;
 import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
@@ -67,6 +68,9 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,8 +90,6 @@ import javax.ws.rs.core.Response;
  */
 public class FormProtocollo extends Window {
 
-    public static final String JPEC_SERVER_URL = "http://192.168.64.200:8080/gdapec/";
-    public static final String DOCS_SERVER_URL = "http://192.168.64.200:8080/gda-documentale/rest/protocollo/";
     private static final String DOCS_FEED = "1234";
 
     /**
@@ -339,7 +341,9 @@ public class FormProtocollo extends Window {
         this.protocolloMenuBar.actionByName("stampaEtichetta").setEnabled(!nuovoInserimento);
         this.protocolloMenuBar.actionByName("inviaPec").setEnabled( !this.getContext().getIsDirty() && convProtocollo && consDocumenti &&
                 protocollo.getTipo().equals(TipoProtocollo.USCITA) &&
-                protocollo.getTiporiferimentomittente() != null && protocollo.getTiporiferimentomittente().getDescrizione().equals("PEC"));
+                protocollo.getTiporiferimentomittente() != null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
+                profilo.inAttribuzionePrincipale());
+
 
         // convalida attribuzioni
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
@@ -537,8 +541,12 @@ public class FormProtocollo extends Window {
                 }
                 if( protocollo.getConsolidadocumenti() ){
                     delete = false;
-                    version = pup.inAttribuzionePrincipaleC();
-                    upload = version && autenticato.getNuovodocsuconsolidato();
+                    if ( protocollo.getTiporiferimentomittente()!=null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) ) {
+                        version = false;
+                    } else {
+                        version = pup.inAttribuzionePrincipaleC();
+                    }
+                    upload = pup.inAttribuzionePrincipaleC() && autenticato.getNuovodocsuconsolidato();
                 } else {
                     upload = pup.inSportelloOAttribuzionePrincipale();
                     delete = upload;
@@ -640,11 +648,6 @@ public class FormProtocollo extends Window {
             QMessageBox.warning(this, "Attenzione", "E' possibile inviare tramite PEC solo per i protocolli in uscita.");
             return;
         }
-/*        if( protocollo.getUfficioProtocolloCollection().size()!=1 ){
-            QMessageBox.warning(this, "Attenzione", "E' necessario che sia presente un unico ufficio mittente.");
-            return;
-        }
-        Ufficio mittente = protocollo.getUfficioProtocolloCollection().iterator().next().getUfficio(); */
 
         Ufficio mittente = new Ufficio();
         for ( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ) {
@@ -662,45 +665,70 @@ public class FormProtocollo extends Window {
             return;
         }
 
-        List<String> destinatari = new ArrayList<>();
-        Map<String, SoggettoProtocollo> mappaDestinatari = new HashMap<>();
+        Application app = Application.getApplicationInstance();
+        String pecServerUrl = (String) app.getConfigItem("pec.serverURL");
+        String pecDocServerUrl = (String) app.getConfigItem("pec.docServerURL");
+
+        List<String> destinatari = new ArrayList<String>();
+        Map<String, SoggettoProtocollo> mappaDestinatari = new HashMap<String, SoggettoProtocollo>();
         int giaInviato = 0;
         int destinatariPec = 0;
+        int destinatariProtocollo = 0;
+        boolean daInviare = false;
         for( SoggettoProtocollo soggettoProtocollo: protocollo.getSoggettoProtocolloCollection() ){
-            if ( soggettoProtocollo.getPec() ){
-                destinatariPec++;
-                if ( soggettoProtocollo.getMessaggiopec()==null ) {
-                    List<String> pecDisponibili = new ArrayList<String>();
-                    for (Riferimento riferimento : soggettoProtocollo.getSoggetto().getRiferimentoCollection()) {
-                        if (TipoRiferimento.PEC.equals(riferimento.getTipo())) {
-                            pecDisponibili.add(riferimento.getRiferimento());
+            if ( !soggettoProtocollo.getAnnullato() ){
+                if ( soggettoProtocollo.getPec() ){
+                    destinatariPec++;
+                    if ( soggettoProtocollo.getMessaggiopec()==null ) {
+                        daInviare = true;
+                    } else {
+                        Client client = ClientBuilder.newClient();
+                        WebTarget target = client.target(pecServerUrl).path("api/messaggi/" + soggettoProtocollo.getMessaggiopec() + "/stato");
+                        String stato = target.request(MediaType.APPLICATION_JSON).get(String.class);
+                        if ( stato.equalsIgnoreCase("\"anomalia\"") ) {
+                            daInviare = true;
+                        } else {
+                            daInviare = false;
                         }
                     }
-                    String pecSelezionata;
-                    if (pecDisponibili.size() == 0) {
-                        pecSelezionata = null;
-                    } else if (pecDisponibili.size() == 1) {
-                        pecSelezionata = pecDisponibili.get(0);
+                    if ( daInviare ) {
+                        List<String> pecDisponibili = new ArrayList<String>();
+                        for (Riferimento riferimento : soggettoProtocollo.getSoggetto().getRiferimentoCollection()) {
+                            if (TipoRiferimento.PEC.equals(riferimento.getTipo())) {
+                                pecDisponibili.add(riferimento.getRiferimento());
+                            }
+                        }
+                        String pecSelezionata;
+                        if (pecDisponibili.size() == 0) {
+                            pecSelezionata = null;
+                        } else if (pecDisponibili.size() == 1) {
+                            pecSelezionata = pecDisponibili.get(0);
+                        } else {
+                            pecSelezionata = QInputDialog.getItem(this,
+                                    "Seleziona PEC destinatario",
+                                    "Scegliere l'indirizzo PEC per il destinatario " + soggettoProtocollo.getSoggettoformattato(),
+                                    pecDisponibili,
+                                    0,
+                                    false);
+                        }
+                        if (pecSelezionata != null) {
+                            destinatari.add(pecSelezionata);
+                            mappaDestinatari.put(pecSelezionata, soggettoProtocollo);
+                        } else {
+                            // destinatario non raggiungibilie tramite pec
+                            QMessageBox.warning(this, "Attenzione", "Il destinatario " + soggettoProtocollo.getSoggettoformattato() + " non è raggiungibile tramite PEC.");
+                            return;
+                        }
                     } else {
-                        pecSelezionata = QInputDialog.getItem(this,
-                                "Seleziona PEC destinatario",
-                                "Scegliere l'indirizzo PEC per il destinatario " + soggettoProtocollo.getSoggettoformattato(),
-                                pecDisponibili,
-                                0,
-                                false);
+                        giaInviato++;
                     }
-                    if (pecSelezionata != null) {
-                        destinatari.add(pecSelezionata);
-                        mappaDestinatari.put(pecSelezionata, soggettoProtocollo);
-                    } else {
-                        // destinatario non raggiungibilie tramite pec
-                        QMessageBox.warning(this, "Attenzione", "Il destinatario " + soggettoProtocollo.getSoggettoformattato() + " non è raggiungibile tramite PEC.");
-                        return;
-                    }
-                } else {
-                    giaInviato++;
                 }
+                destinatariProtocollo++;
             }
+        }
+        if ( destinatariPec==0 ) {
+            QMessageBox.warning(this, "Attenzione", "Nessun destinatario con flag 'PEC' attivato.");
+            return;
         }
         if ( giaInviato==destinatariPec ) {
             QMessageBox.warning(this, "Attenzione", "PEC già inviata a tutti i destinatari indicati.");
@@ -710,7 +738,7 @@ public class FormProtocollo extends Window {
             QMessageBox.warning(this, "Attenzione", "I destinatari devono aver configurato un indirizzo PEC.");
             return;
         }
-        if( destinatariPec<protocollo.getSoggettoProtocolloCollection().size() ){
+        if( destinatariPec<destinatariProtocollo ){
             int conferma = QMessageBox.question(this,
                     "Attenzione", "Alcuni destinatari non hanno attivo il flag per l'invio tramite PEC. Si desidera procedere?",
                     QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
@@ -720,6 +748,7 @@ public class FormProtocollo extends Window {
             }
         }
 
+        int numAllegati=0;
         CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
         AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
         if( helper.children().size() == 0 ){
@@ -729,29 +758,47 @@ public class FormProtocollo extends Window {
                 System.out.println("sono uscito");
                 return;
             }
+        } else {
+            for (Map<String, String> map : helper.children()) {
+                /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
+                Date documentDate = new Date();
+                DateFormat df = new SimpleDateFormat("EEE MMM dd hh:mm:ss 'CEST' yyyy", Locale.ENGLISH);
+                try {
+                    documentDate = df.parse(map.get("lastModificationDate"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if ( documentDate.before(protocollo.getDataconsolidadocumenti()) ) {
+                    numAllegati++;
+                }
+            }
+            if ( numAllegati==0 ) {
+                int conferma = QMessageBox.question(this, "Attenzione", "Non ci sono file allegati. Si desidera continuare?",
+                        QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
+                if (QMessageBox.StandardButton.No.equals(conferma)) {
+                    System.out.println("sono uscito");
+                    return;
+                }
+            }
         }
 
         int conferma = QMessageBox.question(this,
                 "Conferma", "Conferma invio PEC", QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
-        if( QMessageBox.StandardButton.No.equals(conferma)){
+        if( QMessageBox.StandardButton.No.value() == conferma ){
             System.out.println("sono uscito");
+            QMessageBox.information(this, "Invio annullato", "L'invio della PEC è stato annullato.");
             return;
         }
-
         for( String destinatario: destinatari ) {
-
-
             Client client = ClientBuilder.newBuilder()
                     .register(MultiPartFeature.class)
                     .property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024)
                     .build();
 
-            WebTarget messaggiTarget = client.target(JPEC_SERVER_URL).path("api/messaggi");
-
+            WebTarget messaggiTarget = client.target(pecServerUrl).path("api/messaggi");
 
             NuovoMessaggioRequest messaggiRequest = new NuovoMessaggioRequest();
             messaggiRequest.setMailbox(mittente.getPec());
-
             messaggiRequest.addDestinatario(destinatario);
             messaggiRequest.setOggetto(protocollo.getOggetto());
             messaggiRequest.setTestoMessaggio(protocollo.getPecBody());
@@ -761,7 +808,7 @@ public class FormProtocollo extends Window {
             String template = "${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
             String path = CmisUtil.cmisPathGenerator(template, protocollo);
             String hash = md5Hash(protocollo.getIddocumento() + DOCS_FEED);
-            String urlDocumentale = DOCS_SERVER_URL + path + hash + "/documento";
+            String urlDocumentale = pecDocServerUrl + path + hash + "/documento";
             messaggiRequest.setUrlDocumentale(urlDocumentale);
 
             // messaggio
@@ -778,36 +825,48 @@ public class FormProtocollo extends Window {
             soggettoProtocollo.setMessaggiopec(messaggioResponse.getMessageId());
 
             // allegati
-            List<String> nomiFile = new ArrayList<>();
-            if (helper.children().size() > 0) { // c'è qualcosa da allegare
+            List<String> nomiFile = new ArrayList<String>();
+//            if (helper.children().size() > 0) { // c'è qualcosa da allegare
+            if (numAllegati > 0) { // c'è qualcosa da allegare
                 for (Map<String, String> map : helper.children()) {
-                    String objectId = map.get("objectId");
-                    String name = map.get("name");
-                    String mime = map.get("mime");
-                    Integer length = Integer.parseInt(map.get("contentStreamLength"));
-                    Document document = helper.getDocument(objectId);
+                    /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
+                    String strDataFile = map.get("lastModificationDate");
+                    Date documentDate = new Date();
+                    DateFormat df = new SimpleDateFormat("EEE MMM dd hh:mm:ss 'CEST' yyyy", Locale.ENGLISH);
+                    try {
+                        documentDate = df.parse(strDataFile);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if ( documentDate.before(protocollo.getDataconsolidadocumenti()) ) {
+                        String objectId = map.get("objectId");
+                        String name = map.get("name");
+                        String mime = map.get("mime");
+                        Integer length = Integer.parseInt(map.get("contentStreamLength"));
+                        Document document = helper.getDocument(objectId);
 
-                    WebTarget allegatiTarget = client.target(JPEC_SERVER_URL).path("api/allegati/upload");
-                    MultiPart multiPart = new MultiPart();
-                    multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
+                        WebTarget allegatiTarget = client.target(pecServerUrl).path("api/allegati/upload");
+                        MultiPart multiPart = new MultiPart();
+                        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
 
-                    UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
-                    allegatoRequest.setContentType(mime);
-                    allegatoRequest.setFileName(name);
-                    nomiFile.add(name);
-                    allegatoRequest.setSize(length);
-                    allegatoRequest.setIdMessaggio(messaggioResponse.getMessageId());
-                    FormDataBodyPart allegatoDataBodyPart = new FormDataBodyPart("allegato", allegatoRequest, MediaType.APPLICATION_JSON_TYPE);
-                    multiPart.bodyPart(allegatoDataBodyPart);
+                        UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
+                        allegatoRequest.setContentType(mime);
+                        allegatoRequest.setFileName(name);
+                        nomiFile.add(name);
+                        allegatoRequest.setSize(length);
+                        allegatoRequest.setIdMessaggio(messaggioResponse.getMessageId());
+                        FormDataBodyPart allegatoDataBodyPart = new FormDataBodyPart("allegato", allegatoRequest, MediaType.APPLICATION_JSON_TYPE);
+                        multiPart.bodyPart(allegatoDataBodyPart);
 
-                    StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", document.getContentStream().getStream(), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
-                    multiPart.bodyPart(fileDataBodyPart);
+                        StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", document.getContentStream().getStream(), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+                        multiPart.bodyPart(fileDataBodyPart);
 
-                    Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
+                        Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-                    if (!(response.getStatus() == Response.Status.OK.getStatusCode())) {
-                        QMessageBox.critical(this, "Attenzione!", "Problemi con l'allegato " + name);
-                        return;
+                        if (!(response.getStatus() == Response.Status.OK.getStatusCode())) {
+                            QMessageBox.critical(this, "Attenzione!", "Problemi con l'allegato " + name);
+                            return;
+                        }
                     }
                 }
             }
@@ -825,7 +884,7 @@ public class FormProtocollo extends Window {
                 if( DRY_RUN ){
                     System.out.println(segnaturaXml);
                 } else {
-                    WebTarget allegatiTarget = client.target(JPEC_SERVER_URL).path("api/allegati/upload");
+                    WebTarget allegatiTarget = client.target(pecServerUrl).path("api/allegati/upload");
                     MultiPart multiPart = new MultiPart();
                     multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
                     UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
@@ -849,7 +908,7 @@ public class FormProtocollo extends Window {
 
             // eseguo il PUT
             try {
-                URL url = new URL(JPEC_SERVER_URL + "api/azioni/invia/" + messaggioResponse.getMessageId());
+                URL url = new URL(pecServerUrl + "api/azioni/invia/" + messaggioResponse.getMessageId());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
                 conn.setRequestMethod("PUT");
@@ -907,14 +966,15 @@ public class FormProtocollo extends Window {
         for (SoggettoProtocollo soggettoProtocollo : protocollo.getSoggettoProtocolloCollection()) {
             Long messaggiopec = soggettoProtocollo.getMessaggiopec();
             if (messaggiopec != null) {
+                Application app = Application.getApplicationInstance();
+                String pecServerUrl = (String) app.getConfigItem("pec.serverURL");
+
                 Client client = ClientBuilder.newClient();
-                WebTarget target = client.target(JPEC_SERVER_URL).path("api/messaggi/" + messaggiopec + "/stato");
+                WebTarget target = client.target(pecServerUrl).path("api/messaggi/" + messaggiopec + "/stato");
                 String stato = target.request(MediaType.APPLICATION_JSON).get(String.class);
                 out += soggettoProtocollo.getSoggetto().toString() + " - ";
                 out += stato;
                 out += " (PEC n. " + messaggiopec + ")\n";
-//                out += messaggiopec;
-//                out += " (" + stato + ")\n";
             }
         }
         return out;
