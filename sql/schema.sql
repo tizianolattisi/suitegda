@@ -1434,8 +1434,7 @@ CREATE TABLE protocollo.pecprotocollo
       REFERENCES protocollo.protocollo (iddocumento) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
-INHERITS (generale.withtimestamp)
-);
+INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.pecprotocollo OWNER TO postgres;
 
 CREATE TABLE protocollo.tiporiferimentomittente
