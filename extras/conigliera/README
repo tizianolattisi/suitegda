@@ -1,0 +1,11 @@
+Conigliera
+
+Questa piccola utility prende i documenti attribuiti a partire da una specifica data ad uno specifico ufficio,
+e li copia in una cartella.
+
+
+
+es.
+
+./conigliera.sh pguser pgpass pghost 5432 pgdb alfuser alfpass alfhost 8080 /Sites/comune/documentLibrary/protocollo 101 ff2a5079-7651-44dd-b3c9-e32fbf361164 2016-06-28
+
