@@ -1108,6 +1108,11 @@ ALTER TABLE ONLY attribuzione
 ALTER TABLE ONLY attribuzione
     ADD CONSTRAINT fk_attribuzione_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
 
+ALTER TABLE protocollo.attribuzione
+    ADD COLUMN dataprincipale timestamp without time zone;
+ALTER TABLE protocollo.attribuzione
+    ADD COLUMN esecutoreprincipale character varying(40);
+
 CREATE TABLE protocollo.attribuzionecancellata (
   id bigserial NOT NULL,
   protocollo character varying(12) NOT NULL,
