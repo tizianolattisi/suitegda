@@ -8,95 +8,114 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class NuovoMessaggioRequest {
 
-    private String mailbox;
-    private String protocollo;
+	private String mailbox;
+	private String protocollo;
+	private String urlDocumentale;
 
-    private List<String> destinatari;
-    private List<String> destinatariCC;
-    private List<String> destinatariCCN;
-    private String oggetto;
-    private String testoMessaggio;
-    private boolean inviaTestoComeHtml;
+	private List<String> destinatari;
+	private List<String> destinatariCC;
+	private List<String> destinatariCCN;
+	private String oggetto;
+	private String testoMessaggio;
+	private boolean inviaTestoComeHtml;
+	// private List<AllegatoRequest> allegati;
 
-    public String getMailbox() {
-        return mailbox;
-    }
+	public String getMailbox() {
+		return mailbox;
+	}
 
-    public void setMailbox(String mailbox) {
-        this.mailbox = mailbox;
-    }
+	public void setMailbox(String mailbox) {
+		this.mailbox = mailbox;
+	}
 
-    public String getProtocollo() {
-        return protocollo;
-    }
+	public String getProtocollo() {
+		return protocollo;
+	}
 
-    public void setProtocollo(String protocollo) {
-        this.protocollo = protocollo;
-    }
+	public void setProtocollo(String protocollo) {
+		this.protocollo = protocollo;
+	}
 
-    public String getOggetto() {
-        return oggetto;
-    }
+	public String getOggetto() {
+		return oggetto;
+	}
 
-    public void setOggetto(String oggetto) {
-        this.oggetto = oggetto;
-    }
+	public void setOggetto(String oggetto) {
+		this.oggetto = oggetto;
+	}
 
-    public String getTestoMessaggio() {
-        return testoMessaggio;
-    }
+	public String getTestoMessaggio() {
+		return testoMessaggio;
+	}
 
-    public void setTestoMessaggio(String testoMessaggio) {
-        this.testoMessaggio = testoMessaggio;
-    }
+	public void setTestoMessaggio(String testoMessaggio) {
+		this.testoMessaggio = testoMessaggio;
+	}
 
-    public boolean isInviaTestoComeHtml() {
-        return inviaTestoComeHtml;
-    }
+	public boolean isInviaTestoComeHtml() {
+		return inviaTestoComeHtml;
+	}
 
-    public void setInviaTestoComeHtml(boolean inviaTestoComeHtml) {
-        this.inviaTestoComeHtml = inviaTestoComeHtml;
-    }
+	public void setInviaTestoComeHtml(boolean inviaTestoComeHtml) {
+		this.inviaTestoComeHtml = inviaTestoComeHtml;
+	}
 
-    public List<String> getDestinatari() {
-        return destinatari;
-    }
+//	public List<AllegatoRequest> getAllegati() {
+//		return allegati;
+//	}
+//
+//	public void setAllegati(List<AllegatoRequest> allegati) {
+//		this.allegati = allegati;
+//	}
 
-    public void setDestinatari(List<String> destinatari) {
-        this.destinatari = destinatari;
-    }
+	public List<String> getDestinatari() {
+		return destinatari;
+	}
 
-    public List<String> getDestinatariCC() {
-        return destinatariCC;
-    }
+	public void setDestinatari(List<String> destinatari) {
+		this.destinatari = destinatari;
+	}
 
-    public void setDestinatariCC(List<String> destinatariCC) {
-        this.destinatariCC = destinatariCC;
-    }
+	public List<String> getDestinatariCC() {
+		return destinatariCC;
+	}
 
-    public List<String> getDestinatariCCN() {
-        return destinatariCCN;
-    }
+	public void setDestinatariCC(List<String> destinatariCC) {
+		this.destinatariCC = destinatariCC;
+	}
 
-    public void setDestinatariCCN(List<String> destinatariCCN) {
-        this.destinatariCCN = destinatariCCN;
-    }
+	public List<String> getDestinatariCCN() {
+		return destinatariCCN;
+	}
 
-    public void addDestinatario(String destinatario) {
-        if (destinatari == null)
-            destinatari = new ArrayList<String>();
-        destinatari.add(destinatario);
-    }
+	public void setDestinatariCCN(List<String> destinatariCCN) {
+		this.destinatariCCN = destinatariCCN;
+	}
 
-    public void addDestinatarioCC(String destinatarioCC) {
-        if (destinatariCC == null)
-            destinatariCC = new ArrayList<String>();
-        destinatariCC.add(destinatarioCC);
-    }
+	public void addDestinatario(String destinatario) {
+		if (destinatari == null)
+			destinatari = new ArrayList<String>();
+		destinatari.add(destinatario);
+	}
 
-    public void addDestinatarioCCN(String destinatarioCCN) {
-        if (destinatariCCN == null)
-            destinatariCCN = new ArrayList<String>();
-        destinatariCCN.add(destinatarioCCN);
-    }
+	public void addDestinatarioCC(String destinatarioCC) {
+		if (destinatariCC == null)
+			destinatariCC = new ArrayList<String>();
+		destinatariCC.add(destinatarioCC);
+	}
+
+	public void addDestinatarioCCN(String destinatarioCCN) {
+		if (destinatariCCN == null)
+			destinatariCCN = new ArrayList<String>();
+		destinatariCCN.add(destinatarioCCN);
+	}
+
+	public String getUrlDocumentale() {
+		return urlDocumentale;
+	}
+
+	public void setUrlDocumentale(String urlDocumentale) {
+		this.urlDocumentale = urlDocumentale;
+	}
+	
 }

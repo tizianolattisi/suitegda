@@ -190,6 +190,16 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_4">
+       <property name="text">
+        <string>pec</string>
+       </property>
+       <property name="column" stdset="0">
+        <string>pec</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

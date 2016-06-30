@@ -120,7 +120,14 @@ public class ProfiloUtenteProtocollo {
     public Boolean inSportelloOAttribuzionePrincipaleV(){
         return ufficiVisualizzaUtente.contains(sportello) || ufficiVisualizzaUtente.contains(attribuzionePrincipale);
     }
-    
+
+    /*
+     * Inserito nell'attribuzione principale
+     */
+    public Boolean inAttribuzionePrincipale(){
+        return ufficiUtente.contains(attribuzionePrincipale);
+    }
+
     /*
      * Inserito nell'attribuzione principale con flag consolida
      */
