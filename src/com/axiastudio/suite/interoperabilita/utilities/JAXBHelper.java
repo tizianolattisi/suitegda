@@ -3,7 +3,6 @@ package com.axiastudio.suite.interoperabilita.utilities;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.interoperabilita.entities.*;
-import com.axiastudio.suite.protocollo.entities.Oggetto;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 
 import java.util.List;
@@ -37,20 +36,32 @@ public class JAXBHelper {
         segnatura.setIntestazione(intestazione);
 
         Identificatore identificatore = new Identificatore();
-        identificatore.setCodiceAmministrazione(SuiteUtil.trovaCostante("CODICE_AMMINISTRAZIONE").getValore());
-        identificatore.setCodiceAOO(SuiteUtil.trovaCostante("CODICE_AOO").getValore());
-        identificatore.setNumeroRegistrazione(protocollo.getIddocumento().substring(4));
-        identificatore.setDataRegistrazione(protocollo.getDataprotocollo().toString());
-        identificatore.setCodiceRegistro("--");
+        CodiceAmministrazione codiceAmministrazione1 = new CodiceAmministrazione();
+        codiceAmministrazione1.setContent(SuiteUtil.trovaCostante("CODICE_AMMINISTRAZIONE").getValore());
+        identificatore.setCodiceAmministrazione(codiceAmministrazione1);
+        CodiceAOO codiceAOO1 = new CodiceAOO();
+        codiceAOO1.setContent(SuiteUtil.trovaCostante("CODICE_AOO").getValore());
+        identificatore.setCodiceAOO(codiceAOO1);
+        NumeroRegistrazione numeroRegistrazione1 = new NumeroRegistrazione();
+        numeroRegistrazione1.setContent(protocollo.getIddocumento().substring(4));
+        identificatore.setNumeroRegistrazione(numeroRegistrazione1);
+        DataRegistrazione dataRegistrazione1 = new DataRegistrazione();
+        dataRegistrazione1.setContent(protocollo.getDataprotocollo().toString());
+        identificatore.setDataRegistrazione(dataRegistrazione1);
+        CodiceRegistro codiceRegistro = new CodiceRegistro();
+        codiceRegistro.setContent("--");
+        identificatore.setCodiceRegistro(codiceRegistro);
         intestazione.setIdentificatore(identificatore);
-        intestazione.setOggetto(protocollo.getOggetto());
+        Oggetto oggetto = new Oggetto();
+        oggetto.setContent(protocollo.getOggetto());
+        intestazione.setOggetto(oggetto);
 
         Origine origine = new Origine();
         intestazione.setOrigine(origine);
 
         IndirizzoTelematico indirizzoTelematico = new IndirizzoTelematico();
         indirizzoTelematico.setTipo("smtp");
-        indirizzoTelematico.setvalue(protocollo.getUfficioProtocolloCollection().iterator().next().getUfficio().getPec());
+        indirizzoTelematico.setContent(protocollo.getUfficioProtocolloCollection().iterator().next().getUfficio().getPec());
         origine.setIndirizzoTelematico(indirizzoTelematico);
 
         Mittente mittente = new Mittente();
@@ -58,27 +69,24 @@ public class JAXBHelper {
         Amministrazione amministrazione = new Amministrazione();
         mittente.setAmministrazione(amministrazione);
         Denominazione denominazione = new Denominazione();
-        denominazione.setvalue(SuiteUtil.trovaCostante("DENOMINAZIONE").getValore());
+        denominazione.setContent(SuiteUtil.trovaCostante("DENOMINAZIONE").getValore());
         amministrazione.setDenominazione(denominazione);
 
         UnitaOrganizzativa unitaOrganizzativa = new UnitaOrganizzativa();
         unitaOrganizzativa.setTipo("permanente");
         Denominazione denominazioneUnitaOrganizzativa = new Denominazione();
-        denominazioneUnitaOrganizzativa.setvalue(SuiteUtil.trovaCostante("DENOMINAZIONE").getValore());
+        denominazioneUnitaOrganizzativa.setContent(SuiteUtil.trovaCostante("DENOMINAZIONE").getValore());
         unitaOrganizzativa.setDenominazione(denominazioneUnitaOrganizzativa);
         IndirizzoPostale indirizzoPostaleUnitaOrganizzativa = new IndirizzoPostale();
-        indirizzoPostaleUnitaOrganizzativa.getDenominazioneOrToponimoOrCivicoOrCAPOrComuneOrProvinciaOrNazione()
-                .add(new Denominazione());
-        unitaOrganizzativa.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
-                .add(indirizzoPostaleUnitaOrganizzativa);
-        amministrazione.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
-                .add(unitaOrganizzativa);
+        indirizzoPostaleUnitaOrganizzativa.setDenominazione(new Denominazione());
+        unitaOrganizzativa.setIndirizzoPostale(indirizzoPostaleUnitaOrganizzativa);
+        amministrazione.setUnitaOrganizzativa(unitaOrganizzativa);
 
         AOO aoo = new AOO();
         mittente.setAOO(aoo);
         Denominazione denominazioneAoo = new Denominazione();
         aoo.setDenominazione(denominazioneAoo);
-        denominazioneAoo.setvalue(SuiteUtil.trovaCostante("CODICE_AOO").getValore());
+        denominazioneAoo.setContent(SuiteUtil.trovaCostante("CODICE_AOO").getValore());
 
         Destinazione destinazione = new Destinazione();
         intestazione.getDestinazione().add(destinazione);
@@ -86,42 +94,7 @@ public class JAXBHelper {
         IndirizzoTelematico indirizzoTelematicoDestinazione = new IndirizzoTelematico();
         indirizzoTelematicoDestinazione.setTipo("smtp");
         destinazione.setIndirizzoTelematico(indirizzoTelematicoDestinazione);
-        indirizzoTelematicoDestinazione.setvalue(pecDestinatario);
-
-        /* // opzionale
-        Destinatario destinatario = new Destinatario();
-        destinazione.getDestinatario().add(destinatario);
-        Amministrazione amministrazioneDestinatario = new Amministrazione();
-        destinatario.getAmministrazioneOrAOOOrDenominazioneOrPersona().add(amministrazioneDestinatario);
-        Denominazione denominazioneAministrazioneDestinatario = new Denominazione();
-        amministrazioneDestinatario.setDenominazione(denominazioneAministrazioneDestinatario);
-        denominazioneAministrazioneDestinatario.setvalue(soggetto.getDenominazione());
-        UnitaOrganizzativa unitaOrganizzativaAmministrazioneDestinatario = new UnitaOrganizzativa();
-        unitaOrganizzativaAmministrazioneDestinatario.setTipo("permanente");
-        amministrazioneDestinatario.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
-                .add(unitaOrganizzativaAmministrazioneDestinatario);
-        Denominazione denominazioneUnitaOrganizzativaDestinatario = new Denominazione();
-        unitaOrganizzativaAmministrazioneDestinatario.setDenominazione(denominazioneUnitaOrganizzativaDestinatario);
-        denominazioneUnitaOrganizzativaDestinatario.setvalue(soggetto.getDenominazione2());
-        UnitaOrganizzativa unitaOrganizzativaAmministrazioneDestinatario2 = new UnitaOrganizzativa();
-        unitaOrganizzativaAmministrazioneDestinatario2.setTipo("permanente");
-        unitaOrganizzativaAmministrazioneDestinatario.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
-                .add(unitaOrganizzativaAmministrazioneDestinatario2);
-        Denominazione denominazioneUnitaOrganizzativaDestinatario2 = new Denominazione();
-        unitaOrganizzativaAmministrazioneDestinatario2.setDenominazione(denominazioneUnitaOrganizzativaDestinatario2);
-        denominazioneUnitaOrganizzativaDestinatario2.setvalue(soggetto.getDenominazione3());
-        IndirizzoPostale indirizzoPostale = new IndirizzoPostale();
-        unitaOrganizzativaAmministrazioneDestinatario2.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
-                .add(indirizzoPostale);
-        Denominazione denominazioneIndirizzoPostale = new Denominazione();
-        indirizzoPostale.getDenominazioneOrToponimoOrCivicoOrCAPOrComuneOrProvinciaOrNazione()
-                .add(denominazioneIndirizzoPostale);
-        denominazioneIndirizzoPostale.setvalue("");
-        */
-
-
-        //Riferimenti riferimenti = new Riferimenti();
-        //segnatura.setRiferimenti(riferimenti);
+        indirizzoTelematicoDestinazione.setContent(pecDestinatario);
 
         // documento principale o corpo del messaggio
         Descrizione descrizione = new Descrizione();
@@ -129,10 +102,12 @@ public class JAXBHelper {
         Integer allegatiDa = 0;
         if( protocollo.getPecBody()==null || protocollo.getPecBody().equals("") ) {
             Documento documento = new Documento();
-            descrizione.getDocumentoOrTestoDelMessaggio().add(documento);
+            descrizione.setDocumento(documento);
             documento.setNome(fileAllegati.get(0));
             documento.setTipoRiferimento("MIME"); // fisso
-            documento.setOggetto(fileAllegati.get(0));
+            Oggetto oggetto1 = new Oggetto();
+            oggetto1.setContent(fileAllegati.get(0));
+            documento.setOggetto(oggetto1);
             allegatiDa++;
         } else {
             TestoDelMessaggio testoDelMessaggio = new TestoDelMessaggio();
@@ -145,10 +120,12 @@ public class JAXBHelper {
         Allegati allegati = new Allegati();
         for( Integer i=allegatiDa; i<fileAllegati.size(); i++ ){
             Documento documento = new Documento();
-            descrizione.getDocumentoOrTestoDelMessaggio().add(documento);
+            descrizione.setDocumento(documento);
             documento.setNome(fileAllegati.get(i));
             documento.setTipoRiferimento("MIME"); // fisso
-            documento.setOggetto(fileAllegati.get(i));
+            Oggetto oggetto1 = new Oggetto();
+            oggetto1.setContent(fileAllegati.get(i));
+            documento.setOggetto(oggetto1);
             allegati.getDocumentoOrFascicolo().add(documento);
         }
         if( allegati.getDocumentoOrFascicolo().size()>0 ){
