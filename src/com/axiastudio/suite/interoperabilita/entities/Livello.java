@@ -2,28 +2,63 @@
 package com.axiastudio.suite.interoperabilita.entities;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
+ * <p>Classe Java per Livello complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="Livello">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;attribute name="nome" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" />
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "value"
+@XmlType(name = "Livello", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
+    "content"
 })
-@XmlRootElement(name = "Livello")
 public class Livello {
 
-    @XmlAttribute(name = "nome")
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    protected String nome;
     @XmlValue
-    protected String value;
+    protected String content;
+    @XmlAttribute(name = "nome")
+    @XmlSchemaType(name = "anySimpleType")
+    protected String nome;
 
     /**
-     * Gets the value of the nome property.
+     * Recupera il valore della proprietà content.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * Imposta il valore della proprietà content.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setContent(String value) {
+        this.content = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà nome.
      * 
      * @return
      *     possible object is
@@ -35,7 +70,7 @@ public class Livello {
     }
 
     /**
-     * Sets the value of the nome property.
+     * Imposta il valore della proprietà nome.
      * 
      * @param value
      *     allowed object is
@@ -44,30 +79,6 @@ public class Livello {
      */
     public void setNome(String value) {
         this.nome = value;
-    }
-
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getvalue() {
-        return value;
-    }
-
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setvalue(String value) {
-        this.value = value;
     }
 
 }

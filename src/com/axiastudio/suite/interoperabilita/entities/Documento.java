@@ -3,17 +3,56 @@ package com.axiastudio.suite.interoperabilita.entities;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
+ * <p>Classe Java per Documento complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="Documento">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;sequence minOccurs="0">
+ *           &lt;element ref="{http://www.digitPa.gov.it/protocollo/}CollocazioneTelematica"/>
+ *           &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Impronta" minOccurs="0"/>
+ *         &lt;/sequence>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}TitoloDocumento" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}PrimaRegistrazione" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}TipoDocumento" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Oggetto" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Classifica" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}NumeroPagine" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Note" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}PiuInfo" minOccurs="0"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}ID" />
+ *       &lt;attribute name="rife" type="{http://www.w3.org/2001/XMLSchema}IDREF" />
+ *       &lt;attribute name="nome" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" />
+ *       &lt;attribute name="tipoMIME" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" />
+ *       &lt;attribute name="tipoRiferimento" default="MIME">
+ *         &lt;simpleType>
+ *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}NMTOKEN">
+ *             &lt;enumeration value="cartaceo"/>
+ *             &lt;enumeration value="telematico"/>
+ *             &lt;enumeration value="MIME"/>
+ *           &lt;/restriction>
+ *         &lt;/simpleType>
+ *       &lt;/attribute>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
+@XmlType(name = "Documento", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
     "collocazioneTelematica",
     "impronta",
     "titoloDocumento",
@@ -25,196 +64,73 @@ import java.util.List;
     "note",
     "piuInfo"
 })
-@XmlRootElement(name = "Documento")
 public class Documento {
 
+    @XmlElement(name = "CollocazioneTelematica", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected CollocazioneTelematica collocazioneTelematica;
+    @XmlElement(name = "Impronta", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Impronta impronta;
+    @XmlElement(name = "TitoloDocumento", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected TitoloDocumento titoloDocumento;
+    @XmlElement(name = "PrimaRegistrazione", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected PrimaRegistrazione primaRegistrazione;
+    @XmlElement(name = "TipoDocumento", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected TipoDocumento tipoDocumento;
+    @XmlElement(name = "Oggetto", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Oggetto oggetto;
+    @XmlElement(name = "Classifica", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected List<Classifica> classifica;
+    @XmlElement(name = "NumeroPagine", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected NumeroPagine numeroPagine;
+    @XmlElement(name = "Note", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Note note;
+    @XmlElement(name = "PiuInfo", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected PiuInfo piuInfo;
     @XmlAttribute(name = "id")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlID
+    @XmlSchemaType(name = "ID")
     protected String id;
     @XmlAttribute(name = "rife")
     @XmlIDREF
+    @XmlSchemaType(name = "IDREF")
     protected Object rife;
     @XmlAttribute(name = "nome")
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "anySimpleType")
     protected String nome;
     @XmlAttribute(name = "tipoMIME")
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "anySimpleType")
     protected String tipoMIME;
     @XmlAttribute(name = "tipoRiferimento")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     protected String tipoRiferimento;
-    @XmlElement(name = "CollocazioneTelematica")
-    protected String collocazioneTelematica;
-    @XmlElement(name = "Impronta")
-    protected Impronta impronta;
-    @XmlElement(name = "TitoloDocumento")
-    protected String titoloDocumento;
-    @XmlElement(name = "PrimaRegistrazione")
-    protected PrimaRegistrazione primaRegistrazione;
-    @XmlElement(name = "TipoDocumento")
-    protected String tipoDocumento;
-    @XmlElement(name = "Oggetto")
-    protected String oggetto;
-    @XmlElement(name = "Classifica")
-    protected List<Classifica> classifica;
-    @XmlElement(name = "NumeroPagine")
-    protected String numeroPagine;
-    @XmlElement(name = "Note")
-    protected String note;
-    @XmlElement(name = "PiuInfo")
-    protected PiuInfo piuInfo;
 
     /**
-     * Gets the value of the id property.
+     * Recupera il valore della proprietà collocazioneTelematica.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link CollocazioneTelematica }
      *     
      */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
-
-    /**
-     * Gets the value of the rife property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
-     */
-    public Object getRife() {
-        return rife;
-    }
-
-    /**
-     * Sets the value of the rife property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
-     */
-    public void setRife(Object value) {
-        this.rife = value;
-    }
-
-    /**
-     * Gets the value of the nome property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getNome() {
-        return nome;
-    }
-
-    /**
-     * Sets the value of the nome property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNome(String value) {
-        this.nome = value;
-    }
-
-    /**
-     * Gets the value of the tipoMIME property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTipoMIME() {
-        return tipoMIME;
-    }
-
-    /**
-     * Sets the value of the tipoMIME property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTipoMIME(String value) {
-        this.tipoMIME = value;
-    }
-
-    /**
-     * Gets the value of the tipoRiferimento property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTipoRiferimento() {
-        if (tipoRiferimento == null) {
-            return "MIME";
-        } else {
-            return tipoRiferimento;
-        }
-    }
-
-    /**
-     * Sets the value of the tipoRiferimento property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTipoRiferimento(String value) {
-        this.tipoRiferimento = value;
-    }
-
-    /**
-     * Gets the value of the collocazioneTelematica property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCollocazioneTelematica() {
+    public CollocazioneTelematica getCollocazioneTelematica() {
         return collocazioneTelematica;
     }
 
     /**
-     * Sets the value of the collocazioneTelematica property.
+     * Imposta il valore della proprietà collocazioneTelematica.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link CollocazioneTelematica }
      *     
      */
-    public void setCollocazioneTelematica(String value) {
+    public void setCollocazioneTelematica(CollocazioneTelematica value) {
         this.collocazioneTelematica = value;
     }
 
     /**
-     * Gets the value of the impronta property.
+     * Recupera il valore della proprietà impronta.
      * 
      * @return
      *     possible object is
@@ -226,7 +142,7 @@ public class Documento {
     }
 
     /**
-     * Sets the value of the impronta property.
+     * Imposta il valore della proprietà impronta.
      * 
      * @param value
      *     allowed object is
@@ -238,31 +154,31 @@ public class Documento {
     }
 
     /**
-     * Gets the value of the titoloDocumento property.
+     * Recupera il valore della proprietà titoloDocumento.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link TitoloDocumento }
      *     
      */
-    public String getTitoloDocumento() {
+    public TitoloDocumento getTitoloDocumento() {
         return titoloDocumento;
     }
 
     /**
-     * Sets the value of the titoloDocumento property.
+     * Imposta il valore della proprietà titoloDocumento.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link TitoloDocumento }
      *     
      */
-    public void setTitoloDocumento(String value) {
+    public void setTitoloDocumento(TitoloDocumento value) {
         this.titoloDocumento = value;
     }
 
     /**
-     * Gets the value of the primaRegistrazione property.
+     * Recupera il valore della proprietà primaRegistrazione.
      * 
      * @return
      *     possible object is
@@ -274,7 +190,7 @@ public class Documento {
     }
 
     /**
-     * Sets the value of the primaRegistrazione property.
+     * Imposta il valore della proprietà primaRegistrazione.
      * 
      * @param value
      *     allowed object is
@@ -286,50 +202,50 @@ public class Documento {
     }
 
     /**
-     * Gets the value of the tipoDocumento property.
+     * Recupera il valore della proprietà tipoDocumento.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link TipoDocumento }
      *     
      */
-    public String getTipoDocumento() {
+    public TipoDocumento getTipoDocumento() {
         return tipoDocumento;
     }
 
     /**
-     * Sets the value of the tipoDocumento property.
+     * Imposta il valore della proprietà tipoDocumento.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link TipoDocumento }
      *     
      */
-    public void setTipoDocumento(String value) {
+    public void setTipoDocumento(TipoDocumento value) {
         this.tipoDocumento = value;
     }
 
     /**
-     * Gets the value of the oggetto property.
+     * Recupera il valore della proprietà oggetto.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Oggetto }
      *     
      */
-    public String getOggetto() {
+    public Oggetto getOggetto() {
         return oggetto;
     }
 
     /**
-     * Sets the value of the oggetto property.
+     * Imposta il valore della proprietà oggetto.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Oggetto }
      *     
      */
-    public void setOggetto(String value) {
+    public void setOggetto(Oggetto value) {
         this.oggetto = value;
     }
 
@@ -363,55 +279,55 @@ public class Documento {
     }
 
     /**
-     * Gets the value of the numeroPagine property.
+     * Recupera il valore della proprietà numeroPagine.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link NumeroPagine }
      *     
      */
-    public String getNumeroPagine() {
+    public NumeroPagine getNumeroPagine() {
         return numeroPagine;
     }
 
     /**
-     * Sets the value of the numeroPagine property.
+     * Imposta il valore della proprietà numeroPagine.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link NumeroPagine }
      *     
      */
-    public void setNumeroPagine(String value) {
+    public void setNumeroPagine(NumeroPagine value) {
         this.numeroPagine = value;
     }
 
     /**
-     * Gets the value of the note property.
+     * Recupera il valore della proprietà note.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Note }
      *     
      */
-    public String getNote() {
+    public Note getNote() {
         return note;
     }
 
     /**
-     * Sets the value of the note property.
+     * Imposta il valore della proprietà note.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Note }
      *     
      */
-    public void setNote(String value) {
+    public void setNote(Note value) {
         this.note = value;
     }
 
     /**
-     * Gets the value of the piuInfo property.
+     * Recupera il valore della proprietà piuInfo.
      * 
      * @return
      *     possible object is
@@ -423,7 +339,7 @@ public class Documento {
     }
 
     /**
-     * Sets the value of the piuInfo property.
+     * Imposta il valore della proprietà piuInfo.
      * 
      * @param value
      *     allowed object is
@@ -432,6 +348,130 @@ public class Documento {
      */
     public void setPiuInfo(PiuInfo value) {
         this.piuInfo = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà id.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Imposta il valore della proprietà id.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setId(String value) {
+        this.id = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà rife.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Object }
+     *     
+     */
+    public Object getRife() {
+        return rife;
+    }
+
+    /**
+     * Imposta il valore della proprietà rife.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Object }
+     *     
+     */
+    public void setRife(Object value) {
+        this.rife = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà nome.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNome() {
+        return nome;
+    }
+
+    /**
+     * Imposta il valore della proprietà nome.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNome(String value) {
+        this.nome = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà tipoMIME.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTipoMIME() {
+        return tipoMIME;
+    }
+
+    /**
+     * Imposta il valore della proprietà tipoMIME.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTipoMIME(String value) {
+        this.tipoMIME = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà tipoRiferimento.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTipoRiferimento() {
+        if (tipoRiferimento == null) {
+            return "MIME";
+        } else {
+            return tipoRiferimento;
+        }
+    }
+
+    /**
+     * Imposta il valore della proprietà tipoRiferimento.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTipoRiferimento(String value) {
+        this.tipoRiferimento = value;
     }
 
 }

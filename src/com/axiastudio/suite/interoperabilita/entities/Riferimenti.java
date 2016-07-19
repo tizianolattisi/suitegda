@@ -7,19 +7,36 @@ import java.util.List;
 
 
 /**
+ * <p>Classe Java per Riferimenti complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="Riferimenti">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;choice maxOccurs="unbounded">
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Messaggio"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}ContestoProcedurale"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Procedimento"/>
+ *       &lt;/choice>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
+@XmlType(name = "Riferimenti", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
     "messaggioOrContestoProceduraleOrProcedimento"
 })
-@XmlRootElement(name = "Riferimenti")
 public class Riferimenti {
 
     @XmlElements({
-        @XmlElement(name = "Messaggio", required = true, type = Messaggio.class),
-        @XmlElement(name = "ContestoProcedurale", required = true, type = ContestoProcedurale.class),
-        @XmlElement(name = "Procedimento", required = true, type = Procedimento.class)
+        @XmlElement(name = "Messaggio", namespace = "http://www.digitPa.gov.it/protocollo/", type = Messaggio.class),
+        @XmlElement(name = "ContestoProcedurale", namespace = "http://www.digitPa.gov.it/protocollo/", type = ContestoProcedurale.class),
+        @XmlElement(name = "Procedimento", namespace = "http://www.digitPa.gov.it/protocollo/", type = Procedimento.class)
     })
     protected List<Object> messaggioOrContestoProceduraleOrProcedimento;
 

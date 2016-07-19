@@ -4,31 +4,95 @@ package com.axiastudio.suite.interoperabilita.entities;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
+ * <p>Classe Java per PiuInfo complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="PiuInfo">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;choice>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}MetadatiInterni"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}MetadatiEsterni"/>
+ *       &lt;/choice>
+ *       &lt;attribute name="XMLSchema" use="required" type="{http://www.w3.org/2001/XMLSchema}NMTOKEN" />
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "metadatiInterniOrMetadatiEsterni"
+@XmlType(name = "PiuInfo", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
+    "metadatiInterni",
+    "metadatiEsterni"
 })
-@XmlRootElement(name = "PiuInfo")
 public class PiuInfo {
 
+    @XmlElement(name = "MetadatiInterni", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected MetadatiInterni metadatiInterni;
+    @XmlElement(name = "MetadatiEsterni", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected MetadatiEsterni metadatiEsterni;
     @XmlAttribute(name = "XMLSchema", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlSchemaType(name = "NMTOKEN")
     protected String xmlSchema;
-    @XmlElements({
-        @XmlElement(name = "MetadatiInterni", required = true, type = MetadatiInterni.class),
-        @XmlElement(name = "MetadatiEsterni", required = true, type = MetadatiEsterni.class)
-    })
-    protected List<Object> metadatiInterniOrMetadatiEsterni;
 
     /**
-     * Gets the value of the xmlSchema property.
+     * Recupera il valore della proprietà metadatiInterni.
+     * 
+     * @return
+     *     possible object is
+     *     {@link MetadatiInterni }
+     *     
+     */
+    public MetadatiInterni getMetadatiInterni() {
+        return metadatiInterni;
+    }
+
+    /**
+     * Imposta il valore della proprietà metadatiInterni.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link MetadatiInterni }
+     *     
+     */
+    public void setMetadatiInterni(MetadatiInterni value) {
+        this.metadatiInterni = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà metadatiEsterni.
+     * 
+     * @return
+     *     possible object is
+     *     {@link MetadatiEsterni }
+     *     
+     */
+    public MetadatiEsterni getMetadatiEsterni() {
+        return metadatiEsterni;
+    }
+
+    /**
+     * Imposta il valore della proprietà metadatiEsterni.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link MetadatiEsterni }
+     *     
+     */
+    public void setMetadatiEsterni(MetadatiEsterni value) {
+        this.metadatiEsterni = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà xmlSchema.
      * 
      * @return
      *     possible object is
@@ -40,7 +104,7 @@ public class PiuInfo {
     }
 
     /**
-     * Sets the value of the xmlSchema property.
+     * Imposta il valore della proprietà xmlSchema.
      * 
      * @param value
      *     allowed object is
@@ -49,36 +113,6 @@ public class PiuInfo {
      */
     public void setXMLSchema(String value) {
         this.xmlSchema = value;
-    }
-
-    /**
-     * Gets the value of the metadatiInterniOrMetadatiEsterni property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the metadatiInterniOrMetadatiEsterni property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getMetadatiInterniOrMetadatiEsterni().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link MetadatiInterni }
-     * {@link MetadatiEsterni }
-     * 
-     * 
-     */
-    public List<Object> getMetadatiInterniOrMetadatiEsterni() {
-        if (metadatiInterniOrMetadatiEsterni == null) {
-            metadatiInterniOrMetadatiEsterni = new ArrayList<Object>();
-        }
-        return this.metadatiInterniOrMetadatiEsterni;
     }
 
 }

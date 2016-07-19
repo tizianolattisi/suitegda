@@ -1,57 +1,120 @@
 
 package com.axiastudio.suite.interoperabilita.entities;
 
-import javax.xml.bind.annotation.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
+ * <p>Classe Java per MessaggioRicevuto complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="MessaggioRicevuto">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;choice>
+ *         &lt;sequence>
+ *           &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Identificatore"/>
+ *           &lt;element ref="{http://www.digitPa.gov.it/protocollo/}PrimaRegistrazione" minOccurs="0"/>
+ *         &lt;/sequence>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}DescrizioneMessaggio"/>
+ *       &lt;/choice>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "identificatoreOrPrimaRegistrazioneOrDescrizioneMessaggio"
+@XmlType(name = "MessaggioRicevuto", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
+    "identificatore",
+    "primaRegistrazione",
+    "descrizioneMessaggio"
 })
-@XmlRootElement(name = "MessaggioRicevuto")
 public class MessaggioRicevuto {
 
-    @XmlElements({
-        @XmlElement(name = "Identificatore", required = true, type = Identificatore.class),
-        @XmlElement(name = "PrimaRegistrazione", required = true, type = PrimaRegistrazione.class),
-        @XmlElement(name = "DescrizioneMessaggio", required = true, type = DescrizioneMessaggio.class)
-    })
-    protected List<Object> identificatoreOrPrimaRegistrazioneOrDescrizioneMessaggio;
+    @XmlElement(name = "Identificatore", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Identificatore identificatore;
+    @XmlElement(name = "PrimaRegistrazione", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected PrimaRegistrazione primaRegistrazione;
+    @XmlElement(name = "DescrizioneMessaggio", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected DescrizioneMessaggio descrizioneMessaggio;
 
     /**
-     * Gets the value of the identificatoreOrPrimaRegistrazioneOrDescrizioneMessaggio property.
+     * Recupera il valore della proprietà identificatore.
      * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the identificatoreOrPrimaRegistrazioneOrDescrizioneMessaggio property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getIdentificatoreOrPrimaRegistrazioneOrDescrizioneMessaggio().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Identificatore }
-     * {@link PrimaRegistrazione }
-     * {@link DescrizioneMessaggio }
-     * 
-     * 
+     * @return
+     *     possible object is
+     *     {@link Identificatore }
+     *     
      */
-    public List<Object> getIdentificatoreOrPrimaRegistrazioneOrDescrizioneMessaggio() {
-        if (identificatoreOrPrimaRegistrazioneOrDescrizioneMessaggio == null) {
-            identificatoreOrPrimaRegistrazioneOrDescrizioneMessaggio = new ArrayList<Object>();
-        }
-        return this.identificatoreOrPrimaRegistrazioneOrDescrizioneMessaggio;
+    public Identificatore getIdentificatore() {
+        return identificatore;
+    }
+
+    /**
+     * Imposta il valore della proprietà identificatore.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Identificatore }
+     *     
+     */
+    public void setIdentificatore(Identificatore value) {
+        this.identificatore = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà primaRegistrazione.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PrimaRegistrazione }
+     *     
+     */
+    public PrimaRegistrazione getPrimaRegistrazione() {
+        return primaRegistrazione;
+    }
+
+    /**
+     * Imposta il valore della proprietà primaRegistrazione.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PrimaRegistrazione }
+     *     
+     */
+    public void setPrimaRegistrazione(PrimaRegistrazione value) {
+        this.primaRegistrazione = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà descrizioneMessaggio.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DescrizioneMessaggio }
+     *     
+     */
+    public DescrizioneMessaggio getDescrizioneMessaggio() {
+        return descrizioneMessaggio;
+    }
+
+    /**
+     * Imposta il valore della proprietà descrizioneMessaggio.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DescrizioneMessaggio }
+     *     
+     */
+    public void setDescrizioneMessaggio(DescrizioneMessaggio value) {
+        this.descrizioneMessaggio = value;
     }
 
 }

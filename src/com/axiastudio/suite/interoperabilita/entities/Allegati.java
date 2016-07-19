@@ -7,18 +7,34 @@ import java.util.List;
 
 
 /**
+ * <p>Classe Java per Allegati complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="Allegati">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;choice maxOccurs="unbounded">
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Documento"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Fascicolo"/>
+ *       &lt;/choice>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
+@XmlType(name = "Allegati", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
     "documentoOrFascicolo"
 })
-@XmlRootElement(name = "Allegati")
 public class Allegati {
 
     @XmlElements({
-        @XmlElement(name = "Documento", required = true, type = Documento.class),
-        @XmlElement(name = "Fascicolo", required = true, type = Fascicolo.class)
+        @XmlElement(name = "Documento", namespace = "http://www.digitPa.gov.it/protocollo/", type = Documento.class),
+        @XmlElement(name = "Fascicolo", namespace = "http://www.digitPa.gov.it/protocollo/", type = Fascicolo.class)
     })
     protected List<Object> documentoOrFascicolo;
 

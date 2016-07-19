@@ -1,30 +1,50 @@
 
 package com.axiastudio.suite.interoperabilita.entities;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
+ * <p>Classe Java per Ruolo complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="Ruolo">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Denominazione"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Identificativo" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Persona" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
+@XmlType(name = "Ruolo", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
     "denominazione",
     "identificativo",
     "persona"
 })
-@XmlRootElement(name = "Ruolo")
 public class Ruolo {
 
-    @XmlElement(name = "Denominazione", required = true)
+    @XmlElement(name = "Denominazione", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
     protected Denominazione denominazione;
-    @XmlElement(name = "Identificativo")
-    protected String identificativo;
-    @XmlElement(name = "Persona")
+    @XmlElement(name = "Identificativo", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Identificativo identificativo;
+    @XmlElement(name = "Persona", namespace = "http://www.digitPa.gov.it/protocollo/")
     protected Persona persona;
 
     /**
-     * Gets the value of the denominazione property.
+     * Recupera il valore della proprietà denominazione.
      * 
      * @return
      *     possible object is
@@ -36,7 +56,7 @@ public class Ruolo {
     }
 
     /**
-     * Sets the value of the denominazione property.
+     * Imposta il valore della proprietà denominazione.
      * 
      * @param value
      *     allowed object is
@@ -48,31 +68,31 @@ public class Ruolo {
     }
 
     /**
-     * Gets the value of the identificativo property.
+     * Recupera il valore della proprietà identificativo.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Identificativo }
      *     
      */
-    public String getIdentificativo() {
+    public Identificativo getIdentificativo() {
         return identificativo;
     }
 
     /**
-     * Sets the value of the identificativo property.
+     * Imposta il valore della proprietà identificativo.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Identificativo }
      *     
      */
-    public void setIdentificativo(String value) {
+    public void setIdentificativo(Identificativo value) {
         this.identificativo = value;
     }
 
     /**
-     * Gets the value of the persona property.
+     * Recupera il valore della proprietà persona.
      * 
      * @return
      *     possible object is
@@ -84,7 +104,7 @@ public class Ruolo {
     }
 
     /**
-     * Sets the value of the persona property.
+     * Imposta il valore della proprietà persona.
      * 
      * @param value
      *     allowed object is

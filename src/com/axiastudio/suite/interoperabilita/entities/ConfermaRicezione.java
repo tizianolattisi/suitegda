@@ -7,35 +7,152 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
+ * <p>Classe Java per ConfermaRicezione complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="ConfermaRicezione">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Identificatore"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}MessaggioRicevuto"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Riferimenti" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Descrizione" minOccurs="0"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="versione" type="{http://www.w3.org/2001/XMLSchema}NMTOKEN" fixed="aaaa-mm-gg" />
+ *       &lt;attribute name="xml-lang" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" fixed="it" />
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
+@XmlType(name = "ConfermaRicezione", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
     "identificatore",
     "messaggioRicevuto",
     "riferimenti",
     "descrizione"
 })
-@XmlRootElement(name = "ConfermaRicezione")
 public class ConfermaRicezione {
 
+    @XmlElement(name = "Identificatore", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
+    protected Identificatore identificatore;
+    @XmlElement(name = "MessaggioRicevuto", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
+    protected MessaggioRicevuto messaggioRicevuto;
+    @XmlElement(name = "Riferimenti", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Riferimenti riferimenti;
+    @XmlElement(name = "Descrizione", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Descrizione descrizione;
     @XmlAttribute(name = "versione")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlSchemaType(name = "NMTOKEN")
     protected String versione;
-    @XmlAttribute(name = "xml:lang")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlAttribute(name = "xml-lang")
+    @XmlSchemaType(name = "anySimpleType")
     protected String xmlLang;
-    @XmlElement(name = "Identificatore", required = true)
-    protected Identificatore identificatore;
-    @XmlElement(name = "MessaggioRicevuto", required = true)
-    protected MessaggioRicevuto messaggioRicevuto;
-    @XmlElement(name = "Riferimenti")
-    protected Riferimenti riferimenti;
-    @XmlElement(name = "Descrizione")
-    protected Descrizione descrizione;
 
     /**
-     * Gets the value of the versione property.
+     * Recupera il valore della proprietà identificatore.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Identificatore }
+     *     
+     */
+    public Identificatore getIdentificatore() {
+        return identificatore;
+    }
+
+    /**
+     * Imposta il valore della proprietà identificatore.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Identificatore }
+     *     
+     */
+    public void setIdentificatore(Identificatore value) {
+        this.identificatore = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà messaggioRicevuto.
+     * 
+     * @return
+     *     possible object is
+     *     {@link MessaggioRicevuto }
+     *     
+     */
+    public MessaggioRicevuto getMessaggioRicevuto() {
+        return messaggioRicevuto;
+    }
+
+    /**
+     * Imposta il valore della proprietà messaggioRicevuto.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link MessaggioRicevuto }
+     *     
+     */
+    public void setMessaggioRicevuto(MessaggioRicevuto value) {
+        this.messaggioRicevuto = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà riferimenti.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Riferimenti }
+     *     
+     */
+    public Riferimenti getRiferimenti() {
+        return riferimenti;
+    }
+
+    /**
+     * Imposta il valore della proprietà riferimenti.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Riferimenti }
+     *     
+     */
+    public void setRiferimenti(Riferimenti value) {
+        this.riferimenti = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà descrizione.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Descrizione }
+     *     
+     */
+    public Descrizione getDescrizione() {
+        return descrizione;
+    }
+
+    /**
+     * Imposta il valore della proprietà descrizione.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Descrizione }
+     *     
+     */
+    public void setDescrizione(Descrizione value) {
+        this.descrizione = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà versione.
      * 
      * @return
      *     possible object is
@@ -51,7 +168,7 @@ public class ConfermaRicezione {
     }
 
     /**
-     * Sets the value of the versione property.
+     * Imposta il valore della proprietà versione.
      * 
      * @param value
      *     allowed object is
@@ -63,7 +180,7 @@ public class ConfermaRicezione {
     }
 
     /**
-     * Gets the value of the xmlLang property.
+     * Recupera il valore della proprietà xmlLang.
      * 
      * @return
      *     possible object is
@@ -79,7 +196,7 @@ public class ConfermaRicezione {
     }
 
     /**
-     * Sets the value of the xmlLang property.
+     * Imposta il valore della proprietà xmlLang.
      * 
      * @param value
      *     allowed object is
@@ -88,102 +205,6 @@ public class ConfermaRicezione {
      */
     public void setXmlLang(String value) {
         this.xmlLang = value;
-    }
-
-    /**
-     * Gets the value of the identificatore property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Identificatore }
-     *     
-     */
-    public Identificatore getIdentificatore() {
-        return identificatore;
-    }
-
-    /**
-     * Sets the value of the identificatore property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Identificatore }
-     *     
-     */
-    public void setIdentificatore(Identificatore value) {
-        this.identificatore = value;
-    }
-
-    /**
-     * Gets the value of the messaggioRicevuto property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link MessaggioRicevuto }
-     *     
-     */
-    public MessaggioRicevuto getMessaggioRicevuto() {
-        return messaggioRicevuto;
-    }
-
-    /**
-     * Sets the value of the messaggioRicevuto property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link MessaggioRicevuto }
-     *     
-     */
-    public void setMessaggioRicevuto(MessaggioRicevuto value) {
-        this.messaggioRicevuto = value;
-    }
-
-    /**
-     * Gets the value of the riferimenti property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Riferimenti }
-     *     
-     */
-    public Riferimenti getRiferimenti() {
-        return riferimenti;
-    }
-
-    /**
-     * Sets the value of the riferimenti property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Riferimenti }
-     *     
-     */
-    public void setRiferimenti(Riferimenti value) {
-        this.riferimenti = value;
-    }
-
-    /**
-     * Gets the value of the descrizione property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Descrizione }
-     *     
-     */
-    public Descrizione getDescrizione() {
-        return descrizione;
-    }
-
-    /**
-     * Sets the value of the descrizione property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Descrizione }
-     *     
-     */
-    public void setDescrizione(Descrizione value) {
-        this.descrizione = value;
     }
 
 }

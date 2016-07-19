@@ -9,10 +9,38 @@ import java.util.List;
 
 
 /**
+ * <p>Classe Java per Procedimento complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="Procedimento">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}CodiceAmministrazione"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}CodiceAOO"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Identificativo"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}TipoProcedimento" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Oggetto" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Classifica" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Responsabile" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}DataAvvio" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}DataTermine" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Note" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}PiuInfo" minOccurs="0"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}ID" />
+ *       &lt;attribute name="rife" type="{http://www.w3.org/2001/XMLSchema}IDREF" />
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
+@XmlType(name = "Procedimento", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
     "codiceAmministrazione",
     "codiceAOO",
     "identificativo",
@@ -25,204 +53,157 @@ import java.util.List;
     "note",
     "piuInfo"
 })
-@XmlRootElement(name = "Procedimento")
 public class Procedimento {
 
+    @XmlElement(name = "CodiceAmministrazione", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
+    protected CodiceAmministrazione codiceAmministrazione;
+    @XmlElement(name = "CodiceAOO", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
+    protected CodiceAOO codiceAOO;
+    @XmlElement(name = "Identificativo", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
+    protected Identificativo identificativo;
+    @XmlElement(name = "TipoProcedimento", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected TipoProcedimento tipoProcedimento;
+    @XmlElement(name = "Oggetto", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Oggetto oggetto;
+    @XmlElement(name = "Classifica", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected List<Classifica> classifica;
+    @XmlElement(name = "Responsabile", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Responsabile responsabile;
+    @XmlElement(name = "DataAvvio", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected DataAvvio dataAvvio;
+    @XmlElement(name = "DataTermine", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected DataTermine dataTermine;
+    @XmlElement(name = "Note", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Note note;
+    @XmlElement(name = "PiuInfo", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected PiuInfo piuInfo;
     @XmlAttribute(name = "id")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlID
+    @XmlSchemaType(name = "ID")
     protected String id;
     @XmlAttribute(name = "rife")
     @XmlIDREF
+    @XmlSchemaType(name = "IDREF")
     protected Object rife;
-    @XmlElement(name = "CodiceAmministrazione", required = true)
-    protected String codiceAmministrazione;
-    @XmlElement(name = "CodiceAOO", required = true)
-    protected String codiceAOO;
-    @XmlElement(name = "Identificativo", required = true)
-    protected String identificativo;
-    @XmlElement(name = "TipoProcedimento")
-    protected String tipoProcedimento;
-    @XmlElement(name = "Oggetto")
-    protected String oggetto;
-    @XmlElement(name = "Classifica")
-    protected List<Classifica> classifica;
-    @XmlElement(name = "Responsabile")
-    protected Responsabile responsabile;
-    @XmlElement(name = "DataAvvio")
-    protected String dataAvvio;
-    @XmlElement(name = "DataTermine")
-    protected String dataTermine;
-    @XmlElement(name = "Note")
-    protected String note;
-    @XmlElement(name = "PiuInfo")
-    protected PiuInfo piuInfo;
 
     /**
-     * Gets the value of the id property.
+     * Recupera il valore della proprietà codiceAmministrazione.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link CodiceAmministrazione }
      *     
      */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
-
-    /**
-     * Gets the value of the rife property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
-     */
-    public Object getRife() {
-        return rife;
-    }
-
-    /**
-     * Sets the value of the rife property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
-     */
-    public void setRife(Object value) {
-        this.rife = value;
-    }
-
-    /**
-     * Gets the value of the codiceAmministrazione property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCodiceAmministrazione() {
+    public CodiceAmministrazione getCodiceAmministrazione() {
         return codiceAmministrazione;
     }
 
     /**
-     * Sets the value of the codiceAmministrazione property.
+     * Imposta il valore della proprietà codiceAmministrazione.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link CodiceAmministrazione }
      *     
      */
-    public void setCodiceAmministrazione(String value) {
+    public void setCodiceAmministrazione(CodiceAmministrazione value) {
         this.codiceAmministrazione = value;
     }
 
     /**
-     * Gets the value of the codiceAOO property.
+     * Recupera il valore della proprietà codiceAOO.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link CodiceAOO }
      *     
      */
-    public String getCodiceAOO() {
+    public CodiceAOO getCodiceAOO() {
         return codiceAOO;
     }
 
     /**
-     * Sets the value of the codiceAOO property.
+     * Imposta il valore della proprietà codiceAOO.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link CodiceAOO }
      *     
      */
-    public void setCodiceAOO(String value) {
+    public void setCodiceAOO(CodiceAOO value) {
         this.codiceAOO = value;
     }
 
     /**
-     * Gets the value of the identificativo property.
+     * Recupera il valore della proprietà identificativo.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Identificativo }
      *     
      */
-    public String getIdentificativo() {
+    public Identificativo getIdentificativo() {
         return identificativo;
     }
 
     /**
-     * Sets the value of the identificativo property.
+     * Imposta il valore della proprietà identificativo.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Identificativo }
      *     
      */
-    public void setIdentificativo(String value) {
+    public void setIdentificativo(Identificativo value) {
         this.identificativo = value;
     }
 
     /**
-     * Gets the value of the tipoProcedimento property.
+     * Recupera il valore della proprietà tipoProcedimento.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link TipoProcedimento }
      *     
      */
-    public String getTipoProcedimento() {
+    public TipoProcedimento getTipoProcedimento() {
         return tipoProcedimento;
     }
 
     /**
-     * Sets the value of the tipoProcedimento property.
+     * Imposta il valore della proprietà tipoProcedimento.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link TipoProcedimento }
      *     
      */
-    public void setTipoProcedimento(String value) {
+    public void setTipoProcedimento(TipoProcedimento value) {
         this.tipoProcedimento = value;
     }
 
     /**
-     * Gets the value of the oggetto property.
+     * Recupera il valore della proprietà oggetto.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Oggetto }
      *     
      */
-    public String getOggetto() {
+    public Oggetto getOggetto() {
         return oggetto;
     }
 
     /**
-     * Sets the value of the oggetto property.
+     * Imposta il valore della proprietà oggetto.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Oggetto }
      *     
      */
-    public void setOggetto(String value) {
+    public void setOggetto(Oggetto value) {
         this.oggetto = value;
     }
 
@@ -256,7 +237,7 @@ public class Procedimento {
     }
 
     /**
-     * Gets the value of the responsabile property.
+     * Recupera il valore della proprietà responsabile.
      * 
      * @return
      *     possible object is
@@ -268,7 +249,7 @@ public class Procedimento {
     }
 
     /**
-     * Sets the value of the responsabile property.
+     * Imposta il valore della proprietà responsabile.
      * 
      * @param value
      *     allowed object is
@@ -280,79 +261,79 @@ public class Procedimento {
     }
 
     /**
-     * Gets the value of the dataAvvio property.
+     * Recupera il valore della proprietà dataAvvio.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link DataAvvio }
      *     
      */
-    public String getDataAvvio() {
+    public DataAvvio getDataAvvio() {
         return dataAvvio;
     }
 
     /**
-     * Sets the value of the dataAvvio property.
+     * Imposta il valore della proprietà dataAvvio.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link DataAvvio }
      *     
      */
-    public void setDataAvvio(String value) {
+    public void setDataAvvio(DataAvvio value) {
         this.dataAvvio = value;
     }
 
     /**
-     * Gets the value of the dataTermine property.
+     * Recupera il valore della proprietà dataTermine.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link DataTermine }
      *     
      */
-    public String getDataTermine() {
+    public DataTermine getDataTermine() {
         return dataTermine;
     }
 
     /**
-     * Sets the value of the dataTermine property.
+     * Imposta il valore della proprietà dataTermine.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link DataTermine }
      *     
      */
-    public void setDataTermine(String value) {
+    public void setDataTermine(DataTermine value) {
         this.dataTermine = value;
     }
 
     /**
-     * Gets the value of the note property.
+     * Recupera il valore della proprietà note.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Note }
      *     
      */
-    public String getNote() {
+    public Note getNote() {
         return note;
     }
 
     /**
-     * Sets the value of the note property.
+     * Imposta il valore della proprietà note.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Note }
      *     
      */
-    public void setNote(String value) {
+    public void setNote(Note value) {
         this.note = value;
     }
 
     /**
-     * Gets the value of the piuInfo property.
+     * Recupera il valore della proprietà piuInfo.
      * 
      * @return
      *     possible object is
@@ -364,7 +345,7 @@ public class Procedimento {
     }
 
     /**
-     * Sets the value of the piuInfo property.
+     * Imposta il valore della proprietà piuInfo.
      * 
      * @param value
      *     allowed object is
@@ -373,6 +354,54 @@ public class Procedimento {
      */
     public void setPiuInfo(PiuInfo value) {
         this.piuInfo = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà id.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Imposta il valore della proprietà id.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setId(String value) {
+        this.id = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà rife.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Object }
+     *     
+     */
+    public Object getRife() {
+        return rife;
+    }
+
+    /**
+     * Imposta il valore della proprietà rife.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Object }
+     *     
+     */
+    public void setRife(Object value) {
+        this.rife = value;
     }
 
 }

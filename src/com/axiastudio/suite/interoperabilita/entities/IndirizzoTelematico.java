@@ -3,31 +3,76 @@ package com.axiastudio.suite.interoperabilita.entities;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
+ * <p>Classe Java per IndirizzoTelematico complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="IndirizzoTelematico">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;attribute name="tipo" default="smtp">
+ *         &lt;simpleType>
+ *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}NMTOKEN">
+ *             &lt;enumeration value="uri"/>
+ *             &lt;enumeration value="smtp"/>
+ *             &lt;enumeration value="NMTOKEN"/>
+ *           &lt;/restriction>
+ *         &lt;/simpleType>
+ *       &lt;/attribute>
+ *       &lt;attribute name="note" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" />
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "value"
+@XmlType(name = "IndirizzoTelematico", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
+    "content"
 })
-@XmlRootElement(name = "IndirizzoTelematico")
 public class IndirizzoTelematico {
 
+    @XmlValue
+    protected String content;
     @XmlAttribute(name = "tipo")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     protected String tipo;
     @XmlAttribute(name = "note")
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "anySimpleType")
     protected String note;
-    @XmlValue
-    protected String value;
 
     /**
-     * Gets the value of the tipo property.
+     * Recupera il valore della proprietà content.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * Imposta il valore della proprietà content.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setContent(String value) {
+        this.content = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà tipo.
      * 
      * @return
      *     possible object is
@@ -43,7 +88,7 @@ public class IndirizzoTelematico {
     }
 
     /**
-     * Sets the value of the tipo property.
+     * Imposta il valore della proprietà tipo.
      * 
      * @param value
      *     allowed object is
@@ -55,7 +100,7 @@ public class IndirizzoTelematico {
     }
 
     /**
-     * Gets the value of the note property.
+     * Recupera il valore della proprietà note.
      * 
      * @return
      *     possible object is
@@ -67,7 +112,7 @@ public class IndirizzoTelematico {
     }
 
     /**
-     * Sets the value of the note property.
+     * Imposta il valore della proprietà note.
      * 
      * @param value
      *     allowed object is
@@ -76,30 +121,6 @@ public class IndirizzoTelematico {
      */
     public void setNote(String value) {
         this.note = value;
-    }
-
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getvalue() {
-        return value;
-    }
-
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setvalue(String value) {
-        this.value = value;
     }
 
 }

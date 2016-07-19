@@ -1,44 +1,59 @@
 
 package com.axiastudio.suite.interoperabilita.entities;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlValue;
 
 
 /**
+ * <p>Classe Java per DescrizioneMessaggio complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="DescrizioneMessaggio">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "value"
+@XmlType(name = "DescrizioneMessaggio", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
+    "content"
 })
-@XmlRootElement(name = "DescrizioneMessaggio")
 public class DescrizioneMessaggio {
 
     @XmlValue
-    protected String value;
+    protected String content;
 
     /**
-     * Gets the value of the value property.
+     * Recupera il valore della proprietà content.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getvalue() {
-        return value;
+    public String getContent() {
+        return content;
     }
 
     /**
-     * Sets the value of the value property.
+     * Imposta il valore della proprietà content.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setvalue(String value) {
-        this.value = value;
+    public void setContent(String value) {
+        this.content = value;
     }
 
 }

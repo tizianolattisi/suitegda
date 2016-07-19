@@ -1,27 +1,46 @@
 
 package com.axiastudio.suite.interoperabilita.entities;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
+ * <p>Classe Java per Mittente complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="Mittente">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Amministrazione"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}AOO"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
+@XmlType(name = "Mittente", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
     "amministrazione",
     "aoo"
 })
-@XmlRootElement(name = "Mittente")
 public class Mittente {
 
-    @XmlElement(name = "Amministrazione", required = true)
+    @XmlElement(name = "Amministrazione", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
     protected Amministrazione amministrazione;
-    @XmlElement(name = "AOO", required = true)
+    @XmlElement(name = "AOO", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
     protected AOO aoo;
 
     /**
-     * Gets the value of the amministrazione property.
+     * Recupera il valore della proprietà amministrazione.
      * 
      * @return
      *     possible object is
@@ -33,7 +52,7 @@ public class Mittente {
     }
 
     /**
-     * Sets the value of the amministrazione property.
+     * Imposta il valore della proprietà amministrazione.
      * 
      * @param value
      *     allowed object is
@@ -45,7 +64,7 @@ public class Mittente {
     }
 
     /**
-     * Gets the value of the aoo property.
+     * Recupera il valore della proprietà aoo.
      * 
      * @return
      *     possible object is
@@ -57,7 +76,7 @@ public class Mittente {
     }
 
     /**
-     * Sets the value of the aoo property.
+     * Imposta il valore della proprietà aoo.
      * 
      * @param value
      *     allowed object is

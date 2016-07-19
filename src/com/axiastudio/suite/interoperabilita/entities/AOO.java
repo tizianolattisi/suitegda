@@ -1,27 +1,46 @@
 
 package com.axiastudio.suite.interoperabilita.entities;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
+ * <p>Classe Java per AOO complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="AOO">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Denominazione"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}CodiceAOO" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
+@XmlType(name = "AOO", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
     "denominazione",
     "codiceAOO"
 })
-@XmlRootElement(name = "AOO")
 public class AOO {
 
-    @XmlElement(name = "Denominazione", required = true)
+    @XmlElement(name = "Denominazione", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
     protected Denominazione denominazione;
-    @XmlElement(name = "CodiceAOO")
-    protected String codiceAOO;
+    @XmlElement(name = "CodiceAOO", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected CodiceAOO codiceAOO;
 
     /**
-     * Gets the value of the denominazione property.
+     * Recupera il valore della proprietà denominazione.
      * 
      * @return
      *     possible object is
@@ -33,7 +52,7 @@ public class AOO {
     }
 
     /**
-     * Sets the value of the denominazione property.
+     * Imposta il valore della proprietà denominazione.
      * 
      * @param value
      *     allowed object is
@@ -45,26 +64,26 @@ public class AOO {
     }
 
     /**
-     * Gets the value of the codiceAOO property.
+     * Recupera il valore della proprietà codiceAOO.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link CodiceAOO }
      *     
      */
-    public String getCodiceAOO() {
+    public CodiceAOO getCodiceAOO() {
         return codiceAOO;
     }
 
     /**
-     * Sets the value of the codiceAOO property.
+     * Imposta il valore della proprietà codiceAOO.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link CodiceAOO }
      *     
      */
-    public void setCodiceAOO(String value) {
+    public void setCodiceAOO(CodiceAOO value) {
         this.codiceAOO = value;
     }
 

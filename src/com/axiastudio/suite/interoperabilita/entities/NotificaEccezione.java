@@ -7,32 +7,124 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
+ * <p>Classe Java per NotificaEccezione complex type.
+ * 
+ * <p>Il seguente frammento di schema specifica il contenuto previsto contenuto in questa classe.
+ * 
+ * <pre>
+ * &lt;complexType name="NotificaEccezione">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Identificatore" minOccurs="0"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}MessaggioRicevuto"/>
+ *         &lt;element ref="{http://www.digitPa.gov.it/protocollo/}Motivo"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="versione" type="{http://www.w3.org/2001/XMLSchema}NMTOKEN" fixed="aaaa-mm-gg" />
+ *       &lt;attribute name="xml-lang" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" fixed="it" />
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
+@XmlType(name = "NotificaEccezione", namespace = "http://www.digitPa.gov.it/protocollo/", propOrder = {
     "identificatore",
     "messaggioRicevuto",
     "motivo"
 })
-@XmlRootElement(name = "NotificaEccezione")
 public class NotificaEccezione {
 
+    @XmlElement(name = "Identificatore", namespace = "http://www.digitPa.gov.it/protocollo/")
+    protected Identificatore identificatore;
+    @XmlElement(name = "MessaggioRicevuto", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
+    protected MessaggioRicevuto messaggioRicevuto;
+    @XmlElement(name = "Motivo", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
+    protected Motivo motivo;
     @XmlAttribute(name = "versione")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlSchemaType(name = "NMTOKEN")
     protected String versione;
-    @XmlAttribute(name = "xml:lang")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlAttribute(name = "xml-lang")
+    @XmlSchemaType(name = "anySimpleType")
     protected String xmlLang;
-    @XmlElement(name = "Identificatore")
-    protected Identificatore identificatore;
-    @XmlElement(name = "MessaggioRicevuto", required = true)
-    protected MessaggioRicevuto messaggioRicevuto;
-    @XmlElement(name = "Motivo", required = true)
-    protected String motivo;
 
     /**
-     * Gets the value of the versione property.
+     * Recupera il valore della proprietà identificatore.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Identificatore }
+     *     
+     */
+    public Identificatore getIdentificatore() {
+        return identificatore;
+    }
+
+    /**
+     * Imposta il valore della proprietà identificatore.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Identificatore }
+     *     
+     */
+    public void setIdentificatore(Identificatore value) {
+        this.identificatore = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà messaggioRicevuto.
+     * 
+     * @return
+     *     possible object is
+     *     {@link MessaggioRicevuto }
+     *     
+     */
+    public MessaggioRicevuto getMessaggioRicevuto() {
+        return messaggioRicevuto;
+    }
+
+    /**
+     * Imposta il valore della proprietà messaggioRicevuto.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link MessaggioRicevuto }
+     *     
+     */
+    public void setMessaggioRicevuto(MessaggioRicevuto value) {
+        this.messaggioRicevuto = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà motivo.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Motivo }
+     *     
+     */
+    public Motivo getMotivo() {
+        return motivo;
+    }
+
+    /**
+     * Imposta il valore della proprietà motivo.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Motivo }
+     *     
+     */
+    public void setMotivo(Motivo value) {
+        this.motivo = value;
+    }
+
+    /**
+     * Recupera il valore della proprietà versione.
      * 
      * @return
      *     possible object is
@@ -48,7 +140,7 @@ public class NotificaEccezione {
     }
 
     /**
-     * Sets the value of the versione property.
+     * Imposta il valore della proprietà versione.
      * 
      * @param value
      *     allowed object is
@@ -60,7 +152,7 @@ public class NotificaEccezione {
     }
 
     /**
-     * Gets the value of the xmlLang property.
+     * Recupera il valore della proprietà xmlLang.
      * 
      * @return
      *     possible object is
@@ -76,7 +168,7 @@ public class NotificaEccezione {
     }
 
     /**
-     * Sets the value of the xmlLang property.
+     * Imposta il valore della proprietà xmlLang.
      * 
      * @param value
      *     allowed object is
@@ -85,78 +177,6 @@ public class NotificaEccezione {
      */
     public void setXmlLang(String value) {
         this.xmlLang = value;
-    }
-
-    /**
-     * Gets the value of the identificatore property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Identificatore }
-     *     
-     */
-    public Identificatore getIdentificatore() {
-        return identificatore;
-    }
-
-    /**
-     * Sets the value of the identificatore property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Identificatore }
-     *     
-     */
-    public void setIdentificatore(Identificatore value) {
-        this.identificatore = value;
-    }
-
-    /**
-     * Gets the value of the messaggioRicevuto property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link MessaggioRicevuto }
-     *     
-     */
-    public MessaggioRicevuto getMessaggioRicevuto() {
-        return messaggioRicevuto;
-    }
-
-    /**
-     * Sets the value of the messaggioRicevuto property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link MessaggioRicevuto }
-     *     
-     */
-    public void setMessaggioRicevuto(MessaggioRicevuto value) {
-        this.messaggioRicevuto = value;
-    }
-
-    /**
-     * Gets the value of the motivo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMotivo() {
-        return motivo;
-    }
-
-    /**
-     * Sets the value of the motivo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMotivo(String value) {
-        this.motivo = value;
     }
 
 }
