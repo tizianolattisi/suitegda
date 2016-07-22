@@ -1,9 +1,8 @@
 package com.axiastudio.suite.interoperabilita;
 
-import com.axiastudio.suite.interoperabilita.entities.*;
+import com.axiastudio.suite.interoperabilita.entities.xsd.*;
 import com.axiastudio.suite.interoperabilita.utilities.StringMarshalling;
 import com.axiastudio.suite.interoperabilita.utilities.StringUnmarshalling;
-import com.axiastudio.suite.protocollo.entities.Oggetto;
 import org.junit.*;
 import org.w3c.dom.Document;
 import org.xml.sax.ErrorHandler;
@@ -11,7 +10,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -48,7 +46,7 @@ public class jaxbTest {
     }
 
     @Test
-    public void leggi() throws JAXBException, IOException {
+    public void leggi() throws Exception {
         String filePath = "testSegnatura.xml";
 
         FileInputStream fileInputStream = new FileInputStream(filePath);
@@ -67,7 +65,7 @@ public class jaxbTest {
     }
 
     @Test
-    public void scrivi(){
+    public void scrivi() throws Exception {
 
         Segnatura segnatura = new Segnatura();
         segnatura.setVersione("aaaa-mm-gg");
@@ -77,11 +75,21 @@ public class jaxbTest {
         segnatura.setIntestazione(intestazione);
 
         Identificatore identificatore = new Identificatore();
-        identificatore.setCodiceAmministrazione("r_h330");
-        identificatore.setCodiceAOO("RSERVIZI");
-        identificatore.setNumeroRegistrazione("0000001");
-        identificatore.setDataRegistrazione("2014-01-01");
-        identificatore.setCodiceRegistro("--");
+        CodiceAmministrazione codiceAmministrazione1 = new CodiceAmministrazione();
+        codiceAmministrazione1.setContent("r_h330");
+        identificatore.setCodiceAmministrazione(codiceAmministrazione1);
+        CodiceAOO codiceAOO1 = new CodiceAOO();
+        codiceAOO1.setContent("RSERVIZI");
+        identificatore.setCodiceAOO(codiceAOO1);
+        NumeroRegistrazione numeroRegistrazione1 = new NumeroRegistrazione();
+        numeroRegistrazione1.setContent("0000001");
+        identificatore.setNumeroRegistrazione(numeroRegistrazione1);
+        DataRegistrazione dataRegistrazione1 = new DataRegistrazione();
+        dataRegistrazione1.setContent("2014-01-01");
+        identificatore.setDataRegistrazione(dataRegistrazione1);
+        CodiceRegistro codiceRegistro = new CodiceRegistro();
+        codiceRegistro.setContent("--");
+        identificatore.setCodiceRegistro(codiceRegistro);
         intestazione.setIdentificatore(identificatore);
 
         Origine origine = new Origine();
@@ -89,7 +97,7 @@ public class jaxbTest {
 
         IndirizzoTelematico indirizzoTelematico = new IndirizzoTelematico();
         indirizzoTelematico.setTipo("smtp");
-        indirizzoTelematico.setvalue("info@comune.rivadelgarda.tn.it");
+        indirizzoTelematico.setContent("info@comune.rivadelgarda.tn.it");
         origine.setIndirizzoTelematico(indirizzoTelematico);
 
         Mittente mittente = new Mittente();
@@ -97,27 +105,24 @@ public class jaxbTest {
         Amministrazione amministrazione = new Amministrazione();
         mittente.setAmministrazione(amministrazione);
         Denominazione denominazione = new Denominazione();
-        denominazione.setvalue("Comune di Riva del Garda");
+        denominazione.setContent("Comune di Riva del Garda");
         amministrazione.setDenominazione(denominazione);
 
         UnitaOrganizzativa unitaOrganizzativa = new UnitaOrganizzativa();
         unitaOrganizzativa.setTipo("permanente");
         Denominazione denominazioneUnitaOrganizzativa = new Denominazione();
-        denominazioneUnitaOrganizzativa.setvalue("Sistema informativo comunale");
+        denominazioneUnitaOrganizzativa.setContent("Sistema informativo comunale");
         unitaOrganizzativa.setDenominazione(denominazioneUnitaOrganizzativa);
         IndirizzoPostale indirizzoPostaleUnitaOrganizzativa = new IndirizzoPostale();
-        indirizzoPostaleUnitaOrganizzativa.getDenominazioneOrToponimoOrCivicoOrCAPOrComuneOrProvinciaOrNazione()
-                .add(new Denominazione());
-        unitaOrganizzativa.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
-                .add(indirizzoPostaleUnitaOrganizzativa);
-        amministrazione.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
-                .add(unitaOrganizzativa);
+        indirizzoPostaleUnitaOrganizzativa.setDenominazione(new Denominazione());
+        unitaOrganizzativa.setIndirizzoPostale(indirizzoPostaleUnitaOrganizzativa);
+        amministrazione.setUnitaOrganizzativa(unitaOrganizzativa);
 
         AOO aoo = new AOO();
         mittente.setAOO(aoo);
         Denominazione denominazioneAoo = new Denominazione();
+        denominazioneAoo.setContent("RSERVIZI");
         aoo.setDenominazione(denominazioneAoo);
-        denominazioneAoo.setvalue("RSERVIZI");
 
         Destinazione destinazione = new Destinazione();
         intestazione.getDestinazione().add(destinazione);
@@ -125,37 +130,34 @@ public class jaxbTest {
         IndirizzoTelematico indirizzoTelematicoDestinazione = new IndirizzoTelematico();
         indirizzoTelematicoDestinazione.setTipo("smtp");
         destinazione.setIndirizzoTelematico(indirizzoTelematicoDestinazione);
-        indirizzoTelematicoDestinazione.setvalue("serv.supportoeinformatica@pec.provincia.tn.it");
+        indirizzoTelematicoDestinazione.setContent("serv.supportoeinformatica@pec.provincia.tn.it");
         Destinatario destinatario = new Destinatario();
         destinazione.getDestinatario().add(destinatario);
         Amministrazione amministrazioneDestinatario = new Amministrazione();
-        destinatario.getAmministrazioneOrAOOOrDenominazioneOrPersona().add(amministrazioneDestinatario);
+        //destinatario.getAmministrazioneOrAOOOrDenominazioneOrPersona().add(amministrazioneDestinatario);
         Denominazione denominazioneAministrazioneDestinatario = new Denominazione();
+        denominazioneAministrazioneDestinatario.setContent("Provincia Autonoma di Trento");
         amministrazioneDestinatario.setDenominazione(denominazioneAministrazioneDestinatario);
-        denominazioneAministrazioneDestinatario.setvalue("Provincia Autonoma di Trento");
         UnitaOrganizzativa unitaOrganizzativaAmministrazioneDestinatario = new UnitaOrganizzativa();
         unitaOrganizzativaAmministrazioneDestinatario.setTipo("permanente");
-        amministrazioneDestinatario.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
-                .add(unitaOrganizzativaAmministrazioneDestinatario);
+        amministrazioneDestinatario.setUnitaOrganizzativa(unitaOrganizzativaAmministrazioneDestinatario);
         Denominazione denominazioneUnitaOrganizzativaDestinatario = new Denominazione();
+        denominazioneUnitaOrganizzativaDestinatario.setContent("Direzione Generale della Provincia");
         unitaOrganizzativaAmministrazioneDestinatario.setDenominazione(denominazioneUnitaOrganizzativaDestinatario);
-        denominazioneUnitaOrganizzativaDestinatario.setvalue("Direzione Generale della Provincia");
         UnitaOrganizzativa unitaOrganizzativaAmministrazioneDestinatario2 = new UnitaOrganizzativa();
         unitaOrganizzativaAmministrazioneDestinatario2.setTipo("permanente");
-        unitaOrganizzativaAmministrazioneDestinatario.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
-                .add(unitaOrganizzativaAmministrazioneDestinatario2);
+        unitaOrganizzativaAmministrazioneDestinatario.setUnitaOrganizzativa(unitaOrganizzativaAmministrazioneDestinatario2);
         Denominazione denominazioneUnitaOrganizzativaDestinatario2 = new Denominazione();
+        denominazioneUnitaOrganizzativaDestinatario2.setContent("Servizio supporto amministrativo e informatica");
         unitaOrganizzativaAmministrazioneDestinatario2.setDenominazione(denominazioneUnitaOrganizzativaDestinatario2);
-        denominazioneUnitaOrganizzativaDestinatario2.setvalue("Servizio supporto amministrativo e informatica");
         IndirizzoPostale indirizzoPostale = new IndirizzoPostale();
-        unitaOrganizzativaAmministrazioneDestinatario2.getUnitaOrganizzativaOrRuoloOrPersonaOrIndirizzoPostaleOrIndirizzoTelematicoOrTelefonoOrFax()
-                .add(indirizzoPostale);
+        unitaOrganizzativaAmministrazioneDestinatario2.setIndirizzoPostale(indirizzoPostale);
         Denominazione denominazioneIndirizzoPostale = new Denominazione();
-        indirizzoPostale.getDenominazioneOrToponimoOrCivicoOrCAPOrComuneOrProvinciaOrNazione()
-                .add(denominazioneIndirizzoPostale);
-        denominazioneIndirizzoPostale.setvalue("");
-
-        intestazione.setOggetto("Risposta");
+        denominazioneIndirizzoPostale.setContent("Via...");
+        indirizzoPostale.setDenominazione(denominazioneIndirizzoPostale);
+        Oggetto oggetto = new Oggetto();
+        oggetto.setContent("Risposta");
+        intestazione.setOggetto(oggetto);
 
         //Riferimenti riferimenti = new Riferimenti();
         //segnatura.setRiferimenti(riferimenti);
@@ -163,18 +165,19 @@ public class jaxbTest {
         Descrizione descrizione = new Descrizione();
         segnatura.setDescrizione(descrizione);
         Documento documento = new Documento();
-        descrizione.getDocumentoOrTestoDelMessaggio().add(documento);
+        descrizione.setDocumento(documento);
         documento.setNome("risposta.pdf");
         documento.setTipoRiferimento("MIME");
-        Oggetto oggetto = new Oggetto();
-        documento.setOggetto("Descrizione del file risposta.pdf");
+        Oggetto oggetto1 = new Oggetto();
+        oggetto1.setContent("Descrizione del file risposta.pdf");
+        documento.setOggetto(oggetto1);
 
-        String xml = StringMarshalling.getXMLString(CONTEXT, segnatura, false);
+        String xml = StringMarshalling.getXMLStringDTD(CONTEXT, segnatura, "Segnatura", true);
         System.out.println(xml);
 
 
 
-        valida(StringMarshalling.getXMLString(CONTEXT, segnatura, false));
+        //valida(StringMarshalling.getXMLString(CONTEXT, segnatura, false));
 
     }
 
