@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "descrizione",
     "piuInfo"
 })
-@XmlRootElement
+@XmlRootElement(name = "Segnatura")
 public class Segnatura {
 
     @XmlElement(name = "Intestazione", namespace = "http://www.digitPa.gov.it/protocollo/", required = true)
