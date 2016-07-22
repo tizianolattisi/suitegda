@@ -24,7 +24,7 @@ import java.io.IOException;
  */
 public class jaxbTest {
 
-    String CONTEXT = "com.axiastudio.suite.interoperabilita.entities";
+    String CONTEXT = "com.axiastudio.suite.interoperabilita.entities.xsd";
 
     @BeforeClass
     public static void setUpClass() {
@@ -114,7 +114,9 @@ public class jaxbTest {
         denominazioneUnitaOrganizzativa.setContent("Sistema informativo comunale");
         unitaOrganizzativa.setDenominazione(denominazioneUnitaOrganizzativa);
         IndirizzoPostale indirizzoPostaleUnitaOrganizzativa = new IndirizzoPostale();
-        indirizzoPostaleUnitaOrganizzativa.setDenominazione(new Denominazione());
+        Denominazione denominazione1 = new Denominazione();
+        denominazione1.setContent("Piazza II Novembre, 5 - 38062 Riva del Garda (TN)");
+        indirizzoPostaleUnitaOrganizzativa.setDenominazione(denominazione1);
         unitaOrganizzativa.setIndirizzoPostale(indirizzoPostaleUnitaOrganizzativa);
         amministrazione.setUnitaOrganizzativa(unitaOrganizzativa);
 
@@ -172,7 +174,7 @@ public class jaxbTest {
         oggetto1.setContent("Descrizione del file risposta.pdf");
         documento.setOggetto(oggetto1);
 
-        String xml = StringMarshalling.getXMLStringDTD(CONTEXT, segnatura, "Segnatura", true);
+        String xml = StringMarshalling.getXMLStringXSD(CONTEXT, segnatura, "Segnatura", true);
         System.out.println(xml);
 
 
