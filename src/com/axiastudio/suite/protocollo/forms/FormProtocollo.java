@@ -34,7 +34,7 @@ import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.forms.DialogStampaEtichetta;
-import com.axiastudio.suite.interoperabilita.entities.Segnatura;
+import com.axiastudio.suite.interoperabilita.entities.xsd.Segnatura;
 import com.axiastudio.suite.interoperabilita.utilities.JAXBHelper;
 import com.axiastudio.suite.pec.NuovoMessaggioRequest;
 import com.axiastudio.suite.pec.NuovoMessaggioResponse;
@@ -880,7 +880,12 @@ public class FormProtocollo extends Window {
                         soggettoProtocollo.getSoggetto(),
                         destinatario,
                         nomiFile);
-                String segnaturaXml = JAXBHelper.scriviSegnatura(segnatura);
+                String segnaturaXml = null;
+                try {
+                    segnaturaXml = JAXBHelper.scriviSegnatura(segnatura);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if( DRY_RUN ){
                     System.out.println(segnaturaXml);
                 } else {
