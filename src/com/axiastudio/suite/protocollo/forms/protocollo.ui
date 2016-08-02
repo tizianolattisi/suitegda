@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1030</width>
-    <height>606</height>
+    <height>634</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -333,71 +333,30 @@
             <string>Rifer. mitt.</string>
            </property>
            <property name="buddy">
-            <cstring>lineEdit_nrriferimentomittente</cstring>
+            <cstring>comboBox_tiporiferimentomittente</cstring>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_tiporiferimentomittente">
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_tiporiferimentomittente">
            <property name="column" stdset="0">
             <string>Tiporiferimentomittente</string>
            </property>
-           <item>
-            <property name="text">
-             <string>NESSUNO</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>EMAIL</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>FAX</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>LETTERA</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>RACCOMANDATA</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>PEC</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>A_MANO</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>INVIO_TELEMATICO</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ATTO_GIUDIZIARIO</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>CORRIERE</string>
-            </property>
-           </item>
+           <property name="sortbytostring" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>N°</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_nrriferimentomittente</cstring>
            </property>
           </widget>
          </item>
@@ -421,6 +380,9 @@
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>del</string>
+           </property>
+           <property name="buddy">
+            <cstring>dateEdit_datariferimentomittente</cstring>
            </property>
           </widget>
          </item>
@@ -453,6 +415,9 @@
            <property name="column" stdset="0">
             <string>datariferimentomittente</string>
            </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
         </layout>
@@ -461,32 +426,6 @@
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="1">
-            <widget class="QCheckBox" name="spedito">
-             <property name="text">
-              <string>Spedito</string>
-             </property>
-             <property name="column" stdset="0">
-              <string>Spedito</string>
-             </property>
-             <property name="search" stdset="0">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="annullamentorichiesto">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Annull. richiesto</string>
-             </property>
-             <property name="column" stdset="0">
-              <string>annullamentorichiesto</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="1">
             <widget class="QCheckBox" name="riservato">
              <property name="text">
@@ -500,6 +439,32 @@
              </property>
              <property name="export" stdset="0">
               <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="annullato">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Annullato</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>annullato</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="annullamentorichiesto">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Annull. richiesto</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>annullamentorichiesto</string>
              </property>
             </widget>
            </item>
@@ -523,16 +488,16 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QCheckBox" name="annullato">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="spedito">
              <property name="text">
-              <string>Annullato</string>
+              <string>Spedito</string>
              </property>
              <property name="column" stdset="0">
-              <string>annullato</string>
+              <string>Spedito</string>
+             </property>
+             <property name="search" stdset="0">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -762,7 +727,7 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab_3">
            <attribute name="title">
@@ -784,13 +749,13 @@
                <string>.soggettoProtocolloCollection</string>
               </property>
               <property name="columns" stdset="0">
-               <string>&lt;soggettoformattato&gt;,titolo,&gt;corrispondenza&lt;,&gt;notifica&lt;,&gt;conoscenza&lt;</string>
+               <string>&lt;soggettoformattato&gt;,titolo,&gt;corrispondenza&lt;,&gt;notifica&lt;,&gt;conoscenza&lt;,&gt;pec&lt;</string>
               </property>
               <property name="reference" stdset="0">
                <string>soggetto</string>
               </property>
               <property name="headers" stdset="0">
-               <string>Soggetto,Titolo,cr,nt,cn</string>
+               <string>Soggetto,Titolo,cr,nt,cn,pec</string>
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>
@@ -936,7 +901,7 @@
            <bool>true</bool>
           </property>
           <property name="searchfields" stdset="0">
-           <string>pratica.codiceinterno</string>
+           <string>pratica.codiceinterno,oggetto</string>
           </property>
           <property name="sortcolumn" stdset="0">
            <number>2</number>
@@ -1079,17 +1044,85 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_6">
+       <attribute name="title">
+        <string/>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Corpo del messaggio</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_17">
+          <property name="text">
+           <string>Stato invio PEC</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QTextEdit" name="textEdit_PECBody">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="acceptRichText">
+           <bool>false</bool>
+          </property>
+          <property name="column" stdset="0">
+           <string>pecBody</string>
+          </property>
+          <property name="private" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QTextEdit" name="textEdit_StatoPEC">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_18">
+          <property name="text">
+           <string>Segnatura</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="QTextEdit" name="textEdit_Segnatura">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="column" stdset="0">
+           <string>Segnatura</string>
+          </property>
+          <property name="private" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
   </widget>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
-   <extends>QTableView</extends>
-   <header>pypapitableview.h</header>
-  </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
    <extends>QComboBox</extends>
@@ -1099,6 +1132,11 @@
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
    <extends>QDateEdit</extends>
    <header>pypapidateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
+   <extends>QTableView</extends>
+   <header>pypapitableview.h</header>
   </customwidget>
   <customwidget>
    <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateTimeEdit</class>

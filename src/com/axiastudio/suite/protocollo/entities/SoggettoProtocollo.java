@@ -65,10 +65,13 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     private Date datafine;
     @Column(name="principale")
     private Boolean principale=false;
-
+    @Column(name="pec")
+    private Boolean pec=false;
     @JoinColumn(name = "soggettoreferente", referencedColumnName = "id")
     @ManyToOne
     private Soggetto soggettoReferente;
+    @Column(name="messaggiopec")
+    private Long messaggiopec;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -197,12 +200,28 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.principale = principale;
     }
 
+    public Boolean getPec() {
+        return pec;
+    }
+
+    public void setPec(Boolean pec) {
+        this.pec = pec;
+    }
+
     public Soggetto getSoggettoReferente() {
         return soggettoReferente;
     }
 
     public void setSoggettoReferente(Soggetto soggettoReferente) {
         this.soggettoReferente = soggettoReferente;
+    }
+
+    public Long getMessaggiopec() {
+        return messaggiopec;
+    }
+
+    public void setMessaggiopec(Long messaggiopec) {
+        this.messaggiopec = messaggiopec;
     }
 
     public RelazioneSoggetto getReferenteRelazione() {

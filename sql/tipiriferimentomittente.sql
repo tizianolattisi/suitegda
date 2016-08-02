@@ -1,0 +1,11 @@
+INSERT INTO protocollo.tiporiferimentomittente VALUES (1, 'NESSUNO');
+INSERT INTO protocollo.tiporiferimentomittente VALUES (2, 'EMAIL');
+INSERT INTO protocollo.tiporiferimentomittente VALUES (3, 'FAX');
+INSERT INTO protocollo.tiporiferimentomittente VALUES (4, 'LETTERA');
+INSERT INTO protocollo.tiporiferimentomittente VALUES (5, 'RACCOMANDATA');
+INSERT INTO protocollo.tiporiferimentomittente VALUES (6, 'PEC');
+INSERT INTO protocollo.tiporiferimentomittente VALUES (7, 'A_MANO');
+INSERT INTO protocollo.tiporiferimentomittente VALUES (8, 'INVIO_TELEMATICO');
+INSERT INTO protocollo.tiporiferimentomittente VALUES (9, 'ATTO_GIUDIZIARIO');
+INSERT INTO protocollo.tiporiferimentomittente VALUES (10, 'CORRIERE');
+INSERT INTO protocollo.tiporiferimentomittente VALUES (11, 'TELEGRAMMA');

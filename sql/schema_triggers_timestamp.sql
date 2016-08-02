@@ -325,6 +325,18 @@ CREATE TRIGGER trg_upd_ts_titolo
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
 
+CREATE TRIGGER trg_ins_ts_pecprotocollo
+  BEFORE INSERT
+  ON protocollo.pecprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+
+CREATE TRIGGER trg_upd_ts_pecprotocollo
+  BEFORE UPDATE
+  ON protocollo.pecprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
+
 -- Pratiche					----------
 CREATE TRIGGER trg_ins_ts_pratica
   BEFORE INSERT

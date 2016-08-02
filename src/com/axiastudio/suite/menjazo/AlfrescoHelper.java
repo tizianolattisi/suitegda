@@ -126,7 +126,7 @@ public class AlfrescoHelper {
         return versions;
     }
     
-    private HashMap mapFromCmisObject(CmisObject o) {
+    private HashMap<String, String> mapFromCmisObject(CmisObject o) {
         HashMap map = new HashMap();
         // cmis properties
         for( Property<?> property: o.getProperties() ){

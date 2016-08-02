@@ -31,7 +31,6 @@ import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.pratiche.forms.FormTipoPraticaTree;
-import com.axiastudio.suite.protocollo.forms.FormMailboxList;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.axiastudio.suite.scanndo.ScanNDo;
@@ -43,12 +42,7 @@ import com.trolltech.qt.gui.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -469,10 +463,6 @@ public class Mdi extends QMainWindow implements IMdi {
             FormTitolario titolario = new FormTitolario();
             this.workspace.addSubWindow(titolario);
             int exec = titolario.exec();
-        } else if( "EMAIL".equals(formName) ){
-            FormMailboxList mailboxes = new FormMailboxList();
-            this.workspace.addSubWindow(mailboxes);
-            int exec = mailboxes.exec();
         } else if( "TIPIPRATICA".equals(formName) ){
             FormTipoPraticaTree tipipratica = new FormTipoPraticaTree();
             this.workspace.addSubWindow(tipipratica);

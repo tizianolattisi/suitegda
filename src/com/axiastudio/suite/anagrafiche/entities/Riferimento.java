@@ -50,6 +50,10 @@ public class Riferimento implements Serializable, ITimeStamped {
     private Boolean lavoro=Boolean.FALSE;
     @Column(name="pubblicabile")
     private Boolean pubblicabile=Boolean.FALSE;
+    @Column(name="principaleentrata")
+    private Boolean principaleentrata=Boolean.FALSE;
+    @Column(name="principaleuscita")
+    private Boolean principaleuscita=Boolean.FALSE;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -150,6 +154,22 @@ public class Riferimento implements Serializable, ITimeStamped {
 
     public void setRecordmodificatoda(String recordmodificatoda) {
         this.recordmodificatoda = recordmodificatoda;
+    }
+
+    public Boolean getPrincipaleentrata() {
+        return principaleentrata;
+    }
+
+    public void setPrincipaleentrata(Boolean principaleentrata) {
+        this.principaleentrata = principaleentrata;
+    }
+
+    public Boolean getPrincipaleuscita() {
+        return principaleuscita;
+    }
+
+    public void setPrincipaleuscita(Boolean principaleuscita) {
+        this.principaleuscita = principaleuscita;
     }
 
     @Override
