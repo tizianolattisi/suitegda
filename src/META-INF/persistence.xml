@@ -1,94 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-  <persistence-unit name="SuitePU" transaction-type="RESOURCE_LOCAL">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>com.axiastudio.suite.protocollo.entities.Protocollo</class>
-    <class>com.axiastudio.suite.base.entities.Ufficio</class>
-    <class>com.axiastudio.suite.protocollo.entities.Attribuzione</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.Soggetto</class>
-    <class>com.axiastudio.suite.protocollo.entities.UfficioProtocollo</class>
-    <class>com.axiastudio.suite.protocollo.entities.SoggettoProtocollo</class>
-    <class>com.axiastudio.suite.pratiche.entities.Pratica</class>
-    <class>com.axiastudio.suite.protocollo.entities.PraticaProtocollo</class>
-    <class>com.axiastudio.suite.base.entities.UfficioUtente</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.Indirizzo</class>
-    <class>com.axiastudio.suite.protocollo.entities.Fascicolo</class>
-    <class>com.axiastudio.suite.base.entities.Utente</class>
-    <class>com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo</class>
-    <class>com.axiastudio.suite.procedimenti.entities.Procedimento</class>
-    <class>com.axiastudio.suite.pubblicazioni.entities.TipoAttoPubblicazione</class>
-    <class>com.axiastudio.suite.pubblicazioni.entities.Pubblicazione</class>
-    <class>com.axiastudio.suite.sedute.entities.Seduta</class>
-    <class>com.axiastudio.suite.sedute.entities.CaricaCommissione</class>
-    <class>com.axiastudio.suite.sedute.entities.Commissione</class>
-    <class>com.axiastudio.suite.finanziaria.entities.Servizio</class>
-    <class>com.axiastudio.suite.deliberedetermine.entities.Determina</class>
-    <class>com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina</class>
-    <class>com.axiastudio.suite.procedimenti.entities.Delega</class>
-    <class>com.axiastudio.suite.procedimenti.entities.Carica</class>
-    <class>com.axiastudio.suite.sedute.entities.DelegaSeduta</class>
-    <class>com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina</class>
-    <class>com.axiastudio.suite.deliberedetermine.entities.SpesaImpegnoEsistente</class>
-    <class>com.axiastudio.suite.finanziaria.entities.Capitolo</class>
-    <class>com.axiastudio.suite.finanziaria.entities.Progetto</class>
-    <class>com.axiastudio.suite.procedimenti.entities.TipoNorma</class>
-    <class>com.axiastudio.suite.procedimenti.entities.Norma</class>
-    <class>com.axiastudio.suite.procedimenti.entities.NormaProcedimento</class>
-    <class>com.axiastudio.suite.procedimenti.entities.FaseProcedimento</class>
-    <class>com.axiastudio.suite.procedimenti.entities.UfficioProcedimento</class>
-    <class>com.axiastudio.suite.procedimenti.entities.UfficioUtenteProcedimento</class>
-    <class>com.axiastudio.suite.pratiche.entities.TipoPratica</class>
-    <class>com.axiastudio.suite.sedute.entities.TipoSeduta</class>
-    <class>com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento</class>
-    <class>com.axiastudio.suite.deliberedetermine.entities.UfficioDetermina</class>
-    <class>com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.AlboProfessionale</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.GruppoSoggetto</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.Gruppo</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.Stato</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.Provincia</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.Riferimento</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.Relazione</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto</class>
-    <class>com.axiastudio.suite.protocollo.entities.Titolo</class>
-    <class>com.axiastudio.suite.protocollo.entities.Oggetto</class>
-    <class>com.axiastudio.suite.pratiche.entities.Dipendenza</class>
-    <class>com.axiastudio.suite.pratiche.entities.DipendenzaPratica</class>
-    <class>com.axiastudio.suite.pratiche.entities.FasePratica</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.TitoloSoggetto</class>
-    <class>com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo</class>
-    <class>com.axiastudio.suite.protocollo.entities.MotivazioneAnnullamento</class>
-    <class>com.axiastudio.suite.generale.entities.Costante</class>
-    <class>com.axiastudio.suite.pratiche.entities.Fase</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.TitoloStudio</class>
-    <class>com.axiastudio.suite.anagrafiche.entities.TitoloStudioSoggetto</class>
-    <class>com.axiastudio.suite.generale.entities.Etichetta</class>
-    <class>com.axiastudio.suite.base.entities.Giunta</class>
-    <class>com.axiastudio.suite.modelli.entities.Modello</class>
-    <class>com.axiastudio.suite.modelli.entities.TipoPraticaModello</class>
-    <class>com.axiastudio.suite.modelli.entities.ProcedimentoModello</class>
-    <class>com.axiastudio.suite.modelli.entities.Segnalibro</class>
-    <class>com.axiastudio.suite.protocollo.entities.Mailbox</class>
-    <class>com.axiastudio.suite.protocollo.entities.TipoRiferimentoMittente</class>
-    <class>com.axiastudio.suite.richieste.entities.Richiesta</class>
-    <class>com.axiastudio.suite.protocollo.entities.PecProtocollo</class>
-    <class>com.axiastudio.suite.richieste.entities.DestinatarioUfficio</class>
-    <class>com.axiastudio.suite.richieste.entities.DestinatarioUtente</class>
-    <class>com.axiastudio.suite.pratiche.entities.Visto</class>
-    <class>com.axiastudio.suite.pratiche.entities.UtentePratica</class>
-    <class>com.axiastudio.suite.urp.entities.ServizioAlCittadino</class>
-    <class>com.axiastudio.suite.urp.entities.Sportello</class>
-    <class>com.axiastudio.suite.urp.entities.ServizioAlCittadinoSportello</class>
-    <class>com.axiastudio.suite.urp.entities.Ticket</class>
-    <class>com.axiastudio.suite.urp.entities.AperturaURP</class>
-    <class>com.axiastudio.suite.urp.entities.NotiziaURP</class>
-    <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
-      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-      <property name="javax.persistence.jdbc.user" value=""/>
-      <property name="eclipselink.ddl-generation" value="create-tables"/>
-      <property name="eclipselink.cache.shared.default" value="false"/>
-    </properties>
-  </persistence-unit>
+    <persistence-unit name="SuitePU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <class>it.tn.rivadelgarda.comune.suite.Dipendenti</class>
+        <properties>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/suite"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.user" value=""/>
+            <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+        </properties>
+    </persistence-unit>
 </persistence>
