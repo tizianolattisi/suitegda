@@ -34,6 +34,8 @@ CREATE SCHEMA richieste;
 ALTER SCHEMA richieste OWNER TO postgres;
 CREATE SCHEMA urp;
 ALTER SCHEMA urp OWNER TO postgres;
+CREATE SCHEMA pec;
+ALTER SCHEMA pec OWNER TO postgres;
 
 -- Create pgplsql
 CREATE OR REPLACE FUNCTION public.create_plpgsql_language ()
@@ -92,6 +94,36 @@ CREATE TABLE withtimestamp
 );
 ALTER TABLE withtimestamp OWNER TO postgres;
 
+CREATE OR REPLACE FUNCTION update_statopecprotocollo()
+  RETURNS trigger AS
+$BODY$
+DECLARE
+	nuovostato varchar;
+begin
+SELECT CASE WHEN (SELECT tipo FROM protocollo.protocollo WHERE iddocumento=new.protocollo)='USCITA' THEN
+		CASE WHEN (SELECT count(*) FROM protocollo.soggettoprotocollo WHERE protocollo=new.protocollo AND pec AND messaggiopec IS NULL)>0 THEN 'DAINVIARE'
+		WHEN (SELECT count(*) FROM pec.messaggi m, protocollo.soggettoprotocollo sp WHERE sp.protocollo=m.protocollo AND sp.messaggiopec=m.id AND m.protocollo=new.protocollo AND folder='OUT' AND stato_inviato=FALSE)>0 THEN 'DAINVIARE'
+		WHEN (SELECT count(*) FROM pec.messaggi m, protocollo.soggettoprotocollo sp WHERE sp.protocollo=m.protocollo AND sp.messaggiopec=m.id AND m.protocollo=new.protocollo AND folder='OUT')=0 THEN 'ERRORE'
+		WHEN (SELECT count(*) FROM pec.messaggi m, protocollo.soggettoprotocollo sp WHERE sp.protocollo=m.protocollo AND sp.messaggiopec=m.id AND m.protocollo=new.protocollo AND folder='OUT' AND stato_anomalia)>0 THEN 'ANOMALIA'
+		WHEN (SELECT count(*) FROM pec.messaggi m, protocollo.soggettoprotocollo sp WHERE sp.protocollo=m.protocollo AND sp.messaggiopec=m.id AND m.protocollo=new.protocollo AND folder='OUT' AND stato_consegnato=FALSE)>0 THEN 'INVIATO'
+		ELSE 'CONSEGNATO' END
+	ELSE 'CONSEGNATO'
+	END INTO nuovostato;
+IF (COALESCE(new.protocollo, '')!='' AND (SELECT count(*) FROM protocollo.pecprotocollo WHERE protocollo=new.protocollo)=0) THEN
+	INSERT INTO protocollo.pecprotocollo(protocollo, stato)
+	VALUES(new.protocollo, nuovostato);
+ELSE
+	UPDATE protocollo.pecprotocollo
+	SET stato = nuovostato
+	WHERE protocollo=new.protocollo;
+END IF;
+return new;
+end$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION update_statopecprotocollo()
+  OWNER TO postgres;
+
 
 -- Base
 SET search_path = base, pg_catalog;
@@ -140,6 +172,8 @@ ALTER TABLE ONLY utente
     ADD CONSTRAINT utente_pkey PRIMARY KEY (id);
 -- ALTER TABLE ONLY utente
 --     ADD CONSTRAINT fk_utente_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
+ALTER TABLE base.utente
+  ADD COLUMN richieste boolean DEFAULT false;
 
 CREATE TABLE ufficio (
     id bigserial NOT NULL,
@@ -154,6 +188,8 @@ CREATE TABLE ufficio (
 ALTER TABLE base.ufficio OWNER TO postgres;
 ALTER TABLE ONLY ufficio
     ADD CONSTRAINT ufficio_pkey PRIMARY KEY (id);
+ALTER TABLE base.ufficio
+  ADD COLUMN richieste boolean DEFAULT false;
 
 CREATE TABLE ufficioutente (
     id bigserial NOT NULL,
@@ -649,6 +685,11 @@ ALTER TABLE ONLY ufficioutenteprocedimento
     ADD CONSTRAINT fk_ufficioutenteprocedimento_procedimento FOREIGN KEY (procedimento) REFERENCES procedimento(id);
 ALTER TABLE ONLY ufficioutenteprocedimento
     ADD CONSTRAINT fk_ufficioutenteprocedimento_ufficioutente FOREIGN KEY (ufficioutente) REFERENCES base.ufficioutente(id);
+ALTER TABLE procedimenti.ufficioutenteprocedimento
+  DROP CONSTRAINT fk_ufficioutenteprocedimento_ufficioutente;
+ALTER TABLE procedimenti.ufficioutenteprocedimento
+  ADD CONSTRAINT fk_ufficioutenteprocedimento_ufficioutente FOREIGN KEY  (ufficioutente) REFERENCES base.ufficioutente (id) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE CASCADE;
 
 CREATE TABLE protocollo.fascicolo (
     id bigserial NOT NULL,
@@ -736,6 +777,8 @@ ALTER TABLE ONLY delega
     ADD CONSTRAINT fk_delega_procedimento FOREIGN KEY (procedimento) REFERENCES procedimenti.procedimento(id);
 ALTER TABLE ONLY delega
     ADD CONSTRAINT fk_delega_utentedelegante FOREIGN KEY (delegante) REFERENCES base.utente(id);
+ALTER TABLE procedimenti.delega
+  ADD COLUMN impedimento boolean NOT NULL DEFAULT false;
 
 
 -- Pratiche
@@ -948,6 +991,8 @@ CREATE TABLE visto (
   negato boolean default false,
   commento character varying
 );
+ALTER TABLE pratiche.visto
+  ADD COLUMN completato boolean;
 ALTER TABLE pratiche.visto OWNER TO postgres;
 ALTER TABLE ONLY visto
 ADD CONSTRAINT visto_pkey PRIMARY KEY (id);
@@ -1107,6 +1152,43 @@ ALTER TABLE ONLY attribuzione
     ADD CONSTRAINT fk_attribuzione_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo(iddocumento);
 ALTER TABLE ONLY attribuzione
     ADD CONSTRAINT fk_attribuzione_ufficio FOREIGN KEY (ufficio) REFERENCES base.ufficio(id);
+ALTER TABLE protocollo.attribuzione
+  ADD COLUMN dataprincipale timestamp without time zone;
+ALTER TABLE protocollo.attribuzione
+  ADD COLUMN esecutoreprincipale character varying(40);
+
+CREATE OR REPLACE FUNCTION protocollo.update_attribuzioneprincipale()
+  RETURNS trigger AS
+$BODY$
+DECLARE
+	utente_sessione varchar;
+	utente_appl varchar;
+	postgres_user varchar;
+begin
+  INSERT INTO protocollo.attribuzionemodificata (rec_creato, rec_creato_da, rec_modificato, rec_modificato_da, attribuzione, protocollo, ufficio,
+	dataattribuzioneprotocollo, letto, dataletto, esecutoreletto, principale, evidenza, dataprincipale, esecutoreprincipale)
+  VALUES (old.rec_creato, old.rec_creato_da, old.rec_modificato, old.rec_modificato_da, old.id, old.protocollo, old.ufficio,
+	old.dataattribuzioneprotocollo, old.letto, old.dataletto, old.esecutoreletto, old.principale, old.evidenza, old.dataprincipale,
+	old.esecutoreprincipale);
+
+  new.dataprincipale := 'now';
+  SELECT usename, substring(application_name, 7) INTO postgres_user, utente_appl FROM pg_stat_activity WHERE pid=pg_backend_pid();
+  SELECT utente INTO utente_sessione FROM generale.sessionigda WHERE pid=pg_backend_pid();
+  SELECT CASE WHEN postgres_user='suitepa' THEN CASE WHEN utente_appl IS NOT NULL THEN utente_appl ELSE utente_sessione END ELSE postgres_user END
+	INTO new.esecutoreprincipale;
+
+  return new;
+end$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION protocollo.update_attribuzioneprincipale()
+  OWNER TO postgres;
+
+CREATE TRIGGER log_update_attribuzioneprincipale
+  BEFORE UPDATE OF principale
+  ON protocollo.attribuzione
+  FOR EACH ROW
+  EXECUTE PROCEDURE protocollo.update_attribuzioneprincipale();
 
 ALTER TABLE protocollo.attribuzione
     ADD COLUMN dataprincipale timestamp without time zone;
@@ -1300,11 +1382,11 @@ ALTER TABLE ONLY soggettoprotocollo
     ADD CONSTRAINT fk_soggettoprotocollo_titolo FOREIGN KEY (titolo) REFERENCES titolo(id);
 
 ALTER TABLE protocollo.soggettoprotocollo
-  ADD COLUMN indirizzo bigint;
+  ADD COLUMN pec boolean NOT NULL DEFAULT false;
+ALTER TABLE protocollo.soggettoprotocollo
+  ADD COLUMN indirizzo character varying;
 ALTER TABLE protocollo.soggettoprotocollo
   ADD COLUMN messaggiopec bigint;
-ALTER TABLE ONLY protocollo.soggettoprotocollo
-  ADD CONSTRAINT fk_soggettoprotocollo_indirizzo FOREIGN KEY (indirizzo) REFERENCES anagrafiche.indirizzo(id);
 
 -- i soggetti di primo inserimento vengono solo annullati
 CREATE OR REPLACE FUNCTION protocollo.delete_soggettoprotocollo()
@@ -1326,6 +1408,12 @@ CREATE TRIGGER trg_del_soggettoprotocollo
   ON protocollo.soggettoprotocollo
   FOR EACH ROW
   EXECUTE PROCEDURE protocollo.delete_soggettoprotocollo();
+
+CREATE TRIGGER update_statopecprotocollo
+  AFTER UPDATE OF messaggiopec
+  ON protocollo.soggettoprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_statopecprotocollo();
 
 CREATE TABLE soggettoriservatoprotocollo (
     id bigserial NOT NULL,
@@ -1353,6 +1441,19 @@ ALTER TABLE ONLY soggettoriservatoprotocollo
     ADD CONSTRAINT fk_soggettoriservatoprotocollo_soggetto FOREIGN KEY (soggetto) REFERENCES anagrafiche.soggetto(id);
 ALTER TABLE ONLY soggettoriservatoprotocollo
     ADD CONSTRAINT fk_soggettoriservatoprotocollo_titolo FOREIGN KEY (titolo) REFERENCES titolo(id);
+
+ALTER TABLE protocollo.soggettoriservatoprotocollo
+  ADD COLUMN pec boolean NOT NULL DEFAULT false;
+ALTER TABLE protocollo.soggettoriservatoprotocollo
+  ADD COLUMN indirizzo bigint;
+ALTER TABLE protocollo.soggettoriservatoprotocollo
+  ADD COLUMN messaggiopec bigint;
+
+CREATE TRIGGER update_statopecprotocollo
+  AFTER UPDATE OF messaggiopec
+  ON protocollo.soggettoriservatoprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_statopecprotocollo();
 
 -- i soggetti riservati di primo inserimento vengono solo annullati
 CREATE OR REPLACE FUNCTION protocollo.delete_soggettoriservatoprotocollo()
@@ -1441,6 +1542,8 @@ CREATE TABLE protocollo.pecprotocollo
 )
 INHERITS (generale.withtimestamp);
 ALTER TABLE protocollo.pecprotocollo OWNER TO postgres;
+ALTER TABLE protocollo.pecprotocollo
+  ADD COLUMN stato character varying;
 
 CREATE TABLE protocollo.tiporiferimentomittente
 (
@@ -1453,6 +1556,17 @@ ALTER TABLE protocollo.tiporiferimentomittente OWNER TO postgres;
 
 -- Pubblicazioni
 SET search_path = pubblicazioni, pg_catalog;
+
+CREATE OR REPLACE FUNCTION pubblicazioni.update_data_pubblicazione()
+  RETURNS trigger AS
+$BODY$begin
+  new.datapubblicazione := 'now';
+  return new;
+end$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION pubblicazioni.update_data_pubblicazione()
+  OWNER TO postgres;
 
 CREATE TABLE pubblicazione (
     id bigserial NOT NULL,
@@ -1472,6 +1586,15 @@ ALTER TABLE ONLY pubblicazione
     ADD CONSTRAINT pubblicazione_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY pubblicazione
 ADD CONSTRAINT fk_pubblicazione_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
+ALTER TABLE pubblicazioni.pubblicazione
+  ADD COLUMN organo character varying(255);
+ALTER TABLE pubblicazioni.pubblicazione
+  ADD COLUMN esecutorepubblicazione character varying(40);
+CREATE TRIGGER data_pubblicazione
+  BEFORE UPDATE OF pubblicato
+  ON pubblicazioni.pubblicazione
+  FOR EACH ROW
+  EXECUTE PROCEDURE pubblicazioni.update_data_pubblicazione();
 
 
 
@@ -1593,6 +1716,10 @@ ALTER TABLE ONLY determina
       ADD CONSTRAINT fk_determina_progetto FOREIGN KEY (progetto) REFERENCES finanziaria.progetto(id);
 ALTER TABLE ONLY determina
     ADD CONSTRAINT fk_determina_responsabileprocedimento FOREIGN KEY (responsabileprocedimento) REFERENCES anagrafiche.soggetto(id);
+ALTER TABLE deliberedetermine.determina
+  ADD COLUMN incompatibilitaresponsabile boolean NOT NULL DEFAULT false;
+ALTER TABLE deliberedetermine.determina
+  ADD COLUMN incompatibilitadelegato bigint;
 
 CREATE TABLE serviziodetermina (
     id bigserial NOT NULL,
@@ -1749,19 +1876,32 @@ CREATE TABLE richieste.richiesta
   mittente bigint NOT NULL,
   cancellabile boolean NOT NULL DEFAULT true,
   datascadenza timestamp,
-  giornipreavviso int,
+  giornipreavviso integer,
   richiestaprecedente bigint,
   relazione integer,
   richiestaautomatica boolean NOT NULL DEFAULT true,
   fase integer,
-  CONSTRAINT richiesta_pkey PRIMARY KEY (id)
+  statorichiesta character varying,
+  CONSTRAINT richiesta_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_richiesta_mittente FOREIGN KEY (mittente)
+      REFERENCES base.utente (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_richiesta_richiestaprecedente FOREIGN KEY (richiestaprecedente)
+      REFERENCES richieste.richiesta (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE richieste.richiesta
   OWNER TO postgres;
-ALTER TABLE ONLY richieste.richiesta
-    ADD CONSTRAINT fk_richiesta_richiestaprecedente FOREIGN KEY (richiestaprecedente) REFERENCES richieste.richiesta(id);
-ALTER TABLE ONLY richieste.richiesta
-    ADD CONSTRAINT fk_richiesta_mittente FOREIGN KEY (mittente) REFERENCES base.utente(id);
+CREATE TRIGGER trg_ins_ts_richiesta
+  BEFORE INSERT
+  ON richieste.richiesta
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_richiesta
+  BEFORE UPDATE
+  ON richieste.richiesta
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE richieste.destinatarioutente
 (
@@ -1774,13 +1914,23 @@ CREATE TABLE richieste.destinatarioutente
   esecutoreletto character varying(40),
   richiestacancellabile boolean NOT NULL,
   CONSTRAINT destinatarioutente_pkey PRIMARY KEY (id)
-);
+) INHERITS (generale.withtimestamp);;
 ALTER TABLE richieste.destinatarioutente
   OWNER TO postgres;
 ALTER TABLE ONLY richieste.destinatarioutente
     ADD CONSTRAINT fk_destinatarioutente_richiesta FOREIGN KEY (richiesta) REFERENCES richieste.richiesta(id);
 ALTER TABLE ONLY richieste.destinatarioutente
     ADD CONSTRAINT fk_destinatarioutente_destinatario FOREIGN KEY (destinatario) REFERENCES base.utente(id);
+CREATE TRIGGER trg_ins_ts_destinatarioutente
+  BEFORE INSERT
+  ON richieste.destinatarioutente
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_destinatarioutente
+  BEFORE UPDATE
+  ON richieste.destinatarioutente
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
 
 CREATE TABLE richieste.destinatarioufficio
 (
@@ -1794,7 +1944,7 @@ CREATE TABLE richieste.destinatarioufficio
   esecutoreletto character varying(40),
   richiestacancellabile boolean NOT NULL,
   CONSTRAINT destinatarioufficio_pkey PRIMARY KEY (id)
-);
+) INHERITS (generale.withtimestamp);;
 ALTER TABLE richieste.destinatarioufficio
   OWNER TO postgres;
 ALTER TABLE ONLY richieste.destinatarioufficio
@@ -1803,6 +1953,16 @@ ALTER TABLE ONLY richieste.destinatarioufficio
     ADD CONSTRAINT fk_destinatarioufficio_destinatario FOREIGN KEY (destinatario) REFERENCES base.ufficio(id);
 ALTER TABLE ONLY richieste.destinatarioufficio
     ADD CONSTRAINT fk_destinatarioufficio_assegnatario FOREIGN KEY (assegnatario) REFERENCES base.utente(id);
+CREATE TRIGGER trg_ins_ts_destinatarioufficio
+  BEFORE INSERT
+  ON richieste.destinatarioufficio
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_destinatarioufficio
+  BEFORE UPDATE
+  ON richieste.destinatarioufficio
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
 
 /*
 CREATE TABLE messaggi.allegato
@@ -1826,17 +1986,73 @@ CREATE TABLE richieste.richiestaprotocollo
   richiesta bigint NOT NULL,
   protocollo character varying(12) NOT NULL,
   oggetto bigint,
-  CONSTRAINT richiestaprotocollo_pkey PRIMARY KEY (id)
-);
+  CONSTRAINT richiestaprotocollo_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_richiestaprotocollo_oggetto FOREIGN KEY (oggetto)
+      REFERENCES protocollo.oggetto (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_richiestaprotocollo_protocollo FOREIGN KEY (protocollo)
+      REFERENCES protocollo.protocollo (iddocumento) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_richiestaprotocollo_richiesta FOREIGN KEY (richiesta)
+      REFERENCES richieste.richiesta (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+) INHERITS (generale.withtimestamp);
 ALTER TABLE richieste.richiestaprotocollo
   OWNER TO postgres;
-ALTER TABLE ONLY richieste.richiestaprotocollo
-    ADD CONSTRAINT fk_richiestaprotocollo_richiesta FOREIGN KEY (richiesta) REFERENCES richieste.richiesta(id);
-ALTER TABLE ONLY richieste.richiestaprotocollo
-    ADD CONSTRAINT fk_richiestaprotocollo_oggetto FOREIGN KEY (oggetto) REFERENCES protocollo.oggetto(id);
-ALTER TABLE ONLY richieste.richiestaprotocollo
-    ADD CONSTRAINT fk_richiestaprotocollo_protocollo FOREIGN KEY (protocollo) REFERENCES protocollo.protocollo(iddocumento);
+CREATE TRIGGER trg_ins_ts_richiestaprotocollo
+  BEFORE INSERT
+  ON richieste.richiestaprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_richiestaprotocollo
+  BEFORE UPDATE
+  ON richieste.richiestaprotocollo
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
 
+CREATE TABLE richieste.richiestapratica
+(
+  id bigserial NOT NULL,
+  richiesta bigint NOT NULL,
+  pratica character varying(12) NOT NULL,
+  oggetto bigint,
+  CONSTRAINT richiestapratica_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_richiestapratica_oggetto FOREIGN KEY (oggetto)
+      REFERENCES protocollo.oggetto (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_richiestapratica_pratica FOREIGN KEY (pratica)
+      REFERENCES pratiche.pratica (idpratica) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_richiestapratica_richiesta FOREIGN KEY (richiesta)
+      REFERENCES richieste.richiesta (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+) INHERITS (generale.withtimestamp);
+ALTER TABLE richieste.richiestapratica
+  OWNER TO postgres;
+CREATE TRIGGER trg_ins_ts_richiestapratica
+  BEFORE INSERT
+  ON richieste.richiestapratica
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_timestamp();
+CREATE TRIGGER trg_upd_ts_richiestapratica
+  BEFORE UPDATE
+  ON richieste.richiestapratica
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_timestamp();
+
+CREATE TABLE richieste.vistoindividuale
+(
+  id bigserial NOT NULL,
+  richiesta bigint NOT NULL,
+  destinatario bigint NOT NULL,
+  dataletto timestamp without time zone,
+  esecutoreletto character varying(40),
+  CONSTRAINT vistoindividuale_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_vistoindividuale_richiesta FOREIGN KEY (richiesta)
+      REFERENCES richieste.richiesta (id)
+) ;
+ALTER TABLE richieste.vistoindividuale
+  OWNER TO postgres;
 
 
 -- Ticket
@@ -1926,6 +2142,154 @@ CREATE TABLE urp.notiziaurp (
 ALTER TABLE urp.notiziaurp OWNER TO postgres;
 ALTER TABLE ONLY notiziaurp
 ADD CONSTRAINT notiziaurp_pkey PRIMARY KEY (id);
+
+-- PEC
+SET search_path = pec, pg_catalog;
+
+CREATE TABLE pec.allegati
+(
+  id bigserial NOT NULL,
+  id_messaggio bigint,
+  data bytea,
+  file_name character varying,
+  content_type character varying,
+  size bigint,
+  store_file_name character varying,
+  store_path character varying,
+  store_url character varying,
+  dt_cancellazione timestamp without time zone,
+  dt_creazione timestamp without time zone,
+  ts_modifica timestamp without time zone,
+  id_utente_cancellazione bigint,
+  id_utente_creazione bigint,
+  id_utente_modifica bigint,
+  CONSTRAINT allegati_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pec.allegati
+  OWNER TO postgres;
+
+CREATE TABLE pec.messaggi
+(
+  id bigserial NOT NULL,
+  stato_accettato boolean NOT NULL,
+  accettato_id bigint,
+  stato_anomalia boolean NOT NULL,
+  anomalia_id bigint,
+  archiviato boolean,
+  archiviato_data timestamp without time zone,
+  archiviato_id_utente bigint,
+  stato_consegnato boolean NOT NULL,
+  consegnato_id bigint,
+  data_invio timestamp without time zone,
+  data_invio_originale timestamp without time zone,
+  data_ricezione timestamp without time zone,
+  destinatari character varying,
+  mittente_email character varying,
+  eml_file character varying,
+  dt_cancellazione timestamp without time zone,
+  dt_creazione timestamp without time zone,
+  ts_modifica timestamp without time zone,
+  id_utente_cancellazione bigint,
+  id_utente_creazione bigint,
+  id_utente_modifica bigint,
+  folder character varying,
+  stato_inoltrato boolean,
+  inoltrato_destinatari character varying,
+  inoltrato_data timestamp without time zone,
+  inoltrato_id_utente bigint,
+  stato_inviato boolean,
+  letto boolean,
+  letto_data timestamp without time zone,
+  letto_id_utente bigint,
+  message_id character varying,
+  messaggio character varying,
+  mittente_nome character varying,
+  oggetto character varying,
+  postacert_body character varying,
+  postacert_contenttype character varying,
+  postacert_file character varying,
+  processato boolean,
+  protocollo character varying,
+  mittente_username character varying,
+  x_ricevuta character varying,
+  x_riferimento_message_id character varying,
+  x_tipo_ricevuta character varying,
+  mailbox character varying,
+  destinatari_cc character varying,
+  destinatari_ccn character varying,
+  errore_invio character varying,
+  url_documentale character varying,
+  postacert_subject character varying,
+  daticert_xml character varying,
+  segnatura_xml character varying,
+  CONSTRAINT messaggi_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pec.messaggi
+  OWNER TO postgres;
+
+CREATE TRIGGER trg_upd_statopecprotocollo
+  AFTER UPDATE OF stato_inviato, stato_accettato, stato_anomalia, stato_consegnato
+  ON pec.messaggi
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.update_statopecprotocollo();
+
+
+CREATE TABLE pec.notifiche
+(
+  id bigserial NOT NULL,
+  tipo character varying,
+  id_messaggio_padre bigint,
+  destinatari character varying,
+  oggetto character varying,
+  messaggio character varying,
+  allegati character varying,
+  stato_inviato boolean,
+  data_invio timestamp without time zone,
+  protocollo character varying,
+  errore character varying,
+  dt_cancellazione timestamp without time zone,
+  dt_creazione timestamp without time zone,
+  ts_modifica timestamp without time zone,
+  id_utente_cancellazione bigint,
+  id_utente_creazione bigint,
+  id_utente_modifica bigint,
+  CONSTRAINT notifiche_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pec.notifiche
+  OWNER TO postgres;
+
+CREATE TABLE pec.regole
+(
+  id bigserial NOT NULL,
+  azione character varying,
+  criterio character varying,
+  evento character varying,
+  nome character varying,
+  note character varying,
+  ordine integer,
+  dt_cancellazione timestamp without time zone,
+  dt_creazione timestamp without time zone,
+  ts_modifica timestamp without time zone,
+  id_utente_cancellazione bigint,
+  id_utente_creazione bigint,
+  id_utente_modifica bigint,
+  classe character varying,
+  CONSTRAINT regole_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pec.regole
+  OWNER TO postgres;
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
