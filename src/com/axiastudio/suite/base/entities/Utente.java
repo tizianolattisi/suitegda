@@ -94,6 +94,8 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
     @JoinColumn(name = "soggetto", referencedColumnName = "id")
     @OneToOne
     private Soggetto soggetto;
+    @Column(name="richieste")
+    private Boolean richieste=false;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -332,6 +334,14 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
         this.nuovodocsuconsolidato = nuovodocsuconsolidato;
     }
 
+    public Boolean getRichieste() {
+        return richieste;
+    }
+
+    public void setRichieste(Boolean richieste) {
+        this.richieste = richieste;
+    }
+
     public Date getRecordcreato() {
         return recordcreato;
     }
@@ -378,10 +388,7 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
             return false;
         }
         Utente other = (Utente) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

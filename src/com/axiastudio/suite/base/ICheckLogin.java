@@ -21,5 +21,5 @@ package com.axiastudio.suite.base;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public interface ICheckLogin {
-    public Boolean check(String user, String password);
+    Boolean check(String user, String password);
 }

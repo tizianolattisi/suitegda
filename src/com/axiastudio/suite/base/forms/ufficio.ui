@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>881</width>
-    <height>386</height>
+    <width>794</width>
+    <height>391</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,6 +15,9 @@
   </property>
   <property name="searchcolumns" stdset="0">
    <string>id,&lt;Descrizione&gt;</string>
+  </property>
+  <property name="searchfocus" stdset="0">
+   <string>id</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -59,79 +62,6 @@
        </size>
       </property>
      </spacer>
-    </item>
-    <item row="0" column="3" rowspan="4">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="title">
-       <string>Ruoli</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QCheckBox" name="checkBox">
-         <property name="text">
-          <string>sportello</string>
-         </property>
-         <property name="column" stdset="0">
-          <string>sportello</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_2">
-         <property name="text">
-          <string>mittente o destinatario</string>
-         </property>
-         <property name="column" stdset="0">
-          <string>mittenteodestinatario</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_4">
-         <property name="text">
-          <string>attribuzione</string>
-         </property>
-         <property name="column" stdset="0">
-          <string>attribuzione</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_5">
-         <property name="text">
-          <string>assessorato</string>
-         </property>
-         <property name="column" stdset="0">
-          <string>assessorato</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="export" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="label">
@@ -239,6 +169,95 @@
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="0" column="3" rowspan="4">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Ruoli</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="checkBox_4">
+         <property name="text">
+          <string>attribuzione</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>attribuzione</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>sportello</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>sportello</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="checkBox_18">
+         <property name="text">
+          <string>messaggi/richieste</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>richieste</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QCheckBox" name="checkBox_2">
+         <property name="text">
+          <string>mittente o destinatario</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>mittenteodestinatario</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QCheckBox" name="checkBox_5">
+         <property name="text">
+          <string>assessorato</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>assessorato</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>

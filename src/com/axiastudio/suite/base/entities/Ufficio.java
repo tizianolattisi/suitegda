@@ -53,6 +53,8 @@ public class Ufficio implements Serializable, ITimeStamped {
     private Collection<UfficioUtente> ufficioUtenteCollection;
     @Column(name="pec")
     private String pec;
+    @Column(name="richieste")
+    private Boolean richieste=false;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -139,6 +141,14 @@ public class Ufficio implements Serializable, ITimeStamped {
         this.pec = pec;
     }
 
+    public Boolean getRichieste() {
+        return richieste;
+    }
+
+    public void setRichieste(Boolean richieste) {
+        this.richieste = richieste;
+    }
+
     public Date getRecordcreato() {
         return recordcreato;
     }
@@ -185,10 +195,7 @@ public class Ufficio implements Serializable, ITimeStamped {
             return false;
         }
         Ufficio other = (Ufficio) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

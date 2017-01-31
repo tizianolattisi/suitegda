@@ -16,6 +16,9 @@
   <property name="searchcolumns" stdset="0">
    <string>id,login,nome,disabilitato</string>
   </property>
+  <property name="searchfocus" stdset="0">
+   <string>id</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
@@ -87,6 +90,9 @@
          <property name="search" stdset="0">
           <bool>true</bool>
          </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item row="2" column="0">
@@ -133,6 +139,9 @@
           <string>login</string>
          </property>
          <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
           <bool>true</bool>
          </property>
         </widget>
@@ -378,6 +387,22 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
           <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox_18">
+            <property name="text">
+             <string>Messaggi/richieste</string>
+            </property>
+            <property name="column" stdset="0">
+             <string>richieste</string>
+            </property>
+            <property name="search" stdset="0">
+             <bool>true</bool>
+            </property>
+            <property name="export" stdset="0">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
            <widget class="QCheckBox" name="checkBox">
             <property name="text">
              <string>Amministratore</string>
@@ -387,7 +412,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QCheckBox" name="checkBox_2">
             <property name="text">
              <string>Super utente</string>
@@ -397,7 +422,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QCheckBox" name="checkBox_17">
             <property name="text">
              <string>Disabilitato</string>
@@ -406,6 +431,9 @@
              <string>disabilitato</string>
             </property>
             <property name="search" stdset="0">
+             <bool>true</bool>
+            </property>
+            <property name="export" stdset="0">
              <bool>true</bool>
             </property>
            </widget>
@@ -435,6 +463,12 @@
            <string>&gt;ufficio&lt;,ospite,ricerca,visualizza,riservato,daiperletto,inseriscepratica,modificapratica,consolida,responsabile,procedimenti,leggepec</string>
           </property>
           <property name="reference" stdset="0">
+           <string>ufficio</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="searchfields" stdset="0">
            <string>ufficio</string>
           </property>
          </widget>

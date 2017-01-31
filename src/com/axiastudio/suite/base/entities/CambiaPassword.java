@@ -32,7 +32,6 @@ public class CambiaPassword extends QDialog {
     private final QLineEdit oldPassword;
     private final QLineEdit newPassword1;
     private final QLineEdit newPassword2;
-    private Utente utente;
 
     public CambiaPassword(QWidget parent) {
         super(parent);
@@ -86,7 +85,7 @@ public class CambiaPassword extends QDialog {
     }
 
     public void setUtente(Utente utente) {
-        this.utente = utente;
+        Utente utente1 = utente;
     }
     
 }

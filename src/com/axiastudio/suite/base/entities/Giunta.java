@@ -30,7 +30,7 @@ import java.util.Date;
 public class Giunta implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genufficio")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gengiunta")
     private Long id;
     @Column(name="numero")
     private Integer numero;
