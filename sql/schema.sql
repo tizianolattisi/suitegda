@@ -94,6 +94,70 @@ CREATE TABLE withtimestamp
 );
 ALTER TABLE withtimestamp OWNER TO postgres;
 
+CREATE OR REPLACE FUNCTION generale.insert_pid()
+  RETURNS trigger AS
+$BODY$begin
+  new.pid = pg_backend_pid();
+  SELECT client_addr, client_port INTO new.client_addr, new.client_port FROM pg_stat_activity WHERE pid=pg_backend_pid();
+  return new;
+end;$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION generale.insert_pid() OWNER TO postgres;
+
+CREATE TABLE generale.sessionigda
+(
+  utente character varying,
+  pid integer,
+  rec_creato timestamp without time zone,
+  fine_sessione timestamp without time zone,
+  client_addr character varying,
+  client_port integer,
+  fine_sessione_applname timestamp without time zone,
+  appl_name character varying
+);
+ALTER TABLE generale.sessionigda OWNER TO postgres;
+CREATE TRIGGER trg_ins_sessionegda
+  BEFORE INSERT
+  ON generale.sessionigda
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.insert_pid();
+
+CREATE OR REPLACE FUNCTION generale.finesessione()
+  RETURNS trigger AS
+$BODY$
+DECLARE
+  pid_fine int;
+  applname varchar;
+  clientaddr varchar;
+begin
+  pid_fine := pg_backend_pid();
+  SELECT application_name, client_addr INTO applname, clientaddr FROM pg_stat_activity WHERE pid=pid_fine;
+  IF (SELECT COUNT(*) FROM generale.sessionigda WHERE utente=new.utente AND pid=pid_fine AND fine_sessione IS NULL) > 0
+	THEN UPDATE generale.sessionigda SET fine_sessione=current_timestamp WHERE utente=new.utente AND pid=pid_fine AND fine_sessione IS NULL;
+  ELSIF (SELECT COUNT(*) FROM generale.sessionigda WHERE utente=new.utente AND appl_name=applname AND client_addr=clientaddr AND fine_sessione IS NULL) > 0
+	THEN UPDATE generale.sessionigda SET fine_sessione_applname=current_timestamp
+		WHERE utente=new.utente AND appl_name=applname AND client_addr=clientaddr AND fine_sessione IS NULL;
+  ELSE INSERT INTO generale.sessionigda(utente, pid, fine_sessione, appl_name, fine_sessione_applname)
+	VALUES(new.utente, pid_fine, current_timestamp, applname, current_timestamp);
+  END IF;
+  return new;
+end;$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION generale.finesessione() OWNER TO postgres;
+
+CREATE TABLE generale.finesessionigda
+(
+  utente character varying
+);
+ALTER TABLE generale.finesessionigda OWNER TO postgres;
+CREATE TRIGGER tr_upd_finesessionigda
+  BEFORE UPDATE
+  ON generale.finesessionigda
+  FOR EACH ROW
+  EXECUTE PROCEDURE generale.finesessione();
+
 CREATE OR REPLACE FUNCTION update_statopecprotocollo()
   RETURNS trigger AS
 $BODY$
