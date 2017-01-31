@@ -135,10 +135,7 @@ public class Relazione implements Serializable, Comparable<Relazione> {
             return false;
         }
         Relazione other = (Relazione) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

@@ -76,11 +76,11 @@ public class FormRelazioneSoggetto extends Dialog {
         aggiornaPredicato();
 
         if ( checkboxAttivabile ) {
-            if ( cmbRelazione.getCurrentText().equals(cmbRelazione.ND) ) {
+            if ( cmbRelazione.getCurrentText().equals(PyPaPiComboBox.ND) ) {
                 cbInverti.setEnabled(true);
             } else {
                 cbInverti.setEnabled(false);
-                if ( abilitataSx!="" ) {
+                if (!abilitataSx.equals("")) {
                     Relazione rel = (Relazione) cmbRelazione.getCurrentEntity();
                     String query = "SELECT r FROM Relazione r ";
                     if ( cbInverti.checkState().equals(CheckState.Unchecked) ) {

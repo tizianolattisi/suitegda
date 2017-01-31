@@ -18,12 +18,16 @@ package com.axiastudio.suite.anagrafiche.forms;
 
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.ICriteriaFactory;
+import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.SuiteUiUtil;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
-import com.trolltech.qt.gui.QComboBox;
-import com.trolltech.qt.gui.QLineEdit;
-import com.trolltech.qt.gui.QTabWidget;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Utente;
+import com.trolltech.qt.gui.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
@@ -45,6 +49,27 @@ public class FormSoggetto extends Window {
         this.aggiornaTipoSoggetto(tipoSoggetto.currentIndex());
         QTabWidget tab = (QTabWidget) this.findChild(QTabWidget.class, "tabWidgetBody");
         tab.currentChanged.connect(this, "aggiornaFiltroGruppo(Integer)");
+
+        /* Non permessa modifica di indirizzo direttamente da tabella */
+        PyPaPiTableView tabellaIndirizzi = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableViewIndirizzi");
+        tabellaIndirizzi.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers);
+    }
+
+    @Override
+    public void init(Store store) {
+        super.init(store);
+        /* inserimento nuove anagrafiche permesso solo agli utenti con flag "supervisore anagrafiche" */
+        Context dataContext = this.getContext();
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        dataContext.setNoInsert(!autenticato.getSupervisoreanagrafiche());
+    }
+
+    @Override
+    protected void indexChanged(int row) {
+        super.indexChanged(row);
+        /* disabilito TipoSoggetto se anagrafica già inserita */
+        ((QWidget) this.findChild(QComboBox.class, "comboBoxTipoSoggetto")).
+                setEnabled((((Soggetto) this.getContext().getCurrentEntity()).getId() == null));
     }
 
     /*
@@ -89,16 +114,13 @@ public class FormSoggetto extends Window {
      * Un predicato per filtrare i gruppi sulla base della tipologia di soggetto
      */
     public static Predicate gruppoAPredicateProvider(CriteriaBuilder cb, Root from) {
-        Predicate predicate = cb.equal(from.get("azienda"), Boolean.TRUE);
-        return predicate;
+        return cb.equal(from.get("azienda"), Boolean.TRUE);
     }
     public static Predicate gruppoPPredicateProvider(CriteriaBuilder cb, Root from) {
-        Predicate predicate = cb.equal(from.get("persona"), Boolean.TRUE);
-        return predicate;
+        return cb.equal(from.get("persona"), Boolean.TRUE);
     }
     public static Predicate gruppoEPredicateProvider(CriteriaBuilder cb, Root from) {
-        Predicate predicate = cb.equal(from.get("ente"), Boolean.TRUE);
-        return predicate;
+        return cb.equal(from.get("ente"), Boolean.TRUE);
     }
     
 }

@@ -64,10 +64,7 @@ public class TitoloSoggetto implements Serializable {
             return false;
         }
         TitoloSoggetto other = (TitoloSoggetto) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

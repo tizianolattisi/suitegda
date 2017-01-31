@@ -17,13 +17,11 @@
 package com.axiastudio.suite.anagrafiche.forms;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
-import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.db.Store;
+import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.anagrafiche.entities.*;
 import com.trolltech.qt.core.QByteArray;
 import com.trolltech.qt.core.QFile;
@@ -32,7 +30,6 @@ import com.trolltech.qt.designer.QUiLoaderException;
 import com.trolltech.qt.gui.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,23 +80,21 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
         // provincia
         Database db = (Database) Register.queryUtility(IDatabase.class);
         Controller controller = db.createController(Provincia.class);
-        QComboBox comboBoxProvincia = (QComboBox) this.findChild(QComboBox.class, "comboBox_provincia");
+        PyPaPiComboBox comboBoxProvincia = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_provincia");
         comboBoxProvincia.clear();
         storeProvincia = controller.createFullStore();
-        for( Object objProvincia: storeProvincia ){
-            Provincia provincia = (Provincia) objProvincia;
-            comboBoxProvincia.addItem(provincia.getCodice());
-        }
+        storeProvincia.sortByToString();
+        comboBoxProvincia.setLookupStore(storeProvincia);
+        comboBoxProvincia.setCurrentIndex(comboBoxProvincia.findText("n.d."));
         
         // stato
         controller = db.createController(Stato.class);
-        QComboBox comboBoxStato = (QComboBox) this.findChild(QComboBox.class, "comboBox_stato");
+        PyPaPiComboBox comboBoxStato = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_stato");
         comboBoxStato.clear();
         storeStato = controller.createFullStore();
-        for( Object objStato: storeStato ){
-            Stato stato = (Stato) objStato;
-            comboBoxStato.addItem(stato.getCodice());
-        }
+        storeStato.sortByToString();
+        comboBoxStato.setLookupStore(storeStato);
+        comboBoxStato.setCurrentIndex(comboBoxStato.findText("n.d."));
     }
         
     private void insertAndAccept(){
@@ -144,9 +139,13 @@ public class FormQuickInsertSoggetto extends QDialog implements IQuickInsertDial
         s.setIndirizzoCollection(indirizzi);
         Database db = (Database) Register.queryUtility(IDatabase.class);
         Controller controller = db.createController(Soggetto.class);
-        controller.commit(s);
-        this.entity = s;
-        this.accept();
+        Validation res = controller.commit(s);
+        if( res.getResponse() ) {
+            this.entity = s;
+            this.accept();
+        } else {
+            QMessageBox.critical(this, "Errore nell'inserimento", res.getMessage());
+        }
     }
 
     public Object getEntity() {

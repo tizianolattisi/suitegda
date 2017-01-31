@@ -240,15 +240,23 @@ public class Indirizzo implements Serializable, ITimeStamped {
             return false;
         }
         Indirizzo other = (Indirizzo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
     public String toString() {
-        return "com.axiastudio.suite.anagrafiche.entities.Indirizzo[ id=" + id + " ]";
+        String testo="";
+        if ( getPrincipale() ) {
+            testo="* ";
+        }
+        testo+= getVia() + " " + getCivico() + " - " + getComune();
+        if ( getProvincia()!=null ){
+            testo+= " (" + getProvincia() + ")";
+        }
+        if ( getDescrizione()!=null ){
+            testo+=" - " + getDescrizione();
+        }
+        return testo;
     }
     
 }

@@ -74,15 +74,12 @@ public class Stato implements Serializable {
             return false;
         }
         Stato other = (Stato) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
     public String toString() {
-        return codice + " " + descrizione;
+        return descrizione + " - " + codice  ;
     }
     
 }

@@ -21,5 +21,5 @@ package com.axiastudio.suite.anagrafiche.entities;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public enum TipoIndirizzo {
-    DOMICILIO, RESIDENZA, LAVORO, VILLEGGIATURA, ALTRO
+    DOMICILIO, RESIDENZA, RECAPITO_AIRE, LAVORO, VILLEGGIATURA, ALTRO
 }

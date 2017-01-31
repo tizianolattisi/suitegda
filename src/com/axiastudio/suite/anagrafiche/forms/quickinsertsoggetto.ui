@@ -261,7 +261,7 @@
       <item row="2" column="3">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Comune</string>
+         <string>Comune/Città</string>
         </property>
        </widget>
       </item>
@@ -323,20 +323,10 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QComboBox" name="comboBox_provincia">
+       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_provincia">
         <property name="column" stdset="0">
          <string>provincia</string>
         </property>
-        <item>
-         <property name="text">
-          <string>TN</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>BZ</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="3" column="0">
@@ -403,7 +393,7 @@
        </widget>
       </item>
       <item row="3" column="3" colspan="2">
-       <widget class="QComboBox" name="comboBox_stato">
+       <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_stato">
         <property name="column" stdset="0">
          <string>stato</string>
         </property>
@@ -472,6 +462,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>lineEdit_nome</tabstop>
   <tabstop>lineEdit_cognome</tabstop>

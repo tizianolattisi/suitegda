@@ -49,21 +49,23 @@ public class Soggetto implements Serializable, ITimeStamped {
     private TitoloSoggetto titolosoggetto;
     @Column(name="nick")
     private String nick;
-    @Column(name="nome")
+    @Column(name="nome", insertable=true, updatable=false)
     private String nome;
-    @Column(name="cognome")
+    @Column(name="cognome", insertable=true, updatable=false)
     private String cognome;
     @Column(name="codicefiscale")
     private String codicefiscale;
     @Column(name="partitaiva")
     private String partitaiva;
-    @Column(name="ragionesociale")
+    @Column(name="ragionesociale", insertable=true, updatable=false)
     private String ragionesociale;
-    @Column(name="denominazione")
+    @Column(name="ragionesociale1")
+    private String ragionesociale1 = "";
+    @Column(name="denominazione", insertable=true, updatable=false)
     private String denominazione;
-    @Column(name="denominazione2")
+    @Column(name="denominazione2", insertable=true, updatable=false)
     private String denominazione2;
-    @Column(name="denominazione3")
+    @Column(name="denominazione3", insertable=true, updatable=false)
     private String denominazione3;
     @Column(name="referente")
     private String referente;
@@ -153,6 +155,14 @@ public class Soggetto implements Serializable, ITimeStamped {
 
     public void setRagionesociale(String ragionesociale) {
         this.ragionesociale = ragionesociale;
+    }
+
+    public String getRagionesociale1() {
+        return ragionesociale1;
+    }
+
+    public void setRagionesociale1(String ragionesociale1) {
+        this.ragionesociale1 = ragionesociale1;
     }
 
     public TipoSoggetto getTipo() {
@@ -443,6 +453,17 @@ public class Soggetto implements Serializable, ITimeStamped {
         // non deve fare nulla
     }
 
+    public Integer getTotindirizzi() {
+        if ( this.getIndirizzoCollection()==null ) {
+            return 0;
+        } else {
+            return this.getIndirizzoCollection().size();
+        }
+    }
+
+    public void setTotindirizzi(Integer tot) {
+    }
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -494,10 +515,7 @@ public class Soggetto implements Serializable, ITimeStamped {
             return false;
         }
         Soggetto other = (Soggetto) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

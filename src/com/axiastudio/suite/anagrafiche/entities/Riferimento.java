@@ -186,10 +186,7 @@ public class Riferimento implements Serializable, ITimeStamped {
             return false;
         }
         Riferimento other = (Riferimento) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

@@ -40,8 +40,9 @@ public class SoggettoCallbacks {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         String msg = "";
 
-        if ( !autenticato.getOperatoreanagrafiche() ) {
-            msg += "Utente non abilitato per l'inserimento o la modifica delle anagrafiche.\n";
+        /* inserimento nuove anagrafiche permesso solo agli utenti con flag "supervisore anagrafiche" */
+        if ( soggetto.getId() == null && !autenticato.getSupervisoreanagrafiche() ) {
+            msg += "Utente non abilitato per l'inserimento delle anagrafiche.\n";
             res = false;
         }
 
@@ -63,7 +64,7 @@ public class SoggettoCallbacks {
         /*
          * Restituzione della validazione
          */
-        if( res == false ){
+        if(!res){
             return new Validation(false, msg);
         } else {
             return new Validation(true);
