@@ -39,14 +39,18 @@ public class PubblicazioneUtil {
         } else {
             pubblicazione.setDataatto(protocollo.getDataprotocollo());
         }
-        if( protocollo.getNumeroatto() != null ){
-            pubblicazione.setNumeroatto(protocollo.getNumeroatto());
-        }
+//        if ( protocollo.getNumeroatto()==null ) {
+//            pubblicazione.setNumeroatto(Integer.parseInt(protocollo.getIddocumento().substring(5)));
+//        } else {
+//            pubblicazione.setNumeroatto(protocollo.getNumeroatto());
+//        }
+        pubblicazione.setNumeroatto(Integer.parseInt(protocollo.getIddocumento().substring(5)));
 
         // defaults
         pubblicazione.setDurataconsultazione(10);
         pubblicazione.setTipoattopubblicazione(delibere);
         pubblicazione.setOrgano("");
+        pubblicazione.setProtocollo(protocollo);
 
         controllerPubblicazione.commit(pubblicazione);
 
@@ -57,16 +61,10 @@ public class PubblicazioneUtil {
 
         CmisPlugin cmisPluginProtocollo = (CmisPlugin) Register.queryPlugin(Protocollo.class, "CMIS");
         AlfrescoHelper helperProtocollo = cmisPluginProtocollo.createAlfrescoHelper(protocollo);
-
-
-
         for( Map map: helperProtocollo.children() ){
             helperProtocollo.copyDocument((String) map.get("objectId"), path);
         }
 
-        pubblicazione.setProtocollo(protocollo);
-
         return pubblicazione;
-
     }
 }

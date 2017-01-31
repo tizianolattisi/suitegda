@@ -18,12 +18,9 @@ package com.axiastudio.suite.pubblicazioni.forms;
 
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit;
-import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QPushButton;
 import com.trolltech.qt.gui.QSpinBox;
-
-import java.util.GregorianCalendar;
 
 /**
  *

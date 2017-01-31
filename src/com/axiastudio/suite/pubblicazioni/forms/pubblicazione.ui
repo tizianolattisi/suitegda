@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0" rowspan="2">
+    <item row="0" column="0" rowspan="4">
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
        <string>Dati di pubblicazione</string>
@@ -25,16 +25,6 @@
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Id</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="lineEdit">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="column" stdset="0">
-          <string>id</string>
          </property>
         </widget>
        </item>
@@ -51,6 +41,16 @@
          </property>
         </spacer>
        </item>
+       <item row="0" column="2">
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>id</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
@@ -59,7 +59,7 @@
         </widget>
        </item>
        <item row="1" column="2" colspan="2">
-        <widget class="QLineEdit" name="lineEdit_3">
+        <widget class="QLineEdit" name="lineEdit_Richiedente">
          <property name="column" stdset="0">
           <string>richiedente</string>
          </property>
@@ -73,7 +73,7 @@
         </widget>
        </item>
        <item row="2" column="2" colspan="2">
-        <widget class="QLineEdit" name="lineEdit_4">
+        <widget class="QLineEdit" name="lineEdit_Organo">
          <property name="column" stdset="0">
           <string>organo</string>
          </property>
@@ -83,13 +83,6 @@
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>Descrizione</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2" rowspan="2" colspan="2">
-        <widget class="QTextEdit" name="textEdit">
-         <property name="column" stdset="0">
-          <string>descrizione</string>
          </property>
         </widget>
        </item>
@@ -106,6 +99,13 @@
          </property>
         </spacer>
        </item>
+       <item row="3" column="2" rowspan="2" colspan="2">
+        <widget class="QTextEdit" name="textEdit_Descrizione">
+         <property name="column" stdset="0">
+          <string>descrizione</string>
+         </property>
+        </widget>
+       </item>
        <item row="5" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
@@ -114,7 +114,7 @@
         </widget>
        </item>
        <item row="5" column="2" colspan="2">
-        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_TipoAtto">
          <property name="column" stdset="0">
           <string>tipoattopubblicazione</string>
          </property>
@@ -123,7 +123,7 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="1">
+    <item row="0" column="2">
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
        <string>Data e numero atto</string>
@@ -158,7 +158,24 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="1" column="1" colspan="2">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Protocollo</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEdit_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="column" stdset="0">
+       <string>iddocumento</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -171,7 +188,7 @@
       </property>
      </spacer>
     </item>
-    <item row="2" column="0" colspan="2">
+    <item row="4" column="0" colspan="3">
      <widget class="QGroupBox" name="groupBox_3">
       <property name="title">
        <string>Pubblicazione</string>

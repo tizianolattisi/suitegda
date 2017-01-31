@@ -16,6 +16,8 @@
  */
 package com.axiastudio.suite.pubblicazioni.entities;
 
+import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 
 import javax.persistence.*;
@@ -28,8 +30,9 @@ import java.util.Date;
  */
 @Entity
 @Table(schema="PUBBLICAZIONI")
+@EntityListeners({TimeStampedListener.class})
 @SequenceGenerator(name="genpubblicazione", sequenceName="pubblicazioni.pubblicazione_id_seq", initialValue=1, allocationSize=1)
-public class Pubblicazione implements Serializable {
+public class Pubblicazione implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genpubblicazione")
@@ -58,8 +61,20 @@ public class Pubblicazione implements Serializable {
     @Column(name="dataatto")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataatto;
+    @Column(name="esecutorepubblicazione", length=40)
+    private String esecutorepubblicazione;
 
-
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
 
     public Long getId() {
         return id;
@@ -149,6 +164,57 @@ public class Pubblicazione implements Serializable {
         this.dataatto = dataatto;
     }
 
+    public String getEsecutorepubblicazione() {
+        return esecutorepubblicazione;
+    }
+
+    public void setEsecutorepubblicazione(String esecutorepubblicazione) {
+        this.esecutorepubblicazione = esecutorepubblicazione;
+    }
+
+    public String getIddocumento() {
+        return protocollo.getIddocumento();
+    }
+
+    public void setIddocumento(String Iddocumento) {
+    }
+
+    @Override
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
+    }
+
+    @Override
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
+    }
+
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+    @Override
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -163,10 +229,7 @@ public class Pubblicazione implements Serializable {
             return false;
         }
         Pubblicazione other = (Pubblicazione) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
