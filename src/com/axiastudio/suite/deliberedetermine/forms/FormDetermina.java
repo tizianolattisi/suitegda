@@ -32,7 +32,6 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
-import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
@@ -87,12 +86,15 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
 
 
         ((QCheckBox) findChild(QCheckBox.class, "benioservizi")).clicked.connect(this, "beniOServizi(Boolean)");
+        ((QCheckBox) findChild(QCheckBox.class, "checkBox_impedimento")).clicked.connect(this, "impedimentoResponsabile(Boolean)");
 
         ((QRadioButton) findChild(QRadioButton.class, "convenzioneattiva")).toggled.connect(this, "convenzioneAttiva(Boolean)");
 
         try {
             Method storeFactory = this.getClass().getMethod("storeResponsabileProcedimento");
             Register.registerUtility(storeFactory, IStoreFactory.class, "Responsabileprocedimento");
+            storeFactory= this.getClass().getMethod("storeImpedimentoDelegato");
+            Register.registerUtility(storeFactory, IStoreFactory.class, "Impedimentodelegato");
         } catch (NoSuchMethodException ex) {
             Logger.getLogger(FormDetermina.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
@@ -107,6 +109,15 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
 
     private void convenzioneAttiva(Boolean b){
         ((QGroupBox) findChild(QGroupBox.class, "groupBox_B")).setEnabled(!b);
+    }
+
+    private void impedimentoResponsabile(Boolean b){
+        PyPaPiComboBox cmbImpedimentoDelegato=((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_ImpedimentoDelegato"));
+        cmbImpedimentoDelegato.setEnabled(b);
+        if ( !b ) {
+            determina.setImpedimentodelegato(null);
+            cmbImpedimentoDelegato.select(PyPaPiComboBox.ND);
+        }
     }
 
     @Override
@@ -135,6 +146,13 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         cmbResponsabileProcedimento.setLookupStore(store);
         this.getColumn("Responsabileprocedimento").setLookupStore(store);
         cmbResponsabileProcedimento.select(determina.getResponsabileprocedimento());
+
+        Store store1 = storeImpedimentoDelegato();
+        PyPaPiComboBox cmbImpedimentoDelegato=
+                ((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_ImpedimentoDelegato"));
+        cmbImpedimentoDelegato.setLookupStore(store1);
+        this.getColumn("Impedimentodelegato").setLookupStore(store1);
+        cmbImpedimentoDelegato.select(determina.getImpedimentodelegato());
 
         Boolean modificaBloccata=Boolean.FALSE;
         if ( (!(determina.getDispesa() || determina.getDientrata() || determina.getSpesaimpegnoesistente()) &&
@@ -235,7 +253,13 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         SimpleWorkflowDialog swd = new SimpleWorkflowDialog(this, wf , fasePratica);
         int res = swd.exec();
 
-        if( res == 1 ){
+        if( res == 1 ) {
+            if (determina.getProtocollo() != null) {
+                EntityManager em = this.getContext().getController().getEntityManager();
+                if (em.contains(determina.getProtocollo())) {
+                    em.detach(determina.getProtocollo());
+                }
+            }
             this.getContext().commitChanges();
         }
     }
@@ -250,7 +274,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
             inserita.setPrincipale(Boolean.TRUE);
         }
         if ( determina.getReferentePolitico() == null || determina.getReferentePolitico().equals("")) {
-            determina.setReferentePolitico(((Servizio) inserita.getServizio()).getReferentepolitico());
+            determina.setReferentePolitico(inserita.getServizio().getReferentepolitico());
             ((QLineEdit) findChild(QLineEdit.class, "lineEdit_RefPolitico")).setText(determina.getReferentePolitico());
         }
     }
@@ -303,11 +327,44 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
                         " AND (d.fine IS NULL OR d.fine>current_timestamp) " +
                         " AND c.codiceCarica='RESPONSABILE_BENEFICI_DENARO'";
                 for (Utente resp: em.createQuery(query, Utente.class).getResultList()) {
-                    respProcedimento.add((Soggetto) resp.getSoggetto());
+                    respProcedimento.add(resp.getSoggetto());
                 }
             }
         }
         return new Store(respProcedimento);
+    }
+
+    /*
+     * Uno store contenente i delegati in caso di impedimento del responsabile
+     */
+    public Store storeImpedimentoDelegato(){
+        List<Utente> delegato = new ArrayList<Utente>();
+
+        if (this.getContext() == null || this.getContext().getCurrentEntity() == null) {
+            return new Store(delegato);
+        }
+
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        if ( determina.getId() == null || determina.getServizioDeterminaCollection().isEmpty() ) {
+            return new Store(delegato);
+        }
+
+        for (ServizioDetermina servizio: determina.getServizioDeterminaCollection()) {
+            if ( servizio.getPrincipale() ) {
+                Database db = (Database) Register.queryUtility(IDatabase.class);
+                Controller controller = db.createController(Delega.class);
+                EntityManager em = controller.getEntityManager();
+
+                String query = "SELECT u FROM Delega d JOIN d.utente u JOIN d.servizio s ";
+                query = query + "WHERE s.id = " + servizio.getServizio().getId().toString() +
+                        " AND (d.fine IS NULL OR d.fine>current_timestamp) " +
+                        " AND d.impedimento=TRUE AND d.delegante.id = " + determina.getResponsabile().getId().toString();
+                for (Utente resp: em.createQuery(query, Utente.class).getResultList()) {
+                    delegato.add(resp);
+                }
+            }
+        }
+        return new Store(delegato);
     }
 
     /* XXX: codice simile a FormPratica */
@@ -404,7 +461,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         fase.setId(Long.parseLong(SuiteUtil.trovaCostante("FASE_LIQUIDAZIONE").getValore()));
         fp.setFase(fase);
         fp.setPratica(determina.getPratica());
-        wf.creaVisto(fp);
+        wf.creaVisto(fp, false, "", false, true);
 
         this.getContext().refreshElement();
     }

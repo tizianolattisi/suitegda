@@ -16,8 +16,6 @@
  */
 package com.axiastudio.suite.deliberedetermine.entities;
 
-import com.axiastudio.suite.finanziaria.entities.Capitolo;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -192,10 +190,7 @@ public class SpesaImpegnoEsistente implements Serializable {
             return false;
         }
         SpesaImpegnoEsistente other = (SpesaImpegnoEsistente) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

@@ -57,9 +57,30 @@ import java.util.List;
 @EntityListeners({DeterminaListener.class, TimeStampedListener.class})
 @Table(schema="deliberedetermine")
 @SequenceGenerator(name="gendetermina", sequenceName="deliberedetermine.determina_id_seq", initialValue=1, allocationSize=1)
-@NamedQuery(name="inAttesaDiVistoDiBilancio",
-        query = "SELECT d FROM Determina d JOIN d.pratica p JOIN p.fasePraticaCollection fp " +
-                "WHERE fp.attiva = true AND fp.fase.id = :idfase")
+@NamedQueries({
+        @NamedQuery(name="inAttesaDiVistoDiBilancio",
+                query = "SELECT d FROM Determina d JOIN d.pratica p JOIN p.fasePraticaCollection fp " +
+                        "WHERE fp.attiva = true AND (fp.fase.id=:idfase)"),
+        @NamedQuery(name="inAttesaDiVistoResp",
+                query = "SELECT d FROM Determina d JOIN d.pratica p JOIN p.fasePraticaCollection fp " +
+                        "JOIN d.servizioDeterminaCollection sd JOIN Delega dg " +
+                        "WHERE dg.servizio=sd.servizio AND " +
+                            "fp.cariche LIKE '%RESPONSABILE_DI_SERVIZIO%' AND fp.attiva=true AND " +
+                            "sd.principale=true AND " +
+                            "dg.carica.codiceCarica='RESPONSABILE_DI_SERVIZIO' AND coalesce(dg.fine, current_timestamp) >= current_timestamp AND " +
+                            "dg.delegato=false AND dg.utente.id=:autenticato " +
+                        "ORDER BY d.codiceinterno"),
+        @NamedQuery(name="inAttesaDiVistoRespDelegato",
+                query = "SELECT d FROM Determina d JOIN d.pratica p JOIN p.fasePraticaCollection fp " +
+                        "JOIN d.servizioDeterminaCollection sd JOIN Delega dg " +
+                        "WHERE dg.servizio=sd.servizio AND " +
+                        "fp.cariche LIKE '%RESPONSABILE_DI_SERVIZIO%' AND fp.attiva=true AND " +
+                        "sd.principale=true AND " +
+                        "dg.carica.codiceCarica='RESPONSABILE_DI_SERVIZIO' AND coalesce(dg.fine, current_timestamp) >= current_timestamp AND " +
+                        "dg.delegato=true AND dg.utente.id=:autenticato " +
+                        "ORDER BY d.codiceinterno")
+})
+
 public class Determina implements Serializable, ITimeStamped, IDettaglio, IProtocollabile, IAtto {
     private static final long serialVersionUID = 1L;
     @Id
@@ -106,7 +127,7 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     private Date data;
     /* protocollo */
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
-    @ManyToOne
+    @OneToOne
     private Protocollo protocollo;
     @Enumerated(EnumType.STRING)
     private TipoPubblicazione pubblicabile=TipoPubblicazione.PUBBLICABILE;
@@ -120,6 +141,12 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     @JoinColumn(name = "responsabileprocedimento", referencedColumnName = "id")
     @ManyToOne
     private Soggetto responsabileprocedimento;
+    /* Incompatibilità */
+    @Column(name="impedimentoresponsabile")
+    private Boolean impedimentoresponsabile =Boolean.FALSE;
+    @JoinColumn(name = "impedimentodelegato", referencedColumnName = "id")
+    @ManyToOne
+    private Utente impedimentodelegato;
 
     /* Spending review */
     @Column(name="benioservizi")
@@ -144,6 +171,10 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     private String cpv;
     @Column(name="motivoanomalia")
     private String motivoanomalia;
+
+    /* Gestione associata */
+    @Enumerated(EnumType.STRING)
+    private Firmatario firmatario=Firmatario.RESP_SERVIZIO_BILANCIO;
 
 
     /* timestamped */
@@ -202,7 +233,6 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
 
     @Override
     public Servizio getServizio() {
-        Collection<ServizioDetermina> serviziDetermina = getServizioDeterminaCollection();
         for( ServizioDetermina servizioDetermina: getServizioDeterminaCollection() ){
             if( servizioDetermina.getPrincipale() ){
                 return servizioDetermina.getServizio();
@@ -447,34 +477,59 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     }
 
     public String getFirma() {
-        String firma = " RESPONSABILE DEL SERVIZIO DI BILANCIO\n";
+        String firma = "";
 
         Visto vistoResp = this.getVisto("FASE_VISTO_RESPONSABILE");
-        if( vistoResp != null ){
-            if( vistoResp.getUtente().equals(vistoResp.getResponsabile()) ){
-                firma = "IL" + firma;
-            } else {
-                firma = "PER TEMPORANEA ASSENZA DEL" + firma;
-            }
-        }
+        if (vistoResp != null) {
+            if ( firmatario == Firmatario.RESP_SERVIZIO_BILANCIO ) {
+                firma = " RESPONSABILE DEL SERVIZIO\n";
+                if (vistoResp.getUtente().equals(vistoResp.getResponsabile())) {
+                    firma = "IL" + firma;
+                } else {
+                    if (this.getImpedimentoresponsabile()) {
+                        firma = "PER IMPEDIMENTO DEL" + firma;
+                    } else {
+                        firma = "PER TEMPORANEA ASSENZA DEL" + firma;
+                    }
+                }
 
-        if ( this.getProtocollo() != null && this.getProtocollo().getUfficioProtocolloCollection() != null ) {
-            UfficioProtocollo ufficio = (UfficioProtocollo) this.getProtocollo().getUfficioProtocolloCollection().iterator().next();
-            firma +=  ufficio.getUfficio().getDenominazione() +"\n";
-        } else {
-            firma += "[ufficio]\n";
-        }
+                if (this.getProtocollo() != null && this.getProtocollo().getUfficioProtocolloCollection() != null) {
+                    UfficioProtocollo ufficio = this.getProtocollo().getUfficioProtocolloCollection().iterator().next();
+                    firma += ufficio.getUfficio().getDenominazione() + "\n";
+                } else {
+                    String ufficio = "[ufficio]\n";
+                    for( ServizioDetermina servizioDetermina: this.getServizioDeterminaCollection() ) {
+                        if (servizioDetermina.getPrincipale()) {
+                            ufficio = servizioDetermina.getServizio().getUfficio().getDenominazione() + "\n";
+                            ufficio = ufficio.replace("RESPONSABILE ", "");
+                            break;
+                        }
+                    }
+                    firma += ufficio;
+                }
 
-        if ( vistoResp != null && vistoResp.getCodiceCarica() != null ) {
-            if ( "RESPONSABILE_DI_SERVIZIO".equals(vistoResp.getCodiceCarica()) &&
-                    ! vistoResp.getUtente().equals(vistoResp.getResponsabile()) ) {
-                firma += "IL FUNZIONARIO INCARICATO\n";
-            } else if ( "SEGRETARIO".equals(vistoResp.getCodiceCarica()) ) {
-                firma += "IL SEGRETARIO GENERALE\n";
-            } else if ( "VICE_SEGRETARIO".equals(vistoResp.getCodiceCarica()) ) {
-                firma += "IL VICESEGRETARIO GENERALE\n";
+                if (vistoResp.getCodiceCarica() != null) {
+                    if ("RESPONSABILE_DI_SERVIZIO".equals(vistoResp.getCodiceCarica()) &&
+                            !vistoResp.getUtente().equals(vistoResp.getResponsabile())) {
+                        firma += "IL FUNZIONARIO INCARICATO\n";
+                    } else if ("SEGRETARIO".equals(vistoResp.getCodiceCarica())) {
+                        firma += "IL SEGRETARIO GENERALE\n";
+                    } else if ("VICE_SEGRETARIO".equals(vistoResp.getCodiceCarica())) {
+                        firma += "IL VICESEGRETARIO GENERALE\n";
+                    }
+                    firma += vistoResp.getUtente();
+                }
+            } else if ( firmatario == Firmatario.RESP_PROCEDIMENTO ) {
+                firma = "IL RESPONSABILE DI PROCEDIMENTO\n";
+                if (vistoResp.getCodiceCarica() != null) {
+                    if ("SEGRETARIO".equals(vistoResp.getCodiceCarica())) {
+                        firma += "IL SEGRETARIO GENERALE\n";
+                    } else if ("VICE_SEGRETARIO".equals(vistoResp.getCodiceCarica())) {
+                        firma += "IL VICESEGRETARIO GENERALE\n";
+                    }
+                    firma += vistoResp.getUtente();
+                }
             }
-            firma += vistoResp.getUtente();
         }
         return firma;
     }
@@ -633,6 +688,30 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
         this.motivoanomalia = motivoanomalia;
     }
 
+    public Firmatario getFirmatario() {
+        return firmatario;
+    }
+
+    public void setFirmatario(Firmatario firmatario) {
+        this.firmatario = firmatario;
+    }
+
+    public Boolean getImpedimentoresponsabile() {
+        return impedimentoresponsabile;
+    }
+
+    public void setImpedimentoresponsabile(Boolean impedimentoresponsabile) {
+        this.impedimentoresponsabile = impedimentoresponsabile;
+    }
+
+    public Utente getImpedimentodelegato() {
+        return impedimentodelegato;
+    }
+
+    public void setImpedimentodelegato(Utente impedimentodelegato) {
+        this.impedimentodelegato = impedimentodelegato;
+    }
+
     public Date getRecordcreato() {
         return recordcreato;
     }
@@ -679,10 +758,7 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
             return false;
         }
         Determina other = (Determina) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
