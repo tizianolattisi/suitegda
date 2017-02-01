@@ -64,7 +64,9 @@ public class JAXBHelper {
         denominazioneUnitaOrganizzativa.setContent(SuiteUtil.trovaCostante("DENOMINAZIONE").getValore());
         unitaOrganizzativa.setDenominazione(denominazioneUnitaOrganizzativa);
         IndirizzoPostale indirizzoPostaleUnitaOrganizzativa = new IndirizzoPostale();
-        indirizzoPostaleUnitaOrganizzativa.setDenominazione(new Denominazione());
+        Denominazione denominazione1 = new Denominazione();
+        denominazione1.setContent(SuiteUtil.trovaCostante("INDIRIZZO").getValore());
+        indirizzoPostaleUnitaOrganizzativa.setDenominazione(denominazione1);
         unitaOrganizzativa.setIndirizzoPostale(indirizzoPostaleUnitaOrganizzativa);
         amministrazione.setUnitaOrganizzativa(unitaOrganizzativa);
 
@@ -143,9 +145,9 @@ public class JAXBHelper {
 		// boolean dtd = xml.indexOf("Segnatura.dtd") > -1;
 		boolean xsd = xml.indexOf("http://www.digitPa.gov.it/protocollo/") > -1;
 		if (!xsd)
-			segnatura = (com.axiastudio.suite.interoperabilita.entities.dtd.Segnatura) StringUnmarshalling.getObjectDTD(xml);
+			segnatura = StringUnmarshalling.getObjectDTD(xml);
 		else
-			segnatura = (com.axiastudio.suite.interoperabilita.entities.xsd.Segnatura) StringUnmarshalling.getObjectXSD(xml);
+			segnatura = StringUnmarshalling.getObjectXSD(xml);
 		return segnatura;
 	}
 

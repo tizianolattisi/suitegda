@@ -17,7 +17,7 @@ public class StampGenericXML {
                     (context);
             Marshaller marshaller =
                     jaxbLocalContext.createMarshaller();
-            marshaller.setProperty(marshaller.JAXB_FORMATTED_OUTPUT,
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
                     true);
             marshaller.marshal(objectJAXB, System.out);
         } catch (JAXBException e1) {
