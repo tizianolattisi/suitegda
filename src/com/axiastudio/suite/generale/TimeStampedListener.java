@@ -22,8 +22,6 @@ import com.axiastudio.suite.base.entities.Utente;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  *

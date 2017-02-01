@@ -31,15 +31,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.print.*;
-import javax.print.attribute.AttributeSet;
-import javax.print.attribute.HashAttributeSet;
-import javax.print.attribute.standard.PrinterName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,23 +46,19 @@ public class DialogStampaEtichetta extends QDialog {
     
     private QComboBox comboBox = new QComboBox();
     private String className;
-    private Map map;
+    private List<Map> mapList;
     
-    public DialogStampaEtichetta(){
-        this(null, new HashMap());
-    }
-
-    public DialogStampaEtichetta(QWidget parent){
-        this(parent, new HashMap());
-    }
-
     public DialogStampaEtichetta(Map map){
         this(null, map);
     }
 
-    public DialogStampaEtichetta(QWidget parent, Map map){
+    public DialogStampaEtichetta(QWidget parent, Map map) {
+        this(parent, new ArrayList<Map>(Collections.singletonList(map)));
+    }
+
+    public DialogStampaEtichetta(QWidget parent, List<Map> mapList){
         super(parent);
-        this.map = map;
+        this.mapList=mapList;
         className = ((Window) parent).getContext().getRootClass().getName();
         QVBoxLayout layout = new QVBoxLayout();
         layout.addWidget(comboBox);
@@ -108,15 +99,16 @@ public class DialogStampaEtichetta extends QDialog {
     @Override
     public void accept() {
         try {
-//locate printer
+            // locate printer
             Application app = Application.getApplicationInstance();
             String device = (String) app.getConfigItem("barcode.device");
             PrintService[] printService = PrintServiceLookup.lookupPrintServices(null, null);
             Boolean stampanteTrovata = Boolean.FALSE;
             for (PrintService printer: printService) {
                 if ( printer.getName().contains(device) ) {
-                    stampanteTrovata = Boolean.TRUE;
-                    stampaEtichetta(printer);
+                    for (Map map: this.mapList) {
+                        stampaEtichetta(printer, map);
+                    }
                     return;
                 }
             }
@@ -130,16 +122,16 @@ public class DialogStampaEtichetta extends QDialog {
         super.accept();
     }
 
-    private void stampaEtichetta(PrintService printer) throws PrintException, IOException {
+    private void stampaEtichetta(PrintService printer, Map map) throws PrintException, IOException {
         try {
         //create a print job
         DocPrintJob job = printer.createPrintJob();
-//define the print document
+        //define the print document
         Etichetta etichetta = (Etichetta) comboBox.itemData(comboBox.currentIndex());
         MessageMapFormat mmp = new MessageMapFormat(etichetta.getDefinizione());
-        String codice = mmp.format(this.map);
+        String codice = mmp.format(map);
         InputStream is = new ByteArrayInputStream(codice.getBytes());
-//print the data
+        //print the data
         Doc doc = new SimpleDoc(is, DocFlavor.INPUT_STREAM.AUTOSENSE, null);
         job.print(doc, null);
 

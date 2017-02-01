@@ -24,20 +24,20 @@ import java.util.Date;
  */
 public interface ITimeStamped {
 
-    public Date getRecordcreato();
+    Date getRecordcreato();
 
-    public void setRecordcreato(Date date);
+    void setRecordcreato(Date date);
 
-    public String getRecordcreatoda();
+    String getRecordcreatoda();
 
-    public void setRecordcreatoda(String login);
+    void setRecordcreatoda(String login);
 
-    public Date getRecordmodificato();
+    Date getRecordmodificato();
 
-    public void setRecordmodificato(Date date);
+    void setRecordmodificato(Date date);
 
-    public String getRecordmodificatoda();
+    String getRecordmodificatoda();
 
-    public void setRecordmodificatoda(String login);
+    void setRecordmodificatoda(String login);
 
 }
