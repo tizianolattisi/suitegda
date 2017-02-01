@@ -17,15 +17,19 @@
 
 package com.axiastudio.suite.menjazo;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.axiastudio.iwas.IWas;
+import com.axiastudio.mapformat.MessageMapFormat;
+import com.axiastudio.suite.SuiteUtil;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.trolltech.qt.core.QFile;
+import com.trolltech.qt.core.QIODevice;
 import org.alfresco.cmis.client.AlfrescoDocument;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
@@ -48,6 +52,7 @@ public class AlfrescoHelper {
     private String password;
     private String url;
     private String path = "/";
+    private static Session session;
 
     public AlfrescoHelper(String url, String user, String password) {
         this.url = url;
@@ -65,17 +70,20 @@ public class AlfrescoHelper {
     
     
     public Session createSession(){
-        Map<String, String> parameter = new HashMap<String, String>();
-        parameter.put(SessionParameter.USER, this.user);
-        parameter.put(SessionParameter.PASSWORD, this.password);
-        parameter.put(SessionParameter.ATOMPUB_URL, this.url);
-        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-        parameter.put(SessionParameter.AUTH_HTTP_BASIC, "true" );
-        parameter.put(SessionParameter.COOKIES, "true" );        
-        parameter.put(SessionParameter.OBJECT_FACTORY_CLASS, "org.alfresco.cmis.client.impl.AlfrescoObjectFactoryImpl"); // Alfresco
-        SessionFactoryImpl factory = SessionFactoryImpl.newInstance();
-        Repository repository = factory.getRepositories(parameter).get(0);
-        return repository.createSession();
+        if( session == null ) {
+            Map<String, String> parameter = new HashMap<String, String>();
+            parameter.put(SessionParameter.USER, this.user);
+            parameter.put(SessionParameter.PASSWORD, this.password);
+            parameter.put(SessionParameter.ATOMPUB_URL, this.url);
+            parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+            parameter.put(SessionParameter.AUTH_HTTP_BASIC, "true");
+            parameter.put(SessionParameter.COOKIES, "true");
+            parameter.put(SessionParameter.OBJECT_FACTORY_CLASS, "org.alfresco.cmis.client.impl.AlfrescoObjectFactoryImpl"); // Alfresco
+            SessionFactoryImpl factory = SessionFactoryImpl.newInstance();
+            Repository repository = factory.getRepositories(parameter).get(0);
+            session = repository.createSession();
+        }
+        return session;
     }
 
     public Folder folderFromPath(String path){
@@ -97,7 +105,11 @@ public class AlfrescoHelper {
         Folder folder = folderFromPath(this.path + subpath);
         List<HashMap> children = new ArrayList();
         ItemIterable<CmisObject> cmisChildren = folder.getChildren();
+        Long maxItems=100L;
         for (CmisObject o : cmisChildren) {
+            if ( children.size()>=maxItems ) {
+                break;
+            }
             HashMap map = mapFromCmisObject(o);
             children.add(map);
         }
@@ -167,8 +179,7 @@ public class AlfrescoHelper {
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:folder");
         properties.put(PropertyIds.NAME, folderName);
-        Folder folder = parentFolder.createFolder(properties);
-        return folder;
+        return parentFolder.createFolder(properties);
     }
     
     public Document createDocument(String subpath, String name, byte[] content){
@@ -249,8 +260,7 @@ public class AlfrescoHelper {
     
     public InputStream getDocumentStream(String objectId){
         Document document = getDocument(objectId);
-        InputStream stream = document.getContentStream().getStream();
-        return stream;
+        return document.getContentStream().getStream();
     }
 
     public Document getDocument(String objectId) {
@@ -333,5 +343,110 @@ public class AlfrescoHelper {
             doc.updateProperties(properties);
         }
     }
-    
+
+    private Boolean readDocumentContent(InputStream in, FileOutputStream out) {
+        byte[] bytes = new byte[1024];
+        int read = 0;
+        try {
+            while( (read=in.read(bytes)) != -1){
+                out.write(Arrays.copyOfRange(bytes, 0, read));
+            }
+            in.close();
+            out.flush();
+            out.close();
+            return Boolean.TRUE;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Boolean.FALSE;
+        }
+    }
+
+    public Boolean saveFile(String pathName, String idObject){
+        return saveFile(pathName, idObject, false, "", null);
+    }
+
+    public Boolean saveFile(String pathName, String idObject, String tipo, Map stampMap){
+        return saveFile(pathName, idObject, true, tipo, stampMap);
+    }
+
+    private Boolean saveFile(String pathName, String idObject, Boolean stamp, String tipo, Map stampMap) {
+        InputStream in = getDocumentStream(idObject);
+
+        if ( stamp ) {
+            if (pathName.toLowerCase().endsWith("pdf")) {
+                Float offsetX = Float.valueOf(SuiteUtil.trovaCostante(tipo + "_OFFSETX").getValore());
+                Float offsetY = Float.valueOf(SuiteUtil.trovaCostante(tipo + "_OFFSETY").getValore());
+                IWas iwas = IWas.create().pages(new ArrayList<Integer>(Arrays.asList(1)));
+                try {
+                    iwas.load(in).offset(offsetX, offsetY);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Integer nRighe = Integer.valueOf(SuiteUtil.trovaCostante(tipo + "_NRIGHE").getValore());
+                Float rotation = Float.valueOf(SuiteUtil.trovaCostante(tipo + "_ROTATION").getValore());
+                Integer fontSize = Integer.valueOf(SuiteUtil.trovaCostante(tipo + "_FONTSIZE").getValore());
+                for (int i = 1; i <= nRighe; i++) {
+                    String testoCC = SuiteUtil.trovaCostante(tipo + "_TESTO" + String.valueOf(i)).getValore();
+                    MessageMapFormat mmp = new MessageMapFormat(testoCC);
+                    String testo = mmp.format(stampMap);
+                    iwas.text(testo, Font.FontFamily.TIMES_ROMAN, fontSize, Font.NORMAL, (float) (i - 1) * 9, 0f, rotation);
+                }
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                try {
+                    iwas.toStream(outputStream);
+                    in = new ByteArrayInputStream(outputStream.toByteArray());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.err.print("Funzionalità compatibile unicamente con documenti salvati in formato pdf.");
+            }
+        }
+
+        FileOutputStream out;
+        try {
+            out = new FileOutputStream(pathName);
+            return readDocumentContent(in, out);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return Boolean.FALSE;
+        }
+    }
+
+    public Boolean uploadFile(String filePath, String name, String alfrescoSubfolder) {
+        byte[] content;
+        QFile file = new QFile(filePath);
+        if (file.open(QIODevice.OpenModeFlag.ReadOnly)) {
+            content = file.readAll().toByteArray();
+            file.close();
+        } else {
+            return Boolean.FALSE;
+        }
+        createDocument(alfrescoSubfolder, name, content);
+        return Boolean.TRUE;
+    }
+
+    public Boolean uploadP7mFiles(String pathDir, String alfrescoSubfolder) {
+
+        FilenameFilter textFilter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".p7m");
+            }
+        };
+
+        for( String fileName:new File(pathDir).list(textFilter) )
+        {
+            byte[] content;
+            QFile file = new QFile(pathDir + fileName);
+            if (file.open(QIODevice.OpenModeFlag.ReadOnly)) {
+                content = file.readAll().toByteArray();
+                file.close();
+            } else {
+                return Boolean.FALSE;
+            }
+            createDocument(alfrescoSubfolder, fileName, content);
+        }
+        return Boolean.TRUE;
+    }
 }

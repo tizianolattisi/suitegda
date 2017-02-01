@@ -19,6 +19,7 @@ package com.axiastudio.suite.menjazo;
 import com.axiastudio.iwas.DatamatrixSize;
 import com.axiastudio.iwas.IWas;
 import com.axiastudio.mapformat.MessageMapFormat;
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
@@ -55,7 +56,8 @@ public class ClientWindow extends QMainWindow {
     private QTableWidget tableWidget;
     private QAction parentAction = new QAction(this);
     private QAction openAction = new QAction(this);
-    private QAction openStampAction = new QAction(this);
+    private QAction openStampCCAction = new QAction(this);
+    private QAction openStampProtAction = new QAction(this);
     private QAction downloadAction = new QAction(this);
     private QAction uploadAction = new QAction(this);
     private QAction versionAction = new QAction(this);
@@ -118,11 +120,16 @@ public class ClientWindow extends QMainWindow {
         openAction.setToolTip("Scarica e apri il documento selezionato");
         openAction.triggered.connect(this, "openWithoutStamp()");
         toolBar.addAction(openAction);
-        openStampAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/page_copiaconforme.png"));
-        openStampAction.setText("Apri copia conforme");
-        openStampAction.setToolTip("Scarica e apri il documento selezionato come copia conforme");
-        openStampAction.triggered.connect(this, "openWithStamp()");
-        toolBar.addAction(openStampAction);
+        openStampCCAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/page_copiaconforme.png"));
+        openStampCCAction.setText("Apri copia conforme");
+        openStampCCAction.setToolTip("Apri il documento selezionato come copia conforme");
+        openStampCCAction.triggered.connect(this, "openWithStampCC()");
+        toolBar.addAction(openStampCCAction);
+        openStampProtAction.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/page_white_code.png"));
+        openStampProtAction.setText("Apri con numero protocollo");
+        openStampProtAction.setToolTip("Apri il documento selezionato con indicazione del numero protocollo");
+        openStampProtAction.triggered.connect(this, "openWithStampProtocollo()");
+        toolBar.addAction(openStampProtAction);
         downloadAction.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/download.png"));
         downloadAction.setText("Scarica");
         downloadAction.setToolTip("Scarica il documento selezionato");
@@ -196,7 +203,7 @@ public class ClientWindow extends QMainWindow {
         textEditDescription.textChanged.connect(this, "getDirty()");
         tableWidget.currentItemChanged.connect(this, "refreshProperties()");
         toolButtonSaveProperties.clicked.connect(this, "saveProperties()");
-        tableWidget.itemDoubleClicked.connect(this, "openWithoutStamp()");
+        tableWidget.itemDoubleClicked.connect(this, "openDocument()");
     }
     
     private Boolean isDirty() {
@@ -204,14 +211,14 @@ public class ClientWindow extends QMainWindow {
     }
     
     private void getDirty(){
-        if( dirty == false ){
+        if(!dirty){
             dirty = true;
             ((QToolButton) this.findChild(QToolButton.class, "toolButtonSave")).setEnabled(true);
         }
     }
     
     private void cleanDirty(){
-        if( dirty == true ){
+        if(dirty){
             dirty = false;
             ((QToolButton) this.findChild(QToolButton.class, "toolButtonSave")).setEnabled(false);
         }
@@ -232,18 +239,24 @@ public class ClientWindow extends QMainWindow {
                 selectedFile = this.tempFiles.get(objectId).getLocalPath();
             }
         } else {
-            QFileDialog dialog = new QFileDialog(this, "Carica file");
-            int exec = dialog.exec();
-            List<String> selectedFiles = dialog.selectedFiles();
-            if( selectedFiles.size()== 1 ){
+            Application app=Application.getApplicationInstance();
+            List<String> selectedFiles = QFileDialog.getOpenFileNames(this, "Carica file", (String) app.getConfigItem("suite.documentdir"));
+            if ( selectedFiles.size()==0 ) {
+                return;
+            }
+            if ( selectedFiles.size()==1 ) {
                 selectedFile = selectedFiles.get(0);
-            } // TODO: else alert
+                File file = new File(selectedFiles.get(0));
+                app.setConfigItem("suite.documentdir", file.getParent());
+            } else {
+                QMessageBox.critical(this, "Errore aggiornamento versione", "Selezionare un unico file. Aggiornamento del documento non effettuato.");
+            }
         }
         if( selectedFile != null ){
-            QFile file = new QFile(selectedFile);
+            QFile qfile = new QFile(selectedFile);
             String label = QInputDialog.getText(this, "Etichetta di versione", "Inserisci una etichetta per la versione", QLineEdit.EchoMode.Normal, "Nuova versione");
-            if (file.open(QIODevice.OpenModeFlag.ReadOnly)){
-                byte[] content = file.readAll().toByteArray();
+            if (qfile.open(QIODevice.OpenModeFlag.ReadOnly)){
+                byte[] content = qfile.readAll().toByteArray();
                 this.helper.createVersion(objectId, content, label);
             }
         }
@@ -251,54 +264,66 @@ public class ClientWindow extends QMainWindow {
     }
     
     private void upload() throws IOException, DocumentException {
-        QFileDialog dialog = new QFileDialog(this, "Carica file");
-        int exec = dialog.exec();
-        List<String> selectedFiles = dialog.selectedFiles();
+        Application app=Application.getApplicationInstance();
+        List<String> selectedFiles = QFileDialog.getOpenFileNames(this, "Carica file", (String) app.getConfigItem("suite.documentdir"));
+        if ( !selectedFiles.isEmpty() ) {
+            File temp = new File(selectedFiles.get(0));
+            app.setConfigItem("suite.documentdir", temp.getParent());
+        }
+
         String subpath = ""; // XXX
         for( String fileName: selectedFiles ){
             byte[] content;
-            if( fileName.toLowerCase().endsWith("pdf") &&
+            if( false && fileName.toLowerCase().endsWith("pdf") &&
                     entity != null && entity instanceof Protocollo && !TipoProtocollo.ENTRATA.equals(((Protocollo) entity).getTipo()) &&
                     Util.questionBox(this, "Etichetta", "Desideri applicare sul documento l'etichetta?")) {
-                Protocollo protocollo = (Protocollo) entity;
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                String denominazione = SuiteUtil.trovaCostante("DENOMINAZIONE").getValore();
-                String codiceAmministrazione = SuiteUtil.trovaCostante("CODICE_AMMINISTRAZIONE").getValore();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
-                String data = dateFormat.format(protocollo.getDataprotocollo());
-                dateFormat = new SimpleDateFormat("#MM#dd#");
-                String dataCodice = dateFormat.format(protocollo.getDataprotocollo());
-                if( denominazione.startsWith("Comune") || denominazione.startsWith("COMUNE") ){
-                    denominazione = denominazione.substring(7);
-                }
-                String iddocumento = protocollo.getIddocumento();
-                String codice = codiceAmministrazione + "#" + iddocumento + dataCodice ;
-                IWas.create()
-                        .load(new FileInputStream(fileName))
-                        .pages(new ArrayList<>(Arrays.asList(1)))
-                        .offset(65f, 660f)
-                        .text("COMUNE", 10, 0f, 47f)
-                        .text(denominazione, 10, 0f, 38f)
-                        .text("Prot.N.", 8, 0f, 28f)
-                        .text(iddocumento, 10, 0f, 18f)
-                        .text(data, 8, 0f, 9f)
-                        .text(codiceAmministrazione, 8, 0f, 0f)
-                        .datamatrix(codice, DatamatrixSize._22x22, 85f, 16f, 1.9f)
-                        .toStream(outputStream);
-                content = outputStream.toByteArray();
+                content = ApplicaEtichetta(fileName);
             } else {
                 QFile file = new QFile(fileName);
                 if (file.open(QIODevice.OpenModeFlag.ReadOnly)){
                     content = file.readAll().toByteArray();
+                    file.close();
                 } else {
                     return;
                 }
             }
-            String[] split = fileName.split("/");
-            String name = split[split.length-1];
+            File temp = new File(fileName);
+            String name = temp.getName();
             this.helper.createDocument(subpath, name, content);
         }
         this.refreshList();
+    }
+
+    private byte[] ApplicaEtichetta(String fileName) throws IOException {
+        byte[] content;
+        Protocollo protocollo = (Protocollo) entity;
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        String denominazione = SuiteUtil.trovaCostante("DENOMINAZIONE").getValore();
+        String codiceAmministrazione = SuiteUtil.trovaCostante("CODICE_AMMINISTRAZIONE").getValore() + " - " +
+                SuiteUtil.trovaCostante("CODICE_AOO").getValore();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
+        String data = dateFormat.format(protocollo.getDataprotocollo());
+        dateFormat = new SimpleDateFormat("#MM#dd#");
+        String dataCodice = dateFormat.format(protocollo.getDataprotocollo());
+        if( denominazione.startsWith("Comune") || denominazione.startsWith("COMUNE") ){
+            denominazione = denominazione.substring(7);
+        }
+        String iddocumento = protocollo.getIddocumento();
+        String codice = codiceAmministrazione + "#" + iddocumento + dataCodice ;
+        IWas.create()
+                .load(new FileInputStream(fileName))
+                .pages(new ArrayList<Integer>(Arrays.asList(1)))
+                .offset(65f, 660f)
+                .text("COMUNE", 10, 0f, 47f)
+                .text(denominazione, 10, 0f, 38f)
+                .text("Prot.N.", 8, 0f, 28f)
+                .text(iddocumento, 10, 0f, 18f)
+                .text(data, 8, 0f, 9f)
+                .text(codiceAmministrazione, 8, 0f, 0f)
+                .datamatrix(codice, DatamatrixSize._22x22, 85f, 16f, 1.9f)
+                .toStream(outputStream);
+        content = outputStream.toByteArray();
+        return content;
     }
 
     private void goParentFolder(){
@@ -314,24 +339,51 @@ public class ClientWindow extends QMainWindow {
         this.refreshList();   
     }
 
-    private void openWithoutStamp(){
-        open(false);
-    }
-
-    private void openWithStamp(){
-        open(true);
-    }
-    
-    private void open(Boolean stamp){
+    private void openDocument(){
         int currentRow = getOrderedCurrentRow();
         if( currentRow < 0 ){
             return;
         }
         Map map = this.ids.get(currentRow);
-        if( "cmis:folder".equals((String) (map).get("baseTypeId")) ){
+        if("cmis:document".equals((map).get("baseTypeId")) ) {
+            String fileName = (String) (map).get("contentStreamFileName");
+            if (fileName.toLowerCase().endsWith("pdf") && entity != null && entity instanceof Protocollo) {
+                open(true, "PROTOCOLLO");
+            } else {
+                open(false, "");
+            }
+        } else {
+            open(false, "");
+        }
+    }
+
+    private void openWithoutStamp(){
+        open(false, "");
+    }
+
+    private void openWithStampCC(){
+        openWithStamp("COPIA_CONFORME");
+    }
+
+    private void openWithStampProtocollo(){
+        openWithStamp("PROTOCOLLO");
+    }
+
+
+    private void openWithStamp(String tipo){
+        open(true, tipo);
+    }
+    
+    private void open(Boolean stamp, String tipo){
+        int currentRow = getOrderedCurrentRow();
+        if( currentRow < 0 ){
+            return;
+        }
+        Map map = this.ids.get(currentRow);
+        if( "cmis:folder".equals((map).get("baseTypeId")) ){
             this.helper.setPath((String) (map).get("path"));
             this.refreshList();
-        } else if("cmis:document".equals((String) (map).get("baseTypeId"))){
+        } else if("cmis:document".equals((map).get("baseTypeId"))){
             String objectId = (String) (map).get("objectId");
             String fileName = (String) (map).get("contentStreamFileName");
             InputStream in = this.helper.getDocumentStream(objectId);
@@ -340,22 +392,30 @@ public class ClientWindow extends QMainWindow {
                 if( fileName.toLowerCase().endsWith("pdf") ) {
                     Calendar calendar = Calendar.getInstance();
                     stampMap.put("datacorrente", calendar.getTime());
+                    Protocollo protocollo = (Protocollo) entity;
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
+                    stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
+                    stampMap.put("iddocumento", protocollo.getIddocumento());
 
-                    Float offsetX = Float.valueOf(SuiteUtil.trovaCostante("COPIA_CONFORME_OFFSETX").getValore());
-                    Float offsetY = Float.valueOf(SuiteUtil.trovaCostante("COPIA_CONFORME_OFFSETY").getValore());
+                    Float offsetX = Float.valueOf(SuiteUtil.trovaCostante(tipo + "_OFFSETX").getValore());
+                    Float offsetY = Float.valueOf(SuiteUtil.trovaCostante(tipo + "_OFFSETY").getValore());
                     IWas iwas = IWas.create();
                     try {
-                        iwas.load(in)
-                                .offset(offsetX, offsetY);
+                        iwas.load(in).offset(offsetX, offsetY);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    for (int i = 1; i < 5; i++) {
-                        String testoCC = SuiteUtil.trovaCostante("COPIA_CONFORME_TESTO" + String.valueOf(i)).getValore();
+                    Integer nRighe = Integer.valueOf(SuiteUtil.trovaCostante(tipo + "_NRIGHE").getValore());
+                    Float rotation = Float.valueOf(SuiteUtil.trovaCostante(tipo + "_ROTATION").getValore());
+                    for (int i = 1; i <= nRighe; i++) {
+                        String testoCC = SuiteUtil.trovaCostante(tipo + "_TESTO" + String.valueOf(i)).getValore();
+                        if ( i==nRighe && protocollo.getRiservato() ) {
+                            testoCC += " - documento RISERVATO";
+                        }
                         MessageMapFormat mmp = new MessageMapFormat(testoCC);
                         String testo = mmp.format(this.stampMap);
-                        iwas.text(testo, 9, (float) (i - 1) * 9, 0f, 90f);
+                        iwas.text(testo, 9, (float) (i - 1) * 9, 0f, rotation);
                     }
                     try {
                         iwas.toStream(outputStream);
@@ -364,8 +424,8 @@ public class ClientWindow extends QMainWindow {
                         e.printStackTrace();
                     }
                 } else {
-                    QMessageBox.critical(this, "Copia conforme non possibile",
-                            "Attenzione!! È possibile effettuare copia conforme unicamente di documenti salvati in formato pdf.");
+                    QMessageBox.critical(this, "Funzionalità non compatibile",
+                            "Attenzione!! Funzionalità compatibile unicamente con documenti salvati in formato pdf.");
                 }
             } else {
                 openAsTemporaryFile(fileName, in, objectId);
@@ -379,10 +439,10 @@ public class ClientWindow extends QMainWindow {
             return;
         }
         Map map = this.ids.get(currentRow);
-        if( "cmis:folder".equals((String) (map).get("baseTypeId")) ){
+        if( "cmis:folder".equals((map).get("baseTypeId")) ){
             this.helper.setPath((String) (map).get("path"));
             this.refreshList();
-        } else if("cmis:document".equals((String) (map).get("baseTypeId"))){
+        } else if("cmis:document".equals((map).get("baseTypeId"))){
             String objectId = (String) (map).get("objectId");
             String fileName = (String) (map).get("contentStreamFileName");
             InputStream in = this.helper.getDocumentStream(objectId);
@@ -446,11 +506,11 @@ public class ClientWindow extends QMainWindow {
 
             // TODO: check if the extension exists
             QTableWidgetItem itemName = new QTableWidgetItem(name);
-            if( "cmis:document".equals((String) map.get("baseTypeId")) ){
+            if( "cmis:document".equals(map.get("baseTypeId")) ){
                 String ext = name.substring(name.indexOf(".")+1);
                 String iconName = "classpath:com/axiastudio/suite/menjazo/resources/page_"+ ext +".png";
                 itemName.setIcon(new QIcon(iconName));
-            } else if( "cmis:folder".equals((String) map.get("baseTypeId")) ){
+            } else if( "cmis:folder".equals(map.get("baseTypeId")) ){
                 itemName.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/folder.png"));
             }
             
@@ -533,7 +593,7 @@ public class ClientWindow extends QMainWindow {
         Map map = this.ids.get(currentRow);
         String objectId = (String) map.get("objectId");
 
-        if( "cmis:document".equals((String) map.get("baseTypeId"))){
+        if( "cmis:document".equals(map.get("baseTypeId"))){
             ((QLineEdit) this.findChild(QLineEdit.class, "title")).setText((String) map.get("title"));
             ((QTextEdit) this.findChild(QTextEdit.class, "description")).setText((String) map.get("description"));
             cleanDirty();
@@ -550,21 +610,21 @@ public class ClientWindow extends QMainWindow {
                 if( mapVersion.get("checkinComment") != null ){
                     checkinComment = (String) mapVersion.get("checkinComment");
                 }
-                String stringLabel = (String) mapVersion.get("versionLabel") + " " + checkinComment;
+                String stringLabel = mapVersion.get("versionLabel") + " " + checkinComment;
                 QLabel qLabel = new QLabel(stringLabel);
                 String toolTip = "";
                 if( mapVersion.get("title") != null ){
                     toolTip += (String) mapVersion.get("title");
                 }
                 if( mapVersion.get("description") != null ){
-                    toolTip += "\n\n" + (String) mapVersion.get("description");
+                    toolTip += "\n\n" + mapVersion.get("description");
                 }
                 qLabel.setToolTip(toolTip);
                 hBox.addWidget(qLabel);
                 QToolButton toolButton = new QToolButton();
                 toolButton.setIcon(new QIcon("classpath:com/axiastudio/suite/menjazo/resources/download.png"));
                 toolButton.clicked.connect(signalMapper, "map()");
-                String value = ((String) mapVersion.get("objectId")) + ";" + ((String) mapVersion.get("contentStreamFileName"));
+                String value = mapVersion.get("objectId") + ";" + mapVersion.get("contentStreamFileName");
                 signalMapper.setMapping(toolButton, value);
                 hBox.addWidget(toolButton);
                 vBoxVersions.addLayout(hBox);
@@ -656,7 +716,7 @@ public class ClientWindow extends QMainWindow {
     }
 
     private void saveFile(String fileName, InputStream in, String idObject) {
-        String name = QFileDialog.getSaveFileName(this, "Save file");
+        String name = QFileDialog.getSaveFileName(this, "Save file", fileName);
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(name);
