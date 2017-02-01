@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LegendaScrivania</class>
+ <widget class="QDialog" name="LegendaScrivania">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>393</width>
+    <height>196</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Legenda</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Principale</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>per conoscenza</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>classpath:com/axiastudio/suite/resources/star.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>in via principale</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>classpath:com/axiastudio/suite/resources/bullet_black.png</pixmap>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>PEC</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="3" column="1">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>anomalia/errore</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>consegnata</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_19">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>classpath:com/axiastudio/suite/resources/bullet_black.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>inviata/accettata</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>da inviare</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLabel" name="label_22">
+        <property name="text">
+         <string>PEC senza informazioni</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>classpath:com/axiastudio/suite/resources/starorange.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>classpath:com/axiastudio/suite/resources/starwhite.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>classpath:com/axiastudio/suite/resources/stargreen.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>classpath:com/axiastudio/suite/resources/starred.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_21">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>classpath:com/axiastudio/suite/resources/question.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLabel" name="label_20">
+        <property name="text">
+         <string>no PEC</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
