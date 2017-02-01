@@ -14,9 +14,21 @@ public interface IDestinatarioRichiesta {
 
     Boolean getLetto();
 
+    void setLetto(Boolean letto);
+
+    Date getDataletto();
+
+    void setDataletto(Date dataletto);
+
+    String getEsecutoreletto();
+
+    void setEsecutoreletto(String esecutoreletto);
+
     Date getData();
 
     Date getDatascadenza();
+
+    StatoRichiesta getStatorichiesta();
 
     String getTesto();
 

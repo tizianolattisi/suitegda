@@ -17,9 +17,14 @@ public class RichiestaCallbacks {
     @Callback(type= CallbackType.BEFORECOMMIT)
     public static Validation beforeCommit(Richiesta richiesta){
 
-        if( richiesta.getTesto() != null && richiesta.getTesto().length() > 0 ){
-            return new Validation(true);
+        if( richiesta.getTesto() == null || richiesta.getTesto().isEmpty() ){
+            return new Validation(false, "Devi inserire un testo.");
         }
-        return new Validation(false, "Devi inserire un testo.");
+        if ( richiesta.getDestinatarioUfficioCollection().size() + richiesta.getDestinatarioUtenteCollection().size() <= 0) {
+            return new Validation(false, "Devi inserire almeno un destinatario.");
+        }
+
+        return new Validation(true);
+
     }
 }

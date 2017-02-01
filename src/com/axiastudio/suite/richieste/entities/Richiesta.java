@@ -17,32 +17,39 @@
 package com.axiastudio.suite.richieste.entities;
 
 
+import com.axiastudio.pypapi.Register;
+import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.richieste.RichiestaListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Entity
 @Table(schema="RICHIESTE")
-@EntityListeners({RichiestaListener.class})
+@EntityListeners({RichiestaListener.class, TimeStampedListener.class})
 @SequenceGenerator(name="genrichiesta", sequenceName="richieste.richiesta_id_seq", initialValue=1, allocationSize=1)
-public class Richiesta implements Serializable {
+public class Richiesta implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genrichiesta")
     private Long id;
+    @Column(name="data")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date data =  Calendar.getInstance().getTime();
-    private String testo;
+    @Column(name="testo")
+    private String testo = "";
     @JoinColumn(name = "mittente", referencedColumnName = "id")
     @ManyToOne
     private Utente mittente;
     private Boolean cancellabile = Boolean.TRUE;
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date datascadenza;
     private Integer giornipreavviso;
     @JoinColumn(name = "richiestaprecedente", referencedColumnName = "id")
@@ -50,11 +57,34 @@ public class Richiesta implements Serializable {
     private Richiesta richiestaprecedente;
     private Integer relazione;
     private Boolean richiestaautomatica = Boolean.FALSE;
-    @Enumerated(EnumType.ORDINAL)
-    private StatoRichiesta statorichiesta;
+    @Enumerated(EnumType.STRING)
+    private StatoRichiesta statorichiesta=StatoRichiesta.ND;
     @OneToMany(mappedBy = "richiesta", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<DestinatarioUfficio> destinatarioUfficioCollection;
+    @OneToMany(mappedBy = "richiesta", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<DestinatarioUtente> destinatarioUtenteCollection;
+    @OneToMany(mappedBy = "richiestaprecedente", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<Richiesta> richiestaSuccessivaCollection;
+    @OneToMany(mappedBy = "richiesta", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<RichiestaProtocollo> richiestaProtocolloCollection;
+    @OneToMany(mappedBy = "richiesta", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<RichiestaPratica> richiestaPraticaCollection;
 
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
+
+    /* transient */
+    @Transient
+    private String pathdocumento;
 
     public Long getId() {
         return id;
@@ -80,6 +110,44 @@ public class Richiesta implements Serializable {
         this.testo = testo;
     }
 
+    public String getTestop() {
+        if ( this.getId()==null ) {
+            return "";
+        }
+
+        Boolean riservato=Boolean.TRUE;
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        if (this.getMittente().equals(autenticato)) {
+            riservato=Boolean.FALSE;
+        }
+
+        if ( (this.getRichiestaPraticaCollection()!=null && !this.getRichiestaPraticaCollection().isEmpty()) ||
+                this.getRichiestaProtocolloCollection()!=null && ! this.getRichiestaProtocolloCollection().isEmpty() ) {
+            riservato=Boolean.FALSE;
+        }
+
+        for (DestinatarioUtente du : this.getDestinatarioUtenteCollection()) {
+            if (du.getDestinatario().equals(autenticato)) {
+                riservato=Boolean.FALSE;
+            }
+        }
+
+        for (DestinatarioUfficio du : this.getDestinatarioUfficioCollection()) {
+            for (UfficioUtente uu : du.getDestinatario().getUfficioUtenteCollection()) {
+                if (autenticato.equals(uu.getUtente()) && !uu.getOspite()) {
+                    riservato=Boolean.FALSE;
+                }
+            }
+        }
+        if( riservato ){
+            return "NON DI COMPETENZA";
+        }
+        return this.getTesto().replace("\n", " ");
+    }
+
+    public void setTestop(String testo) {
+    }
+
     public Utente getMittente() {
         return mittente;
     }
@@ -88,12 +156,57 @@ public class Richiesta implements Serializable {
         this.mittente = mittente;
     }
 
+    public String getMittentep() {
+        if ( this.getMittente()==null ) {
+            return "";
+        }
+
+        Boolean riservato=Boolean.TRUE;
+
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        if (this.getMittente().equals(autenticato)) {
+            riservato=Boolean.FALSE;
+        }
+
+        if ( (this.getRichiestaPraticaCollection()!=null && !this.getRichiestaPraticaCollection().isEmpty()) ||
+                this.getRichiestaProtocolloCollection()!=null && ! this.getRichiestaProtocolloCollection().isEmpty() ) {
+            riservato=Boolean.FALSE;
+        }
+
+        for (DestinatarioUtente du : this.getDestinatarioUtenteCollection()) {
+            if (du.getDestinatario().equals(autenticato)) {
+                riservato=Boolean.FALSE;
+            }
+        }
+
+        for (DestinatarioUfficio du : this.getDestinatarioUfficioCollection()) {
+            for (UfficioUtente uu : du.getDestinatario().getUfficioUtenteCollection()) {
+                if (autenticato.equals(uu.getUtente()) && !uu.getOspite()) {
+                    riservato=Boolean.FALSE;
+                }
+            }
+        }
+        if( riservato ){
+            return "NON DI COMPETENZA";
+        }
+        return this.getMittente().toString();
+    }
+
+    public void setMittentep(String mittente) {
+    }
+
     public Boolean getCancellabile() {
         return cancellabile;
     }
 
     public void setCancellabile(Boolean cancellabile) {
         this.cancellabile = cancellabile;
+        for ( DestinatarioUfficio du: this.getDestinatarioUfficioCollection() ) {
+            du.setRichiestacancellabile(cancellabile);
+        }
+        for ( DestinatarioUtente du: this.getDestinatarioUtenteCollection() ) {
+            du.setRichiestacancellabile(cancellabile);
+        }
     }
 
     public Date getDatascadenza() {
@@ -144,11 +257,151 @@ public class Richiesta implements Serializable {
         this.statorichiesta = fase;
     }
 
+    public String getPathdocumento() {
+        if ( this.pathdocumento != null) {
+            return this.pathdocumento;
+        } else {
+            return (new SimpleDateFormat("yyyy/MM/")).format(this.data) + this.id.toString();
+        }
+    }
+
+    public void setPathdocumento(String pathdocumento) {
+        this.pathdocumento = pathdocumento;
+    }
+
+    public String getVarPathDocumento() {
+        return this.pathdocumento;
+    }
+
     public Collection<DestinatarioUfficio> getDestinatarioUfficioCollection() {
         return destinatarioUfficioCollection;
     }
 
     public void setDestinatarioUfficioCollection(Collection<DestinatarioUfficio> destinatarioUfficioCollection) {
         this.destinatarioUfficioCollection = destinatarioUfficioCollection;
+    }
+
+    public Collection<DestinatarioUtente> getDestinatarioUtenteCollection() {
+        return destinatarioUtenteCollection;
+    }
+
+    public void setDestinatarioUtenteCollection(Collection<DestinatarioUtente> destinatarioUtenteCollection) {
+        this.destinatarioUtenteCollection = destinatarioUtenteCollection;
+    }
+
+    public Collection<RichiestaProtocollo> getRichiestaProtocolloCollection() {
+        return richiestaProtocolloCollection;
+    }
+
+    public void setRichiestaProtocolloCollection(Collection<RichiestaProtocollo> richiestaProtocolloCollection) {
+        this.richiestaProtocolloCollection = richiestaProtocolloCollection;
+    }
+
+    public Collection<RichiestaPratica> getRichiestaPraticaCollection() {
+        return richiestaPraticaCollection;
+    }
+
+    public void setRichiestaPraticaCollection(Collection<RichiestaPratica> richiestaPraticaCollection) {
+        this.richiestaPraticaCollection = richiestaPraticaCollection;
+    }
+
+    public Collection<Richiesta> getRichiestaSuccessivaCollection() {
+        return richiestaSuccessivaCollection;
+    }
+
+    public void setRichiestaSuccessivaCollection(Collection<Richiesta> richiestaSuccessivaCollection) {
+        this.richiestaSuccessivaCollection = richiestaSuccessivaCollection;
+    }
+
+    public Collection<Richiesta> getRichiestaPrecedente() {
+        if ( getRichiestaprecedente()==null ) {
+            return null;
+        } else {
+            return new ArrayList<Richiesta>(Collections.singletonList(getRichiestaprecedente()));
+        }
+    }
+
+    public void setRichiestaPrecedente(Collection<Richiesta> richiestaPrecedente) {
+    }
+
+
+    public String getNomemittente() {
+        if (getMittente()==null) {
+            return null;
+        } else {
+            return getMittente().toString();
+        }
+    }
+
+    public void setNomemittente(String nomeMittente) {
+    }
+
+    public String getDescRichiesta() {
+        if ( this==null ) {
+            return null;
+        } else {
+            return getId().toString() + "- (" + SuiteUtil.DATETIME_FORMAT.format(getData()) + ") " + getTesto();
+        }
+    }
+
+    public void setDescRichiesta(String descRichiesta) {
+    }
+
+
+    @Override
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    @Override
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
+    }
+
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    @Override
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+    @Override
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    @Override
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
+    }
+
+    @Override
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    @Override
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Richiesta)) {
+            return false;
+        }
+        Richiesta other = (Richiesta) object;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 }
