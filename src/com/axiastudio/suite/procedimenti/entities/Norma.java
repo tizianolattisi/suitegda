@@ -84,10 +84,7 @@ public class Norma implements Serializable {
             return false;
         }
         Norma other = (Norma) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

@@ -29,18 +29,24 @@ import java.util.Date;
  */
 public interface IGestoreDeleghe {
 
-    public Utente trovaTitolare(String codiceCarica, Servizio servizio);
+    Utente trovaTitolare(String codiceCarica, Servizio servizio);
     
-    public TitoloDelega checkTitoloODelega(String codiceCarica);
+    TitoloDelega checkTitoloODelega(String codiceCarica);
 
-    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio);
+    TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio);
     
-    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento);
+    TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento);
 
-    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio);
+    TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio);
 
-    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente);
+    TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente);
 
-    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica);
+    TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica);
+
+    TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica,
+                                    Boolean delegaSuAssenza);
+
+    TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica,
+                                    Boolean delegaSuAssenza, Utente firmatario);
 
 }

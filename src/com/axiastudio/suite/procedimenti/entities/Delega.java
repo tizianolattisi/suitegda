@@ -77,7 +77,9 @@ public class Delega implements Serializable {
     @JoinColumn(name = "delegante", referencedColumnName = "id")
     @ManyToOne
     private Utente delegante;
-    
+    @Column(name="impedimento")
+    private Boolean impedimento =false;
+
     public Long getId() {
         return id;
     }
@@ -182,6 +184,14 @@ public class Delega implements Serializable {
         this.delegante = delegante;
     }
 
+    public Boolean getImpedimento() {
+        return impedimento;
+    }
+
+    public void setImpedimento(Boolean impedimento) {
+        this.impedimento = impedimento;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -196,10 +206,7 @@ public class Delega implements Serializable {
             return false;
         }
         Delega other = (Delega) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

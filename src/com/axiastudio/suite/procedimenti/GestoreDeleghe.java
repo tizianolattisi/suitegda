@@ -42,19 +42,19 @@ import java.util.*;
  */
 public class GestoreDeleghe implements IGestoreDeleghe {
 
-    private static Map<String, Carica> cariche = new HashMap<>();
+    private static Map<String, Carica> cariche = new HashMap<String, Carica>();
 
     public GestoreDeleghe() {
         Database db = (Database) Register.queryUtility(IDatabase.class);
         Controller controller = db.createController(Carica.class);
-        for (Iterator it = controller.createFullStore().iterator(); it.hasNext();) {
-            Carica carica = (Carica) it.next();
+        for (Object o : controller.createFullStore()) {
+            Carica carica = (Carica) o;
             cariche.put(carica.getCodiceCarica(), carica);
         }
     }
 
     public Utente trovaTitolare(String codiceCarica, Servizio servizio) {
-        Carica carica = this.findCarica(codiceCarica);
+        Carica carica = findCarica(codiceCarica);
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -65,6 +65,8 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         predicates.add(cb.equal(from.get("carica"), carica));
         predicates.add(cb.equal(from.get("servizio"), servizio));
         predicates.add(cb.equal(from.get("titolare"), true));
+        predicates.add(from.get("fine").isNull());
+        predicates.add(cb.lessThanOrEqualTo(from.get("inizio"), new Date()));
 
         cq = cq.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
@@ -78,9 +80,10 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         return null;
     }
         
-    private List<Delega> trovaTitoliEDeleghe(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
+    private List<Delega> trovaTitoliEDeleghe(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica,
+                                             Boolean delegaSuAssenza){
 
-        Carica carica = this.findCarica(codiceCarica);
+        Carica carica = findCarica(codiceCarica);
         
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
@@ -119,13 +122,17 @@ public class GestoreDeleghe implements IGestoreDeleghe {
             utente = (Utente) Register.queryUtility(IUtente.class);
         }
         predicates.add(cb.equal(from.get("utente"), utente));
-        
+
+        // delega solo su assenza
+        if (delegaSuAssenza) {
+            predicates.add(cb.or(cb.equal(from.get("delegato"), Boolean.FALSE), cb.equal(from.get("suassenza"), Boolean.TRUE)));
+        }
+
         // where
         cq = cq.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
         
         TypedQuery<Delega> tq = em.createQuery(cq);
-        List<Delega> deleghe = tq.getResultList();
-        return deleghe;
+        return tq.getResultList();
     }
 
     public static Carica findCarica(String codiceCarica){
@@ -136,7 +143,7 @@ public class GestoreDeleghe implements IGestoreDeleghe {
     }
 
     public static List<String> codiciCarica() {
-        List<String> codiciCarica = new ArrayList<>();
+        List<String> codiciCarica = new ArrayList<String>();
         for( String key: cariche.keySet() ){
             codiciCarica.add(key);
         }
@@ -176,9 +183,20 @@ public class GestoreDeleghe implements IGestoreDeleghe {
 
     @Override
     public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica){
+        return this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, utente, dataVerifica, Boolean.TRUE);
+    }
 
+    @Override
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica,
+                                           Boolean delegaSuAssenza) {
+        return this.checkTitoloODelega(codiceCarica, servizio, procedimento, ufficio, utente, dataVerifica, delegaSuAssenza, null);
+    }
+
+    @Override
+    public TitoloDelega checkTitoloODelega(String codiceCarica, Servizio servizio, Procedimento procedimento, Ufficio ufficio, Utente utente, Date dataVerifica,
+                                           Boolean delegaSuAssenza, Utente firmatario) {
         // prima cerchiamo un titolo o una delega esatta
-        List<Delega> titoliEDeleghe = this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, ufficio, utente, dataVerifica);
+        List<Delega> titoliEDeleghe = this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, ufficio, utente, dataVerifica, delegaSuAssenza);
         // se è una delega verifico che il delegante abbia titolo per delegare
         for( Delega titoloODelega: titoliEDeleghe ){
             if( titoloODelega.getTitolare() ){
@@ -191,39 +209,39 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         
         // Cerchiamo tutti i titoli e le deleghe più ampi della richiesta
         List<Delega> titoliEDelegheAmpie = new ArrayList();
-        titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, ufficio, utente, dataVerifica));
+//        titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, ufficio, utente, dataVerifica, delegaSuAssenza));
         if( ufficio != null && procedimento != null && servizio != null ){
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, null, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, ufficio, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, ufficio, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, null, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, ufficio, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, ufficio, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica, delegaSuAssenza));
         } else if( ufficio == null && procedimento != null && servizio != null ) {
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, null, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, procedimento, null, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica, delegaSuAssenza));
         } else if( ufficio != null && procedimento == null && servizio != null ) {
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, ufficio, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, ufficio, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica, delegaSuAssenza));
         } else if( ufficio != null && procedimento != null && servizio == null) {
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, ufficio, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, ufficio, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica, delegaSuAssenza));
         } else if( ufficio != null && procedimento == null && servizio == null){
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, ufficio, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica, delegaSuAssenza));
         } else if( ufficio == null && procedimento != null && servizio == null ){
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, procedimento, null, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica, delegaSuAssenza));
         } else if( ufficio == null && procedimento == null && servizio != null ){
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica));
-            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, servizio, null, null, utente, dataVerifica, delegaSuAssenza));
+            titoliEDelegheAmpie.addAll(this.trovaTitoliEDeleghe(codiceCarica, null, null, null, utente, dataVerifica, delegaSuAssenza));
         }
         // Prima andiamo alla ricerca delle titolarità
         for( Delega titoloODelega: titoliEDelegheAmpie ){
@@ -253,8 +271,50 @@ public class GestoreDeleghe implements IGestoreDeleghe {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         Predicate cariche = cb.equal(from.get("utente"), autenticato);
         Predicate deleghe = cb.equal(from.get("delegante"), autenticato);
-        Predicate predicate = cb.or(cariche, deleghe);
-        return predicate;
+        return cb.or(cariche, deleghe);
     }
-    
+
+    public List<Delega> checkCarica(String codiceCarica){
+        return checkCarica(codiceCarica, null, null);
+    }
+
+    public List<Delega> checkCarica(String codiceCarica, Utente utente, Date dataVerifica) {
+        Carica carica = findCarica(codiceCarica);
+
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Delega> cq = cb.createQuery(Delega.class);
+        Root from = cq.from(Delega.class);
+
+        List<Predicate> predicates = new ArrayList();
+
+        // la carica richiesta
+        predicates.add(cb.equal(from.get("carica"), carica));
+
+        // data verifica
+        if( dataVerifica == null ){
+            dataVerifica = new Date();
+        }
+
+        predicates.add(cb.lessThanOrEqualTo(from.get("inizio"), dataVerifica));
+        predicates.add(cb.or(
+                cb.isNull(from.get("fine")),
+                cb.greaterThanOrEqualTo(from.get("fine"), dataVerifica)
+                )
+        );
+
+        // l'utente
+        if( utente == null ){
+            utente = (Utente) Register.queryUtility(IUtente.class);
+        }
+        predicates.add(cb.equal(from.get("utente"), utente));
+
+        // where
+        cq = cq.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+
+        TypedQuery<Delega> tq = em.createQuery(cq);
+        return tq.getResultList();
+    }
+
 }

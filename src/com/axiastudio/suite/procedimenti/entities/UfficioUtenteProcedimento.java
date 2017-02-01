@@ -16,9 +16,7 @@
  */
 package com.axiastudio.suite.procedimenti.entities;
 
-import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
-import com.axiastudio.suite.base.entities.Utente;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -110,10 +108,7 @@ public class UfficioUtenteProcedimento implements Serializable {
             return false;
         }
         UfficioUtenteProcedimento other = (UfficioUtenteProcedimento) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

@@ -56,6 +56,7 @@ public class SimpleWorkFlow {
     private Object obj=null;
     private Procedimento procedimento=null;
     private Object result = null;
+    private Visto visto = null;
 
     /*
      *  L'entità da cui reperire un procedimento può essere di due tipi:
@@ -219,40 +220,56 @@ public class SimpleWorkFlow {
         return completaFase(fp, Boolean.TRUE, "");
     }
 
-    public Boolean completaFase(FasePratica fp, Boolean confermata){
-        return completaFase(fp, confermata, "");
-    }
-
     public Boolean completaFase(FasePratica fp, Boolean confermata, String commento){
 
+        Boolean esito;
+        Boolean negato;
         if( confermata ){
             fp.setCompletata(true);
             fp.setNegata(false);
             FasePratica successiva = fp.getConfermata();
-            while( successiva.getDascartare()!=null && successiva.getDascartare() != "" &&
+            while( successiva.getDascartare()!=null && !successiva.getDascartare().equals("") &&
                     eseguiClosure(successiva.getDascartare()) ){
                 successiva = successiva.getConfermata();
             }
             setFaseAttiva(successiva);
-            creaVisto(fp, commento);
+            negato=Boolean.FALSE;
         } else {
             fp.setCompletata(false);
             fp.setNegata(true);
             setFaseAttiva(fp.getRifiutata());
-            creaVisto(fp, true, commento); // negato
+            negato=Boolean.TRUE;
         }
-        return Boolean.TRUE;
+        if ( this.visto == null ) {
+            esito = creaVisto(fp, negato, commento);
+        } else {
+            esito = concludiVisto();
+        }
+        this.visto = null;
+        return esito;
     }
 
-    public void creaVisto(FasePratica fp) {
-        creaVisto(fp, false, "");
+    private Boolean creaVisto(FasePratica fp, String commento) {
+        return creaVisto(fp, false, commento, true, true);
     }
 
-    private void creaVisto(FasePratica fp, String commento) {
-        creaVisto(fp, false, commento);
+    private Boolean creaVisto(FasePratica fp, Boolean negato, String commento) {
+        return creaVisto(fp, negato, commento, true, true);
     }
 
-    private void creaVisto(FasePratica fp, Boolean negato, String commento) {
+    public Boolean creaVisto(FasePratica fp, Boolean negato, String commento, Boolean checkAttivo, Boolean completato) {
+
+        this.visto = null;
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        if ( checkAttivo ) {
+            FasePratica reloaded = (FasePratica) db.createController(FasePratica.class).get(fp.getId());
+            if (!reloaded.getAttiva()) {
+                // peste e corna
+                System.out.println("La fase non è attiva!!");
+                result = "La fase selezionata non è più attiva. Verificare eventuale aggiornamento dello stato della pratica eseguendo una nuova ricerca.";
+                return false;
+            }
+        }
         Pratica pratica = fp.getPratica();
         Visto visto = new Visto();
         visto.setFase(fp.getFase());
@@ -260,6 +277,7 @@ public class SimpleWorkFlow {
         visto.setUtente(utente);
         visto.setNegato(negato);
         visto.setCommento(commento);
+        visto.setCompletato(completato);
         IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(fp.getPratica());
         String cariche = fp.getCariche();
         if( cariche != null && !cariche.equals("")){
@@ -278,9 +296,17 @@ public class SimpleWorkFlow {
             }
         }
         visto.setPratica(pratica);
-        Database db = (Database) Register.queryUtility(IDatabase.class);
         Controller controller = db.createController(visto.getClass());
         controller.commit(visto);
+        this.visto = visto;
+        return true;
+    }
+
+    public Boolean concludiVisto() {
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        visto.setCompletato(Boolean.TRUE);
+        Controller controller = db.createController(visto.getClass());
+        return controller.commit(visto).getResponse();
     }
 
     public void setFaseAttiva(FasePratica faseAttiva){
@@ -292,6 +318,7 @@ public class SimpleWorkFlow {
                 fp.setAttiva(false);
             }
         }
+        faseAttiva.getPratica().setFase(faseAttiva.getFase());
     }
 
     public Boolean setFasePratica(FasePratica fp, Fase faseAttiva){

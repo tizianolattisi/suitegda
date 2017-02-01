@@ -91,6 +91,11 @@ public class SimpleWorkflowDialog extends QDialog {
     public void accept() {
         int idx = choice.currentIndex();
         if( idx == 0 ){
+            if ( !simpleWorkFlow.creaVisto(fasePratica, Boolean.FALSE, commento.toPlainText(), Boolean.TRUE, Boolean.FALSE) ) {
+                QMessageBox.critical(this, "Attenzione", simpleWorkFlow.getResult().toString(),
+                        QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+                return;
+            }
             Boolean res = simpleWorkFlow.azione(fasePratica);
             if( res ){
                 if ( !simpleWorkFlow.completaFase(fasePratica) ) {
@@ -107,7 +112,11 @@ public class SimpleWorkflowDialog extends QDialog {
                 return;
             }
         } else if( idx == 1 ){
-            simpleWorkFlow.completaFase(fasePratica, Boolean.FALSE, commento.toPlainText());
+            if ( !simpleWorkFlow.completaFase(fasePratica, Boolean.FALSE, commento.toPlainText()) ) {
+                QMessageBox.critical(this, "Attenzione", simpleWorkFlow.getResult().toString(),
+                        QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+                return;
+            }
         }
         super.accept();
     }
