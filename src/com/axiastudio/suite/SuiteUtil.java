@@ -33,6 +33,7 @@ import javax.persistence.criteria.Root;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,8 +53,8 @@ public class SuiteUtil {
             md.update(s.getBytes());
             byte byteData[] = md.digest();
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < byteData.length; i++) {
-                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            for (byte aByteData : byteData) {
+                sb.append(Integer.toString((aByteData & 0xff) + 0x100, 16).substring(1));
             }
             return sb.toString();
         } catch (NoSuchAlgorithmException ex) {
@@ -72,8 +73,7 @@ public class SuiteUtil {
         cq.select(root);
         cq.where(cb.equal(root.get("idpratica"), idpratica));
         TypedQuery<Pratica> tq = em.createQuery(cq);
-        Pratica pratica = tq.getSingleResult();
-        return pratica;
+        return tq.getSingleResult();
     }
     
     public static Costante trovaCostante(String name){
@@ -105,8 +105,7 @@ public class SuiteUtil {
         cq.select(root);
         cq.where(cb.isNull(root.get("datacessazione")));
         TypedQuery<Giunta> tq = em.createQuery(cq);
-        Giunta giunta = tq.getSingleResult();
-        return giunta;
+        return tq.getSingleResult();
     }
 
     public static List<Modello> elencoModelli(){
@@ -117,8 +116,13 @@ public class SuiteUtil {
         Root<Modello> root = cq.from(Modello.class);
         cq.select(root);
         TypedQuery<Modello> query = em.createQuery(cq);
-        List<Modello> modelli = query.getResultList();
-        return modelli;
+        return query.getResultList();
     }
-    
+
+    public static Date getServerDate(){
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        String query = "SELECT current_timestamp;";
+        return (Date) em.createNativeQuery(query).getSingleResult();
+    }
 }

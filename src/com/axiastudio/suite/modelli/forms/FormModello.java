@@ -31,7 +31,7 @@ public class FormModello extends Window {
         Pratica pratica = SuiteUtil.trovaPratica(codicepratica);
         Object obj;
         if( trovaDettaglio ){
-            IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica((Pratica) pratica);
+            IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(pratica);
             obj = dettaglio;
         } else {
             obj = pratica;

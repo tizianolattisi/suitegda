@@ -59,13 +59,13 @@ public class CmisPlugin implements IPlugin {
     @Override
     public void install(QWidget parent, Boolean addToolbar) {
         if( Window.class.isInstance(parent) ){
-            this.parent = (Window) parent;
+            this.parent = parent;
             if( addToolbar && this.canInsertToolbar  ){
                 CMISMenuBar bar = new CMISMenuBar("CMIS", (Window) parent, this);
                 ((Window) parent).addToolBar(bar);
             }
         } else if( Dialog.class.isInstance(parent) ){
-            this.parent = (Dialog) parent;
+            this.parent = parent;
         }
     }
 
@@ -110,10 +110,15 @@ public class CmisPlugin implements IPlugin {
     }
 
     public void showForm(Object entity, Boolean delete, Boolean download, Boolean parent, Boolean upload, Boolean version, HashMap map) {
+        this.showForm(entity, delete, download, parent, upload, version, new HashMap(), Boolean.FALSE);
+    }
+
+    public void showForm(Object entity, Boolean delete, Boolean download, Boolean parent, Boolean upload, Boolean version,
+                         HashMap map, Boolean allowNewEntity) {
         if( entity==null ){
             entity = ((Window) this.parent).getContext().getCurrentEntity();
         }
-        if( entity == null || entity.hashCode() == 0 ){
+        if( entity == null || (!allowNewEntity && entity.hashCode()==0 ) ){
             return;
         }
         AlfrescoHelper helper = createAlfrescoHelper(entity);
@@ -140,8 +145,7 @@ public class CmisPlugin implements IPlugin {
     }
 
     public CmisStreamProvider createCmisStreamProvider(String objectId){
-        CmisStreamProvider streamProvider = new CmisStreamProvider(cmisUrl, user, password, objectId);
-        return streamProvider;
+        return new CmisStreamProvider(cmisUrl, user, password, objectId);
     }
 
 }

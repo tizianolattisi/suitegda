@@ -111,9 +111,9 @@ public class TicketApplet extends QDialog {
 
         QDialog dialog = new QDialog(this);
         QVBoxLayout layout = new QVBoxLayout(dialog);
-        List<QCheckBox> checkBoxes = new ArrayList<>();
+        List<QCheckBox> checkBoxes = new ArrayList<QCheckBox>();
 
-        List<ServizioAlCittadinoSportello> scsc = new ArrayList<>(sportello.getServizioalcittadinosportelloCollection());
+        List<ServizioAlCittadinoSportello> scsc = new ArrayList<ServizioAlCittadinoSportello>(sportello.getServizioalcittadinosportelloCollection());
 
         for( ServizioAlCittadinoSportello scs: scsc){
             ServizioAlCittadino servizio = scs.getServizioalcittadino();
@@ -161,7 +161,7 @@ public class TicketApplet extends QDialog {
 
     private Map<ServizioAlCittadino, Integer> getSportelliPerServizio() {
         Store scscTutti = ((Database) Register.queryUtility(IDatabase.class)).createController(ServizioAlCittadinoSportello.class).createFullStore();
-        Map<ServizioAlCittadino, Integer> ns = new HashMap<>();
+        Map<ServizioAlCittadino, Integer> ns = new HashMap<ServizioAlCittadino, Integer>();
         for( Object obj: scscTutti ){
 
             ServizioAlCittadinoSportello scs = (ServizioAlCittadinoSportello) obj;

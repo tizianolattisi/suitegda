@@ -79,10 +79,7 @@ public class CaricaCommissione implements Serializable {
             return false;
         }
         CaricaCommissione other = (CaricaCommissione) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

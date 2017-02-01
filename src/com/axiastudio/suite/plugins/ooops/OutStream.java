@@ -16,9 +16,7 @@
  */
 package com.axiastudio.suite.plugins.ooops;
 
-import com.sun.star.io.BufferSizeExceededException;
 import com.sun.star.io.IOException;
-import com.sun.star.io.NotConnectedException;
 import com.sun.star.io.XOutputStream;
 
 import java.io.ByteArrayOutputStream;
@@ -34,7 +32,7 @@ public class OutStream extends ByteArrayOutputStream implements XOutputStream {
     }
     
     @Override
-    public void writeBytes(byte[] bytes) throws NotConnectedException, BufferSizeExceededException, IOException {
+    public void writeBytes(byte[] bytes) throws IOException {
         try {
             this.write(bytes);
         }
@@ -44,7 +42,7 @@ public class OutStream extends ByteArrayOutputStream implements XOutputStream {
     }
 
     @Override
-    public void closeOutput() throws NotConnectedException, BufferSizeExceededException, IOException {
+    public void closeOutput() throws IOException {
         try {
             super.flush();
             super.close();
@@ -59,7 +57,7 @@ public class OutStream extends ByteArrayOutputStream implements XOutputStream {
         try {
             super.flush();
         }
-        catch (java.io.IOException e) {
+        catch (java.io.IOException ignored) {
         }
     }
     

@@ -65,7 +65,7 @@ public class SuiteUiUtil {
                 credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
             }
         }
-        if( extra != "" ){
+        if(!extra.equals("")){
             credits += extra;
         }
         QTextEdit text = new QTextEdit(credits);

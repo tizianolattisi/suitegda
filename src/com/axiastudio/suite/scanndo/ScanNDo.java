@@ -1,11 +1,9 @@
 package com.axiastudio.suite.scanndo;
 
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.ui.Util;
-import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.trolltech.qt.core.QByteArray;
 import com.trolltech.qt.core.QFile;
@@ -19,7 +17,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

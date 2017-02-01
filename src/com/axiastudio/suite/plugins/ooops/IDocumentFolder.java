@@ -28,7 +28,7 @@ import java.util.List;
  */
 public interface IDocumentFolder {
     
-    public List<Template> getTemplates();
-    public void createDocument(String subpath, String name, String title, String description, byte[] content, String mimeType);
+    List<Template> getTemplates();
+    void createDocument(String subpath, String name, String title, String description, byte[] content, String mimeType);
     
 }

@@ -34,7 +34,7 @@ public class InStream extends ByteArrayInputStream implements XInputStream, XSee
     }
     
     @Override
-    public int readBytes(byte[][] bytes, int i) throws NotConnectedException, BufferSizeExceededException, IOException {
+    public int readBytes(byte[][] bytes, int i) throws IOException {
         int numberOfReadBytes;
         try {
             byte[] tmpBytes = new byte[i];
@@ -60,17 +60,17 @@ public class InStream extends ByteArrayInputStream implements XInputStream, XSee
     }
 
     @Override
-    public int readSomeBytes(byte[][] bytes, int i) throws NotConnectedException, BufferSizeExceededException, IOException {
+    public int readSomeBytes(byte[][] bytes, int i) throws IOException {
         return readBytes(bytes, i);
     }
 
     @Override
-    public void skipBytes(int i) throws NotConnectedException, BufferSizeExceededException, IOException {
+    public void skipBytes(int i) throws IOException {
         skip(i);
     }
 
     @Override
-    public void closeInput() throws NotConnectedException, IOException {
+    public void closeInput() throws IOException {
         try {
             close();
         }

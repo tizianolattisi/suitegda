@@ -22,7 +22,6 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.base.Login;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -36,6 +35,8 @@ import java.util.logging.Logger;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 public class Suite {
+
+    private static Map mapProperties;
 
     /**
      * @param args the command line arguments
@@ -88,11 +89,17 @@ public class Suite {
         String alfrescopathProtocollo = null;
         String alfrescopathPratica = null;
         String alfrescopathPubblicazione = null;
+        String alfrescopathRichiesta = null;
 
         String barcodeDevice = null;
         String barcodeLanguage = null;
 
         String oooConnection = null;
+
+        String documentDir = null;
+
+        String pecServerUrl = null;
+        String pecDocServerUrl = null;
 
         // file di Properties
         Properties properties = new Properties();
@@ -114,12 +121,15 @@ public class Suite {
                 alfrescopathProtocollo = properties.getProperty("alfrescopath.protocollo");
                 alfrescopathPratica = properties.getProperty("alfrescopath.pratica");
                 alfrescopathPubblicazione = properties.getProperty("alfrescopath.pubblicazione");
+                alfrescopathRichiesta = properties.getProperty("alfrescopath.richiesta");
 
                 barcodeDevice = properties.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
                 barcodeLanguage = properties.getProperty("barcode.language"); // es. ZPL
 
                 oooConnection = properties.getProperty("ooo.connection");
 
+                pecServerUrl = properties.getProperty("pec.serverURL");
+                pecDocServerUrl = properties.getProperty("pec.docServerURL");
             }
         } catch (IOException e) {
             String message = "Unable to read properties file: " + propertiesStream;
@@ -166,6 +176,9 @@ public class Suite {
         if( System.getProperty("alfrescopath.pubblicazione") != null ) {
             alfrescopathPubblicazione = System.getProperty("alfrescopath.pubblicazione");
         }
+        if( System.getProperty("alfrescopath.richiesta") != null ) {
+            alfrescopathRichiesta = System.getProperty("alfrescopath.richiesta");
+        }
         // OpenOffice
         if( System.getProperty("ooo.connection") != null ) {
             oooConnection = System.getProperty("ooo.connection");
@@ -178,8 +191,18 @@ public class Suite {
         if( System.getProperty("barcode.language") != null ) {
             barcodeLanguage = System.getProperty("barcode.language");
         }
+        if( System.getProperty("suite.documentdir") != null ) {
+            documentDir = System.getProperty("suite.documentdir");
+        }
+        // Server PEC
+        if( System.getProperty("pec.serverURL") != null ) {
+            pecServerUrl = System.getProperty("pec.serverURL");
+        }
+        if( System.getProperty("pec.docServerURL") != null ) {
+            pecDocServerUrl = System.getProperty("pec.docServerURL");
+        }
 
-        Map mapProperties = new HashMap();
+        mapProperties = new HashMap();
         mapProperties.put("javax.persistence.jdbc.url", jdbcUrl);
         if( jdbcUser != null ){
             mapProperties.put("javax.persistence.jdbc.user", jdbcUser);
@@ -195,11 +218,7 @@ public class Suite {
             mapProperties.put("eclipselink.logging.parameters", "true");
         }
 
-        Database db = new Database();
         mapProperties.put("eclipselink.ddl-generation", "");
-        db.open("SuitePU", mapProperties);
-        Register.registerUtility(db, IDatabase.class);
-
 
         // jdbc
         app.setConfigItem("jdbc.url", jdbcUrl);
@@ -215,14 +234,33 @@ public class Suite {
         app.setConfigItem("alfrescopath.protocollo", alfrescopathProtocollo);
         app.setConfigItem("alfrescopath.pratica", alfrescopathPratica);
         app.setConfigItem("alfrescopath.pubblicazione", alfrescopathPubblicazione);
+        app.setConfigItem("alfrescopath.richiesta", alfrescopathRichiesta);
 
         // scringa di connessione per OpenOffice
         app.setConfigItem("ooops.connection", oooConnection);
         //app.setConfigItem("ooops.connection", "uno:socket,host=192.168.64.56,port=2002;urp;StarOffice.ServiceManager");
 
+        // cartella di salvataggio dei documenti
+        app.setConfigItem("suite.documentdir", documentDir);
+
+        // server PEC
+        app.setConfigItem("pec.serverURL", pecServerUrl);
+        app.setConfigItem("pec.docServerURL", pecDocServerUrl);
+
         // configurazione originale SuitePA
-        Configure.configure(db);
+//        Configure.configure(db);
 
     }
-    
+
+    public static void open(String username){
+        Database db = new Database();
+        String applicationName = "GDA";
+        if( username != null ){
+            applicationName += " - " + username;
+        }
+        mapProperties.put("javax.persistence.jdbc.url", ((String) mapProperties.get("javax.persistence.jdbc.url")).split("\\?")[0] + "?ApplicationName=" + applicationName);
+
+        db.open("SuitePU", mapProperties);
+     }
+
 }

@@ -108,6 +108,10 @@ public class FormFaseProcedimento extends Dialog {
     private void openConsole(){
         String entityName = ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_entita")).text();
         String entityId = ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_id")).text();
+        if ( entityId==null ) {
+            QMessageBox.critical(this, "Attenzione", "Manca l'id dell'oggetto");
+            return;
+        }
         Long id = Long.parseLong(entityId);
         Database db = (Database) Register.queryUtility(IDatabase.class);
         Class<?> klass=null;

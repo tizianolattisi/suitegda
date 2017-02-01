@@ -25,12 +25,20 @@ import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.pypapi.ui.IUIFile;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.suite.base.BaseUtil;
 import com.axiastudio.suite.base.entities.CambiaPassword;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.deliberedetermine.entities.Determina;
+import com.axiastudio.suite.deliberedetermine.forms.FormCorreggiUfficiDetermina;
 import com.axiastudio.suite.generale.entities.Costante;
+import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.forms.FormTipoPraticaTree;
+import com.axiastudio.suite.procedimenti.GestoreDeleghe;
+import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
+import com.axiastudio.suite.procedimenti.TitoloDelega;
+import com.axiastudio.suite.protocollo.forms.FormContaDocumenti;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.axiastudio.suite.scanndo.ScanNDo;
@@ -43,6 +51,7 @@ import com.trolltech.qt.gui.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -59,7 +68,6 @@ public class Mdi extends QMainWindow implements IMdi {
     private static String ICON = "classpath:com/axiastudio/pypapi/ui/resources/pypapi32.png";
     private QMdiArea workspace;
     private QTreeWidget tree;
-    private QSystemTrayIcon trayIcon;
     private QMenu menuWindows;
     private QAction actionCloseAll;
     private QAction actionTile;
@@ -77,6 +85,7 @@ public class Mdi extends QMainWindow implements IMdi {
         this.createTree();
         //this.createSystemTray();
         this.createMenu();
+        this.workspace.setActivationOrder(QMdiArea.WindowOrder.ActivationHistoryOrder);
 
         Register.registerUtility(this, IMdi.class);
 
@@ -120,10 +129,10 @@ public class Mdi extends QMainWindow implements IMdi {
             
             String title="";
             if( subWindow.widget() instanceof QMainWindow ){
-                title = ((QMainWindow) subWindow.widget()).windowTitle();
+                title = subWindow.widget().windowTitle();
             }
             if( subWindow.widget() instanceof QDialog ){
-                title = ((QDialog) subWindow.widget()).windowTitle();
+                title = subWindow.widget().windowTitle();
             }
             
             QAction action = menuWindows.addAction(title);
@@ -137,10 +146,10 @@ public class Mdi extends QMainWindow implements IMdi {
     private void createSystemTray(){
         QMenu menu = new QMenu(this);
         menu.addAction("prova");
-        this.trayIcon = new QSystemTrayIcon(new QIcon(ICON), this);
-        this.trayIcon.setContextMenu(menu);
-        this.trayIcon.show();
-        this.trayIcon.showMessage("PyPaPi Suite", "Applicazione avviata.");
+        QSystemTrayIcon trayIcon = new QSystemTrayIcon(new QIcon(ICON), this);
+        trayIcon.setContextMenu(menu);
+        trayIcon.show();
+        trayIcon.showMessage("PyPaPi Suite", "Applicazione avviata.");
         
     }
     
@@ -152,6 +161,7 @@ public class Mdi extends QMainWindow implements IMdi {
         this.workspace.subWindowActivated.connect(this, "refreshMenuWindows()");
         windowMapper = new QSignalMapper(this);
         windowMapper.mappedQObject.connect(this, "setActiveSubWindow(QObject)");
+        this.workspace.setMinimumWidth(500);
     }
     
     private void setActiveSubWindow(QObject obj){
@@ -217,11 +227,10 @@ public class Mdi extends QMainWindow implements IMdi {
         itemScanNDo.setText(1, "SCANNDO");
         itemScanNDo.setDisabled(!autenticato.getSpedisceprotocollo());
 
-        QTreeWidgetItem itemEmail = new QTreeWidgetItem(itemProtocolloInformatico);
-        itemEmail.setText(0, "PEC");
-        itemEmail.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
-        itemEmail.setText(1, "EMAIL");
-        itemEmail.setDisabled(true);
+        QTreeWidgetItem itemContaDocumenti = new QTreeWidgetItem(itemProtocolloInformatico);
+        itemContaDocumenti.setText(0, "Controllo documenti");
+        itemContaDocumenti.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
+        itemContaDocumenti.setText(1, "DOCUMENTI");
 
         /* Anagrafiche */
         QTreeWidgetItem itemAnagrafiche = new QTreeWidgetItem(this.tree);
@@ -238,6 +247,7 @@ public class Mdi extends QMainWindow implements IMdi {
         itemGruppi.setText(0, "Gruppi");
         itemGruppi.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemGruppi.setText(1, "com.axiastudio.suite.anagrafiche.entities.Gruppo");
+        itemGruppi.setDisabled(!autenticato.getAmministratore());
         QTreeWidgetItem itemRelazioni = new QTreeWidgetItem(itemAnagrafiche);
         itemRelazioni.setText(0, "Relazioni");
         itemRelazioni.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
@@ -259,7 +269,8 @@ public class Mdi extends QMainWindow implements IMdi {
         itemTipoPratica.setText(0, "Tipo di pratica");
         itemTipoPratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
         itemTipoPratica.setText(1, "com.axiastudio.suite.pratiche.entities.TipoPratica");
-        
+        itemTipoPratica.setDisabled(!autenticato.getAmministratore());
+
         QTreeWidgetItem itemTipiPratica = new QTreeWidgetItem(itemPraticheRoot);
         itemTipiPratica.setText(0, "Struttura tipi di pratica");
         itemTipiPratica.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/email.png"));
@@ -269,8 +280,7 @@ public class Mdi extends QMainWindow implements IMdi {
         QTreeWidgetItem itemRichiesteRoot = new QTreeWidgetItem(this.tree);
         itemRichiesteRoot.setText(0, "Richieste...");
         this.tree.addTopLevelItem(itemRichiesteRoot);
-        itemRichiesteRoot.setDisabled(true);
-        //itemRichiesteRoot.setDisabled(!autenticato.getOperatorepratiche());
+        itemRichiesteRoot.setDisabled(!autenticato.getOperatorepratiche());
 
         QTreeWidgetItem itemRichieste = new QTreeWidgetItem(itemRichiesteRoot);
         itemRichieste.setText(0, "Richieste");
@@ -291,25 +301,47 @@ public class Mdi extends QMainWindow implements IMdi {
         itemDelibere.setText(2, "NEW");
         itemDelibere.setDisabled(true);
 
-        QTreeWidgetItem itemDetermine = new QTreeWidgetItem(itemDelibereDetermineRoot);
-        itemDetermine.setText(0, "Determine");
-        itemDetermine.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
-        itemDetermine.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
-        itemDetermine.setText(2, "NEW");
-
-        QTreeWidgetItem itemDetermineVistoBilancio = new QTreeWidgetItem(itemDelibereDetermineRoot);
-        itemDetermineVistoBilancio.setText(0, "Determine in attesa visto bilancio");
-        itemDetermineVistoBilancio.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
-        itemDetermineVistoBilancio.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
-        String faseVistoBilancio = SuiteUtil.trovaCostante("FASE_VISTO_BILANCIO").getValore();
-        itemDetermineVistoBilancio.setText(2, "NAMEDQUERY:inAttesaDiVistoDiBilancio:idfase,Integer,"+faseVistoBilancio);
-
         QTreeWidgetItem itemSedute = new QTreeWidgetItem(itemDelibereDetermineRoot);
         itemSedute.setText(0, "Sedute");
         itemSedute.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
         itemSedute.setText(1, "com.axiastudio.suite.sedute.entities.Seduta");
         itemSedute.setText(2, "NEW");
         itemSedute.setDisabled(true);
+
+        QTreeWidgetItem separator = new QTreeWidgetItem(itemDelibereDetermineRoot);
+        separator.setText(0, "--------");
+        separator.setDisabled(true);
+
+        QTreeWidgetItem itemDetermine = new QTreeWidgetItem(itemDelibereDetermineRoot);
+        itemDetermine.setText(0, "Determine");
+        itemDetermine.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemDetermine.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
+        itemDetermine.setText(2, "NEW");
+
+        GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
+        QTreeWidgetItem itemDetermineVistoResp = new QTreeWidgetItem(itemDelibereDetermineRoot);
+        itemDetermineVistoResp.setText(0, "Visto responsabile");
+        itemDetermineVistoResp.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemDetermineVistoResp.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
+        itemDetermineVistoResp.setText(2, "NAMEDQUERY:inAttesaDiVistoResp:autenticato,Integer,"+autenticato.getId());
+        itemDetermineVistoResp.setDisabled(gestoreDeleghe.checkCarica("RESPONSABILE_DI_SERVIZIO").isEmpty());
+
+        QTreeWidgetItem itemDetermineVistoRespDelega = new QTreeWidgetItem(itemDelibereDetermineRoot);
+        itemDetermineVistoRespDelega.setText(0, "Visto responsabile (delegato)");
+        itemDetermineVistoRespDelega.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemDetermineVistoRespDelega.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
+        itemDetermineVistoRespDelega.setText(2, "NAMEDQUERY:inAttesaDiVistoRespDelegato:autenticato,Integer,"+autenticato.getId());
+        itemDetermineVistoRespDelega.setDisabled(gestoreDeleghe.checkCarica("RESPONSABILE_DI_SERVIZIO").isEmpty());
+
+        QTreeWidgetItem itemDetermineVistoBilancio = new QTreeWidgetItem(itemDelibereDetermineRoot);
+        itemDetermineVistoBilancio.setText(0, "Visto bilancio");
+        itemDetermineVistoBilancio.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/vcard.png"));
+        itemDetermineVistoBilancio.setText(1, "com.axiastudio.suite.deliberedetermine.entities.Determina");
+        String faseVistoBilancio = SuiteUtil.trovaCostante("FASE_VISTO_BILANCIO").getValore();
+        itemDetermineVistoBilancio.setText(2, "NAMEDQUERY:inAttesaDiVistoDiBilancio:idfase,Integer,"+faseVistoBilancio);
+        itemDetermineVistoBilancio.setDisabled(gestoreDeleghe.checkCarica("RESPONSABILE_DI_BILANCIO").isEmpty() &&
+                 !BaseUtil.utenteInUfficio(autenticato,
+                         Integer.parseInt(SuiteUtil.trovaCostante("UFFICIO_RAGIONERIA_E_CONTABILITA").getValore()), true));
 
         /* Procedimento */
         QTreeWidgetItem itemProcedimentiRoot = new QTreeWidgetItem(this.tree);
@@ -437,12 +469,18 @@ public class Mdi extends QMainWindow implements IMdi {
         itemDeleghe.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
         itemDeleghe.setText(1, "com.axiastudio.suite.procedimenti.entities.Delega");
         //itemDeleghe.setDisabled(!autenticato.getAmministratore());
-        
+
         itemPassword = new QTreeWidgetItem(itemAmministrazione);
         itemPassword.setText(0, "Cambio password");
         itemPassword.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/key.png"));
         itemPassword.setText(1, "PASSWORD");
-        
+
+        QTreeWidgetItem itemCorreggiUffici = new QTreeWidgetItem(itemAmministrazione);
+        itemCorreggiUffici.setText(0, "Correzione uffici determine");
+        itemCorreggiUffici.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/note.png"));
+        itemCorreggiUffici.setText(1, "UFFICIDETERMINA");
+        itemCorreggiUffici.setDisabled(!autenticato.getAmministratore());
+
         this.tree.activated.connect(this, "runTask()");
         this.tree.setMinimumWidth(200);
 
@@ -471,14 +509,24 @@ public class Mdi extends QMainWindow implements IMdi {
             FormScrivania form = new FormScrivania();
             this.workspace.addSubWindow(form);
             form.show();
+        } else if( "DOCUMENTI".equals(formName) ){
+            FormContaDocumenti form = new FormContaDocumenti();
+            this.workspace.addSubWindow(form);
+            form.show();
         } else if( "SCANNDO".equals(formName) ){
             ScanNDo form = new ScanNDo();
+            this.workspace.addSubWindow(form);
+            form.show();
+        } else if( "UFFICIDETERMINA".equals(formName) ){
+            FormCorreggiUfficiDetermina form = new FormCorreggiUfficiDetermina(
+                    "classpath:com/axiastudio/suite/deliberedetermine/forms/correggiufficidetermina.ui",
+                    Determina.class, "Correggi uffici determina");
             this.workspace.addSubWindow(form);
             form.show();
         } else if( "TICKET".equals(formName) ){
             Database db = (Database) Register.queryUtility(IDatabase.class);
             Store sportelli = db.createController(Sportello.class).createFullStore();
-            List<String> nomiSportelli = new ArrayList<>();
+            List<String> nomiSportelli = new ArrayList<String>();
             for( Object obj: sportelli ){
                 Sportello sportello = (Sportello) obj;
                 nomiSportelli.add(sportello.getDescrizione());
@@ -499,9 +547,9 @@ public class Mdi extends QMainWindow implements IMdi {
             String uiFile = (String) Register.queryUtility(IUIFile.class, formName);
             Class factory = (Class) Register.queryUtility(IFactory.class, formName);
             try {
-                Constructor<? extends Window> constructor = formClass.getConstructor(new Class[]{String.class, Class.class, String.class});
+                Constructor<? extends Window> constructor = formClass.getConstructor(String.class, Class.class, String.class);
                 try {
-                    form = constructor.newInstance(new Object[]{uiFile, factory, ""});
+                    form = constructor.newInstance(uiFile, factory, "");
                 } catch (InstantiationException ex) {
                     Logger.getLogger(Mdi.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalAccessException ex) {
@@ -522,8 +570,8 @@ public class Mdi extends QMainWindow implements IMdi {
             if( "NEW".equals(mode) ){
                 store = new Store(new ArrayList<Object>());
                 try {
-                    Constructor entityConstructor = factory.getConstructor(new Class[]{});
-                    Object entity = entityConstructor.newInstance(new Object[]{});
+                    Constructor entityConstructor = factory.getConstructor();
+                    Object entity = entityConstructor.newInstance();
                     store.add(entity);
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
@@ -575,7 +623,9 @@ public class Mdi extends QMainWindow implements IMdi {
             this.workspace.addSubWindow(form);
             this.showForm(form);
             if( store != null ) {
-                form.getContext().getDirty();
+                if ( store.size()==0 || store.get(0).hashCode() == 0 ) {
+                    form.getContext().getDirty();
+                }
             }
             this.menuWindows.addAction(form.toString());
         }

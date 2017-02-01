@@ -65,13 +65,13 @@ public class OoopsPlugin implements IPlugin {
     @Override
     public void install(QWidget parent, Boolean addToolbar) {
         if( Window.class.isInstance(parent) ){
-            this.parent = (Window) parent;
+            this.parent = parent;
             if( addToolbar && this.canInsertToolbar  ){
                 OoopsMenuBar bar = new OoopsMenuBar("Ooops", (Window) parent, this);
                 ((Window) parent).addToolBar(bar);
             }
         } else if( Dialog.class.isInstance(parent) ){
-            this.parent = (Dialog) parent;
+            this.parent = parent;
         }
     }
 
@@ -81,7 +81,7 @@ public class OoopsPlugin implements IPlugin {
     
     @Override
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void showForm() {

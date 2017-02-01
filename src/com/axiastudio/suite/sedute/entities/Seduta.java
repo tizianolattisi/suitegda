@@ -142,10 +142,7 @@ public class Seduta implements Serializable {
             return false;
         }
         Seduta other = (Seduta) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

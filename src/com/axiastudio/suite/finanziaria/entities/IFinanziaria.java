@@ -36,13 +36,13 @@ import java.util.List;
  */
 public interface IFinanziaria {
     
-    public List<MovimentoDetermina> getMovimentiDetermina(Determina determina);
+    List<MovimentoDetermina> getMovimentiDetermina(Determina determina);
     
-    public void apriGestoreMovimenti(Determina determina);
+    void apriGestoreMovimenti(Determina determina);
 
-    public Boolean assegnaEsecutivitaAtto(Determina determina, Date data);
+    Boolean assegnaEsecutivitaAtto(Determina determina, Date data);
 
-    public Boolean trasformaBozzaInAtto(Determina determina, Date data);
+    Boolean trasformaBozzaInAtto(Determina determina, Date data);
 
 
 }
