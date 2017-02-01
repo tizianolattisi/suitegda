@@ -34,10 +34,10 @@ import java.util.Date;
 @SequenceGenerator(name="genattribuzione", sequenceName="protocollo.attribuzione_id_seq", initialValue=1, allocationSize=1)
 @NamedQueries({
     @NamedQuery(name="trovaAttribuzioniUtente",
-        query = "SELECT a FROM Attribuzione a JOIN a.ufficio u "
-                + "JOIN u.ufficioUtenteCollection uu "
-                + "WHERE a.letto = FALSE AND uu.ricerca = TRUE "
-                + "AND uu.utente.id = :id ORDER BY a.protocollo.iddocumento DESC"),
+            query = "SELECT a FROM Attribuzione a JOIN a.ufficio u "
+                    + "JOIN u.ufficioUtenteCollection uu "
+                    + "WHERE a.letto = FALSE AND uu.ricerca = TRUE "
+                    + "AND uu.utente.id = :id ORDER BY CASE WHEN a.dataprincipale>a.recordcreato THEN a.dataprincipale ELSE a.recordcreato END DESC"),
     @NamedQuery(name="trovaAttribuzioniUtenteProtocollo",
         query = "SELECT a FROM Attribuzione a JOIN a.ufficio u "
                 + "JOIN u.ufficioUtenteCollection uu "
@@ -51,7 +51,7 @@ public class Attribuzione implements Serializable, ITimeStamped {
     private Long id;
     @JoinColumn(name = "ufficio", referencedColumnName = "id")
     @ManyToOne
-    private Ufficio ufficio;
+    public Ufficio ufficio;
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
@@ -66,6 +66,11 @@ public class Attribuzione implements Serializable, ITimeStamped {
     private String esecutoreletto;
     @Column(name="evidenza", length=1)
     private String evidenza;
+    @Column(name="dataprincipale")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataprincipale;
+    @Column(name="esecutoreprincipale", length=1)
+    private String esecutoreprincipale;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -85,7 +90,7 @@ public class Attribuzione implements Serializable, ITimeStamped {
     @Transient
     private Boolean tLetto;
 
-    public Boolean gettPrincipale() {
+    public Boolean getTPrincipale() {
         return tPrincipale;
     }
 
@@ -196,6 +201,63 @@ public class Attribuzione implements Serializable, ITimeStamped {
         this.evidenza = evidenza;
     }
 
+    public Date getDataprincipale() {
+        return dataprincipale;
+    }
+
+    public void setDataprincipale(Date dataprincipale) {
+        this.dataprincipale = dataprincipale;
+    }
+
+    public String getEsecutoreprincipale() {
+        return esecutoreprincipale;
+    }
+
+    public void setEsecutoreprincipale(String esecutoreprincipale) {
+        this.esecutoreprincipale = esecutoreprincipale;
+    }
+
+    public Boolean getPec() {
+        return (this.protocollo.getTiporiferimentomittente() != null && "PEC".equals(this.protocollo.getTiporiferimentomittente().getDescrizione()));
+    }
+
+    public void setPec(Boolean pec) {
+    }
+
+    public Date getDataassegnazione(){
+        if ( this.getDataprincipale() != null ) {
+            return this.getDataprincipale();
+        } else {
+            return this.getRecordcreato();
+        }
+    }
+
+    public void setDataassegnazione(Date dataProtocollo){
+    }
+
+    public Boolean getConvalidaprotocollo(){
+        return this.getProtocollo().getConvalidaprotocollo();
+    }
+
+    public void setConvalidaprotocollo(Boolean convalidaprotocollo){
+    }
+
+    public StatoPec getStatoPec() {
+        if ( this.getProtocollo().getPecProtocollo()!= null &&
+                this.getProtocollo().getPecProtocollo().getStato()!= null &&
+                !this.getProtocollo().getPecProtocollo().getStato().equals("")){
+            return this.getProtocollo().getPecProtocollo().getStato();
+        } else if ( TipoProtocollo.ENTRATA.equals(this.getTipoprotocollo()) &&
+                    this.protocollo.getTiporiferimentomittente() != null &&
+                    "PEC".equals(this.protocollo.getTiporiferimentomittente().getDescrizione()) ) {
+            return StatoPec.CONSEGNATO;
+        } else {
+            return StatoPec.NONGESTITO;
+        }
+    }
+
+    public void setStatoPec(StatoPec stato) {}
+
     @Override
     public Date getRecordcreato() {
         return recordcreato;
@@ -246,10 +308,7 @@ public class Attribuzione implements Serializable, ITimeStamped {
             return false;
         }
         Attribuzione other = (Attribuzione) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

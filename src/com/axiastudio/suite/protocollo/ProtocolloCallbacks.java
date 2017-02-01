@@ -91,6 +91,14 @@ public class ProtocolloCallbacks {
                 res = false;
             }
 
+            /* Oggetto non nullo */
+            Costante costante = SuiteUtil.trovaCostante("LMIN_OGGETTO_PROTOCOLLO");
+            Integer len = Integer.parseInt(costante.getValore());
+            if( protocollo.getOggetto() == null || protocollo.getOggetto().trim().length()<len ){
+                msg += "Devi compilare l'oggetto oppure oggetto troppo corto.";
+                res = false;
+            }
+
         } else {
             /*
              * Nuovo inserimento
@@ -127,7 +135,7 @@ public class ProtocolloCallbacks {
                     res = false;
                 }
             }
-            if( res == false ){
+            if(!res){
                 return new Validation(false, msg);
             }
             /* almeno un ufficio */
@@ -137,8 +145,10 @@ public class ProtocolloCallbacks {
             }
 
             /* Oggetto non nullo */
-            if( protocollo.getOggetto() == null || protocollo.getOggetto().isEmpty() ){
-                msg += "Devi compilare l'oggetto.";
+            Costante costante = SuiteUtil.trovaCostante("LMIN_OGGETTO_PROTOCOLLO");
+            Integer len = Integer.parseInt(costante.getValore());
+            if( protocollo.getOggetto() == null || protocollo.getOggetto().trim().length()<len ){
+                msg += "Devi compilare l'oggetto oppure oggetto troppo corto.";
                 res = false;
             }
         }
@@ -218,7 +228,7 @@ public class ProtocolloCallbacks {
          */
         if( protocollo.getRiferimentoProtocolloCollection() != null ){
             for( RiferimentoProtocollo rp: protocollo.getRiferimentoProtocolloCollection() ){
-                if( ! rp.getPrecedente().getDataprotocollo().before(protocollo.getDataprotocollo()) ){
+                if( protocollo.getDataprotocollo()!=null && !rp.getPrecedente().getDataprotocollo().before(protocollo.getDataprotocollo()) ){
                     msg += "I protocolli precedenti riferiti non possono avere data uguale o successiva al protocollo.\n";
                     res = false;
                     break;
@@ -227,9 +237,27 @@ public class ProtocolloCallbacks {
         }
 
         /*
+         * Inserimento del testo di default della PEC, se mancante
+         */
+        if ( protocollo.getTiporiferimentomittente()!= null &&
+                "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) ) {
+            if (protocollo.getPecProtocollo() == null) {
+                PecProtocollo pecProtocollo = new PecProtocollo();
+                pecProtocollo.setProtocollo(protocollo);
+                protocollo.setPecProtocollo(pecProtocollo);
+            }
+            if ( protocollo.getPecProtocollo().getBody()==null || protocollo.getPecProtocollo().getBody().isEmpty() ) {
+                protocollo.getPecProtocollo().setBody("Buongiorno,\n" +
+                        "in allegato si trasmette quanto in oggetto.\n" +
+                        "Cordiali saluti.");
+            }
+        }
+
+
+        /*
          * Restituzione della validazione
          */
-        if( res == false ){
+        if(!res){
             return new Validation(false, msg);
         } else {
             return new Validation(true);

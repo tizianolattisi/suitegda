@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1030</width>
+    <width>1028</width>
     <height>634</height>
    </rect>
   </property>
@@ -24,6 +24,9 @@
   </property>
   <property name="nodelete" stdset="0">
    <bool>true</bool>
+  </property>
+  <property name="searchfocus" stdset="0">
+   <string>iddocumento</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
@@ -305,6 +308,70 @@
              <width>150</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="palette">
+            <palette>
+             <active>
+              <colorrole role="WindowText">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+              <colorrole role="Text">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+             </active>
+             <inactive>
+              <colorrole role="WindowText">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+              <colorrole role="Text">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+             </inactive>
+             <disabled>
+              <colorrole role="WindowText">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+              <colorrole role="Text">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+             </disabled>
+            </palette>
            </property>
            <property name="displayFormat">
             <string>dd/MM/yyyy HH:mm</string>
@@ -707,7 +774,7 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="tabDettaglio">
        <attribute name="title">
         <string>Corrispondenti e referenti</string>
        </attribute>
@@ -727,7 +794,7 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab_3">
            <attribute name="title">
@@ -771,6 +838,9 @@
               </property>
               <property name="sortorder" stdset="0">
                <string>&lt;</string>
+              </property>
+              <property name="warnings" stdset="0">
+               <string>datacessazione is not null@Anagrafica cessata</string>
               </property>
              </widget>
             </item>
@@ -950,7 +1020,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="QWidget" name="tabRiferimenti">
        <attribute name="title">
         <string>Riferimenti precedenti e successivi</string>
        </attribute>
@@ -1018,7 +1088,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_5">
+      <widget class="QWidget" name="tabAnnullamento">
        <attribute name="title">
         <string>Richieste di annullamento</string>
        </attribute>
@@ -1044,18 +1114,14 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_6">
+      <widget class="QWidget" name="tabPEC">
        <attribute name="title">
         <string/>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Corpo del messaggio</string>
-          </property>
-         </widget>
-        </item>
+       <layout class="QGridLayout" name="gridLayout_5" columnstretch="2,0,0,1">
+        <property name="margin">
+         <number>4</number>
+        </property>
         <item row="0" column="1">
          <widget class="QLabel" name="label_17">
           <property name="text">
@@ -1067,12 +1133,12 @@
          <widget class="QTextEdit" name="textEdit_PECBody">
           <property name="minimumSize">
            <size>
-            <width>0</width>
+            <width>500</width>
             <height>0</height>
            </size>
           </property>
           <property name="acceptRichText">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="column" stdset="0">
            <string>pecBody</string>
@@ -1082,21 +1148,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QTextEdit" name="textEdit_StatoPEC">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_18">
-          <property name="text">
-           <string>Segnatura</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" colspan="2">
+        <item row="3" column="0" colspan="4">
          <widget class="QTextEdit" name="textEdit_Segnatura">
           <property name="enabled">
            <bool>false</bool>
@@ -1109,6 +1161,109 @@
           </property>
           <property name="column" stdset="0">
            <string>Segnatura</string>
+          </property>
+          <property name="private" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Corpo del messaggio</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_18">
+          <property name="text">
+           <string>Segnatura</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLineEdit" name="lineEdit_statopec">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: transparent;</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="column" stdset="0">
+           <string>statopec</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1" colspan="3">
+         <widget class="QTextEdit" name="textEdit_StatoPEC">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabMessaggi">
+       <attribute name="title">
+        <string>Messaggi</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_messaggi">
+          <property name="minimumSize">
+           <size>
+            <width>600</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="sizeIncrement">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&lt;dettagliorichiesta&gt;,&gt;oggetto&lt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>richiesta</string>
+          </property>
+          <property name="entity" stdset="0">
+           <string>.richiestaProtocolloCollection</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>Messaggio,Oggetto</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>0</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
+          <property name="saverows" stdset="0">
+           <bool>true</bool>
           </property>
           <property name="private" stdset="0">
            <bool>true</bool>
@@ -1151,8 +1306,6 @@
   <tabstop>tableView_pratiche</tabstop>
   <tabstop>tableView_attribuzioni</tabstop>
  </tabstops>
- <resources>
-  <include location="../../../../../../../../pypapi/pypapi/lib/pypapi/ui/resources/resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

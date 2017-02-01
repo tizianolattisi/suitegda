@@ -43,7 +43,7 @@
           <bool>false</bool>
          </property>
          <property name="column" stdset="0">
-          <string>if</string>
+          <string>id</string>
          </property>
         </widget>
        </item>

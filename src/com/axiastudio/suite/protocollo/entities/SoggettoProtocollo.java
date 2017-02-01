@@ -70,6 +70,8 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     @JoinColumn(name = "soggettoreferente", referencedColumnName = "id")
     @ManyToOne
     private Soggetto soggettoReferente;
+    @Column(name = "indirizzo")
+    private String indirizzo;
     @Column(name="messaggiopec")
     private Long messaggiopec;
 
@@ -247,8 +249,15 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         // non deve fare nulla
     }
 
+    public String getIndirizzo() {
+        return indirizzo;
+    }
 
-    @Override
+    public void setIndirizzo(String indirizzo) {
+        this.indirizzo = indirizzo;
+    }
+
+@Override
     public Date getRecordcreato() {
         return recordcreato;
     }
@@ -299,10 +308,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
             return false;
         }
         SoggettoProtocollo other = (SoggettoProtocollo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

@@ -26,63 +26,32 @@ import java.util.Map;
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
-public class ScrivaniaMenuBar extends QToolBar {
+public class ContaDocumentiMenuBar extends QToolBar {
 
     protected Map<String, QAction> actions = new HashMap<String, QAction>();
-    public String[] protocolloMenu = {"daiPerLetto", "apriProtocollo", "apriDocumenti", "aggiornaLista", "cercaDaEtichetta", "info"};
-    public String[] richiestaMenu = {"daiPerLettoRichieste", "apriRichiesta", "apriDocumentiRichiesta", "aggiornaListaRichieste",
-                                    "nuovaRichiesta"};
 
-    public ScrivaniaMenuBar(String title, QMainWindow parent){
+    public ContaDocumentiMenuBar(String title, QMainWindow parent){
         super(title, parent);
 
-        this.insertButton("daiPerLetto", "Dai per letto",
-                "classpath:com/axiastudio/suite/resources/tick.png",
-                "Dai per letto il documento", parent);
         this.insertButton("apriProtocollo", "Apri",
                 "classpath:com/axiastudio/suite/resources/email.png",
                 "Apri la finestra di dettaglio e gestione", parent);
         this.insertButton("apriDocumenti", "Apri documenti",
                 "classpath:com/axiastudio/suite/menjazo/resources/menjazo.png",
                 "Apre lo spazio documenti", parent);
-        this.insertButton("aggiornaLista", "Aggiorna lista",
+/*        this.insertButton("aggiornaLista", "Aggiorna lista",
                 "classpath:com/axiastudio/suite/resources/arrow_refresh.png",
-                "Aggiorna la lista visualizzata", parent, new QKeySequence(QKeySequence.StandardKey.Refresh));
-        this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
+                "Aggiorna la lista visualizzata", parent); */
+/*        this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
                 "classpath:com/axiastudio/suite/resources/datamatrix_find.png",
-                "Ricerca da etichetta", parent, new QKeySequence(tr("F9")));
-        this.insertButton("info", "Informazioni e legenda",
-                "classpath:com/axiastudio/pypapi/ui/resources/toolbar/information.png",
-                "Informazioni e legenda", parent, new QKeySequence(QKeySequence.StandardKey.HelpContents));
+                "Ricerca da etichetta", parent, new QKeySequence(tr("F9"))); */
+        this.insertButton("search", tr("SEARCH"),
+                "classpath:com/axiastudio/pypapi/ui/resources/toolbar/find.png",
+                tr("SEARCH_DESCRIPTION"), parent,
+                new QKeySequence(QKeySequence.StandardKey.Find));
 
-        this.insertButton("daiPerLettoRichieste", "Dai per letto",
-                "classpath:com/axiastudio/suite/resources/tick.png",
-                "Dai per letto il documento", parent);
-        this.insertButton("apriRichiesta", "Apri",
-                "classpath:com/axiastudio/suite/resources/email.png",
-                "Apri la finestra di dettaglio e gestione", parent);
-        this.insertButton("apriDocumentiRichiesta", "Apri documenti",
-                "classpath:com/axiastudio/suite/menjazo/resources/menjazo.png",
-                "Apre lo spazio documenti", parent);
-        this.insertButton("aggiornaListaRichieste", "Aggiorna lista",
-                "classpath:com/axiastudio/suite/resources/arrow_refresh.png",
-                "Aggiorna la lista visualizzata", parent, new QKeySequence(QKeySequence.StandardKey.Refresh));
-        this.insertButton("nuovaRichiesta", "Nuovo messaggio",
-                "classpath:com/axiastudio/suite/resources/add.png",
-                "Crea un nuovo messaggio", parent, new QKeySequence(QKeySequence.StandardKey.New));
-
-        actionByName("daiPerLetto").setEnabled(false);
         actionByName("apriProtocollo").setEnabled(false);
         actionByName("apriDocumenti").setEnabled(false);
-        actionByName("daiPerLettoRichieste").setEnabled(false);
-        actionByName("apriRichiesta").setEnabled(false);
-        actionByName("apriDocumentiRichiesta").setEnabled(false);
-
-        actionByName("daiPerLettoRichieste").setVisible(false);
-        actionByName("apriRichiesta").setVisible(false);
-        actionByName("apriDocumentiRichiesta").setVisible(false);
-        actionByName("aggiornaListaRichieste").setVisible(false);
-        actionByName("nuovaRichiesta").setVisible(false);
     }
 
     protected QAction insertButton(String actionName, String text, String iconName,

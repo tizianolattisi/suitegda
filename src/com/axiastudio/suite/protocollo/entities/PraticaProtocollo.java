@@ -161,10 +161,7 @@ public class PraticaProtocollo implements Serializable, ITimeStamped {
             return false;
         }
         PraticaProtocollo other = (PraticaProtocollo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

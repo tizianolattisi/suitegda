@@ -16,7 +16,6 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
-import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 
@@ -44,6 +43,8 @@ public class PecProtocollo implements Serializable, ITimeStamped {
     private String body="";
     @Column(name="segnatura")
     private String segnatura="";
+    @Enumerated(EnumType.STRING)
+    private StatoPec stato=StatoPec.NONGESTITO;
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -86,6 +87,14 @@ public class PecProtocollo implements Serializable, ITimeStamped {
 
     public void setSegnatura(String segnatura) {
         this.segnatura = segnatura;
+    }
+
+    public StatoPec getStato() {
+        return stato;
+    }
+
+    public void setStato(StatoPec stato) {
+        this.stato = stato;
     }
 
     @Override
@@ -138,10 +147,7 @@ public class PecProtocollo implements Serializable, ITimeStamped {
             return false;
         }
         PecProtocollo other = (PecProtocollo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

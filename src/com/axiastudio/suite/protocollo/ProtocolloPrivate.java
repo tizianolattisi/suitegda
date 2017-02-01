@@ -43,12 +43,9 @@ public class ProtocolloPrivate {
         if( utente.getSupervisoreprotocollo() || utente.getRicercatoreprotocollo() ){
             return false;
         }
-        
-        if( profilo.inSportelloOAttribuzione() ){
-            return false;
-        }
-        
-        return true;
+
+        return !profilo.inSportelloOAttribuzione();
+
     }
     
 }

@@ -192,46 +192,6 @@ public class FormContaDocumenti extends QMainWindow {
         Protocollo protocollo = this.selectionProtocollo.get(0).getProtocollo();
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
-/*        List<IPlugin> plugins = (List) Register.queryPlugins(FormContaDocumenti.class);
-        for(IPlugin plugin: plugins){
-            if( "CMIS".equals(plugin.getName()) ){
-                Boolean view = false;
-                Boolean delete = false;
-                Boolean download = false;
-                Boolean parent = false;
-                Boolean upload = false;
-                Boolean version = false;
-                if( protocollo.getRiservato() ){
-                    view = pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR();
-                    download = view;
-                } else {
-                    view = autenticato.getSupervisoreprotocollo() || pup.inSportelloOAttribuzioneV();
-                    download = view;
-                }
-                if( protocollo.getConsolidadocumenti() ){
-                    delete = false;
-                    version = pup.inAttribuzionePrincipaleC();
-                    upload = version;
-                } else {
-                    upload = pup.inSportelloOAttribuzionePrincipale();
-                    delete = upload;
-                    version = upload;
-                }
-                HashMap stampMap = new HashMap();
-                stampMap.put("iddocumento", protocollo.getIddocumento());
-                stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
-                String codiceinterno="";
-                for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
-                    if ( pratica.getOriginale() ) {
-                        codiceinterno=pratica.getPratica().getCodiceinterno();
-                    }
-                }
-                stampMap.put("codiceinterno", codiceinterno);
-                stampMap.put("utente", autenticato.getNome().toUpperCase());
-
-                ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version, stampMap);
-            }
-        }*/
         Boolean view = false;
         Boolean delete = false;
         Boolean download = false;

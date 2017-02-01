@@ -20,6 +20,7 @@ import com.axiastudio.pypapi.Application;
 import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.TipoRiferimento;
 import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
+//import com.axiastudio.suite.interoperabilita.entities.Messaggio;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
@@ -41,13 +42,14 @@ import com.axiastudio.suite.pec.NuovoMessaggioResponse;
 import com.axiastudio.suite.pec.UploadAllegatoRequest;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.cmis.CmisUtil;
+import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.axiastudio.suite.pubblicazioni.PubblicazioneUtil;
-import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
+//import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.scanndo.ScanNDo;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
@@ -75,6 +77,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -126,6 +132,8 @@ public class FormProtocollo extends Window {
         try {
             Method storeFactory = this.getClass().getMethod("storeSportello");
             Register.registerUtility(storeFactory, IStoreFactory.class, "Sportello");
+            storeFactory = this.getClass().getMethod("storeFascicolo");
+            Register.registerUtility(storeFactory, IStoreFactory.class, "Fascicolo");
         } catch (NoSuchMethodException ex) {
             Logger.getLogger(FormProtocollo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
@@ -160,6 +168,19 @@ public class FormProtocollo extends Window {
         /* Gestione annullamenti protocollo */
         PyPaPiTableView tableViewAnnullamento = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_annullamenti");
         tableViewAnnullamento.entityRemoved.connect(this, "annullamentoRimosso(Object)");
+
+        /* permessi dell'utente */
+        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
+            uffici.add(uu.getUfficio());
+            if( uu.getRicerca() ){
+                ufficiRicerca.add(uu.getUfficio());
+            }
+            if( uu.getRiservato() ){
+                ufficiPrivato.add(uu.getUfficio());
+            }
+        }
+
+        tabWidget.setTabEnabled(4, false); // TODO: da togliere
     }
 
     /*
@@ -201,10 +222,35 @@ public class FormProtocollo extends Window {
     private void praticaInserita(Object obj){
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         PraticaProtocollo praticaProtocollo = (PraticaProtocollo) obj;
+        Pratica pratica = praticaProtocollo.getPratica();
+        Ufficio ufficioGestore = pratica.getGestione();
+
+        PyPaPiTableView tableViewPratiche = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_pratiche");
+        if( pratica.getRiservata() ) {
+            if (!ufficiPrivato.contains(ufficioGestore) && !autenticato.getSupervisorepratiche()) {
+                QMessageBox.critical(this, "Attenzione",
+                        "Per poter inserire pratiche riservate è necessario appartenere al loro ufficio gestore con flag riservato.\n" +
+                                "Inserimento della pratica annullato.");
+                tableViewPratiche.clearSelection();
+                tableViewPratiche.model().removeRow(tableViewPratiche.model().rowCount()-1);
+                return;
+            }
+        }
+        else {
+            if( !uffici.contains(ufficioGestore) && !autenticato.getSupervisorepratiche() && !autenticato.getAttributorepratiche()){
+                QMessageBox.critical(this, "Attenzione",
+                        "Per poter inserire pratiche è necessario appartenere al loro ufficio gestore o essere un amministratore delle pratiche.\n" +
+                                "Inserimento della pratica annullato.");
+                tableViewPratiche.model().removeRow(tableViewPratiche.model().rowCount()-1);
+                return;
+            }
+        }
+
         if( protocollo.getPraticaProtocolloCollection().size() == 1 ){
             praticaProtocollo.setOriginale(Boolean.TRUE);
         }
     }
+
     private void praticaRimossa(Object obj){
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         PraticaProtocollo rimossa = (PraticaProtocollo) obj;
@@ -247,15 +293,16 @@ public class FormProtocollo extends Window {
         protocollo.setConvalidaattribuzioni(Boolean.TRUE);
         List<String> items = new ArrayList();
         items.add("nessuno");
+        Integer def = 0;
         for( Delega delega: deleghe ){
+            if ( delega.getTitolare() ) {
+                def=items.size();
+            }
             items.add(delega.getUtente().getNome());
         }
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        Integer def;
-        if( items.size()>1 && autenticato.getAttributoreprotocollo() ){
-            def = 1;
-        } else {
-            def = 0;
+        if( !autenticato.getAttributoreprotocollo() ){
+           def = 0;
         }
         String choice = QInputDialog.getItem(this,
                 "Verificatore delle attribuzioni",
@@ -273,6 +320,10 @@ public class FormProtocollo extends Window {
 
     private void convalidaProtocollo() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        if ( protocollo.getPraticaProtocolloCollection().size() == 0 ) {
+            QMessageBox.critical(this, "Attenzione!", "Non è possibile convalidare il protocollo se non ha almeno una pratica collegata.");
+            return;
+        }
         protocollo.setConvalidaattribuzioni(Boolean.TRUE);
         protocollo.setConvalidaprotocollo(Boolean.TRUE);
         this.getContext().getDirty();
@@ -280,10 +331,20 @@ public class FormProtocollo extends Window {
 
     private void consolidaDocumenti() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        if ( alfrescoHelper.numberOfDocument() < 1 ) {
+            QMessageBox.StandardButtons stdbtns = new QMessageBox.StandardButtons(QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
+            QMessageBox.StandardButton conferma = QMessageBox.question(this, "Attenzione",
+                    "Non esistono documenti collegati al protocollo. Si desidera ugualmente consolidare???",
+                    stdbtns, QMessageBox.StandardButton.No);
+            if( QMessageBox.StandardButton.No.equals(conferma) ){
+                System.out.println("sono uscito");
+                return;
+            }
+        }
         protocollo.setConsolidadocumenti(Boolean.TRUE);
         this.getContext().getDirty();
     }
-    
+
     private void apriTitolario() {
         FormTitolario titolario = new FormTitolario();
         int exec = titolario.exec();
@@ -323,32 +384,41 @@ public class FormProtocollo extends Window {
         Boolean convProtocollo = protocollo.getConvalidaprotocollo();
         Boolean consDocumenti = protocollo.getConsolidadocumenti();
 
-        // colore identificativo x entrata/uscita/interno
-        if ( protocollo.getTipo().equals(TipoProtocollo.ENTRATA) ) {
-            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(255, 255, 127);}");
-        } else if ( protocollo.getTipo().equals(TipoProtocollo.INTERNO) ) {
-            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(170, 255, 127);}");
-        } else if ( protocollo.getTipo().equals(TipoProtocollo.USCITA) ) {
-            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(170, 255, 255);}");
-        }
+        // Tipo protocollo: colore identificativo x entrata/uscita/interno e label soggetti
+        aggiornaTipo(protocollo.getTipo());
 
         // abilitazione azioni: convalida, consolida e spedizione
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
         this.protocolloMenuBar.actionByName("consolidaDocumenti").setEnabled(!consDocumenti && profilo.inAttribuzionePrincipaleC());
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "spedito"), protocollo.getSpedito());
-        this.protocolloMenuBar.actionByName("pubblicaProtocollo").setEnabled(autenticato.getPubblicaalbo());
         this.protocolloMenuBar.actionByName("stampaEtichetta").setEnabled(!nuovoInserimento);
         this.protocolloMenuBar.actionByName("inviaPec").setEnabled( !this.getContext().getIsDirty() && convProtocollo && consDocumenti &&
                 protocollo.getTipo().equals(TipoProtocollo.USCITA) &&
                 protocollo.getTiporiferimentomittente() != null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
                 profilo.inAttribuzionePrincipale());
-
+        this.protocolloMenuBar.actionByName("rispondiPrincipale").setEnabled(profilo.inAttribuzionePrincipale());
+        this.protocolloMenuBar.actionByName("rispondiTutti").setEnabled(profilo.inAttribuzionePrincipale());
+        // modifica icona pubblicazione
+        if ( protocollo.getPubblicazione()==null ) {
+            this.protocolloMenuBar.actionByName("pubblicaProtocollo").setIcon(new QIcon("classpath:com/axiastudio/suite/resources/newspaper.png"));
+        } else if ( protocollo.getPubblicazione().getPubblicato() ) {
+            this.protocolloMenuBar.actionByName("pubblicaProtocollo").setIcon(new QIcon("classpath:com/axiastudio/suite/resources/newspaper_red.png"));
+        } else {
+            this.protocolloMenuBar.actionByName("pubblicaProtocollo").setIcon(new QIcon("classpath:com/axiastudio/suite/resources/newspaper_yellow.png"));
+        }
+        this.protocolloMenuBar.actionByName("pubblicaProtocollo").setEnabled(autenticato.getPubblicaalbo());
 
         // convalida attribuzioni
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
         Boolean modificaAttribuzioni = nuovoInserimento || autenticato.getAttributoreprotocollo() || (!protocollo.getConvalidaattribuzioni() && profilo.inSportelloOAttribuzionePrincipale());
         Util.setWidgetReadOnly(tableViewAttribuzioni, !modificaAttribuzioni);
+
+        // tabella pratiche
+        PyPaPiTableView tableViewPratiche = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_pratiche");
+        Boolean modificaPratiche = nuovoInserimento || profilo.inSportelloOAttribuzione() ||
+                autenticato.getRicercatoreprotocollo() || autenticato.getSupervisoreprotocollo();
+        Util.setWidgetReadOnly(tableViewPratiche, !modificaPratiche);
 
         // sempre read-only
         Util.setWidgetReadOnly((QWidget) this.findChild(QDateEdit.class, "dateEdit_data"), true);
@@ -360,7 +430,6 @@ public class FormProtocollo extends Window {
         // solo primo inserimento
         Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_sportello"), !nuovoInserimento);
         Util.setWidgetReadOnly((QWidget) this.findChild(QComboBox.class, "comboBox_tipo"), !nuovoInserimento);
-        aggiornaLabelSoggetti(protocollo);
 
 
         // sportello
@@ -407,6 +476,13 @@ public class FormProtocollo extends Window {
             this.setStyleSheet("color: red;");
         } else {
             this.setStyleSheet("");
+            if ( protocollo.getAnnullamentoProtocolloCollection().size()>0 ) {
+                for (AnnullamentoProtocollo ap : protocollo.getAnnullamentoProtocolloCollection()) {
+                    if ( !ap.getRespinto() && !ap.getAutorizzato() ) {
+                        this.setStyleSheet("color: darkorange;");
+                    }
+                }
+            }
         }
 
         // protocollo convalidato: disabilitazione di tutto tranne note e pratiche
@@ -459,16 +535,22 @@ public class FormProtocollo extends Window {
     }
 
     private void aggiornaTipo() {
-        aggiornaLabelSoggetti();
         QComboBox cmbTipo = ((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo"));
+        aggiornaTipo(TipoProtocollo.values()[cmbTipo.currentIndex()]);
+    }
+
+    private void aggiornaTipo(TipoProtocollo tipoProtocollo) {
+        aggiornaLabelSoggetti();
         // colore identificativo x entrata/uscita/interno
-        TipoProtocollo tipoProtocollo = TipoProtocollo.values()[cmbTipo.currentIndex()];
         if ( tipoProtocollo.equals(TipoProtocollo.ENTRATA) ) {
-            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(255, 255, 127);}");
+            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("background: rgb(255, 255, 127);");
+            ((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo")).setStyleSheet("background: rgb(255, 255, 127);");
         } else if ( tipoProtocollo.equals(TipoProtocollo.INTERNO) ) {
-            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(170, 255, 127);}");
+            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("background: rgb(170, 255, 127);");
+            ((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo")).setStyleSheet("background: rgb(170, 255, 127);");
         } else if ( tipoProtocollo.equals(TipoProtocollo.USCITA) ) {
-            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("QLineEdit{background: rgb(170, 255, 255);}");
+            ((QLineEdit) this.findChild(QLineEdit.class, "lineEdit_iddocumento")).setStyleSheet("background: rgb(170, 255, 255);");
+            ((QComboBox) this.findChild(QComboBox.class, "comboBox_tipo")).setStyleSheet("background: rgb(170, 255, 255);");
         }
     }
 
@@ -509,6 +591,22 @@ public class FormProtocollo extends Window {
         if( controllorePosta != null ){
             extra += "<br/><br/>Verificatore attribuzioni: " + protocollo.getControlloreposta();
         }
+        for ( Attribuzione attrib: protocollo.getAttribuzioneCollection() ){
+            if ( attrib.getPrincipale() ) {
+                if (attrib.getDataprincipale() != null) {
+                    // si utilizza un campo dedicato alla modifica del flag 'principale'
+                    extra += "<br/><br/>Attribuzione in via principale modificata da : " + attrib.getEsecutoreprincipale() +
+                            "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(attrib.getDataprincipale());
+                } else if (attrib.getRecordmodificato() != null) {
+                    // ci si basa sull'ultimo aggiornamento (che potrebbe anche essere il 'dato x letto'...
+                    extra += "<br/><br/>Attribuzione in via principale modificata da " + attrib.getRecordmodificatoda() +
+                            "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(attrib.getRecordmodificato());
+                } else {
+                    extra += "<br/><br/>Attribuzione in via principale inserita da: " + attrib.getRecordcreatoda() +
+                            "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(attrib.getRecordcreato());
+                }
+            }
+        }
         SuiteUiUtil.showInfo(this, extra);
     }
     
@@ -541,7 +639,9 @@ public class FormProtocollo extends Window {
                 }
                 if( protocollo.getConsolidadocumenti() ){
                     delete = false;
-                    if ( protocollo.getTiporiferimentomittente()!=null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) ) {
+                    if ( protocollo.getTiporiferimentomittente()!=null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
+                            (protocollo.getPecProtocollo()==null || protocollo.getPecProtocollo().getStato()==null ||
+                                    protocollo.getPecProtocollo().getStato().compareTo(StatoPec.DAINVIARE)>0)) {
                         version = false;
                     } else {
                         version = pup.inAttribuzionePrincipaleC();
@@ -581,7 +681,7 @@ public class FormProtocollo extends Window {
         }
         barcode = barcode.trim();
         if( barcode.length() < 5 ){
-            QMessageBox.warning(this, "Attenzione", "Numero di protocollo troppo breve");
+            QMessageBox.warning(this, "Attenzione", "Numero di protocollo troppo breve ("  + barcode + ")");
             return;
         }
         Controller controller = this.getContext().getController();
@@ -595,9 +695,11 @@ public class FormProtocollo extends Window {
         Store store = controller.createCriteriaStore(map);
         if( store.size() == 1 ){
             this.getContext().getModel().replaceRows(store);
+            this.getContext().setIsDirty(Boolean.FALSE);
             this.getContext().firstElement();
+            this.getNavigationBar().refresh();
         } else {
-            QMessageBox.warning(this, "Attenzione", "Protocollo" + barcode + " non trovato");
+            QMessageBox.warning(this, "Attenzione", "Protocollo " + barcode + " non trovato");
         }
     }
     
@@ -614,6 +716,28 @@ public class FormProtocollo extends Window {
         }
     }
 
+    private void stampaEtichettaLista() {
+        PickerDialog pd = new PickerDialog(this, this.getContext().getController());
+        int res = pd.exec();
+        if (res == 1) {
+            List<Map> mapList = new ArrayList<Map>();
+            for ( Object obj: pd.getSelection() ) {
+                Map<String, Object> map = new HashMap();
+                Protocollo protocollo = (Protocollo) obj;
+                map.put("iddocumento", protocollo.getIddocumento());
+                map.put("dataprotocollo", protocollo.getDataprotocollo());
+                map.put("hash", "1234567890");
+                mapList.add(map);
+            }
+            DialogStampaEtichetta dialog = new DialogStampaEtichetta(this, mapList);
+            int exec = dialog.exec();
+            if (exec == 1) {
+                System.out.println("Print!");
+            }
+        }
+        pd.dispose();
+    }
+
     private void scanNDo() {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         if( !autenticato.getSpedisceprotocollo() ){
@@ -624,20 +748,104 @@ public class FormProtocollo extends Window {
         ScanNDo form = new ScanNDo(protocollo.getIddocumento());
         QMdiArea workspace = Util.findParentMdiArea(this);
         if( workspace != null ){
-            workspace.addSubWindow((QDialog) form);
+            workspace.addSubWindow(form);
         }
         form.show();
     }
 
     private void pubblicaProtocollo() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        Pubblicazione pubblicazione = PubblicazioneUtil.pubblicaProtocollo(protocollo);
-        IForm form = Util.formFromEntity(pubblicazione);
+        if ( protocollo.getPubblicazione()==null ) {
+            protocollo.setPubblicazione(PubblicazioneUtil.pubblicaProtocollo(protocollo));
+        }
+        IForm form = Util.formFromEntity(protocollo.getPubblicazione());
         QMdiArea workspace = Util.findParentMdiArea(this);
         if( workspace != null ){
             workspace.addSubWindow((QMainWindow) form);
         }
         form.show();
+    }
+
+    private void rispondiPrincipale(){
+        rispondi(Boolean.FALSE);
+    }
+
+    private void rispondiTutti(){
+        rispondi(Boolean.TRUE);
+    }
+
+    private void rispondi(Boolean tutti){
+        Protocollo protocollo = (Protocollo) getContext().getCurrentEntity();
+        Protocollo risposta = new Protocollo();
+        List<SoggettoProtocollo> tmpListSP=new ArrayList();
+        for ( SoggettoProtocollo sp:protocollo.getSoggettoProtocolloCollection() ) {
+            SoggettoProtocollo newsoggetto = new SoggettoProtocollo();
+            if ( !sp.getAnnullato() && (tutti || sp.getPrincipale())) {
+                newsoggetto.setSoggetto(sp.getSoggetto());
+                newsoggetto.setTitolo(sp.getTitolo());
+                newsoggetto.setPrincipale(sp.getPrincipale());
+                newsoggetto.setDatainizio(Calendar.getInstance().getTime());
+                newsoggetto.setCorrispondenza(sp.getCorrispondenza());
+                newsoggetto.setConoscenza(sp.getConoscenza());
+                newsoggetto.setNotifica(sp.getNotifica());
+//                newsoggetto.setPec(sp.getPec());
+                newsoggetto.setPrimoinserimento(Boolean.TRUE);
+                newsoggetto.setSoggettoReferente(sp.getSoggettoReferente());
+                tmpListSP.add(newsoggetto);
+            }
+        }
+        risposta.setSoggettoProtocolloCollection(tmpListSP);
+
+        List<Attribuzione> tmpListAtt=new ArrayList();
+        for ( Attribuzione att:protocollo.getAttribuzioneCollection() ) {
+            Attribuzione newatt = new Attribuzione();
+            newatt.setUfficio(att.getUfficio());
+            newatt.setPrincipale(att.getPrincipale());
+            tmpListAtt.add(newatt);
+        }
+        risposta.setAttribuzioneCollection(tmpListAtt);
+
+        List<UfficioProtocollo> tmpListUP=new ArrayList();
+        for ( UfficioProtocollo uff:protocollo.getUfficioProtocolloCollection() ) {
+            UfficioProtocollo newuff = new UfficioProtocollo();
+            newuff.setUfficio(uff.getUfficio());
+            tmpListUP.add(newuff);
+        }
+        risposta.setUfficioProtocolloCollection(tmpListUP);
+
+        List<PraticaProtocollo> tmpListPP=new ArrayList();
+        for ( PraticaProtocollo pratica:protocollo.getPraticaProtocolloCollection() ) {
+            PraticaProtocollo newpratica = new PraticaProtocollo();
+            newpratica.setPratica(pratica.getPratica());
+            newpratica.setOriginale(pratica.getOriginale());
+            tmpListPP.add(newpratica);
+        }
+        risposta.setPraticaProtocolloCollection(tmpListPP);
+
+        risposta.setOggetto("Risposta a: " + protocollo.getOggetto());
+        if ( TipoProtocollo.ENTRATA.equals(protocollo.getTipo()) ) {
+            risposta.setTipo(TipoProtocollo.USCITA);
+        } else if ( TipoProtocollo.USCITA.equals(protocollo.getTipo()) ) {
+            risposta.setTipo(TipoProtocollo.ENTRATA);
+        } else {
+            risposta.setTipo(TipoProtocollo.INTERNO);
+        }
+        for ( Attribuzione attr:protocollo.getAttribuzioneCollection() ) {
+            if ( attr.getPrincipale() ) {
+                risposta.setSportello(attr.getUfficio());
+                break;
+            }
+        }
+        RiferimentoProtocollo precedente = new RiferimentoProtocollo();
+        precedente.setPrecedente(protocollo);
+        risposta.setRiferimentoProtocolloCollection(new ArrayList<RiferimentoProtocollo>(Collections.singletonList(precedente)));
+
+        IForm win = Util.formFromEntity(risposta);
+        QMdiArea workspace = Util.findParentMdiArea(this);
+        if( workspace != null ){
+            workspace.addSubWindow((QMainWindow) win);
+        }
+        win.show();
     }
 
     private void inviaPec() {
@@ -653,7 +861,7 @@ public class FormProtocollo extends Window {
         for ( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ) {
             if (attribuzione.getPrincipale()) {
                 mittente = attribuzione.getUfficio();
-                if( mittente.getPec() == null || mittente.getPec() == "" ){
+                if( mittente.getPec() == null || mittente.getPec().equals("")){
                     QMessageBox.warning(this, "Attenzione", "L'attribuzione in via principale deve essere configurata con una mailbox PEC.");
                     return;
                 }
@@ -685,11 +893,7 @@ public class FormProtocollo extends Window {
                         Client client = ClientBuilder.newClient();
                         WebTarget target = client.target(pecServerUrl).path("api/messaggi/" + soggettoProtocollo.getMessaggiopec() + "/stato");
                         String stato = target.request(MediaType.APPLICATION_JSON).get(String.class);
-                        if ( stato.equalsIgnoreCase("\"anomalia\"") ) {
-                            daInviare = true;
-                        } else {
-                            daInviare = false;
-                        }
+                        daInviare = stato.equalsIgnoreCase("\"anomalia\"");
                     }
                     if ( daInviare ) {
                         List<String> pecDisponibili = new ArrayList<String>();
@@ -762,9 +966,9 @@ public class FormProtocollo extends Window {
             for (Map<String, String> map : helper.children()) {
                 /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
                 Date documentDate = new Date();
-                DateFormat df = new SimpleDateFormat("EEE MMM dd hh:mm:ss 'CEST' yyyy", Locale.ENGLISH);
+                DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
                 try {
-                    documentDate = df.parse(map.get("lastModificationDate"));
+                    documentDate = df.parse(map.get("creationDate"));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -774,6 +978,14 @@ public class FormProtocollo extends Window {
             }
             if ( numAllegati==0 ) {
                 int conferma = QMessageBox.question(this, "Attenzione", "Non ci sono file allegati. Si desidera continuare?",
+                        QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
+                if (QMessageBox.StandardButton.No.equals(conferma)) {
+                    System.out.println("sono uscito");
+                    return;
+                }
+            } else {
+                int conferma = QMessageBox.question(this, "Numero di allegati corretto?",
+                        "N. " + ((Integer) numAllegati).toString() + " file allegati da inviare. Si desidera continuare?",
                         QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
                 if (QMessageBox.StandardButton.No.equals(conferma)) {
                     System.out.println("sono uscito");
@@ -800,7 +1012,7 @@ public class FormProtocollo extends Window {
             NuovoMessaggioRequest messaggiRequest = new NuovoMessaggioRequest();
             messaggiRequest.setMailbox(mittente.getPec());
             messaggiRequest.addDestinatario(destinatario);
-            messaggiRequest.setOggetto(protocollo.getOggetto());
+            messaggiRequest.setOggetto(protocollo.getOggetto().replace("\n", ""));
             messaggiRequest.setTestoMessaggio(protocollo.getPecBody());
             messaggiRequest.setProtocollo(protocollo.getIddocumento());
 
@@ -818,7 +1030,7 @@ public class FormProtocollo extends Window {
             } catch (ClientErrorException restError) {
                 String error_response = restError.getResponse().readEntity(String.class);
                 System.out.println(error_response);
-                QMessageBox.critical(this, "Errore", "Errore nella preparazione della PEC da inviare.");
+                QMessageBox.critical(this, "Errore", "Errore nella preparazione della PEC da inviare.\n" + error_response);
                 return;
             }
             SoggettoProtocollo soggettoProtocollo = mappaDestinatari.get(destinatario);
@@ -832,7 +1044,7 @@ public class FormProtocollo extends Window {
                     /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
                     String strDataFile = map.get("lastModificationDate");
                     Date documentDate = new Date();
-                    DateFormat df = new SimpleDateFormat("EEE MMM dd hh:mm:ss 'CEST' yyyy", Locale.ENGLISH);
+                    DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
                     try {
                         documentDate = df.parse(strDataFile);
                     } catch (ParseException e) {
@@ -874,12 +1086,13 @@ public class FormProtocollo extends Window {
             // Segnatura.xml
             Boolean SEGNATURA = Boolean.TRUE;
             Boolean DRY_RUN = Boolean.FALSE;
-            Boolean SEGNATURA_A_TUTTI = Boolean.TRUE;
+            Boolean SEGNATURA_A_TUTTI = Boolean.FALSE;
             if(SEGNATURA && (SEGNATURA_A_TUTTI || TipoSoggetto.ENTE.equals(soggettoProtocollo.getSoggetto().getTipo())) ) {
                 Segnatura segnatura = JAXBHelper.segnaturaDaProtocollo(protocollo,
                         soggettoProtocollo.getSoggetto(),
                         destinatario,
                         nomiFile);
+//                String segnaturaXml = JAXBHelper.scriviSegnatura(segnatura);
                 String segnaturaXml = null;
                 try {
                     segnaturaXml = JAXBHelper.scriviSegnatura(segnatura);
@@ -926,8 +1139,9 @@ public class FormProtocollo extends Window {
                 e.printStackTrace();
             }
             System.out.println("fatto");
-            QMessageBox.information(this, "PEC", "PEC in spedizione.");
+//            QMessageBox.information(this, "PEC", "PEC in spedizione.");
         }
+        QMessageBox.information(this, "PEC", "N. " + ((Integer) destinatari.size()).toString() + " PEC in spedizione.");
     }
 
     /*
@@ -951,8 +1165,8 @@ public class FormProtocollo extends Window {
         md.update(s.getBytes());
         byte[] digest = md.digest();
         StringBuffer sb = new StringBuffer();
-        for( int i=0; i<digest.length; i++ ){
-            sb.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+        for (byte aDigest : digest) {
+            sb.append(Integer.toString((aDigest & 0xff) + 0x100, 16).substring(1));
         }
         return sb.toString();
     }
@@ -984,4 +1198,22 @@ public class FormProtocollo extends Window {
         }
         return out;
     }
+
+    public Store storeFascicolo() {
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Fascicolo> cq = cb.createQuery(Fascicolo.class);
+        Root<Fascicolo> root = cq.from(Fascicolo.class);
+        cq.select(root);
+        cq.where(cb.isNull(root.get("al")));
+        TypedQuery<Fascicolo> tq = em.createQuery(cq);
+        List <Fascicolo> titolario=tq.getResultList();
+        if( titolario.size() == 0 ){
+            QMessageBox.warning(this, "Attenzione", "Titolario non trovato");
+        }
+        return new Store(titolario);
+    }
+
 }

@@ -18,6 +18,8 @@ package com.axiastudio.suite.protocollo.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -41,9 +43,17 @@ public class Fascicolo implements Serializable {
     private String descrizione;
     @Column(name="note")
     private String note;
+    @Column(name="dal")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dal;
+    @Column(name="al")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date al;
 
     @Transient
     private String codicefascicolo;
+    @Transient
+    private String validita;
 
     public Long getId() {
         return id;
@@ -100,6 +110,40 @@ public class Fascicolo implements Serializable {
     public void setCodicefascicolo(String codicefascicolo) {
     }
 
+    public Date getDal() {
+        return dal;
+    }
+
+    public void setDal(Date dal) {
+        this.dal = dal;
+    }
+
+    public Date getAl() {
+        return al;
+    }
+
+    public void setAl(Date al) {
+        this.al = al;
+    }
+
+    public String getDescTitolario () {
+         return "Titolario valido " + getValidita();
+    }
+
+    public String getValidita() {
+        String desc="dal ";
+        if ( this.getDal() != null ){
+            desc += (new SimpleDateFormat("dd/MM/yyyy")).format(this.getDal());
+        }
+        if ( this.getAl() != null ){
+            desc += " al "+ (new SimpleDateFormat("dd/MM/yyyy")).format(this.getAl());
+        }
+        return desc;
+    }
+
+    public void setValidita(String validita) {
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -114,10 +158,7 @@ public class Fascicolo implements Serializable {
             return false;
         }
         Fascicolo other = (Fascicolo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

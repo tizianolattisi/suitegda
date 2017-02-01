@@ -52,9 +52,18 @@ public class ProtocolloMenuBar extends PyPaPiToolBar {
         this.insertButton("stampaEtichetta", "Stampa etichetta",
                           "classpath:com/axiastudio/suite/resources/datamatrix.png",
                           "Stampa etichetta", parent);
-        this.insertButton("scanNDo", "Apri l'utilità scan'n'do",
-                "classpath:com/axiastudio/suite/resources/email_go.png",
-                "Apri l'utilità scan'n'do", parent);
+        this.insertButton("stampaEtichettaLista", "Stampa etichetta x le pratiche selezionate",
+                "classpath:com/axiastudio/suite/resources/datamatrix_list.png",
+                "Stampa etichetta lista", parent);
+        this.insertButton("rispondiPrincipale", "Protocolla risposta (soggetto principale)",
+                "classpath:com/axiastudio/suite/resources/email_reply.png",
+                "Predisponi la protocollazione per la risposta al protocollo visualizzato (al soggetto principale)", parent);
+        this.insertButton("rispondiTutti", "Protocolla risposta (tutti i soggetti)",
+                "classpath:com/axiastudio/suite/resources/email_replyall.png",
+                "Predisponi la protocollazione per la risposta al protocollo visualizzato (a tutti i soggetti)", parent);
+        this.insertButton("scanNDo", "Spedisci",
+                "classpath:com/axiastudio/suite/resources/spedisci.png",
+                "Spedisci (scan'n'do)", parent);
     }
-    
+
 }

@@ -16,13 +16,7 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
-import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.Window;
-import com.axiastudio.suite.SuiteUtil;
-import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.UfficioUtente;
-import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.protocollo.entities.AnnullamentoProtocollo;
 import com.trolltech.qt.gui.QCheckBox;
 import com.trolltech.qt.gui.QComboBox;
@@ -33,7 +27,7 @@ import com.trolltech.qt.gui.QComboBox;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class FormAnnullamentoProtocollo extends Window {
-    
+
     public FormAnnullamentoProtocollo(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
         this.formShown.connect(this, "updatePermission()");
@@ -41,17 +35,27 @@ public class FormAnnullamentoProtocollo extends Window {
 
     @Override
     protected void indexChanged(int row) {
-        updatePermission();
         super.indexChanged(row);
+        updatePermission();
     }
 
     private void updatePermission() {
-        /* permesso di confermare o respingere */
-        if( getParentForm() != null ){
-            this.setEnabled(false);
+        AnnullamentoProtocollo annullamento = new AnnullamentoProtocollo();
+        if ( this.getContext()!=null ) {
+            annullamento = (AnnullamentoProtocollo) this.getContext().getCurrentEntity();
+        } else {
+//            this.setVisible(Boolean.FALSE);
             return;
         }
-        AnnullamentoProtocollo annullamento = (AnnullamentoProtocollo) this.getContext().getCurrentEntity();
+         /* permesso di confermare o respingere */
+        if( getParentForm() != null ){
+            this.setEnabled(false);
+/*            if ( annullamento.getId()==null ) {
+                this.setVisible(Boolean.FALSE);
+                this.close();
+            }*/
+            return;
+        }
         QCheckBox checkBox_autorizzato = (QCheckBox) this.findChild(QCheckBox.class, "checkBox_autorizzato");
         QCheckBox checkBox_respinto = (QCheckBox) this.findChild(QCheckBox.class, "checkBox_respinto");
         QComboBox comboBox_motivazione = (QComboBox) this.findChild(QComboBox.class, "comboBox_motivazione");

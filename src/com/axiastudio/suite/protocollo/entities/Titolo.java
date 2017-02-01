@@ -77,10 +77,7 @@ public class Titolo implements Serializable, Comparable<Titolo> {
             return false;
         }
         Titolo other = (Titolo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

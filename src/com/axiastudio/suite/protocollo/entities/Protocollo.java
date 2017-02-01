@@ -25,6 +25,8 @@ import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.ProtocolloListener;
+import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
+import com.axiastudio.suite.richieste.entities.RichiestaProtocollo;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -143,6 +145,12 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     @OneToOne(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
     private PecProtocollo pecProtocollo;
+
+    @OneToOne(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Pubblicazione pubblicazione;
+
+    @OneToMany(mappedBy = "protocollo", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<RichiestaProtocollo> richiestaProtocolloCollection;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -546,6 +554,32 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     public void setSegnatura(String segnatura) {}
 
+    public String getStatopec() {
+        if ( this.getPecProtocollo()!=null && this.getPecProtocollo().getStato()!=null) {
+            return this.getPecProtocollo().getStato().toString();
+        } else {
+            return "";
+        }
+    }
+
+    public void setStatopec(String statoPec) {}
+
+    public Pubblicazione getPubblicazione() {
+        return pubblicazione;
+    }
+
+    public void setPubblicazione(Pubblicazione pubblicazione) {
+        this.pubblicazione = pubblicazione;
+    }
+
+    public Collection<RichiestaProtocollo> getRichiestaProtocolloCollection() {
+        return richiestaProtocolloCollection;
+    }
+
+    public void setRichiestaProtocolloCollection(Collection<RichiestaProtocollo> richiestaProtocolloCollection) {
+        this.richiestaProtocolloCollection = richiestaProtocolloCollection;
+    }
+
     @Override
     public Date getRecordcreato() {
         return recordcreato;
@@ -597,10 +631,7 @@ public class Protocollo implements Serializable, ITimeStamped {
             return false;
         }
         Protocollo other = (Protocollo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

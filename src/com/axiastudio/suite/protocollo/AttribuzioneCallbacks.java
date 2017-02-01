@@ -8,7 +8,6 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
 
 /**
  * User: tiziano
@@ -33,12 +32,12 @@ public class AttribuzioneCallbacks {
                 // attribuzione nuova
                 res = false;
             } else {
-                Protocollo protocollo = attribuzione.getProtocollo();
-                if( !attribuzione.gettPrincipale().equals(attribuzione.getPrincipale()) ){
+                if( !attribuzione.getTPrincipale().equals(attribuzione.getPrincipale()) ){
                     // cambio attribuzione principale
                     res = false;
                 }
                 if( !attribuzione.gettLetto() && attribuzione.getLetto() ){
+                    res = false;
                     // sto dando per letto
                     for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
                         if( uu.getUfficio().equals(attribuzione.getUfficio()) && uu.getDaiperletto() ){
@@ -48,12 +47,20 @@ public class AttribuzioneCallbacks {
                     }
                 }
             }
+        } else {
+            if( attribuzione.getPrincipale() &&
+                    (attribuzione.getTPrincipale()==null || !attribuzione.getTPrincipale().equals(attribuzione.getPrincipale()))){
+                // cambio attribuzione principale -> tolgo il "dato x visto"
+                attribuzione.setDataletto(null);
+                attribuzione.setEsecutoreletto(null);
+                attribuzione.setLetto(Boolean.FALSE);
+            }
         }
 
         /*
          * Restituzione della validazione
          */
-        if( res == false ){
+        if(!res){
             return new Validation(false, msg);
         } else {
             return new Validation(true);

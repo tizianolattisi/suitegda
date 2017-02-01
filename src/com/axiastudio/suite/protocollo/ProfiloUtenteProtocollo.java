@@ -30,8 +30,6 @@ import java.util.List;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class ProfiloUtenteProtocollo {
-    private final Protocollo protocollo;
-    private final Utente autenticato;
     private final Ufficio sportello;
     private Ufficio attribuzionePrincipale = null;
     private ArrayList attribuzioni = new ArrayList();
@@ -42,8 +40,6 @@ public class ProfiloUtenteProtocollo {
     private ArrayList ufficiConsolidaUtente = new ArrayList();
 
     public ProfiloUtenteProtocollo(Protocollo protocollo, Utente autenticato) {
-        this.protocollo = protocollo;
-        this.autenticato = autenticato;
 
         this.sportello = protocollo.getSportello();
         if( protocollo.getAttribuzioneCollection() != null ){
@@ -54,8 +50,8 @@ public class ProfiloUtenteProtocollo {
                 }
             }
         }
-        if( this.autenticato.getUfficioUtenteCollection() != null ){
-            for(UfficioUtente uu: this.autenticato.getUfficioUtenteCollection()){
+        if( autenticato.getUfficioUtenteCollection() != null ){
+            for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
                 this.ufficiUtente.add(uu.getUfficio());
                 if( uu.getRicerca() ){
                     this.ufficiRicercaUtente.add(uu.getUfficio());
@@ -103,7 +99,7 @@ public class ProfiloUtenteProtocollo {
      */
     public Boolean inSportelloOAttribuzioneV(){
         List intersezione = new ArrayList(attribuzioni);
-        intersezione.retainAll(ufficiUtente);
+        intersezione.retainAll(ufficiVisualizzaUtente);
         return ufficiVisualizzaUtente.contains(sportello) || intersezione.size()>0;
     }
     

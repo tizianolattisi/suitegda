@@ -21,8 +21,7 @@ import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit;
-import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
-import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
+import com.axiastudio.suite.anagrafiche.entities.*;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Titolo;
@@ -30,6 +29,8 @@ import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
@@ -41,18 +42,25 @@ import java.util.logging.Logger;
  */
 public class FormSoggettoProtocollo extends Dialog {
     private PyPaPiComboBox cmbReferenti;
+    private QComboBox cmbIndirizzi;
+    private QLabel indirizzo;
     private SoggettoProtocollo sp;
     private Protocollo protocollo;
 
     public FormSoggettoProtocollo(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
         cmbReferenti = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_referente");
-//        cmbReferenti.currentStringChanged.connect(this, "aggiornaReferente()");
         cmbReferenti.currentIndexChanged.connect(this, "aggiornaReferente()");
+        cmbIndirizzi = (QComboBox) this.findChild(QComboBox.class, "comboBox_indirizzo");
+        cmbIndirizzi.activated.connect(this, "aggiornaIndirizzo()");
+        indirizzo= (QLabel) this.findChild(QLabel.class, "label_indirizzo");
 
         QPushButton clearButton=(QPushButton) this.findChild(QPushButton.class, "clearButton");
         clearButton.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/cancel.png"));
         clearButton.clicked.connect(this, "clearReferente()");
+        QPushButton clearButtonIndirizzo=(QPushButton) this.findChild(QPushButton.class, "clearButtonIndirizzo");
+        clearButtonIndirizzo.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/cancel.png"));
+        clearButtonIndirizzo.clicked.connect(this, "clearIndirizzo()");
 
         try {
             Method storeFactory = this.getClass().getMethod("storeTitolo");
@@ -85,6 +93,13 @@ public class FormSoggettoProtocollo extends Dialog {
             }
         }
 
+        // indirizzo
+        Store storeIndirizzo=storeIndirizzi();
+        cmbIndirizzi.addItems(storeIndirizzo);
+        cmbIndirizzi.setCurrentIndex(cmbIndirizzi.findText(""));
+        indirizzo.setText(sp.getIndirizzo());
+
+        // referente
         Store store = storeReferenti();
         cmbReferenti.setLookupStore(store);
         this.getColumn("ReferenteRelazione").setLookupStore(store);
@@ -107,6 +122,21 @@ public class FormSoggettoProtocollo extends Dialog {
         aggiornaReferente();
     }
 
+    public void aggiornaIndirizzo(){
+        if (sp != null ) {
+            if ( !cmbIndirizzi.currentText().equals(sp.getIndirizzo()) ) {
+                sp.setIndirizzo(cmbIndirizzi.currentText());
+                indirizzo.setText(sp.getIndirizzo());
+                this.getContext().getDirty();
+            }
+        }
+    }
+
+    public void clearIndirizzo() {
+        sp.setIndirizzo(null);
+        indirizzo.setText(sp.getIndirizzo());
+        this.getContext().getDirty();
+    }
 
     /*
  * Uno store contenente gli oggetti ordinati x descrizione
@@ -156,4 +186,27 @@ public class FormSoggettoProtocollo extends Dialog {
         return new Store(referenti);
     }
 
+    /*
+     * Uno store contenente i possibili indirizzi
+     */
+    public Store storeIndirizzi() {
+        List<String> indirizzoList = new ArrayList<String>();
+
+        if (protocollo == null || sp == null || sp.getSoggetto() == null) {
+            return new Store(indirizzoList);
+        }
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Indirizzo> cq = cb.createQuery(Indirizzo.class);
+        Root<Indirizzo> root = cq.from(Indirizzo.class);
+        cq=cq.select(root);
+        cq=cq.where(cb.equal(root.get(Indirizzo_.soggetto), sp.getSoggetto()));
+        TypedQuery<Indirizzo> query = em.createQuery(cq);
+        for ( Indirizzo indirizzo: query.getResultList()) {
+            indirizzoList.add(indirizzo.toString());
+        }
+        indirizzoList.add("");
+        return new Store(indirizzoList);
+    }
 }

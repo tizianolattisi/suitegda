@@ -19,7 +19,7 @@
      <number>4</number>
     </property>
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabScrivania">
       <property name="minimumSize">
        <size>
         <width>900</width>
@@ -39,55 +39,34 @@
        <attribute name="title">
         <string>Protocolli</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,3,2">
-        <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,1,0">
-          <property name="spacing">
-           <number>10</number>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="9">
+         <widget class="QCheckBox" name="checkBoxPEC">
+          <property name="text">
+           <string>PEC</string>
           </property>
-          <item>
-           <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxUfficio">
-            <property name="minimumSize">
-             <size>
-              <width>500</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButtonFiltra">
-            <property name="text">
-             <string>filtra per ufficio</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="labelTotRecord">
-            <property name="text">
-             <string>Totale record: </string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+          <property name="tristate">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QTableView" name="attribuzioni"/>
+        <item row="0" column="6">
+         <widget class="QLabel" name="label_10">
+          <property name="minimumSize">
+           <size>
+            <width>35</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Tipo</string>
+          </property>
+          <property name="buddy">
+           <cstring>comboBoxTipo</cstring>
+          </property>
+         </widget>
         </item>
-        <item row="2" column="0">
+        <item row="2" column="0" colspan="11">
          <widget class="QGroupBox" name="groupBox">
           <property name="minimumSize">
            <size>
@@ -154,15 +133,143 @@
           </layout>
          </widget>
         </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="minimumSize">
+           <size>
+            <width>35</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Ufficio</string>
+          </property>
+          <property name="buddy">
+           <cstring>comboBoxTipo</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="11">
+         <widget class="QTableView" name="attribuzioni"/>
+        </item>
+        <item row="0" column="10">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>273</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="1">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxUfficio">
+          <property name="minimumSize">
+           <size>
+            <width>500</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="QComboBox" name="comboBoxTipo">
+          <property name="minimumSize">
+           <size>
+            <width>103</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>103</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="currentIndex">
+           <number>3</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>ENTRATA</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>USCITA</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>INTERNO</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>n.d.</string>
+           </property>
+          </item>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tabRichieste">
        <attribute name="title">
         <string>Richieste</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_2">
+       <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
          <widget class="QTableView" name="richieste"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="groupBoxRichiesta">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>160</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>250</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Anteprima</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,0">
+           <property name="margin">
+            <number>4</number>
+           </property>
+           <property name="spacing">
+            <number>4</number>
+           </property>
+           <item row="1" column="0">
+            <widget class="QTextEdit" name="textEdit_oggettoRichiesta"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Destinatari</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QListWidget" name="listWidget_destinatari"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Oggetto</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
        </layout>
       </widget>

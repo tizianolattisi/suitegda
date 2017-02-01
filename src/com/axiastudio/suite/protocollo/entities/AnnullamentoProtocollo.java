@@ -146,7 +146,11 @@ public class AnnullamentoProtocollo implements Serializable {
     }
 
     public String getDettaglioProtocollo() {
-        return protocollo.toString();
+        if  ( protocollo != null ) {
+            return protocollo.toString();
+        } else {
+            return "";
+        }
     }
 
     public void setDettaglioProtocollo(String dettaglioProtocollo) {
@@ -169,10 +173,7 @@ public class AnnullamentoProtocollo implements Serializable {
             return false;
         }
         AnnullamentoProtocollo other = (AnnullamentoProtocollo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

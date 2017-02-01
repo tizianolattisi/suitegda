@@ -29,6 +29,8 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,6 +39,7 @@ import java.util.List;
  */
 public class FormTitolario extends QDialog {
     private final QTreeWidget tree;
+    private final QComboBox filtro;
 
     public FormTitolario(){
         this(null);
@@ -44,11 +47,29 @@ public class FormTitolario extends QDialog {
         
     public FormTitolario(QWidget parent){
         super(parent);
+        QVBoxLayout layout = new QVBoxLayout();
+
+        QHBoxLayout filterLayout = new QHBoxLayout();
+        QLabel label = new QLabel("Titolario del: ");
+        filterLayout.addWidget(label);
+        filtro = new QComboBox();
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        Query q=em.createNativeQuery("select distinct dal from protocollo.fascicolo order by dal desc");
+        List <Date> dataDal = q.getResultList();
+        for ( Date data: dataDal) {
+            filtro.addItem((new SimpleDateFormat("dd/MM/yyyy")).format(data));
+        }
+        filterLayout.addWidget(filtro);
+        filtro.currentIndexChanged.connect(this, "aggiornaTitolario()");
+        filterLayout.addSpacerItem(new QSpacerItem(10, 10, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum));
+        layout.addLayout(filterLayout);
+
         this.tree = new QTreeWidget();
         this.tree.header().hide();
         this.tree.doubleClicked.connect(this, "accept()");
-        QVBoxLayout layout = new QVBoxLayout();
         layout.addWidget(this.tree);
+
         QHBoxLayout buttonLayout = new QHBoxLayout();
         buttonLayout.addSpacerItem(new QSpacerItem(10, 10, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum));
         QToolButton cancel = new QToolButton();
@@ -66,27 +87,39 @@ public class FormTitolario extends QDialog {
     
     public Fascicolo getSelection() {
         QTreeWidgetItem currentItem = this.tree.currentItem();
-        Fascicolo fascicolo = (Fascicolo) currentItem.data(0, Qt.ItemDataRole.UserRole);
-        return fascicolo;
+        return (Fascicolo) currentItem.data(0, Qt.ItemDataRole.UserRole);
+    }
+
+    private void aggiornaTitolario() {
+        this.popola(this.tree);
     }
 
     private void popola(QTreeWidget tree){
+        tree.clear();
+
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManagerFactory emf = db.getEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(Fascicolo.class);
         Root root = cq.from(Fascicolo.class);
+        try {
+            cq.where(cb.equal(root.get("dal"), (new SimpleDateFormat("dd/MM/yyyy")).parse(filtro.currentText())));
+        }
+        catch (Exception e) {
+            System.out.println("Errore di interpretazione della data " + filtro.currentText());
+            return;
+        }
         cq.orderBy(cb.asc(root.get("categoria")), cb.asc(root.get("classe")), cb.asc(root.get("fascicolo")));
         Query q = em.createQuery(cq);
         List store = q.getResultList();
         QTreeWidgetItem itemCategoria=null;
         QTreeWidgetItem itemClasse=null;
         QTreeWidgetItem itemFascicolo;
-        for( int i=0; i<store.size(); i++ ){
-            Fascicolo fascicolo = (Fascicolo) store.get(i);
-            if( fascicolo.getFascicolo() == 0){
-                if( fascicolo.getClasse() == 0){
+        for (Object aStore : store) {
+            Fascicolo fascicolo = (Fascicolo) aStore;
+            if (fascicolo.getFascicolo() == 0) {
+                if (fascicolo.getClasse() == 0) {
                     itemCategoria = new QTreeWidgetItem();
                     String descrizione = "(" + fascicolo.getCategoria() +
                             ") " + fascicolo.getDescrizione();
@@ -98,7 +131,7 @@ public class FormTitolario extends QDialog {
                     String descrizione = "(" + fascicolo.getCategoria() + "-" +
                             fascicolo.getClasse() + ") " + fascicolo.getDescrizione();
                     itemClasse.setText(0, descrizione);
-                    if( !"".equals(fascicolo.getNote()) ){
+                    if (!"".equals(fascicolo.getNote())) {
                         itemClasse.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/note.png"));
                         itemClasse.setToolTip(0, "<FONT COLOR=black>" + fascicolo.getNote() + "</FONT>");
                         itemClasse.setData(0, Qt.ItemDataRole.UserRole, fascicolo);
@@ -111,7 +144,7 @@ public class FormTitolario extends QDialog {
                         fascicolo.getClasse() + "-" + fascicolo.getFascicolo() +
                         ") " + fascicolo.getDescrizione();
                 itemFascicolo.setText(0, descrizione);
-                if( !"".equals(fascicolo.getNote()) ){
+                if (!"".equals(fascicolo.getNote())) {
                     itemFascicolo.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/note.png"));
                     itemFascicolo.setToolTip(0, "<FONT COLOR=black>" + fascicolo.getNote() + "</FONT>");
                     itemFascicolo.setData(0, Qt.ItemDataRole.UserRole, fascicolo);

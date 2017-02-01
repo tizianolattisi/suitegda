@@ -19,6 +19,7 @@ package com.axiastudio.suite.protocollo;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
@@ -88,12 +89,9 @@ public class ProtocolloListener {
     void preUpdate(Object object) {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         Protocollo protocollo = (Protocollo) object;
-        Calendar calendar = Calendar.getInstance();
-        Integer year = calendar.get(Calendar.YEAR);
-        Date today = calendar.getTime();
 
         /* convalide */
-        this.convalide(protocollo, autenticato, today);
+        this.convalide(protocollo, autenticato, SuiteUtil.getServerDate());
     }
 
     private void convalide(Protocollo protocollo, Utente autenticato, Date today){
