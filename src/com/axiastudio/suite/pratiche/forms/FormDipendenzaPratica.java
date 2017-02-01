@@ -16,8 +16,6 @@
  */
 package com.axiastudio.suite.pratiche.forms;
 
-import com.axiastudio.pypapi.Register;
-import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
@@ -27,13 +25,6 @@ import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QCheckBox;
 import com.trolltech.qt.gui.QComboBox;
 import com.trolltech.qt.gui.QLabel;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

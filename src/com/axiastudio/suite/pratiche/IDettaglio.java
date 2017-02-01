@@ -19,11 +19,11 @@ public interface IDettaglio {
     // campi proxy (setter in NOP)
     String getIdpratica();
     void setIdpratica(String idpratica);
-    public String getCodiceinterno();
-    public void setCodiceinterno(String codiceinterno);
+    String getCodiceinterno();
+    void setCodiceinterno(String codiceinterno);
 
     // per la gestione delle deleghe nei procedimenti
-    public Servizio getServizio();
-    public Ufficio getUfficio();
+    Servizio getServizio();
+    Ufficio getUfficio();
 
 }

@@ -31,8 +31,48 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="1" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Codice</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QSpinBox" name="spinBox_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>10000</number>
+      </property>
+      <property name="column" stdset="0">
+       <string>id</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLineEdit" name="lineEdit_codicepadre">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="3">
+     <widget class="QLineEdit" name="lineEdit_codicefiglio">
+      <property name="maxLength">
+       <number>3</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="4">
      <widget class="QLineEdit" name="lineEdit_codice">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
       <property name="column" stdset="0">
        <string>codice</string>
       </property>
@@ -41,10 +81,23 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="4">
+    <item row="1" column="5">
+     <spacer name="horizontalSpacer_4">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>291</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="6">
      <widget class="QCheckBox" name="checkBox_3">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="text">
        <string>foglia</string>
@@ -54,21 +107,20 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_2">
+    <item row="1" column="7">
+     <widget class="QCheckBox" name="checkBox_5">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="text">
-       <string>Descrizione</string>
+       <string>approvata</string>
+      </property>
+      <property name="column" stdset="0">
+       <string>approvata</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Codice</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="5">
+    <item row="1" column="8">
      <widget class="QCheckBox" name="checkBox_4">
       <property name="text">
        <string>obsoleta</string>
@@ -78,7 +130,14 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1" colspan="5">
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Descrizione</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="8">
      <widget class="QTextEdit" name="textEdit">
       <property name="column" stdset="0">
        <string>descrizione</string>
@@ -88,7 +147,29 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0" colspan="6">
+    <item row="0" column="1" colspan="8">
+     <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_tipopadre">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>650</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="column" stdset="0">
+       <string>tipopadre</string>
+      </property>
+      <property name="sortbytostring" stdset="0">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="9">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="label_9">
@@ -121,7 +202,7 @@
       </item>
      </layout>
     </item>
-    <item row="7" column="0" colspan="6">
+    <item row="4" column="0" colspan="9">
      <layout class="QGridLayout" name="gridLayout">
       <item row="1" column="1">
        <widget class="QSpinBox" name="spinBox">
@@ -189,41 +270,6 @@
       </item>
      </layout>
     </item>
-    <item row="2" column="2" colspan="2">
-     <spacer name="horizontalSpacer_4">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>291</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="1" colspan="4">
-     <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_tipopadre">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>650</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="column" stdset="0">
-       <string>tipopadre</string>
-      </property>
-      <property name="sortbytostring" stdset="0">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
  </widget>
@@ -234,6 +280,21 @@
    <header>pypapicombobox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>lineEdit_codicepadre</tabstop>
+  <tabstop>lineEdit_codicefiglio</tabstop>
+  <tabstop>lineEdit_codice</tabstop>
+  <tabstop>checkBox_3</tabstop>
+  <tabstop>checkBox_5</tabstop>
+  <tabstop>checkBox_4</tabstop>
+  <tabstop>textEdit</tabstop>
+  <tabstop>comboBoxTitolario</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>checkBox_2</tabstop>
+  <tabstop>comboBox_tipopadre</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

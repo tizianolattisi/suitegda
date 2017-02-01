@@ -123,17 +123,16 @@ public class FormTipoPraticaTree extends QDialog {
     private void makeTree(EntityManager em, TipoPratica parent, QTreeWidgetItem parentItem, QTreeWidget tree) {
         // costruisco il tree
         List<TipoPratica> children = this.children(em, parent);
-        for( int i=0; i<children.size(); i++ ){
-            TipoPratica tipoPratica = (TipoPratica) children.get(i);
+        for (TipoPratica tipoPratica : children) {
             QTreeWidgetItem item = new QTreeWidgetItem();
             item.setText(0, tipoPratica.getCodice());
             item.setToolTip(0, "<FONT COLOR=black>" + tipoPratica.getDescrizione() + "</FONT>");
-            if( ids.contains(tipoPratica.getId()) ){
+            if (ids.contains(tipoPratica.getId())) {
                 // tipologia selezionabile
                 item.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/toolbar/accept.png"));
                 item.setData(0, Qt.ItemDataRole.UserRole, tipoPratica);
             }
-            if( parentItem == null ){
+            if (parentItem == null) {
                 tree.addTopLevelItem(item);
             } else {
                 parentItem.addChild(item);

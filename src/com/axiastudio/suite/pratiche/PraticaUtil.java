@@ -39,7 +39,6 @@ import com.axiastudio.suite.pratiche.entities.TipoPratica;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
 import com.axiastudio.suite.protocollo.IProtocollabile;
 import com.axiastudio.suite.protocollo.entities.*;
-import com.trolltech.qt.core.QProcess;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -70,13 +69,14 @@ public class PraticaUtil {
         Integer year = calendar.get(Calendar.YEAR);
         map.put("anno", year.toString());
         map.put("anno1", ((Integer)(year+1)).toString());
+        map.put("annoprecedente", ((Integer)(year-1)).toString());
 
         // giunta
         Giunta giuntaCorrente = SuiteUtil.trovaGiuntaCorrente();
         map.put("giunta", giuntaCorrente.getNumero());
 
         // codici sezione e numerici
-        String formulacodifica = tipoPratica.getFormulacodifica();
+        String formulacodifica = tipoPratica.getFormulacodifica().trim();
         List<TipoPratica> tipi = new ArrayList();
         TipoPratica iter = tipoPratica;
         while( iter != null ){
@@ -106,7 +106,7 @@ public class PraticaUtil {
                 continue;
             }
             if (n>0) {
-                String sql = "select max(substring(p.codiceinterno, length(p.codiceinterno) - " + tipoPratica.getLunghezzaprogressivo().toString() + " + 1)) " +
+                String sql = "select max(substring(p.codiceinterno, (length(p.codiceinterno) - " + tipoPratica.getLunghezzaprogressivo().toString() + ") + 1)) " +
                                 "from Pratica p join p.tipo t";
                 sql += " where p.codiceinterno like '"+tipo.getCodice()+"%'";
                 sql += " and p.codificaanomala = FALSE";
@@ -143,8 +143,7 @@ public class PraticaUtil {
         }
 
         // composizione codifica
-        String codifica = mmp.format(map);
-        return codifica;
+        return mmp.format(map);
     }
 
     // Verifica se esiste già una pratica con il codice specificato, x tipologie senza progressivo
@@ -188,7 +187,7 @@ public class PraticaUtil {
             attribuzioni.add(ragioneria);
         }
         for(UfficioDetermina ufficioDetermina: determina.getUfficioDeterminaCollection() ){
-            if( ufficioDetermina.getPrincipale() ){
+            if( ufficioDetermina.getPrincipale() && !attribuzioni.contains(ufficioDetermina.getUfficio()) ){
                 attribuzioni.add(ufficioDetermina.getUfficio());
             }
         }
@@ -212,7 +211,7 @@ public class PraticaUtil {
 
         Validation val=protocollaPratica(pratica, sportello, determina.getOggetto(), attribuzioni, oggetto, null, uffici,
                 TipoProtocollo.INTERNO);
-        if ( val.getResponse()==true ) {
+        if (val.getResponse()) {
             determina.setProtocollo((Protocollo) val.getEntity());
         }
         return val;
@@ -269,8 +268,7 @@ public class PraticaUtil {
         validation.setResponse(Boolean.TRUE);
 
         Database db = (Database) Register.queryUtility(IDatabase.class);
-        EntityManagerFactory emf = db.getEntityManagerFactory();
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
         em.getTransaction().begin();
         em.merge(protocollo);
         try {
@@ -434,14 +432,21 @@ public class PraticaUtil {
         map.put("idutente", autenticato.getId().toString());
         MessageMapFormat mmp = new MessageMapFormat(dettaglio);
         String comando = mmp.format(map);
-        int execute = QProcess.execute(comando);
-        return execute == 0;
+        try {
+            Runtime.getRuntime().exec(comando);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+//        int execute = QProcess.execute(comando);
+//        return execute == 0;
+        return true;
     }
 
     public static Boolean utenteInGestorePratica(Pratica pratica, Utente autenticato) {
         Boolean inUfficioGestore = Boolean.FALSE;
         for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
-            if( uu.getUfficio().equals(pratica.getGestione()) ){
+            if( uu.getUfficio().equals(pratica.gettGestione()) ){
                 // se la pratica è riservata, mi serve anche il flag
                 if( !pratica.getRiservata() || uu.getRiservato() ){
                     inUfficioGestore = true;
@@ -455,7 +460,7 @@ public class PraticaUtil {
     public static Boolean utenteInGestorePraticaMod(Pratica pratica, Utente autenticato) {
         Boolean inUfficioGestore = Boolean.FALSE;
         for( UfficioUtente uu: autenticato.getUfficioUtenteCollection() ){
-            if( uu.getUfficio().equals(pratica.getGestione()) && uu.getModificapratica() ){
+            if( uu.getUfficio().equals(pratica.gettGestione()) && uu.getModificapratica() ){
                 // se la pratica è riservata, mi serve anche il flag
                 if( !pratica.getRiservata() || uu.getRiservato() ){
                     inUfficioGestore = true;
@@ -478,7 +483,7 @@ public class PraticaUtil {
         String mimeType = "application/pdf";
 
         /* generazione RuleSet con regole di protocollo e atto */
-        HashMap<String, Object> rules = new HashMap<>();
+        HashMap<String, Object> rules = new HashMap<String, Object>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         if (dettaglio instanceof IProtocollabile) {
             Protocollo protocollo = ((IProtocollabile) dettaglio).getProtocollo();
@@ -518,11 +523,25 @@ public class PraticaUtil {
                         rules.put("firma", "FIRMA");
                     }
                 }
-
             } else {
                 rules.put("numeroprotocollo", "YYYYNNNNNNNN");
                 rules.put("dataprotocollo", "GG/MM/YYYY");
                 rules.put("barcode", "");
+                if (dettaglio instanceof IAtto) {
+                    if (((IAtto) dettaglio).getData() != null) {
+                        rules.put("numeroatto", ((IAtto) dettaglio).getNumero());
+                        rules.put("dataatto", dateFormat.format(((IAtto) dettaglio).getData()));
+
+                    } else {
+                        rules.put("numeroatto", "NNNNN");
+                        rules.put("dataatto", "GG/MM/YYY");
+                    }
+                    if (((IAtto) dettaglio).getFirma() != null) {
+                        rules.put("firma", ((IAtto) dettaglio).getFirma());
+                    } else {
+                        rules.put("firma", "FIRMA");
+                    }
+                }
             }
         }
 
@@ -547,6 +566,23 @@ public class PraticaUtil {
             }
         }
 
+        return Boolean.TRUE;
+    }
+
+    public static Boolean consolidaProtocollo(Protocollo protocollo) {
+        protocollo.setConsolidadocumenti(Boolean.TRUE);
+
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        em.getTransaction().begin();
+        em.merge(protocollo);
+        try {
+            em.getTransaction().commit();
+        } catch (EntityExistsException e) {
+            return Boolean.FALSE;
+        }  catch (Exception e) {
+            return Boolean.FALSE;
+        }
         return Boolean.TRUE;
     }
 }

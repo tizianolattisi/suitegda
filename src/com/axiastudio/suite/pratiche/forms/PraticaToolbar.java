@@ -22,6 +22,9 @@ public class PraticaToolbar extends PyPaPiToolBar {
         this.insertButton("stampaEtichetta", "Stampa etichetta",
                 "classpath:com/axiastudio/suite/resources/datamatrix.png",
                 "Stampa etichetta", parent);
+        this.insertButton("stampaEtichettaLista", "Stampa etichetta x le pratiche selezionate",
+                "classpath:com/axiastudio/suite/resources/datamatrix_list.png",
+                "Stampa etichetta lista", parent);
         this.insertButton("apriDocumenti", "Apri documenti",
                 "classpath:com/axiastudio/suite/menjazo/resources/menjazo.png",
                 "Apre lo spazio documenti", parent);

@@ -180,10 +180,7 @@ public class DipendenzaPratica implements Serializable, ITimeStamped {
             return false;
         }
         DipendenzaPratica other = (DipendenzaPratica) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

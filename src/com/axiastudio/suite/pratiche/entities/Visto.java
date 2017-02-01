@@ -54,6 +54,8 @@ public class Visto implements Serializable {
     Boolean negato=false;
     @Column(name="commento")
     String commento;
+    @Column(name="completato")
+    Boolean completato=false;
 
     public Long getId() {
         return id;
@@ -125,5 +127,13 @@ public class Visto implements Serializable {
 
     public void setCommento(String commento) {
         this.commento = commento;
+    }
+
+    public Boolean getCompletato() {
+        return completato;
+    }
+
+    public void setCompletato(Boolean completato) {
+        this.completato = completato;
     }
 }

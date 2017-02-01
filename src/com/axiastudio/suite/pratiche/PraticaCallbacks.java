@@ -25,7 +25,6 @@ import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.procedimenti.entities.FaseProcedimento;
 import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
@@ -87,7 +86,7 @@ public class PraticaCallbacks {
             if (codifica == null) {
                 msg = "Errore nella creazione della codifica della pratica.";
                 return new Validation(false, msg);
-            } else if (codifica == "Codifica errata") {
+            } else if (codifica.equals("Codifica errata")) {
                 msg = "È stata trovata una codifica anomala per la tipologia di pratica selezionata. Calcolo del progressivo non riuscito." +
                         " Contattare l'assistenza.";
                 return new Validation(false, msg);

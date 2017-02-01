@@ -99,8 +99,7 @@ public class PraticaListener {
         List<FaseProcedimento> fasiProcedimento = pratica.getTipo().getProcedimento().getFaseProcedimentoCollection();
         List<FasePratica> fasiPratica = new ArrayList<FasePratica>();
         Boolean prima=true;
-        for( Integer i=0; i<fasiProcedimento.size(); i++ ){
-            FaseProcedimento faseProcedimento = fasiProcedimento.get(i);
+        for (FaseProcedimento faseProcedimento : fasiProcedimento) {
             FasePratica fasePratica = new FasePratica();
             fasePratica.setPratica(pratica);
             fasePratica.setFase(faseProcedimento.getFase());
@@ -114,9 +113,9 @@ public class PraticaListener {
             fasePratica.setTestorifiutata(faseProcedimento.getTestorifiutata());
             fasePratica.setUsoresponsabile(faseProcedimento.getUsoresponsabile());
             fasePratica.setCariche(faseProcedimento.getCariche());
-            if( prima ){
+            if (prima) {
                 fasePratica.setAttiva(true);
-                prima=false;
+                prima = false;
             }
             fasiPratica.add(fasePratica);
         }
@@ -135,17 +134,16 @@ public class PraticaListener {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         List<UfficioUtenteProcedimento> utentiProcedimento = new ArrayList<UfficioUtenteProcedimento>(pratica.getTipo().getProcedimento().getUfficioUtenteProcedimentoCollection());
         List<UtentePratica> utentiPratica = new ArrayList<UtentePratica>();
-        for( Integer i=0; i<utentiProcedimento.size(); i++ ){
-            UfficioUtenteProcedimento ufficioUtenteProcedimento = utentiProcedimento.get(i);
+        for (UfficioUtenteProcedimento ufficioUtenteProcedimento : utentiProcedimento) {
             Utente utente = ufficioUtenteProcedimento.getUfficioUtente().getUtente();
             Ufficio ufficio = ufficioUtenteProcedimento.getUfficioUtente().getUfficio();
             // mi interessa solo l'ufficio gestore
-            if( ufficio.equals(pratica.getGestione()) ) {
+            if (ufficio.equals(pratica.getGestione())) {
                 // se l'utente autenticato è nella lista come ufficio gestore della pratica e abilitato
                 if (utente.equals(autenticato) && ufficioUtenteProcedimento.getAbilitato()) {
                     istruttore = utente;
                     break; // sicuramente è lui
-                } else if( ufficioUtenteProcedimento.getAbituale() ){
+                } else if (ufficioUtenteProcedimento.getAbituale()) {
                     istruttore = utente;
                 }
             }

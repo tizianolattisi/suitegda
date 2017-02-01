@@ -43,6 +43,11 @@ import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.trolltech.qt.gui.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
@@ -51,6 +56,8 @@ import java.util.logging.Logger;
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
+ * alle modifiche ha collaborato il Comune di Riva del Garda <pivamichela at comune.rivadelgarda.tn.it>
+ *
  */
 public class FormPratica extends Window implements IDocumentFolder {
 
@@ -76,6 +83,8 @@ public class FormPratica extends Window implements IDocumentFolder {
             Register.registerUtility(storeFactory, IStoreFactory.class, "Attribuzione");
             storeFactory = this.getClass().getMethod("storeTipo");
             Register.registerUtility(storeFactory, IStoreFactory.class, "Tipo");
+            storeFactory = this.getClass().getMethod("storeFascicolo");
+            Register.registerUtility(storeFactory, IStoreFactory.class, "Fascicolo");
         } catch (NoSuchMethodException ex) {
             Logger.getLogger(FormPratica.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
@@ -91,6 +100,9 @@ public class FormPratica extends Window implements IDocumentFolder {
         tableView_visti.setVisible(autenticato.getSupervisorepratiche());
 
         ((QComboBox) this.findChild(QComboBox.class, "comboBox_fase")).currentIndexChanged.connect(this, "aggiornaFase()");
+
+
+        ((QTabWidget) this.findChild(QTabWidget.class, "tabWidget")).setTabEnabled(4, false); // TODO: da togliere
     }
 
     private void apriDettaglio(){
@@ -109,7 +121,6 @@ public class FormPratica extends Window implements IDocumentFolder {
             if( !b ){
                 String msg = "Non è stato possibile trovare un dettaglio per la pratica.";
                 Util.warningBox(this, "Attenzione", msg);
-                return;
             }
         }
     }
@@ -157,6 +168,33 @@ public class FormPratica extends Window implements IDocumentFolder {
         }
     }
 
+    private void stampaEtichettaLista() {
+        PickerDialog pd = new PickerDialog(this, this.getContext().getController());
+        int res = pd.exec();
+        if (res == 1) {
+            List<Map> mapList = new ArrayList<Map>();
+            for ( Object obj: pd.getSelection() ) {
+                Map<String, Object> map = new HashMap();
+                Pratica pratica = (Pratica) obj;
+                map.put("idpratica", pratica.getIdpratica());
+                map.put("codiceinterno", pratica.getCodiceinterno());
+                if (pratica.getCodiceaggiuntivo() == null) {
+                    map.put("codiceaggiuntivo", "");
+                } else {
+                    map.put("codiceaggiuntivo", pratica.getCodiceaggiuntivo());
+                }
+                map.put("tipopratica", pratica.getCodiceinterno().substring(0, 3));
+                map.put("hash", "1234567890");
+                mapList.add(map);
+            }
+            DialogStampaEtichetta dialog = new DialogStampaEtichetta(this, mapList);
+            int exec = dialog.exec();
+            if (exec == 1) {
+                System.out.println("Print!");
+            }
+        }
+        pd.dispose();
+    }
 
 
 
@@ -190,6 +228,9 @@ public class FormPratica extends Window implements IDocumentFolder {
             Fascicolo selection = titolario.getSelection();
             PyPaPiComboBox comboBoxTitolario = (PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBoxTitolario");
             comboBoxTitolario.select(selection);
+            Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+            pratica.setFascicolo(selection);
+            aggiornaFascicolo(selection);
             this.getContext().getDirty();
         }
     }
@@ -251,10 +292,27 @@ public class FormPratica extends Window implements IDocumentFolder {
         } else {
             Fase fase = new Fase();
             for(FasePratica ogg: pratica.getFasePraticaCollection()){
-                fasiprat.add((Fase) ogg.getFase());
+                fasiprat.add(ogg.getFase());
             }
         }
         return new Store(fasiprat);
+    }
+
+    public Store storeFascicolo() {
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+
+        EntityManager em = db.getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Fascicolo> cq = cb.createQuery(Fascicolo.class);
+        Root<Fascicolo> root = cq.from(Fascicolo.class);
+        cq.select(root);
+        cq.where(cb.isNull(root.get("al")));
+        TypedQuery<Fascicolo> tq = em.createQuery(cq);
+        List <Fascicolo> titolario=tq.getResultList();
+        if( titolario.size() == 0 ){
+            QMessageBox.warning(this, "Attenzione", "Titolario non trovato");
+        }
+        return new Store(titolario);
     }
 
 
@@ -288,6 +346,9 @@ public class FormPratica extends Window implements IDocumentFolder {
         ((QComboBox) this.findChild(QComboBox.class, "comboBox_gestione")).setEnabled(nuovoInserimento || inUfficioGestore);
         ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_riservata")).setEnabled(nuovoInserimento || inUfficioGestore);
 
+        // fascicolazione
+        aggiornaFascicolo(pratica.getFascicolo());
+
         Store store = storeFase();
         PyPaPiComboBox fase=((PyPaPiComboBox) this.findChild(PyPaPiComboBox.class, "comboBox_fase"));
         fase.setLookupStore(store);
@@ -311,7 +372,27 @@ public class FormPratica extends Window implements IDocumentFolder {
         }
     }
 
-    private void information() {
+    private void aggiornaFascicolo(Fascicolo fascicolo) {
+        QLineEdit lineEdit_titolario = (QLineEdit) this.findChild(QLineEdit.class, "lineEditTitolario");
+        QLineEdit lineEdit_desctitolario = (QLineEdit) this.findChild(QLineEdit.class, "lineEditDescTitolario");
+        if (fascicolo == null) {
+            lineEdit_titolario.setText("");
+            lineEdit_titolario.hide();
+            lineEdit_desctitolario.hide();
+        } else {
+            if (fascicolo.getAl() == null) {
+                lineEdit_titolario.setText("");
+                lineEdit_titolario.hide();
+            } else {
+                lineEdit_titolario.setText(fascicolo.toString());
+                lineEdit_titolario.show();
+            }
+            lineEdit_desctitolario.setText(fascicolo.getDescTitolario());
+            lineEdit_desctitolario.show();
+        }
+    }
+
+        private void information() {
         SuiteUiUtil.showInfo(this);
     }
 

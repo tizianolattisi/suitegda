@@ -26,6 +26,7 @@ import com.axiastudio.suite.pratiche.PraticaListener;
 import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
+import com.axiastudio.suite.richieste.entities.RichiestaPratica;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -111,6 +112,9 @@ public class Pratica implements Serializable, ITimeStamped {
     private Collection<Visto> vistoCollection;
     @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<UtentePratica> utentePraticaCollection;
+    @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
+    private Collection<RichiestaPratica> richiestaPraticaCollection;
+
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -123,6 +127,19 @@ public class Pratica implements Serializable, ITimeStamped {
     private Date recordmodificato;
     @Column(name="rec_modificato_da")
     private String recordmodificatoda;
+
+    /* transient */
+    @Transient
+    private Ufficio tGestione;
+
+    public Ufficio gettGestione() {
+        return tGestione;
+    }
+
+    @PostLoad
+    private void saveTransients() {
+        tGestione = gestione;
+    }
 
     public Long getId() {
         return id;
@@ -190,7 +207,7 @@ public class Pratica implements Serializable, ITimeStamped {
     
     public String getDescrizioner() {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        if( this.getRiservata() != null && this.getRiservata() == true && !PraticaUtil.utenteInGestorePratica(this, autenticato) &&
+        if( this.getRiservata() != null && this.getRiservata() && !PraticaUtil.utenteInGestorePratica(this, autenticato) &&
                 !autenticato.getSupervisorepratiche() ){
             return "RISERVATA";
         }
@@ -353,9 +370,17 @@ public class Pratica implements Serializable, ITimeStamped {
         this.vistoCollection = vistoCollection;
     }
 
+    public Collection<RichiestaPratica> getRichiestaPraticaCollection() {
+        return richiestaPraticaCollection;
+    }
+
+    public void setRichiestaPraticaCollection(Collection<RichiestaPratica> richiestaPraticaCollection) {
+        this.richiestaPraticaCollection = richiestaPraticaCollection;
+    }
+
     /*
-             * timestamped
-             */
+                 * timestamped
+                 */
     @Override
     public Date getRecordcreato() {
         return recordcreato;
@@ -442,10 +467,7 @@ public class Pratica implements Serializable, ITimeStamped {
             return false;
         }
         Pratica other = (Pratica) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     /*
@@ -453,8 +475,7 @@ public class Pratica implements Serializable, ITimeStamped {
      */
     @Override
     public String toString() {
-        String out = this.getCodiceinterno() + " - " + this.getDescrizioner();
-        return out;
+        return this.getCodiceinterno() + " - " + this.getDescrizioner();
     }
     
 }
