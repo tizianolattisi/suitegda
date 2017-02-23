@@ -711,4 +711,3 @@ public class FormScrivania  extends QMainWindow {
         }
     }
 }
-
