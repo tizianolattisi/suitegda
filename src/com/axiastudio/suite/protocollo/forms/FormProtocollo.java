@@ -693,6 +693,7 @@ public class FormProtocollo extends Window {
         DocerHelper helper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
                 (String) app.getConfigItem("docer.password"));
 
+        // se non esiste la cartella in DOCER la creo
         if ( protocollo.getCartelladocer() == null ) {
             try {
                 String token = helper.login();
@@ -713,76 +714,76 @@ public class FormProtocollo extends Window {
             }
         }
 
-        WebAppBridge bridge = WebAppBridgeBuilder.create()
-                .url("http://192.168.64.200:8080/gdadocer/index.html#?id="+protocollo.getCartelladocer())
+        // creazione dei flag con i permessi di accesso alla folder
+        Boolean view = false;
+        Boolean delete = false;
+        Boolean download = false;
+        Boolean parent = false;
+        Boolean upload = false;
+        Boolean version = false;
+        // gli utenti 'supervisore protocollo' possono vedere tutti i documenti; gli utenti 'ricercatore protocollo'
+        //    solo i documenti non riservati
+        if( protocollo.getRiservato() ){
+            view = (pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR()) || autenticato.getSupervisoreprotocollo();
+            download = view;
+        } else {
+            view = autenticato.getSupervisoreprotocollo() || autenticato.getRicercatoreprotocollo() ||
+                    pup.inSportelloOAttribuzioneV();
+            download = view;
+        }
+        if( protocollo.getConsolidadocumenti() ){
+            delete = false;
+            if ( protocollo.getTiporiferimentomittente()!=null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
+                    (protocollo.getPecProtocollo()==null || protocollo.getPecProtocollo().getStato()==null ||
+                            protocollo.getPecProtocollo().getStato().compareTo(StatoPec.DAINVIARE)>0)) {
+                version = false;
+            } else {
+                version = pup.inAttribuzionePrincipaleC();
+            }
+            upload = pup.inAttribuzionePrincipaleC() && autenticato.getNuovodocsuconsolidato();
+        } else {
+            upload = pup.inSportelloOAttribuzionePrincipale();
+            delete = upload;
+            version = upload;
+        }
+
+        // apertura folder
+        if( view ) {
+
+            String url = "http://192.168.64.200:8080/gdadocer/index.html#?id=" + protocollo.getCartelladocer();
+            url += "&iddocumento=" + protocollo.getIddocumento();
+            url += "&dataprotocollo=" + protocollo.getDataprotocollo();
+            String codiceinterno="";
+            for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
+                if ( pratica.getOriginale() ) {
+                    codiceinterno=pratica.getPratica().getCodiceinterno();
+                }
+            }
+            url += "&codiceinterno" + codiceinterno;
+            url += "&utente=" + autenticato.getNome().toUpperCase();
+            String flags="";
+            for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
+                flags += flag ? "1" :  "0";
+            }
+            url += "&flags=" + flags;
+
+            WebAppBridge bridge = WebAppBridgeBuilder.create()
+                    .url(url)
 //                .developerExtrasEnabled(Boolean.TRUE)                       // abilità "inspect" dal menu contestuale
-                .javaScriptEnabled(Boolean.TRUE)                            // abilità l'esecuzione di JavaScript
+                    .javaScriptEnabled(Boolean.TRUE)                            // abilità l'esecuzione di JavaScript
 //                .javaScriptCanOpenWindows(Boolean.TRUE)                     // JS può aprire finestre in popup
 //                .javaScriptCanCloseWindows(Boolean.TRUE)                    // JS può chiudere finestre
 //                .javaScriptCanAccessClipboard(Boolean.TRUE)                 // JS legge e scrive da clipboard
-                .cookieJarEnabled(Boolean.TRUE)                             // la pagina può impostare dei cookie
-                .downloadEnabled(Boolean.TRUE)                              // download abilitati
+                    .cookieJarEnabled(Boolean.TRUE)                             // la pagina può impostare dei cookie
+                    .downloadEnabled(Boolean.TRUE)                              // download abilitati
 //                .downloadContentTypes(new String[]{"application/pdf"})      // content type permessi al download
-                .downloadPath("/home/pivamichela")                   // cartella proposta per il download
+                    .downloadPath("/home/pivamichela")                   // cartella proposta per il download
 //                .loadFinishedCallback(callbackClass, "callback()")          // callback da eseguire a pagina caricata
-                .build();
+                    .build();
 
-        bridge.show();
+            bridge.show();
+        }
 
-//        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
-//        for(IPlugin plugin: plugins){
-//            if( "CMIS".equals(plugin.getName()) ){
-//                Boolean view = false;
-//                Boolean delete = false;
-//                Boolean download = false;
-//                Boolean parent = false;
-//                Boolean upload = false;
-//                Boolean version = false;
-//                // gli utenti 'supervisore protocollo' possono vedere tutti i documenti; gli utenti 'ricercatore protocollo'
-//                //    solo i documenti non riservati
-//                if( protocollo.getRiservato() ){
-//                    view = (pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR()) || autenticato.getSupervisoreprotocollo();
-//                    download = view;
-//                } else {
-//                    view = autenticato.getSupervisoreprotocollo() || autenticato.getRicercatoreprotocollo() ||
-//                            pup.inSportelloOAttribuzioneV();
-//                    download = view;
-//                }
-//                if( protocollo.getConsolidadocumenti() ){
-//                    delete = false;
-//                    if ( protocollo.getTiporiferimentomittente()!=null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
-//                            (protocollo.getPecProtocollo()==null || protocollo.getPecProtocollo().getStato()==null ||
-//                                    protocollo.getPecProtocollo().getStato().compareTo(StatoPec.DAINVIARE)>0)) {
-//                        version = false;
-//                    } else {
-//                        version = pup.inAttribuzionePrincipaleC();
-//                    }
-//                    upload = pup.inAttribuzionePrincipaleC() && autenticato.getNuovodocsuconsolidato();
-//                } else {
-//                    upload = pup.inSportelloOAttribuzionePrincipale();
-//                    delete = upload;
-//                    version = upload;
-//                }
-//                if( view ){
-//                    HashMap stampMap = new HashMap();
-//                    stampMap.put("iddocumento", protocollo.getIddocumento());
-//                    stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
-//                    String codiceinterno="";
-//                    for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
-//                        if ( pratica.getOriginale() ) {
-//                            codiceinterno=pratica.getPratica().getCodiceinterno();
-//                        }
-//                    }
-//                    stampMap.put("codiceinterno", codiceinterno);
-//                    stampMap.put("utente", autenticato.getNome().toUpperCase());
-//
-//                    ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version, stampMap);
-//                } else {
-//                    QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
-//                    return;
-//                }
-//            }
-//        }
     }
 
     private void cercaDaEtichetta() {
