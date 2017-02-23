@@ -107,6 +107,9 @@ public class Protocollo implements Serializable, ITimeStamped {
     @JoinColumn(name = "fascicolo", referencedColumnName = "id")
     @ManyToOne
     private Fascicolo fascicolo;
+    @Column(name="cartelladocer", insertable=false, updatable=false)
+    private String cartelladocer;
+
     
     @Column(name="convalidaattribuzioni")
     private Boolean convalidaattribuzioni=false;
@@ -578,6 +581,14 @@ public class Protocollo implements Serializable, ITimeStamped {
 
     public void setRichiestaProtocolloCollection(Collection<RichiestaProtocollo> richiestaProtocolloCollection) {
         this.richiestaProtocolloCollection = richiestaProtocolloCollection;
+    }
+
+    public String getCartelladocer() {
+        return cartelladocer;
+    }
+
+    public void setCartelladocer(String cartelladocer) {
+        this.cartelladocer = cartelladocer;
     }
 
     @Override

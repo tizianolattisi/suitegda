@@ -1120,6 +1120,9 @@ ALTER TABLE ONLY protocollo
     ADD CONSTRAINT fk_protocollo_sportello FOREIGN KEY (sportello) REFERENCES base.ufficio(id);
 ALTER TABLE ONLY protocollo
     ADD CONSTRAINT fk_protocollo_fascicolo FOREIGN KEY (fascicolo) REFERENCES protocollo.fascicolo(id);
+ALTER TABLE protocollo.protocollo
+    ADD COLUMN cartelladocer character varying;
+
 
 CREATE TABLE protocollo.protocollomodificato
 (
@@ -1966,6 +1969,8 @@ CREATE TRIGGER trg_upd_ts_richiesta
   ON richieste.richiesta
   FOR EACH ROW
   EXECUTE PROCEDURE generale.update_timestamp();
+ALTER TABLE richieste.richiesta
+  ADD COLUMN idconversazione bigint;
 
 CREATE TABLE richieste.destinatarioutente
 (

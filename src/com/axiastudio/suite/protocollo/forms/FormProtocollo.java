@@ -53,6 +53,11 @@ import com.axiastudio.suite.pubblicazioni.PubblicazioneUtil;
 import com.axiastudio.suite.scanndo.ScanNDo;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
+import it.kdm.docer.webservices.DocerServicesDocerExceptionException0;
+import it.kdm.docer.webservices.DocerServicesStub;
+import it.tn.rivadelgarda.comune.gda.WebAppBridge;
+import it.tn.rivadelgarda.comune.gda.WebAppBridgeBuilder;
+import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
@@ -88,6 +93,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import static com.axiastudio.suite.protocollo.entities.Mailbox_.username;
 
 
 /**
@@ -180,7 +187,7 @@ public class FormProtocollo extends Window {
             }
         }
 
-        tabWidget.setTabEnabled(4, false); // TODO: da togliere
+//        tabWidget.setTabEnabled(4, false); // TODO: da togliere
     }
 
     /*
@@ -390,7 +397,7 @@ public class FormProtocollo extends Window {
         // abilitazione azioni: convalida, consolida e spedizione
         this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
         this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
-        this.protocolloMenuBar.actionByName("consolidaDocumenti").setEnabled(!consDocumenti && profilo.inAttribuzionePrincipaleC());
+        this.protocolloMenuBar.actionByName("consolidaDocumenti").setEnabled(!consDocumenti && profilo.inSportelloOAttribuzionePrincipaleC());
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "spedito"), protocollo.getSpedito());
         this.protocolloMenuBar.actionByName("stampaEtichetta").setEnabled(!nuovoInserimento);
         this.protocolloMenuBar.actionByName("inviaPec").setEnabled( !this.getContext().getIsDirty() && convProtocollo && consDocumenti &&
@@ -673,7 +680,111 @@ public class FormProtocollo extends Window {
             }
         }
     }
-    
+
+    private void apriDocumentiDocer(){
+        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        if( protocollo == null || protocollo.getId() == null ){
+            return;
+        }
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
+
+        Application app = Application.getApplicationInstance();
+        DocerHelper helper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
+
+        if ( protocollo.getCartelladocer() == null ) {
+            try {
+                String token = helper.login();
+                String folderId = helper.createFolder(protocollo.getIddocumento());
+                protocollo.setCartelladocer(folderId);
+                System.out.println(protocollo.getCartelladocer());
+            } catch (DocerServicesDocerExceptionException0 e) {
+                try {
+                    DocerServicesStub.SearchItem[] res = helper.searchFolders(protocollo.getIddocumento());
+                    if ( res!=null ) {
+//                        protocollo.setCartelladocer(res[0].getMetadata()[0].getValue());
+                    }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        WebAppBridge bridge = WebAppBridgeBuilder.create()
+                .url("http://192.168.64.200:8080/gdadocer/index.html#?id="+protocollo.getCartelladocer())
+//                .developerExtrasEnabled(Boolean.TRUE)                       // abilità "inspect" dal menu contestuale
+                .javaScriptEnabled(Boolean.TRUE)                            // abilità l'esecuzione di JavaScript
+//                .javaScriptCanOpenWindows(Boolean.TRUE)                     // JS può aprire finestre in popup
+//                .javaScriptCanCloseWindows(Boolean.TRUE)                    // JS può chiudere finestre
+//                .javaScriptCanAccessClipboard(Boolean.TRUE)                 // JS legge e scrive da clipboard
+                .cookieJarEnabled(Boolean.TRUE)                             // la pagina può impostare dei cookie
+                .downloadEnabled(Boolean.TRUE)                              // download abilitati
+//                .downloadContentTypes(new String[]{"application/pdf"})      // content type permessi al download
+                .downloadPath("/home/pivamichela")                   // cartella proposta per il download
+//                .loadFinishedCallback(callbackClass, "callback()")          // callback da eseguire a pagina caricata
+                .build();
+
+        bridge.show();
+
+//        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
+//        for(IPlugin plugin: plugins){
+//            if( "CMIS".equals(plugin.getName()) ){
+//                Boolean view = false;
+//                Boolean delete = false;
+//                Boolean download = false;
+//                Boolean parent = false;
+//                Boolean upload = false;
+//                Boolean version = false;
+//                // gli utenti 'supervisore protocollo' possono vedere tutti i documenti; gli utenti 'ricercatore protocollo'
+//                //    solo i documenti non riservati
+//                if( protocollo.getRiservato() ){
+//                    view = (pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR()) || autenticato.getSupervisoreprotocollo();
+//                    download = view;
+//                } else {
+//                    view = autenticato.getSupervisoreprotocollo() || autenticato.getRicercatoreprotocollo() ||
+//                            pup.inSportelloOAttribuzioneV();
+//                    download = view;
+//                }
+//                if( protocollo.getConsolidadocumenti() ){
+//                    delete = false;
+//                    if ( protocollo.getTiporiferimentomittente()!=null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
+//                            (protocollo.getPecProtocollo()==null || protocollo.getPecProtocollo().getStato()==null ||
+//                                    protocollo.getPecProtocollo().getStato().compareTo(StatoPec.DAINVIARE)>0)) {
+//                        version = false;
+//                    } else {
+//                        version = pup.inAttribuzionePrincipaleC();
+//                    }
+//                    upload = pup.inAttribuzionePrincipaleC() && autenticato.getNuovodocsuconsolidato();
+//                } else {
+//                    upload = pup.inSportelloOAttribuzionePrincipale();
+//                    delete = upload;
+//                    version = upload;
+//                }
+//                if( view ){
+//                    HashMap stampMap = new HashMap();
+//                    stampMap.put("iddocumento", protocollo.getIddocumento());
+//                    stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
+//                    String codiceinterno="";
+//                    for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
+//                        if ( pratica.getOriginale() ) {
+//                            codiceinterno=pratica.getPratica().getCodiceinterno();
+//                        }
+//                    }
+//                    stampMap.put("codiceinterno", codiceinterno);
+//                    stampMap.put("utente", autenticato.getNome().toUpperCase());
+//
+//                    ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version, stampMap);
+//                } else {
+//                    QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
+//                    return;
+//                }
+//            }
+//        }
+    }
+
     private void cercaDaEtichetta() {
         String barcode = QInputDialog.getText(this, "Ricerca da etichetta", "Etichetta");
         if( barcode == null ){

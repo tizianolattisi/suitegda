@@ -91,6 +91,12 @@ public class Suite {
         String alfrescopathPubblicazione = null;
         String alfrescopathRichiesta = null;
 
+
+        String docerUrl = null;
+        String docerUser = null;
+        String docerPassword = null;
+
+
         String barcodeDevice = null;
         String barcodeLanguage = null;
 
@@ -122,6 +128,10 @@ public class Suite {
                 alfrescopathPratica = properties.getProperty("alfrescopath.pratica");
                 alfrescopathPubblicazione = properties.getProperty("alfrescopath.pubblicazione");
                 alfrescopathRichiesta = properties.getProperty("alfrescopath.richiesta");
+
+                docerUrl = properties.getProperty("docer.url");
+                docerUser = properties.getProperty("docer.username");
+                docerPassword = properties.getProperty("docer.password");
 
                 barcodeDevice = properties.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
                 barcodeLanguage = properties.getProperty("barcode.language"); // es. ZPL
@@ -179,6 +189,16 @@ public class Suite {
         if( System.getProperty("alfrescopath.richiesta") != null ) {
             alfrescopathRichiesta = System.getProperty("alfrescopath.richiesta");
         }
+        // Doc/ER
+        if( System.getProperty("docer.url") != null ) {
+            docerUrl = System.getProperty("docer.url");
+        }
+        if( System.getProperty("docer.username") != null ) {
+            docerUser = System.getProperty("docer.username");
+        }
+        if( System.getProperty("docer.password") != null ) {
+            docerPassword = System.getProperty("docer.password");
+        }
         // OpenOffice
         if( System.getProperty("ooo.connection") != null ) {
             oooConnection = System.getProperty("ooo.connection");
@@ -235,6 +255,11 @@ public class Suite {
         app.setConfigItem("alfrescopath.pratica", alfrescopathPratica);
         app.setConfigItem("alfrescopath.pubblicazione", alfrescopathPubblicazione);
         app.setConfigItem("alfrescopath.richiesta", alfrescopathRichiesta);
+
+        // Doc/ER
+        app.setConfigItem("docer.url", docerUrl);
+        app.setConfigItem("docer.username", docerUser);
+        app.setConfigItem("docer.password", docerPassword);
 
         // scringa di connessione per OpenOffice
         app.setConfigItem("ooops.connection", oooConnection);

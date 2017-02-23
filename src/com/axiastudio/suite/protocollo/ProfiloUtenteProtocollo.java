@@ -118,6 +118,13 @@ public class ProfiloUtenteProtocollo {
     }
 
     /*
+     * Inserito nell'ufficio sportello o nell'attribuzione principale con flag consolida
+     */
+    public Boolean inSportelloOAttribuzionePrincipaleC(){
+        return ufficiConsolidaUtente.contains(sportello) || ufficiConsolidaUtente.contains(attribuzionePrincipale);
+    }
+
+    /*
      * Inserito nell'attribuzione principale
      */
     public Boolean inAttribuzionePrincipale(){
