@@ -24,6 +24,12 @@ public interface IDestinatarioRichiesta {
 
     void setEsecutoreletto(String esecutoreletto);
 
+    Boolean getRichiestacancellabile();
+
+    void setRichiestacancellabile(Boolean richiestacancellabile);
+
+    Long getIdRichiesta();
+
     Date getData();
 
     Date getDatascadenza();

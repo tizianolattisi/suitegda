@@ -33,203 +33,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="title">
-       <string>Richiesta</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="3" column="4">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Giorni di preavviso</string>
-         </property>
-         <property name="buddy">
-          <cstring>spinBox</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEditEntroIl">
-         <property name="displayFormat">
-          <string>dd/MM/yyyy</string>
-         </property>
-         <property name="calendarPopup">
-          <bool>true</bool>
-         </property>
-         <property name="column" stdset="0">
-          <string>datascadenza</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="5">
-        <widget class="QSpinBox" name="spinBox">
-         <property name="column" stdset="0">
-          <string>giornipreavviso</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="9">
-        <widget class="QComboBox" name="comboBox">
-         <property name="column" stdset="0">
-          <string>statorichiesta</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <item>
-          <property name="text">
-           <string>ND</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>PENDENTE</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>IN_CARICO</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>IN_ATTESA</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>RIFIUTATA</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>EVASA</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="3" column="6">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>337</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Oggetto</string>
-         </property>
-         <property name="buddy">
-          <cstring>textEdit</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="9">
-        <widget class="QTextEdit" name="textEdit">
-         <property name="column" stdset="0">
-          <string>testo</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="private" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="9">
-        <widget class="QLineEdit" name="lineEditMittente">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-         <property name="column" stdset="0">
-          <string>nomeMittente</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="private" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="8">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Stato</string>
-         </property>
-         <property name="buddy">
-          <cstring>comboBox</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Da completare entro</string>
-         </property>
-         <property name="buddy">
-          <cstring>dateEditEntroIl</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="6">
-        <widget class="QCheckBox" name="checkBox">
-         <property name="text">
-          <string>Cancellabile</string>
-         </property>
-         <property name="column" stdset="0">
-          <string>cancellabile</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Mittente</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEditMittente</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Data</string>
-         </property>
-         <property name="buddy">
-          <cstring>dateTimeEdit</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateTimeEdit" name="dateTimeEdit">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="column" stdset="0">
-          <string>data</string>
-         </property>
-         <property name="search" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
@@ -240,6 +43,16 @@
         <string>Destinatari</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Uffici</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableViewUffici</cstring>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_5">
           <property name="text">
@@ -309,16 +122,6 @@
           </property>
           <property name="private" stdset="0">
            <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Uffici</string>
-          </property>
-          <property name="buddy">
-           <cstring>tableViewUffici</cstring>
           </property>
          </widget>
         </item>
@@ -498,6 +301,232 @@
       </widget>
      </widget>
     </item>
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="title">
+       <string>Richiesta</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="10">
+        <widget class="QComboBox" name="comboBox">
+         <property name="column" stdset="0">
+          <string>statorichiesta</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>ND</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PENDENTE</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>IN_CARICO</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>IN_ATTESA</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>RIFIUTATA</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>EVASA</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="0" column="8">
+        <widget class="QSpinBox" name="spinBox_2">
+         <property name="maximum">
+          <number>10000000</number>
+         </property>
+         <property name="column" stdset="0">
+          <string>id</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="6" colspan="2">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>337</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="7">
+        <widget class="QLabel" name="label_12">
+         <property name="maximumSize">
+          <size>
+           <width>21</width>
+           <height>21</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>N.</string>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Giorni di preavviso</string>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="5">
+        <widget class="QSpinBox" name="spinBox">
+         <property name="column" stdset="0">
+          <string>giornipreavviso</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="9">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Stato</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="6">
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>Cancellabile</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>cancellabile</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Mittente</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEditMittente</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Data</string>
+         </property>
+         <property name="buddy">
+          <cstring>dateTimeEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Oggetto</string>
+         </property>
+         <property name="buddy">
+          <cstring>textEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" colspan="9">
+        <widget class="QTextEdit" name="textEdit">
+         <property name="column" stdset="0">
+          <string>testo</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="private" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEditEntroIl">
+         <property name="displayFormat">
+          <string>dd/MM/yyyy</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>datascadenza</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" colspan="9">
+        <widget class="QLineEdit" name="lineEditMittente">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>nomeMittente</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="private" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateTimeEdit" name="dateTimeEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>data</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Da completare entro</string>
+         </property>
+         <property name="buddy">
+          <cstring>dateEditEntroIl</cstring>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>
@@ -521,7 +550,6 @@
  <tabstops>
   <tabstop>textEdit</tabstop>
   <tabstop>comboBox</tabstop>
-  <tabstop>dateEditEntroIl</tabstop>
   <tabstop>spinBox</tabstop>
   <tabstop>tableViewPersone</tabstop>
   <tabstop>checkBox</tabstop>
@@ -532,7 +560,6 @@
   <tabstop>tableViewSuccessivi</tabstop>
   <tabstop>tableViewPratiche</tabstop>
   <tabstop>tableViewProtocolli</tabstop>
-  <tabstop>dateTimeEdit</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -171,6 +171,11 @@ public class DestinatarioUfficio extends DestinatarioRichiesta
         this.richiestacancellabile = richiestacancellabile;
     }
 
+    @Override
+    public Long getIdRichiesta() {
+        return richiesta.getId();
+    }
+
     public Date getRecordcreato() {
         return recordcreato;
     }

@@ -252,6 +252,7 @@ public class FormScrivania  extends QMainWindow {
         colonne.add(new Column("testo", "Testo", "Testo della richiesta"));
         colonne.add(new Column("conoscenza", "cc", "Per conoscenza"));
         colonne.add(new Column("letto", "Letto", "Richiesta letta/evasa/conclusa"));
+        colonne.add(new Column("richiestacancellabile", "Cancellabile", "Richiesta cancellabile se data per letta da tutti i destinatari"));
 //        colonne.add(new Column("statorichiesta", "Stato", "Stato richiesta"));
         TableModel model = new TableModel(destinatarioStoreGenerale, colonne);
         tableView.clearSelection();
@@ -267,6 +268,7 @@ public class FormScrivania  extends QMainWindow {
         tableView.horizontalHeader().setResizeMode(4, QHeaderView.ResizeMode.Stretch); // testo
         tableView.horizontalHeader().setResizeMode(5, QHeaderView.ResizeMode.ResizeToContents); // CC
         tableView.horizontalHeader().setResizeMode(6, QHeaderView.ResizeMode.ResizeToContents); // letto
+        tableView.horizontalHeader().setResizeMode(7, QHeaderView.ResizeMode.ResizeToContents); // cancellabile
     }
 
     private void selectRowsRichieste(QItemSelection selected, QItemSelection deselected){

@@ -69,6 +69,8 @@ public class Richiesta implements Serializable, ITimeStamped {
     private Collection<RichiestaProtocollo> richiestaProtocolloCollection;
     @OneToMany(mappedBy = "richiesta", orphanRemoval = true, cascade=CascadeType.ALL)
     private Collection<RichiestaPratica> richiestaPraticaCollection;
+    @Column(name="idconversazione", insertable=true, updatable=false)
+    private Long idConversazione = null;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -173,16 +175,20 @@ public class Richiesta implements Serializable, ITimeStamped {
             riservato=Boolean.FALSE;
         }
 
-        for (DestinatarioUtente du : this.getDestinatarioUtenteCollection()) {
-            if (du.getDestinatario().equals(autenticato)) {
-                riservato=Boolean.FALSE;
+        if ( this.getDestinatarioUtenteCollection()!=null ) {
+            for (DestinatarioUtente du : this.getDestinatarioUtenteCollection()) {
+                if (du.getDestinatario().equals(autenticato)) {
+                    riservato = Boolean.FALSE;
+                }
             }
         }
 
-        for (DestinatarioUfficio du : this.getDestinatarioUfficioCollection()) {
-            for (UfficioUtente uu : du.getDestinatario().getUfficioUtenteCollection()) {
-                if (autenticato.equals(uu.getUtente()) && !uu.getOspite()) {
-                    riservato=Boolean.FALSE;
+        if ( this.getDestinatarioUfficioCollection()!=null ) {
+            for (DestinatarioUfficio du : this.getDestinatarioUfficioCollection()) {
+                for (UfficioUtente uu : du.getDestinatario().getUfficioUtenteCollection()) {
+                    if (autenticato.equals(uu.getUtente()) && !uu.getOspite()) {
+                        riservato = Boolean.FALSE;
+                    }
                 }
             }
         }
@@ -347,6 +353,13 @@ public class Richiesta implements Serializable, ITimeStamped {
     public void setDescRichiesta(String descRichiesta) {
     }
 
+    public Long getIdConversazione() {
+        return idConversazione;
+    }
+
+    public void setIdConversazione(Long idConversazione) {
+        this.idConversazione = idConversazione;
+    }
 
     @Override
     public Date getRecordcreato() {
