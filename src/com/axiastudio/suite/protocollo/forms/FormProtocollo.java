@@ -759,7 +759,7 @@ public class FormProtocollo extends Window {
                     codiceinterno=pratica.getPratica().getCodiceinterno();
                 }
             }
-            url += "&codiceinterno" + codiceinterno;
+            url += "&codiceinterno=" + codiceinterno;
             url += "&utente=" + autenticato.getNome().toUpperCase();
             String flags="";
             for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
