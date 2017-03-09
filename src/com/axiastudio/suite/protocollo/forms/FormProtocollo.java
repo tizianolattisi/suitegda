@@ -702,9 +702,9 @@ public class FormProtocollo extends Window {
                 System.out.println(protocollo.getCartelladocer());
             } catch (DocerServicesDocerExceptionException0 e) {
                 try {
-                    DocerServicesStub.SearchItem[] res = helper.searchFolders(protocollo.getIddocumento());
+                    List<Map<String, String>> res = helper.searchFolders(protocollo.getIddocumento());
                     if ( res!=null ) {
-//                        protocollo.setCartelladocer(res[0].getMetadata()[0].getValue());
+                        protocollo.setCartelladocer(res.get(0).get("FOLDER_ID"));
                     }
                 } catch (Exception e1) {
                     e1.printStackTrace();
