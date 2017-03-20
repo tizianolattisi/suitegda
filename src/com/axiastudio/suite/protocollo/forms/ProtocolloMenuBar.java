@@ -38,11 +38,8 @@ public class ProtocolloMenuBar extends PyPaPiToolBar {
                 "classpath:com/axiastudio/suite/resources/lock_folder.png",
                 "Consolida i documenti allegati al protocollo", parent);
         this.insertButton("apriDocumenti", "Apri documenti",
-                "classpath:com/axiastudio/suite/menjazo/resources/menjazo.png",
+                "classpath:com/axiastudio/suite/menjazo/resources/folder_page.png",
                 "Apre lo spazio documenti", parent);
-        this.insertButton("apriDocumentiDocer", "Apri documenti Doc/ER",
-                "classpath:com/axiastudio/suite/menjazo/resources/page_odt.png",
-                "Apre lo spazio documenti Doc/ER", parent);
         this.insertButton("pubblicaProtocollo", "Crea una pubblicazione dal protocollo",
                 "classpath:com/axiastudio/suite/resources/newspaper.png",
                 "Crea una nuova pubblicazione all'albo telematico a partire dal protocollo selezionato", parent);

@@ -24,7 +24,6 @@ import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
-import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
@@ -53,8 +52,6 @@ import com.axiastudio.suite.pubblicazioni.PubblicazioneUtil;
 import com.axiastudio.suite.scanndo.ScanNDo;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
-import it.kdm.docer.webservices.DocerServicesDocerExceptionException0;
-import it.kdm.docer.webservices.DocerServicesStub;
 import it.tn.rivadelgarda.comune.gda.WebAppBridge;
 import it.tn.rivadelgarda.comune.gda.WebAppBridgeBuilder;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
@@ -617,72 +614,11 @@ public class FormProtocollo extends Window {
         SuiteUiUtil.showInfo(this, extra);
     }
     
-    // XXX: codice simile a FormScrivania
     private void apriDocumenti(){
-        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        if( protocollo == null || protocollo.getId() == null ){
-            return;
-        }
-        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
-        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
-        for(IPlugin plugin: plugins){
-            if( "CMIS".equals(plugin.getName()) ){
-                Boolean view = false;
-                Boolean delete = false;
-                Boolean download = false;
-                Boolean parent = false;
-                Boolean upload = false;
-                Boolean version = false;
-                // gli utenti 'supervisore protocollo' possono vedere tutti i documenti; gli utenti 'ricercatore protocollo'
-                //    solo i documenti non riservati
-                if( protocollo.getRiservato() ){
-                    view = (pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR()) || autenticato.getSupervisoreprotocollo();
-                    download = view;
-                } else {
-                    view = autenticato.getSupervisoreprotocollo() || autenticato.getRicercatoreprotocollo() ||
-                            pup.inSportelloOAttribuzioneV();
-                    download = view;
-                }
-                if( protocollo.getConsolidadocumenti() ){
-                    delete = false;
-                    if ( protocollo.getTiporiferimentomittente()!=null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
-                            (protocollo.getPecProtocollo()==null || protocollo.getPecProtocollo().getStato()==null ||
-                                    protocollo.getPecProtocollo().getStato().compareTo(StatoPec.DAINVIARE)>0)) {
-                        version = false;
-                    } else {
-                        version = pup.inAttribuzionePrincipaleC();
-                    }
-                    upload = pup.inAttribuzionePrincipaleC() && autenticato.getNuovodocsuconsolidato();
-                } else {
-                    upload = pup.inSportelloOAttribuzionePrincipale();
-                    delete = upload;
-                    version = upload;
-                }
-                if( view ){
-                    HashMap stampMap = new HashMap();
-                    stampMap.put("iddocumento", protocollo.getIddocumento());
-                    stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
-                    String codiceinterno="";
-                    for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
-                        if ( pratica.getOriginale() ) {
-                            codiceinterno=pratica.getPratica().getCodiceinterno();
-                        }
-                    }
-                    stampMap.put("codiceinterno", codiceinterno);
-                    stampMap.put("utente", autenticato.getNome().toUpperCase());
 
-                    ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version, stampMap);
-                } else {
-                    QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
-                    return;
-                }
-            }
-        }
-    }
-
-    private void apriDocumentiDocer(){
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+        String externalId = "protocollo_" + protocollo.getId();
+
         if( protocollo == null || protocollo.getId() == null ){
             return;
         }
@@ -692,27 +628,6 @@ public class FormProtocollo extends Window {
         Application app = Application.getApplicationInstance();
         DocerHelper helper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
                 (String) app.getConfigItem("docer.password"));
-
-        // se non esiste la cartella in DOCER la creo
-        if ( protocollo.getCartelladocer() == null ) {
-            try {
-                String token = helper.login();
-                String folderId = helper.createFolder(protocollo.getIddocumento());
-                protocollo.setCartelladocer(folderId);
-                System.out.println(protocollo.getCartelladocer());
-            } catch (DocerServicesDocerExceptionException0 e) {
-                try {
-                    List<Map<String, String>> res = helper.searchFolders(protocollo.getIddocumento());
-                    if ( res!=null ) {
-                        protocollo.setCartelladocer(res.get(0).get("FOLDER_ID"));
-                    }
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
         // creazione dei flag con i permessi di accesso alla folder
         Boolean view = false;
@@ -750,7 +665,7 @@ public class FormProtocollo extends Window {
         // apertura folder
         if( view ) {
 
-            String url = "http://192.168.64.200:8080/gdadocer/index.html#?id=" + protocollo.getCartelladocer();
+            String url = "http://192.168.64.200:8080/gdadocer/index.html#?externalId=" + externalId;
             url += "&iddocumento=" + protocollo.getIddocumento();
             url += "&dataprotocollo=" + protocollo.getDataprotocollo();
             String codiceinterno="";
