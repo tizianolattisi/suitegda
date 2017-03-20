@@ -1,18 +1,22 @@
 package com.axiastudio.suite.pubblicazioni;
 
-import com.axiastudio.suite.menjazo.AlfrescoHelper;
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.entities.TipoAttoPubblicazione;
+import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum.TIPO_COMPONENTE;
 
 /**
  * User: tiziano
@@ -53,16 +57,36 @@ public class PubblicazioneUtil {
         pubblicazione.setProtocollo(protocollo);
 
         controllerPubblicazione.commit(pubblicazione);
+        String pubblicazioneExternalId = "pubblicazione_" + pubblicazione.getId();
 
-        CmisPlugin cmisPluginPubblicazione = (CmisPlugin) Register.queryPlugin(Pubblicazione.class, "CMIS");
-        AlfrescoHelper helperPubblicazione = cmisPluginPubblicazione.createAlfrescoHelper(pubblicazione);
-        helperPubblicazione.createFolder();
-        String path = helperPubblicazione.getPath();
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
 
-        CmisPlugin cmisPluginProtocollo = (CmisPlugin) Register.queryPlugin(Protocollo.class, "CMIS");
-        AlfrescoHelper helperProtocollo = cmisPluginProtocollo.createAlfrescoHelper(protocollo);
-        for( Map map: helperProtocollo.children() ){
-            helperProtocollo.copyDocument((String) map.get("objectId"), path);
+        String protocolloExternalId = "protocollo_" + protocollo.getId();
+        try {
+            List<Map<String, String>> documents = docerHelper.searchDocumentsByExternalIdFirstAndRelated(protocolloExternalId);
+            for( Map<String, String> doc: documents){
+                byte[] bytes = docerHelper.getDocument(doc.get("DOCNUM"), "1");
+                TIPO_COMPONENTE tipoComponente;
+                if( "PRINCIPALE".equals(doc.get("TIPO_COMONENTE")) ){
+                    tipoComponente = TIPO_COMPONENTE.PRINCIPALE;
+                } else if( "ALLEGATO".equals(doc.get("TIPO_COMONENTE")) ){
+                    tipoComponente = TIPO_COMPONENTE.ALLEGATO;
+                } else {
+                    continue;
+                }
+                System.out.println("Sono qui!");
+                docerHelper.createDocumentTypeDocumentoAndRelateToExternalId(
+                        doc.get("DOCNAME"),
+                        bytes,
+                        tipoComponente,
+                        doc.get("ABSTRACT"),
+                        pubblicazioneExternalId
+                        );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return pubblicazione;
