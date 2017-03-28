@@ -173,6 +173,9 @@ public class Pubblicazione implements Serializable, ITimeStamped {
     }
 
     public String getIddocumento() {
+        if (protocollo == null) {
+            return null;
+        }
         return protocollo.getIddocumento();
     }
 

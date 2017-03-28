@@ -91,6 +91,7 @@ public class Mdi extends QMainWindow implements IMdi {
 
     }
     
+
     private void createMenu(){
         menuWindows = this.menuBar().addMenu("Finestre");
         actionClose = new QAction("Chiudi", this);
@@ -180,7 +181,7 @@ public class Mdi extends QMainWindow implements IMdi {
         itemScrivania.setText(0, "Scrivania");
         itemScrivania.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/house.png"));
         itemScrivania.setText(1, "SCRIVANIA");
-        itemScrivania.setDisabled(!autenticato.getOperatoreprotocollo());
+//        itemScrivania.setDisabled(!autenticato.getOperatoreprotocollo());
 
         /* Protocollo informatico */
         QTreeWidgetItem itemProtocolloInformatico = new QTreeWidgetItem(this.tree);

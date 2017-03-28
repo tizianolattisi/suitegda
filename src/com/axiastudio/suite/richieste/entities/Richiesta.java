@@ -201,11 +201,15 @@ public class Richiesta implements Serializable, ITimeStamped {
 
     public void setCancellabile(Boolean cancellabile) {
         this.cancellabile = cancellabile;
-        for ( DestinatarioUfficio du: this.getDestinatarioUfficioCollection() ) {
-            du.setRichiestacancellabile(cancellabile);
+        if ( this.getDestinatarioUfficioCollection()!=null ) {
+            for ( DestinatarioUfficio du: this.getDestinatarioUfficioCollection() ) {
+                du.setRichiestacancellabile(cancellabile);
+            }
         }
-        for ( DestinatarioUtente du: this.getDestinatarioUtenteCollection() ) {
-            du.setRichiestacancellabile(cancellabile);
+        if ( this.getDestinatarioUtenteCollection()!=null ) {
+            for (DestinatarioUtente du : this.getDestinatarioUtenteCollection()) {
+                du.setRichiestacancellabile(cancellabile);
+            }
         }
     }
 

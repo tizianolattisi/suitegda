@@ -226,7 +226,7 @@
            <string>.indirizzoCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;principale&lt;,&gt;tipo&lt;,&gt;via&lt;,&gt;civico&lt;,&gt;cap&lt;,&gt;comune&lt;,&gt;provincia&lt;,&gt;stato&lt;,&lt;descrizione&gt;</string>
+           <string>&gt;princip.&lt;,&gt;tipo&lt;,&lt;descrizione&gt;,&gt;via&lt;,&gt;civico&lt;,&gt;cap&lt;,&gt;comune&lt;,&gt;prov&lt;,&gt;stato&lt;</string>
           </property>
           <property name="sortcolumn" stdset="0">
            <number>0</number>

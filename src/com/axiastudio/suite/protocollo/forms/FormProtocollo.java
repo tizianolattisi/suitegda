@@ -637,20 +637,24 @@ public class FormProtocollo extends Window {
                             pup.inSportelloOAttribuzioneV();
                     download = view;
                 }
-                if( protocollo.getConsolidadocumenti() ){
-                    delete = false;
-                    if ( protocollo.getTiporiferimentomittente()!=null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
-                            (protocollo.getPecProtocollo()==null || protocollo.getPecProtocollo().getStato()==null ||
-                                    protocollo.getPecProtocollo().getStato().compareTo(StatoPec.DAINVIARE)>0)) {
-                        version = false;
-                    } else {
-                        version = pup.inAttribuzionePrincipaleC();
-                    }
-                    upload = pup.inAttribuzionePrincipaleC() && autenticato.getNuovodocsuconsolidato();
+                // gli utenti che non sono operatori protocollo non possono aggiungere/versionare/cancellare file
+                if( !autenticato.getOperatoreprotocollo() ) {
+                    upload = delete = version = false;
                 } else {
-                    upload = pup.inSportelloOAttribuzionePrincipale();
-                    delete = upload;
-                    version = upload;
+                    if (protocollo.getConsolidadocumenti()) {
+                        delete = false;
+                        if (protocollo.getTiporiferimentomittente() != null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
+                                (protocollo.getPecProtocollo() == null || protocollo.getPecProtocollo().getStato() == null ||
+                                        protocollo.getPecProtocollo().getStato().compareTo(StatoPec.DAINVIARE) > 0)) {
+                            version = false;
+                        } else {
+                            version = pup.inAttribuzionePrincipaleC();
+                        }
+                        upload = pup.inAttribuzionePrincipaleC() && autenticato.getNuovodocsuconsolidato();
+                    } else {
+                        upload = pup.inSportelloOAttribuzionePrincipale();
+                        delete = version = upload;
+                    }
                 }
                 if( view ){
                     HashMap stampMap = new HashMap();

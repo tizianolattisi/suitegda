@@ -49,6 +49,13 @@ public class ProtocolloCallbacks {
     public static Validation beforeCommit(Protocollo protocollo){
         Boolean res = true;
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        String msg = "";
+
+        if ( !autenticato.getOperatoreprotocollo() ) {
+            msg += "L'utente non ha abilitazioni per inserire e/o modificare protocolli.";
+            res = false;
+        }
+
         Boolean eNuovo = protocollo.getId() == null;
         List<Ufficio> uffici = new ArrayList();
         List<Ufficio> ufficiRicerca = new ArrayList();
@@ -78,14 +85,12 @@ public class ProtocolloCallbacks {
         }
         Ufficio sportello = protocollo.getSportello();
 
-        String msg = "";
-
         if( !eNuovo ){
             /*
              * Modifica permessa solo allo sportello e all'attribuzione principale
              * con flag ricerca
              */
-            if( !(uffici.contains(sportello) || ufficiRicerca.contains(attribuzionePrincipale)) ){
+            if( !(ufficiRicerca.contains(sportello) || ufficiRicerca.contains(attribuzionePrincipale)) ){
                 msg += "Devi appartenere allo sportello o all'attribuzione principale\n";
                 msg += "con diritti di ricerca, per poter modificare il protocollo.\n";
                 res = false;

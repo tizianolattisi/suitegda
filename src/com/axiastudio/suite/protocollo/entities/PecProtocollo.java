@@ -43,6 +43,7 @@ public class PecProtocollo implements Serializable, ITimeStamped {
     private String body="";
     @Column(name="segnatura")
     private String segnatura="";
+    @Column(name="stato", insertable=false, updatable=false)
     @Enumerated(EnumType.STRING)
     private StatoPec stato=StatoPec.NONGESTITO;
     /* timestamped */
