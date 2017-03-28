@@ -1,15 +1,16 @@
 package com.axiastudio.suite.richieste;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.menjazo.AlfrescoHelper;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.richieste.entities.Richiesta;
+import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 
 import javax.persistence.PostPersist;
 import javax.persistence.PrePersist;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,20 +35,24 @@ public class RichiestaListener {
     @PostPersist
     void postPersist(Richiesta richiesta) {
         if ( richiesta.getVarPathDocumento()!=null && richiesta.getVarPathDocumento().length()>0 ) {
-            // copia dei documenti contenuti nella cartella Alfresco definitiva
-            String path = "/Siti/richieste/documentLibrary/" +
-                    (new SimpleDateFormat("yyyy/MM/")).format(richiesta.getData()) + richiesta.getId().toString() + "/";
-            CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
-            AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(richiesta);
-            alfrescoHelper.createFolder(path);
-            for (Map map : alfrescoHelper.children()) {
-                if ( alfrescoHelper.copyDocument((String) map.get("objectId"), path) != null ) {
-                    alfrescoHelper.deleteDocument((String) map.get("objectId"));
-                } else {
-                    return;
+            // modifica del metadato EXTERNAL_ID
+            Application app = Application.getApplicationInstance();
+            DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                    (String) app.getConfigItem("docer.password"));
+            String richiestaExternalId="richiesta_" + richiesta.getId();
+            List<Map<String, String>> documents=new ArrayList<Map<String, String>>();
+            try {
+                documents = docerHelper.searchDocumentsByExternalIdFirstAndRelated(richiesta.getPathdocumento());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            for ( Map<String, String> doc:documents ) {
+                try {
+                    docerHelper.updateProfileDocumentExternalId(doc.get("DOCNUM"), richiestaExternalId);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-            alfrescoHelper.deleteFolder(alfrescoHelper.folderFromPath(alfrescoHelper.getPath()).getId());
             richiesta.setPathdocumento(null);
         }
     }

@@ -91,7 +91,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static com.axiastudio.suite.protocollo.entities.Mailbox_.username;
+//import static com.axiastudio.suite.protocollo.entities.Mailbox_.username;
 
 
 /**
@@ -184,7 +184,7 @@ public class FormProtocollo extends Window {
             }
         }
 
-//        tabWidget.setTabEnabled(4, false); // TODO: da togliere
+        tabWidget.setTabEnabled(4, false); // TODO: da togliere
     }
 
     /*
@@ -601,9 +601,10 @@ public class FormProtocollo extends Window {
                     // si utilizza un campo dedicato alla modifica del flag 'principale'
                     extra += "<br/><br/>Attribuzione in via principale modificata da : " + attrib.getEsecutoreprincipale() +
                             "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(attrib.getDataprincipale());
-                } else if (attrib.getRecordmodificato() != null) {
+                } else if ((attrib.getRecordmodificato() != null && attrib.getDataletto() == null) ||
+                        (attrib.getRecordmodificato() != null /* && attrib.getRecordmodificato()-attrib.getDataletto()<1*/)) {
                     // ci si basa sull'ultimo aggiornamento (che potrebbe anche essere il 'dato x letto'...
-                    extra += "<br/><br/>Attribuzione in via principale modificata da " + attrib.getRecordmodificatoda() +
+                    extra += "<br/><br/>Nessuna informazione certa al riguardo. Ultima modifica effettuata da " + attrib.getRecordmodificatoda() +
                             "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(attrib.getRecordmodificato());
                 } else {
                     extra += "<br/><br/>Attribuzione in via principale inserita da: " + attrib.getRecordcreatoda() +
@@ -624,10 +625,6 @@ public class FormProtocollo extends Window {
         }
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
-
-        Application app = Application.getApplicationInstance();
-        DocerHelper helper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
-                (String) app.getConfigItem("docer.password"));
 
         // creazione dei flag con i permessi di accesso alla folder
         Boolean view = false;
@@ -664,8 +661,11 @@ public class FormProtocollo extends Window {
 
         // apertura folder
         if( view ) {
-
-            String url = "http://192.168.64.200:8080/gdadocer/index.html#?externalId=" + externalId;
+            Application app = Application.getApplicationInstance();
+            DocerHelper helper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                    (String) app.getConfigItem("docer.password"));
+            String url = (String) app.getConfigItem("docer.urlpath");
+            url += "#?externalId=" + externalId;
             url += "&iddocumento=" + protocollo.getIddocumento();
             url += "&dataprotocollo=" + protocollo.getDataprotocollo();
             String codiceinterno="";
@@ -993,7 +993,7 @@ public class FormProtocollo extends Window {
             for (Map<String, String> map : helper.children()) {
                 /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
                 Date documentDate = new Date();
-                DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
+                DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CEST' yyyy", Locale.ENGLISH);
                 try {
                     documentDate = df.parse(map.get("creationDate"));
                 } catch (ParseException e) {
@@ -1065,13 +1065,12 @@ public class FormProtocollo extends Window {
 
             // allegati
             List<String> nomiFile = new ArrayList<String>();
-//            if (helper.children().size() > 0) { // c'è qualcosa da allegare
             if (numAllegati > 0) { // c'è qualcosa da allegare
                 for (Map<String, String> map : helper.children()) {
                     /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
                     String strDataFile = map.get("lastModificationDate");
                     Date documentDate = new Date();
-                    DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
+                    DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CEST' yyyy", Locale.ENGLISH);
                     try {
                         documentDate = df.parse(strDataFile);
                     } catch (ParseException e) {

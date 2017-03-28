@@ -10,13 +10,13 @@ import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.entities.TipoAttoPubblicazione;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum.TIPO_COMPONENTE;
 
 /**
  * User: tiziano
@@ -68,15 +68,14 @@ public class PubblicazioneUtil {
             List<Map<String, String>> documents = docerHelper.searchDocumentsByExternalIdFirstAndRelated(protocolloExternalId);
             for( Map<String, String> doc: documents){
                 byte[] bytes = docerHelper.getDocument(doc.get("DOCNUM"), "1");
-                TIPO_COMPONENTE tipoComponente;
-                if( "PRINCIPALE".equals(doc.get("TIPO_COMONENTE")) ){
-                    tipoComponente = TIPO_COMPONENTE.PRINCIPALE;
-                } else if( "ALLEGATO".equals(doc.get("TIPO_COMONENTE")) ){
-                    tipoComponente = TIPO_COMPONENTE.ALLEGATO;
+                TIPO_COMPONENTE_VALUES tipoComponente;
+                if( "PRINCIPALE".equals(doc.get("TIPO_COMPONENTE")) ){
+                    tipoComponente = TIPO_COMPONENTE_VALUES.PRINCIPALE;
+                } else if( "ALLEGATO".equals(doc.get("TIPO_COMPONENTE")) ){
+                    tipoComponente = TIPO_COMPONENTE_VALUES.ALLEGATO;
                 } else {
                     continue;
                 }
-                System.out.println("Sono qui!");
                 docerHelper.createDocumentTypeDocumentoAndRelateToExternalId(
                         doc.get("DOCNAME"),
                         bytes,
