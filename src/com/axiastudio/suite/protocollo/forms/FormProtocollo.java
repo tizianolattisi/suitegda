@@ -970,7 +970,7 @@ public class FormProtocollo extends Window {
             for (Map<String, String> map : helper.children()) {
                 /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
                 Date documentDate = new Date();
-                DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
+                DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CEST' yyyy", Locale.ENGLISH);
                 try {
                     documentDate = df.parse(map.get("creationDate"));
                 } catch (ParseException e) {
@@ -1048,7 +1048,7 @@ public class FormProtocollo extends Window {
                     /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
                     String strDataFile = map.get("lastModificationDate");
                     Date documentDate = new Date();
-                    DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
+                    DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CEST' yyyy", Locale.ENGLISH);
                     try {
                         documentDate = df.parse(strDataFile);
                     } catch (ParseException e) {
