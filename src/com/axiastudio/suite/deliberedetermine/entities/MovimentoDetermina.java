@@ -84,6 +84,14 @@ public class MovimentoDetermina implements Serializable {
     private String normatitoloattribuzione;
     @Column(name="albobeneficiari")
     private String albobeneficiari;
+    @Column(name="pianofinanziario")
+    private String pianofinanziario;
+    @Column(name="pianofinanziariodesc")
+    private String pianofinanziariodesc;
+    @Column(name="missionecapitolo")
+    private String missionecapitolo;
+    @Column(name="programmamissionecapitolo")
+    private String programmamissionecapitolo;
 
     public Long getId() {
         return id;
@@ -275,6 +283,38 @@ public class MovimentoDetermina implements Serializable {
 
     public void setAlbobeneficiari(String albobeneficiari) {
         this.albobeneficiari = albobeneficiari;
+    }
+
+    public String getPianofinanziario() {
+        return pianofinanziario;
+    }
+
+    public void setPianofinanziario(String pianofinanziario) {
+        this.pianofinanziario = pianofinanziario;
+    }
+
+    public String getPianofinanziariodesc() {
+        return pianofinanziariodesc;
+    }
+
+    public void setPianofinanziariodesc(String pianofinanziariodesc) {
+        this.pianofinanziariodesc = pianofinanziariodesc;
+    }
+
+    public String getMissionecapitolo() {
+        return missionecapitolo;
+    }
+
+    public void setMissionecapitolo(String missionecapitolo) {
+        this.missionecapitolo = missionecapitolo;
+    }
+
+    public String getProgrammamissionecapitolo() {
+        return programmamissionecapitolo;
+    }
+
+    public void setProgrammamissionecapitolo(String programmamissionecapitolo) {
+        this.programmamissionecapitolo = programmamissionecapitolo;
     }
 
     @Override

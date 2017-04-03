@@ -1842,6 +1842,14 @@ CREATE TABLE movimentodetermina (
     albobeneficiari character varying(50)
 ) INHERITS (generale.withtimestamp);
 ALTER TABLE deliberedetermine.movimentodetermina OWNER TO postgres;
+ALTER TABLE deliberedetermine.movimentodetermina
+  ADD COLUMN pianofinanziario character varying(14);
+ALTER TABLE deliberedetermine.movimentodetermina
+  ADD COLUMN pianofinanziariodesc character varying;
+ALTER TABLE deliberedetermine.movimentodetermina
+  ADD COLUMN missionecapitolo character varying(2);
+ALTER TABLE deliberedetermine.movimentodetermina
+  ADD COLUMN programmamissionecapitolo character varying(2);
 ALTER TABLE ONLY movimentodetermina
     ADD CONSTRAINT movimentodetermina_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY movimentodetermina
