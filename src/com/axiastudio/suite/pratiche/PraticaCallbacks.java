@@ -22,8 +22,10 @@ import com.axiastudio.pypapi.annotations.CallbackType;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Validation;
+import com.axiastudio.suite.base.BaseUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
@@ -139,6 +141,23 @@ public class PraticaCallbacks {
                         msg = "Devi avere completa visibilità del protocollo e permesso sui dati riservati per poterlo inserire nella pratica riservata.";
                         return new Validation(false, msg);
                     }
+                }
+            }
+        }
+
+        /*
+         * Verifica collegamenti tra pratiche: permesso se pratica collegata non è archiviata oppure
+         * all'ufficio gestore della pratica collegata
+         */
+        for( DipendenzaPratica dipendenzaPratica: pratica.getDipendenzaPraticaCollection() ){
+            // nuovo inserimento
+            if( dipendenzaPratica.getPraticadominante() == null ){
+                // l'altra pratica è archiviata / ufficio gestore?
+                Pratica dipende = dipendenzaPratica.getPraticadipendente();
+                if( dipende.getArchiviata() &&
+                        !BaseUtil.utenteInUfficio(autenticato, dipende.getGestione().getId().intValue(),Boolean.FALSE)) {
+                    msg = "Non hai i permessi per collegare questa pratica ad una pratica archiviata.";
+                    return new Validation(false, msg);
                 }
             }
         }
