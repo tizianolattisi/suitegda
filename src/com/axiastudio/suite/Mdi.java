@@ -187,7 +187,7 @@ public class Mdi extends QMainWindow implements IMdi {
         QTreeWidgetItem itemProtocolloInformatico = new QTreeWidgetItem(this.tree);
         itemProtocolloInformatico.setText(0, "Protocollo informatico");
         this.tree.addTopLevelItem(itemProtocolloInformatico);
-        itemProtocolloInformatico.setDisabled(!autenticato.getOperatoreprotocollo());
+//        itemProtocolloInformatico.setDisabled(!autenticato.getOperatoreprotocollo());
         
         QTreeWidgetItem itemProtocollo = new QTreeWidgetItem(itemProtocolloInformatico);
         itemProtocollo.setText(0, "Protocollo");
