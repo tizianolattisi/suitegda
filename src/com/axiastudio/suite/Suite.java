@@ -93,7 +93,6 @@ public class Suite {
 
 
         String docerUrl = null;
-        String docerUrlPath = null;
         String docerUser = null;
         String docerPassword = null;
 
@@ -131,7 +130,6 @@ public class Suite {
                 alfrescopathRichiesta = properties.getProperty("alfrescopath.richiesta");
 
                 docerUrl = properties.getProperty("docer.url");
-                docerUrlPath = properties.getProperty("docer.urlpath");
                 docerUser = properties.getProperty("docer.username");
                 docerPassword = properties.getProperty("docer.password");
 
@@ -194,9 +192,6 @@ public class Suite {
         // Doc/ER
         if( System.getProperty("docer.url") != null ) {
             docerUrl = System.getProperty("docer.url");
-        }
-        if( System.getProperty("docer.urlpath") != null ) {
-            docerUrlPath = System.getProperty("docer.urlpath");
         }
         if( System.getProperty("docer.username") != null ) {
             docerUser = System.getProperty("docer.username");
@@ -263,7 +258,6 @@ public class Suite {
 
         // Doc/ER
         app.setConfigItem("docer.url", docerUrl);
-        app.setConfigItem("docer.urlpath", docerUrlPath);
         app.setConfigItem("docer.username", docerUser);
         app.setConfigItem("docer.password", docerPassword);
 

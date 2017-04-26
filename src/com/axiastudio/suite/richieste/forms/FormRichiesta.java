@@ -1,6 +1,5 @@
 package com.axiastudio.suite.richieste.forms;
 
-import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
@@ -10,12 +9,10 @@ import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.base.entities.*;
+import com.axiastudio.suite.menjazo.AlfrescoHelper;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.richieste.entities.*;
 import com.trolltech.qt.gui.*;
-import it.tn.rivadelgarda.comune.gda.WebAppBridge;
-import it.tn.rivadelgarda.comune.gda.WebAppBridgeBuilder;
-import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -31,11 +28,9 @@ import java.util.logging.Logger;
 
 public class FormRichiesta extends Window {
 
-    private static final String TMP_PATH_TEMPLATE = "yyyy-MM-SSSSSS";
+    private static final String TMP_PATH_TEMPLATE = "yyyy/MM/'tmp'SSSSSS";
     Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
     public RichiestaToolbar richiestaToolbar;
-    private Application app;
-    private DocerHelper docerHelper;
 
     public FormRichiesta(String uiFile, Class entityClass, String title) {
         super(uiFile, entityClass, title);
@@ -49,10 +44,6 @@ public class FormRichiesta extends Window {
         tblDestinatari.entityInserted.connect(this, "destinatarioInserito(Object)");
         Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, "tableViewPrecedenti"), Boolean.TRUE);
         Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, "tableViewSuccessivi"), Boolean.TRUE);
-
-        app = Application.getApplicationInstance();
-        docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
-                (String) app.getConfigItem("docer.password"));
 
         try {
             Method storeFactory = this.getClass().getMethod("storeMittente");
@@ -91,26 +82,12 @@ public class FormRichiesta extends Window {
         super.closeEvent(event);
 
         if ( richiesta.getVarPathDocumento()!=null && richiesta.getVarPathDocumento().length()>0 ) {
-            List<Map<String, String>> documents=new ArrayList<Map<String, String>>();
-            try {
-                documents = docerHelper.searchDocumentsByExternalIdFirstAndRelated(richiesta.getVarPathDocumento());
-            } catch (Exception e) {
-                e.printStackTrace();
+            CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
+            AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(richiesta);
+            for (Map map : alfrescoHelper.children()) {
+                alfrescoHelper.deleteDocument((String) map.get("objectId"));
             }
-            for ( Map<String, String> doc:documents ) {
-                try {
-                    docerHelper.deleteDocument(doc.get("DOCNUM"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-//            CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
-//            AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(richiesta);
-//            for (Map map : alfrescoHelper.children()) {
-//                alfrescoHelper.deleteDocument((String) map.get("objectId"));
-//            }
-//            alfrescoHelper.deleteFolder(alfrescoHelper.folderFromPath(alfrescoHelper.getPath()).getId());
+            alfrescoHelper.deleteFolder(alfrescoHelper.folderFromPath(alfrescoHelper.getPath()).getId());
         }
     }
 
@@ -128,42 +105,17 @@ public class FormRichiesta extends Window {
         inoltra.setDatascadenza(richiesta.getDatascadenza());
         inoltra.setTesto(" ----- Messaggio inoltrato ----- \n\n" + richiesta.getTesto());
         inoltra.setGiornipreavviso(richiesta.getGiornipreavviso());
-        inoltra.setPathdocumento("richiestatmp_" + (new SimpleDateFormat(TMP_PATH_TEMPLATE)).format(new Date()));
-//        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
-//        AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(richiesta);
-//        if ( !alfrescoHelper.children().isEmpty() ) {
-//            inoltra.setPathdocumento((new SimpleDateFormat(TMP_PATH_TEMPLATE)).format(new Date()));
-//            // copia dei documenti contenuti nella cartella Alfresco
-//            CmisPlugin cmisPluginInoltra = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
-//            AlfrescoHelper helperInoltra = cmisPluginInoltra.createAlfrescoHelper(inoltra);
-//            helperInoltra.createFolder();
-//            for (Map map : alfrescoHelper.children()) {
-//                alfrescoHelper.copyDocument((String) map.get("objectId"), "/Siti/richieste/documentLibrary/" + inoltra.getPathdocumento() + "/");
-//            }
-//        }
-
-        try {
-            List<Map<String, String>> documents = docerHelper.searchDocumentsByExternalIdFirstAndRelated("richiesta_"+richiesta.getId());
-            for( Map<String, String> doc: documents){
-                byte[] bytes = docerHelper.getDocument(doc.get("DOCNUM"), "1");
-                TIPO_COMPONENTE_VALUES tipoComponente;
-                if( "PRINCIPALE".equals(doc.get("TIPO_COMPONENTE")) ){
-                    tipoComponente = TIPO_COMPONENTE_VALUES.PRINCIPALE;
-                } else if( "ALLEGATO".equals(doc.get("TIPO_COMPONENTE")) ){
-                    tipoComponente = TIPO_COMPONENTE_VALUES.ALLEGATO;
-                } else {
-                    continue;
-                }
-                docerHelper.createDocumentTypeDocumentoAndRelateToExternalId(
-                        doc.get("DOCNAME"),
-                        bytes,
-                        tipoComponente,
-                        doc.get("ABSTRACT"),
-                        inoltra.getVarPathDocumento()
-                );
+        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
+        AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(richiesta);
+        if ( !alfrescoHelper.children().isEmpty() ) {
+            inoltra.setPathdocumento((new SimpleDateFormat(TMP_PATH_TEMPLATE)).format(new Date()));
+            // copia dei documenti contenuti nella cartella Alfresco
+            CmisPlugin cmisPluginInoltra = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
+            AlfrescoHelper helperInoltra = cmisPluginInoltra.createAlfrescoHelper(inoltra);
+            helperInoltra.createFolder();
+            for (Map map : alfrescoHelper.children()) {
+                alfrescoHelper.copyDocument((String) map.get("objectId"), "/Siti/richieste/documentLibrary/" + inoltra.getPathdocumento() + "/");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         inoltra.setIdConversazione(richiesta.getIdConversazione());
 
@@ -264,26 +216,15 @@ public class FormRichiesta extends Window {
                 Boolean parent = false;
                 Boolean upload = false;
                 Boolean version = false;
-                String richiestaExternalId = "";
                 if( richiesta == null || richiesta.getId() == null ){
                     // apri location temporanea; si possono aggiungere documenti
                     if ( richiesta.getVarPathDocumento()== null || richiesta.getVarPathDocumento().isEmpty() ) {
-                        richiesta.setPathdocumento("richiestatmp_" + (new SimpleDateFormat(TMP_PATH_TEMPLATE)).format(new Date()));
+                        richiesta.setPathdocumento((new SimpleDateFormat(TMP_PATH_TEMPLATE)).format(new Date()));
                     }
                     view = delete = download = upload = true;
-                    richiestaExternalId = richiesta.getVarPathDocumento();
                 } else {
-                    richiestaExternalId = "richiesta_" + richiesta.getId();
-                    Boolean isEmpty=false;
-                    try {
-                        isEmpty=docerHelper.searchDocumentsByExternalIdFirst(richiestaExternalId).isEmpty();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-//                    AlfrescoHelper alfrescoHelper = ((CmisPlugin) plugin).createAlfrescoHelper(richiesta);
-//                    if ( alfrescoHelper.numberOfDocument()==0 ) {
-                    if ( isEmpty ) {
+                    AlfrescoHelper alfrescoHelper = ((CmisPlugin) plugin).createAlfrescoHelper(richiesta);
+                    if ( alfrescoHelper.numberOfDocument()==0 ) {
                         QMessageBox.information(this, "Attenzione", "Nessun documento collegato al messaggio/richiesta.");
                         return;
                     }
@@ -315,31 +256,7 @@ public class FormRichiesta extends Window {
                     }
                 }
                 if (view) {
-                    String url = (String) app.getConfigItem("docer.urlpath");
-                    url += "#?externalId=" + richiestaExternalId;
-                    String flags="";
-                    for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
-                        flags += flag ? "1" :  "0";
-                    }
-                    url += "&flags=" + flags;
-
-                    WebAppBridge bridge = WebAppBridgeBuilder.create()
-                            .url(url)
-//                .developerExtrasEnabled(Boolean.TRUE)                       // abilità "inspect" dal menu contestuale
-                            .javaScriptEnabled(Boolean.TRUE)                            // abilità l'esecuzione di JavaScript
-//                .javaScriptCanOpenWindows(Boolean.TRUE)                     // JS può aprire finestre in popup
-//                .javaScriptCanCloseWindows(Boolean.TRUE)                    // JS può chiudere finestre
-//                .javaScriptCanAccessClipboard(Boolean.TRUE)                 // JS legge e scrive da clipboard
-                            .cookieJarEnabled(Boolean.TRUE)                             // la pagina può impostare dei cookie
-                            .downloadEnabled(Boolean.TRUE)                              // download abilitati
-//                .downloadContentTypes(new String[]{"application/pdf"})      // content type permessi al download
-                            .downloadPath("/home/pivamichela")                   // cartella proposta per il download
-//                .loadFinishedCallback(callbackClass, "callback()")          // callback da eseguire a pagina caricata
-                            .build();
-
-                    bridge.show();
-
-//                    ((CmisPlugin) plugin).showForm(richiesta, delete, download, parent, upload, version, null, Boolean.TRUE);
+                    ((CmisPlugin) plugin).showForm(richiesta, delete, download, parent, upload, version, null, Boolean.TRUE);
                 } else {
                     QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
                     return;
