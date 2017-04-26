@@ -31,7 +31,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
-import com.axiastudio.suite.deliberedetermine.forms.FormCorreggiUfficiDetermina;
+//import com.axiastudio.suite.deliberedetermine.forms.FormCorreggiUfficiDetermina;
 import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.forms.FormTipoPraticaTree;
@@ -518,11 +518,11 @@ public class Mdi extends QMainWindow implements IMdi {
             this.workspace.addSubWindow(form);
             form.show();
         } else if( "UFFICIDETERMINA".equals(formName) ){
-            FormCorreggiUfficiDetermina form = new FormCorreggiUfficiDetermina(
+            /*FormCorreggiUfficiDetermina form = new FormCorreggiUfficiDetermina(
                     "classpath:com/axiastudio/suite/deliberedetermine/forms/correggiufficidetermina.ui",
                     Determina.class, "Correggi uffici determina");
             this.workspace.addSubWindow(form);
-            form.show();
+            form.show();*/
         } else if( "TICKET".equals(formName) ){
             Database db = (Database) Register.queryUtility(IDatabase.class);
             Store sportelli = db.createController(Sportello.class).createFullStore();

@@ -390,7 +390,7 @@ public class AlfrescoHelper {
                     String testoCC = SuiteUtil.trovaCostante(tipo + "_TESTO" + String.valueOf(i)).getValore();
                     MessageMapFormat mmp = new MessageMapFormat(testoCC);
                     String testo = mmp.format(stampMap);
-                    iwas.text(testo, Font.FontFamily.TIMES_ROMAN, fontSize, Font.NORMAL, (float) (i - 1) * 9, 0f, rotation);
+                    //iwas.text(testo, Font.FontFamily.TIMES_ROMAN, fontSize, Font.NORMAL, (float) (i - 1) * 9, 0f, rotation);
                 }
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 try {
