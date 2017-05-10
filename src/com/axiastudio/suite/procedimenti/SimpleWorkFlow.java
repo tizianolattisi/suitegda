@@ -16,17 +16,15 @@
  */
 package com.axiastudio.suite.procedimenti;
 
-import com.axiastudio.suite.menjazo.AlfrescoHelper;
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaUtil;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.entities.Fase;
@@ -34,13 +32,15 @@ import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.Visto;
 import com.axiastudio.suite.procedimenti.entities.Procedimento;
+import com.axiastudio.suite.protocollo.entities.Protocollo;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
+import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
+import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -98,30 +98,32 @@ public class SimpleWorkFlow {
         binding.setVariable("obj", obj);
         IGestoreDeleghe gestoreDeleghe = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
-        Class formClass = (Class) Register.queryUtility(IForm.class, obj.getClass().getName());
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(formClass, "CMIS");
-        AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(obj);
         List<String> documenti = new ArrayList<String>();
-        List<HashMap> children=null;
-        try {
-            children = alfrescoHelper.children();
-        } catch (Exception e){
-            // log?
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
+        String externalId=null;
+        if( obj instanceof Protocollo ){
+            externalId = "protocollo_" + ((Protocollo) obj).getId();
+        } else if( obj instanceof Pratica ){
+            externalId = "pratica_" + ((Pratica) obj).getId();
         }
-        // XXX: e se Alfresco non è disponibile?
-        if( children != null ){
-            for( Map child: children ){
-                String fileName = (String) child.get("contentStreamFileName");
-                if( fileName != null ){ // XXX: per saltare le cartelle
+        if( externalId!=null ){
+            try {
+                List<Map<String, String>> folderDocuments = docerHelper.searchDocumentsByExternalIdFirstAndRelated(externalId);
+                for( Map<String, String> doc: folderDocuments){
+                    String fileName = doc.get("FILENAME");  // XXX: exists?
                     documenti.add(fileName);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         Utente utente = (Utente) Register.queryUtility(IUtente.class);
         binding.setVariable("utente", utente);
         binding.setVariable("gestoreDeleghe", gestoreDeleghe);
         binding.setVariable("finanziariaUtil", finanziariaUtil);
-        binding.setVariable("alfrescoHelper", alfrescoHelper);
+        binding.setVariable("docerHelper", docerHelper);
         binding.setVariable("documenti", documenti);
         binding.setVariable("CodiceCarica", String.class);
         binding.setVariable("PraticaUtil", PraticaUtil.class);
