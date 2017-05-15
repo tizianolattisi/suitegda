@@ -21,7 +21,6 @@ import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.TipoRiferimento;
 import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
 //import com.axiastudio.suite.interoperabilita.entities.Messaggio;
-import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.*;
@@ -39,8 +38,8 @@ import com.axiastudio.suite.interoperabilita.utilities.JAXBHelper;
 import com.axiastudio.suite.pec.NuovoMessaggioRequest;
 import com.axiastudio.suite.pec.NuovoMessaggioResponse;
 import com.axiastudio.suite.pec.UploadAllegatoRequest;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.cmis.CmisUtil;
+import com.axiastudio.suite.plugins.cmis.DocerPlugin;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
@@ -52,9 +51,10 @@ import com.axiastudio.suite.pubblicazioni.PubblicazioneUtil;
 import com.axiastudio.suite.scanndo.ScanNDo;
 import com.trolltech.qt.core.QModelIndex;
 import com.trolltech.qt.gui.*;
-import it.tn.rivadelgarda.comune.gda.WebAppBridge;
-import it.tn.rivadelgarda.comune.gda.WebAppBridgeBuilder;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiUtente;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
@@ -91,8 +91,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static com.axiastudio.suite.protocollo.entities.Mailbox_.username;
-
 
 /**
  *
@@ -113,7 +111,9 @@ public class FormProtocollo extends Window {
     List<Ufficio> uffici = new ArrayList();
     List<Ufficio> ufficiRicerca = new ArrayList();
     List<Ufficio> ufficiPrivato = new ArrayList();
-    AlfrescoHelper alfrescoHelper;
+//    DocerHelper docerHelper;
+    DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Protocollo.class, "DocER");
+    String protocolloExternalId;
 
     public FormProtocollo(FormProtocollo form){
         super(form.uiFile, form.entityClass, form.title);
@@ -335,7 +335,16 @@ public class FormProtocollo extends Window {
 
     private void consolidaDocumenti() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        if ( alfrescoHelper.numberOfDocument() < 1 ) {
+        // numero di documenti contenuti in Doc/ER
+        DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+        int n=0;
+        try {
+            n = docerHelper.numberOfDocumentByExternalId(protocolloExternalId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        if ( n < 1 ) {
             QMessageBox.StandardButtons stdbtns = new QMessageBox.StandardButtons(QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
             QMessageBox.StandardButton conferma = QMessageBox.question(this, "Attenzione",
                     "Non esistono documenti collegati al protocollo. Si desidera ugualmente consolidare???",
@@ -531,11 +540,21 @@ public class FormProtocollo extends Window {
             tabWidget.setTabEnabled(3, false);
         }
 
-        // numero di documenti contenuti nella cartella Alfresco
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Protocollo.class, "CMIS");
-        alfrescoHelper = cmisPlugin.createAlfrescoHelper(protocollo);
-        Long n = alfrescoHelper.numberOfDocument();
-        labelConsolida.setText(labelConsolida.text() + "\n " + n + " documento/i");
+        // numero di documenti contenuti in Doc/ER
+        DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+        protocolloExternalId="protocollo_" + protocollo.getId();
+        int n=0;
+        try {
+            n = docerHelper.numberOfDocumentByExternalId(protocolloExternalId);
+            labelConsolida.setText(labelConsolida.text() + "\n " + Integer.toString(n) + " documento/i");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if ( n==0 ) {
+            QMessageBox.information(this, "Attenzione", "Nessun documento collegato al messaggio/richiesta.");
+            return;
+
+        }
     }
 
     private void aggiornaTipo() {
@@ -625,9 +644,8 @@ public class FormProtocollo extends Window {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
 
-        Application app = Application.getApplicationInstance();
-        DocerHelper helper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
-                (String) app.getConfigItem("docer.password"));
+        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Protocollo.class, "DocER");
+        DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
 
         // creazione dei flag con i permessi di accesso alla folder
         Boolean view = false;
@@ -665,7 +683,7 @@ public class FormProtocollo extends Window {
         // apertura folder
         if( view ) {
 
-            String url = "http://192.168.64.200:8080/gdadocer/index.html#?externalId=" + externalId;
+            String url = "#?externalId=" + externalId;
             url += "&iddocumento=" + protocollo.getIddocumento();
             url += "&dataprotocollo=" + protocollo.getDataprotocollo();
             String codiceinterno="";
@@ -682,21 +700,7 @@ public class FormProtocollo extends Window {
             }
             url += "&flags=" + flags;
 
-            WebAppBridge bridge = WebAppBridgeBuilder.create()
-                    .url(url)
-//                .developerExtrasEnabled(Boolean.TRUE)                       // abilità "inspect" dal menu contestuale
-                    .javaScriptEnabled(Boolean.TRUE)                            // abilità l'esecuzione di JavaScript
-//                .javaScriptCanOpenWindows(Boolean.TRUE)                     // JS può aprire finestre in popup
-//                .javaScriptCanCloseWindows(Boolean.TRUE)                    // JS può chiudere finestre
-//                .javaScriptCanAccessClipboard(Boolean.TRUE)                 // JS legge e scrive da clipboard
-                    .cookieJarEnabled(Boolean.TRUE)                             // la pagina può impostare dei cookie
-                    .downloadEnabled(Boolean.TRUE)                              // download abilitati
-//                .downloadContentTypes(new String[]{"application/pdf"})      // content type permessi al download
-                    .downloadPath("/home/pivamichela")                   // cartella proposta per il download
-//                .loadFinishedCallback(callbackClass, "callback()")          // callback da eseguire a pagina caricata
-                    .build();
-
-            bridge.show();
+            docerPlugin.showForm(protocollo, url);
         }
 
     }
@@ -980,9 +984,26 @@ public class FormProtocollo extends Window {
         }
 
         int numAllegati=0;
-        CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
-        AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
-        if( helper.children().size() == 0 ){
+        DocerHelper helper = docerPlugin.createDocerHelper(protocollo);
+        List<Map<String, String>> documenti=new ArrayList<Map<String, String>>();
+        Map<MetadatiDocumento, String> order=new HashMap<MetadatiDocumento, String>() {{
+            put(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC); }};
+        try {
+//            KeyValuePair[] orderBy = KeyValuePairFactory.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC)
+//                    .get();
+            Map<MetadatiDocumento, String> searchCriteria = new HashMap<MetadatiDocumento, String>();
+            searchCriteria.put(MetadatiDocumento.EXTERNAL_ID, protocolloExternalId);
+            searchCriteria.put(MetadatiDocumento.TIPO_COMPONENTE, MetadatiDocumento.TIPO_COMPONENTE_PRINCIPALE);
+            documenti=helper.searchDocuments(Arrays.asList(searchCriteria), Arrays.asList(order));
+            numAllegati=documenti.size();
+//            numAllegati = helper.numberOfDocumentByExternalId(protocolloExternalId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            QMessageBox.critical(this, "Errore grave",
+                    "Errore nella lettura dei documenti collegati al protocollo. Invio PEC annullato.");
+            return;
+        }
+        if( numAllegati == 0 ){
             int conferma = QMessageBox.question(this, "Attenzione", "Non ci sono file allegati. Si desidera continuare?",
                     QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
             if( QMessageBox.StandardButton.No.equals(conferma) ){
@@ -990,34 +1011,27 @@ public class FormProtocollo extends Window {
                 return;
             }
         } else {
-            for (Map<String, String> map : helper.children()) {
-                /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
-                Date documentDate = new Date();
-                DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
-                try {
-                    documentDate = df.parse(map.get("creationDate"));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                if ( documentDate.before(protocollo.getDataconsolidadocumenti()) ) {
-                    numAllegati++;
-                }
+            List<Map<String, String>> allegati=new ArrayList<Map<String, String>>();
+            try {
+                Map<MetadatiDocumento, String> searchCriteria = new HashMap<MetadatiDocumento, String>();
+                searchCriteria.put(MetadatiDocumento.EXTERNAL_ID, protocolloExternalId);
+                searchCriteria.put(MetadatiDocumento.TIPO_COMPONENTE, MetadatiDocumento.TIPO_COMPONENTE_ALLEGATO);
+                allegati=helper.searchDocuments(Arrays.asList(searchCriteria), Arrays.asList(order));
+            } catch (Exception e) {
+                e.printStackTrace();
+                QMessageBox.critical(this, "Errore grave",
+                        "Errore nella lettura degli allegati collegati al protocollo. Invio PEC annullato.");
+                return;
             }
-            if ( numAllegati==0 ) {
-                int conferma = QMessageBox.question(this, "Attenzione", "Non ci sono file allegati. Si desidera continuare?",
-                        QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
-                if (QMessageBox.StandardButton.No.equals(conferma)) {
-                    System.out.println("sono uscito");
-                    return;
-                }
-            } else {
-                int conferma = QMessageBox.question(this, "Numero di allegati corretto?",
-                        "N. " + ((Integer) numAllegati).toString() + " file allegati da inviare. Si desidera continuare?",
-                        QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
-                if (QMessageBox.StandardButton.No.equals(conferma)) {
-                    System.out.println("sono uscito");
-                    return;
-                }
+            documenti.addAll(allegati);
+            numAllegati=documenti.size();
+
+            int conferma = QMessageBox.question(this, "Numero di allegati corretto?",
+                    "N. " + ((Integer) numAllegati).toString() + " file allegati da inviare. Si desidera continuare?",
+                    QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
+            if (QMessageBox.StandardButton.No.equals(conferma)) {
+                System.out.println("sono uscito");
+                return;
             }
         }
 
@@ -1053,7 +1067,8 @@ public class FormProtocollo extends Window {
             // messaggio
             NuovoMessaggioResponse messaggioResponse;
             try {
-                messaggioResponse = messaggiTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(messaggiRequest, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
+                messaggioResponse = messaggiTarget.request(MediaType.APPLICATION_JSON).
+                        post(Entity.entity(messaggiRequest, MediaType.APPLICATION_JSON), NuovoMessaggioResponse.class);
             } catch (ClientErrorException restError) {
                 String error_response = restError.getResponse().readEntity(String.class);
                 System.out.println(error_response);
@@ -1065,48 +1080,40 @@ public class FormProtocollo extends Window {
 
             // allegati
             List<String> nomiFile = new ArrayList<String>();
-//            if (helper.children().size() > 0) { // c'è qualcosa da allegare
-            if (numAllegati > 0) { // c'è qualcosa da allegare
-                for (Map<String, String> map : helper.children()) {
-                    /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
-                    String strDataFile = map.get("lastModificationDate");
-                    Date documentDate = new Date();
-                    DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
-                    try {
-                        documentDate = df.parse(strDataFile);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    if ( documentDate.before(protocollo.getDataconsolidadocumenti()) ) {
-                        String objectId = map.get("objectId");
-                        String name = map.get("name");
-                        String mime = map.get("mime");
-                        Integer length = Integer.parseInt(map.get("contentStreamLength"));
-                        Document document = helper.getDocument(objectId);
+            for (Map<String, String> map : documenti) {
+                String objectId = map.get(MetadatiDocumento.DOCNUM); // docnum o external_id o ...?
+                String name = map.get(MetadatiDocumento.DOCNAME);
+                String mime = map.get("mime");  // ??????????
+                Integer length = Integer.parseInt(map.get("contentStreamLength"));
+//                Document document = helper.getDocument(objectId);
 
-                        WebTarget allegatiTarget = client.target(pecServerUrl).path("api/allegati/upload");
-                        MultiPart multiPart = new MultiPart();
-                        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
+                WebTarget allegatiTarget = client.target(pecServerUrl).path("api/allegati/upload");
+                MultiPart multiPart = new MultiPart();
+                multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
 
-                        UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
-                        allegatoRequest.setContentType(mime);
-                        allegatoRequest.setFileName(name);
-                        nomiFile.add(name);
-                        allegatoRequest.setSize(length);
-                        allegatoRequest.setIdMessaggio(messaggioResponse.getMessageId());
-                        FormDataBodyPart allegatoDataBodyPart = new FormDataBodyPart("allegato", allegatoRequest, MediaType.APPLICATION_JSON_TYPE);
-                        multiPart.bodyPart(allegatoDataBodyPart);
+                UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
+                allegatoRequest.setContentType(mime);
+                allegatoRequest.setFileName(name);
+                nomiFile.add(name);
+                allegatoRequest.setSize(length);
+                allegatoRequest.setIdMessaggio(messaggioResponse.getMessageId());
+                FormDataBodyPart allegatoDataBodyPart = new FormDataBodyPart("allegato", allegatoRequest, MediaType.APPLICATION_JSON_TYPE);
+                multiPart.bodyPart(allegatoDataBodyPart);
 
-                        StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", document.getContentStream().getStream(), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
-                        multiPart.bodyPart(fileDataBodyPart);
+//                StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", document.getContentStream().getStream(), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+                try {
+                    StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", helper.getDocumentStream(objectId, "1"), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    QMessageBox.critical(this, "Errore grave",
+                            "Errore nella lettura del contenuto dei file collegati al protocollo. Invio PEC annullato.");
+                    return;
+                }
+                Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-                        Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
-
-                        if (!(response.getStatus() == Response.Status.OK.getStatusCode())) {
-                            QMessageBox.critical(this, "Attenzione!", "Problemi con l'allegato " + name);
-                            return;
-                        }
-                    }
+                if (!(response.getStatus() == Response.Status.OK.getStatusCode())) {
+                    QMessageBox.critical(this, "Attenzione!", "Problemi con l'allegato " + name);
+                    return;
                 }
             }
 
@@ -1174,7 +1181,7 @@ public class FormProtocollo extends Window {
     /*
     private String segnaturaXml() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
+        AlfrescoCmisPlugin plugin = (AlfrescoCmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
         AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
         Segnatura segnatura = JAXBHelper.segnaturaDaProtocollo(protocollo);
         String xml = JAXBHelper.scriviSegnatura(segnatura);

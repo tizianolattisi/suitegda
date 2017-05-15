@@ -25,8 +25,7 @@ import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.base.entities.*;
-import com.axiastudio.suite.menjazo.AlfrescoHelper;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.DocerPlugin;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.axiastudio.suite.richieste.entities.DestinatarioUfficio;
@@ -37,6 +36,7 @@ import com.trolltech.qt.core.*;
 import com.trolltech.qt.designer.QUiLoader;
 import com.trolltech.qt.designer.QUiLoaderException;
 import com.trolltech.qt.gui.*;
+import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -48,6 +48,7 @@ import java.util.logging.Logger;
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
+ * @author Michela Piva - Comune di Riva del Garda
  */
 public class FormScrivania  extends QMainWindow {
     private Store<Attribuzione> attribuzioneStoreGenerale = new Store<Attribuzione>(null);
@@ -364,11 +365,15 @@ public class FormScrivania  extends QMainWindow {
                     listWidget_soggetti.addItem(item);
                 }
             }
-            // numero di documenti contenuti nella cartella Alfresco
-            CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Protocollo.class, "CMIS");
-            AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(protocollo);
-            Long n = alfrescoHelper.numberOfDocument();
-            groupBox.setTitle("Anteprima - " + n + " documento/i");
+            // numero di documenti contenuti in Doc/ER
+            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Protocollo.class, "DocER");
+            DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+            try {
+                int n = docerHelper.numberOfDocumentByExternalId("protocollo_" + protocollo.getId().toString());
+                groupBox.setTitle("Anteprima - " + Integer.toString(n) + " documento/i");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             textEdit_oggetto.setText("");
             groupBox.setTitle("Anteprima");
@@ -394,11 +399,15 @@ public class FormScrivania  extends QMainWindow {
                 item.setText(dest.getNomedestinatario());
                 listWidget_destinatari.addItem(item);
             }
-            // numero di documenti contenuti nella cartella Alfresco
-            CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
-            AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(richiesta);
-            Long n = alfrescoHelper.numberOfDocument();
-            groupBox.setTitle("Anteprima - " + n + " documento/i");
+            // numero di documenti contenuti in Doc/ER
+            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Richiesta.class, "DocER");
+            DocerHelper docerHelper = docerPlugin.createDocerHelper(richiesta);
+            try {
+                int n = docerHelper.numberOfDocumentByExternalId("richiesta_" + richiesta.getId().toString());
+                groupBox.setTitle("Anteprima - " + Integer.toString(n) + " documento/i");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             textEdit_oggetto.setText("");
             groupBox.setTitle("Anteprima");
@@ -502,7 +511,7 @@ public class FormScrivania  extends QMainWindow {
         ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
         List<IPlugin> plugins = (List) Register.queryPlugins(FormScrivania.class);
         for(IPlugin plugin: plugins){
-            if( "CMIS".equals(plugin.getName()) ){
+            if( "DocER".equals(plugin.getName()) ){
                 Boolean view = false;
                 Boolean delete = false;
                 Boolean download = false;
@@ -531,19 +540,24 @@ public class FormScrivania  extends QMainWindow {
                     delete = upload;
                     version = upload;
                 }
-                HashMap stampMap = new HashMap();
-                stampMap.put("iddocumento", protocollo.getIddocumento());
-                stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
+                String url = "#?externalId=protocollo_" + protocollo.getId();
+                url += "&iddocumento=" + protocollo.getIddocumento();
+                url += "&dataprotocollo=" + protocollo.getDataprotocollo();
                 String codiceinterno="";
                 for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
                     if ( pratica.getOriginale() ) {
                         codiceinterno=pratica.getPratica().getCodiceinterno();
                     }
                 }
-                stampMap.put("codiceinterno", codiceinterno);
-                stampMap.put("utente", autenticato.getNome().toUpperCase());
+                url += "&codiceinterno=" + codiceinterno;
+                url += "&utente=" + autenticato.getNome().toUpperCase();
+                String flags="";
+                for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
+                    flags += flag ? "1" :  "0";
+                }
+                url += "&flags=" + flags;
 
-                ((CmisPlugin) plugin).showForm(protocollo, delete, download, parent, upload, version, stampMap);
+                ((DocerPlugin) plugin).showForm(protocollo, url);
             }
         }
     }
@@ -552,17 +566,25 @@ public class FormScrivania  extends QMainWindow {
         Richiesta richiesta = this.selectionRichiesta.get(0).getRichiesta();
         List<IPlugin> plugins = (List) Register.queryPlugins(Richiesta.class);
         for(IPlugin plugin: plugins) {
-            if ("CMIS".equals(plugin.getName())) {
+            if ("DocER".equals(plugin.getName())) {
                 Boolean view = false;
                 Boolean delete = false;
                 Boolean download = false;
                 Boolean parent = false;
                 Boolean upload = false;
                 Boolean version = false;
-                AlfrescoHelper alfrescoHelper = ((CmisPlugin) plugin).createAlfrescoHelper(richiesta);
-                if ( alfrescoHelper.numberOfDocument()==0 ) {
+                String richiestaExternalId = "richiesta_" + richiesta.getId().toString();
+                DocerHelper docerHelper = ((DocerPlugin) plugin).createDocerHelper(richiesta);
+                int n=0;
+                try {
+                    n = docerHelper.numberOfDocumentByExternalId(richiestaExternalId);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if ( n==0 ) {
                     QMessageBox.information(this, "Attenzione", "Nessun documento collegato al messaggio/richiesta.");
                     return;
+
                 }
                 Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
                 for ( DestinatarioUtente du: richiesta.getDestinatarioUtenteCollection() ) {
@@ -582,7 +604,13 @@ public class FormScrivania  extends QMainWindow {
                     }
                 }
                 if (view) {
-                    ((CmisPlugin) plugin).showForm(richiesta, delete, download, parent, upload, version, null);
+                    String url = "#?externalId=" + richiestaExternalId;
+                    String flags="";
+                    for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
+                        flags += flag ? "1" : "0";
+                    }
+                    url += "&flags=" + flags;
+                    ((DocerPlugin) plugin).showForm(richiesta, url);
                 } else {
                     QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
                     return;

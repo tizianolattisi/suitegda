@@ -30,7 +30,7 @@ import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.forms.DialogStampaEtichetta;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.AlfrescoCmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.suite.pratiche.IDettaglio;
@@ -159,7 +159,8 @@ public class FormPratica extends Window implements IDocumentFolder {
         } else {
             map.put("codiceaggiuntivo", pratica.getCodiceaggiuntivo());
         }
-        map.put("tipopratica", pratica.getCodiceinterno().substring(0, 3));
+        int end=java.lang.Math.min(3, pratica.getCodiceinterno().length());
+        map.put("tipopratica", pratica.getCodiceinterno().substring(0, end));
         map.put("hash", "1234567890");
         DialogStampaEtichetta dialog = new DialogStampaEtichetta(this, map);
         int exec = dialog.exec();
@@ -405,7 +406,7 @@ public class FormPratica extends Window implements IDocumentFolder {
         List<Template> templates = new ArrayList();
         Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormPratica.class, "CMIS");
+        AlfrescoCmisPlugin cmisPlugin = (AlfrescoCmisPlugin) Register.queryPlugin(FormPratica.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(pratica);
         helper.children("protocollo"); // XXX: per creare il subpath "protocollo"
         List<HashMap> children = helper.children();
@@ -425,7 +426,7 @@ public class FormPratica extends Window implements IDocumentFolder {
     public void createDocument(String subpath, String name, String title, String description, byte[] content, String mimeType) {
         Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
         //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormPratica.class, "CMIS");
+        AlfrescoCmisPlugin cmisPlugin = (AlfrescoCmisPlugin) Register.queryPlugin(FormPratica.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(pratica);
 
         // extension
@@ -465,7 +466,7 @@ public class FormPratica extends Window implements IDocumentFolder {
                 Boolean upload = true;
                 Boolean version = true;
                 if( view ){
-                    ((CmisPlugin) plugin).showForm(pratica, delete, download, parent, upload, version);
+                    ((AlfrescoCmisPlugin) plugin).showForm(pratica, delete, download, parent, upload, version);
                 } else {
                     QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
                     return;

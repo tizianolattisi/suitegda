@@ -32,7 +32,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.AlfrescoCmisPlugin;
 import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.plugins.ooops.Template;
@@ -371,7 +371,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
     @Override
     public List<Template> getTemplates() {
         List<Template> templates = new ArrayList<Template>();
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
+        AlfrescoCmisPlugin cmisPlugin = (AlfrescoCmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
         helper.children("protocollo"); // XXX: per creare il subpath "protocollo"
         List<HashMap> children = helper.children();
@@ -393,7 +393,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
     @Override
     public void createDocument(String subpath, String name, String title, String description, byte[] content, String mimeType) {
         //Pratica pratica = SuiteUtil.findPratica(pratica.getIdpratica());
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
+        AlfrescoCmisPlugin cmisPlugin = (AlfrescoCmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
 
         // extension
@@ -431,7 +431,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
                 Boolean upload = true;
                 Boolean version = true;
                 if( view ){
-                    ((CmisPlugin) plugin).showForm(determina, delete, download, parent, upload, version);
+                    ((AlfrescoCmisPlugin) plugin).showForm(determina, delete, download, parent, upload, version);
                 } else {
                     QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
                     return;

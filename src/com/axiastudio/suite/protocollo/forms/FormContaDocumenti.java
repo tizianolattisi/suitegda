@@ -23,8 +23,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.menjazo.AlfrescoHelper;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.DocerPlugin;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.trolltech.qt.core.QByteArray;
@@ -34,9 +33,10 @@ import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.designer.QUiLoader;
 import com.trolltech.qt.designer.QUiLoaderException;
 import com.trolltech.qt.gui.*;
+import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +54,7 @@ public class FormContaDocumenti extends QMainWindow {
     private QCheckBox noDocumenti;
     private final Integer DEFAULT_ROW_HEIGHT = 24;
     private ContaDocumentiMenuBar menuBar;
-    private CmisPlugin cmisPlugin;
+    DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Protocollo.class, "DocER");
 
     public FormContaDocumenti(){
         QFile file = Util.ui2jui(new QFile("classpath:com/axiastudio/suite/protocollo/forms/contadocumenti.ui"));
@@ -75,8 +75,6 @@ public class FormContaDocumenti extends QMainWindow {
 
         totRecord = (QLabel) this.findChild(QLabel.class, "labelTotRecord");
         noDocumenti = (QCheckBox) this.findChild(QCheckBox.class, "checkBoxNoDocumenti");
-
-        cmisPlugin = (CmisPlugin) Register.queryPlugin(Protocollo.class, "CMIS");
     }
     
    private void loadUi(QFile uiFile){
@@ -105,6 +103,7 @@ public class FormContaDocumenti extends QMainWindow {
             Boolean noDoc = (noDocumenti.checkState() == Qt.CheckState.Checked);
             int i = 0;
             for ( Protocollo protocollo: (List<Protocollo>) pd.getSelection() ) {
+                DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
                 for ( Attribuzione attr: protocollo.getAttribuzioneCollection() ) {
                     if (attr.getPrincipale() && ufficiUtente.contains(attr.getUfficio())) {
                         ContaDocumenti contadoc = new ContaDocumenti();
@@ -112,8 +111,14 @@ public class FormContaDocumenti extends QMainWindow {
                         contadoc.setUfficio(attr.getUfficio());
                         if ( i<200 ) {
                             // numero di documenti contenuti nella cartella Alfresco
-                            AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(protocollo);
-                            contadoc.setNumDocumenti(alfrescoHelper.numberOfDocument());
+                            int n=0;
+                            try {
+                                n = docerHelper.numberOfDocumentByExternalId("protocollo_" + protocollo.getId());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                return;
+                            }
+                            contadoc.setNumDocumenti((long) n);
                         } else if ( i==200) {
                             QMessageBox.warning(this, "Attenzione", "Raggiunta la quota massima di 200 protocolli. Conteggio dei documenti non attivo per i successivi.");
                         }
@@ -214,19 +219,24 @@ public class FormContaDocumenti extends QMainWindow {
             delete = upload;
             version = upload;
         }
-        HashMap stampMap = new HashMap();
-        stampMap.put("iddocumento", protocollo.getIddocumento());
-        stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
+        String url = "#?externalId=protocollo_" + protocollo.getId();
+        url += "&iddocumento=" + protocollo.getIddocumento();
+        url += "&dataprotocollo=" + protocollo.getDataprotocollo();
         String codiceinterno="";
         for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
             if ( pratica.getOriginale() ) {
                 codiceinterno=pratica.getPratica().getCodiceinterno();
             }
         }
-        stampMap.put("codiceinterno", codiceinterno);
-        stampMap.put("utente", autenticato.getNome().toUpperCase());
+        url += "&codiceinterno=" + codiceinterno;
+        url += "&utente=" + autenticato.getNome().toUpperCase();
+        String flags="";
+        for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
+            flags += flag ? "1" :  "0";
+        }
+        url += "&flags=" + flags;
 
-        cmisPlugin.showForm(protocollo, delete, download, parent, upload, version, stampMap);
+        docerPlugin.showForm(protocollo, url);
     }
 
     private void apriProtocollo(){

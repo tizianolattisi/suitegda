@@ -1,11 +1,10 @@
 package com.axiastudio.suite.pubblicazioni;
 
-import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.db.Validation;
+import com.axiastudio.suite.plugins.cmis.DocerPlugin;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.entities.TipoAttoPubblicazione;
@@ -59,9 +58,8 @@ public class PubblicazioneUtil {
         controllerPubblicazione.commit(pubblicazione);
         String pubblicazioneExternalId = "pubblicazione_" + pubblicazione.getId();
 
-        Application app = Application.getApplicationInstance();
-        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
-                (String) app.getConfigItem("docer.password"));
+        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Pubblicazione.class, "DocER");
+        DocerHelper docerHelper = docerPlugin.createDocerHelper(pubblicazione);
 
         String protocolloExternalId = "protocollo_" + protocollo.getId();
         try {
@@ -76,7 +74,6 @@ public class PubblicazioneUtil {
                 } else {
                     continue;
                 }
-                System.out.println("Sono qui!");
                 docerHelper.createDocumentTypeDocumentoAndRelateToExternalId(
                         doc.get("DOCNAME"),
                         bytes,

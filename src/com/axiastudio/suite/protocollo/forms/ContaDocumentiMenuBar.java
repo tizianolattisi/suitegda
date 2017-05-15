@@ -37,7 +37,7 @@ public class ContaDocumentiMenuBar extends QToolBar {
                 "classpath:com/axiastudio/suite/resources/email.png",
                 "Apri la finestra di dettaglio e gestione", parent);
         this.insertButton("apriDocumenti", "Apri documenti",
-                "classpath:com/axiastudio/suite/menjazo/resources/menjazo.png",
+                "classpath:com/axiastudio/suite/plugins/cmis/docer.png",
                 "Apre lo spazio documenti", parent);
 /*        this.insertButton("aggiornaLista", "Aggiorna lista",
                 "classpath:com/axiastudio/suite/resources/arrow_refresh.png",

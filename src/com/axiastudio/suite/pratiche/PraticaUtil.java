@@ -32,7 +32,7 @@ import com.axiastudio.suite.base.entities.*;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.deliberedetermine.entities.UfficioDetermina;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.AlfrescoCmisPlugin;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
@@ -362,7 +362,7 @@ public class PraticaUtil {
         Validation validation = controller.commit(protocollo);
         if( validation.getResponse() ){
             // creo la cartella
-            CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
+            AlfrescoCmisPlugin plugin = (AlfrescoCmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");
             AlfrescoHelper helper = plugin.createAlfrescoHelper(protocollo);
             helper.createFolder();
         }
@@ -546,7 +546,7 @@ public class PraticaUtil {
         }
 
         /* ricerca e preparazione */
-        CmisPlugin plugin = (CmisPlugin) Register.queryPlugin(dettaglio.getClass(), "CMIS");
+        AlfrescoCmisPlugin plugin = (AlfrescoCmisPlugin) Register.queryPlugin(dettaglio.getClass(), "CMIS");
         AlfrescoHelper alfrescoHelper = plugin.createAlfrescoHelper(dettaglio);
         OoopsPlugin ooopsPlugin = (OoopsPlugin) Register.queryPlugin(Pratica.class, "Ooops");
         String ooopsConnectionString = ooopsPlugin.getConnectionString();
