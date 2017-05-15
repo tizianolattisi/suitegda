@@ -16,7 +16,6 @@
  */
 package com.axiastudio.suite.procedimenti;
 
-import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
@@ -24,7 +23,9 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaUtil;
+import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
+import com.axiastudio.suite.plugins.cmis.DocerPlugin;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.entities.Fase;
@@ -36,7 +37,6 @@ import com.axiastudio.suite.protocollo.entities.Protocollo;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
-import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -99,20 +99,21 @@ public class SimpleWorkFlow {
         IGestoreDeleghe gestoreDeleghe = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
         List<String> documenti = new ArrayList<String>();
-        Application app = Application.getApplicationInstance();
-        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
-                (String) app.getConfigItem("docer.password"));
+        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Pratica.class, "DocER");
+        DocerHelper docerHelper = docerPlugin.createDocerHelper(obj);
         String externalId=null;
         if( obj instanceof Protocollo ){
             externalId = "protocollo_" + ((Protocollo) obj).getId();
-        } else if( obj instanceof Pratica ){
+        } else if( obj instanceof Pratica){
             externalId = "pratica_" + ((Pratica) obj).getId();
+        } else if( obj instanceof Determina){
+            externalId = "pratica_" + ((Determina) obj).getId();
         }
         if( externalId!=null ){
             try {
                 List<Map<String, String>> folderDocuments = docerHelper.searchDocumentsByExternalIdFirstAndRelated(externalId);
                 for( Map<String, String> doc: folderDocuments){
-                    String fileName = doc.get("FILENAME");  // XXX: exists?
+                    String fileName = doc.get("DOCNAME");  // XXX: exists?
                     documenti.add(fileName);
                 }
             } catch (Exception e) {
