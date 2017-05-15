@@ -21,7 +21,7 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.AlfrescoCmisPlugin;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
@@ -53,7 +53,7 @@ public class RuleSet {
 
         // documenti
         Class formClass = (Class) Register.queryUtility(IForm.class, entity.getClass().getName());
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(formClass, "CMIS");
+        AlfrescoCmisPlugin cmisPlugin = (AlfrescoCmisPlugin) Register.queryPlugin(formClass, "CMIS");
         AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(entity);
         List<String> documenti = new ArrayList<String>();
         List<HashMap> children=null;
