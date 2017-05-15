@@ -25,13 +25,13 @@ import java.io.InputStream;
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
-public class CmisStreamProvider implements IStreamProvider {
+public class AlfrescoCmisStreamProvider implements IStreamProvider {
     private final String cmisUrl;
     private final String user;
     private final String password;
     private String idObject;
 
-    public CmisStreamProvider(String cmisUrl, String user, String password, String idObject) {
+    public AlfrescoCmisStreamProvider(String cmisUrl, String user, String password, String idObject) {
         this.cmisUrl = cmisUrl;
         this.user = user;
         this.password = password;

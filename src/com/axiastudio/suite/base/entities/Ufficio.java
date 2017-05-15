@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.base.entities;
 
+import com.axiastudio.suite.base.UfficioListener;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 
@@ -23,6 +24,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Observable;
 
 /**
  *
@@ -30,9 +32,9 @@ import java.util.Date;
  */
 @Entity
 @Table(schema="BASE")
-@EntityListeners({TimeStampedListener.class})
+@EntityListeners({UfficioListener.class,TimeStampedListener.class})
 @SequenceGenerator(name="genufficio", sequenceName="base.ufficio_id_seq", initialValue=1, allocationSize=1)
-public class Ufficio implements Serializable, ITimeStamped {
+public class Ufficio extends Observable implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genufficio")
@@ -91,6 +93,7 @@ public class Ufficio implements Serializable, ITimeStamped {
 
     public void setDenominazione(String denominazione) {
         this.denominazione = denominazione;
+        this.setChanged();
     }
 
     public Boolean getSportello() {
@@ -179,6 +182,10 @@ public class Ufficio implements Serializable, ITimeStamped {
 
     public void setRecordmodificatoda(String recordmodificatoda) {
         this.recordmodificatoda = recordmodificatoda;
+    }
+
+    public void reset() {
+        this.clearChanged();
     }
 
     @Override

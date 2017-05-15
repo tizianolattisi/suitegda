@@ -16,12 +16,14 @@
  */
 package com.axiastudio.suite.base.entities;
 
+import com.axiastudio.suite.base.UfficioUtenteListener;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Observable;
 
 /**
  *
@@ -29,9 +31,9 @@ import java.util.Date;
  */
 @Entity
 @Table(schema="BASE")
-@EntityListeners({TimeStampedListener.class})
+@EntityListeners({UfficioUtenteListener.class,TimeStampedListener.class})
 @SequenceGenerator(name="genufficioutente", sequenceName="base.ufficioutente_id_seq", initialValue=1, allocationSize=1)
-public class UfficioUtente implements Serializable, ITimeStamped {
+public class UfficioUtente extends Observable implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genufficioutente")
@@ -108,6 +110,7 @@ public class UfficioUtente implements Serializable, ITimeStamped {
 
     public void setRiservato(Boolean riservato) {
         this.riservato = riservato;
+        this.setChanged();
     }
 
     public Boolean getRicerca() {
@@ -124,6 +127,7 @@ public class UfficioUtente implements Serializable, ITimeStamped {
 
     public void setVisualizza(Boolean visualizza) {
         this.visualizza = visualizza;
+        this.setChanged();
     }
 
     public Boolean getOspite() {
@@ -220,6 +224,11 @@ public class UfficioUtente implements Serializable, ITimeStamped {
 
     public void setRecordmodificatoda(String recordmodificatoda) {
         this.recordmodificatoda = recordmodificatoda;
+    }
+
+
+    public void reset() {
+        this.clearChanged();
     }
 
     @Override

@@ -31,8 +31,8 @@ import java.util.HashMap;
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 
-class CMISMenuBar extends PyPaPiToolBar {
-    public CMISMenuBar(String title, Window parent, IPlugin plugin){
+class AlfrescoCMISMenuBar extends PyPaPiToolBar {
+    public AlfrescoCMISMenuBar(String title, Window parent, IPlugin plugin){
         super(title, parent);
         this.insertButton("showForm", "CMIS",
                           "classpath:com/axiastudio/suite/menjazo/resources/menjazo.png",
@@ -40,7 +40,7 @@ class CMISMenuBar extends PyPaPiToolBar {
     }
 }
 
-public class CmisPlugin implements IPlugin {
+public class AlfrescoCmisPlugin implements IPlugin {
     
     private static final String name="CMIS";
     
@@ -61,7 +61,7 @@ public class CmisPlugin implements IPlugin {
         if( Window.class.isInstance(parent) ){
             this.parent = parent;
             if( addToolbar && this.canInsertToolbar  ){
-                CMISMenuBar bar = new CMISMenuBar("CMIS", (Window) parent, this);
+                AlfrescoCMISMenuBar bar = new AlfrescoCMISMenuBar("CMIS", (Window) parent, this);
                 ((Window) parent).addToolBar(bar);
             }
         } else if( Dialog.class.isInstance(parent) ){
@@ -134,7 +134,7 @@ public class CmisPlugin implements IPlugin {
 
     @Override
     public String getName() {
-        return CmisPlugin.name;
+        return AlfrescoCmisPlugin.name;
     }
 
     public AlfrescoHelper createAlfrescoHelper(Object entity) {
@@ -144,8 +144,8 @@ public class CmisPlugin implements IPlugin {
         return helper;
     }
 
-    public CmisStreamProvider createCmisStreamProvider(String objectId){
-        return new CmisStreamProvider(cmisUrl, user, password, objectId);
+    public AlfrescoCmisStreamProvider createCmisStreamProvider(String objectId){
+        return new AlfrescoCmisStreamProvider(cmisUrl, user, password, objectId);
     }
 
 }

@@ -17,6 +17,7 @@
 package com.axiastudio.suite.base.entities;
 
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.base.UtenteListener;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
 import com.axiastudio.suite.procedimenti.entities.Delega;
@@ -25,6 +26,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Observable;
 
 /**
  *
@@ -32,9 +34,9 @@ import java.util.Date;
  */
 @Entity
 @Table(schema="BASE")
-@EntityListeners({TimeStampedListener.class})
+@EntityListeners({UtenteListener.class,TimeStampedListener.class})
 @SequenceGenerator(name="genutente", sequenceName="base.utente_id_seq", initialValue=1, allocationSize=1)
-public class Utente implements Serializable, ITimeStamped, IUtente {
+public class Utente extends Observable implements Serializable, ITimeStamped, IUtente {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genutente")
@@ -124,6 +126,7 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
 
     public void setNome(String nome) {
         this.nome = nome;
+        this.setChanged();
     }
 
     public String getSigla() {
@@ -140,6 +143,7 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
 
     public void setEmail(String email) {
         this.email = email;
+        this.setChanged();
     }
 
     public String getLogin() {
@@ -324,6 +328,7 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
 
     public void setDisabilitato(Boolean disabilitato) {
         this.disabilitato = disabilitato;
+        this.setChanged();
     }
 
     public Boolean getNuovodocsuconsolidato() {
@@ -372,6 +377,10 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
 
     public void setRecordmodificatoda(String recordmodificatoda) {
         this.recordmodificatoda = recordmodificatoda;
+    }
+
+    public void reset() {
+        this.clearChanged();
     }
 
     @Override
