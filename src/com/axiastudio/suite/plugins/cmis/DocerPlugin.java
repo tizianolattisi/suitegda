@@ -143,8 +143,8 @@ public class DocerPlugin implements IPlugin {
         return helper;
     }
 
-    public DocerStreamProvider createDocerStreamProvider(String objectId){
-        return new DocerStreamProvider(docerUrl, user, password, objectId);
-    }
+//    public DocerStreamProvider createDocerStreamProvider(String objectId){
+//        return new DocerStreamProvider(docerUrl, user, password, objectId);
+//    }
 
 }
