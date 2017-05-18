@@ -159,7 +159,8 @@ public class FormPratica extends Window implements IDocumentFolder {
         } else {
             map.put("codiceaggiuntivo", pratica.getCodiceaggiuntivo());
         }
-        map.put("tipopratica", pratica.getCodiceinterno().substring(0, 3));
+        int end=java.lang.Math.min(3, pratica.getCodiceinterno().length());
+        map.put("tipopratica", pratica.getCodiceinterno().substring(0, end));
         map.put("hash", "1234567890");
         DialogStampaEtichetta dialog = new DialogStampaEtichetta(this, map);
         int exec = dialog.exec();
@@ -183,7 +184,8 @@ public class FormPratica extends Window implements IDocumentFolder {
                 } else {
                     map.put("codiceaggiuntivo", pratica.getCodiceaggiuntivo());
                 }
-                map.put("tipopratica", pratica.getCodiceinterno().substring(0, 3));
+                int end=java.lang.Math.min(3, pratica.getCodiceinterno().length());
+                map.put("tipopratica", pratica.getCodiceinterno().substring(0, end));
                 map.put("hash", "1234567890");
                 mapList.add(map);
             }

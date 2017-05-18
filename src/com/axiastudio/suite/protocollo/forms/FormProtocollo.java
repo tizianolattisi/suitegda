@@ -507,6 +507,13 @@ public class FormProtocollo extends Window {
             tvSoggettiRiservati.show();
         }
         tabWidgetSoggettiProtocollo.setTabEnabled(1, protocollo.getRiservato());
+        // Visibilità invio PEC su soggetti riservati
+        QTextEdit txStatoPec =  (QTextEdit) this.findChild(QTextEdit.class, "textEdit_StatoPEC");
+        if( nuovoInserimento || !protocollo.getRiservato() || profilo.inSportelloOAttribuzioneR() || autenticato.getSupervisoreprotocollo() ){
+            txStatoPec.show();
+        } else {
+            txStatoPec.hide();
+        }
 
         // Indicazione num riferimenti precedenti/successivi su label della tab
         tabWidget.setTabText(1, "Riferimenti precedenti (" + protocollo.getRiferimentoProtocolloCollection().size() +
