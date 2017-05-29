@@ -14,6 +14,7 @@
  */
 package com.axiastudio.suite.base;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.plugins.cmis.DocerPlugin;
@@ -36,8 +37,9 @@ public class UtenteListener {
 /*
  ***   creazione utente su Doc/ER
  */
-        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Utente.class, "DocER");
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
         Utente utente = (Utente) object;
 
 		try {
@@ -58,8 +60,11 @@ public class UtenteListener {
         Utente utente = (Utente) object;
 
         if ( utente.hasChanged() ) {
-            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Utente.class, "DocER");
-            DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+//            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Utente.class, "DocER");
+//            DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+            Application app = Application.getApplicationInstance();
+            DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                    (String) app.getConfigItem("docer.password"));
 
         /* aggiornamento abilitazione, nomecompleto e email utente (la login non è modificabile!!) */
             try {

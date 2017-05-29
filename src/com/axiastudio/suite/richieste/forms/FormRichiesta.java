@@ -1,5 +1,6 @@
 package com.axiastudio.suite.richieste.forms;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
@@ -84,7 +85,10 @@ public class FormRichiesta extends Window {
 
         super.closeEvent(event);
 
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(richiesta);
+//        DocerHelper docerHelper = docerPlugin.createDocerHelper(richiesta);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
         if ( richiesta.getVarPathDocumento()!=null && richiesta.getVarPathDocumento().length()>0 ) {
             List<Map<String, String>> documents=new ArrayList<Map<String, String>>();
             try {
@@ -118,7 +122,10 @@ public class FormRichiesta extends Window {
         inoltra.setGiornipreavviso(richiesta.getGiornipreavviso());
         inoltra.setPathdocumento("richiestatmp_" + (new SimpleDateFormat(TMP_PATH_TEMPLATE)).format(new Date()));
 
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(richiesta);
+//        DocerHelper docerHelper = docerPlugin.createDocerHelper(richiesta);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
         try {
             List<Map<String, String>> documents = docerHelper.searchDocumentsByExternalIdFirstAndRelated("richiesta_"+richiesta.getId());
             for( Map<String, String> doc: documents){
@@ -250,7 +257,10 @@ public class FormRichiesta extends Window {
             richiestaExternalId = "richiesta_" + richiesta.getId();
             Boolean isEmpty=false;
             try {
-                DocerHelper docerHelper = docerPlugin.createDocerHelper(richiesta);
+//                DocerHelper docerHelper = docerPlugin.createDocerHelper(richiesta);
+                Application app = Application.getApplicationInstance();
+                DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                        (String) app.getConfigItem("docer.password"));
                 isEmpty=docerHelper.searchDocumentsByExternalIdFirst(richiestaExternalId).isEmpty();
             } catch (Exception e) {
                 e.printStackTrace();

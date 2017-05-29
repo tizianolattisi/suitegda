@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.procedimenti;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
@@ -99,8 +100,11 @@ public class SimpleWorkFlow {
         IGestoreDeleghe gestoreDeleghe = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
         List<String> documenti = new ArrayList<String>();
-        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Pratica.class, "DocER");
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(obj);
+//        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Pratica.class, "DocER");
+//        DocerHelper docerHelper = docerPlugin.createDocerHelper(obj);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
         String externalId=null;
         if( obj instanceof Protocollo ){
             externalId = "protocollo_" + ((Protocollo) obj).getId();

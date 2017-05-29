@@ -90,24 +90,10 @@ public class DocerPlugin implements IPlugin {
         this.urlpath = urlpath;
     }
 
-//    public void showForm() {
-//        this.showForm(null);
-//    }
-
     public void showForm(Object entity, String url) {
         this.showForm(entity, url, true);
     }
 
-//    public void showForm(Object entity, String url, Boolean delete, Boolean download, Boolean parent, Boolean upload, Boolean version) {
-//        this.showForm(entity, url, delete, download, parent, upload, version, new HashMap());
-//    }
-//
-//    public void showForm(Object entity, String url,Boolean delete, Boolean download, Boolean parent, Boolean upload, Boolean version, HashMap map) {
-//        this.showForm(entity, url, delete, download, parent, upload, version, new HashMap(), Boolean.FALSE);
-//    }
-//
-//    public void showForm(Object entity, String url, Boolean delete, Boolean download, Boolean parent, Boolean upload, Boolean version,
-//                         HashMap map, Boolean allowNewEntity) {
     public void showForm(Object entity, String url, Boolean allowNewEntity) {
         if( entity==null ){
             entity = ((Window) this.parent).getContext().getCurrentEntity();
@@ -137,11 +123,11 @@ public class DocerPlugin implements IPlugin {
         return DocerPlugin.name;
     }
 
-    public DocerHelper createDocerHelper(Object entity) {
-//        String path = DocerUtil.cmisPathGenerator(this.template, entity);
-        DocerHelper helper = new DocerHelper(this.docerUrl, this.user, this.password);
-        return helper;
-    }
+//    public DocerHelper createDocerHelper(Object entity) {
+////        String path = DocerUtil.cmisPathGenerator(this.template, entity);
+//        DocerHelper helper = new DocerHelper(this.docerUrl, this.user, this.password);
+//        return helper;
+//    }
 
 //    public DocerStreamProvider createDocerStreamProvider(String objectId){
 //        return new DocerStreamProvider(docerUrl, user, password, objectId);

@@ -336,7 +336,10 @@ public class FormProtocollo extends Window {
     private void consolidaDocumenti() {
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
         // numero di documenti contenuti in Doc/ER
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+//        DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
         int n=0;
         try {
             n = docerHelper.numberOfDocumentByExternalId(protocolloExternalId);
@@ -541,7 +544,10 @@ public class FormProtocollo extends Window {
         }
 
         // numero di documenti contenuti in Doc/ER
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+//        DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
         protocolloExternalId="protocollo_" + protocollo.getId();
         int n=0;
         try {
@@ -644,8 +650,11 @@ public class FormProtocollo extends Window {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
 
-        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Protocollo.class, "DocER");
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+//        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Protocollo.class, "DocER");
+//        DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
 
         // creazione dei flag con i permessi di accesso alla folder
         Boolean view = false;
@@ -984,7 +993,9 @@ public class FormProtocollo extends Window {
         }
 
         int numAllegati=0;
-        DocerHelper helper = docerPlugin.createDocerHelper(protocollo);
+//        DocerHelper helper = docerPlugin.createDocerHelper(protocollo);
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
         List<Map<String, String>> documenti=new ArrayList<Map<String, String>>();
         Map<MetadatiDocumento, String> order=new HashMap<MetadatiDocumento, String>() {{
             put(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC); }};
@@ -994,7 +1005,7 @@ public class FormProtocollo extends Window {
             Map<MetadatiDocumento, String> searchCriteria = new HashMap<MetadatiDocumento, String>();
             searchCriteria.put(MetadatiDocumento.EXTERNAL_ID, protocolloExternalId);
             searchCriteria.put(MetadatiDocumento.TIPO_COMPONENTE, MetadatiDocumento.TIPO_COMPONENTE_PRINCIPALE);
-            documenti=helper.searchDocuments(Arrays.asList(searchCriteria), Arrays.asList(order));
+            documenti=docerHelper.searchDocuments(Arrays.asList(searchCriteria), Arrays.asList(order));
             numAllegati=documenti.size();
 //            numAllegati = helper.numberOfDocumentByExternalId(protocolloExternalId);
         } catch (Exception e) {
@@ -1016,7 +1027,7 @@ public class FormProtocollo extends Window {
                 Map<MetadatiDocumento, String> searchCriteria = new HashMap<MetadatiDocumento, String>();
                 searchCriteria.put(MetadatiDocumento.EXTERNAL_ID, protocolloExternalId);
                 searchCriteria.put(MetadatiDocumento.TIPO_COMPONENTE, MetadatiDocumento.TIPO_COMPONENTE_ALLEGATO);
-                allegati=helper.searchDocuments(Arrays.asList(searchCriteria), Arrays.asList(order));
+                allegati=docerHelper.searchDocuments(Arrays.asList(searchCriteria), Arrays.asList(order));
             } catch (Exception e) {
                 e.printStackTrace();
                 QMessageBox.critical(this, "Errore grave",
@@ -1102,7 +1113,8 @@ public class FormProtocollo extends Window {
 
 //                StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", document.getContentStream().getStream(), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
                 try {
-                    StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", helper.getDocumentStream(objectId, "1"), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+                    StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", docerHelper.getDocumentStream(objectId, "1"),
+                            allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
                 } catch (Exception e) {
                     e.printStackTrace();
                     QMessageBox.critical(this, "Errore grave",

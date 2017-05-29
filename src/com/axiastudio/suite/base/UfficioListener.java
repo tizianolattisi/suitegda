@@ -14,6 +14,7 @@
  */
 package com.axiastudio.suite.base;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.plugins.cmis.DocerPlugin;
@@ -33,8 +34,11 @@ public class UfficioListener {
 /*
  ***   creazione ufficio su Doc/ER
  */
-        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Ufficio.class, "DocER");
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+//        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Ufficio.class, "DocER");
+//        DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
         Ufficio ufficio = (Ufficio) object;
         boolean res=false;
 
@@ -65,8 +69,11 @@ public class UfficioListener {
         Ufficio ufficio = (Ufficio) object;
 
         if ( ufficio.hasChanged() ) {
-            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Ufficio.class, "DocER");
-            DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+//            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Ufficio.class, "DocER");
+//            DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+            Application app = Application.getApplicationInstance();
+            DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                    (String) app.getConfigItem("docer.password"));
             boolean res = false;
 
         /* aggiornamento denominazione ufficio */

@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
@@ -366,8 +367,11 @@ public class FormScrivania  extends QMainWindow {
                 }
             }
             // numero di documenti contenuti in Doc/ER
-            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Protocollo.class, "DocER");
-            DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+//            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Protocollo.class, "DocER");
+//            DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+            Application app = Application.getApplicationInstance();
+            DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                    (String) app.getConfigItem("docer.password"));
             try {
                 int n = docerHelper.numberOfDocumentByExternalId("protocollo_" + protocollo.getId().toString());
                 groupBox.setTitle("Anteprima - " + Integer.toString(n) + " documento/i");
@@ -400,8 +404,11 @@ public class FormScrivania  extends QMainWindow {
                 listWidget_destinatari.addItem(item);
             }
             // numero di documenti contenuti in Doc/ER
-            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Richiesta.class, "DocER");
-            DocerHelper docerHelper = docerPlugin.createDocerHelper(richiesta);
+//            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Richiesta.class, "DocER");
+//            DocerHelper docerHelper = docerPlugin.createDocerHelper(richiesta);
+            Application app = Application.getApplicationInstance();
+            DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                    (String) app.getConfigItem("docer.password"));
             try {
                 int n = docerHelper.numberOfDocumentByExternalId("richiesta_" + richiesta.getId().toString());
                 groupBox.setTitle("Anteprima - " + Integer.toString(n) + " documento/i");
@@ -574,7 +581,10 @@ public class FormScrivania  extends QMainWindow {
                 Boolean upload = false;
                 Boolean version = false;
                 String richiestaExternalId = "richiesta_" + richiesta.getId().toString();
-                DocerHelper docerHelper = ((DocerPlugin) plugin).createDocerHelper(richiesta);
+//                DocerHelper docerHelper = ((DocerPlugin) plugin).createDocerHelper(richiesta);
+                Application app = Application.getApplicationInstance();
+                DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                        (String) app.getConfigItem("docer.password"));
                 int n=0;
                 try {
                     n = docerHelper.numberOfDocumentByExternalId(richiestaExternalId);

@@ -1,5 +1,6 @@
 package com.axiastudio.suite.pubblicazioni;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
@@ -58,8 +59,11 @@ public class PubblicazioneUtil {
         controllerPubblicazione.commit(pubblicazione);
         String pubblicazioneExternalId = "pubblicazione_" + pubblicazione.getId();
 
-        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Pubblicazione.class, "DocER");
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(pubblicazione);
+//        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Pubblicazione.class, "DocER");
+//        DocerHelper docerHelper = docerPlugin.createDocerHelper(pubblicazione);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
 
         String protocolloExternalId = "protocollo_" + protocollo.getId();
         try {

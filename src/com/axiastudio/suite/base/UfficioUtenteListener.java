@@ -14,6 +14,7 @@
  */
 package com.axiastudio.suite.base;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.plugins.cmis.DocerPlugin;
@@ -34,8 +35,9 @@ public class UfficioUtenteListener {
 /*
  ***   inserimento utente in ufficio su Doc/ER
  */
-        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(UfficioUtente.class, "DocER");
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
         UfficioUtente ufficioutente = (UfficioUtente) object;
         boolean res=false;
 
@@ -64,8 +66,11 @@ public class UfficioUtenteListener {
         UfficioUtente ufficioutente = (UfficioUtente) object;
 
         if ( ufficioutente.hasChanged() ) {
-            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(UfficioUtente.class, "DocER");
-            DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+//            DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(UfficioUtente.class, "DocER");
+//            DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+            Application app = Application.getApplicationInstance();
+            DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                    (String) app.getConfigItem("docer.password"));
             boolean res = false;
 
         /* aggiornamento utente-ufficio (inserimento/cancellazione) */
@@ -100,8 +105,11 @@ public class UfficioUtenteListener {
 /*
  ***   cancellazione utente in ufficio su Doc/ER
  */
-        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(UfficioUtente.class, "DocER");
-        DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+//        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(UfficioUtente.class, "DocER");
+//        DocerHelper docerHelper = docerPlugin.createDocerHelper(object);
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
         UfficioUtente ufficioutente = (UfficioUtente) object;
         boolean res=false;
 

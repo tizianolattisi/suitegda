@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.*;
 import com.axiastudio.pypapi.ui.*;
@@ -103,7 +104,10 @@ public class FormContaDocumenti extends QMainWindow {
             Boolean noDoc = (noDocumenti.checkState() == Qt.CheckState.Checked);
             int i = 0;
             for ( Protocollo protocollo: (List<Protocollo>) pd.getSelection() ) {
-                DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+//                DocerHelper docerHelper = docerPlugin.createDocerHelper(protocollo);
+                Application app = Application.getApplicationInstance();
+                DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                        (String) app.getConfigItem("docer.password"));
                 for ( Attribuzione attr: protocollo.getAttribuzioneCollection() ) {
                     if (attr.getPrincipale() && ufficiUtente.contains(attr.getUfficio())) {
                         ContaDocumenti contadoc = new ContaDocumenti();
