@@ -16,19 +16,24 @@
  */
 package com.axiastudio.suite.protocollo.entities;
 
+import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.generale.ITimeStamped;
+import com.axiastudio.suite.protocollo.ISoggettoProtocollo;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
 @Entity
-@Table(schema="PROTOCOLLO")
+@Table(schema="PROTOCOLLO", name="soggettoriservatoprotocollo")
 @SequenceGenerator(name="gensoggettoriservatoprotocollo", sequenceName="protocollo.soggettoriservatoprotocollo_id_seq", initialValue=1, allocationSize=1)
-public class SoggettoRiservatoProtocollo implements Serializable {
+public class SoggettoRiservatoProtocollo implements Serializable, ISoggettoProtocollo, ITimeStamped {
+//    public class SoggettoRiservatoProtocollo extends SoggettoProtocollo implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gensoggettoriservatoprotocollo")
@@ -52,6 +57,35 @@ public class SoggettoRiservatoProtocollo implements Serializable {
     private Boolean notifica=false;
     @Column(name="corrispondenza")
     private Boolean corrispondenza=false;
+    @Column(name="datainizio", columnDefinition="DATE DEFAULT CURRENT_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date datainizio;
+    @Column(name="datafine")
+    @Temporal(TemporalType.DATE)
+    private Date datafine;
+    @Column(name="principale")
+    private Boolean principale=false;
+    @Column(name="pec")
+    private Boolean pec=false;
+    @JoinColumn(name = "soggettoreferente", referencedColumnName = "id")
+    @ManyToOne
+    private Soggetto soggettoReferente;
+    @Column(name = "indirizzo")
+    private String indirizzo;
+    @Column(name="messaggiopec")
+    private Long messaggiopec;
+
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
 
     public Long getId() {
         return id;
@@ -61,6 +95,7 @@ public class SoggettoRiservatoProtocollo implements Serializable {
         this.id = id;
     }
 
+    @Override
     public Protocollo getProtocollo() {
         return protocollo;
     }
@@ -69,6 +104,7 @@ public class SoggettoRiservatoProtocollo implements Serializable {
         this.protocollo = protocollo;
     }
 
+    @Override
     public Soggetto getSoggetto() {
         return soggetto;
     }
@@ -80,6 +116,7 @@ public class SoggettoRiservatoProtocollo implements Serializable {
     /*
      * SoggettoFormattato mette in bold i soggetti di primo inserimento
      */
+    @Override
     public String getSoggettoformattato() {
         String pre = "";
         String post = "";
@@ -112,6 +149,7 @@ public class SoggettoRiservatoProtocollo implements Serializable {
         this.primoinserimento = primoinserimento;
     }
 
+    @Override
     public Boolean getAnnullato() {
         return annullato;
     }
@@ -142,6 +180,135 @@ public class SoggettoRiservatoProtocollo implements Serializable {
 
     public void setCorrispondenza(Boolean corrispondenza) {
         this.corrispondenza = corrispondenza;
+    }
+
+    @Override
+    public Date getDatainizio() {
+        return datainizio;
+    }
+
+    @Override
+    public void setDatainizio(Date datainizio) {
+        this.datainizio = datainizio;
+    }
+
+    public Date getDatafine() {
+        return datafine;
+    }
+
+    public void setDatafine(Date datafine) {
+        this.datafine = datafine;
+    }
+
+    public Boolean getPrincipale() {
+        return principale;
+    }
+
+    public void setPrincipale(Boolean principale) {
+        this.principale = principale;
+    }
+
+    @Override
+    public Boolean getPec() {
+        return pec;
+    }
+
+    public void setPec(Boolean pec) {
+        this.pec = pec;
+    }
+
+    @Override
+    public Soggetto getSoggettoReferente() {
+        return soggettoReferente;
+    }
+
+    @Override
+    public void setSoggettoReferente(Soggetto soggettoReferente) {
+        this.soggettoReferente = soggettoReferente;
+    }
+
+    @Override
+    public String getIndirizzo() {
+        return indirizzo;
+    }
+
+    @Override
+    public void setIndirizzo(String indirizzo) {
+        this.indirizzo = indirizzo;
+    }
+
+    @Override
+    public String getPredicato(){
+        if ( this.getSoggettoReferente()==null ) {
+            return "-";
+        }
+        return this.getSoggettoReferente().toString();
+    }
+
+    public void setPredicato(String predicato){
+        // non deve fare nulla
+    }
+
+    @Override
+    public Long getMessaggiopec() {
+        return messaggiopec;
+    }
+
+    @Override
+    public void setMessaggiopec(Long messaggiopec) {
+        this.messaggiopec = messaggiopec;
+    }
+
+    public RelazioneSoggetto getReferenteRelazione() {
+        return null;
+    }
+
+    public void setReferenteRelazione(RelazioneSoggetto referenteRelazione) {
+        if (referenteRelazione ==  null ) {
+            this.soggettoReferente = null;
+        } else {
+            this.soggettoReferente = referenteRelazione.getRelazionato();
+        }
+    }
+
+    @Override
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    @Override
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
+    }
+
+    @Override
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    @Override
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+    @Override
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    @Override
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
+    }
+
+    @Override
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    @Override
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
 
     @Override

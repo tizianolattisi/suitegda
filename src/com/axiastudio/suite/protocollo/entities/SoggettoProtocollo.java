@@ -20,6 +20,7 @@ import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.generale.ITimeStamped;
 import com.axiastudio.suite.generale.TimeStampedListener;
+import com.axiastudio.suite.protocollo.ISoggettoProtocollo;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -33,7 +34,7 @@ import java.util.Date;
 @EntityListeners({TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="gensoggettoprotocollo", sequenceName="protocollo.soggettoprotocollo_id_seq", initialValue=1, allocationSize=1)
-public class SoggettoProtocollo implements Serializable, ITimeStamped {
+public class SoggettoProtocollo implements Serializable, ISoggettoProtocollo, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gensoggettoprotocollo")
@@ -103,6 +104,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.protocollo = protocollo;
     }
 
+    @Override
     public Soggetto getSoggetto() {
         return soggetto;
     }
@@ -114,6 +116,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
     /*
      * SoggettoFormattato mette in bold i soggetti di primo inserimento
      */
+    @Override
     public String getSoggettoformattato() {
         String pre = "";
         String post = "";
@@ -146,6 +149,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.primoinserimento = primoinserimento;
     }
 
+    @Override
     public Boolean getAnnullato() {
         return annullato;
     }
@@ -178,10 +182,12 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.corrispondenza = corrispondenza;
     }
 
+    @Override
     public Date getDatainizio() {
         return datainizio;
     }
 
+    @Override
     public void setDatainizio(Date datainizio) {
         this.datainizio = datainizio;
     }
@@ -202,6 +208,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.principale = principale;
     }
 
+    @Override
     public Boolean getPec() {
         return pec;
     }
@@ -210,18 +217,22 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.pec = pec;
     }
 
+    @Override
     public Soggetto getSoggettoReferente() {
         return soggettoReferente;
     }
 
+    @Override
     public void setSoggettoReferente(Soggetto soggettoReferente) {
         this.soggettoReferente = soggettoReferente;
     }
 
+    @Override
     public Long getMessaggiopec() {
         return messaggiopec;
     }
 
+    @Override
     public void setMessaggiopec(Long messaggiopec) {
         this.messaggiopec = messaggiopec;
     }
@@ -238,6 +249,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         }
     }
 
+    @Override
     public String getPredicato(){
         if ( this.getSoggettoReferente()==null ) {
             return "-";
@@ -249,6 +261,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         // non deve fare nulla
     }
 
+    @Override
     public String getIndirizzo() {
         return indirizzo;
     }
@@ -257,7 +270,7 @@ public class SoggettoProtocollo implements Serializable, ITimeStamped {
         this.indirizzo = indirizzo;
     }
 
-@Override
+    @Override
     public Date getRecordcreato() {
         return recordcreato;
     }

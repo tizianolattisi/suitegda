@@ -866,16 +866,25 @@
                <string>.soggettoRiservatoProtocolloCollection</string>
               </property>
               <property name="columns" stdset="0">
-               <string>&lt;soggettoformattato&gt;,titolo,&gt;corrispondenza&lt;,&gt;notifica&lt;,&gt;conoscenza&lt;</string>
+               <string>&lt;soggettoformattato&gt;,titolo,&gt;corrispondenza&lt;,&gt;notifica&lt;,&gt;conoscenza&lt;,&gt;pec&lt;</string>
               </property>
               <property name="reference" stdset="0">
                <string>soggetto</string>
               </property>
               <property name="headers" stdset="0">
-               <string>Soggetto,Titolo,cr,nt,cn</string>
+               <string>Soggetto,Titolo,cr,nt,cn,pec</string>
               </property>
               <property name="private" stdset="0">
                <bool>true</bool>
+              </property>
+              <property name="sortcolumn" stdset="0">
+               <number>0</number>
+              </property>
+              <property name="sortorder" stdset="0">
+               <string>&lt;</string>
+              </property>
+              <property name="warnings" stdset="0">
+               <string>datacessazione is not null@Anagrafica cessata</string>
               </property>
              </widget>
             </item>
@@ -1118,37 +1127,31 @@
        <attribute name="title">
         <string/>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5" columnstretch="2,0,0,1">
+       <layout class="QGridLayout" name="gridLayout_5" columnstretch="2,1,0,0,0">
         <property name="margin">
          <number>4</number>
         </property>
-        <item row="0" column="1">
-         <widget class="QLabel" name="label_17">
-          <property name="text">
-           <string>Stato invio PEC</string>
+        <item row="1" column="1" colspan="4">
+         <widget class="QTextEdit" name="textEdit_StatoPEC">
+          <property name="enabled">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QTextEdit" name="textEdit_PECBody">
-          <property name="minimumSize">
+        <item row="0" column="3">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
            <size>
-            <width>500</width>
-            <height>0</height>
+            <width>40</width>
+            <height>20</height>
            </size>
           </property>
-          <property name="acceptRichText">
-           <bool>true</bool>
-          </property>
-          <property name="column" stdset="0">
-           <string>pecBody</string>
-          </property>
-          <property name="private" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
+         </spacer>
         </item>
-        <item row="3" column="0" colspan="4">
+        <item row="3" column="0" colspan="5">
          <widget class="QTextEdit" name="textEdit_Segnatura">
           <property name="enabled">
            <bool>false</bool>
@@ -1181,7 +1184,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="3">
+        <item row="0" column="4">
          <widget class="QLineEdit" name="lineEdit_statopec">
           <property name="enabled">
            <bool>false</bool>
@@ -1203,22 +1206,28 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_17">
+          <property name="text">
+           <string>Stato invio PEC</string>
           </property>
-          <property name="sizeHint" stdset="0">
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QTextEdit" name="textEdit_PECBody">
+          <property name="minimumSize">
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>500</width>
+            <height>0</height>
            </size>
           </property>
-         </spacer>
-        </item>
-        <item row="1" column="1" colspan="3">
-         <widget class="QTextEdit" name="textEdit_StatoPEC">
-          <property name="enabled">
+          <property name="acceptRichText">
+           <bool>true</bool>
+          </property>
+          <property name="column" stdset="0">
+           <string>pecBody</string>
+          </property>
+          <property name="private" stdset="0">
            <bool>true</bool>
           </property>
          </widget>

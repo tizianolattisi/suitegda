@@ -22,6 +22,7 @@ import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit;
 import com.axiastudio.suite.anagrafiche.entities.*;
+import com.axiastudio.suite.protocollo.ISoggettoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Titolo;
@@ -44,7 +45,7 @@ public class FormSoggettoProtocollo extends Dialog {
     private PyPaPiComboBox cmbReferenti;
     private QComboBox cmbIndirizzi;
     private QLabel indirizzo;
-    private SoggettoProtocollo sp;
+    private ISoggettoProtocollo sp;
     private Protocollo protocollo;
 
     public FormSoggettoProtocollo(String uiFile, Class entityClass, String title){
@@ -76,7 +77,7 @@ public class FormSoggettoProtocollo extends Dialog {
     @Override
     protected void showEvent(QShowEvent arg__1) {
 
-        sp = (SoggettoProtocollo) this.getContext().getCurrentEntity();
+        sp = (ISoggettoProtocollo) this.getContext().getCurrentEntity();
         if ( sp!=null ) {
             protocollo = sp.getProtocollo();
             if (protocollo == null) {

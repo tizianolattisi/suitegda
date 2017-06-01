@@ -46,6 +46,7 @@ import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
+import com.axiastudio.suite.protocollo.ISoggettoProtocollo;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.axiastudio.suite.pubblicazioni.PubblicazioneUtil;
@@ -528,6 +529,8 @@ public class FormProtocollo extends Window {
                 // Richiesta informazioni sullo stato dell'invio
                 QTextEdit textStatoPec = (QTextEdit) this.findChild(QTextEdit.class, "textEdit_StatoPEC");
                 textStatoPec.setText(getStatoPec());
+//                textStatoPec = (QTextEdit) this.findChild(QTextEdit.class, "textEdit_PECBody");
+//                textStatoPec.setHtml(protocollo.getPecBody());
             }
         } else {
             tabWidget.setTabText(3, "");
@@ -602,16 +605,25 @@ public class FormProtocollo extends Window {
             if ( attrib.getPrincipale() ) {
                 if (attrib.getDataprincipale() != null) {
                     // si utilizza un campo dedicato alla modifica del flag 'principale'
-                    extra += "<br/><br/>Attribuzione in via principale modificata da : " + attrib.getEsecutoreprincipale() +
+                    extra += "<br/><br/>Attribuzione in via principale modificata da: " + attrib.getEsecutoreprincipale() +
                             "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(attrib.getDataprincipale());
                 } else if (attrib.getRecordmodificato() != null) {
                     // ci si basa sull'ultimo aggiornamento (che potrebbe anche essere il 'dato x letto'...
-                    extra += "<br/><br/>Attribuzione in via principale modificata da " + attrib.getRecordmodificatoda() +
+                    extra += "<br/><br/>Attribuzione in via principale modificata da: " + attrib.getRecordmodificatoda() +
                             "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(attrib.getRecordmodificato());
                 } else {
                     extra += "<br/><br/>Attribuzione in via principale inserita da: " + attrib.getRecordcreatoda() +
                             "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(attrib.getRecordcreato());
                 }
+            }
+        }
+        extra += "<br/><br/>'Dato per letto' in data:";
+        for ( Attribuzione attrib: protocollo.getAttribuzioneCollection() ){
+            extra += "<br/>" + attrib.getUfficio().getDescrizione() + ": ";
+            if ( attrib.getDataletto() != null ) {
+                extra +=  SuiteUtil.DATETIME_FORMAT.format(attrib.getDataletto());
+            } else {
+                extra += " - ";
             }
         }
         SuiteUiUtil.showInfo(this, extra);
@@ -889,12 +901,15 @@ public class FormProtocollo extends Window {
         String pecDocServerUrl = (String) app.getConfigItem("pec.docServerURL");
 
         List<String> destinatari = new ArrayList<String>();
-        Map<String, SoggettoProtocollo> mappaDestinatari = new HashMap<String, SoggettoProtocollo>();
+        Map<String, ISoggettoProtocollo> mappaDestinatari = new HashMap<String, ISoggettoProtocollo>();
         int giaInviato = 0;
         int destinatariPec = 0;
         int destinatariProtocollo = 0;
         boolean daInviare = false;
-        for( SoggettoProtocollo soggettoProtocollo: protocollo.getSoggettoProtocolloCollection() ){
+        Collection<ISoggettoProtocollo> soggettoProtocolloList = new ArrayList<ISoggettoProtocollo>();
+        soggettoProtocolloList.addAll(protocollo.getSoggettoProtocolloCollection());
+        soggettoProtocolloList.addAll(protocollo.getSoggettoRiservatoProtocolloCollection());
+        for( ISoggettoProtocollo soggettoProtocollo: soggettoProtocolloList ){
             if ( !soggettoProtocollo.getAnnullato() ){
                 if ( soggettoProtocollo.getPec() ){
                     destinatariPec++;
@@ -1044,12 +1059,11 @@ public class FormProtocollo extends Window {
                 QMessageBox.critical(this, "Errore", "Errore nella preparazione della PEC da inviare.\n" + error_response);
                 return;
             }
-            SoggettoProtocollo soggettoProtocollo = mappaDestinatari.get(destinatario);
+            ISoggettoProtocollo soggettoProtocollo = mappaDestinatari.get(destinatario);
             soggettoProtocollo.setMessaggiopec(messaggioResponse.getMessageId());
 
             // allegati
             List<String> nomiFile = new ArrayList<String>();
-//            if (helper.children().size() > 0) { // c'è qualcosa da allegare
             if (numAllegati > 0) { // c'è qualcosa da allegare
                 for (Map<String, String> map : helper.children()) {
                     /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
@@ -1103,7 +1117,6 @@ public class FormProtocollo extends Window {
                         soggettoProtocollo.getSoggetto(),
                         destinatario,
                         nomiFile);
-//                String segnaturaXml = JAXBHelper.scriviSegnatura(segnatura);
                 String segnaturaXml = null;
                 try {
                     segnaturaXml = JAXBHelper.scriviSegnatura(segnatura);
@@ -1144,13 +1157,18 @@ public class FormProtocollo extends Window {
                 conn.getInputStream();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                QMessageBox.critical(this, "Errore", "Errore nell'invio della PEC.\n" + e.getMessage());
+                return;
             } catch (ProtocolException e) {
                 e.printStackTrace();
+                QMessageBox.critical(this, "Errore", "Errore nell'invio della PEC.\n" + e.getMessage());
+                return;
             } catch (IOException e) {
                 e.printStackTrace();
+                QMessageBox.critical(this, "Errore", "Errore nell'invio della PEC.\n" + e.getMessage());
+                return;
             }
             System.out.println("fatto");
-//            QMessageBox.information(this, "PEC", "PEC in spedizione.");
         }
         QMessageBox.information(this, "PEC", "N. " + ((Integer) destinatari.size()).toString() + " PEC in spedizione.");
     }
@@ -1187,13 +1205,19 @@ public class FormProtocollo extends Window {
             // Richiesta informazioni sullo stato dell'invio
             QTextEdit textStatoPec = (QTextEdit) this.findChild(QTextEdit.class, "textEdit_StatoPEC");
             textStatoPec.setText(getStatoPec());
+//            Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
+//            textStatoPec = (QTextEdit) this.findChild(QTextEdit.class, "textEdit_PECBody");
+//            textStatoPec.setHtml(protocollo.getPecBody());
         }
     }
 
     private String getStatoPec() {
         String out = "";
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        for (SoggettoProtocollo soggettoProtocollo : protocollo.getSoggettoProtocolloCollection()) {
+        Collection<ISoggettoProtocollo> soggettoProtocolloList = new ArrayList<ISoggettoProtocollo>();
+        soggettoProtocolloList.addAll(protocollo.getSoggettoProtocolloCollection());
+        soggettoProtocolloList.addAll(protocollo.getSoggettoRiservatoProtocolloCollection());
+        for (ISoggettoProtocollo soggettoProtocollo : soggettoProtocolloList) {
             Long messaggiopec = soggettoProtocollo.getMessaggiopec();
             if (messaggiopec != null) {
                 Application app = Application.getApplicationInstance();
