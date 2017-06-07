@@ -69,18 +69,11 @@ public class DocerUtil {
                         metadata.put(MetadatiDocumento.TIPO_FIRMA, "NF");
                         if ( protocollo.getTipo() == TipoProtocollo.ENTRATA ) {
                             metadata.put(MetadatiDocumento.MITTENTI, mittentiDocer(protocollo.getSoggettoProtocolloCollection()));
-                            System.out.print(mittentiDocer(protocollo.getSoggettoProtocolloCollection()));
-                        } else {
-                            metadata.put(MetadatiDocumento.DESTINATARI, "<Destinatari><Destinatario>" +
-                                    "<PersonaGiuridica tipo=\"CodiceFiscalePG\" id=\"1111111111\">" +
-                                    "<Denominazione>AAA SpA</Denominazione>" +
-                                    "<IndirizzoPostale><Denominazione></Denominazione></IndirizzoPostale>" +
-                                    "</PersonaGiuridica>" +
-                                    "</Destinatario></Destinatari>");
+                        } else if ( protocollo.getTipo() == TipoProtocollo.USCITA ) {
+                            metadata.put(MetadatiDocumento.DESTINATARI, destinatariDocer(protocollo.getSoggettoProtocolloCollection()));
                         }
                         String docnum = documento.get("DOCNUM");
                         res = docerHelper.protocollaDocumento(docnum, Arrays.asList(metadata));
-//                        res = docerHelper.protocollaDocumento(documento.get(MetadatiDocumento.DOCNUM), Arrays.asList(metadata));
                         if (!res) {
                             return false;
                         }
@@ -137,23 +130,47 @@ public class DocerUtil {
         }
 
         return mittentiXml + "</Mittenti>";
-//				<Amministrazione>
-//					<!--obbligatorio -->
-//					<Denominazione>Aaaaa</Denominazione>
-//
-//					<!--obbligatorio -->
-//					<CodiceAmministrazione>AAA</CodiceAmministrazione>
-//
-//					<!-- Facoltativo, attributo tipo : smtp|uri|NMTOKEN-->
-//					<IndirizzoTelematico tipo="smtp">
-//                proto.prova3@actaliscertymail.it
-//					</IndirizzoTelematico>
-//
-//					<!--<UnitaOrganizzativa id="1" tipo="temporanea" >UO</UnitaOrganizzativa>-->
-//					<UnitaOrganizzativa  tipo="temporanea" >
-//						<Denominazione>UO</Denominazione>
-//						<Identificativo>UO</Identificativo>
-//					</UnitaOrganizzativa>
-//				</Amministrazione>
     }
+
+    static String destinatariDocer(Collection<SoggettoProtocollo> elencoDestinatari){
+        String destinatariXml="<Destinatari>";
+
+        for (SoggettoProtocollo destinatario: elencoDestinatari) {
+            Soggetto soggetto=destinatario.getSoggetto();
+            String destinatarioXml="<Destinatario>";
+            if ( soggetto.getTipo()== TipoSoggetto.PERSONA ) {
+                String cf;
+                if ( soggetto.getCodicefiscale()!= null ) {
+                    cf=soggetto.getCodicefiscale();
+                } else {
+                    cf=String.format("%016d", soggetto.getId());
+                }
+                destinatarioXml += "<Persona id=\"" + cf + "\">";
+                destinatarioXml += "<Nome>" + soggetto.getNome() + "</Nome>";
+                destinatarioXml += "<Cognome>" + soggetto.getCognome() + "</Cognome>";
+                destinatarioXml += "</Persona>";
+            } else if ( soggetto.getTipo()== TipoSoggetto.AZIENDA ) {
+                String cf;
+                if ( soggetto.getCodicefiscale()!= null ) {
+                    cf=soggetto.getCodicefiscale();
+                } else if ( soggetto.getPartitaiva()!= null ) {
+                    cf=soggetto.getPartitaiva();
+                } else {
+                    cf=String.format("%011d", soggetto.getId());
+                }
+                destinatarioXml += "<PersonaGiuridica tipo=\"CodiceFiscalePG\" id=\"" + cf + "\">";
+                destinatarioXml += "<Denominazione>" + soggetto.getRagionesociale() + "</Denominazione>";
+                destinatarioXml += "<IndirizzoPostale><Denominazione></Denominazione></IndirizzoPostale>";
+                destinatarioXml += "</PersonaGiuridica>";
+            } else {
+                destinatarioXml += "<Amministrazione>";
+                destinatarioXml += "<Denominazione>" + soggetto.getDescrizione() + "</Denominazione>";
+                destinatarioXml += "<CodiceAmministrazione>" + soggetto.getIndicepao() + "</CodiceAmministrazione>";
+                destinatarioXml += "</Amministrazione>";
+            }
+            destinatariXml += destinatarioXml + "</Destinatario>";
+        }
+        return destinatariXml + "</Destinatari>";
+    }
+
 }
