@@ -5,7 +5,6 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.suite.plugins.cmis.DocerPlugin;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.entities.TipoAttoPubblicazione;

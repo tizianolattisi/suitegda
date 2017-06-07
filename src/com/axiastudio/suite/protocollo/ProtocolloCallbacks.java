@@ -30,6 +30,7 @@ import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.generale.entities.Costante;
+import com.axiastudio.suite.plugins.docer.DocerUtil;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.entities.*;
 
@@ -98,6 +99,15 @@ public class ProtocolloCallbacks {
                 msg += "Devi compilare l'oggetto oppure oggetto troppo corto.";
                 res = false;
             }
+
+            /* Consolida del documento -> protocollazione in Doc/ER */
+            if ( protocollo.getConsolidadocumenti() ) {
+                if (!DocerUtil.protocollaDocumentiDocer(protocollo)) {
+                    msg += "Errore nell'aggiornamento dello stato in Doc/ER. Consolida dei documenti annullata.";
+                    res = false;
+                }
+            }
+
 
         } else {
             /*

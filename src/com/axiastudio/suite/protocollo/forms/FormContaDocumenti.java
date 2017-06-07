@@ -24,7 +24,7 @@ import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.plugins.cmis.DocerPlugin;
+import com.axiastudio.suite.plugins.docer.DocerPlugin;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.trolltech.qt.core.QByteArray;

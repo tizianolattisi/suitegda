@@ -9,7 +9,7 @@ import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.base.entities.*;
-import com.axiastudio.suite.plugins.cmis.DocerPlugin;
+import com.axiastudio.suite.plugins.docer.DocerPlugin;
 import com.axiastudio.suite.richieste.entities.*;
 import com.trolltech.qt.gui.*;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;

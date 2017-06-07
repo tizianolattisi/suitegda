@@ -4,7 +4,6 @@ import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.plugins.cmis.DocerPlugin;
 import com.axiastudio.suite.richieste.entities.Richiesta;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 

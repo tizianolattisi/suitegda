@@ -26,7 +26,6 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaUtil;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
-import com.axiastudio.suite.plugins.cmis.DocerPlugin;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.entities.Fase;

@@ -48,7 +48,7 @@ import com.axiastudio.suite.modelli.entities.Modello;
 import com.axiastudio.suite.modelli.entities.Segnalibro;
 import com.axiastudio.suite.modelli.forms.FormModello;
 import com.axiastudio.suite.plugins.cmis.AlfrescoCmisStreamProvider;
-import com.axiastudio.suite.plugins.cmis.DocerPlugin;
+import com.axiastudio.suite.plugins.docer.DocerPlugin;
 import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.plugins.ooops.RuleSet;

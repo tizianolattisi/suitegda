@@ -15,9 +15,7 @@
 package com.axiastudio.suite.base;
 
 import com.axiastudio.pypapi.Application;
-import com.axiastudio.pypapi.Register;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.plugins.cmis.DocerPlugin;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiUtente;
 

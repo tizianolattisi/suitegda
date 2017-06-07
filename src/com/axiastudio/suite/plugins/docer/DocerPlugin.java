@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.axiastudio.suite.plugins.cmis;
+package com.axiastudio.suite.plugins.docer;
 
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.Dialog;
@@ -21,7 +21,6 @@ import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
 import com.trolltech.qt.gui.QWidget;
 import it.tn.rivadelgarda.comune.gda.WebAppBridge;
 import it.tn.rivadelgarda.comune.gda.WebAppBridgeBuilder;
-import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 
 /**
  *

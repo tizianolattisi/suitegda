@@ -26,7 +26,7 @@ import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.base.entities.*;
-import com.axiastudio.suite.plugins.cmis.DocerPlugin;
+import com.axiastudio.suite.plugins.docer.DocerPlugin;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.axiastudio.suite.richieste.entities.DestinatarioUfficio;
