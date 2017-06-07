@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.protocollo.forms;
 
+import com.axiastudio.mapformat.MessageMapFormat;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.TipoRiferimento;
@@ -56,6 +57,7 @@ import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiUtente;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
 import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.commons.impl.json.JSONObject;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -692,6 +694,45 @@ public class FormProtocollo extends Window {
         // apertura folder
         if( view ) {
 
+            // watermark json
+            List<String> rows = new ArrayList<String>();
+            Map<String, Object> stampMap = new HashMap<String, Object>();
+            Calendar calendar = Calendar.getInstance();
+            stampMap.put("datacorrente", calendar.getTime());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
+            stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
+            stampMap.put("iddocumento", protocollo.getIddocumento());
+            Float offsetX = Float.valueOf(SuiteUtil.trovaCostante("PROTOCOLLO_OFFSETX").getValore());
+            Float offsetY = Float.valueOf(SuiteUtil.trovaCostante("PROTOCOLLO_OFFSETY").getValore());
+            Integer nRighe = Integer.valueOf(SuiteUtil.trovaCostante("PROTOCOLLO_NRIGHE").getValore());
+            Float rotation = Float.valueOf(SuiteUtil.trovaCostante("PROTOCOLLO_ROTATION").getValore());
+            for (int i = 1; i <= nRighe; i++) {
+                String testoCC = SuiteUtil.trovaCostante("PROTOCOLLO_TESTO" + String.valueOf(i)).getValore();
+                if (i == nRighe && protocollo.getRiservato()) {
+                    testoCC += " - documento RISERVATO";
+                }
+                MessageMapFormat mmp = new MessageMapFormat(testoCC);
+                rows.add(mmp.format(stampMap));
+            }
+            JSONObject watermarkJson = new JSONObject();
+            watermarkJson.put("offsetx", offsetX);
+            watermarkJson.put("offsety", offsetY);
+            watermarkJson.put("rotation", rotation);
+            watermarkJson.put("rows", rows);
+
+            // acl json
+            JSONObject aclJson = new JSONObject();
+            for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
+                Integer access;
+                if( attribuzione.getPrincipale() ){
+                    access = 0; // Read only
+                } else {
+                    access = 2; // Full (read+write+delete)
+                }
+                aclJson.put(attribuzione.getUfficio().getId().toString(), access);
+            }
+            aclJson.put(protocollo.getSportello().getId().toString(), 2);
+
             String url = "#?externalId=" + externalId;
             url += "&iddocumento=" + protocollo.getIddocumento();
             url += "&dataprotocollo=" + protocollo.getDataprotocollo();
@@ -707,7 +748,9 @@ public class FormProtocollo extends Window {
             for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
                 flags += flag ? "1" :  "0";
             }
-            url += "&flags=" + flags;
+            url += "&profile=" + flags;
+            url += "&stamp=" + watermarkJson.toJSONString();
+            url += "&acls=" + aclJson.toJSONString();
 
             docerPlugin.showForm(protocollo, url);
         }
