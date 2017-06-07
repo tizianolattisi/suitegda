@@ -1094,16 +1094,16 @@ public class FormProtocollo extends Window {
             for (Map<String, String> map : documenti) {
                 String objectId = map.get(MetadatiDocumento.DOCNUM); // docnum o external_id o ...?
                 String name = map.get(MetadatiDocumento.DOCNAME);
-                String mime = map.get("mime");  // ??????????
+//                String mime = map.get("mime");  // ??????????
                 Integer length = Integer.parseInt(map.get("contentStreamLength"));
-//                Document document = helper.getDocument(objectId);
+//                Document document = docerHelper.getDocument(objectId);
 
                 WebTarget allegatiTarget = client.target(pecServerUrl).path("api/allegati/upload");
                 MultiPart multiPart = new MultiPart();
                 multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
 
                 UploadAllegatoRequest allegatoRequest = new UploadAllegatoRequest();
-                allegatoRequest.setContentType(mime);
+//                allegatoRequest.setContentType(mime);
                 allegatoRequest.setFileName(name);
                 nomiFile.add(name);
                 allegatoRequest.setSize(length);
