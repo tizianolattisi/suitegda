@@ -31,7 +31,7 @@ class DocerMenuBar extends PyPaPiToolBar {
     public DocerMenuBar(String title, Window parent, IPlugin plugin){
         super(title, parent);
         this.insertButton("showForm", "Doc/ER",
-                          "classpath:com/axiastudio/suite/plugins/cmis/docer.png",
+                          "classpath:com/axiastudio/suite/plugins/docer/docer.png",
                           "Open Doc/ER form", plugin);
     }
 }
