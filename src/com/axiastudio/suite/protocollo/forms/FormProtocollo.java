@@ -55,6 +55,7 @@ import com.trolltech.qt.gui.*;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
+import org.apache.chemistry.opencmis.commons.impl.json.JSONArray;
 import org.apache.chemistry.opencmis.commons.impl.json.JSONObject;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
@@ -691,7 +692,7 @@ public class FormProtocollo extends Window {
         if( view ) {
 
             // watermark json
-            List<String> rows = new ArrayList<String>();
+            JSONArray rows = new JSONArray();
             Map<String, Object> stampMap = new HashMap<String, Object>();
             Calendar calendar = Calendar.getInstance();
             stampMap.put("datacorrente", calendar.getTime());
@@ -710,11 +711,14 @@ public class FormProtocollo extends Window {
                 MessageMapFormat mmp = new MessageMapFormat(testoCC);
                 rows.add(mmp.format(stampMap));
             }
-            JSONObject watermarkJson = new JSONObject();
-            watermarkJson.put("offsetx", offsetX);
-            watermarkJson.put("offsety", offsetY);
-            watermarkJson.put("rotation", rotation);
-            watermarkJson.put("rows", rows);
+            JSONArray watermarkJson = new JSONArray();
+            JSONObject profilo1 = new JSONObject();
+            profilo1.put("description", "profilo1");
+            profilo1.put("offsetx", offsetX);
+            profilo1.put("offsety", offsetY);
+            profilo1.put("rotation", rotation);
+            profilo1.put("rows", rows);
+            watermarkJson.add(profilo1);
 
             // acl json
             JSONObject aclJson = new JSONObject();
@@ -745,7 +749,7 @@ public class FormProtocollo extends Window {
                 flags += flag ? "1" :  "0";
             }
             url += "&profile=" + flags;
-            url += "&stamp=" + watermarkJson.toJSONString();
+            url += "&stamp=" + profilo1.toJSONString();
             url += "&acls=" + aclJson.toJSONString();
 
             docerPlugin.showForm(protocollo, url);
