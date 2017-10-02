@@ -28,6 +28,7 @@ import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
 import com.axiastudio.suite.base.entities.*;
 import com.axiastudio.suite.plugins.docer.DocerPlugin;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
+import com.axiastudio.suite.protocollo.ProtocolloUtil;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.axiastudio.suite.richieste.entities.DestinatarioUfficio;
 import com.axiastudio.suite.richieste.entities.DestinatarioUtente;
@@ -107,7 +108,7 @@ public class FormScrivania  extends QMainWindow {
         this.popolaRichieste();
 //        timer.schedule(aggiornaRichieste, 2 * 60 * 1000, 1 * 60 * 1000);
     }
-    
+
     private void loadUi(QFile uiFile){
         QMainWindow window = null;
         try {
@@ -120,6 +121,17 @@ public class FormScrivania  extends QMainWindow {
         }
         this.setCentralWidget(window.centralWidget());
         this.setWindowTitle(window.windowTitle());
+    }
+
+    @Override
+    protected void closeEvent(QCloseEvent event) {
+         // uninstall plugins
+        List<IPlugin> plugins = (List<IPlugin>) Register.queryPlugins(this.getClass());
+        for( IPlugin plugin: plugins ){
+            plugin.uninstall();
+        }
+        this.disposeLater();
+        super.closeEvent(event);
     }
 
     private void popolaAttribuzioni() {
@@ -519,52 +531,13 @@ public class FormScrivania  extends QMainWindow {
         List<IPlugin> plugins = (List) Register.queryPlugins(FormScrivania.class);
         for(IPlugin plugin: plugins){
             if( "DocER".equals(plugin.getName()) ){
-                Boolean view = false;
-                Boolean delete = false;
-                Boolean download = false;
-                Boolean parent = false;
-                Boolean upload = false;
-                Boolean version = false;
-                if( protocollo.getRiservato() ){
-                    view = pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR();
-                    download = view;
-                } else {
-                    view = autenticato.getSupervisoreprotocollo() || pup.inSportelloOAttribuzioneV();
-                    download = view;
-                }
-                if( protocollo.getConsolidadocumenti() ){
-                    delete = false;
-                    if ( protocollo.getTiporiferimentomittente()!=null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
-                            (protocollo.getPecProtocollo()==null || protocollo.getPecProtocollo().getStato()==null ||
-                                    protocollo.getPecProtocollo().getStato().compareTo(StatoPec.DAINVIARE)>0)) {
-                        version = false;
-                    } else {
-                        version = pup.inAttribuzionePrincipaleC();
-                    }
-                    upload = version;
-                } else {
-                    upload = pup.inSportelloOAttribuzionePrincipale();
-                    delete = upload;
-                    version = upload;
-                }
-                String url = "#?externalId=protocollo_" + protocollo.getId();
-                url += "&iddocumento=" + protocollo.getIddocumento();
-                url += "&dataprotocollo=" + protocollo.getDataprotocollo();
-                String codiceinterno="";
-                for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
-                    if ( pratica.getOriginale() ) {
-                        codiceinterno=pratica.getPratica().getCodiceinterno();
-                    }
-                }
-                url += "&codiceinterno=" + codiceinterno;
-                url += "&utente=" + autenticato.getNome().toUpperCase();
-                String flags="";
-                for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
-                    flags += flag ? "1" :  "0";
-                }
-                url += "&flags=" + flags;
 
-                ((DocerPlugin) plugin).showForm(protocollo, url);
+                // plugins
+                String url= ProtocolloUtil.urlDocumentiDocER(protocollo, autenticato);
+                if ( url.length()>0 ) {
+                    plugin.install(this, Boolean.FALSE);
+                    ((DocerPlugin) plugin).showForm(protocollo, url);
+                }
             }
         }
     }
@@ -592,7 +565,7 @@ public class FormScrivania  extends QMainWindow {
                     e.printStackTrace();
                 }
                 if ( n==0 ) {
-                    QMessageBox.information(this, "Attenzione", "Nessun documento collegato al messaggio/richiesta.");
+                    QMessageBox.information(this, "Attenzione", "Nessun documento collegato al protocollo.");
                     return;
 
                 }
@@ -620,6 +593,8 @@ public class FormScrivania  extends QMainWindow {
                         flags += flag ? "1" : "0";
                     }
                     url += "&flags=" + flags;
+                    url += "&utente=" + autenticato.getLogin();
+                    plugin.install(this, Boolean.FALSE);
                     ((DocerPlugin) plugin).showForm(richiesta, url);
                 } else {
                     QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");

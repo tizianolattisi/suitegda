@@ -18,6 +18,8 @@ import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
+import com.trolltech.qt.gui.QDialog;
+import com.trolltech.qt.gui.QMainWindow;
 import com.trolltech.qt.gui.QWidget;
 import it.tn.rivadelgarda.comune.gda.WebAppBridge;
 import it.tn.rivadelgarda.comune.gda.WebAppBridgeBuilder;
@@ -60,7 +62,7 @@ public class DocerPlugin implements IPlugin {
                 DocerMenuBar bar = new DocerMenuBar("DocER", (Window) parent, this);
                 ((Window) parent).addToolBar(bar);
             }
-        } else if( Dialog.class.isInstance(parent) ){
+        } else if( Dialog.class.isInstance(parent) || QMainWindow.class.isInstance(parent) || QDialog.class.isInstance(parent)){
             this.parent = parent;
         }
     }
@@ -112,8 +114,9 @@ public class DocerPlugin implements IPlugin {
 //                .downloadContentTypes(new String[]{"application/pdf"})      // content type permessi al download
                 .downloadPath("/home/pivamichela")                   // cartella proposta per il download
 //                .loadFinishedCallback(callbackClass, "callback()")          // callback da eseguire a pagina caricata
-                .build();
+                .build(this.parent);
 
+        bridge.setGeometry(60, 60, 1200, 500);
         bridge.show();
     }
 

@@ -37,14 +37,8 @@ public class ContaDocumentiMenuBar extends QToolBar {
                 "classpath:com/axiastudio/suite/resources/email.png",
                 "Apri la finestra di dettaglio e gestione", parent);
         this.insertButton("apriDocumenti", "Apri documenti",
-                "classpath:com/axiastudio/suite/plugins/cmis/docer.png",
+                "classpath:com/axiastudio/suite/plugins/docer/docer.png",
                 "Apre lo spazio documenti", parent);
-/*        this.insertButton("aggiornaLista", "Aggiorna lista",
-                "classpath:com/axiastudio/suite/resources/arrow_refresh.png",
-                "Aggiorna la lista visualizzata", parent); */
-/*        this.insertButton("cercaDaEtichetta", "Ricerca da etichetta",
-                "classpath:com/axiastudio/suite/resources/datamatrix_find.png",
-                "Ricerca da etichetta", parent, new QKeySequence(tr("F9"))); */
         this.insertButton("search", tr("SEARCH"),
                 "classpath:com/axiastudio/pypapi/ui/resources/toolbar/find.png",
                 tr("SEARCH_DESCRIPTION"), parent,

@@ -43,7 +43,7 @@ public class ScrivaniaMenuBar extends QToolBar {
                 "classpath:com/axiastudio/suite/resources/email.png",
                 "Apri la finestra di dettaglio e gestione", parent);
         this.insertButton("apriDocumenti", "Apri documenti",
-                "classpath:com/axiastudio/suite/plugins/cmis/docer.png",
+                "classpath:com/axiastudio/suite/plugins/docer/docer.png",
                 "Apre lo spazio documenti", parent);
         this.insertButton("aggiornaLista", "Aggiorna lista",
                 "classpath:com/axiastudio/suite/resources/arrow_refresh.png",

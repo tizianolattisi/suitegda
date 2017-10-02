@@ -400,7 +400,7 @@ public class AlfrescoHelper {
                     e.printStackTrace();
                 }
             } else {
-                System.err.print("Funzionalità compatibile unicamente con documenti salvati in formato pdf.");
+                System.err.print("Funzionalità compatibile unicamente con documenti salvati in formato pdf.\n");
             }
         }
 

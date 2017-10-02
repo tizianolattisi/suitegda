@@ -25,7 +25,7 @@ import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.plugins.docer.DocerPlugin;
-import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
+import com.axiastudio.suite.protocollo.ProtocolloUtil;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.trolltech.qt.core.QByteArray;
 import com.trolltech.qt.core.QFile;
@@ -37,7 +37,6 @@ import com.trolltech.qt.gui.*;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -200,47 +199,12 @@ public class FormContaDocumenti extends QMainWindow {
     private void apriDocumenti(){
         Protocollo protocollo = this.selectionProtocollo.get(0).getProtocollo();
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        ProfiloUtenteProtocollo pup = new ProfiloUtenteProtocollo(protocollo, autenticato);
-        Boolean view = false;
-        Boolean delete = false;
-        Boolean download = false;
-        Boolean parent = false;
-        Boolean upload = false;
-        Boolean version = false;
-        if( protocollo.getRiservato() ){
-            view = pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR();
-            download = view;
-        } else {
-            view = autenticato.getSupervisoreprotocollo() || pup.inSportelloOAttribuzioneV();
-            download = view;
-        }
-        if( protocollo.getConsolidadocumenti() ){
-            delete = false;
-            version = pup.inAttribuzionePrincipaleC();
-            upload = version;
-        } else {
-            upload = pup.inSportelloOAttribuzionePrincipale();
-            delete = upload;
-            version = upload;
-        }
-        String url = "#?externalId=protocollo_" + protocollo.getId();
-        url += "&iddocumento=" + protocollo.getIddocumento();
-        url += "&dataprotocollo=" + protocollo.getDataprotocollo();
-        String codiceinterno="";
-        for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
-            if ( pratica.getOriginale() ) {
-                codiceinterno=pratica.getPratica().getCodiceinterno();
-            }
-        }
-        url += "&codiceinterno=" + codiceinterno;
-        url += "&utente=" + autenticato.getNome().toUpperCase();
-        String flags="";
-        for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
-            flags += flag ? "1" :  "0";
-        }
-        url += "&flags=" + flags;
 
-        docerPlugin.showForm(protocollo, url);
+        String url= ProtocolloUtil.urlDocumentiDocER(protocollo, autenticato);
+        if ( url.length()>0 ) {
+            docerPlugin.install(this, Boolean.FALSE);
+            docerPlugin.showForm(protocollo, url);
+        }
     }
 
     private void apriProtocollo(){

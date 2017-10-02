@@ -304,6 +304,8 @@ public class FormRichiesta extends Window {
                 flags += flag ? "1" : "0";
             }
             url += "&flags=" + flags;
+            url += "&utente=" + autenticato.getLogin();
+            docerPlugin.install(this, Boolean.FALSE);
             docerPlugin.showForm(richiesta, url);
         } else {
             QMessageBox.warning(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");

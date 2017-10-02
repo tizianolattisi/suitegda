@@ -46,6 +46,7 @@ import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.Carica;
 import com.axiastudio.suite.procedimenti.entities.Delega;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
+import com.axiastudio.suite.protocollo.ProtocolloUtil;
 import com.axiastudio.suite.protocollo.entities.*;
 import com.axiastudio.suite.pubblicazioni.PubblicazioneUtil;
 //import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
@@ -55,8 +56,8 @@ import com.trolltech.qt.gui.*;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
-import org.apache.chemistry.opencmis.commons.impl.json.JSONArray;
-import org.apache.chemistry.opencmis.commons.impl.json.JSONObject;
+//import org.apache.chemistry.opencmis.commons.impl.json.JSONArray;
+//import org.apache.chemistry.opencmis.commons.impl.json.JSONObject;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -73,7 +74,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
+//import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -555,11 +556,6 @@ public class FormProtocollo extends Window {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if ( n==0 ) {
-            QMessageBox.information(this, "Attenzione", "Nessun documento collegato al messaggio/richiesta.");
-            return;
-
-        }
     }
 
     private void aggiornaTipo() {
@@ -655,106 +651,14 @@ public class FormProtocollo extends Window {
         DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
                 (String) app.getConfigItem("docer.password"));
 
-        // creazione dei flag con i permessi di accesso alla folder
-        Boolean view = false;
-        Boolean delete = false;
-        Boolean download = false;
-        Boolean parent = false;
-        Boolean upload = false;
-        Boolean version = false;
-        // gli utenti 'supervisore protocollo' possono vedere tutti i documenti; gli utenti 'ricercatore protocollo'
-        //    solo i documenti non riservati
-        if( protocollo.getRiservato() ){
-            view = (pup.inSportelloOAttribuzioneV() && pup.inSportelloOAttribuzioneR()) || autenticato.getSupervisoreprotocollo();
-            download = view;
-        } else {
-            view = autenticato.getSupervisoreprotocollo() || autenticato.getRicercatoreprotocollo() ||
-                    pup.inSportelloOAttribuzioneV();
-            download = view;
-        }
-        if( protocollo.getConsolidadocumenti() ){
-            delete = false;
-            if ( protocollo.getTiporiferimentomittente()!=null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
-                    (protocollo.getPecProtocollo()==null || protocollo.getPecProtocollo().getStato()==null ||
-                            protocollo.getPecProtocollo().getStato().compareTo(StatoPec.DAINVIARE)>0)) {
-                version = false;
-            } else {
-                version = pup.inAttribuzionePrincipaleC();
-            }
-            upload = pup.inAttribuzionePrincipaleC() && autenticato.getNuovodocsuconsolidato();
-        } else {
-            upload = pup.inSportelloOAttribuzionePrincipale();
-            delete = upload;
-            version = upload;
-        }
-
-        // apertura folder
-        if( view ) {
-
-            // watermark json
-            JSONArray rows = new JSONArray();
-            Map<String, Object> stampMap = new HashMap<String, Object>();
-            Calendar calendar = Calendar.getInstance();
-            stampMap.put("datacorrente", calendar.getTime());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
-            stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
-            stampMap.put("iddocumento", protocollo.getIddocumento());
-            Float offsetX = Float.valueOf(SuiteUtil.trovaCostante("PROTOCOLLO_OFFSETX").getValore());
-            Float offsetY = Float.valueOf(SuiteUtil.trovaCostante("PROTOCOLLO_OFFSETY").getValore());
-            Integer nRighe = Integer.valueOf(SuiteUtil.trovaCostante("PROTOCOLLO_NRIGHE").getValore());
-            Float rotation = Float.valueOf(SuiteUtil.trovaCostante("PROTOCOLLO_ROTATION").getValore());
-            for (int i = 1; i <= nRighe; i++) {
-                String testoCC = SuiteUtil.trovaCostante("PROTOCOLLO_TESTO" + String.valueOf(i)).getValore();
-                if (i == nRighe && protocollo.getRiservato()) {
-                    testoCC += " - documento RISERVATO";
-                }
-                MessageMapFormat mmp = new MessageMapFormat(testoCC);
-                rows.add(mmp.format(stampMap));
-            }
-            JSONArray watermarkJson = new JSONArray();
-            JSONObject profilo1 = new JSONObject();
-            profilo1.put("description", "profilo1");
-            profilo1.put("offsetx", offsetX);
-            profilo1.put("offsety", offsetY);
-            profilo1.put("rotation", rotation);
-            profilo1.put("rows", rows);
-            watermarkJson.add(profilo1);
-
-            // acl json
-            JSONObject aclJson = new JSONObject();
-            for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
-                Integer access;
-                if( attribuzione.getPrincipale() ){
-                    access = 0; // Read only
-                } else {
-                    access = 2; // Full (read+write+delete)
-                }
-                aclJson.put(attribuzione.getUfficio().getId().toString(), access);
-            }
-            aclJson.put(protocollo.getSportello().getId().toString(), 2);
-
-            String url = "#?externalId=" + externalId;
-            url += "&iddocumento=" + protocollo.getIddocumento();
-            url += "&dataprotocollo=" + protocollo.getDataprotocollo();
-            String codiceinterno="";
-            for( PraticaProtocollo pratica : protocollo.getPraticaProtocolloCollection() ) {
-                if ( pratica.getOriginale() ) {
-                    codiceinterno=pratica.getPratica().getCodiceinterno();
-                }
-            }
-            url += "&codiceinterno=" + codiceinterno;
-            url += "&utente=" + autenticato.getNome().toUpperCase();
-            String flags="";
-            for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
-                flags += flag ? "1" :  "0";
-            }
-            url += "&profile=" + flags;
-            url += "&stamp=" + profilo1.toJSONString();
-            url += "&acls=" + aclJson.toJSONString();
-
+        String url= ProtocolloUtil.urlDocumentiDocER(protocollo, autenticato);
+        if ( url.length()>0 ) {
+            docerPlugin.install(this, Boolean.FALSE);
             docerPlugin.showForm(protocollo, url);
+        } else {
+            QMessageBox.critical(this, "Attenzione", "Non disponi dei permessi per visualizzare i documenti");
         }
-
+//        }
     }
 
     private void cercaDaEtichetta() {
@@ -1083,7 +987,7 @@ public class FormProtocollo extends Window {
             int conferma = QMessageBox.question(this, "Numero di allegati corretto?",
                     "N. " + ((Integer) numAllegati).toString() + " file allegati da inviare. Si desidera continuare?",
                     QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
-            if (QMessageBox.StandardButton.No.equals(conferma)) {
+            if (QMessageBox.StandardButton.No.value() == conferma) {
                 System.out.println("sono uscito");
                 return;
             }
@@ -1135,11 +1039,23 @@ public class FormProtocollo extends Window {
             // allegati
             List<String> nomiFile = new ArrayList<String>();
             for (Map<String, String> map : documenti) {
-                String objectId = map.get(MetadatiDocumento.DOCNUM); // docnum o external_id o ...?
-                String name = map.get(MetadatiDocumento.DOCNAME);
-//                String mime = map.get("mime");  // ??????????
-                Integer length = Integer.parseInt(map.get("contentStreamLength"));
-//                Document document = docerHelper.getDocument(objectId);
+                String objectId = map.get(MetadatiDocumento.DOCNUM.getValue()); // docnum o external_id o ...?
+                String name = map.get(MetadatiDocumento.DOCNAME.getValue());
+
+                DocerHelper.InputStreamAndSize document=null;
+                try {
+                    document=docerHelper.getDocumentStreamAndSize(objectId, null);
+//                    document=docerHelper.getDocumentStreamAndSize(objectId, "1");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    QMessageBox.critical(this, "Errore grave",
+                            "Errore nella lettura del contenuto dei file collegati al protocollo. Invio PEC annullato.");
+                }
+                if( document==null ) {
+                    QMessageBox.critical(this, "Errore grave",
+                            "Errore nella lettura del contenuto dei file collegati al protocollo. Invio PEC annullato.");
+                    return;
+                }
 
                 WebTarget allegatiTarget = client.target(pecServerUrl).path("api/allegati/upload");
                 MultiPart multiPart = new MultiPart();
@@ -1149,21 +1065,24 @@ public class FormProtocollo extends Window {
 //                allegatoRequest.setContentType(mime);
                 allegatoRequest.setFileName(name);
                 nomiFile.add(name);
-                allegatoRequest.setSize(length);
+                allegatoRequest.setSize(document.getSize());
                 allegatoRequest.setIdMessaggio(messaggioResponse.getMessageId());
                 FormDataBodyPart allegatoDataBodyPart = new FormDataBodyPart("allegato", allegatoRequest, MediaType.APPLICATION_JSON_TYPE);
                 multiPart.bodyPart(allegatoDataBodyPart);
 
+                InputStream inputStream=document.getStream();
+                StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", inputStream, allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+                multiPart.bodyPart(fileDataBodyPart);
 //                StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", document.getContentStream().getStream(), allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
-                try {
-                    StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", docerHelper.getDocumentStream(objectId, "1"),
-                            allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    QMessageBox.critical(this, "Errore grave",
-                            "Errore nella lettura del contenuto dei file collegati al protocollo. Invio PEC annullato.");
-                    return;
-                }
+//                try {
+//                    StreamDataBodyPart fileDataBodyPart = new StreamDataBodyPart("file", docerHelper.getDocumentStream(objectId, "1"),
+//                            allegatoRequest.getFileName(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    QMessageBox.critical(this, "Errore grave",
+//                            "Errore nella lettura del contenuto dei file collegati al protocollo. Invio PEC annullato.");
+//                    return;
+//                }
                 Response response = allegatiTarget.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(multiPart, multiPart.getMediaType()));
 
                 if (!(response.getStatus() == Response.Status.OK.getStatusCode())) {
@@ -1181,7 +1100,6 @@ public class FormProtocollo extends Window {
                         soggettoProtocollo.getSoggetto(),
                         destinatario,
                         nomiFile);
-//                String segnaturaXml = JAXBHelper.scriviSegnatura(segnatura);
                 String segnaturaXml = null;
                 try {
                     segnaturaXml = JAXBHelper.scriviSegnatura(segnatura);

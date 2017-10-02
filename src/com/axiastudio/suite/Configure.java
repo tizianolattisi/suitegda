@@ -47,6 +47,7 @@ import com.axiastudio.suite.generale.entities.Etichetta;
 import com.axiastudio.suite.modelli.entities.Modello;
 import com.axiastudio.suite.modelli.entities.Segnalibro;
 import com.axiastudio.suite.modelli.forms.FormModello;
+import com.axiastudio.suite.plugins.cmis.AlfrescoCmisPlugin;
 import com.axiastudio.suite.plugins.cmis.AlfrescoCmisStreamProvider;
 import com.axiastudio.suite.plugins.docer.DocerPlugin;
 import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
@@ -143,14 +144,14 @@ public class Configure {
         /* CMIS */
 
         Application app = Application.getApplicationInstance();
-//        String cmisUrl = (String) app.getConfigItem("cmis.url");
-//        String cmisUser = (String) app.getConfigItem("cmis.user");
-//        String cmisPassword = (String) app.getConfigItem("cmis.password");
+        String cmisUrl = (String) app.getConfigItem("cmis.url");
+        String cmisUser = (String) app.getConfigItem("cmis.user");
+        String cmisPassword = (String) app.getConfigItem("cmis.password");
 //        String alfrescoPathProtocollo = (String) app.getConfigItem("alfrescopath.protocollo");
-//        String alfrescoPathPratica = (String) app.getConfigItem("alfrescopath.pratica");
+        String alfrescoPathPratica = (String) app.getConfigItem("alfrescopath.pratica");
 //        String alfrescoPathRichiesta = (String) app.getConfigItem("alfrescopath.richiesta");
 //        String alfrescoPathPubblicazione = (String) app.getConfigItem("alfrescopath.pubblicazione");
-//
+
 //        AlfrescoCmisPlugin cmisPlugin = new AlfrescoCmisPlugin();
 //        String templateCmisProtocollo = alfrescoPathProtocollo + "/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
 //        cmisPlugin.setup(cmisUrl, cmisUser, cmisPassword,
@@ -166,14 +167,14 @@ public class Configure {
 //        Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
 //        Register.registerPlugin(cmisPluginPubblicazioni, Pubblicazione.class);
 //
-//        AlfrescoCmisPlugin cmisPluginPratica = new AlfrescoCmisPlugin();
-//        cmisPluginPratica.setup(cmisUrl, cmisUser, cmisPassword,
-//                alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/",
-//                Boolean.FALSE);
-//        Register.registerPlugin(cmisPluginPratica, FormPratica.class);
-//        Register.registerPlugin(cmisPluginPratica, Pratica.class);
-//        Register.registerPlugin(cmisPluginPratica, FormDetermina.class);
-//        Register.registerPlugin(cmisPluginPratica, Determina.class);
+        AlfrescoCmisPlugin cmisPluginPratica = new AlfrescoCmisPlugin();
+        cmisPluginPratica.setup(cmisUrl, cmisUser, cmisPassword,
+                alfrescoPathPratica + "/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/",
+                Boolean.FALSE);
+        Register.registerPlugin(cmisPluginPratica, FormPratica.class);
+        Register.registerPlugin(cmisPluginPratica, Pratica.class);
+        Register.registerPlugin(cmisPluginPratica, FormDetermina.class);
+        Register.registerPlugin(cmisPluginPratica, Determina.class);
 //
 //        AlfrescoCmisPlugin cmisPluginRichiesta = new AlfrescoCmisPlugin();
 //        cmisPluginRichiesta.setup(cmisUrl, cmisUser, cmisPassword,
@@ -193,10 +194,10 @@ public class Configure {
         Register.registerPlugin(docerPlugin, FormScrivania.class);
         Register.registerPlugin(docerPlugin, FormPubblicazione.class);
         Register.registerPlugin(docerPlugin, Pubblicazione.class);
-        Register.registerPlugin(docerPlugin, FormPratica.class);
-        Register.registerPlugin(docerPlugin, Pratica.class);
-        Register.registerPlugin(docerPlugin, FormDetermina.class);
-        Register.registerPlugin(docerPlugin, Determina.class);
+//        Register.registerPlugin(docerPlugin, FormPratica.class);
+//        Register.registerPlugin(docerPlugin, Pratica.class);
+//        Register.registerPlugin(docerPlugin, FormDetermina.class);
+//        Register.registerPlugin(docerPlugin, Determina.class);
         Register.registerPlugin(docerPlugin, Richiesta.class);
         Register.registerPlugin(docerPlugin, Utente.class);
         Register.registerPlugin(docerPlugin, Ufficio.class);

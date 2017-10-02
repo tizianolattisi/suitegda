@@ -21,11 +21,14 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.DeterminaUtil;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
+import com.axiastudio.suite.menjazo.AlfrescoHelper;
+import com.axiastudio.suite.plugins.cmis.AlfrescoCmisPlugin;
 import com.axiastudio.suite.pratiche.IDettaglio;
 import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.entities.Fase;
@@ -41,6 +44,7 @@ import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -98,7 +102,30 @@ public class SimpleWorkFlow {
         binding.setVariable("obj", obj);
         IGestoreDeleghe gestoreDeleghe = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
+
+        // Alfresco
+        Class formClass = (Class) Register.queryUtility(IForm.class, obj.getClass().getName());
+        AlfrescoCmisPlugin cmisPlugin = (AlfrescoCmisPlugin) Register.queryPlugin(formClass, "CMIS");
+        AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(obj);
+        List<HashMap> children=null;
         List<String> documenti = new ArrayList<String>();
+        try {
+            children = alfrescoHelper.children();
+        } catch (Exception e){
+            // log?
+        }
+        // XXX: e se Alfresco non è disponibile?
+        if( children != null ){
+            for( Map child: children ){
+                String fileName = (String) child.get("contentStreamFileName");
+                if( fileName != null ){ // XXX: per saltare le cartelle
+                    documenti.add(fileName);
+                }
+            }
+        }
+
+        // Doc/ER
+        List<String> docerDocumenti = new ArrayList<String>();
 //        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Pratica.class, "DocER");
 //        DocerHelper docerHelper = docerPlugin.createDocerHelper(obj);
         Application app = Application.getApplicationInstance();
@@ -117,7 +144,7 @@ public class SimpleWorkFlow {
                 List<Map<String, String>> folderDocuments = docerHelper.searchDocumentsByExternalIdFirstAndRelated(externalId);
                 for( Map<String, String> doc: folderDocuments){
                     String fileName = doc.get("DOCNAME");  // XXX: exists?
-                    documenti.add(fileName);
+                    docerDocumenti.add(fileName);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -127,8 +154,10 @@ public class SimpleWorkFlow {
         binding.setVariable("utente", utente);
         binding.setVariable("gestoreDeleghe", gestoreDeleghe);
         binding.setVariable("finanziariaUtil", finanziariaUtil);
+        binding.setVariable("alfrescoHelper", alfrescoHelper);
         binding.setVariable("docerHelper", docerHelper);
         binding.setVariable("documenti", documenti);
+        binding.setVariable("docerDocumenti", docerDocumenti);
         binding.setVariable("CodiceCarica", String.class);
         binding.setVariable("PraticaUtil", PraticaUtil.class);
         binding.setVariable("DeterminaUtil", DeterminaUtil.class);

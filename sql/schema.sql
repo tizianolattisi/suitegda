@@ -1372,6 +1372,41 @@ CREATE TRIGGER log_update_attribuzioneprincipale
   FOR EACH ROW
   EXECUTE PROCEDURE protocollo.update_attribuzioneprincipale();
 
+CREATE TABLE public.docer_acl_queue
+(
+  external_id character varying,
+  rec_creato timestamp without time zone,
+  status integer,
+  status_text character varying,
+  rec_modificato timestamp without time zone
+)
+WITH (
+  OIDS=TRUE
+);
+ALTER TABLE public.docer_acl_queue
+  OWNER TO postgres;
+
+CREATE OR REPLACE FUNCTION protocollo.modifica_attribuzioni()
+  RETURNS trigger AS
+$BODY$BEGIN
+  INSERT INTO docer_acl_queue (external_id, rec_creato)
+   SELECT 'protocollo_'|| trim(to_char(p.id,'99999999')), current_timestamp
+   FROM protocollo.protocollo p
+   WHERE p.iddocumento=new.protocollo;
+  return new;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION protocollo.modifica_attribuzioni()
+  OWNER TO postgres;
+
+CREATE TRIGGER trg_docer_acl
+  AFTER INSERT OR UPDATE OR DELETE
+  ON protocollo.attribuzione
+  FOR EACH ROW
+  EXECUTE PROCEDURE protocollo.modifica_attribuzioni();
+
 CREATE TABLE oggetto (
     id bigserial NOT NULL,
     descrizione character varying(255)

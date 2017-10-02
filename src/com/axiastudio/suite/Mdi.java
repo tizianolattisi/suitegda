@@ -30,14 +30,14 @@ import com.axiastudio.suite.base.entities.CambiaPassword;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.base.forms.Ufficio2DocerGroup;
+import com.axiastudio.suite.base.forms.Utente2DocerUser;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
-//import com.axiastudio.suite.deliberedetermine.forms.FormCorreggiUfficiDetermina;
+import com.axiastudio.suite.deliberedetermine.forms.FormCorreggiUfficiDetermina;
 import com.axiastudio.suite.generale.entities.Costante;
-import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.forms.FormTipoPraticaTree;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.procedimenti.TitoloDelega;
 import com.axiastudio.suite.protocollo.forms.FormContaDocumenti;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
@@ -51,7 +51,6 @@ import com.trolltech.qt.gui.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -452,6 +451,18 @@ public class Mdi extends QMainWindow implements IMdi {
         itemUffici.setText(1, "com.axiastudio.suite.base.entities.Ufficio");
         itemUffici.setDisabled(!autenticato.getAmministratore());
 
+        QTreeWidgetItem itemUtenti2Docer = new QTreeWidgetItem(itemAmministrazione);
+        itemUtenti2Docer.setText(0, "Export utenti in Doc/ER");
+        itemUtenti2Docer.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/user.png"));
+        itemUtenti2Docer.setText(1, "UTENTI2DOCER");
+        itemUtenti2Docer.setDisabled(!autenticato.getSuperutente());
+
+        QTreeWidgetItem itemUffici2Docer = new QTreeWidgetItem(itemAmministrazione);
+        itemUffici2Docer.setText(0, "Export uffici in Doc/ER");
+        itemUffici2Docer.setIcon(0, new QIcon("classpath:com/axiastudio/suite/resources/group.png"));
+        itemUffici2Docer.setText(1, "UFFICI2DOCER");
+        itemUffici2Docer.setDisabled(!autenticato.getSuperutente());
+
         QTreeWidgetItem itemModelli = new QTreeWidgetItem(itemAmministrazione);
         itemModelli.setText(0, "Modelli");
         itemModelli.setIcon(0, new QIcon("classpath:com/axiastudio/pypapi/ui/resources/cog.png"));
@@ -518,11 +529,11 @@ public class Mdi extends QMainWindow implements IMdi {
             this.workspace.addSubWindow(form);
             form.show();
         } else if( "UFFICIDETERMINA".equals(formName) ){
-            /*FormCorreggiUfficiDetermina form = new FormCorreggiUfficiDetermina(
+            FormCorreggiUfficiDetermina form = new FormCorreggiUfficiDetermina(
                     "classpath:com/axiastudio/suite/deliberedetermine/forms/correggiufficidetermina.ui",
                     Determina.class, "Correggi uffici determina");
             this.workspace.addSubWindow(form);
-            form.show();*/
+            form.show();
         } else if( "TICKET".equals(formName) ){
             Database db = (Database) Register.queryUtility(IDatabase.class);
             Store sportelli = db.createController(Sportello.class).createFullStore();
@@ -540,6 +551,14 @@ public class Mdi extends QMainWindow implements IMdi {
                 //this.workspace.addSubWindow(form);
                 form.show();
             }
+        } else if( "UTENTI2DOCER".equals(formName) ) {
+            Utente2DocerUser form = new Utente2DocerUser();
+            form.show();
+            form.setFocus();
+        } else if( "UFFICI2DOCER".equals(formName) ) {
+            Ufficio2DocerGroup form = new Ufficio2DocerGroup();
+            form.show();
+            form.setFocus();
         } else {
             /* form registrata */
             Window form=null;

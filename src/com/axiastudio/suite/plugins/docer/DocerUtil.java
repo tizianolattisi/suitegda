@@ -1,6 +1,8 @@
 package com.axiastudio.suite.plugins.docer;
 
+import com.axiastudio.mapformat.MessageMapFormat;
 import com.axiastudio.pypapi.Application;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.TipoSoggetto;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
@@ -9,6 +11,8 @@ import com.axiastudio.suite.protocollo.entities.TipoProtocollo;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
+import org.apache.chemistry.opencmis.commons.impl.json.JSONArray;
+import org.apache.chemistry.opencmis.commons.impl.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -171,6 +175,43 @@ public class DocerUtil {
             destinatariXml += destinatarioXml + "</Destinatario>";
         }
         return destinatariXml + "</Destinatari>";
+    }
+
+    public static JSONArray openWithStamp(Object entity, List<String> tipi){
+        Map<String, Object> stampMap = new HashMap<String, Object>();
+        Calendar calendar = Calendar.getInstance();
+        stampMap.put("datacorrente", calendar.getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
+        if (Protocollo.class.isInstance(entity)) {
+            Protocollo protocollo = (Protocollo) entity;
+            stampMap.put("dataprotocollo", protocollo.getDataprotocollo());
+            stampMap.put("iddocumento", protocollo.getIddocumento());
+        }
+
+        JSONArray watermarkJson = new JSONArray();
+        for (String tipo: tipi) {
+            Float offsetX = Float.valueOf(SuiteUtil.trovaCostante(tipo + "_OFFSETX").getValore());
+            Float offsetY = Float.valueOf(SuiteUtil.trovaCostante(tipo + "_OFFSETY").getValore());
+            Integer nRighe = Integer.valueOf(SuiteUtil.trovaCostante(tipo + "_NRIGHE").getValore());
+            Float rotation = Float.valueOf(SuiteUtil.trovaCostante(tipo + "_ROTATION").getValore());
+            JSONArray rows = new JSONArray();
+            for (int i = 1; i <= nRighe; i++) {
+                String testoCC = SuiteUtil.trovaCostante(tipo + "_TESTO" + String.valueOf(i)).getValore();
+                if ( i==nRighe && Protocollo.class.isInstance(entity) && ((Protocollo) entity).getRiservato() ) {
+                    testoCC += " - documento RISERVATO";
+                }
+                MessageMapFormat mmp = new MessageMapFormat(testoCC);
+                rows.add(mmp.format(stampMap));
+            }
+            JSONObject profilo1 = new JSONObject();
+            profilo1.put("description", tipo);
+            profilo1.put("offsetx", offsetX);
+            profilo1.put("offsety", offsetY);
+            profilo1.put("rotation", rotation);
+            profilo1.put("rows", rows);
+            watermarkJson.add(profilo1);
+        }
+        return watermarkJson;
     }
 
 }
