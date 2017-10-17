@@ -143,7 +143,9 @@ public class FormPratica extends Window implements IDocumentFolder {
         Store store = controller.createCriteriaStore(map);
         if( store.size() == 1 ){
             this.getContext().getModel().replaceRows(store);
+            this.getContext().setIsDirty(Boolean.FALSE);
             this.getContext().firstElement();
+            this.getNavigationBar().refresh();
         } else {
             QMessageBox.warning(this, "Attenzione", "Pratica" + barcode + " non trovata");
         }
