@@ -1067,7 +1067,8 @@ public class FormProtocollo extends Window {
             if (numAllegati > 0) { // c'è qualcosa da allegare
                 for (Map<String, String> map : helper.children()) {
                     /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
-                    String strDataFile = map.get("lastModificationDate");
+//                    String strDataFile = map.get("lastModificationDate");
+                    String strDataFile = map.get("creationDate");
                     Date documentDate = new Date();
                     DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CEST' yyyy", Locale.ENGLISH);
                     try {

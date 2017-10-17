@@ -245,7 +245,7 @@ public class ProtocolloCallbacks {
          * Inserimento del testo di default della PEC, se mancante
          */
         if ( protocollo.getTiporiferimentomittente()!= null &&
-                "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) ) {
+                "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) && protocollo.getTipo().equals(TipoProtocollo.USCITA) ) {
             if (protocollo.getPecProtocollo() == null) {
                 PecProtocollo pecProtocollo = new PecProtocollo();
                 pecProtocollo.setProtocollo(protocollo);
