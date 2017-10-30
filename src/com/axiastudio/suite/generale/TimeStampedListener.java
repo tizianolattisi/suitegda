@@ -47,9 +47,18 @@ public class TimeStampedListener {
 
     @PreUpdate
     void preUpdate(Object object) {
-        ITimeStamped timeStamped = (ITimeStamped) object;
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        timeStamped.setRecordmodificatoda(autenticato.getLogin());
+        if( object instanceof ITimeStamped ) {
+            ITimeStamped timeStamped = (ITimeStamped) object;
+            timeStamped.setRecordmodificatoda("--");
+            timeStamped.setRecordmodificatoda(autenticato.getLogin());
+        }
+        if( object instanceof ITimeStampedV ) {
+            ITimeStampedV timeStamped = (ITimeStampedV) object;
+            timeStamped.setRecordmodificatoda("--");
+            timeStamped.setRecordmodificatoda(autenticato.getLogin());
+            System.out.print(timeStamped.getRecordmodificato());
+        }
 /*        Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
         if( timeStamped.getRecordcreato() != null && today.before(timeStamped.getRecordcreato()) ){
