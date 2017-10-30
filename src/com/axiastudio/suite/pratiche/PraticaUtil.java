@@ -359,7 +359,8 @@ public class PraticaUtil {
         // commit
         Database db = (Database) Register.queryUtility(IDatabase.class);
         Controller controller = db.createController(Protocollo.class);
-        Validation validation = controller.commit(protocollo);
+        // Vengono bypassate le callback!!! (controllare prima se tutto ok)
+        Validation validation = controller.commit(protocollo, Boolean.FALSE);
         if( validation.getResponse() ){
             // creo la cartella
             AlfrescoCmisPlugin plugin = (AlfrescoCmisPlugin) Register.queryPlugin(protocollo.getClass(), "CMIS");

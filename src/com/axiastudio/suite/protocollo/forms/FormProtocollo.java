@@ -1016,7 +1016,8 @@ public class FormProtocollo extends Window {
             messaggiRequest.setProtocollo(protocollo.getIddocumento());
 
             // url del documentale
-            String template = "${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
+//            String template = "${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
+            String template = "${id,number,000}/${iddocumento}/";
             String path = CmisUtil.cmisPathGenerator(template, protocollo);
             String hash = md5Hash(protocollo.getIddocumento() + DOCS_FEED);
             String urlDocumentale = pecDocServerUrl + path + hash + "/documento";
