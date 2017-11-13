@@ -48,6 +48,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
 
 /**
  *
@@ -81,7 +82,7 @@ import java.util.List;
                         "ORDER BY d.codiceinterno")
 })
 
-public class Determina implements Serializable, ITimeStamped, IDettaglio, IProtocollabile, IAtto {
+public class Determina extends Observable implements Serializable, ITimeStamped, IDettaglio, IProtocollabile, IAtto {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gendetermina")
@@ -258,6 +259,7 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
     @Override
     public void setOggetto(String oggetto) {
         this.oggetto = oggetto;
+        this.setChanged();
     }
 
     public Date getDatapratica() {
@@ -742,6 +744,10 @@ public class Determina implements Serializable, ITimeStamped, IDettaglio, IProto
 
     public void setRecordmodificatoda(String recordmodificatoda) {
         this.recordmodificatoda = recordmodificatoda;
+    }
+
+    public void reset() {
+        this.clearChanged();
     }
 
     @Override

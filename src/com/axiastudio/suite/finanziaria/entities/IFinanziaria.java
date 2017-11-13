@@ -44,5 +44,6 @@ public interface IFinanziaria {
 
     Boolean trasformaBozzaInAtto(Determina determina, Date data);
 
+    Boolean modificaOggettoBozza(Determina determina, String oggetto);
 
 }
