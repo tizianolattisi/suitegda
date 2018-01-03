@@ -14,6 +14,7 @@
  */
 package com.axiastudio.suite.plugins.docer;
 
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.Window;
@@ -102,6 +103,7 @@ public class DocerPlugin implements IPlugin {
         if( entity == null || (!allowNewEntity && entity.hashCode()==0 ) ){
             return;
         }
+        Application app=Application.getApplicationInstance();
         WebAppBridge bridge = WebAppBridgeBuilder.create()
                 .url(this.urlpath + url)
 //                .developerExtrasEnabled(Boolean.TRUE)                       // abilità "inspect" dal menu contestuale
@@ -111,12 +113,12 @@ public class DocerPlugin implements IPlugin {
 //                .javaScriptCanAccessClipboard(Boolean.TRUE)                 // JS legge e scrive da clipboard
                 .cookieJarEnabled(Boolean.TRUE)                             // la pagina può impostare dei cookie
                 .downloadEnabled(Boolean.TRUE)                              // download abilitati
-//                .downloadContentTypes(new String[]{"application/pdf"})      // content type permessi al download
-                .downloadPath("/home/pivamichela")                   // cartella proposta per il download
-//                .loadFinishedCallback(callbackClass, "callback()")          // callback da eseguire a pagina caricata
+//                .downloadContentTypes(new String[]{"application/pdf"})       // content type permessi al download
+                .downloadPath((String) app.getConfigItem("suite.documentdir")) // cartella proposta per il download
+//                .loadFinishedCallback(callbackClass, "callback()")           // callback da eseguire a pagina caricata
                 .build(this.parent);
 
-        bridge.setGeometry(60, 60, 1200, 500);
+        bridge.setGeometry(30, 30, 1200, 700);
         bridge.show();
     }
 

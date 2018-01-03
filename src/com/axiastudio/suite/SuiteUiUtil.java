@@ -18,7 +18,6 @@ package com.axiastudio.suite;
 
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.generale.ITimeStamped;
-import com.axiastudio.suite.generale.ITimeStampedV;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 
@@ -63,27 +62,6 @@ public class SuiteUiUtil {
             }
             Date recordmodificato = timeStamped.getRecordmodificato();
             if( recordmodificato != null ){
-                credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
-            }
-        }
-        if( currentEntity instanceof ITimeStampedV ) {
-            ITimeStampedV timeStamped = (ITimeStampedV) currentEntity;
-            credits += "Creato da: ";
-            String recordcreatoda = timeStamped.getRecordcreatoda();
-            if (recordcreatoda != null) {
-                credits += recordcreatoda;
-            }
-            Date recordcreato = timeStamped.getRecordcreato();
-            if (recordcreato != null) {
-                credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordcreato);
-            }
-            credits += "<br/><br/>Modificato da: ";
-            String recordmodificatoda = timeStamped.getRecordmodificatoda();
-            if (recordmodificatoda != null) {
-                credits += recordmodificatoda;
-            }
-            Date recordmodificato = timeStamped.getRecordmodificato();
-            if (recordmodificato != null) {
                 credits += "<br/>il: " + SuiteUtil.DATETIME_FORMAT.format(recordmodificato);
             }
         }

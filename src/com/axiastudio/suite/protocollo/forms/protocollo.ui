@@ -174,601 +174,6 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="0">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="minimumSize">
-       <size>
-        <width>524</width>
-        <height>244</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>524</width>
-        <height>244</height>
-       </size>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <property name="margin">
-        <number>4</number>
-       </property>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label_10">
-           <property name="minimumSize">
-            <size>
-             <width>35</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Tipo</string>
-           </property>
-           <property name="buddy">
-            <cstring>comboBox_tipo</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_tipo">
-           <property name="minimumSize">
-            <size>
-             <width>103</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>103</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="column" stdset="0">
-            <string>Tipo</string>
-           </property>
-           <property name="search" stdset="0">
-            <bool>true</bool>
-           </property>
-           <property name="export" stdset="0">
-            <bool>true</bool>
-           </property>
-           <item>
-            <property name="text">
-             <string>ENTRATA</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>USCITA</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>INTERNO</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Protocollo n°</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_iddocumento</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_iddocumento">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>110</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">font-weight:bold;</string>
-           </property>
-           <property name="text">
-            <string>200000000001</string>
-           </property>
-           <property name="column" stdset="0">
-            <string>iddocumento</string>
-           </property>
-           <property name="search" stdset="0">
-            <bool>true</bool>
-           </property>
-           <property name="export" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>del</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateTimeEdit" name="dateEdit_data">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>150</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="palette">
-            <palette>
-             <active>
-              <colorrole role="WindowText">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>0</red>
-                 <green>0</green>
-                 <blue>0</blue>
-                </color>
-               </brush>
-              </colorrole>
-              <colorrole role="Text">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>0</red>
-                 <green>0</green>
-                 <blue>0</blue>
-                </color>
-               </brush>
-              </colorrole>
-             </active>
-             <inactive>
-              <colorrole role="WindowText">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>0</red>
-                 <green>0</green>
-                 <blue>0</blue>
-                </color>
-               </brush>
-              </colorrole>
-              <colorrole role="Text">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>0</red>
-                 <green>0</green>
-                 <blue>0</blue>
-                </color>
-               </brush>
-              </colorrole>
-             </inactive>
-             <disabled>
-              <colorrole role="WindowText">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>0</red>
-                 <green>0</green>
-                 <blue>0</blue>
-                </color>
-               </brush>
-              </colorrole>
-              <colorrole role="Text">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>0</red>
-                 <green>0</green>
-                 <blue>0</blue>
-                </color>
-               </brush>
-              </colorrole>
-             </disabled>
-            </palette>
-           </property>
-           <property name="displayFormat">
-            <string>dd/MM/yyyy HH:mm</string>
-           </property>
-           <property name="calendarPopup">
-            <bool>true</bool>
-           </property>
-           <property name="column" stdset="0">
-            <string>dataprotocollo</string>
-           </property>
-           <property name="search" stdset="0">
-            <bool>true</bool>
-           </property>
-           <property name="export" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>Rifer. mitt.</string>
-           </property>
-           <property name="buddy">
-            <cstring>comboBox_tiporiferimentomittente</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_tiporiferimentomittente">
-           <property name="column" stdset="0">
-            <string>Tiporiferimentomittente</string>
-           </property>
-           <property name="sortbytostring" stdset="0">
-            <bool>true</bool>
-           </property>
-           <property name="search" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_14">
-           <property name="text">
-            <string>N°</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_nrriferimentomittente</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_nrriferimentomittente">
-           <property name="minimumSize">
-            <size>
-             <width>80</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="column" stdset="0">
-            <string>riferimentomittente</string>
-           </property>
-           <property name="search" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>del</string>
-           </property>
-           <property name="buddy">
-            <cstring>dateEdit_datariferimentomittente</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_datariferimentomittente">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>90</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="displayFormat">
-            <string>dd/MM/yyyy</string>
-           </property>
-           <property name="calendarPopup">
-            <bool>true</bool>
-           </property>
-           <property name="column" stdset="0">
-            <string>datariferimentomittente</string>
-           </property>
-           <property name="search" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="1" column="1">
-            <widget class="QCheckBox" name="riservato">
-             <property name="text">
-              <string>Riservato</string>
-             </property>
-             <property name="shortcut">
-              <string>Ctrl+J</string>
-             </property>
-             <property name="column" stdset="0">
-              <string>riservato</string>
-             </property>
-             <property name="export" stdset="0">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QCheckBox" name="annullato">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Annullato</string>
-             </property>
-             <property name="column" stdset="0">
-              <string>annullato</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="annullamentorichiesto">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Annull. richiesto</string>
-             </property>
-             <property name="column" stdset="0">
-              <string>annullamentorichiesto</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QCheckBox" name="richiederisposta">
-             <property name="text">
-              <string>Richiede risposta</string>
-             </property>
-             <property name="column" stdset="0">
-              <string>richiederisposta</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QCheckBox" name="corrispostoostornato">
-             <property name="text">
-              <string>Corrisposto/stornato</string>
-             </property>
-             <property name="column" stdset="0">
-              <string>corrispostoostornato</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QCheckBox" name="spedito">
-             <property name="text">
-              <string>Spedito</string>
-             </property>
-             <property name="column" stdset="0">
-              <string>Spedito</string>
-             </property>
-             <property name="search" stdset="0">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelSpedito">
-             <property name="minimumSize">
-              <size>
-               <width>32</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>32</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="label_spedizione">
-             <property name="text">
-              <string>-</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="labelConvalidaAttribuzioni">
-             <property name="minimumSize">
-              <size>
-               <width>32</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>32</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="label_convalidau">
-             <property name="text">
-              <string>-</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="labelConvalidaProtocollo">
-             <property name="minimumSize">
-              <size>
-               <width>32</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>32</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLabel" name="label_convalida">
-             <property name="text">
-              <string>-</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="labelConsolidaDocumenti">
-             <property name="minimumSize">
-              <size>
-               <width>32</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>32</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QLabel" name="label_consolida">
-             <property name="text">
-              <string>-</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLabel" name="label_11">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Sportello</string>
-           </property>
-           <property name="buddy">
-            <cstring>comboBox_sportello</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_sportello">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_sportello">
-           <property name="column" stdset="0">
-            <string>Sportello</string>
-           </property>
-           <property name="search" stdset="0">
-            <bool>true</bool>
-           </property>
-           <property name="export" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QLabel" name="label_9">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Fascicolazione</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxTitolario">
-           <property name="column" stdset="0">
-            <string>Fascicolo</string>
-           </property>
-           <property name="search" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonTitolario">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
@@ -1110,6 +515,9 @@
           <property name="sortorder" stdset="0">
            <string>&gt;</string>
           </property>
+          <property name="saverows" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -1272,6 +680,674 @@
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="minimumSize">
+       <size>
+        <width>524</width>
+        <height>244</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>524</width>
+        <height>244</height>
+       </size>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <property name="margin">
+        <number>4</number>
+       </property>
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>8</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_10">
+           <property name="minimumSize">
+            <size>
+             <width>35</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Tipo</string>
+           </property>
+           <property name="buddy">
+            <cstring>comboBox_tipo</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBox_tipo">
+           <property name="minimumSize">
+            <size>
+             <width>103</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>103</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="column" stdset="0">
+            <string>Tipo</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="export" stdset="0">
+            <bool>true</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>ENTRATA</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>USCITA</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>INTERNO</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Protocollo n°</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_iddocumento</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_iddocumento">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>110</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font-weight:bold;</string>
+           </property>
+           <property name="text">
+            <string>200000000001</string>
+           </property>
+           <property name="column" stdset="0">
+            <string>iddocumento</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="export" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>del</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateTimeEdit" name="dateEdit_data">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="palette">
+            <palette>
+             <active>
+              <colorrole role="WindowText">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+              <colorrole role="Text">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+             </active>
+             <inactive>
+              <colorrole role="WindowText">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+              <colorrole role="Text">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+             </inactive>
+             <disabled>
+              <colorrole role="WindowText">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+              <colorrole role="Text">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+             </disabled>
+            </palette>
+           </property>
+           <property name="displayFormat">
+            <string>dd/MM/yyyy HH:mm</string>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>dataprotocollo</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="export" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>8</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>Rifer. mitt.</string>
+           </property>
+           <property name="buddy">
+            <cstring>comboBox_tiporiferimentomittente</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_tiporiferimentomittente">
+           <property name="column" stdset="0">
+            <string>Tiporiferimentomittente</string>
+           </property>
+           <property name="sortbytostring" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>N°</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_nrriferimentomittente</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_nrriferimentomittente">
+           <property name="minimumSize">
+            <size>
+             <width>80</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="column" stdset="0">
+            <string>riferimentomittente</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>del</string>
+           </property>
+           <property name="buddy">
+            <cstring>dateEdit_datariferimentomittente</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEdit_datariferimentomittente">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="displayFormat">
+            <string>dd/MM/yyyy</string>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+           <property name="column" stdset="0">
+            <string>datariferimentomittente</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="1" column="1">
+            <widget class="QCheckBox" name="riservato">
+             <property name="text">
+              <string>Riservato</string>
+             </property>
+             <property name="shortcut">
+              <string>Ctrl+J</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>riservato</string>
+             </property>
+             <property name="export" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="annullato">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Annullato</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>annullato</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="annullamentorichiesto">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Annull. richiesto</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>annullamentorichiesto</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="richiederisposta">
+             <property name="text">
+              <string>Richiede risposta</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>richiederisposta</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QCheckBox" name="corrispostoostornato">
+             <property name="text">
+              <string>Corrisposto/stornato</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>corrispostoostornato</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="spedito">
+             <property name="text">
+              <string>Spedito</string>
+             </property>
+             <property name="column" stdset="0">
+              <string>Spedito</string>
+             </property>
+             <property name="search" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QLabel" name="labelSpedito">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_spedizione">
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="labelConvalidaAttribuzioni">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="label_convalidau">
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="labelConvalidaProtocollo">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="label_convalida">
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="labelConsolidaDocumenti">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLabel" name="label_consolida">
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item row="3" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_11">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Sportello</string>
+           </property>
+           <property name="buddy">
+            <cstring>comboBox_sportello</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_sportello">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox_sportello">
+           <property name="column" stdset="0">
+            <string>Sportello</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="export" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1,0,3,0">
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_19">
+           <property name="minimumSize">
+            <size>
+             <width>70</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Documento</string>
+           </property>
+           <property name="buddy">
+            <cstring>comboBox_tipo</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBox_tipodocumento">
+           <property name="minimumSize">
+            <size>
+             <width>103</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>103</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="column" stdset="0">
+            <string>Tipoarchivio</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+           <property name="export" stdset="0">
+            <bool>true</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>DIGITALE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>URL</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>CARTACEO</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_9">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Fascicolazione</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxTitolario">
+           <property name="column" stdset="0">
+            <string>Fascicolo</string>
+           </property>
+           <property name="search" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonTitolario">
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>

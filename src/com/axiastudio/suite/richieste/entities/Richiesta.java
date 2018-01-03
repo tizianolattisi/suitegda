@@ -366,10 +366,10 @@ public class Richiesta implements Serializable, ITimeStamped {
         return recordcreato;
     }
 
-    @Override
-    public void setRecordcreato(Date recordcreato) {
-        this.recordcreato = recordcreato;
-    }
+//    @Override
+//    public void setRecordcreato(Date recordcreato) {
+//        this.recordcreato = recordcreato;
+//    }
 
     @Override
     public String getRecordcreatoda() {
@@ -386,10 +386,10 @@ public class Richiesta implements Serializable, ITimeStamped {
         return recordmodificato;
     }
 
-    @Override
-    public void setRecordmodificato(Date recordmodificato) {
-        this.recordmodificato = recordmodificato;
-    }
+//    @Override
+//    public void setRecordmodificato(Date recordmodificato) {
+//        this.recordmodificato = recordmodificato;
+//    }
 
     @Override
     public String getRecordmodificatoda() {

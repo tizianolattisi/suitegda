@@ -32,6 +32,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Observable;
 
 
 /**
@@ -42,7 +43,7 @@ import java.util.Date;
 @EntityListeners({ProtocolloListener.class, TimeStampedListener.class})
 @Table(schema="PROTOCOLLO")
 @SequenceGenerator(name="genprotocollo", sequenceName="protocollo.protocollo_id_seq", initialValue=1, allocationSize=1)
-public class Protocollo implements Serializable, ITimeStamped {
+public class Protocollo extends Observable implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genprotocollo")
@@ -107,8 +108,10 @@ public class Protocollo implements Serializable, ITimeStamped {
     @JoinColumn(name = "fascicolo", referencedColumnName = "id")
     @ManyToOne
     private Fascicolo fascicolo;
-    @Column(name="cartelladocer", insertable=false, updatable=false)
-    private String cartelladocer;
+//    @Column(name="cartelladocer", insertable=false, updatable=false)
+//    private String cartelladocer;
+    @Enumerated(EnumType.STRING)
+    private TipoArchivio tipoarchivio=TipoArchivio.PAPER;
 
     
     @Column(name="convalidaattribuzioni")
@@ -583,12 +586,26 @@ public class Protocollo implements Serializable, ITimeStamped {
         this.richiestaProtocolloCollection = richiestaProtocolloCollection;
     }
 
-    public String getCartelladocer() {
-        return cartelladocer;
+//    public String getCartelladocer() {
+//        return cartelladocer;
+//    }
+//
+//    public void setCartelladocer(String cartelladocer) {
+//        this.cartelladocer = cartelladocer;
+//    }
+//
+
+    public TipoArchivio getTipoarchivio() {
+        return tipoarchivio;
     }
 
-    public void setCartelladocer(String cartelladocer) {
-        this.cartelladocer = cartelladocer;
+    public void setTipoarchivio(TipoArchivio tipoarchivio) {
+        this.tipoarchivio = tipoarchivio;
+        this.setChanged();
+    }
+
+    public void reset() {
+        this.clearChanged();
     }
 
     @Override

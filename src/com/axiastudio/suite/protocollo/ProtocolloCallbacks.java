@@ -274,4 +274,13 @@ public class ProtocolloCallbacks {
         }
     }
 
+    @Callback(type=CallbackType.AFTERCOMMIT)
+    public static Validation afterCommit(Protocollo protocollo) {
+        if ( protocollo.hasChanged() ) {
+            protocollo.reset();
+            return ProtocolloUtil.modificaAttributoDocER(protocollo);
+        }
+        return new Validation(true);
+    }
+
 }

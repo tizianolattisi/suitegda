@@ -16,17 +16,21 @@
  */
 package com.axiastudio.suite.protocollo;
 
-import com.axiastudio.mapformat.MessageMapFormat;
-import com.axiastudio.suite.SuiteUtil;
-import com.axiastudio.suite.base.entities.*;
+import com.axiastudio.pypapi.Application;
+import com.axiastudio.pypapi.db.Validation;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.plugins.docer.DocerUtil;
 import com.axiastudio.suite.protocollo.entities.*;
+import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
+import it.tn.rivadelgarda.comune.gda.docer.MetadatiHelper;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import org.apache.chemistry.opencmis.commons.impl.json.JSONArray;
 import org.apache.chemistry.opencmis.commons.impl.json.JSONObject;
 
-import javax.print.Doc;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -111,12 +115,49 @@ public class ProtocolloUtil {
                 flags += flag ? "1" : "0";
             }
             url += "&profile=" + flags;
+            if (protocollo.getTipoarchivio() != null && !protocollo.getTipoarchivio().equals("")) {
+                url += "&archiveType=" + protocollo.getTipoarchivio();
+            } else {
+                url += "&archiveType=" + TipoArchivio.PAPER;
+            }
             url += "&stamp=" + watermarkJson.toJSONString();
             url += "&acls=" + aclJson.toJSONString();
             return url;
         } else {
             return "";
         }
+    }
+
+    public static Validation modificaAttributoDocER(Protocollo protocollo) {
+        Validation val=new Validation(true);
+
+        Application app = Application.getApplicationInstance();
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
+        List<Map<String, String>> documents=new ArrayList<Map<String, String>>();
+        try {
+            documents = docerHelper.searchDocumentsByExternalIdFirstAndRelated("protocollo_"+protocollo.getId());
+        } catch (Exception e) {
+            val.setResponse(false);
+            val.setMessage(e.getMessage());
+            e.printStackTrace();
+        }
+        MetadatiHelper<MetadatiDocumento> metadata = MetadatiHelper.build(MetadatiDocumento.ARCHIVE_TYPE,
+                protocollo.getTipoarchivio().toString());
+        for ( Map<String, String> doc:documents ) {
+            try {
+                if (!docerHelper.updateProfileDocument(doc.get("DOCNUM"), metadata)) {
+                    val.setResponse(false);
+                    val.setMessage("Errore nella modifica del tipo di documento (cartaceo/digitale).");
+                    return val;
+                }
+            } catch (Exception e) {
+                val.setResponse(false);
+                val.setMessage(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return val;
     }
 }
 

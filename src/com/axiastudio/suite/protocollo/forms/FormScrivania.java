@@ -34,7 +34,10 @@ import com.axiastudio.suite.richieste.entities.DestinatarioUfficio;
 import com.axiastudio.suite.richieste.entities.DestinatarioUtente;
 import com.axiastudio.suite.richieste.entities.IDestinatarioRichiesta;
 import com.axiastudio.suite.richieste.entities.Richiesta;
-import com.trolltech.qt.core.*;
+import com.trolltech.qt.core.QByteArray;
+import com.trolltech.qt.core.QFile;
+import com.trolltech.qt.core.QModelIndex;
+import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.designer.QUiLoader;
 import com.trolltech.qt.designer.QUiLoaderException;
 import com.trolltech.qt.gui.*;
@@ -317,9 +320,11 @@ public class FormScrivania  extends QMainWindow {
         TableModel model = (TableModel) tableView.model();
         List<Integer> selectedIndexes = new ArrayList();
         List<Integer> deselectedIndexes = new ArrayList();
-        for (QModelIndex i: selected.indexes()){
-            if(!selectedIndexes.contains(i.row())){
-                selectedIndexes.add(i.row());
+        if (selected != null) {
+            for (QModelIndex i : selected.indexes()) {
+                if (!selectedIndexes.contains(i.row())) {
+                    selectedIndexes.add(i.row());
+                }
             }
         }
         if (deselected != null) {

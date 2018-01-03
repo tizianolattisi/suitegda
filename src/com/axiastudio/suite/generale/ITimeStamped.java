@@ -26,7 +26,7 @@ public interface ITimeStamped {
 
     Date getRecordcreato();
 
-    void setRecordcreato(Date date);
+   // void setRecordcreato(Date date);
 
     String getRecordcreatoda();
 
@@ -34,7 +34,7 @@ public interface ITimeStamped {
 
     Date getRecordmodificato();
 
-    void setRecordmodificato(Date date);
+  //  void setRecordmodificato(Date date);
 
     String getRecordmodificatoda();
 

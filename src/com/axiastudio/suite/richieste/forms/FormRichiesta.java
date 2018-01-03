@@ -6,14 +6,19 @@ import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.IStoreFactory;
 import com.axiastudio.pypapi.db.Store;
-import com.axiastudio.pypapi.ui.*;
+import com.axiastudio.pypapi.ui.IForm;
+import com.axiastudio.pypapi.ui.Util;
+import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
-import com.axiastudio.suite.base.entities.*;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.UfficioUtente;
+import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.base.entities.Utente_;
 import com.axiastudio.suite.plugins.docer.DocerPlugin;
 import com.axiastudio.suite.richieste.entities.*;
 import com.trolltech.qt.gui.*;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
+import it.tn.rivadelgarda.comune.gda.docer.values.TIPO_COMPONENTE;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -130,11 +135,11 @@ public class FormRichiesta extends Window {
             List<Map<String, String>> documents = docerHelper.searchDocumentsByExternalIdFirstAndRelated("richiesta_"+richiesta.getId());
             for( Map<String, String> doc: documents){
                 byte[] bytes = docerHelper.getDocument(doc.get("DOCNUM"), "1");
-                TIPO_COMPONENTE_VALUES tipoComponente;
+                TIPO_COMPONENTE tipoComponente;
                 if( "PRINCIPALE".equals(doc.get("TIPO_COMPONENTE")) ){
-                    tipoComponente = TIPO_COMPONENTE_VALUES.PRINCIPALE;
+                    tipoComponente = TIPO_COMPONENTE.PRINCIPALE;
                 } else if( "ALLEGATO".equals(doc.get("TIPO_COMPONENTE")) ){
-                    tipoComponente = TIPO_COMPONENTE_VALUES.ALLEGATO;
+                    tipoComponente = TIPO_COMPONENTE.ALLEGATO;
                 } else {
                     continue;
                 }
