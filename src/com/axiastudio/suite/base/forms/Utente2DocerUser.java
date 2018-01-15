@@ -10,7 +10,7 @@ import com.axiastudio.suite.base.entities.Utente_;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
-import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
+import it.tn.rivadelgarda.comune.gda.docer.MetadatiHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiGruppi;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiUtente;
 
@@ -162,8 +162,8 @@ public class Utente2DocerUser extends QDialog {
                     for (UfficioUtente ufficioutente : utente.getUfficioUtenteCollection()) {
                         if (ufficioutente.getVisualizza()) {
                             try {
-                                KeyValuePairFactory criteri =
-                                        new KeyValuePairFactory<MetadatiGruppi>().add(MetadatiGruppi.GROUP_ID, ufficioutente.getUfficio().getId().toString());
+                                MetadatiHelper criteri =
+                                        new MetadatiHelper<MetadatiGruppi>().add(MetadatiGruppi.GROUP_ID, ufficioutente.getUfficio().getId().toString());
                                 if (docerHelper.searchGroups(criteri).size() == 1) {
                             /* Ufficio normale */
                                     gruppi.add(ufficioutente.getUfficio().getId().toString());

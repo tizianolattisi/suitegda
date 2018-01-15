@@ -12,7 +12,7 @@ import com.axiastudio.suite.protocollo.entities.Attribuzione_;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
-import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
+import it.tn.rivadelgarda.comune.gda.docer.MetadatiHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiGruppi;
 
 import javax.persistence.EntityManager;
@@ -22,7 +22,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.trolltech.qt.core.Qt.AlignmentFlag.AlignHCenter;
 
@@ -116,8 +115,8 @@ public class Ufficio2DocerGroup extends QDialog {
 
         /* ufficio normale */
                 try {
-                    KeyValuePairFactory criteri =
-                            new KeyValuePairFactory<MetadatiGruppi>().add(MetadatiGruppi.GROUP_ID, ufficio.getId().toString());
+                    MetadatiHelper criteri =
+                            new MetadatiHelper<MetadatiGruppi>().add(MetadatiGruppi.GROUP_ID, ufficio.getId().toString());
                     if (docerHelper.searchGroups(criteri).size() == 0) {
                         try {
                             res = docerHelper.createGroup(ufficio.getId().toString(), ufficio.getDenominazione(), "C_H330");
@@ -138,8 +137,8 @@ public class Ufficio2DocerGroup extends QDialog {
                 }
         /* ufficio riservato */
                 try {
-                    KeyValuePairFactory criteri =
-                            new KeyValuePairFactory<MetadatiGruppi>().add(MetadatiGruppi.GROUP_ID, ufficio.getId().toString() + "R");
+                    MetadatiHelper criteri =
+                            new MetadatiHelper<MetadatiGruppi>().add(MetadatiGruppi.GROUP_ID, ufficio.getId().toString() + "R");
                     if (docerHelper.searchGroups(criteri).size() == 0) {
                         try {
                             res = docerHelper.createGroup(ufficio.getId().toString() + "R", ufficio.getDenominazione() + " - Riservato", "C_H330");
