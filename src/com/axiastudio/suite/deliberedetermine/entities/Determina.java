@@ -106,6 +106,8 @@ public class Determina extends Observable implements Serializable, ITimeStamped,
     private Boolean dispesa=Boolean.FALSE;
     @Column(name="spesaimpegnoesistente")
     private Boolean spesaimpegnoesistente =Boolean.FALSE;
+    @Column(name="diaffidamento")
+    private Boolean diaffidamento =Boolean.FALSE;
     @Column(name="dientrata")
     private Boolean dientrata =Boolean.FALSE;
     @Column(name="diregolarizzazione")
@@ -319,6 +321,14 @@ public class Determina extends Observable implements Serializable, ITimeStamped,
 
     public void setSpesaimpegnoesistente(Boolean spesaprecedenteimpegno) {
         this.spesaimpegnoesistente = spesaprecedenteimpegno;
+    }
+
+    public Boolean getDiaffidamento() {
+        return diaffidamento;
+    }
+
+    public void setDiaffidamento(Boolean diaffidamento) {
+        this.diaffidamento = diaffidamento;
     }
 
     public Boolean getDientrata() {

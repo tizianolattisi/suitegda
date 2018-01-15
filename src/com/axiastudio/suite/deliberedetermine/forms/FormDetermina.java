@@ -84,11 +84,16 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         PyPaPiTableView tableView_spese = (PyPaPiTableView) findChild(PyPaPiTableView.class, "tableView_spese");
         tableView_spese.setItemDelegate(new Delegate(tableView_spese));
 
-
         ((QCheckBox) findChild(QCheckBox.class, "benioservizi")).clicked.connect(this, "beniOServizi(Boolean)");
         ((QCheckBox) findChild(QCheckBox.class, "checkBox_impedimento")).clicked.connect(this, "impedimentoResponsabile(Boolean)");
+        ((QCheckBox) findChild(QCheckBox.class, "checkBox_spesa")).clicked.connect(this, "determinaSpesa(Boolean)");
 
         ((QRadioButton) findChild(QRadioButton.class, "convenzioneattiva")).toggled.connect(this, "convenzioneAttiva(Boolean)");
+
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesaImpegnoEsistente")).setEnabled(
+                ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked());
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_affidamento")).setEnabled(
+                ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked());
 
         try {
             Method storeFactory = this.getClass().getMethod("storeResponsabileProcedimento");
@@ -120,6 +125,18 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         }
     }
 
+    private void determinaSpesa(Boolean b){
+        QCheckBox spesaIE=((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesaImpegnoEsistente"));
+        QCheckBox affidamento=((QCheckBox) this.findChild(QCheckBox.class, "checkBox_affidamento"));
+
+        spesaIE.setEnabled(b);
+        affidamento.setEnabled(b);
+        if (!b) {
+            spesaIE.setChecked(false);
+            affidamento.setChecked(false);
+        }
+    }
+
     @Override
     protected void indexChanged(int row) {
         determina = (Determina) this.getContext().getCurrentEntity();
@@ -129,6 +146,8 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         popolaVisti();
 
         ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesaImpegnoEsistente")).setEnabled(
+                ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked());
+        ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_affidamento")).setEnabled(
                 ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked());
         ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_pluriennale")).setEnabled(
                 ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked() ||

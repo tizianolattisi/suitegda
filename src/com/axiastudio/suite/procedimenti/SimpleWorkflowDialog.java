@@ -19,25 +19,34 @@ public class SimpleWorkflowDialog extends QDialog {
         super(parent);
         this.fasePratica = fasePratica;
         this.simpleWorkFlow = simpleWorkFlow;
-        if( !simpleWorkFlow.permesso(fasePratica) || !simpleWorkFlow.condizione(fasePratica) ){
-            // inizializza la dialog per l'avvertimento
+        if( !simpleWorkFlow.permesso(fasePratica) ) {
             String msg = simpleWorkFlow.getResult().toString();
             initNo(msg);
+            return;
+        }
+        if( !simpleWorkFlow.condizione(fasePratica) ){
+            // inizializza la dialog per l'avvertimento
+            String msg = simpleWorkFlow.getResult().toString();
+            init(false, msg);
         } else {
             // inizializza la dialog per il passaggio di fase
-            initOk();
+            init(true, "");
         }
     }
 
-    private void initNo(String msg){
-        QVBoxLayout vBox = new QVBoxLayout();
-        this.setLayout(vBox);
-        vBox.addWidget(new QLabel("Attenzione"));
-        vBox.addWidget(new QLabel(msg));
-    }
 
 
-    private void initOk(){
+    private void init(Boolean continua, String msg){
+        if (!continua) {
+            int res=QMessageBox.question(this, "Attenzione - non sarà possibile continuare l'iter",
+                    msg + "\nSi desidera tornare al punto precedente dell'iter procedurale?",
+                    QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No);
+            if (res==QMessageBox.StandardButton.No.value()) {
+                initNo("Operazione annullata");
+                return;
+            }
+        }
+
         QVBoxLayout vBox = new QVBoxLayout();
         this.setLayout(vBox);
         TitoloDelega titoloDelega = simpleWorkFlow.checkTitoloDelega(fasePratica);
@@ -57,11 +66,11 @@ public class SimpleWorkflowDialog extends QDialog {
 
         choice = new QComboBox();
         vBox.addWidget(choice);
-        if( fasePratica.getConfermata() != null ){
-            choice.addItem(fasePratica.getTestoconfermata());
+        if( continua && fasePratica.getConfermata() != null ){
+            choice.addItem(fasePratica.getTestoconfermata(), 0);
         }
         if( fasePratica.getRifiutata() != null ){
-            choice.addItem(fasePratica.getTestorifiutata());
+            choice.addItem(fasePratica.getTestorifiutata(), 1);
         }
 
         commento = new QTextEdit();
@@ -83,41 +92,51 @@ public class SimpleWorkflowDialog extends QDialog {
             buttonAccept.setEnabled(false);
             checkBox.toggled.connect(buttonAccept, "setEnabled(boolean)");
         }
+    }
 
 
-        }
+    private void initNo(String msg){
+        QVBoxLayout vBox = new QVBoxLayout();
+        this.setLayout(vBox);
+        vBox.addWidget(new QLabel("Attenzione"));
+        vBox.addWidget(new QLabel(msg));
+    }
 
+    
     @Override
     public void accept() {
         int idx = choice.currentIndex();
-        if( idx == 0 ){
-            if ( !simpleWorkFlow.creaVisto(fasePratica, Boolean.FALSE, commento.toPlainText(), Boolean.TRUE, Boolean.FALSE) ) {
-                QMessageBox.critical(this, "Attenzione", simpleWorkFlow.getResult().toString(),
-                        QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
-                return;
-            }
-            Boolean res = simpleWorkFlow.azione(fasePratica);
-            if( res ){
-                if ( !simpleWorkFlow.completaFase(fasePratica) ) {
+        if (idx != -1) {
+            int value = (Integer) choice.itemData(idx);
+            if (value == 0) {
+                if (!simpleWorkFlow.creaVisto(fasePratica, Boolean.FALSE, commento.toPlainText(), Boolean.TRUE, Boolean.FALSE)) {
                     QMessageBox.critical(this, "Attenzione", simpleWorkFlow.getResult().toString(),
                             QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
                     return;
                 }
-            } else {
-                String msg = "Non è stato possibile concludere la fase.";
-                if( simpleWorkFlow.getResult() != null ){
-                    msg = simpleWorkFlow.getResult().toString();
+                Boolean res = simpleWorkFlow.azione(fasePratica);
+                if (res) {
+                    if (!simpleWorkFlow.completaFase(fasePratica)) {
+                        QMessageBox.critical(this, "Attenzione", simpleWorkFlow.getResult().toString(),
+                                QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+                        return;
+                    }
+                } else {
+                    String msg = "Non è stato possibile concludere la fase.";
+                    if (simpleWorkFlow.getResult() != null) {
+                        msg = simpleWorkFlow.getResult().toString();
+                    }
+                    QMessageBox.critical(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+                    return;
                 }
-                QMessageBox.critical(this, "Attenzione", msg, QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
-                return;
+            } else if (value == 1) {
+                if (!simpleWorkFlow.completaFase(fasePratica, Boolean.FALSE, commento.toPlainText())) {
+                    QMessageBox.critical(this, "Attenzione", simpleWorkFlow.getResult().toString(),
+                            QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
+                    return;
+                }
             }
-        } else if( idx == 1 ){
-            if ( !simpleWorkFlow.completaFase(fasePratica, Boolean.FALSE, commento.toPlainText()) ) {
-                QMessageBox.critical(this, "Attenzione", simpleWorkFlow.getResult().toString(),
-                        QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok);
-                return;
-            }
+            super.accept();
         }
-        super.accept();
     }
 }
