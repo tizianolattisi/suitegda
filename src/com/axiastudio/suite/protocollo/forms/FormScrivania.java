@@ -451,6 +451,7 @@ public class FormScrivania  extends QMainWindow {
         List<Attribuzione> attribuzioniLette = new ArrayList();
         for(Attribuzione attribuzione: this.selectionProtocollo){
             if ( ufficiDaiPerLetto.contains(attribuzione.getUfficio()) ) {
+                attribuzione=(Attribuzione) controller.refresh(attribuzione);
                 attribuzione.setLetto(Boolean.TRUE);
                 attribuzione.setDataletto(Calendar.getInstance().getTime());
                 attribuzione.setEsecutoreletto(autenticato.getLogin());
