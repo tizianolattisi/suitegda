@@ -20,7 +20,7 @@
    <string>Tipo pratica</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>codice,descrizione</string>
+   <string>codice,&lt;descrizione&gt;,foglia,obsoleta</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">

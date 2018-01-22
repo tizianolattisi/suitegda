@@ -249,7 +249,11 @@ public class TipoPratica implements Serializable, ITimeStamped, Comparable<TipoP
 
     @Override
     public String toString() {
-        return "-"+this.getCodice()+" - "+this.getDescrizione();
+        String descTipo="-"+this.getCodice()+" - "+this.getDescrizione();
+        if (this.getObsoleta()) {
+            descTipo+=" - obsoleta";
+        }
+        return descTipo;
     }
 
     @Override
