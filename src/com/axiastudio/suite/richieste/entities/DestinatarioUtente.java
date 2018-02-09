@@ -177,6 +177,11 @@ public class DestinatarioUtente extends DestinatarioRichiesta implements Seriali
         this.richiestacancellabile = richiestacancellabile;
     }
 
+    @Override
+    public Long getIdRichiesta() {
+        return richiesta.getId();
+    }
+
     public Date getRecordcreato() {
         return recordcreato;
     }

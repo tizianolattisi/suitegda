@@ -120,6 +120,17 @@ public class FormScrivania  extends QMainWindow {
         this.setWindowTitle(window.windowTitle());
     }
 
+    @Override
+    protected void closeEvent(QCloseEvent event) {
+        // uninstall plugins
+        List<IPlugin> plugins = (List<IPlugin>) Register.queryPlugins(this.getClass());
+        for( IPlugin plugin: plugins ){
+            plugin.uninstall();
+        }
+        this.disposeLater();
+        super.closeEvent(event);
+    }
+
     private void popolaAttribuzioni() {
         Database db = (Database) Register.queryUtility(IDatabase.class);
         EntityManager em = db.getEntityManagerFactory().createEntityManager();
@@ -250,8 +261,9 @@ public class FormScrivania  extends QMainWindow {
         colonne.add(new Column("datascadenza", "Data scadenza", "Data di scadenza della richiesta"));
         colonne.add(new Column("nomedestinatario", "Inviato a", "Richiesta inviata a..."));
         colonne.add(new Column("testo", "Testo", "Testo della richiesta"));
-        colonne.add(new Column("conoscenza", "cc", "Per conoscenza"));
+        colonne.add(new Column("conoscenza", "CC", "Per conoscenza"));
         colonne.add(new Column("letto", "Letto", "Richiesta letta/evasa/conclusa"));
+        colonne.add(new Column("richiestacancellabile", "Canc", "Richiesta cancellabile se data per letta da tutti i destinatari"));
 //        colonne.add(new Column("statorichiesta", "Stato", "Stato richiesta"));
         TableModel model = new TableModel(destinatarioStoreGenerale, colonne);
         tableView.clearSelection();
@@ -267,16 +279,19 @@ public class FormScrivania  extends QMainWindow {
         tableView.horizontalHeader().setResizeMode(4, QHeaderView.ResizeMode.Stretch); // testo
         tableView.horizontalHeader().setResizeMode(5, QHeaderView.ResizeMode.ResizeToContents); // CC
         tableView.horizontalHeader().setResizeMode(6, QHeaderView.ResizeMode.ResizeToContents); // letto
+        tableView.horizontalHeader().setResizeMode(7, QHeaderView.ResizeMode.ResizeToContents); // cancellabile
     }
 
-    private void selectRowsRichieste(QItemSelection selected, QItemSelection deselected){
+    private void selectRowsRichieste(QItemSelection selected, QItemSelection deselected) {
         QTableView tableView = (QTableView) this.findChild(QTableView.class, "richieste");
         TableModel model = (TableModel) tableView.model();
         List<Integer> selectedIndexes = new ArrayList();
         List<Integer> deselectedIndexes = new ArrayList();
-        for (QModelIndex i: selected.indexes()){
-            if(!selectedIndexes.contains(i.row())){
-                selectedIndexes.add(i.row());
+        if (selected != null) {
+            for (QModelIndex i : selected.indexes()) {
+                if (!selectedIndexes.contains(i.row())) {
+                    selectedIndexes.add(i.row());
+                }
             }
         }
         for (QModelIndex i: deselected.indexes()){

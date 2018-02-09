@@ -204,6 +204,11 @@ public class DestinatarioUfficio extends DestinatarioRichiesta
     }
 
     @Override
+    public Long getIdRichiesta() {
+        return richiesta.getId();
+    }
+
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

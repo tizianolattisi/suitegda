@@ -36,8 +36,14 @@ public class FormRichiesta extends Window {
         super(uiFile, entityClass, title);
         this.richiestaToolbar = new RichiestaToolbar("Richiesta", this);
         this.addToolBar(richiestaToolbar);
-        ((PyPaPiTableView) this.findChild(QWidget.class, "tableViewPersone")).setOpen(false);
-        ((PyPaPiTableView) this.findChild(QWidget.class, "tableViewUffici")).setOpen(false);
+//        ((PyPaPiTableView) this.findChild(QWidget.class, "tableViewPersone")).setOpen(false);
+//        ((PyPaPiTableView) this.findChild(QWidget.class, "tableViewUffici")).setOpen(false);
+        PyPaPiTableView tblDestinatari=((PyPaPiTableView) this.findChild(QWidget.class, "tableViewPersone"));
+        tblDestinatari.setOpen(false);
+        tblDestinatari.entityInserted.connect(this, "destinatarioInserito(Object)");
+        tblDestinatari=((PyPaPiTableView) this.findChild(QWidget.class, "tableViewUffici"));
+        tblDestinatari.setOpen(false);
+        tblDestinatari.entityInserted.connect(this, "destinatarioInserito(Object)");
         Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, "tableViewPrecedenti"), Boolean.TRUE);
         Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, "tableViewSuccessivi"), Boolean.TRUE);
 
@@ -87,6 +93,11 @@ public class FormRichiesta extends Window {
         }
     }
 
+    private void destinatarioInserito(Object obj){
+        IDestinatarioRichiesta inserito = (IDestinatarioRichiesta) obj;
+        inserito.setRichiestacancellabile(((Richiesta) this.getContext().getCurrentEntity()).getCancellabile());
+    }
+
     private void inoltraRichiesta(){
         Richiesta richiesta = (Richiesta) getContext().getCurrentEntity();
         Richiesta inoltra = new Richiesta();
@@ -108,6 +119,7 @@ public class FormRichiesta extends Window {
                 alfrescoHelper.copyDocument((String) map.get("objectId"), "/Siti/richieste/documentLibrary/" + inoltra.getPathdocumento() + "/");
             }
         }
+        inoltra.setIdConversazione(richiesta.getIdConversazione());
 
         IForm win = Util.formFromEntity(inoltra);
         QMdiArea workspace = Util.findParentMdiArea(this);
@@ -158,6 +170,21 @@ public class FormRichiesta extends Window {
         risposta.setMittente(autenticato);
         risposta.setDestinatarioUtenteCollection(destinatariUtente);
         risposta.setDestinatarioUfficioCollection(destinatariUfficio);
+        List<RichiestaPratica> tmpRichiestaPratica = new ArrayList();
+        for ( RichiestaPratica rp:richiesta.getRichiestaPraticaCollection() ) {
+            RichiestaPratica newrp = new RichiestaPratica();
+            newrp.setPratica(rp.getPratica());
+            tmpRichiestaPratica.add(newrp);
+        }
+        risposta.setRichiestaPraticaCollection(tmpRichiestaPratica);
+        List<RichiestaProtocollo> tmpRichiestaProtocollo = new ArrayList();
+        for ( RichiestaProtocollo rp:richiesta.getRichiestaProtocolloCollection() ) {
+            RichiestaProtocollo newrp = new RichiestaProtocollo();
+            newrp.setProtocollo(rp.getProtocollo());
+            tmpRichiestaProtocollo.add(newrp);
+        }
+        risposta.setRichiestaProtocolloCollection(tmpRichiestaProtocollo);
+        risposta.setIdConversazione(richiesta.getIdConversazione());
         IForm win = Util.formFromEntity(risposta);
         QMdiArea workspace = Util.findParentMdiArea(this);
         if( workspace != null ){
