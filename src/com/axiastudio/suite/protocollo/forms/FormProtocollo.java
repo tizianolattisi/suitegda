@@ -181,7 +181,7 @@ public class FormProtocollo extends Window {
             }
         }
 
-        tabWidget.setTabEnabled(4, false); // TODO: da togliere
+//        tabWidget.setTabEnabled(4, false); // TODO: da togliere
     }
 
     /*
@@ -228,7 +228,7 @@ public class FormProtocollo extends Window {
 
         PyPaPiTableView tableViewPratiche = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_pratiche");
         if( pratica.getRiservata() ) {
-            if (!ufficiPrivato.contains(ufficioGestore) && !autenticato.getSupervisorepratiche()) {
+            if (!ufficiPrivato.contains(ufficioGestore) && !autenticato.getSupervisorepraticheriservate()) {
                 QMessageBox.critical(this, "Attenzione",
                         "Per poter inserire pratiche riservate è necessario appartenere al loro ufficio gestore con flag riservato.\n" +
                                 "Inserimento della pratica annullato.");
@@ -395,7 +395,7 @@ public class FormProtocollo extends Window {
         Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "spedito"), protocollo.getSpedito());
         this.protocolloMenuBar.actionByName("stampaEtichetta").setEnabled(!nuovoInserimento);
         this.protocolloMenuBar.actionByName("inviaPec").setEnabled( !this.getContext().getIsDirty() && convProtocollo && consDocumenti &&
-                protocollo.getTipo().equals(TipoProtocollo.USCITA) &&
+                !protocollo.getTipo().equals(TipoProtocollo.ENTRATA) &&
                 protocollo.getTiporiferimentomittente() != null && "PEC".equals(protocollo.getTiporiferimentomittente().getDescrizione()) &&
                 profilo.inAttribuzionePrincipale());
         this.protocolloMenuBar.actionByName("rispondiPrincipale").setEnabled(profilo.inAttribuzionePrincipale());
@@ -658,7 +658,9 @@ public class FormProtocollo extends Window {
                 }
                 // gli utenti che non sono operatori protocollo non possono aggiungere/versionare/cancellare file
                 if( !autenticato.getOperatoreprotocollo() ) {
-                    upload = delete = version = false;
+                    delete = version = false;
+                    upload = pup.inSportelloOAttribuzionePrincipale();
+//                    upload = delete = version = false;
                 } else {
                     if (protocollo.getConsolidadocumenti()) {
                         delete = false;
@@ -992,11 +994,16 @@ public class FormProtocollo extends Window {
             for (Map<String, String> map : helper.children()) {
                 /* invio solo i documenti che sono stati inseriti prima del primo invio di PEC, x evitare di spedire anche le ricevute */
                 Date documentDate = new Date();
-                DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
+                DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CEST' yyyy", Locale.ENGLISH);
                 try {
                     documentDate = df.parse(map.get("creationDate"));
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
+                    try {
+                        documentDate = df.parse(map.get("creationDate"));
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
                 }
                 if ( documentDate.before(protocollo.getDataconsolidadocumenti()) ) {
                     numAllegati++;
@@ -1027,6 +1034,10 @@ public class FormProtocollo extends Window {
             QMessageBox.information(this, "Invio annullato", "L'invio della PEC è stato annullato.");
             return;
         }
+
+        Database db = (Database) Register.queryUtility(IDatabase.class);
+        Controller controller = db.createController(SoggettoProtocollo.class);
+        Controller controllerRis = db.createController(SoggettoRiservatoProtocollo.class);
         for( String destinatario: destinatari ) {
             Client client = ClientBuilder.newBuilder()
                     .register(MultiPartFeature.class)
@@ -1060,6 +1071,16 @@ public class FormProtocollo extends Window {
                 return;
             }
             ISoggettoProtocollo soggettoProtocollo = mappaDestinatari.get(destinatario);
+            Controller dest;
+            if ( SoggettoProtocollo.class.isInstance(soggettoProtocollo) ) {
+                dest=controller;
+            } else if ( SoggettoRiservatoProtocollo.class.isInstance(soggettoProtocollo) ) {
+                dest=controllerRis;
+            } else {
+                QMessageBox.critical(this, "Non è stata individiduata la classe del destinatario", "Invio annullato");
+                return;
+            }
+            soggettoProtocollo=(ISoggettoProtocollo) dest.refresh(soggettoProtocollo);
             soggettoProtocollo.setMessaggiopec(messaggioResponse.getMessageId());
 
             // allegati
@@ -1070,11 +1091,16 @@ public class FormProtocollo extends Window {
 //                    String strDataFile = map.get("lastModificationDate");
                     String strDataFile = map.get("creationDate");
                     Date documentDate = new Date();
-                    DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
+                    DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CEST' yyyy", Locale.ENGLISH);
                     try {
                         documentDate = df.parse(strDataFile);
                     } catch (ParseException e) {
-                        e.printStackTrace();
+                        df = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH);
+                        try {
+                            documentDate = df.parse(map.get("creationDate"));
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                     if ( documentDate.before(protocollo.getDataconsolidadocumenti()) ) {
                         String objectId = map.get("objectId");
@@ -1147,7 +1173,8 @@ public class FormProtocollo extends Window {
 
 
             // salvare
-            getContext().commitChanges();
+            dest.commit(soggettoProtocollo);
+//            getContext().commitChanges();
 
             // eseguo il PUT
             try {
@@ -1172,6 +1199,7 @@ public class FormProtocollo extends Window {
             System.out.println("fatto");
         }
         QMessageBox.information(this, "PEC", "N. " + ((Integer) destinatari.size()).toString() + " PEC in spedizione.");
+        getContext().refreshElement();
     }
 
     /*

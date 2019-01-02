@@ -24,11 +24,13 @@ import com.axiastudio.pypapi.db.IDatabase;
 import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.base.BaseUtil;
 import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.procedimenti.entities.TipoPraticaProcedimento;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
+import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 
@@ -139,6 +141,22 @@ public class PraticaCallbacks {
                         return new Validation(false, msg);
                     } else if( pratica.getRiservata() && !profilo.inSportelloOAttribuzioneR() && !autenticato.getSupervisoreprotocollo()){
                         msg = "Devi avere completa visibilità del protocollo e permesso sui dati riservati per poterlo inserire nella pratica riservata.";
+                        return new Validation(false, msg);
+                    }
+                }
+                // inserire in originale protocolli
+                if ( praticaProtocollo.getOriginale() ) {
+                    // esiste già un protocollo collegato come originale -> msg box
+                    // con attribuzione principale!=ufficio gestore -> vietato
+                    Ufficio principale=null;
+                    for (Attribuzione attr : praticaProtocollo.getProtocollo().getAttribuzioneCollection()) {
+                        if (attr.getPrincipale()) {
+                            principale = attr.getUfficio();
+                            break;
+                        }
+                    }
+                    if ( !(pratica.getGestione().equals(principale) || autenticato.getSupervisorepratiche()) ) {
+                        msg = "Per poter inserire il protocollo in originale, l'attribuzione principale deve coincidere con l'ufficio gestore della pratica.\n";
                         return new Validation(false, msg);
                     }
                 }

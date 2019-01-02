@@ -20,6 +20,7 @@ import com.axiastudio.suite.base.entities.Ufficio;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -39,6 +40,19 @@ public class UfficioProtocollo implements Serializable {
     @JoinColumn(name = "protocollo", referencedColumnName = "iddocumento")
     @ManyToOne
     private Protocollo protocollo;
+
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
+
 
     public Long getId() {
         return id;
@@ -62,6 +76,38 @@ public class UfficioProtocollo implements Serializable {
 
     public void setUfficio(Ufficio ufficio) {
         this.ufficio = ufficio;
+    }
+
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
+    }
+
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
+    }
+
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
     }
 
     @Override

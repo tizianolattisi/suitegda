@@ -210,7 +210,7 @@
     <item row="3" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidgetBody">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
@@ -226,7 +226,7 @@
            <string>.indirizzoCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;principale&lt;,&gt;tipo&lt;,&lt;descrizione&gt;,&gt;via&lt;,&gt;civico&lt;,&gt;cap&lt;,&gt;comune&lt;,&gt;provincia&lt;,&gt;stato&lt;</string>
+           <string>&gt;principale&lt;,&gt;tipo&lt;,&gt;via&lt;,&gt;civico&lt;,&gt;cap&lt;,&gt;comune&lt;,&gt;provincia&lt;,&gt;stato&lt;,&lt;descrizione&gt;</string>
           </property>
           <property name="sortcolumn" stdset="0">
            <number>0</number>
@@ -242,9 +242,6 @@
           </property>
           <property name="export" stdset="0">
            <bool>false</bool>
-          </property>
-          <property name="headers" stdset="0">
-           <string>Princip.,Tipo,Descrizione,Via,Civico,CAP,Comune,Prov.,Stato</string>
           </property>
          </widget>
         </item>
@@ -312,9 +309,19 @@
        <attribute name="title">
         <string>Relazioni</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_4">
+         <widget class="QCheckBox" name="checkBoxRelazAttive">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Solo relazioni attive</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewRelazioni">
           <property name="entity" stdset="0">
            <string>.relazioneSoggettoCollection</string>
           </property>
@@ -322,7 +329,10 @@
            <string>relazionato</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&lt;predicato&gt;</string>
+           <string>&lt;predicato&gt;,datanascita,datacessazione,attivo</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>Relazione,Dal,Al,Attivo</string>
           </property>
          </widget>
         </item>
@@ -420,7 +430,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -793,7 +803,7 @@
         <item row="3" column="1" colspan="4">
          <widget class="QLineEdit" name="lineEdit_19">
           <property name="column" stdset="0">
-           <string>referente</string>
+           <string>referente_entetab</string>
           </property>
          </widget>
         </item>
@@ -892,7 +902,6 @@
   <tabstop>lineEdit_10</tabstop>
   <tabstop>tableView_3</tabstop>
   <tabstop>tableView_2</tabstop>
-  <tabstop>tableView_4</tabstop>
  </tabstops>
  <resources/>
  <connections/>

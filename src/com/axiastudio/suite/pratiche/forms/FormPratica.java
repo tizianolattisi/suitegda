@@ -39,14 +39,19 @@ import com.axiastudio.suite.pratiche.entities.Fase;
 import com.axiastudio.suite.pratiche.entities.FasePratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
+import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.Fascicolo;
+import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
+import com.axiastudio.suite.protocollo.entities.PraticaProtocollo_;
 import com.axiastudio.suite.protocollo.forms.FormTitolario;
 import com.trolltech.qt.gui.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -78,6 +83,11 @@ public class FormPratica extends Window implements IDocumentFolder {
         toolButtonTitolario.setIcon(new QIcon("classpath:com/axiastudio/suite/resources/book_open.png"));
         toolButtonTitolario.clicked.connect(this, "apriTitolario()");
 
+        /* pratiche collegate */
+        PyPaPiTableView tableViewProtocolli = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableViewProtocolli");
+        tableViewProtocolli.entityUpdated.connect(this, "controllaOriginale(Object)");
+
+
         try {
             Method storeFactory = this.getClass().getMethod("storeAttribuzione");
             Register.registerUtility(storeFactory, IStoreFactory.class, "Attribuzione");
@@ -102,7 +112,7 @@ public class FormPratica extends Window implements IDocumentFolder {
         ((QComboBox) this.findChild(QComboBox.class, "comboBox_fase")).currentIndexChanged.connect(this, "aggiornaFase()");
 
 
-        ((QTabWidget) this.findChild(QTabWidget.class, "tabWidget")).setTabEnabled(4, false); // TODO: da togliere
+//        ((QTabWidget) this.findChild(QTabWidget.class, "tabWidget")).setTabEnabled(4, false); // TODO: da togliere
     }
 
     private void apriDettaglio(){
@@ -110,9 +120,18 @@ public class FormPratica extends Window implements IDocumentFolder {
         IDettaglio dettaglio = PraticaUtil.trovaDettaglioDaPratica(pratica);
         if( dettaglio != null ){
             IForm form = Util.formFromEntity(dettaglio);
-            QMdiArea workspace = Util.findParentMdiArea(this);
-            if( workspace != null ){
-                workspace.addSubWindow((QMainWindow) form);
+            if( form == null ){
+                String msg = "Errore nell'apertura della finestra di dettaglio.";
+                Util.warningBox(this, "Attenzione", msg);
+                return;
+            }
+            if( Dialog.class.isInstance(form) ){
+                ((Dialog) form).setModal(true);
+            } else {
+                QMdiArea workspace = Util.findParentMdiArea(this);
+                if( workspace != null ){
+                    workspace.addSubWindow((QMainWindow) form);
+                }
             }
             form.show();
 
@@ -236,6 +255,54 @@ public class FormPratica extends Window implements IDocumentFolder {
             pratica.setFascicolo(selection);
             aggiornaFascicolo(selection);
             this.getContext().getDirty();
+        }
+    }
+
+    private void controllaOriginale(Object obj) {
+        PraticaProtocollo pp=(PraticaProtocollo) obj;
+
+        if ( pp.getOriginale() ) {
+            Pratica pratica = (Pratica) this.getContext().getCurrentEntity();
+            // verifico se il protocollo è inserito in originale in *altre* pratiche
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            EntityManager em = db.getEntityManagerFactory().createEntityManager();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Object> cq = cb.createQuery();
+            Root from = cq.from(PraticaProtocollo.class);
+            cq.select(from);
+            List<Predicate> predicates = new ArrayList();
+            predicates.add(cb.equal(from.get(PraticaProtocollo_.protocollo), pp.getProtocollo()));
+            predicates.add(cb.isTrue(from.get(PraticaProtocollo_.originale)));
+            cq = cq.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+            Query q = em.createQuery(cq);
+            List entities = q.getResultList();
+            for (Object objOrig: entities) {
+                if ( !((PraticaProtocollo) objOrig).getPratica().equals(pratica)) {
+                    for (Attribuzione attr:((PraticaProtocollo) objOrig).getProtocollo().getAttribuzioneCollection()) {
+                        if ( attr.getPrincipale() && !attr.getUfficio().equals(pratica.getGestione())) {
+                            if (QMessageBox.question(this, "Controllo originale",
+                                    "Il protocollo ha ufficio attribuito in via principale differente dall'ufficio gestore della pratica.\n" +
+                                            "Operazione permessa solo agli utenti con permessi di 'supervisore pratiche'.\n" +
+                                            "Spostare l'originale?") == QMessageBox.StandardButton.Ok) {
+                                QMessageBox.information(this, "Ok", "ok");
+                            } else {
+                                QMessageBox.information(this, "No", "no");
+                                pp.setOriginale(Boolean.FALSE);
+                            }
+                            break;
+                        }
+                    }
+                    if (QMessageBox.question(this, "Controllo originale", "Il protocollo è già stato assegnato in originale ad un'altra pratica.\n" +
+                            "Spostare l'originale?") == QMessageBox.StandardButton.Ok) {
+                        QMessageBox.information(this, "Ok", "ok");
+                    } else {
+                        QMessageBox.information(this, "No", "no");
+                        pp.setOriginale(Boolean.FALSE);
+                    }
+                    break;
+                }
+            }
+
         }
     }
 

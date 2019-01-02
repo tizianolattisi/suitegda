@@ -498,7 +498,9 @@ public class Determina extends Observable implements Serializable, ITimeStamped,
                 if (vistoResp.getUtente().equals(vistoResp.getResponsabile())) {
                     firma = "IL" + firma;
                 } else {
-                    if (this.getImpedimentoresponsabile()) {
+                    if ("SEGRETARIO".equals(vistoResp.getCodiceCarica())){
+                        firma = "PER IL" + firma;
+                    } else if (this.getImpedimentoresponsabile()) {
                         firma = "PER IMPEDIMENTO DEL" + firma;
                     } else {
                         firma = "PER TEMPORANEA ASSENZA DEL" + firma;

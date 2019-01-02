@@ -180,16 +180,20 @@ public class Richiesta implements Serializable, ITimeStamped {
             riservato=Boolean.FALSE;
         }
 
-        for (DestinatarioUtente du : this.getDestinatarioUtenteCollection()) {
-            if (du.getDestinatario().equals(autenticato)) {
-                riservato=Boolean.FALSE;
+        if ( this.getDestinatarioUtenteCollection()!=null ) {
+            for (DestinatarioUtente du : this.getDestinatarioUtenteCollection()) {
+                if (du.getDestinatario().equals(autenticato)) {
+                    riservato = Boolean.FALSE;
+                }
             }
         }
 
-        for (DestinatarioUfficio du : this.getDestinatarioUfficioCollection()) {
-            for (UfficioUtente uu : du.getDestinatario().getUfficioUtenteCollection()) {
-                if (autenticato.equals(uu.getUtente()) && !uu.getOspite()) {
-                    riservato=Boolean.FALSE;
+        if ( this.getDestinatarioUtenteCollection()!=null ) {
+            for (DestinatarioUfficio du : this.getDestinatarioUfficioCollection()) {
+                for (UfficioUtente uu : du.getDestinatario().getUfficioUtenteCollection()) {
+                    if (autenticato.equals(uu.getUtente()) && !uu.getOspite()) {
+                        riservato = Boolean.FALSE;
+                    }
                 }
             }
         }

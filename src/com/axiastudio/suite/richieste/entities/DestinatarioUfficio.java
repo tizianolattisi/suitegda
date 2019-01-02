@@ -24,7 +24,8 @@ import java.util.Date;
         query = "SELECT d FROM DestinatarioUfficio d JOIN d.destinatario u "
                 + "JOIN u.ufficioUtenteCollection uu "
                 + "WHERE d.letto = FALSE AND uu.ospite = FALSE "
-                + "AND uu.utente.id = :id ORDER BY d.richiesta.data desc ")
+                + "AND uu.utente.id = :id AND NOT EXISTS (SELECT v FROM VistoIndividuale v JOIN v.esecutoreletto u1 WHERE d.richiesta=v.richiesta AND u1.id = :id) "
+                + "ORDER BY d.richiesta.data desc ")
 public class DestinatarioUfficio extends DestinatarioRichiesta
         implements Serializable, IDestinatarioRichiesta, ITimeStamped, Comparable<IDestinatarioRichiesta> {
     private static final long serialVersionUID = 1L;

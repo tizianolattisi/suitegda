@@ -21,6 +21,7 @@ import com.axiastudio.suite.SuiteUtil;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import com.axiastudio.suite.generale.ITimeStamped;
 
 /**
  *
@@ -29,7 +30,7 @@ import java.util.Date;
 @Entity
 @Table(schema="ANAGRAFICHE")
 @SequenceGenerator(name="gengrupposoggetto", sequenceName="anagrafiche.grupposoggetto_id_seq", initialValue=1, allocationSize=1)
-public class GruppoSoggetto implements Serializable {
+public class GruppoSoggetto implements Serializable, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gengrupposoggetto")
@@ -48,6 +49,17 @@ public class GruppoSoggetto implements Serializable {
     private Date datacessazione;
     @Column(name="note")
     private String note;
+    /* timestamped */
+    @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordcreato;
+    @Column(name="rec_creato_da")
+    private String recordcreatoda;
+    @Column(name="rec_modificato")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date recordmodificato;
+    @Column(name="rec_modificato_da")
+    private String recordmodificatoda;
 
     public Long getId() {
         return id;
@@ -98,17 +110,48 @@ public class GruppoSoggetto implements Serializable {
     }
 
     public Boolean getAttivo() {
-        return getDatacessazione() == null;
+        return (getDatacessazione() == null || getDatacessazione().after(new Date()));
     }
 
     public void setAttivo(Boolean attivo) {
 
     }
 
+    public Date getRecordcreato() {
+        return recordcreato;
+    }
+
+    public void setRecordcreato(Date recordcreato) {
+        this.recordcreato = recordcreato;
+    }
+
+    public String getRecordcreatoda() {
+        return recordcreatoda;
+    }
+
+    public void setRecordcreatoda(String recordcreatoda) {
+        this.recordcreatoda = recordcreatoda;
+    }
+
+    public Date getRecordmodificato() {
+        return recordmodificato;
+    }
+
+    public void setRecordmodificato(Date recordmodificato) {
+        this.recordmodificato = recordmodificato;
+    }
+
+    public String getRecordmodificatoda() {
+        return recordmodificatoda;
+    }
+
+    public void setRecordmodificatoda(String recordmodificatoda) {
+        this.recordmodificatoda = recordmodificatoda;
+    }
 
     /*
-     * Il predicato esprime la relazione nel corretto verso
-     */
+         * Il predicato esprime la relazione nel corretto verso
+         */
     public String getPredicato(){
         String out = "";
         out += this.getGruppo();

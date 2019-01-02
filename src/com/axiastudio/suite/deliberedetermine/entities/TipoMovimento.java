@@ -21,5 +21,5 @@ package com.axiastudio.suite.deliberedetermine.entities;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public enum TipoMovimento {
-    TIPO1, TIPO2
+    U, E
 }

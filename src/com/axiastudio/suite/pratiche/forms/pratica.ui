@@ -33,7 +33,7 @@
     <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_pratiche">
        <attribute name="title">
@@ -67,7 +67,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableView_2">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewProtocolli">
           <property name="entity" stdset="0">
            <string>.praticaProtocolloCollection</string>
           </property>
@@ -973,7 +973,7 @@
   <tabstop>checkBox_riservata</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>tableView_3</tabstop>
-  <tabstop>tableView_2</tabstop>
+  <tabstop>tableViewProtocolli</tabstop>
   <tabstop>lineEdit_4</tabstop>
   <tabstop>comboBoxTitolario</tabstop>
   <tabstop>toolButtonTitolario</tabstop>

@@ -105,6 +105,8 @@ public class Pratica implements Serializable, ITimeStamped {
     private Date datascadenza;
     @Column(name="codificaanomala")
     private Boolean codificaanomala=false;
+    @Column(name="multiufficio")
+    private Boolean multiufficio=false;
     @OneToMany(mappedBy = "pratica", orphanRemoval = true, cascade=CascadeType.ALL)
     @OrderColumn(name="progressivo")
     private List<FasePratica> fasePraticaCollection;
@@ -208,7 +210,7 @@ public class Pratica implements Serializable, ITimeStamped {
     public String getDescrizioner() {
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         if( this.getRiservata() != null && this.getRiservata() && !PraticaUtil.utenteInGestorePratica(this, autenticato) &&
-                !autenticato.getSupervisorepratiche() ){
+                !autenticato.getSupervisorepraticheriservate() ){
             return "RISERVATA";
         }
         return this.getDescrizione();
@@ -275,7 +277,8 @@ public class Pratica implements Serializable, ITimeStamped {
     }
 
     public Boolean getArchiviata() {
-        return archiviata;
+//        return archiviata;
+        return this.getDatachiusura()!=null;
     }
 
     public void setArchiviata(Boolean archiviata) {
@@ -352,6 +355,14 @@ public class Pratica implements Serializable, ITimeStamped {
 
     public void setCodificaanomala(Boolean codificaanomala) {
         this.codificaanomala = codificaanomala;
+    }
+
+    public Boolean getMultiufficio() {
+        return multiufficio;
+    }
+
+    public void setMultiufficio(Boolean multiufficio) {
+        this.multiufficio = multiufficio;
     }
 
     public List<FasePratica> getFasePraticaCollection() {

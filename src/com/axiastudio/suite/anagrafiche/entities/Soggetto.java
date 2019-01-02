@@ -245,6 +245,14 @@ public class Soggetto implements Serializable, ITimeStamped {
         this.referente = referente;
     }
 
+    public String getReferente_entetab() {
+        return referente;
+    }
+
+    public void setReferente_entetab(String referente) {
+        this.referente = referente;
+    }
+
     public String getComunedinascita() {
         return comunedinascita;
     }

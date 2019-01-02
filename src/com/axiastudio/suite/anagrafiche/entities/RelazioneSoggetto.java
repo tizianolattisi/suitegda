@@ -138,6 +138,15 @@ public class RelazioneSoggetto implements Serializable, ITimeStamped {
     public void setInvertita(Boolean invertita) {
         this.invertita = invertita;
     }
+
+    public Boolean getAttivo() {
+        return (getDatacessazione() == null || getDatacessazione().after(new Date()));
+    }
+
+    public void setAttivo(Boolean attivo) {
+
+    }
+
     
     /*
      * Il predicato esprime la relazione nel corretto verso
@@ -160,12 +169,12 @@ public class RelazioneSoggetto implements Serializable, ITimeStamped {
             out += " è in relazione con ";
         }
         out += this.getRelazionato().toString();
-        if( this.getDatanascita() != null ){
-            out += " dal " + SuiteUtil.DATE_FORMAT.format(this.getDatanascita());
-        }
-        if( this.getDatacessazione()!= null ){
-            out += " fino al " + SuiteUtil.DATE_FORMAT.format(this.getDatacessazione());
-        }
+//        if( this.getDatanascita() != null ){
+//            out += " dal " + SuiteUtil.DATE_FORMAT.format(this.getDatanascita());
+//        }
+//        if( this.getDatacessazione()!= null ){
+//            out += " fino al " + SuiteUtil.DATE_FORMAT.format(this.getDatacessazione());
+//        }
         return out;
     }
 

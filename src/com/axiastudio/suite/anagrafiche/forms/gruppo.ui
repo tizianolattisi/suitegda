@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>474</width>
+    <width>495</width>
     <height>199</height>
    </rect>
   </property>
@@ -14,10 +14,10 @@
    <string>Gestione gruppi soggetto</string>
   </property>
   <property name="searchcolumns" stdset="0">
-   <string>descrizione,persona,azienda,ente</string>
+   <string>&gt;id&lt;,&lt;descrizione&gt;,&gt;persona&lt;,&gt;azienda&lt;,&gt;ente&lt;</string>
   </property>
   <property name="sortcolumn" stdset="0">
-   <number>0</number>
+   <number>1</number>
   </property>
   <property name="sortorder" stdset="0">
    <string>&lt;</string>

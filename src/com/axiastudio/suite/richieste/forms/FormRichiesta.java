@@ -77,21 +77,20 @@ public class FormRichiesta extends Window {
         this.richiestaToolbar.actionByName("invia").setEnabled(nuovaRichiesta);
     }
 
-    @Override
-    protected void closeEvent(QCloseEvent event) {
-        Richiesta richiesta = (Richiesta) getContext().getCurrentEntity();
-
-        super.closeEvent(event);
-
-        if ( richiesta.getVarPathDocumento()!=null && richiesta.getVarPathDocumento().length()>0 ) {
-            CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
-            AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(richiesta);
-            for (Map map : alfrescoHelper.children()) {
-                alfrescoHelper.deleteDocument((String) map.get("objectId"));
-            }
-            alfrescoHelper.deleteFolder(alfrescoHelper.folderFromPath(alfrescoHelper.getPath()).getId());
-        }
-    }
+//    @Override
+//    protected void closeEvent(QCloseEvent event) {
+//        Richiesta richiesta = (Richiesta) getContext().getCurrentEntity();
+//
+//        if ( richiesta.getVarPathDocumento()!=null && richiesta.getVarPathDocumento().length()>0 ) {
+//            CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
+//            AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(richiesta);
+//            for (Map map : alfrescoHelper.children()) {
+//                alfrescoHelper.deleteDocument((String) map.get("objectId"));
+//            }
+//            alfrescoHelper.deleteFolder(alfrescoHelper.folderFromPath(alfrescoHelper.getPath()).getId());
+//        }
+//        super.closeEvent(event);
+//    }
 
     private void destinatarioInserito(Object obj){
         IDestinatarioRichiesta inserito = (IDestinatarioRichiesta) obj;
@@ -270,10 +269,20 @@ public class FormRichiesta extends Window {
     private void invia() {
         if (this.getContext().commitChanges()) {
             QMessageBox.information(this, " ", "Messaggio inviato");
+
+            Richiesta richiesta = (Richiesta) getContext().getCurrentEntity();
+
+            if ( richiesta.getVarPathDocumento()!=null && richiesta.getVarPathDocumento().length()>0 ) {
+                CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(Richiesta.class, "CMIS");
+                AlfrescoHelper alfrescoHelper = cmisPlugin.createAlfrescoHelper(richiesta);
+                for (Map map : alfrescoHelper.children()) {
+                    alfrescoHelper.deleteDocument((String) map.get("objectId"));
+                }
+                alfrescoHelper.deleteFolder(alfrescoHelper.folderFromPath(alfrescoHelper.getPath()).getId());
+            }
 //            this.hide();
-//            this.close();
+            this.close();
 //            this.destroy(true, true);
-            //super.closeEvent(new QCloseEvent()); //TODO
         }
     }
 

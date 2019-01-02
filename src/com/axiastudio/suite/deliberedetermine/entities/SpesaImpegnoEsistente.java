@@ -63,6 +63,8 @@ public class SpesaImpegnoEsistente implements Serializable {
     private String cespite;
     @Column(name="descrizionecespite")
     private String descrizioneCespite;
+    @Enumerated(EnumType.STRING)
+    private TipoMovimento eu = TipoMovimento.U;
 
     public Long getId() {
         return id;
@@ -174,6 +176,14 @@ public class SpesaImpegnoEsistente implements Serializable {
 
     public void setDescrizioneCespite(String descrizioneCespite) {
         this.descrizioneCespite = descrizioneCespite;
+    }
+
+    public TipoMovimento getEu() {
+        return eu;
+    }
+
+    public void setEu(TipoMovimento eu) {
+        this.eu = eu;
     }
 
     @Override

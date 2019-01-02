@@ -393,6 +393,7 @@ public class FormDetermina extends FormDettaglio implements IDocumentFolder {
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
         helper.children("protocollo"); // XXX: per creare il subpath "protocollo"
+        helper.children("da_non_protocollare"); // XXX: per creare il subpath "protocollo"
         List<HashMap> children = helper.children();
         for( HashMap map: children ){
             String name = (String) map.get("name");

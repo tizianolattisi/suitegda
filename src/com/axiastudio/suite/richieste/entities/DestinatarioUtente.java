@@ -22,7 +22,8 @@ import java.util.Date;
 @NamedQuery(name="trovaDestinatarioUtente",
         query = "SELECT d FROM DestinatarioUtente d JOIN d.destinatario u "
                 + "WHERE d.letto = FALSE "
-                + "AND u.id = :id ORDER BY d.richiesta.data desc ")
+                + "AND u.id = :id "
+                + "ORDER BY d.richiesta.data desc ")
 public class DestinatarioUtente extends DestinatarioRichiesta implements Serializable, IDestinatarioRichiesta, ITimeStamped {
     private static final long serialVersionUID = 1L;
     @Id

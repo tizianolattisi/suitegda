@@ -16,6 +16,7 @@
  */
 package com.axiastudio.suite.procedimenti;
 
+import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.db.Controller;
@@ -292,7 +293,12 @@ public class SimpleWorkFlow {
                     } else if( titoloDelega.getDelega() ){
                         visto.setResponsabile(titoloDelega.getDelegante());
                     }
+                    break;
                 }
+            }
+            for( String carica: cariche.split(",") ){
+                visto.setResponsabile(gestoreDeleghe.trovaTitolare(carica, dettaglio.getServizio()));
+                break;
             }
         }
         visto.setPratica(pratica);

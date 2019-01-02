@@ -53,6 +53,8 @@ import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.plugins.ooops.RuleSet;
 import com.axiastudio.suite.plugins.ooops.Template;
+import com.axiastudio.suite.portale.entities.Comunicato;
+import com.axiastudio.suite.portale.forms.FormComunicato;
 import com.axiastudio.suite.pratiche.PraticaAdapters;
 import com.axiastudio.suite.pratiche.PraticaCallbacks;
 import com.axiastudio.suite.pratiche.PraticaPrivate;
@@ -537,6 +539,12 @@ public class Configure {
                 NotiziaURP.class,
                 Window.class);
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/portale/forms/comunicato.ui",
+                Comunicato.class,
+                FormComunicato.class);
+
     }
-    
+
+
 }

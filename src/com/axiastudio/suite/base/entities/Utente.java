@@ -77,6 +77,8 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
     private Boolean operatorepratiche=true;
     @Column(name="supervisorepratiche")
     private Boolean supervisorepratiche=false;
+    @Column(name="supervisorepraticheriservate")
+    private Boolean supervisorepraticheriservate=false;
     @Column(name="modellatorepratiche")
     private Boolean modellatorepratiche=false;
     @Column(name="istruttorepratiche")
@@ -96,6 +98,8 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
     private Soggetto soggetto;
     @Column(name="richieste")
     private Boolean richieste=false;
+    @Column(name="note")
+    private String note;
 
     /* timestamped */
     @Column(name="rec_creato", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -246,6 +250,14 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
         this.supervisorepratiche = supervisorepratiche;
     }
 
+    public Boolean getSupervisorepraticheriservate() {
+        return supervisorepraticheriservate;
+    }
+
+    public void setSupervisorepraticheriservate(Boolean supervisorepraticheriservate) {
+        this.supervisorepraticheriservate = supervisorepraticheriservate;
+    }
+
     public Boolean getModellatorepratiche() {
         return modellatorepratiche;
     }
@@ -340,6 +352,14 @@ public class Utente implements Serializable, ITimeStamped, IUtente {
 
     public void setRichieste(Boolean richieste) {
         this.richieste = richieste;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Date getRecordcreato() {

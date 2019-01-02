@@ -24,15 +24,15 @@ import com.axiastudio.pypapi.db.Store;
 import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.pypapi.ui.*;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox;
+import com.axiastudio.suite.SuiteUiUtil;
+import com.axiastudio.suite.SuiteUtil;
 import com.axiastudio.suite.base.entities.*;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.*;
-import com.axiastudio.suite.richieste.entities.DestinatarioUfficio;
-import com.axiastudio.suite.richieste.entities.DestinatarioUtente;
-import com.axiastudio.suite.richieste.entities.IDestinatarioRichiesta;
-import com.axiastudio.suite.richieste.entities.Richiesta;
+import com.axiastudio.suite.richieste.entities.*;
+import com.axiastudio.suite.richieste.forms.FormVistaRichieste;
 import com.trolltech.qt.core.*;
 import com.trolltech.qt.designer.QUiLoader;
 import com.trolltech.qt.designer.QUiLoaderException;
@@ -294,9 +294,11 @@ public class FormScrivania  extends QMainWindow {
                 }
             }
         }
-        for (QModelIndex i: deselected.indexes()){
-            if(!deselectedIndexes.contains(i.row())){
-                deselectedIndexes.add(i.row());
+        if (deselected != null) {
+            for (QModelIndex i : deselected.indexes()) {
+                if (!deselectedIndexes.contains(i.row())) {
+                    deselectedIndexes.add(i.row());
+                }
             }
         }
         for (Integer idx: selectedIndexes){
@@ -452,8 +454,6 @@ public class FormScrivania  extends QMainWindow {
     }
 
     private void daiPerLettoRichieste(){
-        Database db = (Database) Register.queryUtility(IDatabase.class);
-        Controller controller = db.createController(IDestinatarioRichiesta.class);
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         List<Ufficio> ufficiDaiPerLetto = new ArrayList();
         for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
@@ -461,24 +461,67 @@ public class FormScrivania  extends QMainWindow {
                 ufficiDaiPerLetto.add(uu.getUfficio());
             }
         }
-        List<IDestinatarioRichiesta> richiesteLette = new ArrayList();
-        for(IDestinatarioRichiesta destRichiesta: this.selectionRichiesta){
-            destRichiesta.setLetto(Boolean.TRUE);
-            destRichiesta.setDataletto(Calendar.getInstance().getTime());
-            destRichiesta.setEsecutoreletto(autenticato.getLogin());
-            controller.commit(destRichiesta);
-            richiesteLette.add(destRichiesta);
-        }
-        destinatarioStoreGenerale.removeAll(richiesteLette);
-        QTableView tableView = (QTableView) this.findChild(QTableView.class, "richieste");
-        TableModel model = (TableModel) tableView.model();
-        Store store=model.getStore();
-        store.removeAll(richiesteLette);
-        model.setStore(store);
-        tabWidget.setTabText(1, "Messaggi (" + String.valueOf(destinatarioStoreGenerale.size()) + ")");
 
-        this.selectionRichiesta.clear();
-        this.refreshInfoRichieste();
+        int ret=0;
+        if (this.selectionRichiesta.size()==1){
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            Controller controller = db.createController(IDestinatarioRichiesta.class);
+            Controller vcontroller = db.createController(VistoIndividuale.class);
+            boolean letto=false;
+            boolean vistopersona=false;
+            IDestinatarioRichiesta destRichiesta=selectionRichiesta.get(0);
+            if ( DestinatarioUtente.class.isInstance(destRichiesta) ) {
+                letto=true;
+            } else if ( DestinatarioUfficio.class.isInstance(destRichiesta) ) {
+                if ( ufficiDaiPerLetto.contains(((DestinatarioUfficio) destRichiesta).getDestinatario()) ) {
+                    letto=true;
+                } else if ( QMessageBox.StandardButton.Yes.value() == QMessageBox.question(this, "Attenzione",
+                        "Si desidera segnare questo messaggio visto da te?\n\"" + destRichiesta.getTesto().substring(0, Math.min(50, destRichiesta.getTesto().length())) + "...\"",
+                        QMessageBox.StandardButton.Yes, QMessageBox.StandardButton.No) ) {
+                    vistopersona=true;
+                }
+            }
+            if (letto) {
+                destRichiesta.setLetto(Boolean.TRUE);
+                destRichiesta.setDataletto(Calendar.getInstance().getTime());
+                destRichiesta.setEsecutoreletto(autenticato.getLogin());
+                controller.commit(destRichiesta);
+            } else if (vistopersona) {
+                VistoIndividuale visto = new VistoIndividuale();
+                visto.setRichiesta(destRichiesta.getRichiesta());
+                visto.setDataletto(SuiteUtil.getServerDate());
+                visto.setEsecutoreletto(autenticato);
+                vcontroller.commit(visto);
+            }
+            ret=1;
+        } else if (this.selectionRichiesta.size()>1) {
+            List<IDestinatarioRichiesta> richiesteLetteGenerali = new ArrayList();
+            List<IDestinatarioRichiesta> richiesteLettePersonali = new ArrayList();
+            for(IDestinatarioRichiesta destRichiesta: this.selectionRichiesta){
+                if ( DestinatarioUtente.class.isInstance(destRichiesta) ) {
+                    richiesteLetteGenerali.add(destRichiesta);
+                } else if ( DestinatarioUfficio.class.isInstance(destRichiesta) ) {
+                    if ( ufficiDaiPerLetto.contains(((DestinatarioUfficio) destRichiesta).getDestinatario()) ) {
+                        richiesteLetteGenerali.add(destRichiesta);
+                    } else {
+                        richiesteLettePersonali.add(destRichiesta);
+                    }
+                }
+            }
+            FormVistaRichieste vistaRichieste = new FormVistaRichieste(this, richiesteLetteGenerali, richiesteLettePersonali,
+                    ufficiDaiPerLetto);
+            ret = vistaRichieste.exec();
+        }
+
+//        destinatarioStoreGenerale.removeAll(richiesteLette);
+//        QTableView tableView = (QTableView) this.findChild(QTableView.class, "richieste");
+//        TableModel model = (TableModel) tableView.model();
+//        Store store=model.getStore();
+//        store.removeAll(richiesteLette);
+//        model.setStore(store);
+        if (ret==1) {
+            this.aggiornaListaRichieste();
+        }
     }
 
     private void apriProtocollo(){

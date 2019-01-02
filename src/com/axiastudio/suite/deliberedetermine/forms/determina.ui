@@ -682,7 +682,7 @@
       </widget>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
-        <string>Spesa su impegno esistente</string>
+        <string>Spesa/entrata su esistente</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
@@ -691,10 +691,10 @@
            <string>.spesaImpegnoEsistenteCollection</string>
           </property>
           <property name="columns" stdset="0">
-           <string>&gt;capitolo&lt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo</string>
+           <string>&gt;eu&lt;,&gt;capitolo&lt;,&gt;impegno&lt;,&gt;sottoImpegno&lt;,&gt;annoImpegno&lt;,importo</string>
           </property>
           <property name="headers" stdset="0">
-           <string>capitolo,impegno,sub,anno,importo</string>
+           <string>E/U,capitolo,impegno,sub,anno,importo</string>
           </property>
           <property name="sortcolumn" stdset="0">
            <number>0</number>

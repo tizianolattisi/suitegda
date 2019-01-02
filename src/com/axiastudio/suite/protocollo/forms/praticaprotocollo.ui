@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>343</width>
-    <height>51</height>
+    <height>72</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,6 +18,16 @@
     <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBox">
      <property name="column" stdset="0">
       <string>oggetto</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="chkOriginale">
+     <property name="text">
+      <string>Originale</string>
+     </property>
+     <property name="column" stdset="0">
+      <string>originale</string>
      </property>
     </widget>
    </item>
