@@ -21,6 +21,7 @@ import com.axiastudio.suite.generale.TimeStampedListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -31,7 +32,7 @@ import java.util.Date;
 @Table(schema="ANAGRAFICHE")
 @EntityListeners({TimeStampedListener.class})
 @SequenceGenerator(name="genriferimento", sequenceName="anagrafiche.riferimento_id_seq", initialValue=1, allocationSize=1)
-public class Riferimento implements Serializable, ITimeStamped {
+public class Riferimento implements Serializable, ITimeStamped, Comparable<Riferimento>  {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genriferimento")
@@ -193,5 +194,20 @@ public class Riferimento implements Serializable, ITimeStamped {
     public String toString() {
         return tipo + " " + riferimento;
     }
-    
-}
+
+    @Override
+    public int compareTo(Riferimento o) {
+        return Comparators.RIFERIMENTO.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static Comparator<Riferimento> RIFERIMENTO = new Comparator<Riferimento>() {
+            @Override
+            public int compare(Riferimento o1, Riferimento o2) {
+                return o1.riferimento.compareTo(o2.riferimento);
+            }
+        };
+    };
+
+
+    }

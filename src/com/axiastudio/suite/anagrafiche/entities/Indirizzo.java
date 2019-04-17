@@ -21,6 +21,7 @@ import com.axiastudio.suite.generale.TimeStampedListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -31,7 +32,7 @@ import java.util.Date;
 @EntityListeners({TimeStampedListener.class})
 @Table(schema="ANAGRAFICHE")
 @SequenceGenerator(name="genindirizzo", sequenceName="anagrafiche.indirizzo_id_seq", initialValue=1, allocationSize=1)
-public class Indirizzo implements Serializable, ITimeStamped {
+public class Indirizzo implements Serializable, ITimeStamped, Comparable<Indirizzo> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="genindirizzo")
@@ -258,5 +259,34 @@ public class Indirizzo implements Serializable, ITimeStamped {
         }
         return testo;
     }
-    
+
+    @Override
+    public int compareTo(Indirizzo o) {
+        return Comparators.PRINCIPALEDESC.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static Comparator<Indirizzo> PRINCIPALE = new Comparator<Indirizzo>() {
+            @Override
+            public int compare(Indirizzo o1, Indirizzo o2) {
+                if (o1.principale.equals(o2.principale)) {
+                    return o1.id.compareTo(o2.id);
+                } else {
+                    return o1.principale.compareTo(o2.principale);
+                }
+            }
+        };
+        public static Comparator<Indirizzo> PRINCIPALEDESC = new Comparator<Indirizzo>() {
+            @Override
+            public int compare(Indirizzo o1, Indirizzo o2) {
+                if (o1.principale.equals(o2.principale)) {
+                    return o2.id.compareTo(o1.id);
+                } else {
+                    return o2.principale.compareTo(o1.principale);
+                }
+            }
+        };
+    }
+
+
 }
